@@ -1,0 +1,89 @@
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background: #1a252f;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+.hero {
+  background: #f4f6f7;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.hero h1 {
+  margin-top: 0;
+  color: #1a252f;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.btn {
+  display: inline-block;
+  background: #27ae60;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+footer {
+  background: #1a252f;
+  color: #aaa;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 3rem;
+}
