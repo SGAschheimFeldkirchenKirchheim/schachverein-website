@@ -40,11 +40,9 @@
 
 // ---------- TABELLE ----------
 #align(center)[
-  #text(size: 16pt, weight: "bold")[Oberland Quartett]
-  #v(0.8em)
 
   #table(
-    columns: (auto, auto) + teams.map(t => 1fr),
+    columns: (center, center) + teams.map(t => center,
     stroke: 0.6pt + navy,
     inset: 7pt,
     align: (center,center,center,center,center,center),
