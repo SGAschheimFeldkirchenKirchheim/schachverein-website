@@ -18,9 +18,9 @@
   ("24.07.2003", "Höhenkirchen", (4, 3, 2, 1)),
   ("18.06.2004", "Holzkirchen", (2, 3, 4, 1)),
   ("15.07.2005", "Deisenhofen", (3, 1, 4, 2)),
-  ("28.06.2024", "Aschheim-Feldkirchen-Kirchheim", (1, 2, 3, "-")),
-  ("27.06.2025", "Höhenkirchen", (1, 2, 3, 4)),
-  ("03.07.2026", "Holzkirchen", (1, 2, 3, 4)),
+  ("28.06.2024", "Aschheim-Feldkirchen-Kirchheim", (1, 2, "-", 3)),
+  ("27.06.2025", "Höhenkirchen", (1, 2, 4, 3)),
+  ("03.07.2026", "Holzkirchen", (1, 2, 4, 3)),
 )
 
 // Aufruf der Tabelle mit den Variablen
