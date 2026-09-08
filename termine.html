@@ -6,62 +6,17 @@
   <title>Termine & Spielplan | SG AFK</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Spezifisches Design für die Termin-Tabelle */
-    .table-responsive {
-      overflow-x: auto; /* Erlaubt horizontales Scrollen auf Smartphones */
-      margin-top: 1.5rem;
-    }
-
-    .termine-tabelle {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-      background: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .termine-tabelle th, 
-    .termine-tabelle td {
-      padding: 10px 12px;
-      border: 1px solid #dcdcdc;
-      text-align: center;
-    }
-
-    .termine-tabelle th {
-      background-color: #1a252f;
-      color: white;
-      font-weight: bold;
-    }
-
-    /* Monats-Kopfzeilen (DeepSkyBlue) */
-    .monat-header {
-      background-color: #00bfff !important;
-      color: #000;
-      font-weight: bold;
-      font-size: 1.1rem;
-      text-align: center !important;
-    }
-
-    /* Farbliche Hervorhebungen aus dem Typst-Code */
-    .bg-yellow {
-      background-color: #fff2ac !important;
-    }
-
-    .bg-orange {
-      background-color: #ffd8a8 !important;
-    }
-
-    /* Ausrichtung für Termin & Verein-Spalten auf links */
-    .termine-tabelle td:nth-child(1),
-    .termine-tabelle td:nth-child(2) {
-      text-align: left;
-    }
+    .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
+    .termine-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
+    .termine-tabelle th, .termine-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
+    .termine-tabelle th { background-color: #1a252f; color: white; }
+    .monat-header { background-color: #00bfff !important; font-weight: bold; font-size: 1.1rem; }
+    .bg-yellow { background-color: #fff2ac !important; }
+    .bg-orange { background-color: #ffd8a8 !important; }
+    .termine-tabelle td:nth-child(1), .termine-tabelle td:nth-child(2) { text-align: left; }
   </style>
 </head>
 <body>
-
   <header>
     <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
     <nav>
@@ -73,174 +28,52 @@
       <a href="kontakt.html">Kontakt</a>
     </nav>
   </header>
-
   <main class="container">
-    <h1>Termine & Spielplan Saison 2026/2027</h1>
-    <p>Übersicht aller Vereinsabende, Turniere und Mannschaftsspieltage der SG AFK.</p>
-
+    <h1>Termine & Spielplan</h1>
     <div class="table-responsive">
       <table class="termine-tabelle">
         <thead>
           <tr>
-            <th>Termin</th>
-            <th>Verein</th>
-            <th>AFK 1</th>
-            <th>AFK 2</th>
-            <th>AFK 3</th>
-            <th>AFK 4</th>
-            <th>AFK 5</th>
-            <th>AFK 6</th>
-            <th>Senioren</th>
-            <th>Jugend</th>
+            <th>Termin</th><th>Verein</th><th>AFK 1</th><th>AFK 2</th><th>AFK 3</th>
+            <th>AFK 4</th><th>AFK 5</th><th>AFK 6</th><th>Senioren</th><th>Jugend</th>
           </tr>
         </thead>
         <tbody>
-          <!-- September -->
-          <tr>
-            <td colspan="10" class="monat-header">September</td>
-          </tr>
-          <tr>
-            <td>16.09. Mi, 18:00 Uhr</td>
-            <td>Duke-Turnier Part II</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>18.09. Fr</td>
-            <td class="bg-yellow">Akklimatisieren im neuen GyKi</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>25.09. Fr</td>
-            <td class="bg-orange">Herbstblitz</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-
-          <!-- Oktober -->
-          <tr>
-            <td colspan="10" class="monat-header">Oktober</td>
-          </tr>
-          <tr>
-            <td>02.10. Fr, 19:30 Uhr</td>
-            <td>Schnellschach-VM</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>09.10. Fr</td>
-            <td class="bg-yellow">Kooperationsturnier</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>16.10. Fr</td>
-            <td>Vergleichskampf mit EBE</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>16.10. Fr, 19:00 Uhr</td>
-            <td class="bg-orange">Schnellschach-VM + Kooperationsturnier mit Ebersberg</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>23.10. Fr, 19:30 Uhr</td>
-            <td></td>
-            <td>MMM Runde 1</td>
-            <td>MMM Runde 1</td>
-            <td>MMM Runde 1</td>
-            <td>MMM Runde 1</td>
-            <td>MMM Runde 1</td>
-            <td>MMM Runde 1</td>
-            <td></td><td></td>
-          </tr>
-          <tr>
-            <td>30.10. Fr, 19:30 Uhr</td>
-            <td></td>
-            <td></td><td></td><td></td><td></td><td></td><td></td>
-            <td>MSMM Runde 1</td>
-            <td></td>
-          </tr>
-
-          <!-- November -->
-          <tr>
-            <td colspan="10" class="monat-header">November</td>
-          </tr>
-          <tr>
-            <td>06.11. Fr</td>
-            <td>Vereinsabend (Herbstferien)</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>13.11. Fr, 19:30 Uhr</td>
-            <td></td>
-            <td>MMM Runde 2</td>
-            <td>MMM Runde 2</td>
-            <td>MMM Runde 2</td>
-            <td>MMM Runde 2</td>
-            <td>MMM Runde 2</td>
-            <td>MMM Runde 2</td>
-            <td></td><td></td>
-          </tr>
-          <tr>
-            <td>20.11. Fr</td>
-            <td class="bg-yellow">Nacht der Mathematik</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-            <td class="bg-yellow">Nacht der Mathematik</td>
-          </tr>
-          <tr>
-            <td>22.11. So, 11:00 Uhr</td>
-            <td>Münchner Blitz-EM</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>27.11. Fr, 19:30 Uhr</td>
-            <td></td>
-            <td>MMM Runde 3</td>
-            <td>MMM Runde 3</td>
-            <td>MMM Runde 3</td>
-            <td>MMM Runde 3</td>
-            <td>MMM Runde 3</td>
-            <td>MMM Runde 3</td>
-            <td></td><td></td>
-          </tr>
-          <tr>
-            <td>29.11. So, 11:00 Uhr</td>
-            <td>Mannschafts- und Ligapokal</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-
-          <!-- Dezember -->
-          <tr>
-            <td colspan="10" class="monat-header">Dezember</td>
-          </tr>
-          <tr>
-            <td>11.12. Fr, 19:30 Uhr</td>
-            <td></td>
-            <td>MMM Runde 4</td>
-            <td>MMM Runde 4</td>
-            <td>MMM Runde 4</td>
-            <td>MMM Runde 4</td>
-            <td>MMM Runde 4</td>
-            <td>MMM Runde 4</td>
-            <td></td><td></td>
-          </tr>
-          <tr>
-            <td>18.12. Fr</td>
-            <td class="bg-orange">Weihnachtsblitz</td>
-            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-          </tr>
-          <tr>
-            <td>18.12. Fr, 19:30 Uhr</td>
-            <td></td>
-            <td></td><td></td><td></td><td></td><td></td><td></td>
-            <td>MSMM Runde 2</td>
-            <td></td>
-          </tr>
+<tr><td>#table(
+  align: center,
+  columns: (1fr, auto, auto, auto, auto, auto, auto, auto, auto, auto),
+  stroke: 1pt + black,
+  table.header(
+    [* Termin *</td><td>* Verein *</td><td>* AFK 1 *</td><td>* AFK 2 *</td><td>* AFK 3 *</td><td>* AFK 4 *</td><td>* AFK 5 *</td><td>* AFK 6 *</td><td>* Senioren *</td><td>* Jugend *</td></tr>
+<tr><td colspan="10" class="monat-header">September</td></tr>
+<tr><td>16.09. Mi, 18:00 Uhr</td><td>Duke-Turnier Part II</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>18.09. Fr</td><td class="bg-yellow">Akklimatisieren im neuen GyKi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>25.09. Fr</td><td class="bg-orange">Herbstblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td colspan="10" class="monat-header">Oktober</td></tr>
+<tr><td>02.10. Fr, 19:30 Uhr</td><td>Schnellschach-VM</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>09.10. Fr</td><td class="bg-yellow">Kooperationsturnier</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16.10. Fr</td><td>Vergleichskampf mit EBE</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>16.10. Fr, 19:00 Uhr</td><td class="bg-orange">Schnellschach-VM+Kooperationsturnier mit Ebersberg</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>23.10. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 1</td><td>MMM Runde 1</td><td>MMM Runde 1</td><td>MMM Runde 1</td><td>MMM Runde 1</td><td>MMM Runde 1</td><td></td><td></td></tr>
+<tr><td>30.10. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>MSMM Runde 1</td><td></td></tr>
+<tr><td colspan="10" class="monat-header">November</td></tr>
+<tr><td>06.11. Fr</td><td>Vereinsabend (Herbstferien)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>13.11. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 2</td><td>MMM Runde 2</td><td>MMM Runde 2</td><td>MMM Runde 2</td><td>MMM Runde 2</td><td>MMM Runde 2</td><td></td><td></td></tr>
+<tr><td>20.11. Fr</td><td class="bg-yellow">Nacht der Mathematik</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-yellow">Nacht der Mathematik</td></tr>
+<tr><td>22.11. So, 11:00 Uhr</td><td>Münchner Blitz-EM</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>27.11. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 3</td><td></td><td></td></tr>
+<tr><td>29.11. So, 11:00 Uhr</td><td>Mannschafts-und Ligapokal</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td colspan="10" class="monat-header">Dezember</td></tr>
+<tr><td>11.12. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td></td><td></td></tr>
+<tr><td>18.12. Fr</td><td class="bg-orange">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>18.12. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>18.12. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>MSMM Runde 2</td><td></td></tr>
         </tbody>
       </table>
     </div>
   </main>
-
   <footer>
     <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
   </footer>
-
 </body>
 </html>
