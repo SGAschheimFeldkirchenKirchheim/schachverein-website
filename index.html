@@ -25,9 +25,6 @@
       font-weight: bold;
       margin-top: 0.8rem;
     }
-    .maps-btn:hover {
-      background: #2980b9;
-    }
     .hinweis-box {
       background: #e8f4f8;
       border: 1px solid #bce8f1;
@@ -36,6 +33,17 @@
       border-radius: 5px;
       margin-top: 1rem;
       font-size: 0.95rem;
+    }
+    .home-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 768px) {
+      .home-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -61,42 +69,80 @@
 
   <main class="container">
 
-    <!-- Haupt-Box für Zeiten & Ort -->
+    <!-- Wann & Wo Box -->
     <div class="info-card">
       <h2>🕒 Wann & Wo wir spielen</h2>
       <p><strong>Jeden Freitag</strong> (Das Gebäude ist ab 18:00 Uhr geöffnet)</p>
-      
       <ul>
         <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
         <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
       </ul>
-
-      <!-- Die gewünschte flexible Formulierung -->
       <div class="hinweis-box">
         💡 <strong>Volle Flexibilität für jedes Alter:</strong> Bei uns gibt es keine starren Grenzen! Erwachsene dürfen selbstverständlich schon ab 18:00 Uhr zum freien Spielen kommen, und auch Jugendliche müssen um 19:30 Uhr nicht nach Hause gehen, sondern können gerne länger bleiben. Jeder kann kommen und gehen, wann er möchte.
       </div>
-
       <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1.5rem 0;">
-
-      <p><strong>Spielort:</strong> Gymnasium Kirchheim<br>
-      Heimstettner Str. 3, 85551 Kirchheim bei München</p>
-      
+      <p><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim bei München</p>
       <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
     </div>
 
-    <!-- 3 Kacheln nebeneinander zur optimalen Platznutzung -->
+    <!-- 2-Spalten Layout: Links News, Rechts Termine -->
+    <div class="home-grid">
+      <div>
+        <h2>📰 Aktuelle Berichte</h2>
+        
+            <div class="card" style="margin-bottom: 1rem;">
+              <h3 style="margin-bottom:0.3rem;">Spannende Duelle beim Herbstblitzturnier 2026</h3>
+              <p style="color:#777; font-size:0.8rem; margin-top:0;">📅 25. September 2026</p>
+              <p style="font-size:0.9rem;">Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt. 
+Mit einer hervorragenden Beteiligung von 18 Spielern – von unser...</p>
+              <a href="berichte/2026-09-herbstblitz.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.9rem;">Weiterlesen →</a>
+            </div>
+            
+        <a href="berichte.html" style="display:inline-block; margin-top:0.5rem; color:#3498db; font-weight:bold;">Alle Berichte ansehen →</a>
+      </div>
+
+      <div>
+        <h2>📅 Nächste Termine</h2>
+        <div class="card">
+          <ul style="list-style:none; padding:0; margin:0;">
+            
+    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+      <strong>16.09. Mi, 18:00 Uhr</strong><br>
+      <span style="color:#555; font-size:0.9rem;">Duke-Turnier Part II</span>
+    </li>
+    
+    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+      <strong>18.09. Fr</strong><br>
+      <span style="color:#555; font-size:0.9rem;">Akklimatisieren im neuen GyKi</span>
+    </li>
+    
+    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+      <strong>25.09. Fr</strong><br>
+      <span style="color:#555; font-size:0.9rem;">Herbstblitz</span>
+    </li>
+    
+    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+      <strong>02.10. Fr, 19:30 Uhr</strong><br>
+      <span style="color:#555; font-size:0.9rem;">Schnellschach-VM</span>
+    </li>
+    
+          </ul>
+          <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:1rem;">Zum kompletten Spielplan</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Kacheln unten -->
     <div class="grid-3">
       <div class="card">
         <h3>♟️ Hobbyspieler & Einsteiger</h3>
         <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
       </div>
-
       <div class="card">
         <h3>♟️ Kinder & Jugendliche</h3>
         <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
         <a href="jugend.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Mehr zur Jugend</a>
       </div>
-
       <div class="card">
         <h3>♟️ Mannschaftsschach</h3>
         <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
