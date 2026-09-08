@@ -130,6 +130,7 @@ if os.path.exists("termine.typ"):
 # 2. BERICHTE VERARBEITEN
 # ==========================================
 def typst_to_html_article(typst_text):
+    # Metadaten extrahieren
     title_m = re.search(r'#title\[(.*?)\]', typst_text)
     date_m = re.search(r'#date\[(.*?)\]', typst_text)
     author_m = re.search(r'#author\[(.*?)\]', typst_text)
@@ -143,17 +144,52 @@ def typst_to_html_article(typst_text):
     body = re.sub(r'#date\[.*?\]', '', body)
     body = re.sub(r'#author\[.*?\]', '', body)
     
-    raw_text = re.sub(r'[=#*]', '', body).strip()
+    # Vorschautext für die Startseite säubern
+    raw_text = re.sub(r'#\w+(\[.*?\]|\(.*?\))', '', body)
+    raw_text = re.sub(r'[=#*_]', '', raw_text).strip()
     preview_snippet = raw_text[:110] + "..." if len(raw_text) > 110 else raw_text
 
-    body = re.sub(r'= (.*?)\n', r'<h2>\1</h2>\n', body)
-    body = re.sub(r'== (.*?)\n', r'<h3>\1</h3>\n', body)
-    body = re.sub(r'\*(.*?)\*', r'<strong>\1</strong>', body)
+    # --- TYPST SYNTAX FORMATIERUNGEN UMWANDELN ---
     
+    # 1. Überschriften (Mehrere Gleichheitszeichen zuerst matchen!)
+    body = re.sub(r'===\s*(.*?)\n', r'<h3>\1</h3>\n', body)
+    body = re.sub(r'==\s*(.*?)\n', r'<h2>\1</h2>\n', body)
+    body = re.sub(r'=\s*(.*?)\n', r'<h1>\1</h1>\n', body)
+    
+    # 2. Textformatierungen: Fett (*...*) und Kursiv (_..._)
+    body = re.sub(r'\*(.*?)\*', r'<strong>\1</strong>', body)
+    body = re.sub(r'_(.*?)_', r'<em>\1</em>', body)
+    
+    # 3. Typst-Befehle: #underline[...]
+    body = re.sub(r'#underline\[(.*?)\]', r'<u>\1</u>', body)
+    
+    # 4. Typst-Befehle: #text(...)
+    # Extrahiere Textfarbe, Schriftgröße und Inhalt
+    def parse_text_func(match):
+        args = match.group(1)
+        content = match.group(2)
+        
+        style_rules = []
+        if 'blue' in args: style_rules.append('color: blue;')
+        if 'red' in args: style_rules.append('color: red;')
+        if 'green' in args: style_rules.append('color: green;')
+        
+        size_m = re.search(r'size:\s*(\d+pt)', args)
+        if size_m: style_rules.append(f'font-size: {size_m.group(1)};')
+        
+        if 'italic' in args: style_rules.append('font-style: italic;')
+        if 'bold' in args: style_rules.append('font-weight: bold;')
+        
+        style_attr = f' style="{" ".join(style_rules)}"' if style_rules else ''
+        return f'<span{style_attr}>{content}</span>'
+
+    body = re.sub(r'#text\((.*?)\)\[(.*?)\]', parse_text_func, body, flags=re.DOTALL)
+    
+    # Absätze in <p>-Tags verpacken
     paragraphs = [p.strip() for p in body.split('\n\n') if p.strip()]
     formatted_body = ""
     for p in paragraphs:
-        if p.startswith('<h2>') or p.startswith('<h3>'):
+        if p.startswith('<h1') or p.startswith('<h2') or p.startswith('<h3'):
             formatted_body += f"{p}\n"
         else:
             formatted_body += f"<p>{p}</p>\n"
