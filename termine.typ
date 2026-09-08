@@ -1,5 +1,3 @@
-#import "package.typ": *
-
 #align(center)[
 #table(
   align: center,
