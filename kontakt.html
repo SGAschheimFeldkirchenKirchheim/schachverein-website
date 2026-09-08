@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt & Anfahrt | SG AFK</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .kontakt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .ansprechpartner-card {
+      background: #f8f9fa;
+      border-left: 4px solid #3498db;
+      padding: 1.2rem;
+      border-radius: 6px;
+    }
+    .kontakt-form-card {
+      background: #f8f9fa;
+      border-top: 4px solid #27ae60;
+      padding: 1.5rem;
+      border-radius: 6px;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    .btn-submit {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-submit:hover {
+      background: #219150;
+    }
+  </style>
+</head>
+<body>
 
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Kontakt & Ansprechpartner</h1>
+    <p>Du hast Fragen zum Spielbetrieb, zum Jugendtraining oder möchtest einfach mal bei uns reinschnuppern? Schreib uns oder komm direkt vorbei!</p>
+
+    <div class="kontakt-grid">
+      
+      <!-- Ansprechpartner & Spielort -->
+      <div>
+        <div class="ansprechpartner-card" style="margin-bottom: 1.5rem;">
+          <h3 style="margin-top:0;">👥 Ansprechpartner</h3>
+          <p style="margin-bottom:0.5rem;"><strong>1. Vorstand / Vereinsanfragen:</strong><br>
+          <a href="mailto:info@sg-afk.de" style="color:#3498db;">info@sg-afk.de</a></p>
+          
+          <p style="margin-bottom:0.5rem;"><strong>Jugendleitung / Jugendtraining:</strong><br>
+          <a href="mailto:jugend@sg-afk.de" style="color:#3498db;">jugend@sg-afk.de</a></p>
+          
+          <p style="margin-bottom:0;"><strong>Mannschaftsspielbetrieb:</strong><br>
+          <a href="mailto:spielleiter@sg-afk.de" style="color:#3498db;">spielleiter@sg-afk.de</a></p>
+        </div>
+
+        <div class="ansprechpartner-card" style="border-left-color: #e67e22;">
+          <h3 style="margin-top:0;">📍 Spielort & Zeiten</h3>
+          <p style="font-size:0.9rem;"><strong>Gymnasium Kirchheim</strong><br>
+          Heimstettner Str. 3, 85551 Kirchheim</p>
+          <p style="font-size:0.85rem;"><strong>Jeden Freitag:</strong><br>
+          • 18:00 – 19:30 Uhr: Jugendtraining<br>
+          • Ab 19:30 Uhr: Erwachsene & allgemeiner Spielabend</p>
+          <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#e67e22; display:inline-block; font-size:0.85rem; padding:0.5rem 1rem; color:white; text-decoration:none; border-radius:4px;">📍 Auf Google Maps öffnen</a>
+        </div>
+      </div>
+
+      <!-- Kontaktformular -->
+      <div class="kontakt-form-card">
+        <h3 style="margin-top:0;">✉️ Nachricht senden</h3>
+        <form action="https://formspree.io/f/xbjnopqr" method="POST"> <!-- Formspree oder Mailto-URL eintragen -->
+          <div class="form-group">
+            <label for="name">Dein Name:</label>
+            <input type="text" id="name" name="name" required placeholder="z. B. Max Mustermann">
+          </div>
+
+          <div class="form-group">
+            <label for="email">Deine E-Mail-Adresse:</label>
+            <input type="email" id="email" name="email" required placeholder="max@example.de">
+          </div>
+
+          <div class="form-group">
+            <label for="betreff">Betreff:</label>
+            <input type="text" id="betreff" name="betreff" placeholder="z. B. Interesse an Schnuppertraining">
+          </div>
+
+          <div class="form-group">
+            <label for="nachricht">Nachricht:</label>
+            <textarea id="nachricht" name="nachricht" rows="5" required placeholder="Deine Nachricht an uns..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Nachricht absenden</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>
