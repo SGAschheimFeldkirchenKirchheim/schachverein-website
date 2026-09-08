@@ -2,7 +2,7 @@
 #set page(width: 22cm, height: auto, margin: 1.5cm)
 #set text(font: "Liberation Sans", size: 10pt)
 
-#let navy = rgb("#0a1f44")
+#let navy = rgb("#0a1f44")https://github.com/SGAschheimFeldkirchenKirchheim/schachverein-website/tree/main/turniere/oberlandquartett
 #let gold = rgb("#ffd54a")
 #let navy-light = rgb("#eef1f8")
 
@@ -18,7 +18,7 @@
   ("24.07.2003", "Höhenkirchen", (4, 3, 2, 1)),
   ("18.06.2004", "Holzkirchen", (2, 3, 4, 1)),
   ("15.07.2005", "Deisenhofen", (3, 1, 4, 2)),
-  ("28.06.2024", "Aschheim-Feldkirchen-Kirchheim", (1, 2, 3, "Aschheim II")),
+  ("28.06.2024", "Aschheim-Feldkirchen-Kirchheim", (1, 2, 3, "-")),
   ("27.06.2025", "Höhenkirchen", (1, 2, 3, 4)),
   ("03.07.2026", "Holzkirchen", (1, 2, 3, 4)),
 )
