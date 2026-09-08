@@ -3,7 +3,151 @@ import re
 import glob
 
 # ==========================================
-# HELPER: TYPST TABELLEN IN HTML WANDELN
+# 1. POKAL-LOGIK & PARSER FÜR OBERLANDQUARTETT
+# ==========================================
+def compute_pokal_wins(teams_count, data_list):
+    streak = [0] * teams_count
+    total = [0] * teams_count
+    wins = []
+
+    for i, entry in enumerate(data_list):
+        results = entry[2]
+        for j, val in enumerate(results):
+            if isinstance(val, int) and val == 1:
+                streak[j] += 1
+                total[j] += 1
+            else:
+                streak[j] = 0
+                
+        for j in range(teams_count):
+            if streak[j] >= 3 or total[j] >= 5:
+                wins.append((i, j))
+                streak = [0] * teams_count
+                total = [0] * teams_count
+
+    return wins
+
+def parse_oberlandquartett(main_typ_path):
+    if not os.path.exists(main_typ_path):
+        return "<p>Keine Daten für Oberlandquartett gefunden.</p>"
+
+    with open(main_typ_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    teams_m = re.search(r'#let\s+teams\s*=\s*\((.*?)\)', content, re.DOTALL)
+    teams = []
+    if teams_m:
+        teams = [t.strip().strip('"\'') for t in teams_m.group(1).split(',') if t.strip()]
+
+    data = []
+    data_block_m = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', content, re.DOTALL)
+    if data_block_m:
+        raw_tuples = re.findall(r'\((.*?)\)', data_block_m.group(1), re.DOTALL)
+        for raw_tuple in raw_tuples:
+            parts = [p.strip() for p in raw_tuple.split(',') if p.strip()]
+            if len(parts) >= 3:
+                datum = parts[0].strip('"\'')
+                ausrichter = parts[1].strip('"\'')
+                results = []
+                for res_val in parts[2:]:
+                    res_val = res_val.strip('"\'')
+                    if res_val.isdigit():
+                        results.append(int(res_val))
+                    else:
+                        results.append(res_val)
+                data.append((datum, ausrichter, results))
+
+    if not teams or not data:
+        return "<p>Fehler beim Lesen der Oberlandquartett-Daten.</p>"
+
+    pokal_wins = compute_pokal_wins(len(teams), data)
+
+    html = ['<div style="text-align:center; margin-bottom:1.5rem;">']
+    html.append('<h2 style="font-size:1.4rem; font-weight:bold; color:#0a1f44; margin-bottom:1rem;">Oberland Quartett</h2>')
+    html.append('<div class="table-responsive"><table class="oq-tabelle">')
+    
+    html.append('<thead><tr>')
+    html.append('<th>Datum</th><th>Ausrichter</th>')
+    for t in teams:
+        html.append(f'<th>{t}</th>')
+    html.append('</tr></thead><tbody>')
+
+    for i, (datum, ausrichter, results) in enumerate(data):
+        row_bg = '#eef1f8' if i % 2 == 1 else '#ffffff'
+        html.append(f'<tr style="background-color: {row_bg};">')
+        html.append(f'<td style="text-align:left;">{datum}</td>')
+        html.append(f'<td style="text-align:left;">{ausrichter}</td>')
+
+        for j, val in enumerate(results):
+            is_win = (i, j) in pokal_wins
+            bg_color = ""
+            text_color = ""
+            font_weight = "normal"
+
+            if is_win:
+                bg_color = "background-color: #0a1f44;"
+                text_color = "color: white;"
+                font_weight = "bold"
+            elif isinstance(val, int) and val == 1:
+                bg_color = "background-color: #ffd54a;"
+                font_weight = "bold"
+
+            style = f'style="{bg_color} {text_color} font-weight:{font_weight};"' if bg_color or text_color or font_weight != "normal" else ""
+            html.append(f'<td {style}>{val}</td>')
+
+        html.append('</tr>')
+
+    html.append('</tbody></table></div>')
+    html.append('<p style="font-size:0.85rem; font-style:italic; margin-top:1rem; color:#555;">')
+    html.append('Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>')
+    html.append('Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.')
+    html.append('</p></div>')
+
+    return "\n".join(html)
+
+
+# ==========================================
+# 2. PARSER FÜR VEREINSINTERN / HALL OF FAME
+# ==========================================
+def parse_hall_of_fame(main_typ_path):
+    if not os.path.exists(main_typ_path):
+        return "<p>Keine Daten für Hall of Fame gefunden.</p>"
+
+    with open(main_typ_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    data_block_m = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', content, re.DOTALL)
+    if not data_block_m:
+        return "<p>Keine Einträge in data gefunden.</p>"
+
+    raw_tuples = re.findall(r'\((.*?)\)', data_block_m.group(1), re.DOTALL)
+    entries = []
+    for raw_tuple in raw_tuples:
+        parts = [p.strip().strip('"\'') for p in raw_tuple.split(',') if p.strip()]
+        if len(parts) >= 3:
+            spieler, turnier, jahr = parts[0], parts[1], parts[2]
+            entries.append((turnier, jahr, spieler))
+
+    if not entries:
+        return "<p>Keine Hall of Fame Einträge vorhanden.</p>"
+
+    html = ['<div class="table-responsive"><table class="hof-tabelle">']
+    html.append('<thead><tr><th>Turnier</th><th>Jahr</th><th>Spieler</th></tr></thead><tbody>')
+
+    for i, (turnier, jahr, spieler) in enumerate(entries):
+        row_bg = '#eef1f8' if i % 2 == 1 else '#ffffff'
+        html.append(f'<tr style="background-color: {row_bg};">')
+        html.append(f'<td style="text-align:left;">{turnier}</td>')
+        html.append(f'<td style="text-align:center;">{jahr}</td>')
+        html.append(f'<td style="text-align:left;">{spieler}</td>')
+        html.append('</tr>')
+
+    html.append('</tbody></table></div>')
+    return "\n".join(html)
+
+
+# ==========================================
+# GENERISCHER PARSER FÜR EINFACHE TYPST TABELLEN
 # ==========================================
 def parse_typst_table_to_html(typst_content):
     if '#table(' not in typst_content and 'table(' not in typst_content:
@@ -19,7 +163,6 @@ def parse_typst_table_to_html(typst_content):
     
     for token in tokens:
         token = token.strip()
-        
         if token.startswith('align:') or token.startswith('columns:') or token.startswith('stroke:'):
             continue
             
@@ -62,7 +205,7 @@ def parse_typst_table_to_html(typst_content):
 
 
 # ==========================================
-# 1. TERMINE (termine/termine.typ -> termine.html)
+# 3. TERMINE (termine/termine.typ -> termine.html)
 # ==========================================
 upcoming_events = []
 typst_termine_path = os.path.join("termine", "termine.typ")
@@ -132,55 +275,23 @@ if os.path.exists(typst_termine_path):
 
 
 # ==========================================
-# 2. TURNIERE-UNTERSEITEN DYNAMISCH AUS ORDNERN LESEN
+# 4. OBERLANDQUARTETT GENERIEREN
 # ==========================================
-def read_typst_from_dir(folder_path):
-    """Liest den Typst-Code aus einem Turniere-Ordner aus (sucht nach main.typ, table.typ oder kombiniert alle .typ)."""
-    if not os.path.exists(folder_path):
-        return ""
-    
-    # 1. Bevorzuge main.typ oder table.typ, falls vorhanden
-    main_file = os.path.join(folder_path, "main.typ")
-    table_file = os.path.join(folder_path, "table.typ")
-    
-    combined_code = ""
-    if os.path.exists(table_file):
-        with open(table_file, "r", encoding="utf-8") as f:
-            combined_code += f.read() + "\n"
-    if os.path.exists(main_file):
-        with open(main_file, "r", encoding="utf-8") as f:
-            combined_code += f.read() + "\n"
-            
-    if not combined_code:
-        for fpath in glob.glob(os.path.join(folder_path, "*.typ")):
-            if not fpath.endswith("template.typ"): # Ignoriere bloße Template-Definitionen
-                with open(fpath, "r", encoding="utf-8") as f:
-                    combined_code += f.read() + "\n"
-                    
-    return combined_code
+oq_main_path = os.path.join("turniere", "oberlandquartett", "main.typ")
+oq_content_html = parse_oberlandquartett(oq_main_path)
 
-def generate_custom_typst_page(folder_name, html_filename, title_text):
-    table_content = "<p>Keine Daten vorhanden.</p>"
-    
-    folder_path = os.path.join("turniere", folder_name)
-    code = read_typst_from_dir(folder_path)
-
-    if code:
-        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
-
-    page_html = f"""<!DOCTYPE html>
+oq_page_html = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title_text} | SG AFK</title>
+  <title>Oberlandquartett | SG AFK</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .table-responsive {{ overflow-x: auto; margin-top: 1.5rem; }}
-    .custom-tabelle {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }}
-    .custom-tabelle th, .custom-tabelle td {{ padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }}
-    .custom-tabelle th {{ background-color: #1a252f; color: white; }}
-    .monat-header {{ background-color: #3498db !important; color: white; font-weight: bold; font-size: 1.1rem; }}
+    .oq-tabelle {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }}
+    .oq-tabelle th, .oq-tabelle td {{ padding: 10px 12px; border: 1px solid #0a1f44; text-align: center; }}
+    .oq-tabelle th {{ background-color: #0a1f44; color: white; font-weight: bold; }}
   </style>
 </head>
 <body>
@@ -198,26 +309,69 @@ def generate_custom_typst_page(folder_name, html_filename, title_text):
   </header>
   <main class="container">
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-    <h1 style="margin-top:1rem;">{title_text}</h1>
-    <div class="table-responsive">
-      {table_content}
-    </div>
+    <h1 style="margin-top:1rem;">Oberlandquartett</h1>
+    {oq_content_html}
   </main>
   <footer>
     <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
   </footer>
 </body>
 </html>"""
-    
-    with open(html_filename, "w", encoding="utf-8") as f:
-        f.write(page_html)
 
-generate_custom_typst_page("oberlandquartett", "oberlandquartett.html", "Oberlandquartett")
-generate_custom_typst_page("vereinsintern", "vereinsintern.html", "Vereinsinterne Turniere & Hall of Fame")
+with open("oberlandquartett.html", "w", encoding="utf-8") as f:
+    f.write(oq_page_html)
 
 
 # ==========================================
-# 3. TURNIERE-ÜBERSICHTSSEITE (turniere.html)
+# 5. VEREINSINTERN / HALL OF FAME GENERIEREN
+# ==========================================
+hof_main_path = os.path.join("turniere", "vereinsintern", "main.typ")
+hof_content_html = parse_hall_of_fame(hof_main_path)
+
+hof_page_html = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vereinsinterne Turniere & Hall of Fame | SG AFK</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .table-responsive {{ overflow-x: auto; margin-top: 1.5rem; }}
+    .hof-tabelle {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }}
+    .hof-tabelle th, .hof-tabelle td {{ padding: 10px 12px; border: 1px solid #0a1f44; }}
+    .hof-tabelle th {{ background-color: #0a1f44; color: white; font-weight: bold; text-align: center; }}
+  </style>
+</head>
+<body>
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <main class="container">
+    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+    <h1 style="margin-top:1rem;">Vereinsinterne Turniere & Hall of Fame</h1>
+    {hof_content_html}
+  </main>
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+</body>
+</html>"""
+
+with open("vereinsintern.html", "w", encoding="utf-8") as f:
+    f.write(hof_page_html)
+
+
+# ==========================================
+# 6. TURNIERE-ÜBERSICHTSSEITE (turniere.html)
 # ==========================================
 html_turniere = """<!DOCTYPE html>
 <html lang="de">
@@ -269,7 +423,7 @@ with open("turniere.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 4. BERICHTE VERARBEITEN
+# 7. BERICHTE VERARBEITEN
 # ==========================================
 def typst_to_html_article(typst_text):
     title_m = re.search(r'#title\[(.*?)\]', typst_text)
@@ -329,7 +483,6 @@ if os.path.exists("berichte"):
     typ_files = sorted(glob.glob("berichte/*.typ"), reverse=True)
     
     for filepath in typ_files:
-        # Ignoriere reine Vorlagen
         if "vorlage" in filepath.lower():
             continue
             
@@ -435,7 +588,7 @@ with open("berichte.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 5. STARTSEITE GENERIEREN
+# 8. STARTSEITE GENERIEREN
 # ==========================================
 news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p style='font-size:0.9rem;'>Noch keine Berichte vorhanden.</p>"
 
@@ -582,4 +735,4 @@ html_index = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_index)
 
-print("Build erfolgreich für modulare Turnier-Ordner abgeschlossen!")
+print("Build erfolgreich abgeschlossen!")
