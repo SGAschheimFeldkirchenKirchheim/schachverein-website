@@ -7,10 +7,9 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
-    .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
-    .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
-    .custom-tabelle th { background-color: #1a252f; color: white; }
-    .monat-header { background-color: #3498db !important; color: white; font-weight: bold; font-size: 1.1rem; }
+    .oq-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }
+    .oq-tabelle th, .oq-tabelle td { padding: 10px 12px; border: 1px solid #0a1f44; text-align: center; }
+    .oq-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -29,12 +28,101 @@
   <main class="container">
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">Oberlandquartett</h1>
-    <div class="table-responsive">
-      <table class="custom-tabelle"><thead><tr></tr></thead><tbody>
-<tr><td>#text(size: 16pt, weight: "bold")[Oberland Quartett</td><td>Datum</td><td>Ausrichter</td><td>#t</td><td>#shown</td><td>#shown</td><td>Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.
-    
-    Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.</td></tr></tbody></table>
-    </div>
+    <div style="text-align:center; margin-bottom:1.5rem;">
+<h2 style="font-size:1.4rem; font-weight:bold; color:#0a1f44; margin-bottom:1rem;">Oberland Quartett</h2>
+<div class="table-responsive"><table class="oq-tabelle">
+<thead><tr>
+<th>Datum</th><th>Ausrichter</th>
+<th>AFK</th>
+<th>Deisenhofen</th>
+<th>Holzkirchen</th>
+<th>Höhenkirchen</th>
+</tr></thead><tbody>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">21.07.1997</td>
+<td style="text-align:left;">Deisenhofen</td>
+<td >(3</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+<td >4</td>
+<td >2</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">17.07.1998</td>
+<td style="text-align:left;">Aschheim-Feldkirchen</td>
+<td >(1</td>
+<td >3</td>
+<td >4</td>
+<td >2</td>
+</tr>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">1999</td>
+<td style="text-align:left;">Höhenkirchen</td>
+<td >(1</td>
+<td >2</td>
+<td >4</td>
+<td >3</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">30.06.2000</td>
+<td style="text-align:left;">Holzkirchen</td>
+<td >(3</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+<td >4</td>
+<td >2</td>
+</tr>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">29.06.2001</td>
+<td style="text-align:left;">Deisenhofen</td>
+<td >(3</td>
+<td >2</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+<td >4</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">24.07.2003</td>
+<td style="text-align:left;">Höhenkirchen</td>
+<td >(4</td>
+<td >3</td>
+<td >2</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+</tr>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">18.06.2004</td>
+<td style="text-align:left;">Holzkirchen</td>
+<td >(2</td>
+<td >3</td>
+<td >4</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">15.07.2005</td>
+<td style="text-align:left;">Deisenhofen</td>
+<td >(3</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+<td >4</td>
+<td >2</td>
+</tr>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">28.06.2024</td>
+<td style="text-align:left;">AFK</td>
+<td >(2</td>
+<td >SG ASK - Revolution!</td>
+<td >3</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">06.06.2027</td>
+<td style="text-align:left;">Deisenhofen</td>
+<td >(3</td>
+<td >4</td>
+<td style="background-color: #ffd54a;  font-weight:bold;">1</td>
+<td >-</td>
+</tr>
+</tbody></table></div>
+<p style="font-size:0.85rem; font-style:italic; margin-top:1rem; color:#555;">
+Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>
+Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.
+</p></div>
   </main>
   <footer>
     <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
