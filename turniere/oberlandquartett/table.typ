@@ -34,9 +34,9 @@
 #let pokal-wins = compute-pokal-wins(teams, data)
 #let is-pokal-cell(i, j) = pokal-wins.any(w => w.at(0) == i and w.at(1) == j)
 
-// Gelb markiert NUR die Platz-1 der eigenen Mannschaft (AFK), die Pokal-Logik
+// Gelb markiert NUR die Platz-1 der eigenen Mannschaft (Aschheim), die Pokal-Logik
 // (navy) läuft unabhängig davon fuer alle Teams.
-#let afk-index = teams.position(t => t == "AFK")
+#let Aschheim-index = teams.position(t => t == "Aschheim")
 
 // ---------- TABELLE ----------
 #align(center)[
@@ -55,7 +55,7 @@
         let i = row - 1
         let val = data.at(i).at(2).at(j)
         if is-pokal-cell(i, j) { navy }
-        else if j == afk-index and type(val) == int and val == 1 { gold }
+        else if j == Aschheim-index and type(val) == int and val == 1 { gold }
         else if calc.even(row) { navy-light }
         else { white }
       } else if calc.even(row) { navy-light }
