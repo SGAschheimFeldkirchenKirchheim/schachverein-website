@@ -16,7 +16,7 @@ def parse_typst_to_html(typst_content):
     
     rows_html = []
     current_row = []
-    upcoming_events = [] # Für die Startseite
+    upcoming_events = []
     
     for token in tokens:
         token = token.strip()
@@ -39,11 +39,9 @@ def parse_typst_to_html(typst_content):
             current_row.append(f'<td{cls}>{text}</td>')
             
             if len(current_row) == 10:
-                # Prüfe, ob in dieser Zeile ein Event/Termin steckt für die Vorschau auf der Startseite
                 datum = re.sub(r'<.*?>', '', current_row[0]).strip()
                 event_info = re.sub(r'<.*?>', '', current_row[1]).strip()
                 
-                # Falls kein spezifischer Vereinsevent-Text da ist, suche in den Mannschaftsspalten
                 if not event_info:
                     teams = ["AFK 1", "AFK 2", "AFK 3", "AFK 4", "AFK 5", "AFK 6", "Senioren", "Jugend"]
                     for idx, cell in enumerate(current_row[2:], start=0):
@@ -72,7 +70,7 @@ if os.path.exists("termine.typ"):
 
     table_body, upcoming_events = parse_typst_to_html(typst_code)
 
-    html_termine = f"""<!DOCTYPE html>
+    html_termine = """<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -80,14 +78,14 @@ if os.path.exists("termine.typ"):
   <title>Termine & Spielplan | SG AFK</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .table-responsive {{ overflow-x: auto; margin-top: 1.5rem; }}
-    .termine-tabelle {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }}
-    .termine-tabelle th, .termine-tabelle td {{ padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }}
-    .termine-tabelle th {{ background-color: #1a252f; color: white; }}
-    .monat-header {{ background-color: #00bfff !important; font-weight: bold; font-size: 1.1rem; }}
-    .bg-yellow {{ background-color: #fff2ac !important; }}
-    .bg-orange {{ background-color: #ffd8a8 !important; }}
-    .termine-tabelle td:nth-child(1), .termine-tabelle td:nth-child(2) {{ text-align: left; }}
+    .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
+    .termine-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
+    .termine-tabelle th, .termine-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
+    .termine-tabelle th { background-color: #1a252f; color: white; }
+    .monat-header { background-color: #00bfff !important; font-weight: bold; font-size: 1.1rem; }
+    .bg-yellow { background-color: #fff2ac !important; }
+    .bg-orange { background-color: #ffd8a8 !important; }
+    .termine-tabelle td:nth-child(1), .termine-tabelle td:nth-child(2) { text-align: left; }
   </style>
 </head>
 <body>
@@ -114,7 +112,7 @@ if os.path.exists("termine.typ"):
           </tr>
         </thead>
         <tbody>
-{table_body}
+""" + table_body + """
         </tbody>
       </table>
     </div>
@@ -145,7 +143,6 @@ def typst_to_html_article(typst_text):
     body = re.sub(r'#date\[.*?\]', '', body)
     body = re.sub(r'#author\[.*?\]', '', body)
     
-    # Vorschautext für die Startseite generieren (ohne Formatierungszeichen)
     raw_text = re.sub(r'[=#*]', '', body).strip()
     preview_snippet = raw_text[:140] + "..." if len(raw_text) > 140 else raw_text
 
@@ -176,7 +173,7 @@ if os.path.exists("berichte"):
             
         title, date, author, body_html, snippet = typst_to_html_article(content)
         
-        # HTML für die Detailseite im berichte-Ordner
+        author_str = f" | ✍️ von {author}" if author else ""
         article_html = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -201,7 +198,7 @@ if os.path.exists("berichte"):
   <main class="container">
     <a href="../berichte.html" style="text-decoration:none;">← Zurück zur Berichte-Übersicht</a>
     <h1 style="margin-top:1rem;">{title}</h1>
-    <p style="color:#777; font-size:0.9rem;">📅 {date} {f'| ✍️ von {author}' if author else ''}</p>
+    <p style="color:#777; font-size:0.9rem;">📅 {date}{author_str}</p>
     <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
     <div class="article-content">{body_html}</div>
   </main>
@@ -215,7 +212,6 @@ if os.path.exists("berichte"):
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(article_html)
             
-        # Für berichte.html
         berichte_cards.append(f"""
         <div class="card">
           <h3>{title}</h3>
@@ -224,7 +220,6 @@ if os.path.exists("berichte"):
         </div>
         """)
         
-        # Für die Startseite (maximal 3 aktuelle Berichte)
         if len(home_news_snippets) < 3:
             home_news_snippets.append(f"""
             <div class="card" style="margin-bottom: 1rem;">
@@ -274,7 +269,7 @@ with open("berichte.html", "w", encoding="utf-8") as f:
     f.write(html_berichte_overview)
 
 # ==========================================
-# 3. STARTSEITE (index.html) AUTOMATISCH AKTUALISIEREN
+# 3. STARTSEITE (index.html) GENERIEREN
 # ==========================================
 news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
 
@@ -425,4 +420,4 @@ html_index = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_index)
 
-print("Startseite, Berichte und Termine vollautomatisch aktualisiert!")
+print("Build erfolgreich abgeschlossen!")
