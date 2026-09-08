@@ -58,7 +58,17 @@ nav a:hover {
 
 /* Variante A: 2 Spalten (z. B. für Startseite) */
 .grid-Mannschaften {
-  grid-template-columns: repeat(3, 1fr);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 Spalten auf PCs/Monitoren */
+  gap: 1.5rem;                           /* Abstand zwischen den Karten */
+  margin-top: 1.5rem;
+}
+
+/* Automatisch auf 1 Spalte wechseln, wenn der Bildschirm schmaler als 768px ist (z. B. Smartphones) */
+@media (max-width: 768px) {
+  .grid-Mannschaften {
+    grid-template-columns: 1fr;
+  }
 }
 
 
