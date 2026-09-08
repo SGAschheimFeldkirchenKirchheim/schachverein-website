@@ -1,4 +1,4 @@
-#title[Titel]
+#title[Vorlage]
 #date[Datum]
 #author[Verfasser des Berichts]
 
@@ -7,7 +7,7 @@
 Hier kann man den Bericht schreiben.
 
 *Dieser Text ist fett*
-_Dieser Text ist kuriv_
+_Dieser Text ist kursiv_
 
 Das sind Überschriften
 = Heading Level 1
