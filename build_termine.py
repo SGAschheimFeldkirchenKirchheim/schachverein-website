@@ -6,15 +6,12 @@ import glob
 # HELPER: TYPST TABELLEN IN HTML WANDELN
 # ==========================================
 def parse_typst_table_to_html(typst_content):
-    """Generischer Parser für Typst-Tabellen (Termine, Hall of Fame, Oberlandquartett)"""
     if '#table(' not in typst_content and 'table(' not in typst_content:
         return "<p>Keine Tabelle gefunden.</p>"
 
-    # Extrahiere den Inhalt innerhalb der Haupt-Tabelle
     table_match = re.search(r'table\((.*?)\)\s*\]?$', typst_content, re.DOTALL)
     table_body = table_match.group(1) if table_match else typst_content
 
-    # Zelle für Zelle oder Zeile für Zeile verarbeiten
     tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|table\.header\(.*?\)|\[.*?\])', table_body, re.DOTALL)
     
     html_rows = []
@@ -23,18 +20,15 @@ def parse_typst_table_to_html(typst_content):
     for token in tokens:
         token = token.strip()
         
-        # Ignoriere reine Tabellen-Konfigurationen
         if token.startswith('align:') or token.startswith('columns:') or token.startswith('stroke:'):
             continue
             
-        # Header-Behandlung
         if 'table.header' in token:
             headers = re.findall(r'\[(.*?)\]', token)
             header_cells = "".join([f"<th>{re.sub(r'[*_]', '', h).strip()}</th>" for h in headers if h.strip()])
             html_rows.append(f"<thead><tr>{header_cells}</tr></thead><tbody>")
             continue
 
-        # Trennzeilen / Monatszeilen / Spezialzellen mit colspan
         if 'colspan:' in token:
             if current_row:
                 html_rows.append("<tr>" + "".join(current_row) + "</tr>")
@@ -68,14 +62,17 @@ def parse_typst_table_to_html(typst_content):
 
 
 # ==========================================
-# 1. TERMINE (termine.typ -> termine.html)
+# 1. TERMINE (termine/termine.typ -> termine.html)
 # ==========================================
 upcoming_events = []
-if os.path.exists("termine.typ"):
-    with open("termine.typ", "r", encoding="utf-8") as f:
+typst_termine_path = os.path.join("termine", "termine.typ")
+if not os.path.exists(typst_termine_path) and os.path.exists("termine.typ"):
+    typst_termine_path = "termine.typ"
+
+if os.path.exists(typst_termine_path):
+    with open(typst_termine_path, "r", encoding="utf-8") as f:
         typst_code = f.read()
 
-    # Einfacher Auszug für die Nächsten Termine auf der Startseite
     tokens = re.findall(r'\[(.*?)\]', typst_code)
     for i in range(len(tokens)-1):
         if re.match(r'^\d{2}\.\d{2}\.', tokens[i].strip()):
@@ -135,13 +132,40 @@ if os.path.exists("termine.typ"):
 
 
 # ==========================================
-# 2. OBERLANDQUARTETT & HALL OF FAME GENERIEREN
+# 2. TURNIERE-UNTERSEITEN DYNAMISCH AUS ORDNERN LESEN
 # ==========================================
-def generate_custom_typst_page(typst_filename, html_filename, title_text):
+def read_typst_from_dir(folder_path):
+    """Liest den Typst-Code aus einem Turniere-Ordner aus (sucht nach main.typ, table.typ oder kombiniert alle .typ)."""
+    if not os.path.exists(folder_path):
+        return ""
+    
+    # 1. Bevorzuge main.typ oder table.typ, falls vorhanden
+    main_file = os.path.join(folder_path, "main.typ")
+    table_file = os.path.join(folder_path, "table.typ")
+    
+    combined_code = ""
+    if os.path.exists(table_file):
+        with open(table_file, "r", encoding="utf-8") as f:
+            combined_code += f.read() + "\n"
+    if os.path.exists(main_file):
+        with open(main_file, "r", encoding="utf-8") as f:
+            combined_code += f.read() + "\n"
+            
+    if not combined_code:
+        for fpath in glob.glob(os.path.join(folder_path, "*.typ")):
+            if not fpath.endswith("template.typ"): # Ignoriere bloße Template-Definitionen
+                with open(fpath, "r", encoding="utf-8") as f:
+                    combined_code += f.read() + "\n"
+                    
+    return combined_code
+
+def generate_custom_typst_page(folder_name, html_filename, title_text):
     table_content = "<p>Keine Daten vorhanden.</p>"
-    if os.path.exists(typst_filename):
-        with open(typst_filename, "r", encoding="utf-8") as f:
-            code = f.read()
+    
+    folder_path = os.path.join("turniere", folder_name)
+    code = read_typst_from_dir(folder_path)
+
+    if code:
         table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
 
     page_html = f"""<!DOCTYPE html>
@@ -188,8 +212,8 @@ def generate_custom_typst_page(typst_filename, html_filename, title_text):
     with open(html_filename, "w", encoding="utf-8") as f:
         f.write(page_html)
 
-generate_custom_typst_page("oberlandquartett.typ", "oberlandquartett.html", "Oberlandquartett")
-generate_custom_typst_page("hall_of_fame.typ", "vereinsintern.html", "Vereinsinterne Turniere & Hall of Fame")
+generate_custom_typst_page("oberlandquartett", "oberlandquartett.html", "Oberlandquartett")
+generate_custom_typst_page("vereinsintern", "vereinsintern.html", "Vereinsinterne Turniere & Hall of Fame")
 
 
 # ==========================================
@@ -305,6 +329,10 @@ if os.path.exists("berichte"):
     typ_files = sorted(glob.glob("berichte/*.typ"), reverse=True)
     
     for filepath in typ_files:
+        # Ignoriere reine Vorlagen
+        if "vorlage" in filepath.lower():
+            continue
+            
         filename = os.path.basename(filepath).replace(".typ", ".html")
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
@@ -407,7 +435,7 @@ with open("berichte.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 5. STARTSEITE (index.html) GENERIEREN
+# 5. STARTSEITE GENERIEREN
 # ==========================================
 news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p style='font-size:0.9rem;'>Noch keine Berichte vorhanden.</p>"
 
@@ -554,4 +582,4 @@ html_index = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_index)
 
-print("Vollständiger Build inklusive Turniere, Oberlandquartett und Hall of Fame abgeschlossen!")
+print("Build erfolgreich für modulare Turnier-Ordner abgeschlossen!")
