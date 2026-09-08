@@ -8,7 +8,7 @@
 // ============ HIER TRAGT IHR EURE DATEN EIN ============
 
 // Reihenfolge der Teams = Reihenfolge der Ergebnis-Spalten in der Tabelle
-#let teams = ("AFK", "Deisenhofen", "Holzkirchen", "Höhenkirchen")
+#let teams = ("Aschheim", "Deisenhofen", "Holzkirchen", "Höhenkirchen")
 
 // Jede Zeile: (Datum, Ausrichter, (Platz Team1, Platz Team2, Platz Team3, Platz Team4))
 // Platz kann sein:
