@@ -49,12 +49,19 @@ nav a:hover {
   padding: 0 1rem;
 }
 
+/* Grund-Grid für Abstände */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
+
+/* Variante A: 2 Spalten (z. B. für Startseite) */
+.grid-Mannschaften {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+
 
 .card {
   border: 1px solid #e0e0e0;
