@@ -42,7 +42,7 @@
 #align(center)[
 
   #table(
-    columns: (center, center) + teams.map(t => center,
+    columns: (center, center) + teams.map(t => center),
     stroke: 0.6pt + navy,
     inset: 7pt,
     align: (center,center,center,center,center,center),
