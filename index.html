@@ -6,7 +6,6 @@
   <title>SGem Aschheim / Feldkirchen / Kirchheim e.V.</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* 3-Spalten-Layout für große Monitore */
     .hero-layout {
       display: grid;
       grid-template-columns: 1fr 1.6fr 1fr;
@@ -14,7 +13,6 @@
       align-items: start;
       margin-bottom: 2rem;
     }
-    
     .info-card {
       background: #f8f9fa;
       border-left: 5px solid #27ae60;
@@ -22,7 +20,6 @@
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-    
     .maps-btn {
       display: inline-block;
       background: #3498db;
@@ -34,7 +31,6 @@
       font-weight: bold;
       margin-top: 0.6rem;
     }
-    
     .hinweis-box {
       background: #e8f4f8;
       border: 1px solid #bce8f1;
@@ -44,8 +40,6 @@
       margin-top: 0.8rem;
       font-size: 0.85rem;
     }
-
-    /* Auf Smartphones untereinander stapeln */
     @media (max-width: 1024px) {
       .hero-layout {
         grid-template-columns: 1fr;
@@ -63,7 +57,7 @@
       <a href="mannschaften.html">Mannschaften</a>
       <a href="termine.html">Termine</a>
       <a href="berichte.html">Berichte</a>
-      <a href="jugend.html">Jugend</a>
+      <a href="turniere.html">Turniere</a>
       <a href="kontakt.html">Kontakt</a>
     </nav>
   </header>
@@ -75,10 +69,7 @@
 
   <main class="container" style="max-width: 1300px;">
 
-    <!-- Das gewünschte 3-Spalten-Layout -->
     <div class="hero-layout">
-      
-      <!-- SPALTE 1: GELB (Berichte) -->
       <div>
         <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
         
@@ -106,7 +97,6 @@ Das sind Überschriften
         <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
       </div>
 
-      <!-- SPALTE 2: MITTE (Wann & Wo) -->
       <div class="info-card">
         <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
         <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
@@ -122,7 +112,6 @@ Das sind Überschriften
         <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
       </div>
 
-      <!-- SPALTE 3: BLAU (Termine) -->
       <div>
         <h3 style="margin-top:0;">📅 Nächste Termine</h3>
         <div class="card" style="padding: 1rem;">
@@ -152,10 +141,8 @@ Das sind Überschriften
           <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:0.8rem; font-size:0.85rem; padding: 0.5rem;">Zum Spielplan</a>
         </div>
       </div>
-
     </div>
 
-    <!-- 3 Kacheln unten -->
     <div class="grid-3">
       <div class="card">
         <h3>♟️ Hobbyspieler & Einsteiger</h3>
@@ -164,7 +151,6 @@ Das sind Überschriften
       <div class="card">
         <h3>♟️ Kinder & Jugendliche</h3>
         <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
-        <a href="jugend.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Mehr zur Jugend</a>
       </div>
       <div class="card">
         <h3>♟️ Mannschaftsschach</h3>
