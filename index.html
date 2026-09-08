@@ -6,42 +6,48 @@
   <title>SGem Aschheim / Feldkirchen / Kirchheim e.V.</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    /* 3-Spalten-Layout für große Monitore */
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr 1fr;
+      gap: 1.2rem;
+      align-items: start;
+      margin-bottom: 2rem;
+    }
+    
     .info-card {
       background: #f8f9fa;
       border-left: 5px solid #27ae60;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      padding: 1.2rem;
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+    
     .maps-btn {
       display: inline-block;
       background: #3498db;
       color: white;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       text-decoration: none;
       border-radius: 4px;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: bold;
-      margin-top: 0.8rem;
+      margin-top: 0.6rem;
     }
+    
     .hinweis-box {
       background: #e8f4f8;
       border: 1px solid #bce8f1;
       color: #2c3e50;
-      padding: 1rem;
+      padding: 0.8rem;
       border-radius: 5px;
-      margin-top: 1rem;
-      font-size: 0.95rem;
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
     }
-    .home-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    @media (max-width: 768px) {
-      .home-grid {
+
+    /* Auf Smartphones untereinander stapeln */
+    @media (max-width: 1024px) {
+      .hero-layout {
         grid-template-columns: 1fr;
       }
     }
@@ -67,92 +73,86 @@
     <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
   </section>
 
-  <main class="container">
+  <main class="container" style="max-width: 1300px;">
 
-    <!-- Wann & Wo Box -->
-    <div class="info-card">
-      <h2>🕒 Wann & Wo wir spielen</h2>
-      <p><strong>Jeden Freitag</strong> (Das Gebäude ist ab 18:00 Uhr geöffnet)</p>
-      <ul>
-        <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
-        <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
-      </ul>
-      <div class="hinweis-box">
-        💡 <strong>Volle Flexibilität für jedes Alter:</strong> Bei uns gibt es keine starren Grenzen! Erwachsene dürfen selbstverständlich schon ab 18:00 Uhr zum freien Spielen kommen, und auch Jugendliche müssen um 19:30 Uhr nicht nach Hause gehen, sondern können gerne länger bleiben. Jeder kann kommen und gehen, wann er möchte.
-      </div>
-      <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1.5rem 0;">
-      <p><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim bei München</p>
-      <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
-    </div>
-
-    <!-- 2-Spalten Layout: Links News, Rechts Termine -->
-    <div class="home-grid">
+    <!-- Das gewünschte 3-Spalten-Layout -->
+    <div class="hero-layout">
+      
+      <!-- SPALTE 1: GELB (Berichte) -->
       <div>
-        <h2>📰 Aktuelle Berichte</h2>
+        <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
         
-            <div class="card" style="margin-bottom: 1rem;">
-              <h3 style="margin-bottom:0.3rem;">Titel</h3>
-              <p style="color:#777; font-size:0.8rem; margin-top:0;">📅 Datum</p>
-              <p style="font-size:0.9rem;">Hier kann man den Bericht schreiben.
+            <div class="card" style="margin-bottom: 1rem; padding: 1rem;">
+              <h4 style="margin: 0 0 0.3rem 0; font-size:1.05rem;">Titel</h4>
+              <p style="color:#777; font-size:0.75rem; margin:0 0 0.5rem 0;">📅 Datum</p>
+              <p style="font-size:0.85rem; margin: 0 0 0.5rem 0; line-height: 1.3;">Hier kann man den Bericht schreiben.
 
 Dieser Text ist fett
 _Dieser Text ist kuriv_
 
 Das sind Überschriften
- Heading Level 1
- Heading Level 2...</p>
-              <a href="berichte/Vorlage.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.9rem;">Weiterlesen →</a>
+ He...</p>
+              <a href="berichte/Vorlage.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.85rem;">Weiterlesen →</a>
             </div>
             
 
-            <div class="card" style="margin-bottom: 1rem;">
-              <h3 style="margin-bottom:0.3rem;">Turnierbericht</h3>
-              <p style="color:#777; font-size:0.8rem; margin-top:0;">📅 </p>
-              <p style="font-size:0.9rem;">Das ist ein Test</p>
-              <a href="berichte/2026-10-vereinsmeisterschaft.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.9rem;">Weiterlesen →</a>
+            <div class="card" style="margin-bottom: 1rem; padding: 1rem;">
+              <h4 style="margin: 0 0 0.3rem 0; font-size:1.05rem;">Turnierbericht</h4>
+              <p style="color:#777; font-size:0.75rem; margin:0 0 0.5rem 0;">📅 </p>
+              <p style="font-size:0.85rem; margin: 0 0 0.5rem 0; line-height: 1.3;">Das ist ein Test</p>
+              <a href="berichte/2026-10-vereinsmeisterschaft.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.85rem;">Weiterlesen →</a>
             </div>
             
-
-            <div class="card" style="margin-bottom: 1rem;">
-              <h3 style="margin-bottom:0.3rem;">Spannende Duelle beim Herbstblitzturnier 2026</h3>
-              <p style="color:#777; font-size:0.8rem; margin-top:0;">📅 25. September 2026</p>
-              <p style="font-size:0.9rem;">Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt. 
-Mit einer hervorragenden Beteiligung von 18 Spielern – von unser...</p>
-              <a href="berichte/2026-09-herbstblitz.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.9rem;">Weiterlesen →</a>
-            </div>
-            
-        <a href="berichte.html" style="display:inline-block; margin-top:0.5rem; color:#3498db; font-weight:bold;">Alle Berichte ansehen →</a>
+        <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
       </div>
 
+      <!-- SPALTE 2: MITTE (Wann & Wo) -->
+      <div class="info-card">
+        <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
+        <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
+        <ul style="font-size:0.85rem; padding-left: 1.2rem;">
+          <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+          <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
+        </ul>
+        <div class="hinweis-box">
+          💡 <strong>Volle Flexibilität:</strong> Keine starren Grenzen! Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.
+        </div>
+        <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1rem 0;">
+        <p style="font-size:0.85rem; margin:0;"><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim</p>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
+      </div>
+
+      <!-- SPALTE 3: BLAU (Termine) -->
       <div>
-        <h2>📅 Nächste Termine</h2>
-        <div class="card">
+        <h3 style="margin-top:0;">📅 Nächste Termine</h3>
+        <div class="card" style="padding: 1rem;">
           <ul style="list-style:none; padding:0; margin:0;">
             
-    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+    <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
       <strong>16.09. Mi, 18:00 Uhr</strong><br>
-      <span style="color:#555; font-size:0.9rem;">Duke-Turnier Part II</span>
+      <span style="color:#555;">Duke-Turnier Part II</span>
     </li>
     
-    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+    <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
       <strong>18.09. Fr</strong><br>
-      <span style="color:#555; font-size:0.9rem;">Akklimatisieren im neuen GyKi</span>
+      <span style="color:#555;">Akklimatisieren im neuen GyKi</span>
     </li>
     
-    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+    <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
       <strong>25.09. Fr</strong><br>
-      <span style="color:#555; font-size:0.9rem;">Herbstblitz</span>
+      <span style="color:#555;">Herbstblitz</span>
     </li>
     
-    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+    <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
       <strong>02.10. Fr, 19:30 Uhr</strong><br>
-      <span style="color:#555; font-size:0.9rem;">Schnellschach-VM</span>
+      <span style="color:#555;">Schnellschach-VM</span>
     </li>
     
           </ul>
-          <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:1rem;">Zum kompletten Spielplan</a>
+          <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:0.8rem; font-size:0.85rem; padding: 0.5rem;">Zum Spielplan</a>
         </div>
       </div>
+
     </div>
 
     <!-- 3 Kacheln unten -->
