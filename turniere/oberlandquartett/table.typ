@@ -45,7 +45,7 @@
 
   #table(
     align: (center,center,center,center,center,center),
-    columns: (auto, auto) + teams.map(t => 1fr),
+    # columns: (auto, auto) + teams.map(t => 1fr),
     stroke: 0.6pt + navy,
     inset: 7pt,
     align: (left, left) + teams.map(t => center),
