@@ -27,11 +27,23 @@ def compute_pokal_wins(teams_count, data_list):
 
     return wins
 
-def parse_oberlandquartett(main_typ_path):
-    if not os.path.exists(main_typ_path):
+def parse_oberlandquartett():
+    possible_paths = [
+        os.path.join("turniere", "oberlandquartett", "main.typ"),
+        os.path.join("turniere", "oberlandquartett.typ"),
+        "oberlandquartett.typ"
+    ]
+    
+    target_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            target_path = p
+            break
+
+    if not target_path:
         return "<p>Keine Daten für Oberlandquartett gefunden.</p>"
 
-    with open(main_typ_path, "r", encoding="utf-8") as f:
+    with open(target_path, "r", encoding="utf-8") as f:
         content = f.read()
 
     teams_m = re.search(r'#let\s+teams\s*=\s*\((.*?)\)', content, re.DOTALL)
@@ -58,7 +70,7 @@ def parse_oberlandquartett(main_typ_path):
                 data.append((datum, ausrichter, results))
 
     if not teams or not data:
-        return "<p>Fehler beim Lesen der Oberlandquartett-Daten.</p>"
+        return "<p>Fehler beim Auslesen der Oberlandquartett-Daten aus main.typ.</p>"
 
     pokal_wins = compute_pokal_wins(len(teams), data)
 
@@ -109,11 +121,23 @@ def parse_oberlandquartett(main_typ_path):
 # ==========================================
 # 2. PARSER FÜR VEREINSINTERN / HALL OF FAME
 # ==========================================
-def parse_hall_of_fame(main_typ_path):
-    if not os.path.exists(main_typ_path):
+def parse_hall_of_fame():
+    possible_paths = [
+        os.path.join("turniere", "vereinsintern", "main.typ"),
+        os.path.join("turniere", "hall_of_fame.typ"),
+        "hall_of_fame.typ"
+    ]
+
+    target_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            target_path = p
+            break
+
+    if not target_path:
         return "<p>Keine Daten für Hall of Fame gefunden.</p>"
 
-    with open(main_typ_path, "r", encoding="utf-8") as f:
+    with open(target_path, "r", encoding="utf-8") as f:
         content = f.read()
 
     data_block_m = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', content, re.DOTALL)
@@ -147,13 +171,12 @@ def parse_hall_of_fame(main_typ_path):
 
 
 # ==========================================
-# GENERISCHER PARSER FÜR EINFACHE TYPST TABELLEN
+# 3. GENERISCHER PARSER FÜR TERMINE
 # ==========================================
 def parse_typst_table_to_html(typst_content):
     if '#table(' not in typst_content and 'table(' not in typst_content:
         return "<p>Keine Tabelle gefunden.</p>"
 
-    # Typst-Befehle aus Monatszeilen wie [#strong("September")] bereinigen
     typst_content = re.sub(r'#strong\s*\(\s*["\'](.*?)["\']\s*\)', r'\1', typst_content)
     typst_content = re.sub(r'#align\s*\([^)]*\)', '', typst_content)
 
@@ -167,7 +190,6 @@ def parse_typst_table_to_html(typst_content):
     
     for token in tokens:
         token = token.strip()
-        
         if token.startswith('align:') or token.startswith('columns:') or token.startswith('stroke:'):
             continue
             
@@ -212,7 +234,7 @@ def parse_typst_table_to_html(typst_content):
 
 
 # ==========================================
-# 3. TERMINE (termine/termine.typ -> termine.html)
+# 4. TERMINE ERZEUGEN
 # ==========================================
 upcoming_events = []
 typst_termine_path = os.path.join("termine", "termine.typ")
@@ -282,10 +304,9 @@ if os.path.exists(typst_termine_path):
 
 
 # ==========================================
-# 4. OBERLANDQUARTETT GENERIEREN
+# 5. OBERLANDQUARTETT ERZEUGEN
 # ==========================================
-oq_main_path = os.path.join("turniere", "oberlandquartett", "main.typ")
-oq_content_html = parse_oberlandquartett(oq_main_path)
+oq_content_html = parse_oberlandquartett()
 
 oq_page_html = f"""<!DOCTYPE html>
 <html lang="de">
@@ -330,10 +351,9 @@ with open("oberlandquartett.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 5. VEREINSINTERN / HALL OF FAME GENERIEREN
+# 6. VEREINSINTERN / HALL OF FAME ERZEUGEN
 # ==========================================
-hof_main_path = os.path.join("turniere", "vereinsintern", "main.typ")
-hof_content_html = parse_hall_of_fame(hof_main_path)
+hof_content_html = parse_hall_of_fame()
 
 hof_page_html = f"""<!DOCTYPE html>
 <html lang="de">
@@ -378,7 +398,7 @@ with open("vereinsintern.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 6. TURNIERE-ÜBERSICHTSSEITE (turniere.html)
+# 7. TURNIERE-ÜBERSICHTSSEITE
 # ==========================================
 html_turniere = """<!DOCTYPE html>
 <html lang="de">
@@ -430,7 +450,7 @@ with open("turniere.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 7. BERICHTE VERARBEITEN
+# 8. BERICHTE VERARBEITEN
 # ==========================================
 def typst_to_html_article(typst_text):
     title_m = re.search(r'#title\[(.*?)\]', typst_text)
@@ -595,7 +615,7 @@ with open("berichte.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
-# 8. STARTSEITE GENERIEREN
+# 9. STARTSEITE GENERIEREN
 # ==========================================
 news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p style='font-size:0.9rem;'>Noch keine Berichte vorhanden.</p>"
 
