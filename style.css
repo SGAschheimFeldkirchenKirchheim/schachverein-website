@@ -9,28 +9,32 @@ body {
 header {
   background: #1a252f;
   color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  padding: 1.5rem 2rem;
+  text-align: center; /* Zentriert Logo und Menü */
 }
 
 header h2 {
-  margin: 0;
-  font-size: 1.3rem;
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+nav {
+  display: flex;
+  justify-content: center; /* Zentriert die Menülinks */
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 nav a {
   color: white;
   text-decoration: none;
-  margin-left: 1.5rem;
   font-weight: bold;
 }
 
 nav a:hover {
   text-decoration: underline;
 }
+
 
 .hero {
   background: #f4f6f7;
@@ -61,6 +65,13 @@ nav a:hover {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 Spalten auf PCs/Monitoren */
   gap: 1.5rem;                           /* Abstand zwischen den Karten */
+  margin-top: 1.5rem;
+}
+/* 3 Kacheln nebeneinander auf Monitoren */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
