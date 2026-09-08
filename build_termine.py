@@ -1,18 +1,17 @@
+import os
 import re
+import glob
 
+# ==========================================
+# 1. TYPST TERMIN-TABELLE VERARBEITEN
+# ==========================================
 def parse_typst_to_html(typst_content):
-    # 1. Entferne #align, #import und den umschließenden table(...) Header-Teil
-    # Wir schneiden alles ab, wo die eigentlichen Daten/Monate beginnen
     if 'table.cell(colspan: 10' in typst_content:
-        # Schneide alles VOR der ersten Monatszelle ab
         body_part = 'table.cell(colspan: 10' + typst_content.split('table.cell(colspan: 10', 1)[1]
     else:
         body_part = typst_content
 
-    # Entferne die schließenden Klammern am Ende der Typst-Datei
     body_part = re.sub(r'\n\s*\)\s*\]\s*$', '', body_part)
-
-    # 2. Extrahiere alle Zellen im Body
     tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|\[.*?\])', body_part, re.DOTALL)
     
     rows_html = []
@@ -20,8 +19,6 @@ def parse_typst_to_html(typst_content):
     
     for token in tokens:
         token = token.strip()
-        
-        # Monats-Überschrift
         if 'colspan: 10' in token:
             if current_row:
                 rows_html.append("<tr>" + "".join(current_row) + "</tr>")
@@ -36,13 +33,10 @@ def parse_typst_to_html(typst_content):
             elif 'fill: orange' in token:
                 cls = ' class="bg-orange"'
             
-            # Textinhalt aus den eckigen Klammern [ ... ] extrahieren
             content_match = re.search(r'\[(.*)\]$', token, re.DOTALL)
             text = content_match.group(1).strip() if content_match else ""
-            
             current_row.append(f'<td{cls}>{text}</td>')
             
-            # Sobald 10 Spalten voll sind, erstelle eine Tabellenzeile
             if len(current_row) == 10:
                 rows_html.append("<tr>" + "".join(current_row) + "</tr>")
                 current_row = []
@@ -52,14 +46,14 @@ def parse_typst_to_html(typst_content):
         
     return "\n".join(rows_html)
 
-# Typst-Datei einlesen
-with open("termine.typ", "r", encoding="utf-8") as f:
-    typst_code = f.read()
+# Build termine.html
+if os.path.exists("termine.typ"):
+    with open("termine.typ", "r", encoding="utf-8") as f:
+        typst_code = f.read()
 
-table_body = parse_typst_to_html(typst_code)
+    table_body = parse_typst_to_html(typst_code)
 
-# HTML-Gerüst aufbauen
-html_template = f"""<!DOCTYPE html>
+    html_termine = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -85,6 +79,7 @@ html_template = f"""<!DOCTYPE html>
       <a href="ueber-uns.html">Über uns</a>
       <a href="mannschaften.html">Mannschaften</a>
       <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
       <a href="jugend.html">Jugend</a>
       <a href="kontakt.html">Kontakt</a>
     </nav>
@@ -111,7 +106,147 @@ html_template = f"""<!DOCTYPE html>
 </body>
 </html>"""
 
-with open("termine.html", "w", encoding="utf-8") as f:
-    f.write(html_template)
+    with open("termine.html", "w", encoding="utf-8") as f:
+        f.write(html_termine)
 
-print("termine.html erfolgreich ohne Typst-Header-Salat generiert!")
+# ==========================================
+# 2. BERICHTE AUS BERICHTE/*.TYP GENERIEREN
+# ==========================================
+def typst_to_html_article(typst_text):
+    # Einfacher Typst-Parser für Berichte
+    title_m = re.search(r'#title\[(.*?)\]', typst_text)
+    date_m = re.search(r'#date\[(.*?)\]', typst_text)
+    author_m = re.search(r'#author\[(.*?)\]', typst_text)
+    
+    title = title_m.group(1) if title_m else "Turnierbericht"
+    date = date_m.group(1) if date_m else ""
+    author = author_m.group(1) if author_m else ""
+    
+    # Body ohne Metadaten
+    body = typst_text
+    body = re.sub(r'#title\[.*?\]', '', body)
+    body = re.sub(r'#date\[.*?\]', '', body)
+    body = re.sub(r'#author\[.*?\]', '', body)
+    
+    # Formatierungen umwandeln
+    body = re.sub(r'= (.*?)\n', r'<h2>\1</h2>\n', body)
+    body = re.sub(r'== (.*?)\n', r'<h3>\1</h3>\n', body)
+    body = re.sub(r'\*(.*?)\*', r'<strong>\1</strong>', body)
+    
+    paragraphs = [p.strip() for p in body.split('\n\n') if p.strip()]
+    formatted_body = ""
+    for p in paragraphs:
+        if p.startswith('<h2>') or p.startswith('<h3>'):
+            formatted_body += f"{p}\n"
+        else:
+            formatted_body += f"<p>{p}</p>\n"
+            
+    return title, date, author, formatted_body
+
+berichte_cards = []
+
+if os.path.exists("berichte"):
+    typ_files = sorted(glob.glob("berichte/*.typ"), reverse=True)
+    
+    for filepath in typ_files:
+        filename = os.path.basename(filepath).replace(".typ", ".html")
+        with open(filepath, "r", encoding="utf-8") as f:
+            content = f.read()
+            
+        title, date, author, body_html = typst_to_html_article(content)
+        
+        # Detailseite für den Bericht erstellen
+        article_html = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} | SG AFK</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="../index.html">Start</a>
+      <a href="../ueber-uns.html">Über uns</a>
+      <a href="../mannschaften.html">Mannschaften</a>
+      <a href="../termine.html">Termine</a>
+      <a href="../berichte.html">Berichte</a>
+      <a href="../jugend.html">Jugend</a>
+      <a href="../kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <main class="container">
+    <a href="../berichte.html" style="text-decoration:none;">← Zurück zur Berichte-Übersicht</a>
+    <h1 style="margin-top:1rem;">{title}</h1>
+    <p style="color:#777; font-size:0.9rem;">📅 {date} {f'| ✍️ von {author}' if author else ''}</p>
+    <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
+    <div class="article-content">
+      {body_html}
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="../kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+</body>
+</html>"""
+        
+        # Speichere die HTML-Datei im berichte-Ordner
+        out_path = os.path.join("berichte", filename)
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(article_html)
+            
+        # Teaser für die Übersichtsseite aufbauen
+        berichte_cards.append(f"""
+        <div class="card">
+          <h3>{title}</h3>
+          <p style="color:#777; font-size:0.85rem;">📅 {date}</p>
+          <a href="berichte/{filename}" class="btn" style="background:#3498db;">Bericht lesen →</a>
+        </div>
+        """)
+
+# ==========================================
+# 3. BERICHTE-ÜBERSICHTSSEITE (berichte.html)
+# ==========================================
+cards_html = "\n".join(berichte_cards) if berichte_cards else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
+
+html_berichte_overview = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berichte & News | SG AFK</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="jugend.html">Jugend</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <main class="container">
+    <h1>Aktuelle Berichte & News</h1>
+    <p>Hier findest du Berichte über unsere Turniere, Mannschaftskämpfe und Vereinsveranstaltungen.</p>
+    
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+      {cards_html}
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+</body>
+</html>"""
+
+with open("berichte.html", "w", encoding="utf-8") as f:
+    f.write(html_berichte_overview)
+
+print("Termine und Berichte erfolgreich aus Typst generiert!")
