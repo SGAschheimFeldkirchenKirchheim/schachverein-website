@@ -1,14 +1,27 @@
 import re
 
 def parse_typst_to_html(typst_content):
-    # Monats-Überschriften und Zellen mit Farben erkennen
-    tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|\[.*?\])', typst_content, re.DOTALL)
+    # 1. Entferne #align, #import und den umschließenden table(...) Header-Teil
+    # Wir schneiden alles ab, wo die eigentlichen Daten/Monate beginnen
+    if 'table.cell(colspan: 10' in typst_content:
+        # Schneide alles VOR der ersten Monatszelle ab
+        body_part = 'table.cell(colspan: 10' + typst_content.split('table.cell(colspan: 10', 1)[1]
+    else:
+        body_part = typst_content
+
+    # Entferne die schließenden Klammern am Ende der Typst-Datei
+    body_part = re.sub(r'\n\s*\)\s*\]\s*$', '', body_part)
+
+    # 2. Extrahiere alle Zellen im Body
+    tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|\[.*?\])', body_part, re.DOTALL)
     
     rows_html = []
     current_row = []
     
     for token in tokens:
         token = token.strip()
+        
+        # Monats-Überschrift
         if 'colspan: 10' in token:
             if current_row:
                 rows_html.append("<tr>" + "".join(current_row) + "</tr>")
@@ -23,10 +36,13 @@ def parse_typst_to_html(typst_content):
             elif 'fill: orange' in token:
                 cls = ' class="bg-orange"'
             
+            # Textinhalt aus den eckigen Klammern [ ... ] extrahieren
             content_match = re.search(r'\[(.*)\]$', token, re.DOTALL)
             text = content_match.group(1).strip() if content_match else ""
+            
             current_row.append(f'<td{cls}>{text}</td>')
             
+            # Sobald 10 Spalten voll sind, erstelle eine Tabellenzeile
             if len(current_row) == 10:
                 rows_html.append("<tr>" + "".join(current_row) + "</tr>")
                 current_row = []
@@ -36,13 +52,13 @@ def parse_typst_to_html(typst_content):
         
     return "\n".join(rows_html)
 
-# Typst einlesen und HTML generieren
+# Typst-Datei einlesen
 with open("termine.typ", "r", encoding="utf-8") as f:
     typst_code = f.read()
 
 table_body = parse_typst_to_html(typst_code)
 
-# Vorlage in termine.html schreiben
+# HTML-Gerüst aufbauen
 html_template = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -98,4 +114,4 @@ html_template = f"""<!DOCTYPE html>
 with open("termine.html", "w", encoding="utf-8") as f:
     f.write(html_template)
 
-print("termine.html erfolgreich automatisch aus termine.typ generiert!")
+print("termine.html erfolgreich ohne Typst-Header-Salat generiert!")
