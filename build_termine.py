@@ -3,74 +3,90 @@ import re
 import glob
 
 # ==========================================
-# 1. TYPST TERMIN-TABELLE VERARBEITEN
+# HELPER: TYPST TABELLEN IN HTML WANDELN
 # ==========================================
-def parse_typst_to_html(typst_content):
-    if 'table.cell(colspan: 10' in typst_content:
-        body_part = 'table.cell(colspan: 10' + typst_content.split('table.cell(colspan: 10', 1)[1]
-    else:
-        body_part = typst_content
+def parse_typst_table_to_html(typst_content):
+    """Generischer Parser für Typst-Tabellen (Termine, Hall of Fame, Oberlandquartett)"""
+    if '#table(' not in typst_content and 'table(' not in typst_content:
+        return "<p>Keine Tabelle gefunden.</p>"
 
-    body_part = re.sub(r'\n\s*\)\s*\]\s*$', '', body_part)
-    tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|\[.*?\])', body_part, re.DOTALL)
+    # Extrahiere den Inhalt innerhalb der Haupt-Tabelle
+    table_match = re.search(r'table\((.*?)\)\s*\]?$', typst_content, re.DOTALL)
+    table_body = table_match.group(1) if table_match else typst_content
+
+    # Zelle für Zelle oder Zeile für Zeile verarbeiten
+    tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|table\.header\(.*?\)|\[.*?\])', table_body, re.DOTALL)
     
-    rows_html = []
+    html_rows = []
     current_row = []
-    upcoming_events = []
     
     for token in tokens:
         token = token.strip()
-        if 'colspan: 10' in token:
+        
+        # Ignoriere reine Tabellen-Konfigurationen
+        if token.startswith('align:') or token.startswith('columns:') or token.startswith('stroke:'):
+            continue
+            
+        # Header-Behandlung
+        if 'table.header' in token:
+            headers = re.findall(r'\[(.*?)\]', token)
+            header_cells = "".join([f"<th>{re.sub(r'[*_]', '', h).strip()}</th>" for h in headers if h.strip()])
+            html_rows.append(f"<thead><tr>{header_cells}</tr></thead><tbody>")
+            continue
+
+        # Trennzeilen / Monatszeilen / Spezialzellen mit colspan
+        if 'colspan:' in token:
             if current_row:
-                rows_html.append("<tr>" + "".join(current_row) + "</tr>")
+                html_rows.append("<tr>" + "".join(current_row) + "</tr>")
                 current_row = []
-            month_match = re.search(r'"(.*?)"', token)
-            month_name = month_match.group(1) if month_match else "Monat"
-            rows_html.append(f'<tr><td colspan="10" class="monat-header">{month_name}</td></tr>')
+            colspan_m = re.search(r'colspan:\s*(\d+)', token)
+            colspan_val = colspan_m.group(1) if colspan_m else "1"
+            
+            content_m = re.search(r'\[(.*)\]$', token, re.DOTALL)
+            text = content_m.group(1).strip() if content_m else ""
+            text = re.sub(r'#align\(.*?\)' , '', text)
+            text = re.sub(r'#strong\[(.*?)\]', r'<strong>\1</strong>', text)
+            text = re.sub(r'[*_]', '', text)
+            
+            html_rows.append(f'<tr><td colspan="{colspan_val}" class="monat-header">{text}</td></tr>')
         else:
             cls = ""
-            if 'fill: yellow' in token:
-                cls = ' class="bg-yellow"'
-            elif 'fill: orange' in token:
-                cls = ' class="bg-orange"'
+            if 'fill: yellow' in token: cls = ' class="bg-yellow"'
+            elif 'fill: orange' in token: cls = ' class="bg-orange"'
+            elif 'fill: DeepSkyBlue' in token: cls = ' class="monat-header"'
             
-            content_match = re.search(r'\[(.*)\]$', token, re.DOTALL)
-            text = content_match.group(1).strip() if content_match else ""
+            content_m = re.search(r'\[(.*)\]$', token, re.DOTALL)
+            text = content_m.group(1).strip() if content_m else ""
+            text = re.sub(r'[*]', '', text)
+            
             current_row.append(f'<td{cls}>{text}</td>')
             
-            if len(current_row) == 10:
-                datum = re.sub(r'<.*?>', '', current_row[0]).strip()
-                event_info = re.sub(r'<.*?>', '', current_row[1]).strip()
-                
-                if not event_info:
-                    teams = ["AFK 1", "AFK 2", "AFK 3", "AFK 4", "AFK 5", "AFK 6", "Senioren", "Jugend"]
-                    for idx, cell in enumerate(current_row[2:], start=0):
-                        clean_cell = re.sub(r'<.*?>', '', cell).strip()
-                        if clean_cell:
-                            event_info = f"{clean_cell} ({teams[idx]})"
-                            break
-                
-                if datum and event_info and len(upcoming_events) < 5:
-                    upcoming_events.append((datum, event_info))
-
-                rows_html.append("<tr>" + "".join(current_row) + "</tr>")
-                current_row = []
-                
     if current_row:
-        rows_html.append("<tr>" + "".join(current_row) + "</tr>")
+        html_rows.append("<tr>" + "".join(current_row) + "</tr>")
         
-    return "\n".join(rows_html), upcoming_events
+    return "\n".join(html_rows) + "</tbody>"
 
-table_body = ""
+
+# ==========================================
+# 1. TERMINE (termine.typ -> termine.html)
+# ==========================================
 upcoming_events = []
-
 if os.path.exists("termine.typ"):
     with open("termine.typ", "r", encoding="utf-8") as f:
         typst_code = f.read()
 
-    table_body, upcoming_events = parse_typst_to_html(typst_code)
+    # Einfacher Auszug für die Nächsten Termine auf der Startseite
+    tokens = re.findall(r'\[(.*?)\]', typst_code)
+    for i in range(len(tokens)-1):
+        if re.match(r'^\d{2}\.\d{2}\.', tokens[i].strip()):
+            datum = tokens[i].strip()
+            event = tokens[i+1].strip()
+            if event and not event.startswith("MMM") and len(upcoming_events) < 4:
+                upcoming_events.append((datum, event))
 
-    html_termine = """<!DOCTYPE html>
+    table_html = parse_typst_table_to_html(typst_code)
+
+    html_termine = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -78,14 +94,13 @@ if os.path.exists("termine.typ"):
   <title>Termine & Spielplan | SG AFK</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
-    .termine-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
-    .termine-tabelle th, .termine-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
-    .termine-tabelle th { background-color: #1a252f; color: white; }
-    .monat-header { background-color: #00bfff !important; font-weight: bold; font-size: 1.1rem; }
-    .bg-yellow { background-color: #fff2ac !important; }
-    .bg-orange { background-color: #ffd8a8 !important; }
-    .termine-tabelle td:nth-child(1), .termine-tabelle td:nth-child(2) { text-align: left; }
+    .table-responsive {{ overflow-x: auto; margin-top: 1.5rem; }}
+    .custom-tabelle {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }}
+    .custom-tabelle th, .custom-tabelle td {{ padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }}
+    .custom-tabelle th {{ background-color: #1a252f; color: white; }}
+    .monat-header {{ background-color: #00bfff !important; font-weight: bold; font-size: 1.1rem; color: black; }}
+    .bg-yellow {{ background-color: #fff2ac !important; }}
+    .bg-orange {{ background-color: #ffd8a8 !important; }}
   </style>
 </head>
 <body>
@@ -97,23 +112,15 @@ if os.path.exists("termine.typ"):
       <a href="mannschaften.html">Mannschaften</a>
       <a href="termine.html">Termine</a>
       <a href="berichte.html">Berichte</a>
-      <a href="jugend.html">Jugend</a>
+      <a href="turniere.html">Turniere</a>
       <a href="kontakt.html">Kontakt</a>
     </nav>
   </header>
   <main class="container">
     <h1>Termine & Spielplan</h1>
     <div class="table-responsive">
-      <table class="termine-tabelle">
-        <thead>
-          <tr>
-            <th>Termin</th><th>Verein</th><th>AFK 1</th><th>AFK 2</th><th>AFK 3</th>
-            <th>AFK 4</th><th>AFK 5</th><th>AFK 6</th><th>Senioren</th><th>Jugend</th>
-          </tr>
-        </thead>
-        <tbody>
-""" + table_body + """
-        </tbody>
+      <table class="custom-tabelle">
+        {table_html}
       </table>
     </div>
   </main>
@@ -126,11 +133,121 @@ if os.path.exists("termine.typ"):
     with open("termine.html", "w", encoding="utf-8") as f:
         f.write(html_termine)
 
+
 # ==========================================
-# 2. BERICHTE VERARBEITEN
+# 2. OBERLANDQUARTETT & HALL OF FAME GENERIEREN
+# ==========================================
+def generate_custom_typst_page(typst_filename, html_filename, title_text):
+    table_content = "<p>Keine Daten vorhanden.</p>"
+    if os.path.exists(typst_filename):
+        with open(typst_filename, "r", encoding="utf-8") as f:
+            code = f.read()
+        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
+
+    page_html = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title_text} | SG AFK</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .table-responsive {{ overflow-x: auto; margin-top: 1.5rem; }}
+    .custom-tabelle {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }}
+    .custom-tabelle th, .custom-tabelle td {{ padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }}
+    .custom-tabelle th {{ background-color: #1a252f; color: white; }}
+    .monat-header {{ background-color: #3498db !important; color: white; font-weight: bold; font-size: 1.1rem; }}
+  </style>
+</head>
+<body>
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <main class="container">
+    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+    <h1 style="margin-top:1rem;">{title_text}</h1>
+    <div class="table-responsive">
+      {table_content}
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+</body>
+</html>"""
+    
+    with open(html_filename, "w", encoding="utf-8") as f:
+        f.write(page_html)
+
+generate_custom_typst_page("oberlandquartett.typ", "oberlandquartett.html", "Oberlandquartett")
+generate_custom_typst_page("hall_of_fame.typ", "vereinsintern.html", "Vereinsinterne Turniere & Hall of Fame")
+
+
+# ==========================================
+# 3. TURNIERE-ÜBERSICHTSSEITE (turniere.html)
+# ==========================================
+html_turniere = """<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turniere | SG AFK</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <main class="container">
+    <h1>Turniere & Ergebnisse</h1>
+    <p>Hier findest du Übersichten zu unseren regionalen Wettkämpfen sowie die Hall of Fame unserer vereinsinternen Meisterschaften.</p>
+    
+    <div class="grid-2" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; margin-top:2rem;">
+      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #3498db; border-radius:6px;">
+        <h2>🏆 Oberlandquartett</h2>
+        <p>Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.</p>
+        <a href="oberlandquartett.html" class="btn" style="background:#3498db; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zum Oberlandquartett →</a>
+      </div>
+
+      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #27ae60; border-radius:6px;">
+        <h2>🥇 Vereinsintern & Hall of Fame</h2>
+        <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
+        <a href="vereinsintern.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Hall of Fame →</a>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+</body>
+</html>"""
+
+with open("turniere.html", "w", encoding="utf-8") as f:
+    f.write(html_turniere)
+
+
+# ==========================================
+# 4. BERICHTE VERARBEITEN
 # ==========================================
 def typst_to_html_article(typst_text):
-    # Metadaten extrahieren
     title_m = re.search(r'#title\[(.*?)\]', typst_text)
     date_m = re.search(r'#date\[(.*?)\]', typst_text)
     author_m = re.search(r'#author\[(.*?)\]', typst_text)
@@ -144,48 +261,33 @@ def typst_to_html_article(typst_text):
     body = re.sub(r'#date\[.*?\]', '', body)
     body = re.sub(r'#author\[.*?\]', '', body)
     
-    # Vorschautext für die Startseite säubern
     raw_text = re.sub(r'#\w+(\[.*?\]|\(.*?\))', '', body)
     raw_text = re.sub(r'[=#*_]', '', raw_text).strip()
     preview_snippet = raw_text[:110] + "..." if len(raw_text) > 110 else raw_text
 
-    # --- TYPST SYNTAX FORMATIERUNGEN UMWANDELN ---
-    
-    # 1. Überschriften (Mehrere Gleichheitszeichen zuerst matchen!)
     body = re.sub(r'===\s*(.*?)\n', r'<h3>\1</h3>\n', body)
     body = re.sub(r'==\s*(.*?)\n', r'<h2>\1</h2>\n', body)
     body = re.sub(r'=\s*(.*?)\n', r'<h1>\1</h1>\n', body)
-    
-    # 2. Textformatierungen: Fett (*...*) und Kursiv (_..._)
     body = re.sub(r'\*(.*?)\*', r'<strong>\1</strong>', body)
     body = re.sub(r'_(.*?)_', r'<em>\1</em>', body)
-    
-    # 3. Typst-Befehle: #underline[...]
     body = re.sub(r'#underline\[(.*?)\]', r'<u>\1</u>', body)
     
-    # 4. Typst-Befehle: #text(...)
-    # Extrahiere Textfarbe, Schriftgröße und Inhalt
     def parse_text_func(match):
         args = match.group(1)
         content = match.group(2)
-        
         style_rules = []
         if 'blue' in args: style_rules.append('color: blue;')
         if 'red' in args: style_rules.append('color: red;')
         if 'green' in args: style_rules.append('color: green;')
-        
         size_m = re.search(r'size:\s*(\d+pt)', args)
         if size_m: style_rules.append(f'font-size: {size_m.group(1)};')
-        
         if 'italic' in args: style_rules.append('font-style: italic;')
         if 'bold' in args: style_rules.append('font-weight: bold;')
-        
         style_attr = f' style="{" ".join(style_rules)}"' if style_rules else ''
         return f'<span{style_attr}>{content}</span>'
 
     body = re.sub(r'#text\((.*?)\)\[(.*?)\]', parse_text_func, body, flags=re.DOTALL)
     
-    # Absätze in <p>-Tags verpacken
     paragraphs = [p.strip() for p in body.split('\n\n') if p.strip()]
     formatted_body = ""
     for p in paragraphs:
@@ -208,8 +310,8 @@ if os.path.exists("berichte"):
             content = f.read()
             
         title, date, author, body_html, snippet = typst_to_html_article(content)
-        
         author_str = f" | ✍️ von {author}" if author else ""
+        
         article_html = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -227,7 +329,7 @@ if os.path.exists("berichte"):
       <a href="../mannschaften.html">Mannschaften</a>
       <a href="../termine.html">Termine</a>
       <a href="../berichte.html">Berichte</a>
-      <a href="../jugend.html">Jugend</a>
+      <a href="../turniere.html">Turniere</a>
       <a href="../kontakt.html">Kontakt</a>
     </nav>
   </header>
@@ -284,7 +386,7 @@ html_berichte_overview = f"""<!DOCTYPE html>
       <a href="mannschaften.html">Mannschaften</a>
       <a href="termine.html">Termine</a>
       <a href="berichte.html">Berichte</a>
-      <a href="jugend.html">Jugend</a>
+      <a href="turniere.html">Turniere</a>
       <a href="kontakt.html">Kontakt</a>
     </nav>
   </header>
@@ -303,8 +405,9 @@ html_berichte_overview = f"""<!DOCTYPE html>
 with open("berichte.html", "w", encoding="utf-8") as f:
     f.write(html_berichte_overview)
 
+
 # ==========================================
-# 3. STARTSEITE (3-SPALTEN-LAYOUT) GENERIEREN
+# 5. STARTSEITE (index.html) GENERIEREN
 # ==========================================
 news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p style='font-size:0.9rem;'>Noch keine Berichte vorhanden.</p>"
 
@@ -327,7 +430,6 @@ html_index = f"""<!DOCTYPE html>
   <title>SGem Aschheim / Feldkirchen / Kirchheim e.V.</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* 3-Spalten-Layout für große Monitore */
     .hero-layout {{
       display: grid;
       grid-template-columns: 1fr 1.6fr 1fr;
@@ -335,7 +437,6 @@ html_index = f"""<!DOCTYPE html>
       align-items: start;
       margin-bottom: 2rem;
     }}
-    
     .info-card {{
       background: #f8f9fa;
       border-left: 5px solid #27ae60;
@@ -343,7 +444,6 @@ html_index = f"""<!DOCTYPE html>
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }}
-    
     .maps-btn {{
       display: inline-block;
       background: #3498db;
@@ -355,7 +455,6 @@ html_index = f"""<!DOCTYPE html>
       font-weight: bold;
       margin-top: 0.6rem;
     }}
-    
     .hinweis-box {{
       background: #e8f4f8;
       border: 1px solid #bce8f1;
@@ -365,8 +464,6 @@ html_index = f"""<!DOCTYPE html>
       margin-top: 0.8rem;
       font-size: 0.85rem;
     }}
-
-    /* Auf Smartphones untereinander stapeln */
     @media (max-width: 1024px) {{
       .hero-layout {{
         grid-template-columns: 1fr;
@@ -384,7 +481,7 @@ html_index = f"""<!DOCTYPE html>
       <a href="mannschaften.html">Mannschaften</a>
       <a href="termine.html">Termine</a>
       <a href="berichte.html">Berichte</a>
-      <a href="jugend.html">Jugend</a>
+      <a href="turniere.html">Turniere</a>
       <a href="kontakt.html">Kontakt</a>
     </nav>
   </header>
@@ -396,17 +493,13 @@ html_index = f"""<!DOCTYPE html>
 
   <main class="container" style="max-width: 1300px;">
 
-    <!-- Das gewünschte 3-Spalten-Layout -->
     <div class="hero-layout">
-      
-      <!-- SPALTE 1: GELB (Berichte) -->
       <div>
         <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
         {news_html}
         <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
       </div>
 
-      <!-- SPALTE 2: MITTE (Wann & Wo) -->
       <div class="info-card">
         <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
         <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
@@ -422,7 +515,6 @@ html_index = f"""<!DOCTYPE html>
         <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
       </div>
 
-      <!-- SPALTE 3: BLAU (Termine) -->
       <div>
         <h3 style="margin-top:0;">📅 Nächste Termine</h3>
         <div class="card" style="padding: 1rem;">
@@ -432,10 +524,8 @@ html_index = f"""<!DOCTYPE html>
           <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:0.8rem; font-size:0.85rem; padding: 0.5rem;">Zum Spielplan</a>
         </div>
       </div>
-
     </div>
 
-    <!-- 3 Kacheln unten -->
     <div class="grid-3">
       <div class="card">
         <h3>♟️ Hobbyspieler & Einsteiger</h3>
@@ -444,7 +534,6 @@ html_index = f"""<!DOCTYPE html>
       <div class="card">
         <h3>♟️ Kinder & Jugendliche</h3>
         <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
-        <a href="jugend.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Mehr zur Jugend</a>
       </div>
       <div class="card">
         <h3>♟️ Mannschaftsschach</h3>
@@ -465,4 +554,4 @@ html_index = f"""<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_index)
 
-print("Startseite erfolgreich ins 3-Spalten-Layout umgebaut!")
+print("Vollständiger Build inklusive Turniere, Oberlandquartett und Hall of Fame abgeschlossen!")
