@@ -87,5 +87,6 @@
     Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.
     
     Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.
+    2024 hat Aschheim II Holzkirchen vertreten und den 2 Platz belegt
   ]
 }
