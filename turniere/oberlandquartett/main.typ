@@ -6,7 +6,8 @@
 #let gold = rgb("#ffd54a")
 #let navy-light = rgb("#eef1f8")
 
-#let teams = ("AFK", "Deisenhofen", "Holzkirchen", "Höhenkirchen")
+// Namensänderung im teams-Array für den Tabellenkopf:
+#let teams = ("Aschheim-Feldkirchen-Kirchheim", "Deisenhofen", "Holzkirchen", "Höhenkirchen")
 
 #let data = (
   ("21.07.1997", "Deisenhofen", (3, 1, 4, 2)),
@@ -17,8 +18,9 @@
   ("24.07.2003", "Höhenkirchen", (4, 3, 2, 1)),
   ("18.06.2004", "Holzkirchen", (2, 3, 4, 1)),
   ("15.07.2005", "Deisenhofen", (3, 1, 4, 2)),
-  ("28.06.2024", "AFK", (2, "SG ASK - Revolution!", 3, 1)),
-  ("06.06.2027", "Deisenhofen", (3, 4, 1, "-")),
+  ("28.06.2024", "Aschheim-Feldkirchen-Kirchheim", (1, 2, 3, "Aschheim II")),
+  ("27.06.2025", "Höhenkirchen", (1, 2, 3, 4)),
+  ("03.07.2026", "Holzkirchen", (1, 2, 3, 4)),
 )
 
 // Aufruf der Tabelle mit den Variablen
