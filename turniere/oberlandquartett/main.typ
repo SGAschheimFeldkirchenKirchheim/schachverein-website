@@ -1,14 +1,20 @@
-#import "table.typ": render-table
 #set page(width: 22cm, height: auto, margin: 1.5cm)
-#set text(font: "Liberation Sans", size: 10pt)
+#set text(size: 10pt)
 
-#let navy = rgb("#0a1f44")https://github.com/SGAschheimFeldkirchenKirchheim/schachverein-website/tree/main/turniere/oberlandquartett
+#let navy = rgb("#0a1f44")
 #let gold = rgb("#ffd54a")
 #let navy-light = rgb("#eef1f8")
 
-// Namensänderung im teams-Array für den Tabellenkopf:
-#let teams = ("Aschheim-Feldkirchen-Kirchheim", "Deisenhofen", "Holzkirchen", "Höhenkirchen")
+// ============ HIER TRAGT IHR EURE DATEN EIN ============
 
+// Reihenfolge der Teams = Reihenfolge der Ergebnis-Spalten in der Tabelle
+#let teams = ("AFK", "Deisenhofen", "Holzkirchen", "Höhenkirchen")
+
+// Jede Zeile: (Datum, Ausrichter, (Platz Team1, Platz Team2, Platz Team3, Platz Team4))
+// Platz kann sein:
+//   - eine Zahl 1-4  -> normale Platzierung (die 1 wird automatisch gelb)
+//   - "-"            -> Team ist nicht angetreten
+//   - beliebiger Text -> z.B. Name einer Ersatzmannschaft (siehe letzte Zeile)
 #let data = (
   ("21.07.1997", "Deisenhofen", (3, 1, 4, 2)),
   ("17.07.1998", "Aschheim-Feldkirchen", (1, 3, 4, 2)),
@@ -18,9 +24,8 @@
   ("24.07.2003", "Höhenkirchen", (4, 3, 2, 1)),
   ("18.06.2004", "Holzkirchen", (2, 3, 4, 1)),
   ("15.07.2005", "Deisenhofen", (3, 1, 4, 2)),
-  ("28.06.2024", "Aschheim-Feldkirchen-Kirchheim", (1, 2, "-", 3)),
-  ("27.06.2025", "Höhenkirchen", (1, 2, 4, 3)),
-  ("03.07.2026", "Holzkirchen", (1, 2, 4, 3)),
+  ("28.06.2024", "AFK", (2, "SG ASK – Revolution!", 3, 1)),
+  ("06.06.2027", "Deisenhofen", (3, 4, 1, "-")),
 )
 
 // Aufruf der Tabelle mit den Variablen
