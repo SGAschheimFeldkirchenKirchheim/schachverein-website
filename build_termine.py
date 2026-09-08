@@ -153,6 +153,10 @@ def parse_typst_table_to_html(typst_content):
     if '#table(' not in typst_content and 'table(' not in typst_content:
         return "<p>Keine Tabelle gefunden.</p>"
 
+    # Typst-Befehle aus Monatszeilen wie [#strong("September")] bereinigen
+    typst_content = re.sub(r'#strong\s*\(\s*["\'](.*?)["\']\s*\)', r'\1', typst_content)
+    typst_content = re.sub(r'#align\s*\([^)]*\)', '', typst_content)
+
     table_match = re.search(r'table\((.*?)\)\s*\]?$', typst_content, re.DOTALL)
     table_body = table_match.group(1) if table_match else typst_content
 
@@ -163,6 +167,7 @@ def parse_typst_table_to_html(typst_content):
     
     for token in tokens:
         token = token.strip()
+        
         if token.startswith('align:') or token.startswith('columns:') or token.startswith('stroke:'):
             continue
             
@@ -181,9 +186,7 @@ def parse_typst_table_to_html(typst_content):
             
             content_m = re.search(r'\[(.*)\]$', token, re.DOTALL)
             text = content_m.group(1).strip() if content_m else ""
-            text = re.sub(r'#align\(.*?\)' , '', text)
-            text = re.sub(r'#strong\[(.*?)\]', r'<strong>\1</strong>', text)
-            text = re.sub(r'[*_]', '', text)
+            text = re.sub(r'[*_"\']', '', text).strip()
             
             html_rows.append(f'<tr><td colspan="{colspan_val}" class="monat-header">{text}</td></tr>')
         else:
@@ -194,9 +197,13 @@ def parse_typst_table_to_html(typst_content):
             
             content_m = re.search(r'\[(.*)\]$', token, re.DOTALL)
             text = content_m.group(1).strip() if content_m else ""
-            text = re.sub(r'[*]', '', text)
+            text = re.sub(r'[*]', '', text).strip()
             
             current_row.append(f'<td{cls}>{text}</td>')
+            
+            if len(current_row) == 10:
+                html_rows.append("<tr>" + "".join(current_row) + "</tr>")
+                current_row = []
             
     if current_row:
         html_rows.append("<tr>" + "".join(current_row) + "</tr>")
