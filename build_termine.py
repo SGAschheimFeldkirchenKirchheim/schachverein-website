@@ -16,6 +16,7 @@ def parse_typst_to_html(typst_content):
     
     rows_html = []
     current_row = []
+    upcoming_events = [] # Für die Startseite
     
     for token in tokens:
         token = token.strip()
@@ -38,20 +39,38 @@ def parse_typst_to_html(typst_content):
             current_row.append(f'<td{cls}>{text}</td>')
             
             if len(current_row) == 10:
+                # Prüfe, ob in dieser Zeile ein Event/Termin steckt für die Vorschau auf der Startseite
+                datum = re.sub(r'<.*?>', '', current_row[0]).strip()
+                event_info = re.sub(r'<.*?>', '', current_row[1]).strip()
+                
+                # Falls kein spezifischer Vereinsevent-Text da ist, suche in den Mannschaftsspalten
+                if not event_info:
+                    teams = ["AFK 1", "AFK 2", "AFK 3", "AFK 4", "AFK 5", "AFK 6", "Senioren", "Jugend"]
+                    for idx, cell in enumerate(current_row[2:], start=0):
+                        clean_cell = re.sub(r'<.*?>', '', cell).strip()
+                        if clean_cell:
+                            event_info = f"{clean_cell} ({teams[idx]})"
+                            break
+                
+                if datum and event_info and len(upcoming_events) < 5:
+                    upcoming_events.append((datum, event_info))
+
                 rows_html.append("<tr>" + "".join(current_row) + "</tr>")
                 current_row = []
                 
     if current_row:
         rows_html.append("<tr>" + "".join(current_row) + "</tr>")
         
-    return "\n".join(rows_html)
+    return "\n".join(rows_html), upcoming_events
 
-# Build termine.html
+table_body = ""
+upcoming_events = []
+
 if os.path.exists("termine.typ"):
     with open("termine.typ", "r", encoding="utf-8") as f:
         typst_code = f.read()
 
-    table_body = parse_typst_to_html(typst_code)
+    table_body, upcoming_events = parse_typst_to_html(typst_code)
 
     html_termine = f"""<!DOCTYPE html>
 <html lang="de">
@@ -110,10 +129,9 @@ if os.path.exists("termine.typ"):
         f.write(html_termine)
 
 # ==========================================
-# 2. BERICHTE AUS BERICHTE/*.TYP GENERIEREN
+# 2. BERICHTE VERARBEITEN & VORSCHAU ERSTELLEN
 # ==========================================
 def typst_to_html_article(typst_text):
-    # Einfacher Typst-Parser für Berichte
     title_m = re.search(r'#title\[(.*?)\]', typst_text)
     date_m = re.search(r'#date\[(.*?)\]', typst_text)
     author_m = re.search(r'#author\[(.*?)\]', typst_text)
@@ -122,13 +140,15 @@ def typst_to_html_article(typst_text):
     date = date_m.group(1) if date_m else ""
     author = author_m.group(1) if author_m else ""
     
-    # Body ohne Metadaten
     body = typst_text
     body = re.sub(r'#title\[.*?\]', '', body)
     body = re.sub(r'#date\[.*?\]', '', body)
     body = re.sub(r'#author\[.*?\]', '', body)
     
-    # Formatierungen umwandeln
+    # Vorschautext für die Startseite generieren (ohne Formatierungszeichen)
+    raw_text = re.sub(r'[=#*]', '', body).strip()
+    preview_snippet = raw_text[:140] + "..." if len(raw_text) > 140 else raw_text
+
     body = re.sub(r'= (.*?)\n', r'<h2>\1</h2>\n', body)
     body = re.sub(r'== (.*?)\n', r'<h3>\1</h3>\n', body)
     body = re.sub(r'\*(.*?)\*', r'<strong>\1</strong>', body)
@@ -141,9 +161,10 @@ def typst_to_html_article(typst_text):
         else:
             formatted_body += f"<p>{p}</p>\n"
             
-    return title, date, author, formatted_body
+    return title, date, author, formatted_body, preview_snippet
 
 berichte_cards = []
+home_news_snippets = []
 
 if os.path.exists("berichte"):
     typ_files = sorted(glob.glob("berichte/*.typ"), reverse=True)
@@ -153,9 +174,9 @@ if os.path.exists("berichte"):
         with open(filepath, "r", encoding="utf-8") as f:
             content = f.read()
             
-        title, date, author, body_html = typst_to_html_article(content)
+        title, date, author, body_html, snippet = typst_to_html_article(content)
         
-        # Detailseite für den Bericht erstellen
+        # HTML für die Detailseite im berichte-Ordner
         article_html = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -182,9 +203,7 @@ if os.path.exists("berichte"):
     <h1 style="margin-top:1rem;">{title}</h1>
     <p style="color:#777; font-size:0.9rem;">📅 {date} {f'| ✍️ von {author}' if author else ''}</p>
     <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
-    <div class="article-content">
-      {body_html}
-    </div>
+    <div class="article-content">{body_html}</div>
   </main>
   <footer>
     <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="../kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
@@ -192,12 +211,11 @@ if os.path.exists("berichte"):
 </body>
 </html>"""
         
-        # Speichere die HTML-Datei im berichte-Ordner
         out_path = os.path.join("berichte", filename)
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(article_html)
             
-        # Teaser für die Übersichtsseite aufbauen
+        # Für berichte.html
         berichte_cards.append(f"""
         <div class="card">
           <h3>{title}</h3>
@@ -205,12 +223,20 @@ if os.path.exists("berichte"):
           <a href="berichte/{filename}" class="btn" style="background:#3498db;">Bericht lesen →</a>
         </div>
         """)
+        
+        # Für die Startseite (maximal 3 aktuelle Berichte)
+        if len(home_news_snippets) < 3:
+            home_news_snippets.append(f"""
+            <div class="card" style="margin-bottom: 1rem;">
+              <h3 style="margin-bottom:0.3rem;">{title}</h3>
+              <p style="color:#777; font-size:0.8rem; margin-top:0;">📅 {date}</p>
+              <p style="font-size:0.9rem;">{snippet}</p>
+              <a href="berichte/{filename}" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.9rem;">Weiterlesen →</a>
+            </div>
+            """)
 
-# ==========================================
-# 3. BERICHTE-ÜBERSICHTSSEITE (berichte.html)
-# ==========================================
+# Berichte-Übersichtsseite erstellen
 cards_html = "\n".join(berichte_cards) if berichte_cards else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
-
 html_berichte_overview = f"""<!DOCTYPE html>
 <html lang="de">
 <head>
@@ -234,8 +260,6 @@ html_berichte_overview = f"""<!DOCTYPE html>
   </header>
   <main class="container">
     <h1>Aktuelle Berichte & News</h1>
-    <p>Hier findest du Berichte über unsere Turniere, Mannschaftskämpfe und Vereinsveranstaltungen.</p>
-    
     <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
       {cards_html}
     </div>
@@ -249,4 +273,156 @@ html_berichte_overview = f"""<!DOCTYPE html>
 with open("berichte.html", "w", encoding="utf-8") as f:
     f.write(html_berichte_overview)
 
-print("Termine und Berichte erfolgreich aus Typst generiert!")
+# ==========================================
+# 3. STARTSEITE (index.html) AUTOMATISCH AKTUALISIEREN
+# ==========================================
+news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
+
+events_list_items = ""
+for datum, event in upcoming_events[:4]:
+    events_list_items += f"""
+    <li style="margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid #eee;">
+      <strong>{datum}</strong><br>
+      <span style="color:#555; font-size:0.9rem;">{event}</span>
+    </li>
+    """
+if not events_list_items:
+    events_list_items = "<li>Keine anstehenden Termine gefunden.</li>"
+
+html_index = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGem Aschheim / Feldkirchen / Kirchheim e.V.</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .info-card {{
+      background: #f8f9fa;
+      border-left: 5px solid #27ae60;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }}
+    .maps-btn {{
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-top: 0.8rem;
+    }}
+    .hinweis-box {{
+      background: #e8f4f8;
+      border: 1px solid #bce8f1;
+      color: #2c3e50;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }}
+    .home-grid {{
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }}
+    @media (max-width: 768px) {{
+      .home-grid {{
+        grid-template-columns: 1fr;
+      }}
+    }}
+  </style>
+</head>
+<body>
+
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="jugend.html">Jugend</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Schach spielen in Aschheim, Feldkirchen & Kirchheim</h1>
+    <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
+  </section>
+
+  <main class="container">
+
+    <!-- Wann & Wo Box -->
+    <div class="info-card">
+      <h2>🕒 Wann & Wo wir spielen</h2>
+      <p><strong>Jeden Freitag</strong> (Das Gebäude ist ab 18:00 Uhr geöffnet)</p>
+      <ul>
+        <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+        <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
+      </ul>
+      <div class="hinweis-box">
+        💡 <strong>Volle Flexibilität für jedes Alter:</strong> Bei uns gibt es keine starren Grenzen! Erwachsene dürfen selbstverständlich schon ab 18:00 Uhr zum freien Spielen kommen, und auch Jugendliche müssen um 19:30 Uhr nicht nach Hause gehen, sondern können gerne länger bleiben. Jeder kann kommen und gehen, wann er möchte.
+      </div>
+      <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1.5rem 0;">
+      <p><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim bei München</p>
+      <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
+    </div>
+
+    <!-- 2-Spalten Layout: Links News, Rechts Termine -->
+    <div class="home-grid">
+      <div>
+        <h2>📰 Aktuelle Berichte</h2>
+        {news_html}
+        <a href="berichte.html" style="display:inline-block; margin-top:0.5rem; color:#3498db; font-weight:bold;">Alle Berichte ansehen →</a>
+      </div>
+
+      <div>
+        <h2>📅 Nächste Termine</h2>
+        <div class="card">
+          <ul style="list-style:none; padding:0; margin:0;">
+            {events_list_items}
+          </ul>
+          <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:1rem;">Zum kompletten Spielplan</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Kacheln unten -->
+    <div class="grid-3">
+      <div class="card">
+        <h3>♟️ Hobbyspieler & Einsteiger</h3>
+        <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
+      </div>
+      <div class="card">
+        <h3>♟️ Kinder & Jugendliche</h3>
+        <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
+        <a href="jugend.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Mehr zur Jugend</a>
+      </div>
+      <div class="card">
+        <h3>♟️ Mannschaftsschach</h3>
+        <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
+        <a href="mannschaften.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Unsere Teams</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_index)
+
+print("Startseite, Berichte und Termine vollautomatisch aktualisiert!")
