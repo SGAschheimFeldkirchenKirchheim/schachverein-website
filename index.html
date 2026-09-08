@@ -5,6 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SGem Aschheim / Feldkirchen / Kirchheim e.V.</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .info-card {
+      background: #f8f9fa;
+      border-left: 5px solid #27ae60;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+    }
+    .maps-btn {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .maps-btn:hover {
+      background: #2980b9;
+    }
+  </style>
 </head>
 <body>
 
@@ -23,25 +45,45 @@
   <section class="hero">
     <h1>Schach spielen in Aschheim, Feldkirchen & Kirchheim</h1>
     <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
-    <a href="#zeiten" class="btn">Trainingszeiten & Spielort</a>
   </section>
 
-  <main class="container" id="zeiten">
-    <h2>Trainingszeiten & Spiellokal</h2>
+  <main class="container">
+
+    <!-- Zentrale Infos zu Zeit & Ort -->
+    <div class="info-card">
+      <h2>🕒 Wann & Wo wir spielen</h2>
+      <p><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
+      <ul>
+        <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+        <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
+      </ul>
+      <p><em>Offener Spielabend: Es ist für jeden ein kommen und gehen wann man möchte!</em></p>
+      <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1rem 0;">
+      <p><strong>Spielort:</strong> Gymnasium Kirchheim<br>
+      Heimstettner Str. 3, 85551 Kirchheim bei München</p>
+      <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
+    </div>
+
+    <!-- 3 Kacheln für Zielgruppen -->
     <div class="grid">
       <div class="card">
-        <h3>♟️ Jugend & Einsteiger</h3>
-        <p><strong>Wann:</strong> Jeden Freitag (außer in den Schulferien)</p>
-        <p><strong>Wo:</strong> Spiellokal SG AFK</p>
-        <p><em>Einfach ohne Anmeldung zum Schnuppern vorbeikommen!</em></p>
+        <h3>♟️ Hobbyspieler & Einsteiger</h3>
+        <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
       </div>
+
       <div class="card">
-        <h3>♚ Erwachsene & Spielabend</h3>
-        <p><strong>Wann:</strong> Jeden Freitag abend</p>
-        <p><strong>Wo:</strong> Spiellokal SG AFK</p>
-        <p><em>Gäste und Hobbyspieler sind jederzeit herzlich willkommen!</em></p>
+        <h3>♟️ Kinder & Jugendliche</h3>
+        <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
+        <a href="jugend.html" class="btn" style="background:#3498db;">Mehr zur Jugend</a>
+      </div>
+
+      <div class="card">
+        <h3>♟️ Mannschaftsschach</h3>
+        <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
+        <a href="mannschaften.html" class="btn" style="background:#3498db;">Unsere Teams</a>
       </div>
     </div>
+
   </main>
 
   <footer>
