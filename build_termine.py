@@ -58,11 +58,12 @@ def parse_oberlandquartett():
         for raw_tuple in raw_tuples:
             parts = [p.strip() for p in raw_tuple.split(',') if p.strip()]
             if len(parts) >= 3:
-                datum = parts[0].strip('"\'')
-                ausrichter = parts[1].strip('"\'')
+                datum = parts[0].strip('()"\'')
+                ausrichter = parts[1].strip('()"\'')
                 results = []
                 for res_val in parts[2:]:
-                    res_val = res_val.strip('"\'')
+                    # Hier auch '(' und ')' mit strip entfernen:
+                    res_val = res_val.strip('()"\'')
                     if res_val.isdigit():
                         results.append(int(res_val))
                     else:
