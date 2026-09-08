@@ -44,11 +44,10 @@
   #v(0.8em)
 
   #table(
-    align: (center,center,center,center,center,center),
-    # columns: (auto, auto) + teams.map(t => 1fr),
+    columns: (auto, auto) + teams.map(t => 1fr),
     stroke: 0.6pt + navy,
     inset: 7pt,
-    align: (left, left) + teams.map(t => center),
+    align: (center,center,center,center,center,center),
     fill: (col, row) => {
       if row == 0 { navy }
       else if col >= 2 {
