@@ -1,3 +1,7 @@
+
+
+// =========================================================
+
 // ---------- POKAL-LOGIK (nichts anfassen) ----------
 // Ermittelt alle Zellen, in denen der Pokal endgueltig gewonnen wurde:
 // entweder 3x hintereinander die 1, oder 5x insgesamt seit dem letzten Reset.
@@ -27,66 +31,62 @@
   wins
 }
 
-// ---------- HAUPTFUNKTION ----------
-#let render-table(
-  teams: (),
-  data: (),
-  navy: rgb("#0a1f44"),
-  gold: rgb("#ffd54a"),
-  navy-light: rgb("#eef1f8"),
-) = {
-  let pokal-wins = compute-pokal-wins(teams, data)
-  let is-pokal-cell(i, j) = pokal-wins.any(w => w.at(0) == i and w.at(1) == j)
+#let pokal-wins = compute-pokal-wins(teams, data)
+#let is-pokal-cell(i, j) = pokal-wins.any(w => w.at(0) == i and w.at(1) == j)
 
-  align(center)[
-    #text(size: 16pt, weight: "bold")[Oberland Quartett]
-    #v(0.8em)
+// Gelb markiert NUR die Platz-1 der eigenen Mannschaft (AFK), die Pokal-Logik
+// (navy) läuft unabhängig davon fuer alle Teams.
+#let afk-index = teams.position(t => t == "AFK")
 
-    #table(
-      columns: (auto, auto) + teams.map(t => 1fr),
-      stroke: 0.6pt + navy,
-      inset: 7pt,
-      align: (left, left) + teams.map(t => center),
-      fill: (col, row) => {
-        if row == 0 { navy }
-        else if col >= 2 {
-          let j = col - 2
-          let i = row - 1
-          let val = data.at(i).at(2).at(j)
-          if is-pokal-cell(i, j) { navy }
-          else if type(val) == int and val == 1 { gold }
-          else if calc.even(row) { navy-light }
-          else { white }
-        } else if calc.even(row) { navy-light }
+// ---------- TABELLE ----------
+#align(center)[
+  #text(size: 16pt, weight: "bold")[Oberland Quartett]
+  #v(0.8em)
+
+  #table(
+    columns: (auto, auto) + teams.map(t => 1fr),
+    stroke: 0.6pt + navy,
+    inset: 7pt,
+    align: (left, left) + teams.map(t => center),
+    fill: (col, row) => {
+      if row == 0 { navy }
+      else if col >= 2 {
+        let j = col - 2
+        let i = row - 1
+        let val = data.at(i).at(2).at(j)
+        if is-pokal-cell(i, j) { navy }
+        else if j == afk-index and type(val) == int and val == 1 { gold }
+        else if calc.even(row) { navy-light }
         else { white }
-      },
+      } else if calc.even(row) { navy-light }
+      else { white }
+    },
 
-      table.header(
-        table.cell(text(fill: white, weight: "bold")[Datum]),
-        table.cell(text(fill: white, weight: "bold")[Ausrichter]),
-        ..teams.map(t => table.cell(text(fill: white, weight: "bold")[#t])),
-      ),
+    table.header(
+      table.cell(text(fill: white, weight: "bold")[Datum]),
+      table.cell(text(fill: white, weight: "bold")[Ausrichter]),
+      ..teams.map(t => table.cell(text(fill: white, weight: "bold")[#t])),
+    ),
 
-      ..data.enumerate().map(((i, entry)) => {
-        let (datum, ausrichter, results) = entry
-        let cells = (table.cell(datum), table.cell(ausrichter))
-        for (j, val) in results.enumerate() {
-          let shown = if type(val) == str { val } else { str(val) }
-          let win = is-pokal-cell(i, j)
-          cells.push(table.cell(
-            if win { text(fill: white, weight: "bold")[#shown] } else { [#shown] }
-          ))
-        }
-        cells
-      }).flatten(),
-    )
-  ]
+    ..data.map(entry => {
+      let (datum, ausrichter, results) = entry
+      let i = data.position(d => d == entry)
+      let cells = (table.cell(datum), table.cell(ausrichter))
+      for (j, val) in results.enumerate() {
+        let shown = if type(val) == str { val } else { str(val) }
+        let win = is-pokal-cell(i, j)
+        cells.push(table.cell(
+          if win { text(fill: white, weight: "bold")[#shown] } else { [#shown] }
+        ))
+      }
+      cells
+    }).flatten(),
+  )
+]
 
-  v(1em)
-  text(size: 9pt, style: "italic")[
-    Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.
-    
-    Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.
-    2024 hat Aschheim II Holzkirchen vertreten und den 2 Platz belegt
-  ]
-}
+#v(1em)
+#text(size: 9pt, style: "italic")[
+  Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.
+  Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.
+]
+
