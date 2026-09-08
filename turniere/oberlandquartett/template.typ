@@ -41,7 +41,6 @@
       left:   3cm,
       right:  2.5cm,
     ),
-    flipped: true,
     numbering: "1",
     number-align: right + bottom,
 
