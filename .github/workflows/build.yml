@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 3. HTML-Export aus der Blitzjahreswertung erzeugen (Typst HTML export)
+      # 3. Typst Kompilierung für Blitzjahreswertung
       - name: Compile Typst to HTML
         run: |
           if [ -d "turniere/blitzjahreswertung" ]; then
@@ -30,11 +30,11 @@ jobs:
             cd ../..
           fi
 
-      # Run Build Script
+      # 4. Neues Python-Skript ausführen
       - name: Run Build Script
-        run: python build_site.py^
+        run: python build_site.py
 
-      # 5. Änderungen auf GitHub Pages / Main pushen
+      # 5. Änderungen committen und pushen
       - name: Commit and Push Changes
         run: |
           git config --global user.name 'github-actions[bot]'
