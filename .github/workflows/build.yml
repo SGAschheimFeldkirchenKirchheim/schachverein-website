@@ -9,15 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 1. Typst CLI installieren
+      # 1. Typst CLI mit expliziter Version installieren
       - name: Setup Typst
-        uses: typst-community/setup-typst@v2
+        uses: typst-community/setup-typst@v3
+        with:
+          typst-version: latest
 
       # 2. Python Umgebung einrichten
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
@@ -30,7 +32,7 @@ jobs:
             cd ../..
           fi
 
-      # 4. Neues Python-Skript ausführen
+      # 4. Python Build-Skript ausführen
       - name: Run Build Script
         run: python build_site.py
 
