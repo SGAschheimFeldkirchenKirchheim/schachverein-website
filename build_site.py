@@ -1,6 +1,7 @@
 import os
 import re
 import glob
+import subprocess
 
 # ==========================================
 # 1. HELPER: RENDER PAGE MIT TEMPLATE
@@ -88,9 +89,7 @@ def parse_typst_table_to_html(typst_content):
         
     return "\n".join(html_rows) + "</tbody>"
 
-# ==========================================
-# TURNIERE ÜBERSICHTSSEITE BUILDEN
-# ==========================================
+
 def build_turniere_overview():
     content = """
     <h1>Turniere & Ergebnisse</h1>
@@ -281,19 +280,26 @@ def build_oberlandquartett():
 # ==========================================
 def build_blitzjahreswertung():
     folder_path = os.path.join("turniere", "blitzjahreswertung")
+    main_typ = os.path.join(folder_path, "main.typ")
     output_html_path = os.path.join(folder_path, "output.html")
     
+    # 1. Typst CLI ausführen, falls main.typ existiert
+    if os.path.exists(main_typ):
+        try:
+            subprocess.run(["typst", "compile", main_typ, output_html_path], check=True)
+        except Exception as e:
+            print(f"Typst Compiling fehlgeschlagen/nicht installiert: {e}")
+
     table_content = "<p>Keine Daten für die Blitzjahreswertung vorhanden.</p>"
 
+    # 2. Gerendertes HTML verwenden oder Fallback nutzen
     if os.path.exists(output_html_path):
         with open(output_html_path, "r", encoding="utf-8") as f:
             table_content = f.read()
-    else:
-        main_typ = os.path.join(folder_path, "main.typ")
-        if os.path.exists(main_typ):
-            with open(main_typ, "r", encoding="utf-8") as f:
-                code = f.read()
-            table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
+    elif os.path.exists(main_typ):
+        with open(main_typ, "r", encoding="utf-8") as f:
+            code = f.read()
+        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
@@ -543,7 +549,7 @@ if __name__ == "__main__":
     build_oberlandquartett()
     build_blitzjahreswertung()
     build_hall_of_fame()
-    build_turniere_overview()  # <-- NEU HINZUGEFÜGT
+    build_turniere_overview()
     news = build_berichte()
     build_index(upcoming, news)
     print("Build erfolgreich abgeschlossen!")
