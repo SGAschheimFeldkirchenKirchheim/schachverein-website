@@ -1,0 +1,25 @@
+#import "../database.typ": *
+
+#let sommerblitz = (
+  "LarsG": 20,
+  "PierreT": 18,
+  "DavidM": 16,
+  "RonnyD": 14,
+  "FabianM": 13,
+  "ArthurK": 12,
+  "AlexanderW": 11,
+  "FrederikP": 10,
+  "HajunP": 9,
+  "DominikD": 8,
+  "JohannesA": 7,
+  "KonradK": 6,
+  "StefansK": 5,
+  "NiklasKö": 4,
+  "LotharE": 3,
+  "KianH": 2,
+  "JakobR": 1,
+  "KeremE": 0,
+  "EmilJ": 0,
+  "ValentinG": 0,
+  "AndreasS": 0,
+)
