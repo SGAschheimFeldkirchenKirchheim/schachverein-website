@@ -88,6 +88,38 @@ def parse_typst_table_to_html(typst_content):
         
     return "\n".join(html_rows) + "</tbody>"
 
+# ==========================================
+# TURNIERE ÜBERSICHTSSEITE BUILDEN
+# ==========================================
+def build_turniere_overview():
+    content = """
+    <h1>Turniere & Ergebnisse</h1>
+    <p>Hier findest du Übersichten zu unseren regionalen Wettkämpfen, die Gesamtwertung der Blitzschach-Serie sowie die Hall of Fame unserer Vereinsmeister.</p>
+    
+    <div class="grid-3" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-top:2rem;">
+      
+      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #3498db; border-radius:6px;">
+        <h2>🏆 Oberlandquartett</h2>
+        <p>Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.</p>
+        <a href="oberlandquartett.html" class="btn" style="background:#3498db; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zum Oberlandquartett →</a>
+      </div>
+
+      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #e67e22; border-radius:6px;">
+        <h2>⚡ Blitzjahreswertung</h2>
+        <p>Die aktuelle Gesamtwertung und Zwischenstände unserer monatlichen Blitzschach-Turnierserie.</p>
+        <a href="blitzjahreswertung.html" class="btn" style="background:#e67e22; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Blitzjahreswertung →</a>
+      </div>
+
+      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #27ae60; border-radius:6px;">
+        <h2>🥇 Vereinsintern & Hall of Fame</h2>
+        <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
+        <a href="vereinsintern.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Hall of Fame →</a>
+      </div>
+
+    </div>
+    """
+    render_page("Turniere & Ergebnisse", content, "turniere.html")
+
 
 def build_termine():
     path = os.path.join("termine", "termine.typ")
@@ -511,6 +543,7 @@ if __name__ == "__main__":
     build_oberlandquartett()
     build_blitzjahreswertung()
     build_hall_of_fame()
+    build_turniere_overview()  # <-- NEU HINZUGEFÜGT
     news = build_berichte()
     build_index(upcoming, news)
-    print("Build erfolgreich mit Template-System abgeschlossen!")
+    print("Build erfolgreich abgeschlossen!")
