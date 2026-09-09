@@ -5,17 +5,15 @@ on:
     branches: [ main ]
 
 jobs:
-  build:F
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 1. Typst CLI mit expliziter Version installieren
+      # 1. Typst CLI installieren
       - name: Setup Typst
         uses: typst-community/setup-typst@v3
-        with:
-          typst-version: latest
 
       # 2. Python Umgebung einrichten
       - name: Setup Python
@@ -23,7 +21,6 @@ jobs:
         with:
           python-version: '3.x'
 
-      # 3. Typst Kompilierung für Blitzjahreswertung
       # 3. Typst Kompilierung zu SVG
       - name: Compile Typst to SVG
         run: |
@@ -42,6 +39,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add *.html berichte/*.html
-          git diff-index --quiet HEAD || git commit -m "Auto-generate HTML files from Typst"
+          git add *.html berichte/*.html turniere/blitzjahreswertung/*.svg
+          git diff-index --quiet HEAD || git commit -m "Auto-generate HTML and SVG files"
           git push
