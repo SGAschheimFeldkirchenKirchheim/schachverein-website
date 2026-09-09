@@ -40,10 +40,15 @@ jobs:
         run: python build_site.py
 
       # 5. Änderungen committen und pushen
+      # 5. Änderungen committen und pushen
       - name: Commit and Push Changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add *.html berichte/*.html turniere/blitzjahreswertung/*.svg
-          git diff-index --quiet HEAD || git commit -m "Auto-generate HTML and SVG files"
-          git push
+          git add -A
+          if git diff-index --quiet HEAD; then
+            echo "Keine Änderungen zum Committen vorhanden."
+          else
+            git commit -m "Auto-generate HTML and SVG files"
+            git push
+          fi
