@@ -30,9 +30,9 @@ jobs:
             cd ../..
           fi
 
-      # 4. Dein Python-Skript ausführen
+      # Run Build Script
       - name: Run Build Script
-        run: python build_termine.py
+        run: python build_site.py^
 
       # 5. Änderungen auf GitHub Pages / Main pushen
       - name: Commit and Push Changes
