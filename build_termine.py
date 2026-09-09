@@ -616,6 +616,73 @@ with open("berichte.html", "w", encoding="utf-8") as f:
 
 
 # ==========================================
+# GENERATOR FÜR BLITZJAHRESWERTUNG
+# ==========================================
+def generate_blitzjahreswertung_page():
+    folder_path = os.path.join("turniere", "blitzjahreswertung")
+    output_html_path = os.path.join(folder_path, "output.html")
+    
+    table_content = "<p>Keine Daten für die Blitzjahreswertung vorhanden.</p>"
+
+    # 1. Prüfe, ob Typst bereits eine fertig gerenderte HTML-Datei erzeugt hat
+    if os.path.exists(output_html_path):
+        with open(output_html_path, "r", encoding="utf-8") as f:
+            table_content = f.read()
+    else:
+        # Fallback: Versuche direkt main.typ einzulesen
+        main_typ = os.path.join(folder_path, "main.typ")
+        if os.path.exists(main_typ):
+            with open(main_typ, "r", encoding="utf-8") as f:
+                code = f.read()
+            table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
+
+    page_html = f"""<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blitzjahreswertung | SG AFK</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .table-responsive {{ overflow-x: auto; margin-top: 1.5rem; }}
+    .custom-tabelle, table {{ width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }}
+    th, td {{ padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }}
+    th {{ background-color: #0a1f44; color: white; font-weight: bold; }}
+  </style>
+</head>
+<body>
+  <header>
+    <h2>♟️ SG Aschheim / Feldkirchen / Kirchheim</h2>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <main class="container">
+    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+    <h1 style="margin-top:1rem;">⚡ Blitzjahreswertung</h1>
+    <div class="table-responsive">
+      {table_content}
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+  </footer>
+</body>
+</html>"""
+
+    with open("blitzjahreswertung.html", "w", encoding="utf-8") as f:
+        f.write(page_html)
+
+generate_blitzjahreswertung_page()
+
+
+# ==========================================
 # 9. STARTSEITE GENERIEREN
 # ==========================================
 news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p style='font-size:0.9rem;'>Noch keine Berichte vorhanden.</p>"
