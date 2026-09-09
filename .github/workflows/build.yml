@@ -1,31 +1,44 @@
-name: Build Typst Termine und Berichte
+name: Generate Website
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      # 1. Typst CLI installieren
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v2
+
+      # 2. Python Umgebung einrichten
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
+      # 3. HTML-Export aus der Blitzjahreswertung erzeugen (Typst HTML export)
+      - name: Compile Typst to HTML
+        run: |
+          if [ -d "turniere/blitzjahreswertung" ]; then
+            cd turniere/blitzjahreswertung
+            typst compile main.typ output.html || true
+            cd ../..
+          fi
+
+      # 4. Dein Python-Skript ausführen
       - name: Run Build Script
         run: python build_termine.py
 
-      - name: Commit generated HTML files
+      # 5. Änderungen auf GitHub Pages / Main pushen
+      - name: Commit and Push Changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-generate HTML files from Typst" && git push)
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add *.html berichte/*.html
+          git diff-index --quiet HEAD || git commit -m "Auto-generate HTML files from Typst"
+          git push
