@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build:F
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -24,11 +24,12 @@ jobs:
           python-version: '3.x'
 
       # 3. Typst Kompilierung für Blitzjahreswertung
-      - name: Compile Typst to HTML
+      # 3. Typst Kompilierung zu SVG
+      - name: Compile Typst to SVG
         run: |
-          if [ -d "turniere/blitzjahreswertung" ]; then
+          if [ -f "turniere/blitzjahreswertung/main.typ" ]; then
             cd turniere/blitzjahreswertung
-            typst compile main.typ output.html || true
+            typst compile main.typ output.svg || true
             cd ../..
           fi
 
