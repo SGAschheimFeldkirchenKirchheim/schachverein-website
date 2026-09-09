@@ -278,24 +278,28 @@ def build_oberlandquartett():
 # ==========================================
 # 4. BLITZJAHRESWERTUNG PARSER
 # ==========================================
+# ==========================================
+# 4. BLITZJAHRESWERTUNG PARSER
+# ==========================================
 def build_blitzjahreswertung():
     folder_path = os.path.join("turniere", "blitzjahreswertung")
     main_typ = os.path.join(folder_path, "main.typ")
-    output_html_path = os.path.join(folder_path, "output.html")
+    output_svg_path = os.path.join(folder_path, "output.svg")
     
-    # 1. Typst CLI ausführen, falls main.typ existiert
+    # 1. Lokales Compiling als SVG (falls lokal ausgeführt)
     if os.path.exists(main_typ):
         try:
-            subprocess.run(["typst", "compile", main_typ, output_html_path], check=True)
+            subprocess.run(["typst", "compile", main_typ, output_svg_path], check=True)
         except Exception as e:
-            print(f"Typst Compiling fehlgeschlagen/nicht installiert: {e}")
+            print(f"Typst Compiling Hinweis: {e}")
 
     table_content = "<p>Keine Daten für die Blitzjahreswertung vorhanden.</p>"
 
-    # 2. Gerendertes HTML verwenden oder Fallback nutzen
-    if os.path.exists(output_html_path):
-        with open(output_html_path, "r", encoding="utf-8") as f:
-            table_content = f.read()
+    # 2. Falls SVG existiert, direkt als Vektorgrafik einbetten
+    if os.path.exists(output_svg_path):
+        with open(output_svg_path, "r", encoding="utf-8") as f:
+            svg_data = f.read()
+        table_content = f'<div class="svg-container">{svg_data}</div>'
     elif os.path.exists(main_typ):
         with open(main_typ, "r", encoding="utf-8") as f:
             code = f.read()
@@ -310,7 +314,8 @@ def build_blitzjahreswertung():
     """
 
     styles = """<style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
+      .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
+      .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle, table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
       th, td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
       th { background-color: #0a1f44; color: white; font-weight: bold; }
