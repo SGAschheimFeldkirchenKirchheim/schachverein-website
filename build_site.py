@@ -1,7 +1,28 @@
 import os
 import re
 import glob
+import datetime
 import subprocess
+import html as htmllib
+
+# ==========================================
+# KONFIGURATION
+# ==========================================
+# True  -> Termine-Seite zeigt die von Typst erzeugte SVG (falls vorhanden)
+# False -> Termine-Seite wird immer als HTML-Tabelle gerendert
+#          (Farben, klickbare Links, volle Breite, am Handy besser lesbar)
+USE_SVG_FOR_TERMINE = False
+
+# Wie viele "Nächste Termine" auf der Startseite erscheinen
+NEXT_EVENTS_COUNT = 6
+
+TODAY = datetime.date.today()
+
+# Lässt einen Block die volle Fensterbreite nutzen, auch wenn der Seiten-Container schmal ist
+FULL_BLEED_CSS = """
+      .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
+"""
+
 
 # ==========================================
 # 1. HELPER: RENDER PAGE MIT TEMPLATE
@@ -28,66 +49,263 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
 
 
 # ==========================================
-# 2. TERMINE PARSER
+# 2. TERMINE: TYPST-TABELLE PARSEN
 # ==========================================
-def parse_typst_table_to_html(typst_content):
-    if '#table(' not in typst_content and 'table(' not in typst_content:
-        return "<p>Keine Tabelle gefunden.</p>"
+def _find_closing(s, start):
+    """Index der schließenden Klammer zur öffnenden '(' oder '[' an Position start."""
+    open_ch = s[start]
+    close_ch = ')' if open_ch == '(' else ']'
+    depth = 0
+    in_str = False
+    for i in range(start, len(s)):
+        c = s[i]
+        if c == '"' and (i == 0 or s[i - 1] != '\\'):
+            in_str = not in_str
+        elif not in_str:
+            if c == open_ch:
+                depth += 1
+            elif c == close_ch:
+                depth -= 1
+                if depth == 0:
+                    return i
+    return -1
 
-    typst_content = re.sub(r'#strong\s*\(\s*["\'](.*?)["\']\s*\)', r'\1', typst_content)
-    typst_content = re.sub(r'#align\s*\([^)]*\)', '', typst_content)
 
-    table_match = re.search(r'table\((.*?)\)\s*\]?$', typst_content, re.DOTALL)
-    table_body = table_match.group(1) if table_match else typst_content
-
-    tokens = re.findall(r'(table\.cell\(.*?\)?\[.*?\]|table\.header\(.*?\)|\[.*?\])', table_body, re.DOTALL)
-    
-    html_rows = []
-    current_row = []
-    
-    for token in tokens:
-        token = token.strip()
-        if token.startswith('align:') or token.startswith('columns:') or token.startswith('stroke:'):
-            continue
-            
-        if 'table.header' in token:
-            headers = re.findall(r'\[(.*?)\]', token)
-            header_cells = "".join([f"<th>{re.sub(r'[*_]', '', h).strip()}</th>" for h in headers if h.strip()])
-            html_rows.append(f"<thead><tr>{header_cells}</tr></thead><tbody>")
-            continue
-
-        if 'colspan:' in token:
-            if current_row:
-                html_rows.append("<tr>" + "".join(current_row) + "</tr>")
-                current_row = []
-            colspan_m = re.search(r'colspan:\s*(\d+)', token)
-            colspan_val = colspan_m.group(1) if colspan_m else "1"
-            
-            content_m = re.search(r'\[(.*)\]$', token, re.DOTALL)
-            text = content_m.group(1).strip() if content_m else ""
-            text = re.sub(r'[*_"\']', '', text).strip()
-            
-            html_rows.append(f'<tr><td colspan="{colspan_val}" class="monat-header">{text}</td></tr>')
+def _top_level_brackets(s):
+    """Inhalte aller [...] auf oberster Ebene."""
+    result = []
+    i = 0
+    while i < len(s):
+        if s[i] == '[':
+            k = _find_closing(s, i)
+            if k == -1:
+                break
+            result.append(s[i + 1:k])
+            i = k + 1
         else:
-            cls = ""
-            if 'fill: yellow' in token: cls = ' class="bg-yellow"'
-            elif 'fill: orange' in token: cls = ' class="bg-orange"'
-            elif 'fill: DeepSkyBlue' in token: cls = ' class="monat-header"'
-            
-            content_m = re.search(r'\[(.*)\]$', token, re.DOTALL)
-            text = content_m.group(1).strip() if content_m else ""
-            text = re.sub(r'[*]', '', text).strip()
-            
-            current_row.append(f'<td{cls}>{text}</td>')
-            
-            if len(current_row) == 10:
-                html_rows.append("<tr>" + "".join(current_row) + "</tr>")
-                current_row = []
-            
-    if current_row:
-        html_rows.append("<tr>" + "".join(current_row) + "</tr>")
-        
-    return "\n".join(html_rows) + "</tbody>"
+            i += 1
+    return result
+
+
+def typst_inline_to_html(txt):
+    """Wandelt den Inhalt einer Typst-Zelle in HTML um (Links, #strong, #align, #underline)."""
+    txt = txt.strip()
+
+    link_m = re.match(r'#link\(\s*"([^"]*)"\s*\)\[(.*)\]\s*$', txt, re.DOTALL)
+    if link_m:
+        label = typst_inline_to_html(link_m.group(2))
+        url = htmllib.escape(link_m.group(1), quote=True)
+        return f'<a href="{url}" target="_blank" rel="noopener">{label}</a>'
+
+    txt = re.sub(r'#strong\s*\(\s*"(.*?)"\s*\)', r'\1', txt, flags=re.DOTALL)
+    txt = re.sub(r'#align\s*\([^)]*\)\[(.*)\]', r'\1', txt, flags=re.DOTALL)
+    txt = re.sub(r'#(?:strong|underline|emph)\[(.*)\]', r'\1', txt, flags=re.DOTALL)
+    txt = txt.replace('*', '').strip()
+    return htmllib.escape(txt, quote=False)
+
+
+def parse_typst_table(typst_content):
+    """
+    Liest die erste table(...) aus Typst-Code.
+    Rückgabe: dict mit header (Liste), rows (Liste) und ncols - oder None.
+    rows-Einträge: {'kind': 'month', 'text', 'colspan'} oder {'kind': 'row', 'cells': [...]}
+    """
+    code = re.sub(r'(?m)^\s*//.*$', '', typst_content)
+    m = re.search(r'(?<![\w.])table\(', code)
+    if not m:
+        return None
+    start = m.end() - 1
+    end = _find_closing(code, start)
+    if end == -1:
+        return None
+    body = code[start + 1:end]
+
+    header = []
+    items = []
+    i, n = 0, len(body)
+
+    while i < n:
+        c = body[i]
+        if c in ' \t\r\n,':
+            i += 1
+            continue
+
+        if body.startswith('table.header(', i):
+            p = i + len('table.header')
+            q = _find_closing(body, p)
+            if q == -1:
+                break
+            header = [typst_inline_to_html(t) for t in _top_level_brackets(body[p + 1:q])]
+            i = q + 1
+
+        elif body.startswith('table.cell(', i):
+            p = i + len('table.cell')
+            q = _find_closing(body, p)
+            if q == -1:
+                break
+            args = body[p + 1:q]
+            j = q + 1
+            while j < n and body[j] in ' \t\r\n':
+                j += 1
+            text = ''
+            if j < n and body[j] == '[':
+                k = _find_closing(body, j)
+                if k == -1:
+                    break
+                text = body[j + 1:k]
+                i = k + 1
+            else:
+                i = j
+            fill_m = re.search(r'fill:\s*(\w+)', args)
+            span_m = re.search(r'colspan:\s*(\d+)', args)
+            items.append({
+                'text': typst_inline_to_html(text),
+                'fill': fill_m.group(1) if fill_m else '',
+                'colspan': int(span_m.group(1)) if span_m else 1,
+            })
+
+        elif c == '[':
+            k = _find_closing(body, i)
+            if k == -1:
+                break
+            items.append({'text': typst_inline_to_html(body[i + 1:k]), 'fill': '', 'colspan': 1})
+            i = k + 1
+
+        else:
+            # Benannte Argumente wie "columns: 10," oder "stroke: 1pt + black," überspringen
+            depth = 0
+            while i < n:
+                ch = body[i]
+                if ch in '([':
+                    depth += 1
+                elif ch in ')]':
+                    depth -= 1
+                elif ch == ',' and depth == 0:
+                    break
+                i += 1
+
+    ncols = len(header)
+    if not ncols:
+        cm = re.search(r'columns:\s*(\d+)', body)
+        ncols = int(cm.group(1)) if cm else 10
+
+    rows, current, filled = [], [], 0
+    for it in items:
+        if it['colspan'] >= ncols:
+            if current:
+                rows.append({'kind': 'row', 'cells': current})
+                current, filled = [], 0
+            rows.append({'kind': 'month', 'text': it['text'], 'colspan': it['colspan']})
+        else:
+            current.append(it)
+            filled += it['colspan']
+            if filled >= ncols:
+                rows.append({'kind': 'row', 'cells': current})
+                current, filled = [], 0
+    if current:
+        rows.append({'kind': 'row', 'cells': current})
+
+    return {'header': header, 'rows': rows, 'ncols': ncols}
+
+
+DATE_RE = re.compile(r'^\s*(\d{1,2})\.(\d{1,2})\.')
+
+
+def assign_dates(rows, today=TODAY):
+    """
+    Setzt für jede Zeile mit Datum ('02.10. Fr, 18:00 Uhr') ein echtes date-Objekt.
+    Das Jahr wird aus der Reihenfolge abgeleitet: Rutscht der Monat zurück (Dez -> Jan),
+    beginnt ein neues Jahr. Die Saison startet im Herbst (ab Juli = laufendes Jahr).
+    """
+    year = today.year if today.month >= 7 else today.year - 1
+    prev_month = None
+    for r in rows:
+        if r['kind'] != 'row':
+            continue
+        r['date'] = None
+        plain = re.sub(r'<[^>]+>', '', r['cells'][0]['text'])
+        dm = DATE_RE.match(plain)
+        if not dm:
+            continue
+        day, month = int(dm.group(1)), int(dm.group(2))
+        if prev_month is not None and month < prev_month:
+            year += 1
+        prev_month = month
+        try:
+            r['date'] = datetime.date(year, month, day)
+        except ValueError:
+            pass
+
+
+def render_table_inner_html(parsed, today=TODAY):
+    out = []
+    if parsed['header']:
+        out.append('<thead><tr>' + ''.join(f'<th>{h}</th>' for h in parsed['header']) + '</tr></thead>')
+    out.append('<tbody>')
+    for r in parsed['rows']:
+        if r['kind'] == 'month':
+            out.append(f'<tr class="monat-row"><td colspan="{r["colspan"]}" class="monat-header">{r["text"]}</td></tr>')
+            continue
+        past = r.get('date') is not None and r['date'] < today
+        tr_cls = ' class="past"' if past else ''
+        tds = []
+        for c in r['cells']:
+            cls = f' class="bg-{c["fill"].lower()}"' if c['fill'] else ''
+            span = f' colspan="{c["colspan"]}"' if c['colspan'] > 1 else ''
+            tds.append(f'<td{cls}{span}>{c["text"]}</td>')
+        out.append(f'<tr{tr_cls}>' + ''.join(tds) + '</tr>')
+    out.append('</tbody>')
+    return '\n'.join(out)
+
+
+def parse_typst_table_to_html(typst_content):
+    """Kompatibel zur alten Version: liefert den Inhalt für <table>...</table>."""
+    parsed = parse_typst_table(typst_content)
+    if not parsed or not parsed['rows']:
+        return '<tbody><tr><td>Keine Tabelle gefunden.</td></tr></tbody>'
+    assign_dates(parsed['rows'])
+    return render_table_inner_html(parsed)
+
+
+def extract_upcoming_events(parsed, today=TODAY, limit=NEXT_EVENTS_COUNT):
+    """
+    Nächste Termine ab heute. Zeilen mit Veranstaltung zeigen den Titel,
+    Zeilen ohne Veranstaltung (Mannschaftskämpfe) zeigen z. B. 'MMM Runde 1' + betroffene Teams.
+    """
+    header = parsed['header']
+    events = []
+    for r in parsed['rows']:
+        if r['kind'] != 'row' or not r.get('date') or r['date'] < today:
+            continue
+        cells = r['cells']
+        if len(cells) < 2:
+            continue
+
+        when = cells[0]['text']
+        event = cells[1]['text']
+        who = ''
+
+        if event:
+            title = event
+        else:
+            groups = {}
+            for idx in range(2, len(cells)):
+                t = cells[idx]['text']
+                if t and 'spielfrei' not in t.lower():
+                    name = header[idx] if idx < len(header) else f'Team {idx - 1}'
+                    groups.setdefault(t, []).append(name)
+            if not groups:
+                continue
+            if len(groups) == 1:
+                title = next(iter(groups))
+                who = ', '.join(next(iter(groups.values())))
+            else:
+                title = '<br>'.join(f"{t} ({', '.join(names)})" for t, names in groups.items())
+
+        events.append({'date': r['date'], 'when': when, 'title': title, 'who': who})
+        if len(events) >= limit:
+            break
+    return events
 
 
 def build_turniere_overview():
@@ -124,51 +342,56 @@ def build_termine():
     folder_path = "termine"
     main_typ = os.path.join(folder_path, "termine.typ")
     svg_path = os.path.join(folder_path, "output.svg")
-    
-    # 1. Lokales Kompilieren versuchen (falls typst CLI lokal vorhanden ist)
-    if os.path.exists(main_typ):
+
+    # 1. Lokales Kompilieren versuchen (nur nötig, wenn die SVG verwendet wird)
+    if USE_SVG_FOR_TERMINE and os.path.exists(main_typ):
         try:
             subprocess.run(["typst", "compile", main_typ, svg_path], check=True)
         except Exception:
             pass
 
-    upcoming_events = []
-
-    # 2. Anstehende Termine für die Startseite auslesen
+    # 2. Typst-Tabelle lesen
+    parsed = None
     if os.path.exists(main_typ):
         with open(main_typ, "r", encoding="utf-8") as f:
-            typst_code = f.read()
+            parsed = parse_typst_table(f.read())
 
-        tokens = re.findall(r'\[(.*?)\]', typst_code)
-        for i in range(len(tokens) - 1):
-            if re.match(r'^\d{2}\.\d{2}\.', tokens[i].strip()):
-                datum = tokens[i].strip()
-                event = tokens[i + 1].strip()
-                if event and not event.startswith("MMM") and len(upcoming_events) < 4:
-                    upcoming_events.append((datum, event))
+    upcoming_events = []
+    if parsed:
+        assign_dates(parsed['rows'])
+        upcoming_events = extract_upcoming_events(parsed)
 
-    # 3. Wenn output.svg existiert (vom GitHub Workflow erzeugt), diese direkt einbetten!
-    if os.path.exists(svg_path):
+    # 3. Tabelle: SVG oder HTML
+    if USE_SVG_FOR_TERMINE and os.path.exists(svg_path):
         with open(svg_path, "r", encoding="utf-8") as f:
-            svg_content = f.read()
-        table_html = f'<div class="svg-container">{svg_content}</div>'
-    elif os.path.exists(main_typ):
-        # Fallback nur nutzen, wenn KEINE SVG existiert
-        table_html = f'<table class="custom-tabelle">{parse_typst_table_to_html(typst_code)}</table>'
+            table_html = f'<div class="svg-container">{f.read()}</div>'
+    elif parsed and parsed['rows']:
+        table_html = f'<table class="custom-tabelle">{render_table_inner_html(parsed)}</table>'
     else:
         table_html = "<p>Keine Termine vorhanden.</p>"
 
     content = f"""<h1>Termine & Spielplan</h1>
-    <div class="table-responsive">
-      {table_html}
+    <div class="full-bleed">
+      <div class="table-responsive">
+        {table_html}
+      </div>
     </div>"""
 
-    styles = """<style>
+    styles = """<style>""" + FULL_BLEED_CSS + """
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
       .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
       .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
       .custom-tabelle th { background-color: #1a252f; color: white; }
+      .custom-tabelle td:first-child { white-space: nowrap; }
+      .custom-tabelle td:nth-child(n+3) { white-space: nowrap; }
+      .custom-tabelle td.monat-header { background: deepskyblue; font-weight: bold; font-size: 1.05rem; }
+      .custom-tabelle .past td { opacity: 0.45; }
+      .custom-tabelle td.bg-yellow { background: yellow; }
+      .custom-tabelle td.bg-orange { background: orange; }
+      .custom-tabelle td.bg-green { background: #5fd068; }
+      .custom-tabelle td.bg-darkslategray { background: #2f4f4f; color: white; }
+      .custom-tabelle td.bg-deepskyblue { background: deepskyblue; }
     </style>"""
 
     render_page("Termine & Spielplan", content, "termine.html", extra_styles=styles)
@@ -286,9 +509,6 @@ def build_oberlandquartett():
     render_page("Oberlandquartett", content, "oberlandquartett.html", extra_styles=styles)
 
 
-# ==========================================
-# 4. BLITZJAHRESWERTUNG PARSER
-# ==========================================
 # ==========================================
 # 4. BLITZJAHRESWERTUNG PARSER
 # ==========================================
@@ -476,16 +696,18 @@ def build_berichte():
 def build_index(upcoming_events, home_news_snippets):
     news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p style='font-size:0.9rem;'>Noch keine Berichte vorhanden.</p>"
 
-    events_list_items = ""
-    for datum, event in upcoming_events[:4]:
-        events_list_items += f"""
-        <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
-          <strong>{datum}</strong><br>
-          <span style="color:#555;">{event}</span>
-        </li>
+    event_cards = ""
+    for ev in upcoming_events:
+        who = f'<div class="ev-who">{ev["who"]}</div>' if ev["who"] else ""
+        event_cards += f"""
+        <div class="event-card">
+          <div class="ev-date">{ev["when"]}</div>
+          <div class="ev-title">{ev["title"]}</div>
+          {who}
+        </div>
         """
-    if not events_list_items:
-        events_list_items = "<li style='font-size:0.9rem;'>Keine anstehenden Termine gefunden.</li>"
+    if not event_cards:
+        event_cards = "<p style='font-size:0.9rem;'>Keine anstehenden Termine gefunden.</p>"
 
     index_content = f"""
     <section class="hero" style="margin-bottom: 2rem;">
@@ -493,64 +715,76 @@ def build_index(upcoming_events, home_news_snippets):
       <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
     </section>
 
-    <div class="hero-layout">
-      <div>
-        <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
-        {news_html}
-        <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
-      </div>
+    <div class="full-bleed">
 
-      <div class="info-card">
-        <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
-        <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
-        <ul style="font-size:0.85rem; padding-left: 1.2rem;">
-          <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
-          <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
-        </ul>
-        <div class="hinweis-box">
-          💡 <strong>Volle Flexibilität:</strong> Keine starren Grenzen! Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.
+      <div class="hero-layout">
+        <div>
+          <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
+          {news_html}
+          <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
         </div>
-        <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1rem 0;">
-        <p style="font-size:0.85rem; margin:0;"><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim</p>
-        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
-      </div>
 
-      <div>
-        <h3 style="margin-top:0;">📅 Nächste Termine</h3>
-        <div class="card" style="padding: 1rem;">
-          <ul style="list-style:none; padding:0; margin:0;">
-            {events_list_items}
+        <div class="info-card">
+          <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
+          <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
+          <ul style="font-size:0.85rem; padding-left: 1.2rem;">
+            <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+            <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
           </ul>
-          <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:0.8rem; font-size:0.85rem; padding: 0.5rem;">Zum Spielplan</a>
+          <div class="hinweis-box">
+            💡 <strong>Volle Flexibilität:</strong> Keine starren Grenzen! Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.
+          </div>
+          <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1rem 0;">
+          <p style="font-size:0.85rem; margin:0;"><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim</p>
+          <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
         </div>
       </div>
-    </div>
 
-    <div class="grid-3" style="margin-top: 2rem;">
-      <div class="card">
-        <h3>♟️ Hobbyspieler & Einsteiger</h3>
-        <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
-        <a href="mitgliederantrag.pdf" download style="display:inline-block; margin-top:0.8rem; color:#27ae60; font-weight:bold; font-size:0.85rem; text-decoration:none;">
-          📄 Mitgliedsantrag (PDF) herunterladen →
-        </a>
+      <section class="next-events">
+        <div class="next-events-head">
+          <h3 style="margin:0;">📅 Nächste Termine</h3>
+          <a href="termine.html" class="btn" style="background:#3498db; font-size:0.85rem; padding: 0.5rem 1rem;">Zum Spielplan →</a>
+        </div>
+        <div class="events-grid">
+          {event_cards}
+        </div>
+      </section>
+
+      <div class="grid-3" style="margin-top: 2rem;">
+        <div class="card">
+          <h3>♟️ Hobbyspieler & Einsteiger</h3>
+          <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
+          <a href="mitgliederantrag.pdf" download style="display:inline-block; margin-top:0.8rem; color:#27ae60; font-weight:bold; font-size:0.85rem; text-decoration:none;">
+            📄 Mitgliedsantrag (PDF) herunterladen →
+          </a>
+        </div>
+        <div class="card">
+          <h3>♟️ Kinder & Jugendliche</h3>
+          <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
+        </div>
+        <div class="card">
+          <h3>♟️ Mannschaftsschach</h3>
+          <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
+          <a href="mannschaften.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Unsere Teams</a>
+        </div>
       </div>
-      <div class="card">
-        <h3>♟️ Kinder & Jugendliche</h3>
-        <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
-      </div>
-      <div class="card">
-        <h3>♟️ Mannschaftsschach</h3>
-        <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
-        <a href="mannschaften.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Unsere Teams</a>
-      </div>
+
     </div>
     """
 
-    styles = """<style>
-      .hero-layout { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: 1.2rem; align-items: start; }
+    styles = """<style>""" + FULL_BLEED_CSS + """
+      .hero-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; align-items: start; margin-bottom: 2rem; }
       .info-card { background: #f8f9fa; border-left: 5px solid #27ae60; padding: 1.2rem; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
       .maps-btn { display: inline-block; background: #3498db; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.85rem; font-weight: bold; margin-top: 0.6rem; }
       .hinweis-box { background: #e8f4f8; border: 1px solid #bce8f1; color: #2c3e50; padding: 0.8rem; border-radius: 5px; margin-top: 0.8rem; font-size: 0.85rem; }
+      .next-events { margin-top: 1rem; }
+      .next-events-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+      .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+      .event-card { background: #f8f9fa; border-left: 4px solid #3498db; border-radius: 6px; padding: 0.9rem 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .ev-date { font-size: 0.8rem; font-weight: bold; color: #555; margin-bottom: 0.25rem; }
+      .ev-title { font-size: 0.95rem; font-weight: bold; color: #1a252f; }
+      .ev-title a { color: #3498db; }
+      .ev-who { font-size: 0.8rem; color: #777; margin-top: 0.25rem; }
       @media (max-width: 1024px) { .hero-layout { grid-template-columns: 1fr; } }
     </style>"""
 
