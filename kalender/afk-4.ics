@@ -1,0 +1,139 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SG AFK//Termine//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:SG AFK – AFK 4
+X-WR-TIMEZONE:Europe/Berlin
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+BEGIN:VEVENT
+UID:2026-10-02-18-vereinsabend-afk-4@sg-afk
+DTSTAMP:20261002T000000Z
+DTSTART:20261002T160000Z
+DTEND:20261002T190000Z
+SUMMARY:Vereinsabend
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-09-ganztag-kooperationsturnier-mit-der-schule-afk-4@sg-afk
+DTSTAMP:20261009T000000Z
+DTSTART;VALUE=DATE:20261009
+DTEND;VALUE=DATE:20261010
+SUMMARY:Kooperationsturnier mit der Schule
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-16-19-schnellschach-vm-kooperationsturnier-mit-ebersberg-afk-4@
+ sg-afk
+DTSTAMP:20261016T000000Z
+DTSTART:20261016T173000Z
+DTEND:20261016T203000Z
+SUMMARY:Schnellschach-VM+Kooperationsturnier mit Ebersberg
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-23-19-afk-4-mmm-runde-1-afk-4@sg-afk
+DTSTAMP:20261023T000000Z
+DTSTART:20261023T173000Z
+DTEND:20261023T203000Z
+SUMMARY:AFK 4: MMM Runde 1
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-06-ganztag-vereinsabend-herbstferien-afk-4@sg-afk
+DTSTAMP:20261106T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Vereinsabend (Herbstferien)
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-13-19-afk-4-mmm-runde-2-afk-4@sg-afk
+DTSTAMP:20261113T000000Z
+DTSTART:20261113T183000Z
+DTEND:20261113T213000Z
+SUMMARY:AFK 4: MMM Runde 2
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-20-ganztag-nacht-der-mathematik-afk-4@sg-afk
+DTSTAMP:20261120T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Nacht der Mathematik
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-22-11-muenchner-blitz-em-afk-4@sg-afk
+DTSTAMP:20261122T000000Z
+DTSTART:20261122T100000Z
+DTEND:20261122T130000Z
+SUMMARY:Münchner Blitz-EM
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-27-19-afk-4-mmm-runde-3-afk-4@sg-afk
+DTSTAMP:20261127T000000Z
+DTSTART:20261127T183000Z
+DTEND:20261127T213000Z
+SUMMARY:AFK 4: MMM Runde 3
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-29-11-mannschafts-und-ligapokal-afk-4@sg-afk
+DTSTAMP:20261129T000000Z
+DTSTART:20261129T100000Z
+DTEND:20261129T130000Z
+SUMMARY:Mannschafts-und Ligapokal
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-12-11-19-afk-4-mmm-runde-4-afk-4@sg-afk
+DTSTAMP:20261211T000000Z
+DTSTART:20261211T183000Z
+DTEND:20261211T213000Z
+SUMMARY:AFK 4: MMM Runde 4
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-12-18-ganztag-weihnachtsblitz-afk-4@sg-afk
+DTSTAMP:20261218T000000Z
+DTSTART;VALUE=DATE:20261218
+DTEND;VALUE=DATE:20261219
+SUMMARY:Weihnachtsblitz
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-01-06-ganztag-dreikoenigsturnier-afk-4@sg-afk
+DTSTAMP:20270106T000000Z
+DTSTART;VALUE=DATE:20270106
+DTEND;VALUE=DATE:20270107
+SUMMARY:Dreikönigsturnier
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-01-29-19-afk-4-mmm-runde-5-afk-4@sg-afk
+DTSTAMP:20270129T000000Z
+DTSTART:20270129T183000Z
+DTEND:20270129T213000Z
+SUMMARY:AFK 4: MMM Runde 5
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+END:VCALENDAR

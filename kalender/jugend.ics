@@ -1,0 +1,94 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SG AFK//Termine//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:SG AFK – Jugend
+X-WR-TIMEZONE:Europe/Berlin
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+BEGIN:VEVENT
+UID:2026-10-02-18-vereinsabend-jugend@sg-afk
+DTSTAMP:20261002T000000Z
+DTSTART:20261002T160000Z
+DTEND:20261002T190000Z
+SUMMARY:Vereinsabend
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-09-ganztag-kooperationsturnier-mit-der-schule-jugend@sg-afk
+DTSTAMP:20261009T000000Z
+DTSTART;VALUE=DATE:20261009
+DTEND;VALUE=DATE:20261010
+SUMMARY:Kooperationsturnier mit der Schule
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-16-19-schnellschach-vm-kooperationsturnier-mit-ebersberg-jugend
+ @sg-afk
+DTSTAMP:20261016T000000Z
+DTSTART:20261016T173000Z
+DTEND:20261016T203000Z
+SUMMARY:Schnellschach-VM+Kooperationsturnier mit Ebersberg
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-06-ganztag-vereinsabend-herbstferien-jugend@sg-afk
+DTSTAMP:20261106T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Vereinsabend (Herbstferien)
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-20-ganztag-nacht-der-mathematik-jugend@sg-afk
+DTSTAMP:20261120T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Nacht der Mathematik
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-22-11-muenchner-blitz-em-jugend@sg-afk
+DTSTAMP:20261122T000000Z
+DTSTART:20261122T100000Z
+DTEND:20261122T130000Z
+SUMMARY:Münchner Blitz-EM
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-29-11-mannschafts-und-ligapokal-jugend@sg-afk
+DTSTAMP:20261129T000000Z
+DTSTART:20261129T100000Z
+DTEND:20261129T130000Z
+SUMMARY:Mannschafts-und Ligapokal
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-12-18-ganztag-weihnachtsblitz-jugend@sg-afk
+DTSTAMP:20261218T000000Z
+DTSTART;VALUE=DATE:20261218
+DTEND;VALUE=DATE:20261219
+SUMMARY:Weihnachtsblitz
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-01-06-ganztag-dreikoenigsturnier-jugend@sg-afk
+DTSTAMP:20270106T000000Z
+DTSTART;VALUE=DATE:20270106
+DTEND;VALUE=DATE:20270107
+SUMMARY:Dreikönigsturnier
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+END:VCALENDAR
