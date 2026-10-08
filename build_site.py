@@ -123,46 +123,44 @@ def build_turniere_overview():
 def build_termine():
     folder_path = "termine"
     main_typ = os.path.join(folder_path, "termine.typ")
-    target_svg = os.path.join(folder_path, "output.svg")
+    svg_path = os.path.join(folder_path, "output.svg")
     
-    # 1. Versuchen, Typst direkt via Python auszuführen, falls lokal/auf Action verfügbar
+    # 1. Lokales Kompilieren versuchen (falls typst CLI lokal vorhanden ist)
     if os.path.exists(main_typ):
         try:
-            res = subprocess.run(["typst", "compile", main_typ, target_svg], capture_output=True, text=True)
-            if res.returncode != 0:
-                print(f"Typst Compiler Fehler bei Termine:\n{res.stderr}")
-            else:
-                print("Typst SVG für Termine erfolgreich generiert!")
-        except Exception as e:
-            print(f"Typst CLI nicht aufrufbar: {e}")
-
-    # 2. Prüfen, ob output.svg existiert (egal ob eben oder durch GitHub Action erzeugt)
-    output_svg_path = target_svg if os.path.exists(target_svg) else None
+            subprocess.run(["typst", "compile", main_typ, svg_path], check=True)
+        except Exception:
+            pass
 
     upcoming_events = []
+
+    # 2. Anstehende Termine für die Startseite auslesen
     if os.path.exists(main_typ):
         with open(main_typ, "r", encoding="utf-8") as f:
             typst_code = f.read()
 
         tokens = re.findall(r'\[(.*?)\]', typst_code)
-        for i in range(len(tokens)-1):
+        for i in range(len(tokens) - 1):
             if re.match(r'^\d{2}\.\d{2}\.', tokens[i].strip()):
                 datum = tokens[i].strip()
-                event = tokens[i+1].strip()
+                event = tokens[i + 1].strip()
                 if event and not event.startswith("MMM") and len(upcoming_events) < 4:
                     upcoming_events.append((datum, event))
 
-    # 3. SVG einbinden oder Warnung anzeigen
-    if output_svg_path:
-        with open(output_svg_path, "r", encoding="utf-8") as f:
-            table_content = f'<div class="svg-container">{f.read()}</div>'
+    # 3. Wenn output.svg existiert (vom GitHub Workflow erzeugt), diese direkt einbetten!
+    if os.path.exists(svg_path):
+        with open(svg_path, "r", encoding="utf-8") as f:
+            svg_content = f.read()
+        table_html = f'<div class="svg-container">{svg_content}</div>'
+    elif os.path.exists(main_typ):
+        # Fallback nur nutzen, wenn KEINE SVG existiert
+        table_html = f'<table class="custom-tabelle">{parse_typst_table_to_html(typst_code)}</table>'
     else:
-        print("WARNUNG: output.svg nicht gefunden. Verwende unvollständigen Fallback-Parser.")
-        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(typst_code)}</table>'
+        table_html = "<p>Keine Termine vorhanden.</p>"
 
     content = f"""<h1>Termine & Spielplan</h1>
     <div class="table-responsive">
-      {table_content}
+      {table_html}
     </div>"""
 
     styles = """<style>
@@ -175,7 +173,6 @@ def build_termine():
 
     render_page("Termine & Spielplan", content, "termine.html", extra_styles=styles)
     return upcoming_events
-
 
 # ==========================================
 # 3. OBERLANDQUARTETT PARSER
