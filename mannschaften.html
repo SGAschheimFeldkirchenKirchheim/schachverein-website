@@ -13,7 +13,7 @@
     <nav>
       <a href="index.html">Start</a>
       <a href="ueber-uns.html">Über uns</a>
-      <a href="mannschaften.html">Mannschaften</a>
+      <a href="mannschaften.html" aria-current="page">Mannschaften</a>
       <a href="termine.html">Termine</a>
       <a href="jugend.html">Jugend</a>
       <a href="kontakt.html">Kontakt</a>
@@ -21,57 +21,89 @@
   </header>
 
   <main class="container">
-    <h1>Unsere Mannschaften & Liga-Ergebnisse</h1>
-    <p>Hier findest du die Aufstellungen und die aktuellen Tabellen unserer Teams in der laufenden Saison.</p>
+    <h1>Unsere Mannschaften &amp; Liga-Ergebnisse</h1>
+    <p>Hier findest du die Links zu den aktuellen Tabellen und Ergebnissen unserer Teams in der laufenden Saison.</p>
 
-    <div class="grid-Mannschaften">
-      <div class="card">
-        <h3>1. Mannschaft</h3>
-        <p>Liga & Spielklasse im Schachbezirk</p>
-        <a href="https://schachbezirk-muenchen.de/component/clm/?view=mannschaft&saison=16&liga=340&tlnr=3&Itemid=4164" target="_blank" rel="noopener" class="btn">Tabelle & Ergebnisse im Schachbezirk</a>
-      </div>
-
-      <div class="card">
-        <h3>2. Mannschaft</h3>
-        <p>Liga & Spielklasse im Schachbezirk</p>
-        <a href="https://schachbezirk-muenchen.de/component/clm/?view=mannschaft&saison=16&liga=341&tlnr=8&Itemid=4164" target="_blank" rel="noopener" class="btn">Tabelle & Ergebnisse im Schachbezirk</a>
-      </div>
-
-      <div class="card">
-        <h3>3. Mannschaft</h3>
-        <p>Liga & Spielklasse im Schachbezirk</p>
-        <a href="https://schachbezirk-muenchen.de/component/clm/?view=mannschaft&saison=16&liga=344&tlnr=8&Itemid=4164" target="_blank" rel="noopener" class="btn">Tabelle & Ergebnisse im Schachbezirk</a>
-      </div>
-
-      <div class="card">
-        <h3>4. Mannschaft</h3>
-        <p>Liga & Spielklasse im Schachbezirk</p>
-        <a href="https://schachbezirk-muenchen.de/component/clm/?view=mannschaft&saison=16&liga=345&tlnr=3&Itemid=4164" target="_blank" rel="noopener" class="btn">Tabelle & Ergebnisse im Schachbezirk</a>
-      </div>
-      
-      <div class="card">
-        <h3>5. Mannschaft</h3>
-        <p>Liga & Spielklasse im Schachbezirk</p>
-        <a href="https://schachbezirk-muenchen.de/component/clm/?view=mannschaft&saison=16&liga=347&tlnr=3&Itemid=4164" target="_blank" rel="noopener" class="btn">Tabelle & Ergebnisse im Schachbezirk</a>
-      </div>
-
-      <div class="card">
-        <h3>6. Mannschaft</h3>
-        <p>Liga & Spielklasse im Schachbezirk</p>
-        <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener" class="btn">Tabelle & Ergebnisse im Schachbezirk</a>
-      </div>
-
-      <div class="card">
-        <h3>Jugendmannschaften</h3>
-        <p>Ergebnisse und Tabellen der Jugendrunden</p>
-        <a href="https://schachbezirk-muenchen.de/component/clm/?view=mannschaft&saison=16&liga=348&tlnr=6&Itemid=4164" target="_blank" rel="noopener" class="btn">Jugend-Ergebnisse öffnen</a>
-      </div>
+    <div class="grid-Mannschaften" id="mannschaften">
+      <noscript>
+        <p>Bitte aktiviere JavaScript oder besuche direkt die Seite des
+          <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener">Schachbezirks München</a>.</p>
+      </noscript>
     </div>
   </main>
 
   <footer>
-    <p>&copy; 2026 SGem Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" style="color:#aaa;">Impressum & Datenschutz</a></p>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="kontakt.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
   </footer>
+
+  <script>
+    // ============================================================
+    //  HIER PFLEGEN: Pro neuer Saison nur diese Werte anpassen
+    // ============================================================
+    const SAISON = 16;
+    const ITEMID = 4164;
+    const BASIS  = "https://schachbezirk-muenchen.de/component/clm/";
+
+    // liga = Liga-Nummer, tlnr = Mannschaftsnummer in dieser Liga
+    // klasse = Spielklasse (optional, z. B. "Bezirksliga A")
+    // liga: null  ->  Karte ohne Link ("wird nachgetragen")
+    const MANNSCHAFTEN = [
+      { name: "1. Mannschaft",     liga: 340,  tlnr: 3, klasse: "" },
+      { name: "2. Mannschaft",     liga: 341,  tlnr: 8, klasse: "" },
+      { name: "3. Mannschaft",     liga: 344,  tlnr: 8, klasse: "" },
+      { name: "4. Mannschaft",     liga: 345,  tlnr: 3, klasse: "" },
+      { name: "5. Mannschaft",     liga: 347,  tlnr: 3, klasse: "" },
+      { name: "6. Mannschaft",     liga: null, tlnr: null, klasse: "" },
+      { name: "Jugendmannschaften", liga: 348, tlnr: 6, klasse: "Jugendrunden", jugend: true },
+    ];
+    // ============================================================
+
+    function tabellenUrl(m) {
+      const p = new URLSearchParams({
+        view: "mannschaft",
+        saison: SAISON,
+        liga: m.liga,
+        tlnr: m.tlnr,
+        Itemid: ITEMID,
+      });
+      return BASIS + "?" + p.toString();
+    }
+
+    const container = document.getElementById("mannschaften");
+
+    MANNSCHAFTEN.forEach((m) => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const h3 = document.createElement("h3");
+      h3.textContent = m.name;
+      card.appendChild(h3);
+
+      if (m.klasse) {
+        const p = document.createElement("p");
+        p.textContent = m.klasse;
+        card.appendChild(p);
+      }
+
+      if (m.liga !== null && m.tlnr !== null) {
+        const a = document.createElement("a");
+        a.href = tabellenUrl(m);
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.className = "btn";
+        a.textContent = m.jugend ? "Jugend-Ergebnisse öffnen" : "Tabelle & Ergebnisse";
+        a.setAttribute("aria-label",
+          (m.jugend ? "Ergebnisse der " : "Tabelle der ") + m.name + " (öffnet in neuem Tab)");
+        card.appendChild(a);
+      } else {
+        const p = document.createElement("p");
+        p.textContent = "Liga wird nachgetragen.";
+        card.appendChild(p);
+      }
+
+      container.appendChild(card);
+    });
+  </script>
 
 </body>
 </html>
