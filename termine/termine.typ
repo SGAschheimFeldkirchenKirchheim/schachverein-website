@@ -1,49 +1,41 @@
-#import "package.typ": *  
+#import "package.typ": *
 
-#let template(body) = [
-  #set page(
-    paper: "a3",           
-    flipped: true,
-    width: auto, 
-    height: auto, 
-    margin: 1cm,
-  )
-
-  #set document(title: "MMM 2026/2027", author: "Korbinian Ruff")
-  
-  #set text(
-    font: "New Computer Modern", 
-    size: 12pt,                
-    lang: "de",                
-    region: "DE",
-  )
-
-  // DEINE NEUE REGEL FÜR HEADING LEVEL 1
-  #show heading.where(level: 1): it => {
-    set align(center)
-    set text(size: 24pt, weight: "bold")
-    block[#underline(it.body)]
-    v(0.2em)
-  }
-
-  // Standard: überall außerhalb von Tabellen
-#show link: set text(fill: LightSlateBlue)
-
-#show table.cell: it => {
-  let c = if it.fill == green {
-    black
-  } else if it.fill == none {
-    black
-  } else if it.fill == orange {
-    black
-  } else if it.fill == yellow {
-    dunkelblau
-  } else {
-    LightSlateBlue
-  }
-  show link: set text(fill: c)
-  it
-}
-
-  #body
+#align(center)[
+#table(
+  align: center,
+  columns: 10,
+  stroke: 1pt + black,
+  table.header(
+    [* Termin *], [* Verein *], [* AFK 1 *], [* AFK 2 *], [* AFK 3 *], [* AFK 4 *], [* AFK 5 *], [* AFK 6 *], [* Senioren *], [* Jugend *]
+  ),
+  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Oktober")]],
+  table.cell(fill: DarkSlateGray)[02.10. Fr, 18:00 Uhr], [Vereinsabend], [], [], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[09.10. Fr], table.cell(fill: yellow)[#link("https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/Eltern-Schueler-Turnier_2026.pdf")[#underline[Kooperationsturnier mit der Schule]]], [], [], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[16.10. Fr, 19:30 Uhr], table.cell(fill: orange)[#link("https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/Schnellschach-VM%20und%20Kooperationsturnier%20mit%20EBE.pdf")[#underline[Schnellschach-VM+Kooperationsturnier mit Ebersberg]]], [], [], [], [], [], [], [], [],
+  [21.10. Mi, 19:00 Uhr], [], [], [], [], [], table.cell(fill: green)[MMM Runde 1], [], [], [],
+  [22.10. Do, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 1], [], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[23.10. Fr, 19:30 Uhr], [], [], table.cell(fill: green)[MMM Runde 1], table.cell(fill: green)[MMM Runde 1], table.cell(fill: green)[MMM Runde 1], [], [], [], [],
+  [28.10. Mi, 19:00 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 1], [],
+  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("November")]],
+  table.cell(fill: DarkSlateGray)[06.11. Fr], [Vereinsabend (Herbstferien)], [], [], [], [], [], [], [], [],
+  [10.11. Di, 19:30 Uhr], [], [], [], table.cell(fill: green)[MMM Runde 2], [], [], table.cell(fill: green)[MMM Runde 1], [], [],
+  table.cell(fill: DarkSlateGray)[13.11. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 2], table.cell(fill: green)[MMM Runde 2], [], table.cell(fill: green)[MMM Runde 2], table.cell(fill: green)[MMM Runde 2], [], [], [],
+  table.cell(fill: DarkSlateGray)[20.11. Fr], table.cell(fill: yellow)[#link("https://www.mathenacht.de/")[#underline[Nacht der Mathematik]]], [], [], [], [], [], [], [], [],
+  [22.11. So, 11:00 Uhr], [Münchner Blitz-EM], [], [], [], [], [], [], [], [],
+  [26.11. Do, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 3], [], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[27.11. Fr, 19:30 Uhr], [], [], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 2], [], [],
+  [29.11. So, 11:00 Uhr], [Mannschafts-und Ligapokal], [], [], [], [], [], [], [], [],
+  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Dezember")]],
+  [08.12. Di, 19:30 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 3], [], [],
+  table.cell(fill: DarkSlateGray)[11.12. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], [], [], [],
+  [14.12. Mo], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Spiefrei], [],
+  table.cell(fill: DarkSlateGray)[18.12. Fr], table.cell(fill: orange)[Weihnachtsblitz], [], [], [], [], [], [], [], [],
+  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Januar")]],
+  [06.01. Mi], [Dreikönigsturnier], [], [], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[22.01. Fr, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 3], [],
+  [25.01. Mo], [], [], [], [], [], [], table.cell(fill: green)[MMM Spielfrei], [], [],
+  [28.01. Do, 19:30 Uhr], [], [], [], table.cell(fill: green)[MMM Runde 5], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[29.01. Fr, 19:00 Uhr], [], [], table.cell(fill: green)[MMM Runde 5], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[29.01. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 5], [], [], table.cell(fill: green)[MMM Runde 5], table.cell(fill: green)[MMM Runde 5], [], [], [],
+)
 ]
