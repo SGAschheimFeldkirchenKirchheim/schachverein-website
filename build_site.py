@@ -123,32 +123,23 @@ def build_turniere_overview():
 def build_termine():
     folder_path = "termine"
     main_typ = os.path.join(folder_path, "termine.typ")
+    target_svg = os.path.join(folder_path, "output.svg")
     
-    # Mögliche SVG-Pfade prüfen
-    svg_paths = [
-        os.path.join(folder_path, "output.svg"),
-        "output.svg"
-    ]
-    
-    output_svg_path = None
-    for p in svg_paths:
-        if os.path.exists(p):
-            output_svg_path = p
-            break
-
-    # 1. Lokales Compiling versuchen (falls Typst lokal installiert ist)
-    if not output_svg_path and os.path.exists(main_typ):
+    # 1. Versuchen, Typst direkt via Python auszuführen, falls lokal/auf Action verfügbar
+    if os.path.exists(main_typ):
         try:
-            target_svg = os.path.join(folder_path, "output.svg")
-            subprocess.run(["typst", "compile", main_typ, target_svg], check=True)
-            if os.path.exists(target_svg):
-                output_svg_path = target_svg
+            res = subprocess.run(["typst", "compile", main_typ, target_svg], capture_output=True, text=True)
+            if res.returncode != 0:
+                print(f"Typst Compiler Fehler bei Termine:\n{res.stderr}")
+            else:
+                print("Typst SVG für Termine erfolgreich generiert!")
         except Exception as e:
-            print(f"Typst Compiling Hinweis (Termine): {e}")
+            print(f"Typst CLI nicht aufrufbar: {e}")
+
+    # 2. Prüfen, ob output.svg existiert (egal ob eben oder durch GitHub Action erzeugt)
+    output_svg_path = target_svg if os.path.exists(target_svg) else None
 
     upcoming_events = []
-    
-    # 2. Termine für die Startseiten-Vorschau per Regex extrahieren
     if os.path.exists(main_typ):
         with open(main_typ, "r", encoding="utf-8") as f:
             typst_code = f.read()
@@ -161,14 +152,13 @@ def build_termine():
                 if event and not event.startswith("MMM") and len(upcoming_events) < 4:
                     upcoming_events.append((datum, event))
 
-    # 3. Wenn die SVG existiert, wird sie 1:1 eingebettet!
-    if output_svg_path and os.path.exists(output_svg_path):
+    # 3. SVG einbinden oder Warnung anzeigen
+    if output_svg_path:
         with open(output_svg_path, "r", encoding="utf-8") as f:
             table_content = f'<div class="svg-container">{f.read()}</div>'
-    elif os.path.exists(main_typ):
-        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(typst_code)}</table>'
     else:
-        table_content = "<p>Keine Termine vorhanden.</p>"
+        print("WARNUNG: output.svg nicht gefunden. Verwende unvollständigen Fallback-Parser.")
+        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(typst_code)}</table>'
 
     content = f"""<h1>Termine & Spielplan</h1>
     <div class="table-responsive">
