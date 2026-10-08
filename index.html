@@ -6,10 +6,20 @@
   <title>Startseite | SG AFK</title>
   <link rel="stylesheet" href="style.css">
   <style>
-      .hero-layout { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: 1.2rem; align-items: start; }
+      .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
+
+      .hero-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; align-items: start; margin-bottom: 2rem; }
       .info-card { background: #f8f9fa; border-left: 5px solid #27ae60; padding: 1.2rem; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
       .maps-btn { display: inline-block; background: #3498db; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.85rem; font-weight: bold; margin-top: 0.6rem; }
       .hinweis-box { background: #e8f4f8; border: 1px solid #bce8f1; color: #2c3e50; padding: 0.8rem; border-radius: 5px; margin-top: 0.8rem; font-size: 0.85rem; }
+      .next-events { margin-top: 1rem; }
+      .next-events-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+      .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+      .event-card { background: #f8f9fa; border-left: 4px solid #3498db; border-radius: 6px; padding: 0.9rem 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .ev-date { font-size: 0.8rem; font-weight: bold; color: #555; margin-bottom: 0.25rem; }
+      .ev-title { font-size: 0.95rem; font-weight: bold; color: #1a252f; }
+      .ev-title a { color: #3498db; }
+      .ev-who { font-size: 0.8rem; color: #777; margin-top: 0.25rem; }
       @media (max-width: 1024px) { .hero-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -35,10 +45,12 @@
       <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
     </section>
 
-    <div class="hero-layout">
-      <div>
-        <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
-        
+    <div class="full-bleed">
+
+      <div class="hero-layout">
+        <div>
+          <h3 style="margin-top:0;">📰 Aktuelle Berichte</h3>
+          
                 <div class="card" style="margin-bottom: 1rem; padding: 1rem;">
                   <h4 style="margin: 0 0 0.3rem 0; font-size:1.05rem;">Turnierbericht</h4>
                   <p style="color:#777; font-size:0.75rem; margin:0 0 0.5rem 0;">📅 </p>
@@ -54,72 +66,90 @@
                   <a href="berichte/2026-10-vereinsmeisterschaft.html" style="color:#3498db; font-weight:bold; text-decoration:none; font-size:0.85rem;">Weiterlesen →</a>
                 </div>
                 
-        <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
-      </div>
-
-      <div class="info-card">
-        <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
-        <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
-        <ul style="font-size:0.85rem; padding-left: 1.2rem;">
-          <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
-          <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
-        </ul>
-        <div class="hinweis-box">
-          💡 <strong>Volle Flexibilität:</strong> Keine starren Grenzen! Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.
+          <a href="berichte.html" style="display:inline-block; color:#3498db; font-weight:bold; font-size:0.85rem;">Alle Berichte ansehen →</a>
         </div>
-        <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1rem 0;">
-        <p style="font-size:0.85rem; margin:0;"><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim</p>
-        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
-      </div>
 
-      <div>
-        <h3 style="margin-top:0;">📅 Nächste Termine</h3>
-        <div class="card" style="padding: 1rem;">
-          <ul style="list-style:none; padding:0; margin:0;">
-            
-        <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
-          <strong>02.10. Fr, 18:00 Uhr</strong><br>
-          <span style="color:#555;">Vereinsabend</span>
-        </li>
-        
-        <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
-          <strong>09.10. Fr</strong><br>
-          <span style="color:#555;">Kooperationsturnier mit der Schule</span>
-        </li>
-        
-        <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
-          <strong>16.10. Fr, 19:30 Uhr</strong><br>
-          <span style="color:#555;">Schnellschach-VM+Kooperationsturnier mit Ebersberg</span>
-        </li>
-        
-        <li style="margin-bottom:0.6rem; padding-bottom:0.4rem; border-bottom:1px solid #eee; font-size:0.85rem;">
-          <strong>06.11. Fr</strong><br>
-          <span style="color:#555;">Vereinsabend (Herbstferien)</span>
-        </li>
-        
+        <div class="info-card">
+          <h3 style="margin-top:0;">🕒 Wann & Wo wir spielen</h3>
+          <p style="font-size:0.9rem;"><strong>Jeden Freitag</strong> (Gebäude ab 18:00 Uhr geöffnet)</p>
+          <ul style="font-size:0.85rem; padding-left: 1.2rem;">
+            <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+            <li><strong>Erwachsene & Spielabend:</strong> Ab 19:30 Uhr (open end)</li>
           </ul>
-          <a href="termine.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box; margin-top:0.8rem; font-size:0.85rem; padding: 0.5rem;">Zum Spielplan</a>
+          <div class="hinweis-box">
+            💡 <strong>Volle Flexibilität:</strong> Keine starren Grenzen! Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.
+          </div>
+          <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 1rem 0;">
+          <p style="font-size:0.85rem; margin:0;"><strong>Spielort:</strong> Gymnasium Kirchheim<br>Heimstettner Str. 3, 85551 Kirchheim</p>
+          <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="maps-btn">📍 Auf Google Maps öffnen</a>
         </div>
       </div>
-    </div>
 
-    <div class="grid-3" style="margin-top: 2rem;">
-      <div class="card">
-        <h3>♟️ Hobbyspieler & Einsteiger</h3>
-        <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
-        <a href="mitgliederantrag.pdf" download style="display:inline-block; margin-top:0.8rem; color:#27ae60; font-weight:bold; font-size:0.85rem; text-decoration:none;">
-          📄 Mitgliedsantrag (PDF) herunterladen →
-        </a>
+      <section class="next-events">
+        <div class="next-events-head">
+          <h3 style="margin:0;">📅 Nächste Termine</h3>
+          <a href="termine.html" class="btn" style="background:#3498db; font-size:0.85rem; padding: 0.5rem 1rem;">Zum Spielplan →</a>
+        </div>
+        <div class="events-grid">
+          
+        <div class="event-card">
+          <div class="ev-date">09.10. Fr</div>
+          <div class="ev-title">Kooperationsturnier mit der Schule</div>
+          
+        </div>
+        
+        <div class="event-card">
+          <div class="ev-date">16.10. Fr, 19:30 Uhr</div>
+          <div class="ev-title">Schnellschach-VM+Kooperationsturnier mit Ebersberg</div>
+          
+        </div>
+        
+        <div class="event-card">
+          <div class="ev-date">21.10. Mi, 19:00 Uhr</div>
+          <div class="ev-title">MMM Runde 1</div>
+          <div class="ev-who">AFK 5</div>
+        </div>
+        
+        <div class="event-card">
+          <div class="ev-date">22.10. Do, 19:30 Uhr</div>
+          <div class="ev-title">MMM Runde 1</div>
+          <div class="ev-who">AFK 1</div>
+        </div>
+        
+        <div class="event-card">
+          <div class="ev-date">23.10. Fr, 19:30 Uhr</div>
+          <div class="ev-title">MMM Runde 1</div>
+          <div class="ev-who">AFK 2, AFK 3, AFK 4</div>
+        </div>
+        
+        <div class="event-card">
+          <div class="ev-date">28.10. Mi, 19:00 Uhr</div>
+          <div class="ev-title">MSMM Runde 1</div>
+          <div class="ev-who">Senioren</div>
+        </div>
+        
+        </div>
+      </section>
+
+      <div class="grid-3" style="margin-top: 2rem;">
+        <div class="card">
+          <h3>♟️ Hobbyspieler & Einsteiger</h3>
+          <p>Du spielst gerne Schach oder möchtest es lernen? Bei uns kannst du ganz zwanglos freie Partien spielen, ohne Turnierdruck.</p>
+          <a href="mitgliederantrag.pdf" download style="display:inline-block; margin-top:0.8rem; color:#27ae60; font-weight:bold; font-size:0.85rem; text-decoration:none;">
+            📄 Mitgliedsantrag (PDF) herunterladen →
+          </a>
+        </div>
+        <div class="card">
+          <h3>♟️ Kinder & Jugendliche</h3>
+          <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
+        </div>
+        <div class="card">
+          <h3>♟️ Mannschaftsschach</h3>
+          <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
+          <a href="mannschaften.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Unsere Teams</a>
+        </div>
       </div>
-      <div class="card">
-        <h3>♟️ Kinder & Jugendliche</h3>
-        <p>Freitags ab 18:00 Uhr bieten wir ein strukturiertes Jugendtraining für alle Alters- und Spielklassen an.</p>
-      </div>
-      <div class="card">
-        <h3>♟️ Mannschaftsschach</h3>
-        <p>Mit mehreren Teams von der C-Klasse bis zur Bezirksliga bieten wir für jedes Spielniveau die passende Mannschaft.</p>
-        <a href="mannschaften.html" class="btn" style="background:#3498db; width:100%; text-align:center; box-sizing:border-box;">Unsere Teams</a>
-      </div>
+
     </div>
     
   </main>

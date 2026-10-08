@@ -6,11 +6,22 @@
   <title>Termine & Spielplan | SG AFK</title>
   <link rel="stylesheet" href="style.css">
   <style>
+      .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
+
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
       .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
       .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
       .custom-tabelle th { background-color: #1a252f; color: white; }
+      .custom-tabelle td:first-child { white-space: nowrap; }
+      .custom-tabelle td:nth-child(n+3) { white-space: nowrap; }
+      .custom-tabelle td.monat-header { background: deepskyblue; font-weight: bold; font-size: 1.05rem; }
+      .custom-tabelle .past td { opacity: 0.45; }
+      .custom-tabelle td.bg-yellow { background: yellow; }
+      .custom-tabelle td.bg-orange { background: orange; }
+      .custom-tabelle td.bg-green { background: #5fd068; }
+      .custom-tabelle td.bg-darkslategray { background: #2f4f4f; color: white; }
+      .custom-tabelle td.bg-deepskyblue { background: deepskyblue; }
     </style>
 </head>
 <body>
@@ -30,37 +41,41 @@
 
   <main class="container">
     <h1>Termine & Spielplan</h1>
-    <div class="table-responsive">
-      <table class="custom-tabelle"><thead><tr><th>Termin</th><th>Veranstaltung</th><th>AFK 1</th><th>AFK 2</th><th>AFK 3</th><th>AFK 4</th><th>AFK 5</th><th>AFK 6</th><th>Senioren</th><th>Jugend</th></tr></thead><tbody>
-<tr><td colspan="10" class="monat-header">[Oktober</td></tr>
-<tr><td>02.10. Fr, 18:00 Uhr</td><td>Vereinsabend</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>09.10. Fr</td><td class="bg-yellow">Kooperationsturnier mit der Schule</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>16.10. Fr, 19:30 Uhr</td><td class="bg-orange">Schnellschach-VM+Kooperationsturnier mit Ebersberg</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>21.10. Mi, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td>MMM Runde 1</td><td></td><td></td><td></td></tr>
-<tr><td>22.10. Do, 19:30 Uhr</td><td></td><td>MMM Runde 1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>23.10. Fr, 19:30 Uhr</td><td></td><td></td><td>MMM Runde 1</td><td>MMM Runde 1</td><td>MMM Runde 1</td><td></td><td></td><td></td><td></td></tr>
-<tr><td>28.10. Mi, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>MSMM Runde 1</td><td></td></tr>
-<tr><td colspan="10" class="monat-header">[November</td></tr>
-<tr><td>06.11. Fr</td><td>Vereinsabend (Herbstferien)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>10.11. Di, 19:30 Uhr</td><td></td><td></td><td></td><td>MMM Runde 2</td><td></td><td></td><td>MMM Runde 1</td><td></td><td></td></tr>
-<tr><td>13.11. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 2</td><td>MMM Runde 2</td><td></td><td>MMM Runde 2</td><td>MMM Runde 2</td><td></td><td></td><td></td></tr>
-<tr><td>20.11. Fr</td><td class="bg-yellow">#link("https://www.mathenacht.de/")[#underline[Nacht der Mathematik</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <div class="full-bleed">
+      <div class="table-responsive">
+        <table class="custom-tabelle"><thead><tr><th>Termin</th><th>Veranstaltung</th><th>AFK 1</th><th>AFK 2</th><th>AFK 3</th><th>AFK 4</th><th>AFK 5</th><th>AFK 6</th><th>Senioren</th><th>Jugend</th></tr></thead>
+<tbody>
+<tr class="monat-row"><td colspan="10" class="monat-header">Oktober</td></tr>
+<tr class="past"><td class="bg-darkslategray">02.10. Fr, 18:00 Uhr</td><td>Vereinsabend</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">09.10. Fr</td><td class="bg-yellow">Kooperationsturnier mit der Schule</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">16.10. Fr, 19:30 Uhr</td><td class="bg-orange">Schnellschach-VM+Kooperationsturnier mit Ebersberg</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21.10. Mi, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 1</td><td></td><td></td><td></td></tr>
+<tr><td>22.10. Do, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">23.10. Fr, 19:30 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 1</td><td class="bg-green">MMM Runde 1</td><td class="bg-green">MMM Runde 1</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>28.10. Mi, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 1</td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">November</td></tr>
+<tr><td class="bg-darkslategray">06.11. Fr</td><td>Vereinsabend (Herbstferien)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>10.11. Di, 19:30 Uhr</td><td></td><td></td><td></td><td class="bg-green">MMM Runde 2</td><td></td><td></td><td class="bg-green">MMM Runde 1</td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">13.11. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 2</td><td class="bg-green">MMM Runde 2</td><td></td><td class="bg-green">MMM Runde 2</td><td class="bg-green">MMM Runde 2</td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">20.11. Fr</td><td class="bg-yellow"><a href="https://www.mathenacht.de/" target="_blank" rel="noopener">Nacht der Mathematik</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>22.11. So, 11:00 Uhr</td><td>Münchner Blitz-EM</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>26.11. Do, 19:30 Uhr</td><td></td><td>MMM Runde 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>27.11. Fr, 19:30 Uhr</td><td></td><td></td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 3</td><td>MMM Runde 2</td><td></td><td></td></tr>
+<tr><td>26.11. Do, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">27.11. Fr, 19:30 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 3</td><td class="bg-green">MMM Runde 3</td><td class="bg-green">MMM Runde 3</td><td class="bg-green">MMM Runde 3</td><td class="bg-green">MMM Runde 2</td><td></td><td></td></tr>
 <tr><td>29.11. So, 11:00 Uhr</td><td>Mannschafts-und Ligapokal</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td colspan="10" class="monat-header">[Dezember</td></tr>
-<tr><td>08.12. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td>MMM Runde 3</td><td></td><td></td></tr>
-<tr><td>11.12. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td>MMM Runde 4</td><td></td><td></td><td></td></tr>
-<tr><td>14.12. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>MSMM Spiefrei</td><td></td></tr>
-<tr><td>18.12. Fr</td><td class="bg-orange">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td colspan="10" class="monat-header">[Januar</td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">Dezember</td></tr>
+<tr><td>08.12. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 3</td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">11.12. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td></td><td></td><td></td></tr>
+<tr><td>14.12. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Spiefrei</td><td></td></tr>
+<tr><td class="bg-darkslategray">18.12. Fr</td><td class="bg-orange">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">Januar</td></tr>
 <tr><td>06.01. Mi</td><td>Dreikönigsturnier</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>22.01. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>MSMM Runde 3</td><td></td></tr>
-<tr><td>25.01. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td>MMM Spielfrei</td><td></td><td></td></tr>
-<tr><td>28.01. Do, 19:30 Uhr</td><td></td><td></td><td></td><td>MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>29.01. Fr, 19:00 Uhr</td><td></td><td></td><td>MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>29.01. Fr, 19:30 Uhr</td><td></td><td>MMM Runde 5</td><td></td><td></td><td>MMM Runde 5</td><td>MMM Runde 5</td><td></td><td></td><td></td></tr></tbody></table>
+<tr><td class="bg-darkslategray">22.01. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 3</td><td></td></tr>
+<tr><td>25.01. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Spielfrei</td><td></td><td></td></tr>
+<tr><td>28.01. Do, 19:30 Uhr</td><td></td><td></td><td></td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">29.01. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">29.01. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td class="bg-green">MMM Runde 5</td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td></td></tr>
+</tbody></table>
+      </div>
     </div>
   </main>
 
