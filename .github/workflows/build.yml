@@ -29,15 +29,11 @@ jobs:
       # 3. Typst Kompilierung zu SVG
       - name: Compile Typst to SVG
         run: |
-          if [ -d "termine" ]; then
-            cd termine
-            typst compile termine.typ output.svg || true
-            cd ..
+          if [ -f "termine/termine.typ" ]; then
+            typst compile termine/termine.typ termine/output.svg || true
           fi
-          if [ -d "turniere/blitzjahreswertung" ]; then
-            cd turniere/blitzjahreswertung
-            typst compile main.typ output.svg || true
-            cd ../..
+          if [ -f "turniere/blitzjahreswertung/main.typ" ]; then
+            typst compile turniere/blitzjahreswertung/main.typ turniere/blitzjahreswertung/output.svg || true
           fi
 
       # 4. Python Build-Skript ausführen
