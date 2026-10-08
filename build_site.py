@@ -121,15 +121,22 @@ def build_turniere_overview():
 
 
 def build_termine():
-    path = os.path.join("termine", "termine.typ")
-    if not os.path.exists(path) and os.path.exists("termine.typ"):
-        path = "termine.typ"
+    folder_path = "termine"
+    main_typ = os.path.join(folder_path, "termine.typ")
+    output_svg_path = os.path.join(folder_path, "output.svg")
+    
+    # 1. Typst-Datei zu SVG kompilieren (falls lokal aufgeführt)
+    if os.path.exists(main_typ):
+        try:
+            subprocess.run(["typst", "compile", main_typ, output_svg_path], check=True)
+        except Exception as e:
+            print(f"Typst Compiling Hinweis (Termine): {e}")
 
     upcoming_events = []
-    table_html = "<p>Keine Termine vorhanden.</p>"
-
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
+    
+    # 2. Termine für die Startseiten-Vorschau auslesen
+    if os.path.exists(main_typ):
+        with open(main_typ, "r", encoding="utf-8") as f:
             typst_code = f.read()
 
         tokens = re.findall(r'\[(.*?)\]', typst_code)
@@ -140,23 +147,26 @@ def build_termine():
                 if event and not event.startswith("MMM") and len(upcoming_events) < 4:
                     upcoming_events.append((datum, event))
 
-        table_html = parse_typst_table_to_html(typst_code)
+    # 3. Falls SVG existiert (aus Workflow), direkt einbetten
+    if os.path.exists(output_svg_path):
+        with open(output_svg_path, "r", encoding="utf-8") as f:
+            table_content = f'<div class="svg-container">{f.read()}</div>'
+    elif os.path.exists(main_typ):
+        table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(typst_code)}</table>'
+    else:
+        table_content = "<p>Keine Termine vorhanden.</p>"
 
     content = f"""<h1>Termine & Spielplan</h1>
     <div class="table-responsive">
-      <table class="custom-tabelle">
-        {table_html}
-      </table>
+      {table_content}
     </div>"""
 
     styles = """<style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
+      .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
+      .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
       .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
       .custom-tabelle th { background-color: #1a252f; color: white; }
-      .monat-header { background-color: #00bfff !important; font-weight: bold; font-size: 1.1rem; color: black; }
-      .bg-yellow { background-color: #fff2ac !important; }
-      .bg-orange { background-color: #ffd8a8 !important; }
     </style>"""
 
     render_page("Termine & Spielplan", content, "termine.html", extra_styles=styles)
