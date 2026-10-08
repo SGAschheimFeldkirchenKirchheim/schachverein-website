@@ -10,7 +10,7 @@
   ),
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Oktober")]],
   table.cell(fill: DarkSlateGray)[02.10. Fr, 18:00 Uhr], [Vereinsabend], [], [], [], [], [], [], [], [],
-  table.cell(fill: DarkSlateGray)[09.10. Fr], table.cell(fill: yellow)[#link("https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/Eltern-Schüler-Turnier_2026.pdf")[#underline[Kooperationsturnier mit der Schule]]], [], [], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[09.10. Fr], table.cell(fill: yellow)[#link("https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/Eltern-Schueler-Turnier_2026.pdf")[#underline[Kooperationsturnier mit der Schule]]], [], [], [], [], [], [], [], [],
   table.cell(fill: DarkSlateGray)[16.10. Fr, 19:30 Uhr], table.cell(fill: orange)[#link("https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/KTEBE.pdf")[#underline[Schnellschach-VM+Kooperationsturnier mit Ebersberg]]], [], [], [], [], [], [], [], [],
   [21.10. Mi, 19:00 Uhr], [], [], [], [], [], table.cell(fill: green)[MMM Runde 1], [], [], [],
   [22.10. Do, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 1], [], [], [], [], [], [], [],
