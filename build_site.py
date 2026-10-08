@@ -608,10 +608,23 @@ def build_ausschreibungen():
     folder = "Ausschreibungen"
     files = glob.glob(os.path.join(folder, "*.pdf")) if os.path.isdir(folder) else []
 
+    # Optionale Anzeigenamen: Datei Ausschreibungen/titel.txt, je Zeile "datei.pdf = Anzeigename"
+    titles = {}
+    titles_path = os.path.join(folder, "titel.txt")
+    if os.path.exists(titles_path):
+        with open(titles_path, "r", encoding="utf-8-sig") as f:
+            for line in f:
+                if "=" in line and not line.strip().startswith("#"):
+                    key, value = line.split("=", 1)
+                    if key.strip() and value.strip():
+                        titles[key.strip().lower()] = value.strip()
+
     entries = []
     for path in files:
         name = os.path.basename(path)
-        label = re.sub(r'\s+', ' ', re.sub(r'[_-]+', ' ', os.path.splitext(name)[0])).strip()
+        stem = os.path.splitext(name)[0]
+        label = (titles.get(name.lower()) or titles.get(stem.lower())
+                 or re.sub(r'\s+', ' ', re.sub(r'[_-]+', ' ', stem)).strip())
         entries.append({
             'label': htmllib.escape(label),
             'url': f"{quote(folder)}/{quote(name)}",
