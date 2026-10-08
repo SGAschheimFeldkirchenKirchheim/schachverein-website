@@ -4,6 +4,12 @@ import glob
 import datetime
 import subprocess
 import html as htmllib
+from urllib.parse import quote
+
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:  # sehr alte Python-Versionen
+    ZoneInfo = None
 
 # ==========================================
 # KONFIGURATION
@@ -15,6 +21,14 @@ USE_SVG_FOR_TERMINE = False
 
 # Wie viele "Nächste Termine" auf der Startseite erscheinen
 NEXT_EVENTS_COUNT = 6
+
+# Öffentliche Adresse der Seite (für Kalender-Links)
+SITE_URL = "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/"
+
+# Kalender-Export
+CAL_TZ = "Europe/Berlin"
+EVENT_DURATION_HOURS = 3          # Standarddauer für Termine mit Uhrzeit
+SPIELORT = "Gymnasium Kirchheim, Heimstettner Str. 3, 85551 Kirchheim"
 
 TODAY = datetime.date.today()
 
@@ -308,6 +322,156 @@ def extract_upcoming_events(parsed, today=TODAY, limit=NEXT_EVENTS_COUNT):
     return events
 
 
+# ------------------------------------------
+# Kalender-Export (.ics)
+# ------------------------------------------
+TIME_RE = re.compile(r'(\d{1,2}):(\d{2})')
+
+
+def plain_text(html_str):
+    return htmllib.unescape(re.sub(r'<[^>]+>', '', html_str)).strip()
+
+
+def slugify(text):
+    text = plain_text(text).lower()
+    for a, b in (('ä', 'ae'), ('ö', 'oe'), ('ü', 'ue'), ('ß', 'ss')):
+        text = text.replace(a, b)
+    return re.sub(r'[^a-z0-9]+', '-', text).strip('-') or 'x'
+
+
+def ics_escape(s):
+    return s.replace('\\', '\\\\').replace(';', '\\;').replace(',', '\\,').replace('\n', '\\n')
+
+
+def ics_fold(line):
+    """Zeilen laut Standard auf 75 Bytes umbrechen (nie mitten in einem UTF-8-Zeichen)."""
+    out = []
+    b = line.encode('utf-8')
+    while len(b) > 75:
+        cut = 75
+        while (b[cut] & 0xC0) == 0x80:
+            cut -= 1
+        out.append(b[:cut].decode('utf-8'))
+        b = b' ' + b[cut:]
+    out.append(b.decode('utf-8'))
+    return '\r\n'.join(out)
+
+
+def ics_datetime(d, hh, mm, add_hours=0):
+    local = datetime.datetime(d.year, d.month, d.day, hh, mm) + datetime.timedelta(hours=add_hours)
+    try:
+        return local.replace(tzinfo=ZoneInfo(CAL_TZ)).astimezone(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
+    except Exception:
+        return local.strftime('%Y%m%dT%H%M%S')   # Notlösung: lokale Zeit ohne Zeitzone
+
+
+def collect_calendar_events(parsed):
+    header = [plain_text(h) for h in parsed['header']]
+    events = []
+    for r in parsed['rows']:
+        if r['kind'] != 'row' or not r.get('date'):
+            continue
+        cells = r['cells']
+        if len(cells) < 2:
+            continue
+        tm = TIME_RE.search(plain_text(cells[0]['text']))
+        hh, mm = (int(tm.group(1)), int(tm.group(2))) if tm else (None, None)
+
+        title = plain_text(cells[1]['text'])
+        if title:
+            events.append({'date': r['date'], 'h': hh, 'm': mm, 'title': title, 'teams': []})
+
+        groups = {}
+        for idx in range(2, len(cells)):
+            t = plain_text(cells[idx]['text'])
+            if t and 'spielfrei' not in t.lower():
+                name = header[idx] if idx < len(header) else f'Team {idx - 1}'
+                groups.setdefault(t, []).append(name)
+        for t, names in groups.items():
+            events.append({'date': r['date'], 'h': hh, 'm': mm, 'title': t, 'teams': names})
+    return events
+
+
+def write_ics(path, cal_name, feed_slug, entries):
+    """entries: Liste von (event, summary)."""
+    lines = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SG AFK//Termine//DE',
+        'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',
+        f'X-WR-CALNAME:{ics_escape(cal_name)}', f'X-WR-TIMEZONE:{CAL_TZ}',
+        'REFRESH-INTERVAL;VALUE=DURATION:PT12H', 'X-PUBLISHED-TTL:PT12H',
+    ]
+    for ev, summary in entries:
+        d = ev['date']
+        uid = f"{d.isoformat()}-{ev['h'] if ev['h'] is not None else 'ganztag'}-{slugify(summary)}-{feed_slug}@sg-afk"
+        lines += ['BEGIN:VEVENT', f'UID:{uid}', f"DTSTAMP:{d.strftime('%Y%m%d')}T000000Z"]
+        if ev['h'] is not None:
+            lines.append(f"DTSTART:{ics_datetime(d, ev['h'], ev['m'])}")
+            lines.append(f"DTEND:{ics_datetime(d, ev['h'], ev['m'], EVENT_DURATION_HOURS)}")
+        else:
+            lines.append(f"DTSTART;VALUE=DATE:{d.strftime('%Y%m%d')}")
+            lines.append(f"DTEND;VALUE=DATE:{(d + datetime.timedelta(days=1)).strftime('%Y%m%d')}")
+        lines.append(f'SUMMARY:{ics_escape(summary)}')
+        if 'vereinsabend' in ev['title'].lower():
+            lines.append(f'LOCATION:{ics_escape(SPIELORT)}')
+        lines.append(f'URL:{SITE_URL}termine.html')
+        lines.append('END:VEVENT')
+    lines.append('END:VCALENDAR')
+    with open(path, 'w', encoding='utf-8', newline='') as f:
+        f.write('\r\n'.join(ics_fold(l) for l in lines) + '\r\n')
+
+
+def build_calendar_feeds(parsed):
+    """Schreibt kalender/alle.ics und je eine Datei pro Spalte (AFK 1 ... Jugend). Rückgabe: [(Label, Dateiname)]"""
+    os.makedirs('kalender', exist_ok=True)
+    events = collect_calendar_events(parsed)
+    feeds = []
+
+    # Alle Termine
+    entries = []
+    for ev in events:
+        summary = f"{ev['title']} ({', '.join(ev['teams'])})" if ev['teams'] else ev['title']
+        entries.append((ev, summary))
+    write_ics('kalender/alle.ics', 'SG AFK – Alle Termine', 'alle', entries)
+    feeds.append(('Alle Termine', 'alle.ics'))
+
+    # Pro Mannschaft: Vereinstermine + eigene Spiele
+    for team in [plain_text(h) for h in parsed['header'][2:]]:
+        slug = slugify(team)
+        entries = []
+        for ev in events:
+            if not ev['teams']:
+                entries.append((ev, ev['title']))
+            elif team in ev['teams']:
+                entries.append((ev, f"{team}: {ev['title']}"))
+        write_ics(f'kalender/{slug}.ics', f'SG AFK – {team}', slug, entries)
+        feeds.append((team, f'{slug}.ics'))
+    return feeds
+
+
+def calendar_box_html(feeds):
+    if not feeds:
+        return ""
+    webcal_base = SITE_URL.replace('https://', 'webcal://')
+    rows = []
+    for label, fname in feeds:
+        https_url = f'{SITE_URL}kalender/{fname}'
+        rows.append(
+            f'<li><strong>{label}</strong> '
+            f'<a href="{webcal_base}kalender/{fname}">📲 Abonnieren</a> '
+            f'<a href="{https_url}" data-url="{https_url}" '
+            f'onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent=\'✓ Link kopiert\';return false;">🔗 Link kopieren</a></li>'
+        )
+    return f"""
+    <details class="kalender-box">
+      <summary>📆 Termine im Handy-Kalender abonnieren</summary>
+      <p>Der Kalender aktualisiert sich automatisch, wenn sich der Spielplan ändert.
+         <strong>iPhone / Mac / Outlook:</strong> „Abonnieren" antippen.
+         <strong>Google Kalender:</strong> „Link kopieren" und in Google Kalender unter „Weitere Kalender → Per URL" einfügen.</p>
+      <ul>{''.join(rows)}</ul>
+    </details>
+    """
+
+
 def build_turniere_overview():
     content = """
     <h1>Turniere & Ergebnisse</h1>
@@ -331,6 +495,12 @@ def build_turniere_overview():
         <h2>🥇 Vereinsintern & Hall of Fame</h2>
         <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
         <a href="vereinsintern.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Hall of Fame →</a>
+      </div>
+
+      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #8e44ad; border-radius:6px;">
+        <h2>📄 Ausschreibungen</h2>
+        <p>Alle Turnierausschreibungen als PDF zum Ansehen und Herunterladen.</p>
+        <a href="ausschreibungen.html" class="btn" style="background:#8e44ad; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zu den Ausschreibungen →</a>
       </div>
 
     </div>
@@ -357,9 +527,11 @@ def build_termine():
             parsed = parse_typst_table(f.read())
 
     upcoming_events = []
+    calendar_html = ""
     if parsed:
         assign_dates(parsed['rows'])
         upcoming_events = extract_upcoming_events(parsed)
+        calendar_html = calendar_box_html(build_calendar_feeds(parsed))
 
     # 3. Tabelle: SVG oder HTML
     if USE_SVG_FOR_TERMINE and os.path.exists(svg_path):
@@ -371,6 +543,7 @@ def build_termine():
         table_html = "<p>Keine Termine vorhanden.</p>"
 
     content = f"""<h1>Termine & Spielplan</h1>
+    {calendar_html}
     <div class="full-bleed">
       <div class="table-responsive">
         {table_html}
@@ -392,10 +565,123 @@ def build_termine():
       .custom-tabelle td.bg-green { background: #5fd068; }
       .custom-tabelle td.bg-darkslategray { background: #2f4f4f; color: white; }
       .custom-tabelle td.bg-deepskyblue { background: deepskyblue; }
+      .kalender-box { background: #f8f9fa; border-left: 5px solid #3498db; border-radius: 6px; padding: 0.8rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+      .kalender-box summary { cursor: pointer; font-weight: bold; }
+      .kalender-box ul { list-style: none; padding: 0; margin: 0.6rem 0 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.4rem 1.5rem; }
+      .kalender-box li a { margin-left: 0.6rem; color: #3498db; text-decoration: none; font-weight: bold; }
     </style>"""
 
     render_page("Termine & Spielplan", content, "termine.html", extra_styles=styles)
     return upcoming_events
+
+# ==========================================
+# 2b. AUSSCHREIBUNGEN-ARCHIV & "NEU HIER?"
+# ==========================================
+def git_last_date(path):
+    try:
+        out = subprocess.run(["git", "log", "-1", "--format=%cs", "--", path],
+                             capture_output=True, text=True, check=True).stdout.strip()
+        return datetime.date.fromisoformat(out) if out else None
+    except Exception:
+        return None
+
+
+def build_ausschreibungen():
+    folder = "Ausschreibungen"
+    files = glob.glob(os.path.join(folder, "*.pdf")) if os.path.isdir(folder) else []
+
+    entries = []
+    for path in files:
+        name = os.path.basename(path)
+        label = re.sub(r'\s+', ' ', re.sub(r'[_-]+', ' ', os.path.splitext(name)[0])).strip()
+        entries.append({
+            'label': htmllib.escape(label),
+            'url': f"{quote(folder)}/{quote(name)}",
+            'size': max(1, os.path.getsize(path) // 1024),
+            'date': git_last_date(path),
+            'name': name.lower(),
+        })
+    entries.sort(key=lambda e: e['name'])
+    entries.sort(key=lambda e: e['date'] or datetime.date.min, reverse=True)
+
+    if entries:
+        items = ""
+        for e in entries:
+            stand = f" · Stand {e['date'].strftime('%d.%m.%Y')}" if e['date'] else ""
+            items += f"""
+            <a class="pdf-card" href="{e['url']}" target="_blank" rel="noopener">
+              <span class="pdf-icon">📄</span>
+              <span class="pdf-text"><strong>{e['label']}</strong><br><small>PDF · {e['size']} KB{stand}</small></span>
+            </a>"""
+        body = f'<div class="pdf-grid">{items}</div>'
+    else:
+        body = "<p>Aktuell sind keine Ausschreibungen vorhanden.</p>"
+
+    content = f"""
+    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+    <h1 style="margin-top:1rem;">📄 Ausschreibungen</h1>
+    <p>Hier findest du die Ausschreibungen unserer Turniere. Ein Klick öffnet die PDF direkt.</p>
+    {body}
+    """
+    styles = """<style>
+      .pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+      .pdf-card { display: flex; gap: 0.9rem; align-items: center; background: #f8f9fa; border-left: 4px solid #8e44ad; border-radius: 6px; padding: 1rem 1.2rem; text-decoration: none; color: #1a252f; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .pdf-card:hover { background: #eef1f8; }
+      .pdf-icon { font-size: 1.8rem; }
+      .pdf-card small { color: #777; }
+    </style>"""
+    render_page("Ausschreibungen", content, "ausschreibungen.html", extra_styles=styles)
+
+
+def build_neu_hier():
+    content = f"""
+    <h1>Neu hier? So kommst du vorbei</h1>
+    <p>Egal ob Einsteiger, Jugendlicher oder Turnierspieler: Komm einfach an einem Freitag bei uns vorbei.</p>
+
+    <div class="neu-grid">
+      <div class="neu-card">
+        <h3>🕒 Wann?</h3>
+        <p><strong>Jeden Freitag.</strong> Das Gebäude ist ab 18:00 Uhr geöffnet.</p>
+        <ul>
+          <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+          <li><strong>Erwachsene &amp; Spielabend:</strong> ab 19:30 Uhr (open end)</li>
+        </ul>
+        <p>Die Zeiten sind flexibel: Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.</p>
+      </div>
+
+      <div class="neu-card">
+        <h3>📍 Wo?</h3>
+        <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 3<br>85551 Kirchheim</p>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;">📍 Auf Google Maps öffnen</a>
+      </div>
+
+      <div class="neu-card">
+        <h3>♟️ Was erwartet dich?</h3>
+        <ul>
+          <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
+          <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen</li>
+          <li><strong>Mannschaftsschach:</strong> Teams von der C-Klasse bis zur Bezirksliga, für jedes Spielniveau</li>
+        </ul>
+        <a href="mannschaften.html">Unsere Teams →</a>
+      </div>
+
+      <div class="neu-card">
+        <h3>📝 Mitglied werden</h3>
+        <p>Gefällt es dir bei uns? Den Mitgliedsantrag kannst du hier herunterladen:</p>
+        <a href="mitgliederantrag.pdf" download>📄 Mitgliedsantrag (PDF) →</a>
+        <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
+      </div>
+    </div>
+    """
+    styles = """<style>
+      .neu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+      .neu-card { background: #f8f9fa; border-top: 4px solid #27ae60; border-radius: 6px; padding: 1.2rem 1.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .neu-card h3 { margin-top: 0; }
+      .neu-card ul { padding-left: 1.2rem; }
+      .neu-card a { color: #3498db; font-weight: bold; text-decoration: none; }
+    </style>"""
+    render_page("Neu hier?", content, "neu-hier.html", extra_styles=styles)
+
 
 # ==========================================
 # 3. OBERLANDQUARTETT PARSER
@@ -713,6 +999,7 @@ def build_index(upcoming_events, home_news_snippets):
     <section class="hero" style="margin-bottom: 2rem;">
       <h1>Schach spielen in Aschheim, Feldkirchen & Kirchheim</h1>
       <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
+      <a href="neu-hier.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:0.6rem;">Neu hier? So kommst du vorbei →</a>
     </section>
 
     <div class="full-bleed">
@@ -800,6 +1087,8 @@ if __name__ == "__main__":
     build_blitzjahreswertung()
     build_hall_of_fame()
     build_turniere_overview()
+    build_ausschreibungen()
+    build_neu_hier()
     news = build_berichte()
     build_index(upcoming, news)
     print("Build erfolgreich abgeschlossen!")
