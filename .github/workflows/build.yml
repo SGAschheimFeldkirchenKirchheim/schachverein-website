@@ -27,6 +27,7 @@ jobs:
           python-version: '3.x'
 
       # 3. Typst Kompilierung zu SVG
+      # 3. Typst Kompilierung zu SVG
       - name: Compile Typst to SVG
         run: |
           if [ -f "termine/termine.typ" ]; then
