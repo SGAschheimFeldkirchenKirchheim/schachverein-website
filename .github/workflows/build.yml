@@ -29,7 +29,12 @@ jobs:
       # 3. Typst Kompilierung zu SVG
       - name: Compile Typst to SVG
         run: |
-          if [ -f "turniere/blitzjahreswertung/main.typ" ]; then
+          if [ -d "termine" ]; then
+            cd termine
+            typst compile termine.typ output.svg || true
+            cd ..
+          fi
+          if [ -d "turniere/blitzjahreswertung" ]; then
             cd turniere/blitzjahreswertung
             typst compile main.typ output.svg || true
             cd ../..
@@ -39,7 +44,6 @@ jobs:
       - name: Run Build Script
         run: python build_site.py
 
-      # 5. Änderungen committen und pushen
       # 5. Änderungen committen und pushen
       - name: Commit and Push Changes
         run: |
