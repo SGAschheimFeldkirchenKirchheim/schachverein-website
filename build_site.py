@@ -32,6 +32,11 @@ SPIELORT = "Gymnasium Kirchheim, Heimstettner Str. 3, 85551 Kirchheim"
 
 TODAY = datetime.date.today()
 
+# Gelbes Hinweisbanner (Text kommt aus hinweis.txt)
+HINWEIS_CSS = """
+      .hinweis-banner { background: #fff3cd; border: 1px solid #ffe08a; color: #664d03; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-weight: bold; }
+"""
+
 # Lässt einen Block die volle Fensterbreite nutzen, auch wenn der Seiten-Container schmal ist
 FULL_BLEED_CSS = """
       .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
@@ -472,6 +477,18 @@ def calendar_box_html(feeds):
     """
 
 
+def read_hinweis():
+    """Liest hinweis.txt im Hauptverzeichnis. Leer oder nicht vorhanden = kein Banner."""
+    path = "hinweis.txt"
+    if not os.path.exists(path):
+        return ""
+    with open(path, "r", encoding="utf-8") as f:
+        lines = [htmllib.escape(l.strip()) for l in f.read().splitlines() if l.strip()]
+    if not lines:
+        return ""
+    return '<div class="hinweis-banner">📢 ' + '<br>'.join(lines) + '</div>'
+
+
 def build_turniere_overview():
     content = """
     <h1>Turniere & Ergebnisse</h1>
@@ -542,7 +559,8 @@ def build_termine():
     else:
         table_html = "<p>Keine Termine vorhanden.</p>"
 
-    content = f"""<h1>Termine & Spielplan</h1>
+    content = f"""{read_hinweis()}
+    <h1>Termine & Spielplan</h1>
     {calendar_html}
     <div class="full-bleed">
       <div class="table-responsive">
@@ -550,7 +568,7 @@ def build_termine():
       </div>
     </div>"""
 
-    styles = """<style>""" + FULL_BLEED_CSS + """
+    styles = """<style>""" + FULL_BLEED_CSS + HINWEIS_CSS + """
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
       .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
@@ -996,6 +1014,7 @@ def build_index(upcoming_events, home_news_snippets):
         event_cards = "<p style='font-size:0.9rem;'>Keine anstehenden Termine gefunden.</p>"
 
     index_content = f"""
+    {read_hinweis()}
     <section class="hero" style="margin-bottom: 2rem;">
       <h1>Schach spielen in Aschheim, Feldkirchen & Kirchheim</h1>
       <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
@@ -1059,7 +1078,7 @@ def build_index(upcoming_events, home_news_snippets):
     </div>
     """
 
-    styles = """<style>""" + FULL_BLEED_CSS + """
+    styles = """<style>""" + FULL_BLEED_CSS + HINWEIS_CSS + """
       .hero-layout { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; align-items: start; margin-bottom: 2rem; }
       .info-card { background: #f8f9fa; border-left: 5px solid #27ae60; padding: 1.2rem; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
       .maps-btn { display: inline-block; background: #3498db; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.85rem; font-weight: bold; margin-top: 0.6rem; }
@@ -1079,6 +1098,40 @@ def build_index(upcoming_events, home_news_snippets):
 
 
 # ==========================================
+# 8. SITEMAP & 404-SEITE
+# ==========================================
+def build_404():
+    content = f"""
+    <h1>Seite nicht gefunden</h1>
+    <p>Diese Seite gibt es leider nicht (mehr). Vielleicht hilft dir einer dieser Links weiter:</p>
+    <p>
+      <a href="{SITE_URL}index.html" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Startseite</a>
+      <a href="{SITE_URL}termine.html" style="margin-left:1rem;">Zu den Terminen →</a>
+    </p>
+    """
+    # Absolute Pfade, weil die 404-Seite unter beliebigen Adressen angezeigt werden kann
+    render_page("Seite nicht gefunden", content, "404.html", css_path=SITE_URL, nav_path=SITE_URL)
+
+
+def build_sitemap():
+    pages = sorted(glob.glob("*.html")) + sorted(glob.glob("berichte/*.html"))
+    urls = []
+    for path in pages:
+        name = path.replace(os.sep, "/")
+        if name == "404.html":
+            continue
+        loc = SITE_URL if name == "index.html" else SITE_URL + quote(name)
+        last = git_last_date(path)
+        lastmod = f"<lastmod>{last.isoformat()}</lastmod>" if last else ""
+        urls.append(f"  <url><loc>{htmllib.escape(loc)}</loc>{lastmod}</url>")
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+           + "\n".join(urls) + "\n</urlset>\n")
+    with open("sitemap.xml", "w", encoding="utf-8") as f:
+        f.write(xml)
+
+
+# ==========================================
 # MAIN EXECUTION
 # ==========================================
 if __name__ == "__main__":
@@ -1091,4 +1144,6 @@ if __name__ == "__main__":
     build_neu_hier()
     news = build_berichte()
     build_index(upcoming, news)
+    build_404()
+    build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
     print("Build erfolgreich abgeschlossen!")
