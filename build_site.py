@@ -123,18 +123,32 @@ def build_turniere_overview():
 def build_termine():
     folder_path = "termine"
     main_typ = os.path.join(folder_path, "termine.typ")
-    output_svg_path = os.path.join(folder_path, "output.svg")
     
-    # 1. Typst-Datei zu SVG kompilieren (falls lokal aufgeführt)
-    if os.path.exists(main_typ):
+    # Mögliche SVG-Pfade prüfen
+    svg_paths = [
+        os.path.join(folder_path, "output.svg"),
+        "output.svg"
+    ]
+    
+    output_svg_path = None
+    for p in svg_paths:
+        if os.path.exists(p):
+            output_svg_path = p
+            break
+
+    # 1. Lokales Compiling versuchen (falls Typst lokal installiert ist)
+    if not output_svg_path and os.path.exists(main_typ):
         try:
-            subprocess.run(["typst", "compile", main_typ, output_svg_path], check=True)
+            target_svg = os.path.join(folder_path, "output.svg")
+            subprocess.run(["typst", "compile", main_typ, target_svg], check=True)
+            if os.path.exists(target_svg):
+                output_svg_path = target_svg
         except Exception as e:
             print(f"Typst Compiling Hinweis (Termine): {e}")
 
     upcoming_events = []
     
-    # 2. Termine für die Startseiten-Vorschau auslesen
+    # 2. Termine für die Startseiten-Vorschau per Regex extrahieren
     if os.path.exists(main_typ):
         with open(main_typ, "r", encoding="utf-8") as f:
             typst_code = f.read()
@@ -147,8 +161,8 @@ def build_termine():
                 if event and not event.startswith("MMM") and len(upcoming_events) < 4:
                     upcoming_events.append((datum, event))
 
-    # 3. Falls SVG existiert (aus Workflow), direkt einbetten
-    if os.path.exists(output_svg_path):
+    # 3. Wenn die SVG existiert, wird sie 1:1 eingebettet!
+    if output_svg_path and os.path.exists(output_svg_path):
         with open(output_svg_path, "r", encoding="utf-8") as f:
             table_content = f'<div class="svg-container">{f.read()}</div>'
     elif os.path.exists(main_typ):
