@@ -571,6 +571,29 @@ def build_turniere_overview():
     """
     render_page("Turniere & Ergebnisse", content, "turniere.html")
 
+    # Zusätzliche Zellfarben (Typst-Name kleingeschrieben -> Hintergrund, Textfarbe)
+BG_FARBEN = {
+    "red":        ("#ff4136", ""),
+    "blue":       ("#0074d9", "white"),
+    "chocolate":  ("chocolate", "white"),
+    "purple":     ("#b10dc9", "white"),
+    "gray":       ("#aaaaaa", ""),
+    "white":      ("white", ""),
+    "black":      ("black", "white"),
+    "gold":       ("gold", ""),
+    "tuerkis":    ("turquoise", ""),
+    "blueviolet": ("blueviolet", "white"),
+    "orangered":  ("orangered", ""),
+}
+
+
+def farben_css():
+    zeilen = []
+    for name, (bg, fg) in BG_FARBEN.items():
+        regel = f"background: {bg};" + (f" color: {fg};" if fg else "")
+        zeilen.append(f"      .custom-tabelle td.bg-{name} {{ {regel} }}")
+    return "\n".join(zeilen) + "\n"
+
 
 def build_termine():
     folder_path = "termine"
@@ -636,6 +659,8 @@ def build_termine():
       .kalender-box li a { margin-left: 0.6rem; color: #3498db; text-decoration: none; font-weight: bold; }
     </style>"""
 
+    
+    styles = styles.replace("</style>", farben_css() + "</style>")
     render_page("Termine & Spielplan", content, "termine.html", extra_styles=styles)
     return upcoming_events
 
