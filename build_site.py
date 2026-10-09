@@ -42,10 +42,51 @@ FULL_BLEED_CSS = """
       .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
 """
 
+# Menü: hier einmal pflegen (Reihenfolge = Reihenfolge im Menü)
+NAV = [
+    ("index.html", "Start"),
+    ("ueber-uns.html", "Über uns"),
+    ("mannschaften.html", "Mannschaften"),
+    ("termine.html", "Termine"),
+    ("berichte.html", "Berichte"),
+    ("turniere.html", "Turniere"),
+    ("neu-hier.html", "Neu hier?"),
+    ("kontakt.html", "Kontakt"),
+]
+
+# Unterseiten, bei denen im Menü der übergeordnete Reiter markiert wird
+ACTIVE_PARENT = {
+    "ausschreibungen.html": "turniere.html",
+    "oberlandquartett.html": "turniere.html",
+    "blitzjahreswertung.html": "turniere.html",
+    "vereinsintern.html": "turniere.html",
+}
+
+# Handgeschriebene Seiten: Inhalt liegt in seiten/<name>.html
+STATIC_PAGES = [
+    ("ueber-uns", "Über uns"),
+    ("mannschaften", "Mannschaften"),
+    ("kontakt", "Kontakt &amp; Anfahrt"),
+    ("impressum", "Impressum &amp; Datenschutz"),
+]
+
+GLOBAL_CSS = """<style>
+      nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
+      .footer-link { color: #aaa; }
+    </style>"""
+
 
 # ==========================================
 # 1. HELPER: RENDER PAGE MIT TEMPLATE
 # ==========================================
+def build_nav(nav_path, active):
+    links = []
+    for href, label in NAV:
+        cur = ' aria-current="page"' if href == active else ''
+        links.append(f'<a href="{nav_path}{href}"{cur}>{label}</a>')
+    return "\n      ".join(links)
+
+
 def render_page(title, content, filename, css_path="", nav_path="", extra_styles=""):
     template_path = os.path.join("templates", "base.html")
     if not os.path.exists(template_path):
@@ -55,12 +96,18 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
     with open(template_path, "r", encoding="utf-8") as f:
         template = f.read()
 
+    name = os.path.basename(filename)
+    if os.path.dirname(filename).replace(os.sep, "/") == "berichte":
+        name = "berichte.html"          # Einzelberichte -> Reiter "Berichte"
+    active = ACTIVE_PARENT.get(name, name)
+
     full_html = template.format(
         title=title,
         content=content,
         css_path=css_path,
         nav_path=nav_path,
-        extra_styles=extra_styles
+        nav=build_nav(nav_path, active),
+        extra_styles=GLOBAL_CSS + extra_styles,
     )
 
     with open(filename, "w", encoding="utf-8") as f:
@@ -1143,6 +1190,20 @@ def build_sitemap():
     with open("sitemap.xml", "w", encoding="utf-8") as f:
         f.write(xml)
 
+def build_static_pages():
+    """Baut die handgeschriebenen Seiten aus seiten/<name>.html in die Vorlage ein."""
+    for name, title in STATIC_PAGES:
+        src = os.path.join("seiten", f"{name}.html")
+        if not os.path.exists(src):
+            print(f"Hinweis: {src} fehlt, Seite wird übersprungen.")
+            continue
+        with open(src, "r", encoding="utf-8") as f:
+            raw = f.read()
+        style_re = r'<style[^>]*>.*?</style>'
+        styles = "".join(re.findall(style_re, raw, re.DOTALL))
+        content = re.sub(style_re, '', raw, flags=re.DOTALL).strip()
+        render_page(title, content, f"{name}.html", extra_styles=styles)
+
 
 # ==========================================
 # MAIN EXECUTION
@@ -1158,5 +1219,6 @@ if __name__ == "__main__":
     news = build_berichte()
     build_index(upcoming, news)
     build_404()
+    build_static_pages()
     build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
     print("Build erfolgreich abgeschlossen!")
