@@ -572,18 +572,24 @@ def build_turniere_overview():
     render_page("Turniere & Ergebnisse", content, "turniere.html")
 
     # Zusätzliche Zellfarben (Typst-Name kleingeschrieben -> Hintergrund, Textfarbe)
+# Typst-Name (kleingeschrieben) -> (Hintergrund, Textfarbe), Werte aus package.typ
 BG_FARBEN = {
-    "red":        ("#ff4136", ""),
-    "blue":       ("#0074d9", "white"),
-    "chocolate":  ("chocolate", "white"),
-    "purple":     ("#b10dc9", "white"),
-    "gray":       ("#aaaaaa", ""),
-    "white":      ("white", ""),
-    "black":      ("black", "white"),
-    "gold":       ("gold", ""),
-    "tuerkis":    ("turquoise", ""),
-    "blueviolet": ("blueviolet", "white"),
-    "orangered":  ("orangered", ""),
+    "green":         ("#00CD00", ""),
+    "yellow":        ("#ffff00", ""),
+    "blue":          ("#0000ff", "white"),
+    "red":           ("#ff0000", ""),
+    "chocolate":     ("#d2691e", ""),
+    "orange":        ("#ffa500", ""),
+    "purple":        ("#551a8b", "white"),
+    "gray":          ("#bebebe", ""),
+    "white":         ("#ffffff", ""),
+    "black":         ("#000000", "white"),
+    "gold":          ("#B8860B", ""),
+    "tuerkis":       ("#8B8878", ""),
+    "blueviolet":    ("#8A2BE2", "white"),
+    "orangered":     ("#ff4500", ""),
+    "deepskyblue":   ("#00bfff", ""),
+    "darkslategray": ("#528b8b", "white"),
 }
 
 
