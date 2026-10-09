@@ -1,0 +1,78 @@
+<h1>Unsere Mannschaften &amp; Liga-Ergebnisse</h1>
+<p>Hier findest du die Links zu den aktuellen Tabellen und Ergebnissen unserer Teams in der laufenden Saison.</p>
+
+<div class="grid-Mannschaften" id="mannschaften">
+  <noscript>
+    <p>Bitte aktiviere JavaScript oder besuche direkt die Seite des
+      <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener">Schachbezirks München</a>.</p>
+  </noscript>
+</div>
+
+<script>
+  // ============================================================
+  //  HIER PFLEGEN: Pro neuer Saison nur diese Werte anpassen
+  // ============================================================
+  const SAISON = 16;
+  const ITEMID = 4164;
+  const BASIS  = "https://schachbezirk-muenchen.de/component/clm/";
+
+  // liga = Liga-Nummer, tlnr = Mannschaftsnummer in dieser Liga
+  // klasse = Spielklasse (optional, z. B. "Bezirksliga A")
+  // liga: null  ->  Karte ohne Link ("wird nachgetragen")
+  const MANNSCHAFTEN = [
+    { name: "1. Mannschaft",     liga: 340,  tlnr: 3, klasse: "Bezirksliga" },
+    { name: "2. Mannschaft",     liga: 341,  tlnr: 8, klasse: "A-Klasse" },
+    { name: "3. Mannschaft",     liga: 344,  tlnr: 8, klasse: "B-Klasse" },
+    { name: "4. Mannschaft",     liga: 345,  tlnr: 3, klasse: "C-Klasse" },
+    { name: "5. Mannschaft",     liga: 347,  tlnr: 3, klasse: "D-Klasse" },
+    { name: "6. Mannschaft",     liga: 348,  tlnr: 6, klasse: "E-Klasse" },
+    { name: "Jugendmannschaften", liga: null, tlnr: null, klasse: "Jugendrunden", jugend: true },
+  ];
+  // ============================================================
+
+  function tabellenUrl(m) {
+    const p = new URLSearchParams({
+      view: "mannschaft",
+      saison: SAISON,
+      liga: m.liga,
+      tlnr: m.tlnr,
+      Itemid: ITEMID,
+    });
+    return BASIS + "?" + p.toString();
+  }
+
+  const container = document.getElementById("mannschaften");
+
+  MANNSCHAFTEN.forEach((m) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = m.name;
+    card.appendChild(h3);
+
+    if (m.klasse) {
+      const p = document.createElement("p");
+      p.textContent = m.klasse;
+      card.appendChild(p);
+    }
+
+    if (m.liga !== null && m.tlnr !== null) {
+      const a = document.createElement("a");
+      a.href = tabellenUrl(m);
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.className = "btn";
+      a.textContent = m.jugend ? "Jugend-Ergebnisse öffnen" : "Tabelle & Ergebnisse";
+      a.setAttribute("aria-label",
+        (m.jugend ? "Ergebnisse der " : "Tabelle der ") + m.name + " (öffnet in neuem Tab)");
+      card.appendChild(a);
+    } else {
+      const p = document.createElement("p");
+      p.textContent = "Liga wird nachgetragen.";
+      card.appendChild(p);
+    }
+
+    container.appendChild(card);
+  });
+</script>
