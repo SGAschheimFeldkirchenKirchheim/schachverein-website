@@ -18,10 +18,10 @@ URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-10-09-ganztag-kooperationsturnier-mit-der-schule-afk-3@sg-afk
+UID:2026-10-09-19-kooperationsturnier-mit-der-schule-afk-3@sg-afk
 DTSTAMP:20261009T000000Z
-DTSTART;VALUE=DATE:20261009
-DTEND;VALUE=DATE:20261010
+DTSTART:20261009T170000Z
+DTEND:20261009T200000Z
 SUMMARY:Kooperationsturnier mit der Schule
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -133,6 +133,42 @@ DTSTAMP:20270128T000000Z
 DTSTART:20270128T183000Z
 DTEND:20270128T213000Z
 SUMMARY:AFK 3: MMM Runde 5
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-02-19-19-afk-3-mmm-runde-6-afk-3@sg-afk
+DTSTAMP:20270219T000000Z
+DTSTART:20270219T183000Z
+DTEND:20270219T213000Z
+SUMMARY:AFK 3: MMM Runde 6
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-12-19-afk-3-mmm-runde-7-afk-3@sg-afk
+DTSTAMP:20270312T000000Z
+DTSTART:20270312T183000Z
+DTEND:20270312T213000Z
+SUMMARY:AFK 3: MMM Runde 7
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-04-09-19-afk-3-mmm-runde-8-afk-3@sg-afk
+DTSTAMP:20270409T000000Z
+DTSTART:20270409T173000Z
+DTEND:20270409T203000Z
+SUMMARY:AFK 3: MMM Runde 8
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-04-30-19-afk-3-mmm-runde-9-afk-3@sg-afk
+DTSTAMP:20270430T000000Z
+DTSTART:20270430T173000Z
+DTEND:20270430T203000Z
+SUMMARY:AFK 3: MMM Runde 9
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
