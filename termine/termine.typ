@@ -4,7 +4,7 @@
 #align(center)[
 #table(
   align: center,
-  columns: (auto,auto,auto,auto,auto,auto,auto,auto,auto,auto),
+  columns: 10,
   stroke: 1pt + black,
   table.header(
     [* Termin *], [* Verein *], [* AFK 1 *], [* AFK 2 *], [* AFK 3 *], [* AFK 4 *], [* AFK 5 *], [* AFK 6 *], [* Senioren *], [* Jugend *]
@@ -43,32 +43,10 @@
   table.cell(fill: DarkSlateGray)[22.01. Fr, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 3], [],
   [23.01. Sa, 10:00 Uhr], [], [], [], [], [], [], [], [], [Landesliga Süd Runde 4+5],
   [24.01. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, 1.Liga Runde 4+5],
-  [25.01. Mo], [], [], [], [], [], [], table.cell(fill: green)[MMM Spielfrei], [], [],
+  [25.01. Mo, 19:00 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 4], [], [],
   [28.01. Do, 19:30 Uhr], [], [], [], table.cell(fill: green)[MMM Runde 5], [], [], [], [], [],
   table.cell(fill: DarkSlateGray)[29.01. Fr, 19:00 Uhr], [], [], table.cell(fill: green)[MMM Runde 5], [], [], [], [], [], [],
   table.cell(fill: DarkSlateGray)[29.01. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 5], [], [], table.cell(fill: green)[MMM Runde 5], table.cell(fill: green)[MMM Runde 5], [], [], [],
   [30.01. Sa], [], [], [], [], [], [], [], [], [Schulschach MMM],
-  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Februar")]],
-  [18.02. Do, 19:00 Uhr], [], [], [], [], table.cell(fill: green)[MMM Runde 6], [], [], [], [],
-  table.cell(fill: DarkSlateGray)[19.02. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 6], table.cell(fill: green)[MMM Runde 6], table.cell(fill: green)[MMM Runde 6], [], table.cell(fill: green)[MMM Runde 6], table.cell(fill: green)[MMM Runde 5], [], [],
-  [20.02. Sa, 10:00 Uhr], [], [], [], [], [], [], [], [], [Landesliga Süd Runde 6+7],
-  [21.02. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, 1.Liga Runde 6+7],
-  [24.02. Mi, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 4], [],
-  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("März")]],
-  [09.03. Di, 19:30 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 6], [], [],
-  table.cell(fill: DarkSlateGray)[12.03. Fr, 19:00 Uhr], [], [], table.cell(fill: green)[MMM Runde 7], [], [], [], [], [], [],
-  table.cell(fill: DarkSlateGray)[12.03. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 7], [], table.cell(fill: green)[MMM Runde 7], table.cell(fill: green)[MMM Runde 7], table.cell(fill: green)[MMM Runde 7], [], [], [],
-  table.cell(fill: DarkSlateGray)[19.03. Fr, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 5], [],
-  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("April")]],
-  [06.04. Di, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 8], [], [], [], [], [], [], [],
-  [08.04. Do, 19:30 Uhr], [], [], [], [], table.cell(fill: green)[MMM Runde 8], [], [], [], [],
-  table.cell(fill: DarkSlateGray)[09.04. Fr, 19:30 Uhr], [], [], table.cell(fill: green)[MMM Runde 8], table.cell(fill: green)[MMM Runde 8], [], table.cell(fill: green)[MMM Runde 8], table.cell(fill: green)[MMM Runde 7], [], [],
-  [13.04. Di, 19:00 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 6], [],
-  [17.04. Sa, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, Ab 2.Liga Runde 1-3],
-  [18.04. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, Ab 2.Liga Runde 4+5],
-  [27.04. Di, 19:30 Uhr], [], [], table.cell(fill: green)[MMM Runde 9], [], [], [], [], [], [],
-  table.cell(fill: DarkSlateGray)[30.04. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 9], [], table.cell(fill: green)[MMM Runde 9], table.cell(fill: green)[MMM Runde 9], table.cell(fill: green)[MMM Runde 9], [], [], [],
-  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Mai")]],
-  table.cell(fill: DarkSlateGray)[14.05. Fr, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 7], [],
 )
 ]
