@@ -1,0 +1,5 @@
+Termine ändern
+	python build_site.py
+	git add .
+	git commit -m "Termine aktualisiert"
+	git push --force

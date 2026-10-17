@@ -635,7 +635,7 @@ BG_FARBEN = {
     "green":         ("#00CD00", ""),
     "yellow":        ("#ffff00", ""),
     "blue":          ("#0000ff", "white"),
-    "red":           ("#ff0000", ""),
+    "red":           ("#ff0000", "white"),
     "chocolate":     ("#d2691e", ""),
     "orange":        ("#ffa500", ""),
     "purple":        ("#551a8b", "white"),
