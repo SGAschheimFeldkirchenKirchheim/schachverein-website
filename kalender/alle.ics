@@ -10,8 +10,8 @@ X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
 UID:2026-10-02-18-vereinsabend-alle@sg-afk
 DTSTAMP:20261002T000000Z
-DTSTART:20261002T180000
-DTEND:20261002T210000
+DTSTART:20261002T160000Z
+DTEND:20261002T190000Z
 SUMMARY:Vereinsabend
 LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
@@ -20,8 +20,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-10-09-19-kooperationsturnier-mit-der-schule-alle@sg-afk
 DTSTAMP:20261009T000000Z
-DTSTART:20261009T190000
-DTEND:20261009T220000
+DTSTART:20261009T170000Z
+DTEND:20261009T200000Z
 SUMMARY:Kooperationsturnier mit der Schule
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -30,8 +30,8 @@ BEGIN:VEVENT
 UID:2026-10-16-19-schnellschach-vm-kooperationsturnier-mit-ebersberg-alle@s
  g-afk
 DTSTAMP:20261016T000000Z
-DTSTART:20261016T193000
-DTEND:20261016T223000
+DTSTART:20261016T173000Z
+DTEND:20261016T203000Z
 SUMMARY:Schnellschach-VM+Kooperationsturnier mit Ebersberg
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -39,8 +39,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-10-21-19-mmm-runde-1-afk-5-alle@sg-afk
 DTSTAMP:20261021T000000Z
-DTSTART:20261021T190000
-DTEND:20261021T220000
+DTSTART:20261021T170000Z
+DTEND:20261021T200000Z
 SUMMARY:MMM Runde 1 (AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -48,8 +48,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-10-22-19-mmm-runde-1-afk-1-alle@sg-afk
 DTSTAMP:20261022T000000Z
-DTSTART:20261022T193000
-DTEND:20261022T223000
+DTSTART:20261022T173000Z
+DTEND:20261022T203000Z
 SUMMARY:MMM Runde 1 (AFK 1)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -57,8 +57,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-10-23-19-mmm-runde-1-afk-2-afk-3-afk-4-alle@sg-afk
 DTSTAMP:20261023T000000Z
-DTSTART:20261023T193000
-DTEND:20261023T223000
+DTSTART:20261023T173000Z
+DTEND:20261023T203000Z
 SUMMARY:MMM Runde 1 (AFK 2\, AFK 3\, AFK 4)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -66,8 +66,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-10-28-19-msmm-runde-1-senioren-alle@sg-afk
 DTSTAMP:20261028T000000Z
-DTSTART:20261028T190000
-DTEND:20261028T220000
+DTSTART:20261028T180000Z
+DTEND:20261028T210000Z
 SUMMARY:MSMM Runde 1 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -85,8 +85,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-10-19-mmm-runde-2-afk-3-alle@sg-afk
 DTSTAMP:20261110T000000Z
-DTSTART:20261110T193000
-DTEND:20261110T223000
+DTSTART:20261110T183000Z
+DTEND:20261110T213000Z
 SUMMARY:MMM Runde 2 (AFK 3)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -94,8 +94,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-10-19-mmm-runde-1-afk-6-alle@sg-afk
 DTSTAMP:20261110T000000Z
-DTSTART:20261110T193000
-DTEND:20261110T223000
+DTSTART:20261110T183000Z
+DTEND:20261110T213000Z
 SUMMARY:MMM Runde 1 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -103,8 +103,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-13-19-mmm-runde-2-afk-1-afk-2-afk-4-afk-5-alle@sg-afk
 DTSTAMP:20261113T000000Z
-DTSTART:20261113T193000
-DTEND:20261113T223000
+DTSTART:20261113T183000Z
+DTEND:20261113T213000Z
 SUMMARY:MMM Runde 2 (AFK 1\, AFK 2\, AFK 4\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -121,8 +121,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-21-14-landesliga-sued-runde-1-jugend-alle@sg-afk
 DTSTAMP:20261121T000000Z
-DTSTART:20261121T140000
-DTEND:20261121T170000
+DTSTART:20261121T130000Z
+DTEND:20261121T160000Z
 SUMMARY:Landesliga Süd Runde 1 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -130,8 +130,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-22-10-u20-mmm-1-liga-runde-1-jugend-alle@sg-afk
 DTSTAMP:20261122T000000Z
-DTSTART:20261122T100000
-DTEND:20261122T130000
+DTSTART:20261122T090000Z
+DTEND:20261122T120000Z
 SUMMARY:U20 MMM\, 1.Liga Runde 1 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -139,8 +139,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-22-11-muenchner-blitz-em-alle@sg-afk
 DTSTAMP:20261122T000000Z
-DTSTART:20261122T110000
-DTEND:20261122T140000
+DTSTART:20261122T100000Z
+DTEND:20261122T130000Z
 SUMMARY:Münchner Blitz-EM
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -148,8 +148,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-26-19-mmm-runde-3-afk-1-alle@sg-afk
 DTSTAMP:20261126T000000Z
-DTSTART:20261126T193000
-DTEND:20261126T223000
+DTSTART:20261126T183000Z
+DTEND:20261126T213000Z
 SUMMARY:MMM Runde 3 (AFK 1)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -157,8 +157,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-27-19-mmm-runde-2-afk-6-alle@sg-afk
 DTSTAMP:20261127T000000Z
-DTSTART:20261127T193000
-DTEND:20261127T223000
+DTSTART:20261127T183000Z
+DTEND:20261127T213000Z
 SUMMARY:MMM Runde 2 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -166,8 +166,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-29-10-u14-u16-mmm-runde-1-3-jugend-alle@sg-afk
 DTSTAMP:20261129T000000Z
-DTSTART:20261129T100000
-DTEND:20261129T130000
+DTSTART:20261129T090000Z
+DTEND:20261129T120000Z
 SUMMARY:U14/U16 MMM Runde 1-3 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -175,8 +175,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-11-29-11-mannschafts-und-ligapokal-alle@sg-afk
 DTSTAMP:20261129T000000Z
-DTSTART:20261129T110000
-DTEND:20261129T140000
+DTSTART:20261129T100000Z
+DTEND:20261129T130000Z
 SUMMARY:Mannschafts-und Ligapokal
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -193,8 +193,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-12-05-10-landesliga-sued-runde-2-3-jugend-alle@sg-afk
 DTSTAMP:20261205T000000Z
-DTSTART:20261205T100000
-DTEND:20261205T130000
+DTSTART:20261205T090000Z
+DTEND:20261205T120000Z
 SUMMARY:Landesliga Süd Runde 2+3 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -202,8 +202,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-12-06-10-u20-mmm-1-liga-runde-2-3-jugend-alle@sg-afk
 DTSTAMP:20261206T000000Z
-DTSTART:20261206T100000
-DTEND:20261206T130000
+DTSTART:20261206T090000Z
+DTEND:20261206T120000Z
 SUMMARY:U20 MMM\, 1.Liga Runde 2+3 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -211,8 +211,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-12-08-19-mmm-runde-3-afk-6-alle@sg-afk
 DTSTAMP:20261208T000000Z
-DTSTART:20261208T193000
-DTEND:20261208T223000
+DTSTART:20261208T183000Z
+DTEND:20261208T213000Z
 SUMMARY:MMM Runde 3 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -220,8 +220,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-12-11-19-mmm-runde-4-afk-1-afk-2-afk-3-afk-4-afk-5-alle@sg-afk
 DTSTAMP:20261211T000000Z
-DTSTART:20261211T193000
-DTEND:20261211T223000
+DTSTART:20261211T183000Z
+DTEND:20261211T213000Z
 SUMMARY:MMM Runde 4 (AFK 1\, AFK 2\, AFK 3\, AFK 4\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -229,8 +229,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2026-12-12-10-u14-u16-mmm-runde-4-5-jugend-alle@sg-afk
 DTSTAMP:20261212T000000Z
-DTSTART:20261212T100000
-DTEND:20261212T130000
+DTSTART:20261212T090000Z
+DTEND:20261212T120000Z
 SUMMARY:U14/U16 MMM Runde 4+5 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -265,8 +265,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-22-19-msmm-runde-3-senioren-alle@sg-afk
 DTSTAMP:20270122T000000Z
-DTSTART:20270122T193000
-DTEND:20270122T223000
+DTSTART:20270122T183000Z
+DTEND:20270122T213000Z
 SUMMARY:MSMM Runde 3 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -274,8 +274,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-23-10-landesliga-sued-runde-4-5-jugend-alle@sg-afk
 DTSTAMP:20270123T000000Z
-DTSTART:20270123T100000
-DTEND:20270123T130000
+DTSTART:20270123T090000Z
+DTEND:20270123T120000Z
 SUMMARY:Landesliga Süd Runde 4+5 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -283,8 +283,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-24-10-u20-mmm-1-liga-runde-4-5-jugend-alle@sg-afk
 DTSTAMP:20270124T000000Z
-DTSTART:20270124T100000
-DTEND:20270124T130000
+DTSTART:20270124T090000Z
+DTEND:20270124T120000Z
 SUMMARY:U20 MMM\, 1.Liga Runde 4+5 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -292,8 +292,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-25-19-mmm-runde-4-afk-6-alle@sg-afk
 DTSTAMP:20270125T000000Z
-DTSTART:20270125T190000
-DTEND:20270125T220000
+DTSTART:20270125T180000Z
+DTEND:20270125T210000Z
 SUMMARY:MMM Runde 4 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -301,8 +301,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-28-19-mmm-runde-5-afk-3-alle@sg-afk
 DTSTAMP:20270128T000000Z
-DTSTART:20270128T193000
-DTEND:20270128T223000
+DTSTART:20270128T183000Z
+DTEND:20270128T213000Z
 SUMMARY:MMM Runde 5 (AFK 3)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -310,8 +310,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-29-19-mmm-runde-5-afk-2-alle@sg-afk
 DTSTAMP:20270129T000000Z
-DTSTART:20270129T190000
-DTEND:20270129T220000
+DTSTART:20270129T180000Z
+DTEND:20270129T210000Z
 SUMMARY:MMM Runde 5 (AFK 2)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -319,8 +319,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-01-29-19-mmm-runde-5-afk-1-afk-4-afk-5-alle@sg-afk
 DTSTAMP:20270129T000000Z
-DTSTART:20270129T193000
-DTEND:20270129T223000
+DTSTART:20270129T183000Z
+DTEND:20270129T213000Z
 SUMMARY:MMM Runde 5 (AFK 1\, AFK 4\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -337,8 +337,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-18-19-mmm-runde-6-afk-4-alle@sg-afk
 DTSTAMP:20270218T000000Z
-DTSTART:20270218T190000
-DTEND:20270218T220000
+DTSTART:20270218T180000Z
+DTEND:20270218T210000Z
 SUMMARY:MMM Runde 6 (AFK 4)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -346,8 +346,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-19-19-mmm-runde-6-afk-1-afk-2-afk-3-afk-5-alle@sg-afk
 DTSTAMP:20270219T000000Z
-DTSTART:20270219T193000
-DTEND:20270219T223000
+DTSTART:20270219T183000Z
+DTEND:20270219T213000Z
 SUMMARY:MMM Runde 6 (AFK 1\, AFK 2\, AFK 3\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -355,8 +355,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-19-19-mmm-runde-5-afk-6-alle@sg-afk
 DTSTAMP:20270219T000000Z
-DTSTART:20270219T193000
-DTEND:20270219T223000
+DTSTART:20270219T183000Z
+DTEND:20270219T213000Z
 SUMMARY:MMM Runde 5 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -364,8 +364,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-20-10-landesliga-sued-runde-6-7-jugend-alle@sg-afk
 DTSTAMP:20270220T000000Z
-DTSTART:20270220T100000
-DTEND:20270220T130000
+DTSTART:20270220T090000Z
+DTEND:20270220T120000Z
 SUMMARY:Landesliga Süd Runde 6+7 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -373,8 +373,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-21-10-u20-mmm-1-liga-runde-6-7-jugend-alle@sg-afk
 DTSTAMP:20270221T000000Z
-DTSTART:20270221T100000
-DTEND:20270221T130000
+DTSTART:20270221T090000Z
+DTEND:20270221T120000Z
 SUMMARY:U20 MMM\, 1.Liga Runde 6+7 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -382,8 +382,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-02-24-19-msmm-runde-4-senioren-alle@sg-afk
 DTSTAMP:20270224T000000Z
-DTSTART:20270224T193000
-DTEND:20270224T223000
+DTSTART:20270224T183000Z
+DTEND:20270224T213000Z
 SUMMARY:MSMM Runde 4 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -391,8 +391,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-03-09-19-mmm-runde-6-afk-6-alle@sg-afk
 DTSTAMP:20270309T000000Z
-DTSTART:20270309T193000
-DTEND:20270309T223000
+DTSTART:20270309T183000Z
+DTEND:20270309T213000Z
 SUMMARY:MMM Runde 6 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -400,8 +400,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-03-12-19-mmm-runde-7-afk-2-alle@sg-afk
 DTSTAMP:20270312T000000Z
-DTSTART:20270312T190000
-DTEND:20270312T220000
+DTSTART:20270312T180000Z
+DTEND:20270312T210000Z
 SUMMARY:MMM Runde 7 (AFK 2)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -409,8 +409,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-03-12-19-mmm-runde-7-afk-1-afk-3-afk-4-afk-5-alle@sg-afk
 DTSTAMP:20270312T000000Z
-DTSTART:20270312T193000
-DTEND:20270312T223000
+DTSTART:20270312T183000Z
+DTEND:20270312T213000Z
 SUMMARY:MMM Runde 7 (AFK 1\, AFK 3\, AFK 4\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -418,8 +418,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-03-19-19-msmm-runde-5-senioren-alle@sg-afk
 DTSTAMP:20270319T000000Z
-DTSTART:20270319T193000
-DTEND:20270319T223000
+DTSTART:20270319T183000Z
+DTEND:20270319T213000Z
 SUMMARY:MSMM Runde 5 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -427,8 +427,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-06-19-mmm-runde-8-afk-1-alle@sg-afk
 DTSTAMP:20270406T000000Z
-DTSTART:20270406T193000
-DTEND:20270406T223000
+DTSTART:20270406T173000Z
+DTEND:20270406T203000Z
 SUMMARY:MMM Runde 8 (AFK 1)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -436,8 +436,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-08-19-mmm-runde-8-afk-4-alle@sg-afk
 DTSTAMP:20270408T000000Z
-DTSTART:20270408T193000
-DTEND:20270408T223000
+DTSTART:20270408T173000Z
+DTEND:20270408T203000Z
 SUMMARY:MMM Runde 8 (AFK 4)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -445,8 +445,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-09-19-mmm-runde-8-afk-2-afk-3-afk-5-alle@sg-afk
 DTSTAMP:20270409T000000Z
-DTSTART:20270409T193000
-DTEND:20270409T223000
+DTSTART:20270409T173000Z
+DTEND:20270409T203000Z
 SUMMARY:MMM Runde 8 (AFK 2\, AFK 3\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -454,8 +454,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-09-19-mmm-runde-7-afk-6-alle@sg-afk
 DTSTAMP:20270409T000000Z
-DTSTART:20270409T193000
-DTEND:20270409T223000
+DTSTART:20270409T173000Z
+DTEND:20270409T203000Z
 SUMMARY:MMM Runde 7 (AFK 6)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -463,8 +463,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-13-19-msmm-runde-6-senioren-alle@sg-afk
 DTSTAMP:20270413T000000Z
-DTSTART:20270413T190000
-DTEND:20270413T220000
+DTSTART:20270413T170000Z
+DTEND:20270413T200000Z
 SUMMARY:MSMM Runde 6 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -472,8 +472,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-17-10-u20-mmm-ab-2-liga-runde-1-3-jugend-alle@sg-afk
 DTSTAMP:20270417T000000Z
-DTSTART:20270417T100000
-DTEND:20270417T130000
+DTSTART:20270417T080000Z
+DTEND:20270417T110000Z
 SUMMARY:U20 MMM\, Ab 2.Liga Runde 1-3 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -481,8 +481,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-18-10-u20-mmm-ab-2-liga-runde-4-5-jugend-alle@sg-afk
 DTSTAMP:20270418T000000Z
-DTSTART:20270418T100000
-DTEND:20270418T130000
+DTSTART:20270418T080000Z
+DTEND:20270418T110000Z
 SUMMARY:U20 MMM\, Ab 2.Liga Runde 4+5 (Jugend)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -490,8 +490,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-27-19-mmm-runde-9-afk-2-alle@sg-afk
 DTSTAMP:20270427T000000Z
-DTSTART:20270427T193000
-DTEND:20270427T223000
+DTSTART:20270427T173000Z
+DTEND:20270427T203000Z
 SUMMARY:MMM Runde 9 (AFK 2)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -499,8 +499,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-04-30-19-mmm-runde-9-afk-1-afk-3-afk-4-afk-5-alle@sg-afk
 DTSTAMP:20270430T000000Z
-DTSTART:20270430T193000
-DTEND:20270430T223000
+DTSTART:20270430T173000Z
+DTEND:20270430T203000Z
 SUMMARY:MMM Runde 9 (AFK 1\, AFK 3\, AFK 4\, AFK 5)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
@@ -508,8 +508,8 @@ END:VEVENT
 BEGIN:VEVENT
 UID:2027-05-14-19-msmm-runde-7-senioren-alle@sg-afk
 DTSTAMP:20270514T000000Z
-DTSTART:20270514T193000
-DTEND:20270514T223000
+DTSTART:20270514T173000Z
+DTEND:20270514T203000Z
 SUMMARY:MSMM Runde 7 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
