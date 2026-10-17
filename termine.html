@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termine & Spielplan | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
+
+      .hinweis-banner { background: #fff3cd; border: 1px solid #ffe08a; color: #664d03; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-weight: bold; }
+
+      .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
+      .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+      .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
+      .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
+      .custom-tabelle th { background-color: #1a252f; color: white; }
+      .custom-tabelle td:first-child { white-space: nowrap; }
+      .custom-tabelle td:nth-child(n+3) { white-space: nowrap; }
+      .custom-tabelle td.monat-header { background: deepskyblue; font-weight: bold; font-size: 1.05rem; }
+      .custom-tabelle .past td { opacity: 0.45; }
+      .custom-tabelle td.bg-yellow { background: yellow; }
+      .custom-tabelle td.bg-orange { background: orange; }
+      .custom-tabelle td.bg-green { background: #5fd068; }
+      .custom-tabelle td.bg-darkslategray { background: #2f4f4f; color: white; }
+      .custom-tabelle td.bg-deepskyblue { background: deepskyblue; }
+      .kalender-box { background: #f8f9fa; border-left: 5px solid #3498db; border-radius: 6px; padding: 0.8rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+      .kalender-box summary { cursor: pointer; font-weight: bold; }
+      .kalender-box ul { list-style: none; padding: 0; margin: 0.6rem 0 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.4rem 1.5rem; }
+      .kalender-box li a { margin-left: 0.6rem; color: #3498db; text-decoration: none; font-weight: bold; }
+          .custom-tabelle td.bg-green { background: #00CD00; }
+      .custom-tabelle td.bg-yellow { background: #ffff00; }
+      .custom-tabelle td.bg-blue { background: #0000ff; color: white; }
+      .custom-tabelle td.bg-red { background: #ff0000; }
+      .custom-tabelle td.bg-chocolate { background: #d2691e; }
+      .custom-tabelle td.bg-orange { background: #ffa500; }
+      .custom-tabelle td.bg-purple { background: #551a8b; color: white; }
+      .custom-tabelle td.bg-gray { background: #bebebe; }
+      .custom-tabelle td.bg-white { background: #ffffff; }
+      .custom-tabelle td.bg-black { background: #000000; color: white; }
+      .custom-tabelle td.bg-gold { background: #B8860B; }
+      .custom-tabelle td.bg-tuerkis { background: #8B8878; }
+      .custom-tabelle td.bg-blueviolet { background: #8A2BE2; color: white; }
+      .custom-tabelle td.bg-orangered { background: #ff4500; }
+      .custom-tabelle td.bg-deepskyblue { background: #00bfff; }
+      .custom-tabelle td.bg-darkslategray { background: #528b8b; color: white; }
+</style>
+  <meta property="og:title" content="Termine & Spielplan | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html" aria-current="page">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="neu-hier.html">Neu hier?</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    
+    <h1>Termine & Spielplan</h1>
+    
+    <details class="kalender-box">
+      <summary>📆 Termine im Handy-Kalender abonnieren</summary>
+      <p>Der Kalender aktualisiert sich automatisch, wenn sich der Spielplan ändert.
+         <strong>iPhone / Mac / Outlook:</strong> „Abonnieren" antippen.
+         <strong>Google Kalender:</strong> „Link kopieren" und in Google Kalender unter „Weitere Kalender → Per URL" einfügen.</p>
+      <ul><li><strong>Alle Termine</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 1</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 2</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 3</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 4</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 5</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 6</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>Senioren</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>Jugend</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li></ul>
+    </details>
+    
+    <div class="full-bleed">
+      <div class="table-responsive">
+        <table class="custom-tabelle"><thead><tr><th>Termin</th><th>Verein</th><th>AFK 1</th><th>AFK 2</th><th>AFK 3</th><th>AFK 4</th><th>AFK 5</th><th>AFK 6</th><th>Senioren</th><th>Jugend</th></tr></thead>
+<tbody>
+<tr class="monat-row"><td colspan="10" class="monat-header">Oktober</td></tr>
+<tr class="past"><td class="bg-darkslategray">02.10. Fr, 18:00 Uhr</td><td>Vereinsabend</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="past"><td class="bg-darkslategray">09.10. Fr, 19:00 Uhr</td><td class="bg-yellow"><a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/Eltern-Schueler-Turnier_2026.pdf" target="_blank" rel="noopener">Kooperationsturnier mit der Schule</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="past"><td class="bg-darkslategray">16.10. Fr, 19:30 Uhr</td><td class="bg-orange"><a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Ausschreibungen/Schnellschach-VM%20und%20Kooperationsturnier%20mit%20EBE.pdf" target="_blank" rel="noopener">Schnellschach-VM+Kooperationsturnier mit Ebersberg</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21.10. Mi, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 1</td><td></td><td></td><td></td></tr>
+<tr><td>22.10. Do, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">23.10. Fr, 19:30 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 1</td><td class="bg-green">MMM Runde 1</td><td class="bg-green">MMM Runde 1</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>28.10. Mi, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 1</td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">November</td></tr>
+<tr><td class="bg-darkslategray">06.11. Fr</td><td>Vereinsabend (Herbstferien)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>10.11. Di, 19:30 Uhr</td><td></td><td></td><td></td><td class="bg-green">MMM Runde 2</td><td></td><td></td><td class="bg-green">MMM Runde 1</td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">13.11. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 2</td><td class="bg-green">MMM Runde 2</td><td></td><td class="bg-green">MMM Runde 2</td><td class="bg-green">MMM Runde 2</td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">20.11. Fr</td><td class="bg-yellow"><a href="https://www.mathenacht.de/" target="_blank" rel="noopener">Nacht der Mathematik</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>21.11. Sa, 14:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Landesliga Süd Runde 1</td></tr>
+<tr><td>22.11. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red">U20 MMM, 1.Liga Runde 1</td></tr>
+<tr><td>22.11. So, 11:00 Uhr</td><td>Münchner Blitz-EM</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>26.11. Do, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">27.11. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 2</td><td></td><td></td></tr>
+<tr><td>29.11. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-blueviolet">U14/U16 MMM Runde 1-3</td></tr>
+<tr><td>29.11. So, 11:00 Uhr</td><td>Mannschafts-und Ligapokal</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">Dezember</td></tr>
+<tr><td>05.12. Sa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Schulschach EM</td></tr>
+<tr><td>05.12. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Landesliga Süd Runde 2+3</td></tr>
+<tr><td>06.12. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red">U20 MMM, 1.Liga Runde 2+3</td></tr>
+<tr><td>08.12. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 3</td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">11.12. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td class="bg-green">MMM Runde 4</td><td></td><td></td><td></td></tr>
+<tr><td>12.12. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-blueviolet">U14/U16 MMM Runde 4+5</td></tr>
+<tr><td>14.12. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Spiefrei</td><td></td></tr>
+<tr><td class="bg-darkslategray">18.12. Fr</td><td class="bg-orange">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">Januar</td></tr>
+<tr><td>06.01. Mi</td><td>Dreikönigsturnier</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">22.01. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 3</td><td></td></tr>
+<tr><td>23.01. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Landesliga Süd Runde 4+5</td></tr>
+<tr><td>24.01. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red">U20 MMM, 1.Liga Runde 4+5</td></tr>
+<tr><td>25.01. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Spielfrei</td><td></td><td></td></tr>
+<tr><td>28.01. Do, 19:30 Uhr</td><td></td><td></td><td></td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">29.01. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">29.01. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td class="bg-green">MMM Runde 5</td><td class="bg-green">MMM Runde 5</td><td></td><td></td><td></td></tr>
+<tr><td>30.01. Sa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Schulschach MMM</td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">Februar</td></tr>
+<tr><td>18.02. Do, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 6</td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">19.02. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 6</td><td class="bg-green">MMM Runde 6</td><td class="bg-green">MMM Runde 6</td><td></td><td class="bg-green">MMM Runde 6</td><td class="bg-green">MMM Runde 5</td><td></td><td></td></tr>
+<tr><td>20.02. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Landesliga Süd Runde 6+7</td></tr>
+<tr><td>21.02. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red">U20 MMM, 1.Liga Runde 6+7</td></tr>
+<tr><td>24.02. Mi, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 4</td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">März</td></tr>
+<tr><td>09.03. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 6</td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">12.03. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 7</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">12.03. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 7</td><td></td><td class="bg-green">MMM Runde 7</td><td class="bg-green">MMM Runde 7</td><td class="bg-green">MMM Runde 7</td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">19.03. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 5</td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">April</td></tr>
+<tr><td>06.04. Di, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>08.04. Do, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td class="bg-green">MMM Runde 8</td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">09.04. Fr, 19:30 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 8</td><td class="bg-green">MMM Runde 8</td><td></td><td class="bg-green">MMM Runde 8</td><td class="bg-green">MMM Runde 7</td><td></td><td></td></tr>
+<tr><td>13.04. Di, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 6</td><td></td></tr>
+<tr><td>17.04. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red">U20 MMM, Ab 2.Liga Runde 1-3</td></tr>
+<tr><td>18.04. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red">U20 MMM, Ab 2.Liga Runde 4+5</td></tr>
+<tr><td>27.04. Di, 19:30 Uhr</td><td></td><td></td><td class="bg-green">MMM Runde 9</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td class="bg-darkslategray">30.04. Fr, 19:30 Uhr</td><td></td><td class="bg-green">MMM Runde 9</td><td></td><td class="bg-green">MMM Runde 9</td><td class="bg-green">MMM Runde 9</td><td class="bg-green">MMM Runde 9</td><td></td><td></td><td></td></tr>
+<tr class="monat-row"><td colspan="10" class="monat-header">Mai</td></tr>
+<tr><td class="bg-darkslategray">14.05. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green">MSMM Runde 7</td><td></td></tr>
+</tbody></table>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>

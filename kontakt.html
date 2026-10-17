@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt &amp; Anfahrt | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+  .kontakt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .ansprechpartner-card {
+    background: #f8f9fa;
+    border-left: 4px solid #3498db;
+    padding: 1.2rem;
+    border-radius: 6px;
+  }
+  .kontakt-form-card {
+    background: #f8f9fa;
+    border-top: 4px solid #27ae60;
+    padding: 1.5rem;
+    border-radius: 6px;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+  }
+  .form-group input, .form-group textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+  }
+  .btn-submit {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-submit:hover {
+    background: #219150;
+  }
+</style>
+  <meta property="og:title" content="Kontakt &amp; Anfahrt | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="neu-hier.html">Neu hier?</a>
+      <a href="kontakt.html" aria-current="page">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Kontakt &amp; Ansprechpartner</h1>
+<p>Du hast Fragen zum Spielbetrieb, zum Jugendtraining oder möchtest einfach mal bei uns reinschnuppern? Schreib uns oder komm direkt vorbei!</p>
+
+<div class="kontakt-grid">
+
+  <!-- Ansprechpartner & Spielort -->
+  <div>
+    <div class="ansprechpartner-card" style="margin-bottom: 1.5rem;">
+      <h3 style="margin-top:0;">👥 Ansprechpartner</h3>
+      <p style="margin-bottom:0.5rem;"><strong>1. Vorstand / Vereinsanfragen:</strong><br>
+      <a href="mailto:info@sg-afk.de" style="color:#3498db;">info@sg-afk.de</a></p>
+
+      <p style="margin-bottom:0.5rem;"><strong>Jugendleitung / Jugendtraining:</strong><br>
+      <a href="mailto:jugend@sg-afk.de" style="color:#3498db;">jugend@sg-afk.de</a></p>
+
+      <p style="margin-bottom:0;"><strong>Mannschaftsspielbetrieb:</strong><br>
+      <a href="mailto:spielleiter@sg-afk.de" style="color:#3498db;">spielleiter@sg-afk.de</a></p>
+    </div>
+
+    <div class="ansprechpartner-card" style="border-left-color: #e67e22;">
+      <h3 style="margin-top:0;">📍 Spielort &amp; Zeiten</h3>
+      <p style="font-size:0.9rem;"><strong>Gymnasium Kirchheim</strong><br>
+      Heimstettner Str. 3, 85551 Kirchheim</p>
+      <p style="font-size:0.85rem;"><strong>Jeden Freitag:</strong><br>
+      • 18:00 – 19:30 Uhr: Jugendtraining<br>
+      • Ab 19:30 Uhr: Erwachsene &amp; allgemeiner Spielabend</p>
+      <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#e67e22; display:inline-block; font-size:0.85rem; padding:0.5rem 1rem; color:white; text-decoration:none; border-radius:4px;">📍 Auf Google Maps öffnen</a>
+    </div>
+  </div>
+
+  <!-- Kontaktformular -->
+  <div class="kontakt-form-card">
+    <h3 style="margin-top:0;">✉️ Nachricht senden</h3>
+    <form action="https://formspree.io/f/xbjnopqr" method="POST"> <!-- Formspree oder Mailto-URL eintragen -->
+      <div class="form-group">
+        <label for="name">Dein Name:</label>
+        <input type="text" id="name" name="name" required placeholder="z. B. Max Mustermann">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Deine E-Mail-Adresse:</label>
+        <input type="email" id="email" name="email" required placeholder="max@example.de">
+      </div>
+
+      <div class="form-group">
+        <label for="betreff">Betreff:</label>
+        <input type="text" id="betreff" name="betreff" placeholder="z. B. Interesse an Schnuppertraining">
+      </div>
+
+      <div class="form-group">
+        <label for="nachricht">Nachricht:</label>
+        <textarea id="nachricht" name="nachricht" rows="5" required placeholder="Deine Nachricht an uns..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">Nachricht absenden</button>
+    </form>
+  </div>
+
+</div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>

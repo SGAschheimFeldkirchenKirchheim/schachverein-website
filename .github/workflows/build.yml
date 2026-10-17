@@ -1,0 +1,67 @@
+name: Generate Website
+
+on:
+  push:
+    branches: [ main ]
+  # Täglicher Rebuild, damit "Nächste Termine" und ausgegraute Vergangenheit aktuell bleiben
+  schedule:
+    - cron: '0 3 * * *'
+  # Manuell startbar über den Actions-Tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 1. Typst CLI installieren
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v3
+
+      # 2. Python Umgebung einrichten
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # 3. Typst Kompilierung zu SVG
+      #    Fehler brechen den Build nicht ab, erscheinen aber als gelbe Warnung im Run
+      #    (vorher: "|| true" hat sie komplett versteckt)
+      - name: Compile Typst to SVG
+        run: |
+          if [ -f "termine/termine.typ" ]; then
+            typst compile termine/termine.typ termine/output.svg \
+              || echo "::warning::Typst-Kompilierung von termine/termine.typ fehlgeschlagen"
+          fi
+          if [ -f "turniere/blitzjahreswertung/main.typ" ]; then
+            typst compile turniere/blitzjahreswertung/main.typ turniere/blitzjahreswertung/output.svg \
+              || echo "::warning::Typst-Kompilierung von turniere/blitzjahreswertung/main.typ fehlgeschlagen"
+          fi
+
+      # 4. Python Build-Skript ausführen
+      - name: Run Build Script
+        run: python build_site.py
+
+      # 5. Änderungen committen und pushen
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff-index --quiet HEAD; then
+            echo "Keine Änderungen zum Committen vorhanden."
+          else
+            git commit -m "Auto-generate HTML and SVG files"
+            git push
+          fi

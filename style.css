@@ -1,0 +1,167 @@
+/* ==========================================
+   FARBSYSTEM
+   Eine Farbe für Haupt-Aktionen (Buttons), eine für Textlinks.
+   ========================================== */
+:root {
+  --navy: #1a252f;          /* Header, Footer, Überschriften */
+  --primary: #1e8449;       /* Buttons (weißer Text, ausreichend Kontrast) */
+  --primary-dark: #17653a;  /* Button beim Darüberfahren */
+  --link: #2874a6;          /* Textlinks */
+  --soft: #f4f6f7;          /* helle Flächen */
+  --border: #e0e0e0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+a {
+  color: var(--link);
+}
+
+a:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid #f5b041;
+  outline-offset: 2px;
+}
+
+header {
+  background: var(--navy);
+  color: white;
+  padding: 1.5rem 2rem;
+  text-align: center; /* Zentriert Logo und Menü */
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  color: white;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.brand-logo {
+  height: 48px;
+  width: auto;
+}
+
+nav {
+  display: flex;
+  justify-content: center; /* Zentriert die Menülinks */
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+
+.hero {
+  background: var(--soft);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.hero h1 {
+  margin-top: 0;
+  color: var(--navy);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Grund-Grid für Abstände */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Variante A: 3 Spalten (Mannschaften) */
+.grid-Mannschaften {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 Spalten auf PCs/Monitoren */
+  gap: 1.5rem;                           /* Abstand zwischen den Karten */
+  margin-top: 1.5rem;
+}
+/* 3 Kacheln nebeneinander auf Monitoren */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Automatisch auf 1 Spalte wechseln, wenn der Bildschirm schmaler als 768px ist (z. B. Smartphones) */
+@media (max-width: 768px) {
+  .grid-Mannschaften {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+/* Haupt-Button: eine Farbe für alle Aktionen */
+.btn {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+/* Zweiter Button-Typ (z. B. "Karte öffnen"): nur Umrandung */
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn-outline:hover {
+  background: var(--primary);
+  color: white;
+}
+
+footer {
+  background: var(--navy);
+  color: #aaa;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 3rem;
+}

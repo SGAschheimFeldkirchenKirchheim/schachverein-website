@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startseite | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .hinweis-banner { background: #fff3cd; border: 1px solid #ffe08a; color: #664d03; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-weight: bold; }
+
+      :root { --hero-logo-h: 200px; --hero-logo-h-mobile: 140px; --next-accent: #27ae60; }
+
+      .container { max-width: 1200px; }
+      .hero { border-radius: 8px; margin-bottom: 1.5rem; }
+      .hero-logo { display: block; height: var(--hero-logo-h); width: auto; margin: 0 auto 1.2rem; mix-blend-mode: multiply; }
+      @media (max-width: 600px) { .hero-logo { height: var(--hero-logo-h-mobile); } }
+
+      .hero-facts { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; padding: 0; margin: 1.5rem auto 1rem; max-width: 960px; text-align: left; }
+      .hero-facts li { background: #fff; border-radius: 8px; padding: 0.9rem 1.1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 0.2rem; }
+      .hero-facts strong { color: var(--navy); font-size: 1.05rem; }
+      .hero-facts span { color: #555; font-size: 0.95rem; }
+      .hero-note { font-size: 0.95rem; color: #555; margin: 0 0 0.5rem; }
+
+      .stats { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; padding: 0; margin: 0 0 1rem; }
+      .stats li, .stats li a { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.15rem; }
+      .stats li { background: #fff; border: 1px solid #e3e6ea; border-radius: 8px; padding: 1rem 0.8rem; }
+      .stats li a { text-decoration: none; color: inherit; width: 100%; }
+      .stats li:has(a):hover { border-color: var(--link); }
+      .stats strong { font-size: 1.5rem; color: var(--navy); line-height: 1.2; }
+      .stats span { font-size: 0.9rem; color: #555; }
+
+      .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin: 2.5rem 0 1rem; }
+      .section-head h2 { margin: 0; font-size: 1.4rem; color: var(--navy); }
+      .section-head a { font-weight: bold; text-decoration: none; }
+
+      .spielabend { margin: 0 0 1rem; padding: 0.7rem 1.1rem; background: #eaf6ee; border-left: 4px solid var(--next-accent); border-radius: 6px; font-weight: bold; color: #1e5631; }
+      .spielabend[hidden] { display: none; }
+
+      .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+      .event-card { background: var(--soft); border-left: 4px solid var(--link); border-radius: 6px; padding: 0.9rem 1.1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .event-card.next { border-left-color: var(--next-accent); box-shadow: 0 3px 10px rgba(39,174,96,0.25); }
+      .ev-date { font-size: 0.95rem; font-weight: bold; color: #444; margin-bottom: 0.3rem; }
+      .ev-rel:not(:empty) { display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.55rem; border-radius: 999px; background: #e3e6ea; color: #333; font-size: 0.75rem; }
+      .event-card.next .ev-rel:not(:empty) { background: var(--next-accent); color: #fff; }
+      .ev-title { font-size: 1.1rem; font-weight: bold; color: var(--navy); line-height: 1.35; }
+      .ev-teams { margin-top: 0.4rem; }
+      .pill { display: inline-block; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.1rem 0.7rem; font-size: 0.85rem; font-weight: bold; margin: 0.2rem 0.3rem 0 0; }
+      .ev-legend { font-size: 0.85rem; color: #555; margin: 0.9rem 0 0; }
+
+      .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1rem; }
+      .news-grid .card { margin-bottom: 0 !important; }
+
+      .cta-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin: 3rem 0 1rem; padding: 1.6rem 2rem; background: var(--navy); color: #fff; border-radius: 8px; }
+      .cta-band h2 { margin: 0 0 0.3rem; color: #fff; font-size: 1.4rem; }
+      .cta-band p { margin: 0; color: #dfe6ee; }
+      .cta-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+      .btn-ghost { background: transparent !important; border: 2px solid #fff; color: #fff !important; }
+      .btn-ghost:hover { background: rgba(255,255,255,0.12) !important; }
+    
+      .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+      .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
+      .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
+      .news-card a { font-weight: bold; text-decoration: none; }
+</style>
+  <meta property="og:title" content="Startseite | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html" aria-current="page">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="neu-hier.html">Neu hier?</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    
+    
+
+    <section class="hero">
+      <img src="Logo.png" alt="Wappen der SG Aschheim / Feldkirchen / Kirchheim" class="hero-logo">
+      <h1>Schach spielen in Aschheim, Feldkirchen &amp; Kirchheim</h1>
+      <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
+
+      <ul class="hero-facts">
+        <li>
+          <strong>📅 Jeden Freitag</strong>
+          <span>Gebäude ab 18:00 Uhr geöffnet</span>
+        </li>
+        <li>
+          <strong>🕒 Jugendtraining 18:00 – 19:30 Uhr</strong>
+          <span>Erwachsene &amp; Spielabend ab 19:30 Uhr, open end</span>
+        </li>
+        <li>
+          <strong>📍 Gymnasium Kirchheim</strong>
+          <span>Heimstettner Str. 3, 85551 Kirchheim<br>
+            <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
+        </li>
+      </ul>
+      <p class="hero-note">Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche dürfen auch länger bleiben.</p>
+
+      <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
+    </section>
+
+    <ul class="stats"><li><a href="https://www.schachbund.de/dwz-vereine/22061.html" target="_blank" rel="noopener"><strong>80+</strong><span>Mitglieder im Schachbund</span></a></li><li><a href="mannschaften.html"><strong>6</strong><span>Mannschaften</span></a></li><li><a href="neu-hier.html"><strong>Freitag</strong><span>Spielabend &amp; Jugendtraining</span></a></li></ul>
+
+    <section>
+      <div class="section-head">
+        <h2>Nächste Termine</h2>
+        <a href="termine.html">Termine ansehen →</a>
+      </div>
+      <p class="spielabend" id="spielabend" hidden></p>
+      <div class="events-grid">
+        
+        <div class="event-card" data-date="2026-10-21">
+          <div class="ev-date">21.10. Mi, 19:00 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 1</div>
+          <div class="ev-teams"><span class="pill">AFK 5</span></div>
+        </div>
+        <div class="event-card" data-date="2026-10-22">
+          <div class="ev-date">22.10. Do, 19:30 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 1</div>
+          <div class="ev-teams"><span class="pill">AFK 1</span></div>
+        </div>
+        <div class="event-card" data-date="2026-10-23">
+          <div class="ev-date">23.10. Fr, 19:30 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 1</div>
+          <div class="ev-teams"><span class="pill">AFK 2</span><span class="pill">AFK 3</span><span class="pill">AFK 4</span></div>
+        </div>
+        <div class="event-card" data-date="2026-10-28">
+          <div class="ev-date">28.10. Mi, 19:00 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MSMM Runde 1</div>
+          <div class="ev-teams"><span class="pill">Senioren</span></div>
+        </div>
+      </div>
+      <p class="ev-legend"><strong>MMM</strong> = Münchner Mannschaftsmeisterschaft · <strong>MSMM</strong> = Münchner Senioren-Mannschaftsmeisterschaft</p>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Aktuelle Berichte</h2>
+        <a href="berichte.html">Alle Berichte ansehen →</a>
+      </div>
+      <div class="news-grid">
+        
+        <div class="card news-card">
+          <h3>Spannende Duelle beim Herbstblitzturnier 2026</h3>
+          <p class="news-meta">25. September 2026 · von Korbinian Ruff</p>
+          <p class="news-snippet">Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt.</p>
+          <a href="berichte/2026-09-herbstblitz.html">Weiterlesen →</a>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div>
+        <h2>Lust auf eine Partie?</h2>
+        <p>Komm freitags einfach vorbei oder schreib uns, wenn du vorab Fragen hast.</p>
+      </div>
+      <div class="cta-buttons">
+        <a href="kontakt.html" class="btn">Kontakt aufnehmen</a>
+        <a href="mitgliederantrag.pdf" class="btn btn-ghost" download>Mitgliedsantrag (PDF)</a>
+      </div>
+    </section>
+
+    <script>
+(function () {
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  function rel(d) {
+    var n = Math.round((d - today) / 86400000);
+    if (n === 0) return "heute";
+    if (n === 1) return "morgen";
+    return "in " + n + " Tagen";
+  }
+  function two(x) { return ("0" + x).slice(-2); }
+
+  var first = true;
+  document.querySelectorAll(".event-card[data-date]").forEach(function (c) {
+    var p = c.dataset.date.split("-");
+    var d = new Date(+p[0], p[1] - 1, +p[2]);
+    if (d < today) { c.style.display = "none"; return; }
+    var r = c.querySelector(".ev-rel");
+    if (r) r.textContent = rel(d);
+    if (first) { c.classList.add("next"); first = false; }
+  });
+
+  var f = new Date(today);
+  f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
+  var el = document.getElementById("spielabend");
+  if (el) {
+    el.textContent = "🗓️ Nächster Spielabend: Freitag, " + two(f.getDate()) + "." + two(f.getMonth() + 1) +
+                     ". ab 18:00 Uhr (" + rel(f) + ")";
+    el.hidden = false;
+  }
+})();
+</script>
+    
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vereinsinterne Turniere & Hall of Fame | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
+      .hof-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }
+      .hof-tabelle th, .hof-tabelle td { padding: 10px 12px; border: 1px solid #0a1f44; }
+      .hof-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; text-align: center; }
+    </style>
+  <meta property="og:title" content="Vereinsinterne Turniere & Hall of Fame | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html" aria-current="page">Turniere</a>
+      <a href="neu-hier.html">Neu hier?</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+<h1 style="margin-top:1rem;">Vereinsinterne Turniere & Hall of Fame</h1>
+<div class="table-responsive"><table class="hof-tabelle">
+<thead><tr><th>Turnier</th><th>Jahr</th><th>Spieler</th></tr></thead><tbody>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">Weihnachtsblitz</td>
+<td style="text-align:center;">2020</td>
+<td style="text-align:left;">Max Mustermann</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">Sommeropen</td>
+<td style="text-align:center;">2016</td>
+<td style="text-align:left;">Erika Musterfrau</td>
+</tr>
+<tr style="background-color: #ffffff;">
+<td style="text-align:left;">Vereinsmeisterschaft</td>
+<td style="text-align:center;">2017</td>
+<td style="text-align:left;">Hans Beispiel</td>
+</tr>
+<tr style="background-color: #eef1f8;">
+<td style="text-align:left;">Blitzturnier</td>
+<td style="text-align:center;">2018</td>
+<td style="text-align:left;">Anna Test</td>
+</tr>
+</tbody></table></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>

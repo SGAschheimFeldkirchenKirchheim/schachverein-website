@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neu hier? | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .neu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+      .neu-card { background: #f8f9fa; border-top: 4px solid #27ae60; border-radius: 6px; padding: 1.2rem 1.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .neu-card h3 { margin-top: 0; }
+      .neu-card ul { padding-left: 1.2rem; }
+      .neu-card a { color: #3498db; font-weight: bold; text-decoration: none; }
+    </style>
+  <meta property="og:title" content="Neu hier? | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="neu-hier.html" aria-current="page">Neu hier?</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    
+    <h1>Neu hier? So kommst du vorbei</h1>
+    <p>Egal ob Einsteiger, Jugendlicher oder Turnierspieler: Komm einfach an einem Freitag bei uns vorbei.</p>
+
+    <div class="neu-grid">
+      <div class="neu-card">
+        <h3>🕒 Wann?</h3>
+        <p><strong>Jeden Freitag.</strong> Das Gebäude ist ab 18:00 Uhr geöffnet.</p>
+        <ul>
+          <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+          <li><strong>Erwachsene &amp; Spielabend:</strong> ab 19:30 Uhr (open end)</li>
+        </ul>
+        <p>Die Zeiten sind flexibel: Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.</p>
+      </div>
+
+      <div class="neu-card">
+        <h3>📍 Wo?</h3>
+        <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 3<br>85551 Kirchheim</p>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;">📍 Auf Google Maps öffnen</a>
+      </div>
+
+      <div class="neu-card">
+        <h3>♟️ Was erwartet dich?</h3>
+        <ul>
+          <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
+          <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen</li>
+          <li><strong>Mannschaftsschach:</strong> Teams von der C-Klasse bis zur Bezirksliga, für jedes Spielniveau</li>
+        </ul>
+        <a href="mannschaften.html">Unsere Teams →</a>
+      </div>
+
+      <div class="neu-card">
+        <h3>📝 Mitglied werden</h3>
+        <p>Gefällt es dir bei uns? Den Mitgliedsantrag kannst du hier herunterladen:</p>
+        <a href="mitgliederantrag.pdf" download>📄 Mitgliedsantrag (PDF) →</a>
+        <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
+      </div>
+    </div>
+    
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>

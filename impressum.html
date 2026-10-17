@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impressum &amp; Datenschutz | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+  .legal-section {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 1.8rem;
+    margin-bottom: 2rem;
+  }
+  .legal-section h2 {
+    margin-top: 0;
+    color: #1a252f;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+  }
+</style>
+  <meta property="og:title" content="Impressum &amp; Datenschutz | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="neu-hier.html">Neu hier?</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Rechtliche Hinweise</h1>
+
+<!-- IMPRESSUM -->
+<div class="legal-section">
+  <h2>Impressum</h2>
+  <p><strong>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz):</strong></p>
+  <p>
+    Schachgemeinschaft Aschheim / Feldkirchen / Kirchheim e.V.<br>
+    Gymnasium Kirchheim<br>
+    Heimstettner Str. 3<br>
+    85551 Kirchheim bei München
+  </p>
+
+  <p><strong>Vertreten durch:</strong><br>
+  Der Verein wird vertreten durch den Vorstand gemäß § 26 BGB.<br>
+  E-Mail: <a href="mailto:info@sg-afk.de" style="color:#3498db;">info@sg-afk.de</a>
+  </p>
+
+  <p><strong>Registereintrag:</strong><br>
+  Eintragung im Vereinsregister.<br>
+  Registergericht: Amtsgericht München<br>
+  Registernummer: VR [Eure Nummer eintragen]
+  </p>
+
+  <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</strong><br>
+  Vorstand der SG Aschheim / Feldkirchen / Kirchheim e.V.<br>
+  Heimstettner Str. 3, 85551 Kirchheim
+  </p>
+</div>
+
+<!-- DATENSCHUTZERKLÄRUNG -->
+<div class="legal-section">
+  <h2>Datenschutzerklärung</h2>
+
+  <h3>1. Datenschutz auf einen Blick</h3>
+  <p>
+    Wir nehmen den Schutz eurer persönlichen Daten sehr ernst. Personenbezogene Daten werden auf dieser Website nur im technisch notwendigen Umfang erhoben. In keinem Fall werden die erhobenen Daten verkauft oder aus anderen Gründen an Dritte weitergegeben.
+  </p>
+
+  <h3>2. Hosting &amp; GitHub Pages</h3>
+  <p>
+    Diese Website wird über <strong>GitHub Pages</strong> (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) gehostet. Beim Aufruf der Seiten speichert GitHub automatisiert Informationen in sogenannten Server-Log-Dateien, die euer Browser übermittelt (z.B. IP-Adresse, Browsertyp, Datum und Uhrzeit des Zugriffs). Dies ist für die technische Bereitstellung und Sicherheit der Website erforderlich.
+  </p>
+
+  <h3>3. Kontaktaufnahme</h3>
+  <p>
+    Wenn ihr uns per E-Mail oder Kontaktformular Anfragen zukommen lasst, werden eure Angaben zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne eure Einwilligung weiter.
+  </p>
+
+  <h3>4. Eure Rechte</h3>
+  <p>
+    Ihr habt jederzeit das Recht auf kostenlose Auskunft über eure gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten. Wendet euch dazu jederzeit an die im Impressum angegebene Adresse.
+  </p>
+</div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>

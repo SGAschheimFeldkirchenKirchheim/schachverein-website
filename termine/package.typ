@@ -1,0 +1,23 @@
+#let green = rgb("#00CD00")
+#let yellow = rgb("#ffff00")
+#let blue = rgb("#0000ff")
+#let red = rgb("#ff0000")
+#let chocolate = rgb("#d2691e")
+#let orange = rgb("#ffa500")
+#let purple = rgb("#551a8b")
+#let gray = rgb("#bebebe")
+#let white = rgb("#ffffff")
+#let black = rgb("#000000")
+#let gold = rgb("#B8860B")
+#let tuerkis = rgb("#8B8878")
+#let blueViolet = rgb("#8A2BE2")
+#let orangeRed = rgb("#ff4500")
+#let DeepSkyBlue = rgb("#00bfff")
+#let DarkSlateGray = rgb("#528b8b")
+#let LightSlateBlue = rgb("#8470ff")
+#let hellrot = red.lighten(25%)
+#let CornflowerBlue = rgb("#6495ed")
+#let dunkelblau = rgb("#4b1480")
+
+
+#let LinkTypst = link("https://typst.app/")[Typst]

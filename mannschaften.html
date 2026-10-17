@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mannschaften | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <link rel="icon" href="Logo.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style>
+  <meta property="og:title" content="Mannschaften | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+</head>
+<body>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <nav>
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html" aria-current="page">Mannschaften</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="neu-hier.html">Neu hier?</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Unsere Mannschaften &amp; Liga-Ergebnisse</h1>
+<p>Hier findest du die Links zu den aktuellen Tabellen und Ergebnissen unserer Teams in der laufenden Saison.</p>
+
+<div class="grid-Mannschaften" id="mannschaften">
+  <noscript>
+    <p>Bitte aktiviere JavaScript oder besuche direkt die Seite des
+      <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener">Schachbezirks München</a>.</p>
+  </noscript>
+</div>
+
+<script>
+  // ============================================================
+  //  HIER PFLEGEN: Pro neuer Saison nur diese Werte anpassen
+  // ============================================================
+  const SAISON = 16;
+  const ITEMID = 4164;
+  const BASIS  = "https://schachbezirk-muenchen.de/component/clm/";
+
+  // liga = Liga-Nummer, tlnr = Mannschaftsnummer in dieser Liga
+  // klasse = Spielklasse (optional, z. B. "Bezirksliga A")
+  // liga: null  ->  Karte ohne Link ("wird nachgetragen")
+  const MANNSCHAFTEN = [
+    { name: "1. Mannschaft",     liga: 340,  tlnr: 3, klasse: "Bezirksliga" },
+    { name: "2. Mannschaft",     liga: 341,  tlnr: 8, klasse: "A-Klasse" },
+    { name: "3. Mannschaft",     liga: 344,  tlnr: 8, klasse: "B-Klasse" },
+    { name: "4. Mannschaft",     liga: 345,  tlnr: 3, klasse: "C-Klasse" },
+    { name: "5. Mannschaft",     liga: 347,  tlnr: 3, klasse: "D-Klasse" },
+    { name: "6. Mannschaft",     liga: 348,  tlnr: 6, klasse: "E-Klasse" },
+    { name: "Jugendmannschaften", liga: null, tlnr: null, klasse: "Jugendrunden", jugend: true },
+  ];
+  // ============================================================
+
+  function tabellenUrl(m) {
+    const p = new URLSearchParams({
+      view: "mannschaft",
+      saison: SAISON,
+      liga: m.liga,
+      tlnr: m.tlnr,
+      Itemid: ITEMID,
+    });
+    return BASIS + "?" + p.toString();
+  }
+
+  const container = document.getElementById("mannschaften");
+
+  MANNSCHAFTEN.forEach((m) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = m.name;
+    card.appendChild(h3);
+
+    if (m.klasse) {
+      const p = document.createElement("p");
+      p.textContent = m.klasse;
+      card.appendChild(p);
+    }
+
+    if (m.liga !== null && m.tlnr !== null) {
+      const a = document.createElement("a");
+      a.href = tabellenUrl(m);
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.className = "btn";
+      a.textContent = m.jugend ? "Jugend-Ergebnisse öffnen" : "Tabelle & Ergebnisse";
+      a.setAttribute("aria-label",
+        (m.jugend ? "Ergebnisse der " : "Tabelle der ") + m.name + " (öffnet in neuem Tab)");
+      card.appendChild(a);
+    } else {
+      const p = document.createElement("p");
+      p.textContent = "Liga wird nachgetragen.";
+      card.appendChild(p);
+    }
+
+    container.appendChild(card);
+  });
+</script>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+  </footer>
+
+</body>
+</html>
