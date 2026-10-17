@@ -8,6 +8,99 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
+UID:2026-10-02-18-vereinsabend-jugend@sg-afk
+DTSTAMP:20261002T000000Z
+DTSTART:20261002T180000
+DTEND:20261002T210000
+SUMMARY:Vereinsabend
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-09-19-kooperationsturnier-mit-der-schule-jugend@sg-afk
+DTSTAMP:20261009T000000Z
+DTSTART:20261009T190000
+DTEND:20261009T220000
+SUMMARY:Kooperationsturnier mit der Schule
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-16-19-schnellschach-vm-kooperationsturnier-mit-ebersberg-jugend
+ @sg-afk
+DTSTAMP:20261016T000000Z
+DTSTART:20261016T193000
+DTEND:20261016T223000
+SUMMARY:Schnellschach-VM+Kooperationsturnier mit Ebersberg
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-06-ganztag-vereinsabend-herbstferien-jugend@sg-afk
+DTSTAMP:20261106T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Vereinsabend (Herbstferien)
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-20-ganztag-nacht-der-mathematik-jugend@sg-afk
+DTSTAMP:20261120T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Nacht der Mathematik
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-21-14-jugend-landesliga-sued-runde-1-jugend@sg-afk
+DTSTAMP:20261121T000000Z
+DTSTART:20261121T140000
+DTEND:20261121T170000
+SUMMARY:Jugend: Landesliga Süd Runde 1
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-22-10-jugend-u20-mmm-1-liga-runde-1-jugend@sg-afk
+DTSTAMP:20261122T000000Z
+DTSTART:20261122T100000
+DTEND:20261122T130000
+SUMMARY:Jugend: U20 MMM\, 1.Liga Runde 1
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-22-11-muenchner-blitz-em-jugend@sg-afk
+DTSTAMP:20261122T000000Z
+DTSTART:20261122T110000
+DTEND:20261122T140000
+SUMMARY:Münchner Blitz-EM
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-29-10-jugend-u14-u16-mmm-runde-1-3-jugend@sg-afk
+DTSTAMP:20261129T000000Z
+DTSTART:20261129T100000
+DTEND:20261129T130000
+SUMMARY:Jugend: U14/U16 MMM Runde 1-3
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-29-11-mannschafts-und-ligapokal-jugend@sg-afk
+DTSTAMP:20261129T000000Z
+DTSTART:20261129T110000
+DTEND:20261129T140000
+SUMMARY:Mannschafts-und Ligapokal
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
 UID:2026-12-05-ganztag-jugend-schulschach-em-jugend@sg-afk
 DTSTAMP:20261205T000000Z
 DTSTART;VALUE=DATE:20261205
@@ -85,6 +178,42 @@ DTSTAMP:20270130T000000Z
 DTSTART;VALUE=DATE:20270130
 DTEND;VALUE=DATE:20270131
 SUMMARY:Jugend: Schulschach MMM
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-02-20-10-jugend-landesliga-sued-runde-6-7-jugend@sg-afk
+DTSTAMP:20270220T000000Z
+DTSTART:20270220T100000
+DTEND:20270220T130000
+SUMMARY:Jugend: Landesliga Süd Runde 6+7
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-02-21-10-jugend-u20-mmm-1-liga-runde-6-7-jugend@sg-afk
+DTSTAMP:20270221T000000Z
+DTSTART:20270221T100000
+DTEND:20270221T130000
+SUMMARY:Jugend: U20 MMM\, 1.Liga Runde 6+7
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-04-17-10-jugend-u20-mmm-ab-2-liga-runde-1-3-jugend@sg-afk
+DTSTAMP:20270417T000000Z
+DTSTART:20270417T100000
+DTEND:20270417T130000
+SUMMARY:Jugend: U20 MMM\, Ab 2.Liga Runde 1-3
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-04-18-10-jugend-u20-mmm-ab-2-liga-runde-4-5-jugend@sg-afk
+DTSTAMP:20270418T000000Z
+DTSTART:20270418T100000
+DTEND:20270418T130000
+SUMMARY:Jugend: U20 MMM\, Ab 2.Liga Runde 4+5
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT

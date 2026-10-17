@@ -8,6 +8,90 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
+UID:2026-10-02-18-vereinsabend-afk-6@sg-afk
+DTSTAMP:20261002T000000Z
+DTSTART:20261002T180000
+DTEND:20261002T210000
+SUMMARY:Vereinsabend
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-09-19-kooperationsturnier-mit-der-schule-afk-6@sg-afk
+DTSTAMP:20261009T000000Z
+DTSTART:20261009T190000
+DTEND:20261009T220000
+SUMMARY:Kooperationsturnier mit der Schule
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-10-16-19-schnellschach-vm-kooperationsturnier-mit-ebersberg-afk-6@
+ sg-afk
+DTSTAMP:20261016T000000Z
+DTSTART:20261016T193000
+DTEND:20261016T223000
+SUMMARY:Schnellschach-VM+Kooperationsturnier mit Ebersberg
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-06-ganztag-vereinsabend-herbstferien-afk-6@sg-afk
+DTSTAMP:20261106T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Vereinsabend (Herbstferien)
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-10-19-afk-6-mmm-runde-1-afk-6@sg-afk
+DTSTAMP:20261110T000000Z
+DTSTART:20261110T193000
+DTEND:20261110T223000
+SUMMARY:AFK 6: MMM Runde 1
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-20-ganztag-nacht-der-mathematik-afk-6@sg-afk
+DTSTAMP:20261120T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Nacht der Mathematik
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-22-11-muenchner-blitz-em-afk-6@sg-afk
+DTSTAMP:20261122T000000Z
+DTSTART:20261122T110000
+DTEND:20261122T140000
+SUMMARY:Münchner Blitz-EM
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-27-19-afk-6-mmm-runde-2-afk-6@sg-afk
+DTSTAMP:20261127T000000Z
+DTSTART:20261127T193000
+DTEND:20261127T223000
+SUMMARY:AFK 6: MMM Runde 2
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2026-11-29-11-mannschafts-und-ligapokal-afk-6@sg-afk
+DTSTAMP:20261129T000000Z
+DTSTART:20261129T110000
+DTEND:20261129T140000
+SUMMARY:Mannschafts-und Ligapokal
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
 UID:2026-12-08-19-afk-6-mmm-runde-3-afk-6@sg-afk
 DTSTAMP:20261208T000000Z
 DTSTART:20261208T193000
@@ -40,6 +124,33 @@ DTSTAMP:20270125T000000Z
 DTSTART:20270125T190000
 DTEND:20270125T220000
 SUMMARY:AFK 6: MMM Runde 4
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-02-19-19-afk-6-mmm-runde-5-afk-6@sg-afk
+DTSTAMP:20270219T000000Z
+DTSTART:20270219T193000
+DTEND:20270219T223000
+SUMMARY:AFK 6: MMM Runde 5
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-09-19-afk-6-mmm-runde-6-afk-6@sg-afk
+DTSTAMP:20270309T000000Z
+DTSTART:20270309T193000
+DTEND:20270309T223000
+SUMMARY:AFK 6: MMM Runde 6
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-04-09-19-afk-6-mmm-runde-7-afk-6@sg-afk
+DTSTAMP:20270409T000000Z
+DTSTART:20270409T193000
+DTEND:20270409T223000
+SUMMARY:AFK 6: MMM Runde 7
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
