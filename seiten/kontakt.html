@@ -5,48 +5,44 @@
     gap: 1.5rem;
     margin-top: 2rem;
   }
-  .ansprechpartner-card {
+  .kontakt-spalte { display: flex; flex-direction: column; gap: 1.5rem; }
+  .kontakt-card {
     background: #f8f9fa;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid var(--link);
     padding: 1.2rem;
     border-radius: 6px;
   }
+  .kontakt-card.ort { border-left-color: #e67e22; }
+  .kontakt-card h2, .kontakt-form-card h2 { margin-top: 0; font-size: 1.25rem; color: var(--navy); }
+  .kontakt-card p { margin: 0 0 0.7rem; }
+  .kontakt-card p:last-child { margin-bottom: 0; }
+  .kontakt-card ul { margin: 0 0 0.8rem; padding-left: 1.2rem; }
+  .kontakt-card .btn { margin-top: 0.3rem; }
+
   .kontakt-form-card {
     background: #f8f9fa;
-    border-top: 4px solid #27ae60;
+    border-top: 4px solid var(--primary);
     padding: 1.5rem;
     border-radius: 6px;
   }
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
-  }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-weight: bold; margin-bottom: 0.3rem; font-size: 0.9rem; }
   .form-group input, .form-group textarea {
     width: 100%;
     padding: 0.6rem;
-    border: 1px solid #ccc;
+    border: 1px solid #999;
     border-radius: 4px;
+    font: inherit;
     font-size: 0.95rem;
     box-sizing: border-box;
   }
-  .btn-submit {
-    background: #27ae60;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.4rem;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .btn-submit:hover {
-    background: #219150;
-  }
+  .form-group.form-check { display: flex; gap: 0.6rem; align-items: flex-start; }
+  .form-group.form-check input { width: auto; margin-top: 0.35rem; }
+  .form-group.form-check label { font-weight: normal; margin: 0; }
+  .kontakt-form-card .btn { border: 0; cursor: pointer; font: inherit; font-weight: bold; margin-top: 0.3rem; }
+
+  /* Spam-Falle: für Menschen unsichtbar, Bots füllen das Feld aus */
+  .hp { position: absolute; left: -9999px; }
 </style>
 
 <h1>Kontakt &amp; Ansprechpartner</h1>
@@ -55,42 +51,55 @@
 <div class="kontakt-grid">
 
   <!-- Ansprechpartner & Spielort -->
-  <div>
-    <div class="ansprechpartner-card" style="margin-bottom: 1.5rem;">
-      <h3 style="margin-top:0;">👥 Ansprechpartner</h3>
-      <p style="margin-bottom:0.5rem;"><strong>1. Vorstand / Vereinsanfragen:</strong><br>
-      <a href="mailto:info@sg-afk.de" style="color:#3498db;">info@sg-afk.de</a></p>
+  <div class="kontakt-spalte">
+    <div class="kontakt-card">
+      <h2><span aria-hidden="true">👥</span> Ansprechpartner</h2>
+      <p><strong>1. Vorstand / Vereinsanfragen:</strong><br>
+      <a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
 
-      <p style="margin-bottom:0.5rem;"><strong>Jugendleitung / Jugendtraining:</strong><br>
-      <a href="mailto:jugend@sg-afk.de" style="color:#3498db;">jugend@sg-afk.de</a></p>
+      <p><strong>Jugendleitung / Jugendtraining:</strong><br>
+      <a href="mailto:jugend@sg-afk.de">jugend@sg-afk.de</a></p>
 
-      <p style="margin-bottom:0;"><strong>Mannschaftsspielbetrieb:</strong><br>
-      <a href="mailto:spielleiter@sg-afk.de" style="color:#3498db;">spielleiter@sg-afk.de</a></p>
+      <p><strong>Mannschaftsspielbetrieb:</strong><br>
+      <a href="mailto:spielleiter@sg-afk.de">spielleiter@sg-afk.de</a></p>
     </div>
 
-    <div class="ansprechpartner-card" style="border-left-color: #e67e22;">
-      <h3 style="margin-top:0;">📍 Spielort &amp; Zeiten</h3>
-      <p style="font-size:0.9rem;"><strong>Gymnasium Kirchheim</strong><br>
+    <div class="kontakt-card ort">
+      <h2><span aria-hidden="true">📍</span> Spielort &amp; Zeiten</h2>
+      <p><strong>Gymnasium Kirchheim</strong><br>
       Heimstettner Str. 3, 85551 Kirchheim</p>
-      <p style="font-size:0.85rem;"><strong>Jeden Freitag:</strong><br>
-      • 18:00 – 19:30 Uhr: Jugendtraining<br>
-      • Ab 19:30 Uhr: Erwachsene &amp; allgemeiner Spielabend</p>
-      <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#e67e22; display:inline-block; font-size:0.85rem; padding:0.5rem 1rem; color:white; text-decoration:none; border-radius:4px;">📍 Auf Google Maps öffnen</a>
+      <p><strong>Jeden Freitag:</strong></p>
+      <ul>
+        <li><strong>18:00 – 19:30 Uhr:</strong> Jugendtraining</li>
+        <li><strong>ab 19:30 Uhr:</strong> Spielabend für Erwachsene (schon ab 18:00 Uhr willkommen)</li>
+      </ul>
+      <div class="btn-row">
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn btn-outline"><span aria-hidden="true">📍</span> Auf Google Maps öffnen</a>
+      </div>
+      <p style="margin-top:0.8rem;"><a href="neu-hier.html">Neu hier? So kommst du vorbei →</a></p>
     </div>
   </div>
 
   <!-- Kontaktformular -->
   <div class="kontakt-form-card">
-    <h3 style="margin-top:0;">✉️ Nachricht senden</h3>
-    <form action="https://formspree.io/f/xbjnopqr" method="POST"> <!-- Formspree oder Mailto-URL eintragen -->
+    <h2><span aria-hidden="true">✉️</span> Nachricht senden</h2>
+    <!-- TODO: Formspree-Adresse prüfen. Sie muss zu EUREM Formspree-Konto gehören,
+         sonst kommen Nachrichten nirgends an. Der Dienst muss außerdem in der
+         Datenschutzerklärung (impressum.html) genannt sein. -->
+    <form action="https://formspree.io/f/xbjnopqr" method="POST">
+      <input type="hidden" name="_subject" value="Neue Nachricht über die Vereinswebsite">
+      <div class="hp" aria-hidden="true">
+        <label>Dieses Feld bitte leer lassen <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+      </div>
+
       <div class="form-group">
         <label for="name">Dein Name:</label>
-        <input type="text" id="name" name="name" required placeholder="z. B. Max Mustermann">
+        <input type="text" id="name" name="name" required autocomplete="name" placeholder="z. B. Max Mustermann">
       </div>
 
       <div class="form-group">
         <label for="email">Deine E-Mail-Adresse:</label>
-        <input type="email" id="email" name="email" required placeholder="max@example.de">
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="max@example.de">
       </div>
 
       <div class="form-group">
@@ -103,7 +112,12 @@
         <textarea id="nachricht" name="nachricht" rows="5" required placeholder="Deine Nachricht an uns..."></textarea>
       </div>
 
-      <button type="submit" class="btn-submit">Nachricht absenden</button>
+      <div class="form-group form-check">
+        <input type="checkbox" id="datenschutz" name="datenschutz" required>
+        <label for="datenschutz">Ich habe die <a href="impressum.html">Hinweise zum Datenschutz</a> gelesen und bin einverstanden, dass meine Angaben zur Beantwortung meiner Anfrage über den Dienst Formspree an den Verein übermittelt werden.</label>
+      </div>
+
+      <button type="submit" class="btn">Nachricht absenden</button>
     </form>
   </div>
 

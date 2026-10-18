@@ -1,10 +1,18 @@
-<h1>Unsere Mannschaften &amp; Liga-Ergebnisse</h1>
-<p>Hier findest du die Links zu den aktuellen Tabellen und Ergebnissen unserer Teams in der laufenden Saison.</p>
+<style>
+  .team-grid .card { display: flex; flex-direction: column; }
+  .team-grid .card h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; margin-bottom: 0.4rem; }
+  .team-tag { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; }
+  .team-klasse { margin: 0 0 1rem; color: #555; }
+  .team-grid .card .btn { margin-top: auto; align-self: flex-start; }
+</style>
 
-<div class="grid-Mannschaften" id="mannschaften">
+<h1>Unsere Mannschaften &amp; Liga-Ergebnisse</h1>
+<p>Hier findest du die Links zu den aktuellen Tabellen und Ergebnissen unserer Teams in der laufenden Saison<span id="saison-label"></span>. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.</p>
+
+<div class="grid-3 team-grid" id="mannschaften">
   <noscript>
-    <p>Bitte aktiviere JavaScript oder besuche direkt die Seite des
-      <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener">Schachbezirks München</a>.</p>
+    <p>Diese Übersicht braucht JavaScript. Alle Ligen findest du auch direkt beim
+      <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener">Schachbezirk München</a>.</p>
   </noscript>
 </div>
 
@@ -13,20 +21,22 @@
   //  HIER PFLEGEN: Pro neuer Saison nur diese Werte anpassen
   // ============================================================
   const SAISON = 16;
+  const SAISON_LABEL = "2026/27";   // nur zur Anzeige, bitte prüfen
   const ITEMID = 4164;
   const BASIS  = "https://schachbezirk-muenchen.de/component/clm/";
 
   // liga = Liga-Nummer, tlnr = Mannschaftsnummer in dieser Liga
   // klasse = Spielklasse (optional, z. B. "Bezirksliga A")
+  // kurz = Kürzel wie im Spielplan (AFK 1 ...)
   // liga: null  ->  Karte ohne Link ("wird nachgetragen")
   const MANNSCHAFTEN = [
-    { name: "1. Mannschaft",     liga: 340,  tlnr: 3, klasse: "Bezirksliga" },
-    { name: "2. Mannschaft",     liga: 341,  tlnr: 8, klasse: "A-Klasse" },
-    { name: "3. Mannschaft",     liga: 344,  tlnr: 8, klasse: "B-Klasse" },
-    { name: "4. Mannschaft",     liga: 345,  tlnr: 3, klasse: "C-Klasse" },
-    { name: "5. Mannschaft",     liga: 347,  tlnr: 3, klasse: "D-Klasse" },
-    { name: "6. Mannschaft",     liga: 348,  tlnr: 6, klasse: "E-Klasse" },
-    { name: "Jugendmannschaften", liga: null, tlnr: null, klasse: "Jugendrunden", jugend: true },
+    { name: "1. Mannschaft",      kurz: "AFK 1",  liga: 340,  tlnr: 3, klasse: "Bezirksliga" },
+    { name: "2. Mannschaft",      kurz: "AFK 2",  liga: 341,  tlnr: 8, klasse: "A-Klasse" },
+    { name: "3. Mannschaft",      kurz: "AFK 3",  liga: 344,  tlnr: 8, klasse: "B-Klasse" },
+    { name: "4. Mannschaft",      kurz: "AFK 4",  liga: 345,  tlnr: 3, klasse: "C-Klasse" },
+    { name: "5. Mannschaft",      kurz: "AFK 5",  liga: 347,  tlnr: 3, klasse: "D-Klasse" },
+    { name: "6. Mannschaft",      kurz: "AFK 6",  liga: 348,  tlnr: 6, klasse: "E-Klasse" },
+    { name: "Jugendmannschaften", kurz: "Jugend", liga: null, tlnr: null, klasse: "Jugendrunden", jugend: true },
   ];
   // ============================================================
 
@@ -41,6 +51,8 @@
     return BASIS + "?" + p.toString();
   }
 
+  document.getElementById("saison-label").textContent = " (Saison " + SAISON_LABEL + ")";
+
   const container = document.getElementById("mannschaften");
 
   MANNSCHAFTEN.forEach((m) => {
@@ -48,11 +60,18 @@
     card.className = "card";
 
     const h3 = document.createElement("h3");
-    h3.textContent = m.name;
+    h3.appendChild(document.createTextNode(m.name));
+    if (m.kurz) {
+      const tag = document.createElement("span");
+      tag.className = "team-tag";
+      tag.textContent = m.kurz;
+      h3.appendChild(tag);
+    }
     card.appendChild(h3);
 
     if (m.klasse) {
       const p = document.createElement("p");
+      p.className = "team-klasse";
       p.textContent = m.klasse;
       card.appendChild(p);
     }
@@ -64,11 +83,13 @@
       a.rel = "noopener";
       a.className = "btn";
       a.textContent = m.jugend ? "Jugend-Ergebnisse öffnen" : "Tabelle & Ergebnisse";
+      // Der sichtbare Text steht am Anfang des Labels (Screenreader / Sprachsteuerung)
       a.setAttribute("aria-label",
-        (m.jugend ? "Ergebnisse der " : "Tabelle der ") + m.name + " (öffnet in neuem Tab)");
+        a.textContent + (m.jugend ? "" : " der " + m.name) + " (neuer Tab)");
       card.appendChild(a);
     } else {
       const p = document.createElement("p");
+      p.className = "team-klasse";
       p.textContent = "Liga wird nachgetragen.";
       card.appendChild(p);
     }

@@ -19,14 +19,17 @@
     let m = mitglieder-db.at(id, default: (Vorname: id, Nachname: ""))
     let voller-name = m.Vorname + " " + m.Nachname
 
-    // Punkte für jedes Turnier einsammeln
+    // Punkte und Teilnahme für jedes Turnier einsammeln
     let spieler-punkte = ()
+    let spieler-teilnahme = ()
+
     for t in turniere-liste {
-      // Nutzt deine bestehende punkte()-Funktion
       spieler-punkte.push(punkte(id, t.daten))
+      // True, wenn der Spieler im Turnier-Dictionary steht (auch mit 0 Punkten)
+      spieler-teilnahme.push(t.daten.keys().contains(id))
     }
 
-    // Top-3 Regel: Absteigend sortieren, max. 3 nehmen und summieren
+    // Top-3 Regel: Absteigend sortieren, max. 3 nehmen und summieren (Fehlende Turniere/0 Pkt ändern nichts)
     let sorted-p = spieler-punkte.sorted(key: x => -x)
     let top3 = sorted-p.slice(0, calc.min(3, sorted-p.len()))
     let summe = top3.fold(0, (acc, val) => acc + val)
@@ -35,6 +38,7 @@
       id: id,
       name: voller-name,
       einzel: spieler-punkte,
+      teilnahme: spieler-teilnahme,
       summe: summe
     ))
   }
