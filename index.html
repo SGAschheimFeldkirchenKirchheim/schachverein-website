@@ -87,6 +87,19 @@
       .ev-teams { margin-top: 0.4rem; }
       .pill { display: inline-block; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.1rem 0.7rem; font-size: 0.85rem; font-weight: bold; margin: 0.2rem 0.3rem 0 0; }
       .ev-legend { font-size: 0.85rem; color: #555; margin: 0.9rem 0 0; }
+      .events-empty { margin: 0.5rem 0 0; }
+      .events-empty[hidden] { display: none; }
+
+      a.event-card { display: block; color: inherit; text-decoration: none; }
+      a.event-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .spielabend-note { display: inline-block; margin-top: 0.2rem; font-weight: normal; font-size: 0.9rem; }
+
+      @media (max-width: 600px) {
+        .stats { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        .stats li { padding: 0.6rem 0.4rem; }
+        .stats strong { font-size: 1.25rem; }
+        .stats span { font-size: 0.8rem; }
+      }
 
       .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1rem; }
       .news-grid .card { margin-bottom: 0 !important; }
@@ -162,7 +175,7 @@
       <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
     </section>
 
-    <ul class="stats"><li><a href="https://www.schachbund.de/dwz-vereine/22061.html" target="_blank" rel="noopener"><strong>103</strong><span>Mitglieder</span></a></li><li><a href="mannschaften.html"><strong>6</strong><span>Mannschaften</span></a></li><li><a href="neu-hier.html"><strong>Freitag</strong><span>Spielabend &amp; Jugendtraining</span></a></li></ul>
+    <ul class="stats"><li><a href="https://www.schachbund.de/dwz-vereine/22061.html" target="_blank" rel="noopener"><strong>103</strong><span>Mitglieder</span></a></li><li><a href="mannschaften.html"><strong>6</strong><span>Mannschaften</span></a></li></ul>
 
     <section>
       <div class="section-head">
@@ -170,29 +183,50 @@
         <a href="termine.html">Termine ansehen →</a>
       </div>
       <p class="spielabend" id="spielabend" hidden></p>
-      <div class="events-grid">
+      <div class="events-grid" data-max="4">
         
-        <div class="event-card" data-date="2026-10-21">
+        <a class="event-card" href="termine.html" data-date="2026-10-21">
           <div class="ev-date">21.10. Mi, 19:00 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">MMM Runde 1</div>
           <div class="ev-teams"><span class="pill">AFK 5</span></div>
-        </div>
-        <div class="event-card" data-date="2026-10-22">
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-10-22">
           <div class="ev-date">22.10. Do, 19:30 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">MMM Runde 1</div>
           <div class="ev-teams"><span class="pill">AFK 1</span></div>
-        </div>
-        <div class="event-card" data-date="2026-10-23">
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-10-23">
           <div class="ev-date">23.10. Fr, 19:30 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">MMM Runde 1</div>
           <div class="ev-teams"><span class="pill">AFK 2</span><span class="pill">AFK 3</span><span class="pill">AFK 4</span></div>
-        </div>
-        <div class="event-card" data-date="2026-10-28">
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-10-28">
           <div class="ev-date">28.10. Mi, 19:00 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">MSMM Runde 1</div>
           <div class="ev-teams"><span class="pill">Senioren</span></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-06">
+          <div class="ev-date">06.11. Fr <span class="ev-rel"></span></div>
+          <div class="ev-title">Vereinsabend (Herbstferien)</div>
+          
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-10">
+          <div class="ev-date">10.11. Di, 19:30 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 2 (AFK 3)<br>MMM Runde 1 (AFK 6)</div>
+          
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-13">
+          <div class="ev-date">13.11. Fr, 19:30 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 2</div>
+          <div class="ev-teams"><span class="pill">AFK 1</span><span class="pill">AFK 2</span><span class="pill">AFK 4</span><span class="pill">AFK 5</span></div>
+        </a>
+        <div class="event-card" data-date="2026-11-20">
+          <div class="ev-date">20.11. Fr <span class="ev-rel"></span></div>
+          <div class="ev-title"><a href="https://www.mathenacht.de/" target="_blank" rel="noopener">Nacht der Mathematik</a></div>
+          
         </div>
       </div>
+      <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
       <p class="ev-legend"><strong>MMM</strong> = Münchner Mannschaftsmeisterschaft · <strong>MSMM</strong> = Münchner Senioren-Mannschaftsmeisterschaft</p>
     </section>
 
@@ -227,30 +261,78 @@
     <script>
 (function () {
   var today = new Date(); today.setHours(0, 0, 0, 0);
+  var AUSFALL = [];   // Spielabend-Ausfälle aus ausfall.txt
+
+  function two(x) { return ("0" + x).slice(-2); }
+  function iso(d) { return d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()); }
+  function dm(d) { return two(d.getDate()) + "." + two(d.getMonth() + 1) + "."; }
   function rel(d) {
     var n = Math.round((d - today) / 86400000);
     if (n === 0) return "heute";
     if (n === 1) return "morgen";
     return "in " + n + " Tagen";
   }
-  function two(x) { return ("0" + x).slice(-2); }
+  function blocked(d) {
+    var s = iso(d);
+    for (var i = 0; i < AUSFALL.length; i++) {
+      if (s >= AUSFALL[i].start && s <= AUSFALL[i].end) return AUSFALL[i];
+    }
+    return null;
+  }
 
-  var first = true;
+  // Termin-Karten: vergangene ausblenden, nur die ersten N zeigen
+  var grid = document.querySelector(".events-grid");
+  var max = (grid && parseInt(grid.dataset.max, 10)) || 4;
+  var total = 0, shown = 0;
   document.querySelectorAll(".event-card[data-date]").forEach(function (c) {
+    total++;
     var p = c.dataset.date.split("-");
     var d = new Date(+p[0], p[1] - 1, +p[2]);
-    if (d < today) { c.style.display = "none"; return; }
+    if (d < today || shown >= max) { c.style.display = "none"; return; }
     var r = c.querySelector(".ev-rel");
     if (r) r.textContent = rel(d);
-    if (first) { c.classList.add("next"); first = false; }
+    if (shown === 0) c.classList.add("next");
+    shown++;
   });
+  var empty = document.getElementById("events-empty");
+  if (empty && total > 0 && shown === 0) empty.hidden = false;
 
-  var f = new Date(today);
-  f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
+  // Nächster Spielabend: jeden Freitag, außer an Ausfalltagen
   var el = document.getElementById("spielabend");
   if (el) {
-    el.textContent = "🗓️ Nächster Spielabend: Freitag, " + two(f.getDate()) + "." + two(f.getMonth() + 1) +
-                     ". ab 18:00 Uhr (" + rel(f) + ")";
+    var f = new Date(today);
+    f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
+    var skipped = [];
+    var hit = blocked(f);
+    while (hit && skipped.length < 30) {
+      skipped.push({ d: new Date(f), reason: hit.reason });
+      f.setDate(f.getDate() + 7);
+      hit = blocked(f);
+    }
+
+    el.textContent = "";
+    var icon = document.createElement("span");
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = "🗓️ ";
+    el.appendChild(icon);
+
+    if (hit) {
+      el.appendChild(document.createTextNode("Aktuell kein Spielabend" + (hit.reason ? ": " + hit.reason : "")));
+    } else {
+      el.appendChild(document.createTextNode(
+        "Nächster Spielabend: Freitag, " + dm(f) + " ab 18:00 Uhr (" + rel(f) + ")"));
+      if (skipped.length) {
+        var first = skipped[0], last = skipped[skipped.length - 1];
+        var why = first.reason ? " (" + first.reason + ")" : "";
+        var note = document.createElement("span");
+        note.className = "spielabend-note";
+        note.textContent = skipped.length === 1
+          ? "Am " + dm(first.d) + " kein Spielabend" + why
+          : "Vom " + dm(first.d) + " bis " + dm(last.d) + " kein Spielabend" + why;
+        el.appendChild(document.createElement("br"));
+        el.appendChild(note);
+      }
+    }
     el.hidden = false;
   }
 })();

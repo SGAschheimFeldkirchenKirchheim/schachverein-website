@@ -1,0 +1,12 @@
+# Tage, an denen KEIN Spielabend stattfindet.
+# Die Startseite überspringt diese Freitage beim "Nächsten Spielabend"
+# und weist darauf hin. Vergangene Einträge werden automatisch ignoriert.
+#
+# Eine Zeile pro Eintrag, Grund hinter dem "=" ist optional:
+#   25.12.2026 = Weihnachten
+#   24.12.2026 - 08.01.2027 = Weihnachtsferien
+#
+# Datum als TT.MM.JJJJ oder JJJJ-MM-TT. Zeilen mit # am Anfang sind Kommentare.
+# Beispiele (ohne # davor aktiv):
+# 25.12.2026 = Weihnachten
+# 01.01.2027 = Neujahr

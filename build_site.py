@@ -22,8 +22,12 @@ except ImportError:  # sehr alte Python-Versionen
 #          (Farben, klickbare Links, volle Breite, am Handy besser lesbar)
 USE_SVG_FOR_TERMINE = False
 
-# Wie viele "Nächste Termine" auf der Startseite erscheinen
-NEXT_EVENTS_COUNT = 4
+# Wie viele kommende Termine beim Build in die Startseite geschrieben werden (Reserve:
+# vergangene Karten blendet der Browser aus, auch wenn die Seite länger nicht neu gebaut wurde)
+NEXT_EVENTS_COUNT = 8
+
+# Wie viele Termin-Karten gleichzeitig sichtbar sind
+HOME_EVENTS_VISIBLE = 4
 
 # Öffentliche Adresse der Seite (für Kalender-Links)
 SITE_URL = "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/"
@@ -1376,7 +1380,6 @@ MEMBER_FALLBACK = "80+"                  # falls Abruf scheitert und noch kein C
 STATS = [
     ("{members}", "Mitglieder", DSB_VEREIN_URL),
     ("6", "Mannschaften", "mannschaften.html"),
-    ("Freitag", "Spielabend &amp; Jugendtraining", "neu-hier.html"),
 ]
 
 # Wird im Browser ausgeführt, damit "heute / in 3 Tagen" und der nächste
@@ -1384,30 +1387,78 @@ STATS = [
 HOME_JS = """<script>
 (function () {
   var today = new Date(); today.setHours(0, 0, 0, 0);
+  var AUSFALL = __AUSFALL__;   // Spielabend-Ausfälle aus ausfall.txt
+
+  function two(x) { return ("0" + x).slice(-2); }
+  function iso(d) { return d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()); }
+  function dm(d) { return two(d.getDate()) + "." + two(d.getMonth() + 1) + "."; }
   function rel(d) {
     var n = Math.round((d - today) / 86400000);
     if (n === 0) return "heute";
     if (n === 1) return "morgen";
     return "in " + n + " Tagen";
   }
-  function two(x) { return ("0" + x).slice(-2); }
+  function blocked(d) {
+    var s = iso(d);
+    for (var i = 0; i < AUSFALL.length; i++) {
+      if (s >= AUSFALL[i].start && s <= AUSFALL[i].end) return AUSFALL[i];
+    }
+    return null;
+  }
 
-  var first = true;
+  // Termin-Karten: vergangene ausblenden, nur die ersten N zeigen
+  var grid = document.querySelector(".events-grid");
+  var max = (grid && parseInt(grid.dataset.max, 10)) || 4;
+  var total = 0, shown = 0;
   document.querySelectorAll(".event-card[data-date]").forEach(function (c) {
+    total++;
     var p = c.dataset.date.split("-");
     var d = new Date(+p[0], p[1] - 1, +p[2]);
-    if (d < today) { c.style.display = "none"; return; }
+    if (d < today || shown >= max) { c.style.display = "none"; return; }
     var r = c.querySelector(".ev-rel");
     if (r) r.textContent = rel(d);
-    if (first) { c.classList.add("next"); first = false; }
+    if (shown === 0) c.classList.add("next");
+    shown++;
   });
+  var empty = document.getElementById("events-empty");
+  if (empty && total > 0 && shown === 0) empty.hidden = false;
 
-  var f = new Date(today);
-  f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
+  // Nächster Spielabend: jeden Freitag, außer an Ausfalltagen
   var el = document.getElementById("spielabend");
   if (el) {
-    el.textContent = "🗓️ Nächster Spielabend: Freitag, " + two(f.getDate()) + "." + two(f.getMonth() + 1) +
-                     ". ab 18:00 Uhr (" + rel(f) + ")";
+    var f = new Date(today);
+    f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
+    var skipped = [];
+    var hit = blocked(f);
+    while (hit && skipped.length < 30) {
+      skipped.push({ d: new Date(f), reason: hit.reason });
+      f.setDate(f.getDate() + 7);
+      hit = blocked(f);
+    }
+
+    el.textContent = "";
+    var icon = document.createElement("span");
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = "🗓️ ";
+    el.appendChild(icon);
+
+    if (hit) {
+      el.appendChild(document.createTextNode("Aktuell kein Spielabend" + (hit.reason ? ": " + hit.reason : "")));
+    } else {
+      el.appendChild(document.createTextNode(
+        "Nächster Spielabend: Freitag, " + dm(f) + " ab 18:00 Uhr (" + rel(f) + ")"));
+      if (skipped.length) {
+        var first = skipped[0], last = skipped[skipped.length - 1];
+        var why = first.reason ? " (" + first.reason + ")" : "";
+        var note = document.createElement("span");
+        note.className = "spielabend-note";
+        note.textContent = skipped.length === 1
+          ? "Am " + dm(first.d) + " kein Spielabend" + why
+          : "Vom " + dm(first.d) + " bis " + dm(last.d) + " kein Spielabend" + why;
+        el.appendChild(document.createElement("br"));
+        el.appendChild(note);
+      }
+    }
     el.hidden = false;
   }
 })();
@@ -1463,6 +1514,52 @@ def find_logo():
     return next((f for f in os.listdir(".") if f.lower() == "logo.png"), None)
 
 
+def _parse_any_date(text):
+    """'2026-12-25' oder '25.12.2026' -> date, sonst None."""
+    t = text.strip()
+    m = re.fullmatch(r'(\d{4})-(\d{1,2})-(\d{1,2})', t)
+    if m:
+        y, mo, d = map(int, m.groups())
+    else:
+        m = re.fullmatch(r'(\d{1,2})\.(\d{1,2})\.(\d{4})', t)
+        if not m:
+            return None
+        d, mo, y = map(int, m.groups())
+    try:
+        return datetime.date(y, mo, d)
+    except ValueError:
+        return None
+
+
+def read_ausfall(path="ausfall.txt"):
+    """
+    Liest Tage, an denen KEIN Spielabend stattfindet. Eine Zeile pro Eintrag:
+        25.12.2026 = Weihnachten
+        24.12.2026 - 08.01.2027 = Weihnachtsferien
+    Datum als TT.MM.JJJJ oder JJJJ-MM-TT, Zeilen mit # am Anfang sind Kommentare.
+    Rückgabe: Liste mit start/end (ISO-Datum) und reason; vergangene Einträge fallen weg.
+    """
+    if not os.path.exists(path):
+        return []
+    result = []
+    with open(path, "r", encoding="utf-8-sig") as f:
+        for raw in f:
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            datepart, _, reason = line.partition("=")
+            parts = re.split(r'\s+(?:-|–|bis)\s+', datepart.strip())
+            start = _parse_any_date(parts[0])
+            end = _parse_any_date(parts[-1]) if len(parts) > 1 else start
+            if not start or not end or end < start:
+                print(f"Hinweis: ausfall.txt – Zeile nicht lesbar: {line}")
+                continue
+            if end < TODAY:
+                continue
+            result.append({"start": start.isoformat(), "end": end.isoformat(), "reason": reason.strip()})
+    return result
+
+
 def stats_html():
     members = fetch_member_count()
     items = []
@@ -1491,18 +1588,28 @@ def event_card_html(ev):
     if ev["who"]:
         pills = "".join(f'<span class="pill">{t.strip()}</span>' for t in ev["who"].split(","))
         teams = f'<div class="ev-teams">{pills}</div>'
-    return f"""
-        <div class="event-card" data-date="{ev['date'].isoformat()}">
+    date_attr = ev["date"].isoformat()
+    inner = f"""
           <div class="ev-date">{ev["when"]} <span class="ev-rel"></span></div>
           <div class="ev-title">{ev["title"]}</div>
-          {teams}
+          {teams}"""
+    # Enthält die Karte schon einen Link (z. B. zur Ausschreibung), bleibt sie ein <div>,
+    # sonst ist die ganze Karte ein Link zum Spielplan (Links dürfen nicht verschachtelt sein).
+    if "<a " in ev["when"] + ev["title"]:
+        return f"""
+        <div class="event-card" data-date="{date_attr}">{inner}
         </div>"""
+    return f"""
+        <a class="event-card" href="termine.html" data-date="{date_attr}">{inner}
+        </a>"""
 
 
 def build_index(upcoming_events, home_news_snippets):
     news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
     event_cards = "".join(event_card_html(ev) for ev in upcoming_events) or "<p>Keine anstehenden Termine gefunden.</p>"
     legend = legend_html(upcoming_events)
+    ausfall_json = json.dumps(read_ausfall(), ensure_ascii=False).replace("<", "\\u003c")
+    home_js = HOME_JS.replace("__AUSFALL__", ausfall_json)
 
     logo_file = find_logo()
     hero_logo = (f'<img src="{logo_file}" alt="Wappen der SG Aschheim / Feldkirchen / Kirchheim" class="hero-logo">'
@@ -1544,9 +1651,10 @@ def build_index(upcoming_events, home_news_snippets):
         <a href="termine.html">Termine ansehen →</a>
       </div>
       <p class="spielabend" id="spielabend" hidden></p>
-      <div class="events-grid">
+      <div class="events-grid" data-max="{HOME_EVENTS_VISIBLE}">
         {event_cards}
       </div>
+      <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
       {legend}
     </section>
 
@@ -1571,7 +1679,7 @@ def build_index(upcoming_events, home_news_snippets):
       </div>
     </section>
 
-    {HOME_JS}
+    {home_js}
     """
 
     styles = """<style>""" + HINWEIS_CSS + """
@@ -1613,6 +1721,19 @@ def build_index(upcoming_events, home_news_snippets):
       .ev-teams { margin-top: 0.4rem; }
       .pill { display: inline-block; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.1rem 0.7rem; font-size: 0.85rem; font-weight: bold; margin: 0.2rem 0.3rem 0 0; }
       .ev-legend { font-size: 0.85rem; color: #555; margin: 0.9rem 0 0; }
+      .events-empty { margin: 0.5rem 0 0; }
+      .events-empty[hidden] { display: none; }
+
+      a.event-card { display: block; color: inherit; text-decoration: none; }
+      a.event-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .spielabend-note { display: inline-block; margin-top: 0.2rem; font-weight: normal; font-size: 0.9rem; }
+
+      @media (max-width: 600px) {
+        .stats { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        .stats li { padding: 0.6rem 0.4rem; }
+        .stats strong { font-size: 1.25rem; }
+        .stats span { font-size: 0.8rem; }
+      }
 
       .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1rem; }
       .news-grid .card { margin-bottom: 0 !important; }
