@@ -43,6 +43,23 @@ ABBREVIATIONS = {
     "MSMM": "Münchner Senioren-Mannschaftsmeisterschaft",
 }
 
+# Meta-Beschreibung (Google, WhatsApp-Vorschau). Standard für alle Seiten ohne eigenen Eintrag.
+DEFAULT_DESCRIPTION = "Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag."
+
+# Eigene Beschreibung pro Seite (Schlüssel = Dateiname). Fehlt eine Seite, gilt der Standard.
+PAGE_DESCRIPTIONS = {
+    "termine.html": "Spielplan und Termine der SG Aschheim/Feldkirchen/Kirchheim: Mannschaftskämpfe, Turniere und Vereinsabende, mit Kalender-Abo fürs Handy.",
+    "mannschaften.html": "Unsere Mannschaften mit Links zu Ligen, Tabellen und Ergebnissen.",
+    "berichte.html": "Aktuelle Berichte und News aus dem Vereinsleben der SG AFK: Turniere, Mannschaftskämpfe und mehr.",
+    "turniere.html": "Turniere der SG AFK: Oberlandquartett, Blitzjahreswertung, Hall of Fame und Ausschreibungen.",
+    "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
+    "kontakt.html": "Kontakt und Anfahrt zur SG Aschheim/Feldkirchen/Kirchheim im Gymnasium Kirchheim.",
+    "ausschreibungen.html": "Alle Turnierausschreibungen der SG AFK als PDF zum Ansehen und Herunterladen.",
+    "oberlandquartett.html": "Ergebnisse und Pokalstand des Oberlandquartetts.",
+    "blitzjahreswertung.html": "Gesamtwertung der Blitzjahreswertung der SG AFK.",
+    "vereinsintern.html": "Vereinsmeister und Sieger der vereinsinternen Turniere: die Hall of Fame der SG AFK.",
+}
+
 # Favicon, solange es kein logo.png im Hauptverzeichnis gibt (Emoji als SVG)
 FAVICON_EMOJI = '''<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E♟️%3C/text%3E%3C/svg%3E">'''
 
@@ -90,6 +107,10 @@ GLOBAL_CSS = """<style>
         --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
       }
 
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
       header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
       header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
 
@@ -133,7 +154,7 @@ def build_nav(nav_path, active):
     return "\n      ".join(links)
 
 
-def render_page(title, content, filename, css_path="", nav_path="", extra_styles=""):
+def render_page(title, content, filename, css_path="", nav_path="", extra_styles="", description=None):
     template_path = os.path.join("templates", "base.html")
     if not os.path.exists(template_path):
         print(f"Fehler: Template {template_path} nicht gefunden!")
@@ -147,14 +168,24 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         name = "berichte.html"          # Einzelberichte -> Reiter "Berichte"
     active = ACTIVE_PARENT.get(name, name)
 
+    # Beschreibung: explizit übergeben > Eintrag in PAGE_DESCRIPTIONS > Standard
+    desc_src = description or PAGE_DESCRIPTIONS.get(name) or DEFAULT_DESCRIPTION
+    desc = htmllib.escape(plain_text(desc_src), quote=True)
+
     # Logo und Favicon: nehmen logo.png (Groß-/Kleinschreibung egal), falls vorhanden
     logo_file = next((f for f in os.listdir(".") if f.lower() == "logo.png"), None)
     if logo_file:
         logo = f'<img src="{css_path}{logo_file}" alt="" class="brand-logo">'
         head_icon = f'<link rel="icon" href="{css_path}{logo_file}">'
+        # Für die Vorschau in WhatsApp & Co. muss die Bild-Adresse absolut sein
+        og_image_tag = (
+            f'<meta property="og:image" content="{SITE_URL}{quote(logo_file)}">\n'
+            '  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">'
+        )
     else:
         logo = ""
         head_icon = FAVICON_EMOJI
+        og_image_tag = ""
 
     full_html = template.format(
         title=title,
@@ -165,6 +196,8 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         extra_styles=GLOBAL_CSS + extra_styles,
         logo=logo,
         head_icon=head_icon,
+        description=desc,
+        og_image_tag=og_image_tag,
     )
 
     with open(filename, "w", encoding="utf-8") as f:
@@ -566,13 +599,13 @@ def calendar_box_html(feeds):
         https_url = f'{SITE_URL}kalender/{fname}'
         rows.append(
             f'<li><strong>{label}</strong> '
-            f'<a href="{webcal_base}kalender/{fname}">📲 Abonnieren</a> '
+            f'<a href="{webcal_base}kalender/{fname}"><span aria-hidden="true">📲</span> Abonnieren</a> '
             f'<a href="{https_url}" data-url="{https_url}" '
-            f'onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent=\'✓ Link kopiert\';return false;">🔗 Link kopieren</a></li>'
+            f'onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent=\'✓ Link kopiert\';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li>'
         )
     return f"""
     <details class="kalender-box">
-      <summary>📆 Termine im Handy-Kalender abonnieren</summary>
+      <summary><span aria-hidden="true">📆</span> Termine im Handy-Kalender abonnieren</summary>
       <p>Der Kalender aktualisiert sich automatisch, wenn sich der Spielplan ändert.
          <strong>iPhone / Mac / Outlook:</strong> „Abonnieren" antippen.
          <strong>Google Kalender:</strong> „Link kopieren" und in Google Kalender unter „Weitere Kalender → Per URL" einfügen.</p>
@@ -590,7 +623,7 @@ def read_hinweis():
         lines = [htmllib.escape(l.strip()) for l in f.read().splitlines() if l.strip()]
     if not lines:
         return ""
-    return '<div class="hinweis-banner">📢 ' + '<br>'.join(lines) + '</div>'
+    return '<div class="hinweis-banner"><span aria-hidden="true">📢</span> ' + '<br>'.join(lines) + '</div>'
 
 
 def build_turniere_overview():
@@ -601,25 +634,25 @@ def build_turniere_overview():
     <div class="grid-3" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-top:2rem;">
       
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #3498db; border-radius:6px;">
-        <h2>🏆 Oberlandquartett</h2>
+        <h2><span aria-hidden="true">🏆</span> Oberlandquartett</h2>
         <p>Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.</p>
         <a href="oberlandquartett.html" class="btn" style="background:#3498db; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zum Oberlandquartett →</a>
       </div>
 
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #e67e22; border-radius:6px;">
-        <h2>⚡ Blitzjahreswertung</h2>
+        <h2><span aria-hidden="true">⚡</span> Blitzjahreswertung</h2>
         <p>Die aktuelle Gesamtwertung und Zwischenstände unserer monatlichen Blitzschach-Turnierserie.</p>
         <a href="blitzjahreswertung.html" class="btn" style="background:#e67e22; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Blitzjahreswertung →</a>
       </div>
 
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #27ae60; border-radius:6px;">
-        <h2>🥇 Vereinsintern & Hall of Fame</h2>
+        <h2><span aria-hidden="true">🥇</span> Vereinsintern & Hall of Fame</h2>
         <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
         <a href="vereinsintern.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Hall of Fame →</a>
       </div>
 
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #8e44ad; border-radius:6px;">
-        <h2>📄 Ausschreibungen</h2>
+        <h2><span aria-hidden="true">📄</span> Ausschreibungen</h2>
         <p>Alle Turnierausschreibungen als PDF zum Ansehen und Herunterladen.</p>
         <a href="ausschreibungen.html" class="btn" style="background:#8e44ad; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zu den Ausschreibungen →</a>
       </div>
@@ -777,7 +810,7 @@ def build_ausschreibungen():
             stand = f" · Stand {e['date'].strftime('%d.%m.%Y')}" if e['date'] else ""
             items += f"""
             <a class="pdf-card" href="{e['url']}" target="_blank" rel="noopener">
-              <span class="pdf-icon">📄</span>
+              <span class="pdf-icon" aria-hidden="true">📄</span>
               <span class="pdf-text"><strong>{e['label']}</strong><br><small>PDF · {e['size']} KB{stand}</small></span>
             </a>"""
         body = f'<div class="pdf-grid">{items}</div>'
@@ -786,7 +819,7 @@ def build_ausschreibungen():
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-    <h1 style="margin-top:1rem;">📄 Ausschreibungen</h1>
+    <h1 style="margin-top:1rem;"><span aria-hidden="true">📄</span> Ausschreibungen</h1>
     <p>Hier findest du die Ausschreibungen unserer Turniere. Ein Klick öffnet die PDF direkt.</p>
     {body}
     """
@@ -807,7 +840,7 @@ def build_neu_hier():
 
     <div class="neu-grid">
       <div class="neu-card">
-        <h3>🕒 Wann?</h3>
+        <h3><span aria-hidden="true">🕒</span> Wann?</h3>
         <p><strong>Jeden Freitag.</strong> Das Gebäude ist ab 18:00 Uhr geöffnet.</p>
         <ul>
           <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
@@ -817,13 +850,13 @@ def build_neu_hier():
       </div>
 
       <div class="neu-card">
-        <h3>📍 Wo?</h3>
+        <h3><span aria-hidden="true">📍</span> Wo?</h3>
         <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 3<br>85551 Kirchheim</p>
-        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;">📍 Auf Google Maps öffnen</a>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;"><span aria-hidden="true">📍</span> Auf Google Maps öffnen</a>
       </div>
 
       <div class="neu-card">
-        <h3>♟️ Was erwartet dich?</h3>
+        <h3><span aria-hidden="true">♟️</span> Was erwartet dich?</h3>
         <ul>
           <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
           <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen</li>
@@ -833,9 +866,9 @@ def build_neu_hier():
       </div>
 
       <div class="neu-card">
-        <h3>📝 Mitglied werden</h3>
+        <h3><span aria-hidden="true">📝</span> Mitglied werden</h3>
         <p>Gefällt es dir bei uns? Den Mitgliedsantrag kannst du hier herunterladen:</p>
-        <a href="mitgliederantrag.pdf" download>📄 Mitgliedsantrag (PDF) →</a>
+        <a href="mitgliederantrag.pdf" download><span aria-hidden="true">📄</span> Mitgliedsantrag (PDF) →</a>
         <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
       </div>
     </div>
@@ -991,7 +1024,7 @@ def build_blitzjahreswertung():
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-    <h1 style="margin-top:1rem;">⚡ Blitzjahreswertung</h1>
+    <h1 style="margin-top:1rem;"><span aria-hidden="true">⚡</span> Blitzjahreswertung</h1>
     <div class="table-responsive">
       {table_content}
     </div>
@@ -1233,17 +1266,31 @@ def typst_to_html_article(typst_text):
     return esc(title), esc(date), esc(author), "\n".join(blocks), make_snippet(blocks)
 
 
+def is_draft_report(filepath, code, title):
+    """
+    Entwürfe und Vorlagen werden nicht veröffentlicht, wenn
+    - der Dateiname 'vorlage' enthält, oder
+    - der Titel 'Vorlage' heißt, oder
+    - irgendwo im Bericht eine Zeile '// entwurf' bzw. '// draft' steht.
+    """
+    if "vorlage" in filepath.lower():
+        return True
+    if plain_text(title).strip().lower() == "vorlage":
+        return True
+    return bool(re.search(r'(?im)^\s*//\s*(entwurf|draft)\b', code))
+
+
 def build_berichte():
     reports = []
 
     if os.path.exists("berichte"):
         for filepath in glob.glob("berichte/*.typ"):
-            if "vorlage" in filepath.lower():
-                continue
             stem = os.path.splitext(os.path.basename(filepath))[0]
             with open(filepath, "r", encoding="utf-8") as f:
                 code = f.read()
             title, date, author, body_html, snippet = typst_to_html_article(code)
+            if is_draft_report(filepath, code, title):
+                continue
             meta = date + (f" · von {author}" if author and date else (f"von {author}" if author else ""))
             reports.append({
                 'stem': stem,
@@ -1258,7 +1305,7 @@ def build_berichte():
         # Neueste zuerst (nach dem Datum im Bericht, sonst nach dem Dateinamen)
         reports.sort(key=lambda r: (r['when'], r['stem']), reverse=True)
 
-        # HTML-Dateien ohne passende .typ (z. B. gelöschte Berichte) entfernen
+        # HTML-Dateien ohne passende .typ (z. B. gelöschte Berichte oder Entwürfe) entfernen
         valid = {r['filename'] for r in reports}
         for old in glob.glob("berichte/*.html"):
             if os.path.basename(old) not in valid:
@@ -1275,7 +1322,8 @@ def build_berichte():
         <div class="article-content">{r['body']}</div>
         """
         render_page(r['title'], article_content, os.path.join("berichte", r['filename']),
-                    css_path="../", nav_path="../", extra_styles=article_styles)
+                    css_path="../", nav_path="../", extra_styles=article_styles,
+                    description=r['snippet'] or None)
 
     cards = []
     for r in reports:
@@ -1326,7 +1374,7 @@ MEMBER_FALLBACK = "80+"                  # falls Abruf scheitert und noch kein C
 # Zahlenleiste: (große Zahl/Wort, Beschriftung, Link oder None); {members} wird ersetzt
 # ACHTUNG: Mannschaftszahl bitte prüfen, nur ein Platzhalter!
 STATS = [
-    ("{members}", "Mitglieder im Schachbund", DSB_VEREIN_URL),
+    ("{members}", "Mitglieder", DSB_VEREIN_URL),
     ("6", "Mannschaften", "mannschaften.html"),
     ("Freitag", "Spielabend &amp; Jugendtraining", "neu-hier.html"),
 ]
@@ -1470,15 +1518,15 @@ def build_index(upcoming_events, home_news_snippets):
 
       <ul class="hero-facts">
         <li>
-          <strong>📅 Jeden Freitag</strong>
+          <strong><span aria-hidden="true">📅</span> Jeden Freitag</strong>
           <span>Gebäude ab 18:00 Uhr geöffnet</span>
         </li>
         <li>
-          <strong>🕒 Jugendtraining 18:00 – 19:30 Uhr</strong>
-          <span>Erwachsene &amp; Spielabend ab 19:30 Uhr, open end</span>
+          <strong><span aria-hidden="true">🕒</span> Jugendtraining 18:00 – 19:30 Uhr</strong>
+          <span>Spielabend für Erwachsene ab 19:30 Uhr, open end</span>
         </li>
         <li>
-          <strong>📍 Gymnasium Kirchheim</strong>
+          <strong><span aria-hidden="true">📍</span> Gymnasium Kirchheim</strong>
           <span>Heimstettner Str. 3, 85551 Kirchheim<br>
             <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
         </li>

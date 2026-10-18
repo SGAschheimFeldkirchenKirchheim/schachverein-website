@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Neu hier? | SG AFK</title>
   <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1a252f">
   <link rel="icon" href="Logo.png">
   <link rel="stylesheet" href="style.css">
   <style>
       :root {
         --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
       }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
 
       header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
       header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
@@ -51,8 +56,14 @@
   <meta property="og:title" content="Neu hier? | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
 </head>
 <body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <header>
     <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
@@ -60,7 +71,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav>
+    <nav aria-label="Hauptmenü">
       <a href="index.html">Start</a>
       <a href="ueber-uns.html">Über uns</a>
       <a href="mannschaften.html">Mannschaften</a>
@@ -72,14 +83,14 @@
     </nav>
   </header>
 
-  <main class="container">
+  <main id="main" class="container">
     
     <h1>Neu hier? So kommst du vorbei</h1>
     <p>Egal ob Einsteiger, Jugendlicher oder Turnierspieler: Komm einfach an einem Freitag bei uns vorbei.</p>
 
     <div class="neu-grid">
       <div class="neu-card">
-        <h3>🕒 Wann?</h3>
+        <h3><span aria-hidden="true">🕒</span> Wann?</h3>
         <p><strong>Jeden Freitag.</strong> Das Gebäude ist ab 18:00 Uhr geöffnet.</p>
         <ul>
           <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
@@ -89,13 +100,13 @@
       </div>
 
       <div class="neu-card">
-        <h3>📍 Wo?</h3>
+        <h3><span aria-hidden="true">📍</span> Wo?</h3>
         <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 3<br>85551 Kirchheim</p>
-        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;">📍 Auf Google Maps öffnen</a>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;"><span aria-hidden="true">📍</span> Auf Google Maps öffnen</a>
       </div>
 
       <div class="neu-card">
-        <h3>♟️ Was erwartet dich?</h3>
+        <h3><span aria-hidden="true">♟️</span> Was erwartet dich?</h3>
         <ul>
           <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
           <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen</li>
@@ -105,9 +116,9 @@
       </div>
 
       <div class="neu-card">
-        <h3>📝 Mitglied werden</h3>
+        <h3><span aria-hidden="true">📝</span> Mitglied werden</h3>
         <p>Gefällt es dir bei uns? Den Mitgliedsantrag kannst du hier herunterladen:</p>
-        <a href="mitgliederantrag.pdf" download>📄 Mitgliedsantrag (PDF) →</a>
+        <a href="mitgliederantrag.pdf" download><span aria-hidden="true">📄</span> Mitgliedsantrag (PDF) →</a>
         <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
       </div>
     </div>

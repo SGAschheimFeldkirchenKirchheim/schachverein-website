@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Startseite | SG AFK</title>
   <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1a252f">
   <link rel="icon" href="Logo.png">
   <link rel="stylesheet" href="style.css">
   <style>
       :root {
         --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
       }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
 
       header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
       header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
@@ -101,8 +106,14 @@
   <meta property="og:title" content="Startseite | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
 </head>
 <body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <header>
     <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
@@ -110,7 +121,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav>
+    <nav aria-label="Hauptmenü">
       <a href="index.html" aria-current="page">Start</a>
       <a href="ueber-uns.html">Über uns</a>
       <a href="mannschaften.html">Mannschaften</a>
@@ -122,7 +133,7 @@
     </nav>
   </header>
 
-  <main class="container">
+  <main id="main" class="container">
     
     
 
@@ -133,15 +144,15 @@
 
       <ul class="hero-facts">
         <li>
-          <strong>📅 Jeden Freitag</strong>
+          <strong><span aria-hidden="true">📅</span> Jeden Freitag</strong>
           <span>Gebäude ab 18:00 Uhr geöffnet</span>
         </li>
         <li>
-          <strong>🕒 Jugendtraining 18:00 – 19:30 Uhr</strong>
-          <span>Erwachsene &amp; Spielabend ab 19:30 Uhr, open end</span>
+          <strong><span aria-hidden="true">🕒</span> Jugendtraining 18:00 – 19:30 Uhr</strong>
+          <span>Spielabend für Erwachsene ab 19:30 Uhr, open end</span>
         </li>
         <li>
-          <strong>📍 Gymnasium Kirchheim</strong>
+          <strong><span aria-hidden="true">📍</span> Gymnasium Kirchheim</strong>
           <span>Heimstettner Str. 3, 85551 Kirchheim<br>
             <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
         </li>
@@ -151,7 +162,7 @@
       <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
     </section>
 
-    <ul class="stats"><li><a href="https://www.schachbund.de/dwz-vereine/22061.html" target="_blank" rel="noopener"><strong>103</strong><span>Mitglieder im Schachbund</span></a></li><li><a href="mannschaften.html"><strong>6</strong><span>Mannschaften</span></a></li><li><a href="neu-hier.html"><strong>Freitag</strong><span>Spielabend &amp; Jugendtraining</span></a></li></ul>
+    <ul class="stats"><li><a href="https://www.schachbund.de/dwz-vereine/22061.html" target="_blank" rel="noopener"><strong>103</strong><span>Mitglieder</span></a></li><li><a href="mannschaften.html"><strong>6</strong><span>Mannschaften</span></a></li><li><a href="neu-hier.html"><strong>Freitag</strong><span>Spielabend &amp; Jugendtraining</span></a></li></ul>
 
     <section>
       <div class="section-head">
@@ -197,14 +208,6 @@
           <p class="news-meta">25. September 2026 · von Korbinian Ruff</p>
           <p class="news-snippet">Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt.</p>
           <a href="berichte/2026-09-herbstblitz.html">Weiterlesen →</a>
-        </div>
-        
-
-        <div class="card news-card">
-          <h3>Vorlage</h3>
-          <p class="news-meta">Datum · von Verfasser des Berichts</p>
-          <p class="news-snippet">Weihnachten ist ein besonderes Fest, das in vielen Kulturen auf der ganzen Welt gefeiert wird. Es ist eine Zeit der Freude, des Gebens und des Zusammenseins mit Familie und Freunden.</p>
-          <a href="berichte/Weihnachten.html">Weiterlesen →</a>
         </div>
         
       </div>

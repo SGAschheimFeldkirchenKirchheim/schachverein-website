@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Termine & Spielplan | SG AFK</title>
   <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1a252f">
   <link rel="icon" href="Logo.png">
   <link rel="stylesheet" href="style.css">
   <style>
       :root {
         --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
       }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
 
       header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
       header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
@@ -84,8 +89,14 @@
   <meta property="og:title" content="Termine & Spielplan | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
 </head>
 <body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <header>
     <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
@@ -93,7 +104,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav>
+    <nav aria-label="Hauptmenü">
       <a href="index.html">Start</a>
       <a href="ueber-uns.html">Über uns</a>
       <a href="mannschaften.html">Mannschaften</a>
@@ -105,16 +116,16 @@
     </nav>
   </header>
 
-  <main class="container">
+  <main id="main" class="container">
     
     <h1>Termine & Spielplan</h1>
     
     <details class="kalender-box">
-      <summary>📆 Termine im Handy-Kalender abonnieren</summary>
+      <summary><span aria-hidden="true">📆</span> Termine im Handy-Kalender abonnieren</summary>
       <p>Der Kalender aktualisiert sich automatisch, wenn sich der Spielplan ändert.
          <strong>iPhone / Mac / Outlook:</strong> „Abonnieren" antippen.
          <strong>Google Kalender:</strong> „Link kopieren" und in Google Kalender unter „Weitere Kalender → Per URL" einfügen.</p>
-      <ul><li><strong>Alle Termine</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 1</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 2</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 3</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 4</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 5</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>AFK 6</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>Senioren</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li><li><strong>Jugend</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics">📲 Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;">🔗 Link kopieren</a></li></ul>
+      <ul><li><strong>Alle Termine</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>AFK 1</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>AFK 2</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>AFK 3</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>AFK 4</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>AFK 5</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>AFK 6</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>Senioren</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li><li><strong>Jugend</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics"><span aria-hidden="true">📲</span> Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='✓ Link kopiert';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li></ul>
     </details>
     
     <div class="full-bleed">

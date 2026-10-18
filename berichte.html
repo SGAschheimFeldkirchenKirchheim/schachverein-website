@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Berichte & News | SG AFK</title>
   <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1a252f">
   <link rel="icon" href="Logo.png">
   <link rel="stylesheet" href="style.css">
   <style>
       :root {
         --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
       }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
 
       header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
       header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
@@ -50,8 +55,14 @@
   <meta property="og:title" content="Berichte & News | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
 </head>
 <body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <header>
     <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
@@ -59,7 +70,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <nav>
+    <nav aria-label="Hauptmenü">
       <a href="index.html">Start</a>
       <a href="ueber-uns.html">Über uns</a>
       <a href="mannschaften.html">Mannschaften</a>
@@ -71,21 +82,13 @@
     </nav>
   </header>
 
-  <main class="container">
+  <main id="main" class="container">
     <h1>Aktuelle Berichte &amp; News</h1><div class='grid' style='grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));'>
         <div class="card news-card">
           <h3>Spannende Duelle beim Herbstblitzturnier 2026</h3>
           <p class="news-meta">25. September 2026 · von Korbinian Ruff</p>
           <p class="news-snippet">Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt.</p>
           <a href="berichte/2026-09-herbstblitz.html" class="btn">Bericht lesen →</a>
-        </div>
-        
-
-        <div class="card news-card">
-          <h3>Vorlage</h3>
-          <p class="news-meta">Datum · von Verfasser des Berichts</p>
-          <p class="news-snippet">Weihnachten ist ein besonderes Fest, das in vielen Kulturen auf der ganzen Welt gefeiert wird. Es ist eine Zeit der Freude, des Gebens und des Zusammenseins mit Familie und Freunden.</p>
-          <a href="berichte/Weihnachten.html" class="btn">Bericht lesen →</a>
         </div>
         </div>
   </main>
