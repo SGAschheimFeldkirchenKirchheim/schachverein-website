@@ -639,13 +639,13 @@ def build_turniere_overview():
     <div class="grid-3" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-top:2rem;">
       
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #3498db; border-radius:6px;">
-        <h2><span aria-hidden="true">🏆</span> Oberlandquartett</h2>
+        <h2>Oberlandquartett</h2>
         <p>Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.</p>
         <a href="oberlandquartett.html" class="btn" style="background:#3498db; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zum Oberlandquartett →</a>
       </div>
 
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #e67e22; border-radius:6px;">
-        <h2><span aria-hidden="true">⚡</span> Blitzjahreswertung</h2>
+        <h2>Blitzjahreswertung</h2>
         <p>Die aktuelle Gesamtwertung und Zwischenstände unserer monatlichen Blitzschach-Turnierserie.</p>
         <a href="blitzjahreswertung.html" class="btn" style="background:#e67e22; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Blitzjahreswertung →</a>
       </div>
@@ -1094,7 +1094,7 @@ def build_blitzjahreswertung():
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-    <h1 style="margin-top:1rem;">⚡ Blitzjahreswertung</h1>
+        <h1 style="margin-top:1rem;">Blitzjahreswertung</h1>
     <div class="bw-wrap">
       {table_content}
     </div>
