@@ -48,18 +48,23 @@
       .footer-link { color: #aaa; }
     </style><style>
   .legal-section {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
+    background: #fff;
+    border: 1px solid var(--border);
     border-radius: 6px;
     padding: 1.8rem;
     margin-bottom: 2rem;
+    scroll-margin-top: 5rem;            /* Anker-Sprung nicht unter dem fixierten Header */
   }
   .legal-section h2 {
     margin-top: 0;
-    color: #1a252f;
-    border-bottom: 2px solid #3498db;
+    color: var(--navy);
+    border-bottom: 2px solid var(--link);
     padding-bottom: 0.5rem;
   }
+  .legal-section h3 { color: var(--navy); margin: 1.6rem 0 0.4rem; font-size: 1.1rem; }
+  .legal-section p, .legal-section li { max-width: 75ch; }
+  .legal-section ul { padding-left: 1.2rem; }
+  .legal-stand { font-size: 0.85rem; color: #555; }
 </style>
   <meta property="og:title" content="Impressum &amp; Datenschutz | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
@@ -93,59 +98,101 @@
 
   <main id="main" class="container">
     <h1>Rechtliche Hinweise</h1>
+<p><a href="#impressum">Impressum</a> · <a href="#datenschutz">Datenschutzerklärung</a></p>
 
 <!-- IMPRESSUM -->
-<div class="legal-section">
+<section class="legal-section" id="impressum">
   <h2>Impressum</h2>
   <p><strong>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz):</strong></p>
+  <!-- TODO: Hier muss die ladungsfähige Anschrift des Vereins stehen (wie im Vereinsregister).
+       Falls die Vereinsanschrift nicht das Gymnasium ist, bitte ersetzen. -->
   <p>
     Schachgemeinschaft Aschheim / Feldkirchen / Kirchheim e.V.<br>
     Gymnasium Kirchheim<br>
-    Heimstettner Str. 3<br>
+    Heimstettner Str. 20<br>
     85551 Kirchheim bei München
   </p>
 
   <p><strong>Vertreten durch:</strong><br>
   Der Verein wird vertreten durch den Vorstand gemäß § 26 BGB.<br>
-  E-Mail: <a href="mailto:info@sg-afk.de" style="color:#3498db;">info@sg-afk.de</a>
+  <!-- TODO: Namen der vertretungsberechtigten Vorstandsmitglieder eintragen -->
+  Vertretungsberechtigt: [Name 1. Vorsitzende/r]
+  </p>
+
+  <p><strong>Kontakt:</strong><br>
+  E-Mail: <a href="mailto:info@sg-afk.de">info@sg-afk.de</a><br>
+  oder über unser <a href="kontakt.html">Kontaktformular</a>
   </p>
 
   <p><strong>Registereintrag:</strong><br>
   Eintragung im Vereinsregister.<br>
   Registergericht: Amtsgericht München<br>
+  <!-- TODO: Registernummer eintragen -->
   Registernummer: VR [Eure Nummer eintragen]
   </p>
 
   <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</strong><br>
-  Vorstand der SG Aschheim / Feldkirchen / Kirchheim e.V.<br>
-  Heimstettner Str. 3, 85551 Kirchheim
+  <!-- TODO: Name und Anschrift einer verantwortlichen Person (z. B. Webmaster oder Vorstand) -->
+  [Vorname Nachname], Heimstettner Str. 20, 85551 Kirchheim bei München
   </p>
-</div>
+</section>
 
 <!-- DATENSCHUTZERKLÄRUNG -->
-<div class="legal-section">
+<section class="legal-section" id="datenschutz">
   <h2>Datenschutzerklärung</h2>
 
-  <h3>1. Datenschutz auf einen Blick</h3>
+  <h3>1. Verantwortlicher</h3>
   <p>
-    Wir nehmen den Schutz eurer persönlichen Daten sehr ernst. Personenbezogene Daten werden auf dieser Website nur im technisch notwendigen Umfang erhoben. In keinem Fall werden die erhobenen Daten verkauft oder aus anderen Gründen an Dritte weitergegeben.
+    Verantwortlich für die Datenverarbeitung auf dieser Website ist die Schachgemeinschaft Aschheim / Feldkirchen / Kirchheim e.V. (Kontaktdaten siehe <a href="#impressum">Impressum</a>), E-Mail: <a href="mailto:info@sg-afk.de">info@sg-afk.de</a>.
   </p>
 
-  <h3>2. Hosting &amp; GitHub Pages</h3>
+  <h3>2. Datenschutz auf einen Blick</h3>
   <p>
-    Diese Website wird über <strong>GitHub Pages</strong> (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA) gehostet. Beim Aufruf der Seiten speichert GitHub automatisiert Informationen in sogenannten Server-Log-Dateien, die euer Browser übermittelt (z.B. IP-Adresse, Browsertyp, Datum und Uhrzeit des Zugriffs). Dies ist für die technische Bereitstellung und Sicherheit der Website erforderlich.
+    Wir nehmen den Schutz deiner persönlichen Daten ernst. Personenbezogene Daten verarbeiten wir nur im technisch notwendigen Umfang oder wenn du uns selbst Daten schickst. Wir setzen auf dieser Website keine Cookies, keine Analyse- oder Tracking-Dienste und keine von fremden Servern geladenen Schriftarten ein. Deine Daten werden nicht verkauft.
   </p>
 
-  <h3>3. Kontaktaufnahme</h3>
+  <h3>3. Hosting über GitHub Pages</h3>
   <p>
-    Wenn ihr uns per E-Mail oder Kontaktformular Anfragen zukommen lasst, werden eure Angaben zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne eure Einwilligung weiter.
+    Diese Website wird über <strong>GitHub Pages</strong> gehostet (GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA). Beim Aufruf der Seiten verarbeitet GitHub technisch notwendige Daten, die dein Browser übermittelt, zum Beispiel deine IP-Adresse, Browsertyp, Datum und Uhrzeit des Zugriffs sowie die aufgerufene Seite. Das ist für die Auslieferung und Sicherheit der Website erforderlich.
+  </p>
+  <p>
+    Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und effizienten Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO). Dabei können Daten in die USA übermittelt werden.
+  </p>
+  <!-- TODO: Prüfen, auf welcher Grundlage GitHub die Übermittlung in die USA stützt
+       (EU-US Data Privacy Framework bzw. Standardvertragsklauseln) und hier konkret nennen. -->
+
+  <h3>4. Kontaktaufnahme (E-Mail und Kontaktformular)</h3>
+  <p>
+    Wenn du uns per E-Mail schreibst, speichern wir deine Angaben zur Bearbeitung der Anfrage und für mögliche Anschlussfragen.
+  </p>
+  <p>
+    Das Kontaktformular wird über den Dienst <strong>Formspree</strong> (Formspree, Inc., USA) betrieben. Beim Absenden werden die Angaben aus dem Formular (Name, E-Mail-Adresse, Betreff, Nachricht, Zeitpunkt der Anfrage) an Formspree übermittelt und von dort per E-Mail an den Verein weitergeleitet. Formspree kann die Nachrichten vorübergehend auf seinen Servern speichern.
+  </p>
+  <p>
+    Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die du durch das Ankreuzen des Kästchens im Formular erteilst. Wenn deine Anfrage auf einen Vertrag oder eine Mitgliedschaft zielt, ist es zusätzlich Art. 6 Abs. 1 lit. b DSGVO. Dabei können Daten in die USA übermittelt werden. Du kannst die Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen, eine formlose E-Mail an uns genügt.
+  </p>
+  <p>
+    Wir löschen deine Anfrage, sobald sie erledigt ist und keine gesetzlichen Aufbewahrungspflichten entgegenstehen. Wenn du das Formular nicht nutzen möchtest, schreib uns einfach direkt per E-Mail.
+  </p>
+  <!-- TODO: Prüfen, ob mit Formspree ein Auftragsverarbeitungsvertrag (AV-Vertrag/DPA) besteht,
+       wie lange Formspree Einsendungen speichert (Einstellungen im Formspree-Konto)
+       und auf welcher Grundlage die USA-Übermittlung erfolgt. -->
+
+  <h3>5. Externe Links</h3>
+  <p>
+    Auf unserer Website verlinken wir auf externe Seiten, zum Beispiel Google Maps, den Schachbezirk München oder den Deutschen Schachbund. Diese Seiten werden nicht automatisch geladen. Erst wenn du einen Link anklickst, werden Daten (zum Beispiel deine IP-Adresse) an den jeweiligen Anbieter übermittelt. Für deren Datenverarbeitung gelten die Datenschutzhinweise der Anbieter.
   </p>
 
-  <h3>4. Eure Rechte</h3>
+  <h3>6. Deine Rechte</h3>
   <p>
-    Ihr habt jederzeit das Recht auf kostenlose Auskunft über eure gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung sowie ein Recht auf Berichtigung, Sperrung oder Löschung dieser Daten. Wendet euch dazu jederzeit an die im Impressum angegebene Adresse.
+    Du hast das Recht auf Auskunft über die zu deiner Person gespeicherten Daten (Art. 15 DSGVO), auf Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Eine erteilte Einwilligung kannst du jederzeit widerrufen. Wende dich dazu an die oben genannte E-Mail-Adresse.
   </p>
-</div>
+  <p>
+    Außerdem hast du das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Zuständig für uns ist das Bayerische Landesamt für Datenschutzaufsicht, Promenade 18, 91522 Ansbach, <a href="https://www.lda.bayern.de" target="_blank" rel="noopener">www.lda.bayern.de</a>.
+  </p>
+
+  <p class="legal-stand">Stand: Oktober 2026</p>
+</section>
   </main>
 
   <footer>
