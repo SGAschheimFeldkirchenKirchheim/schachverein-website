@@ -15,7 +15,6 @@
     paper: "a4",           
     flipped: true,
     margin: (x: 1.5cm, top: 2cm, bottom: 2cm),
-    // height: auto,
 
     
     footer: [
@@ -23,9 +22,10 @@
     
     #grid(
       columns: (auto,1fr,auto),
+      [],
       [#align(center)[
       Falls euch bei den Ergebnissen ein Fehler auffällt, wendet euch bitte umgehend an #link("mailto:pierre.tassell@gmail.com")[Pierre] oder #link("mailto:Korbinian.ruff@t-online.de")[Korbinian].
-    ]],[],[#link("https://typst.app/")[Made with Typst]]
+    ]],
     )
   ],
   )
