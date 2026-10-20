@@ -36,7 +36,7 @@ SITE_URL = "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-websit
 # Kalender-Export
 CAL_TZ = "Europe/Berlin"
 EVENT_DURATION_HOURS = 3          # Standarddauer für Termine mit Uhrzeit
-SPIELORT = "Gymnasium Kirchheim, Heimstettner Str. 3, 85551 Kirchheim"
+SPIELORT = "Gymnasium Kirchheim, Heimstettner Str. 20, 85551 Kirchheim"
 
 TODAY = datetime.date.today()
 
@@ -856,7 +856,7 @@ def build_neu_hier():
 
       <div class="neu-card">
         <h3><span aria-hidden="true">📍</span> Wo?</h3>
-        <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 3<br>85551 Kirchheim</p>
+           <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 20<br>85551 Kirchheim</p>
         <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;"><span aria-hidden="true">📍</span> Auf Google Maps öffnen</a>
       </div>
 
@@ -1700,7 +1700,7 @@ def build_index(upcoming_events, home_news_snippets):
         </li>
         <li>
           <strong><span aria-hidden="true">📍</span> Gymnasium Kirchheim</strong>
-          <span>Heimstettner Str. 3, 85551 Kirchheim<br>
+             <span>Heimstettner Str. 20, 85551 Kirchheim<br>
             <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
         </li>
       </ul>

@@ -13,7 +13,7 @@ DTSTAMP:20261002T000000Z
 DTSTART:20261002T160000Z
 DTEND:20261002T190000Z
 SUMMARY:Vereinsabend
-LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 20\, 85551 Kirchheim
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
@@ -42,7 +42,7 @@ DTSTAMP:20261106T000000Z
 DTSTART;VALUE=DATE:20261106
 DTEND;VALUE=DATE:20261107
 SUMMARY:Vereinsabend (Herbstferien)
-LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 3\, 85551 Kirchheim
+LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 20\, 85551 Kirchheim
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT

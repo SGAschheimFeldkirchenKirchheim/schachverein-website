@@ -49,19 +49,28 @@
     </style><style>
   .kontakt-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
   }
   .kontakt-spalte { display: flex; flex-direction: column; gap: 1.5rem; }
+
   .kontakt-card {
     background: #f8f9fa;
     border-left: 4px solid var(--link);
     padding: 1.2rem;
     border-radius: 6px;
   }
-  .kontakt-card.ort { border-left-color: #e67e22; }
-  .kontakt-card h2, .kontakt-form-card h2 { margin-top: 0; font-size: 1.25rem; color: var(--navy); }
+  /* Spielort-Karte füllt den Rest der Spalte, damit beide Spalten gleich hoch enden */
+  .kontakt-card.ort { border-left-color: #e67e22; flex: 1; }
+  .kontakt-card h2, .kontakt-form-card h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
   .kontakt-card p { margin: 0 0 0.7rem; }
   .kontakt-card p:last-child { margin-bottom: 0; }
   .kontakt-card ul { margin: 0 0 0.8rem; padding-left: 1.2rem; }
@@ -73,21 +82,57 @@
     padding: 1.5rem;
     border-radius: 6px;
   }
+  .icon-mail { width: 1.4em; height: 1.4em; flex-shrink: 0; color: var(--primary); }
+
   .form-group { margin-bottom: 1rem; }
   .form-group label { display: block; font-weight: bold; margin-bottom: 0.3rem; font-size: 0.9rem; }
   .form-group input, .form-group textarea {
     width: 100%;
     padding: 0.6rem;
-    border: 1px solid #999;
+    border: 1px solid #767676;           /* ausreichender Kontrast (WCAG 1.4.11) */
     border-radius: 4px;
     font: inherit;
-    font-size: 0.95rem;
+    font-size: 1rem;                     /* mind. 16px: verhindert Auto-Zoom auf dem iPhone */
+    background: #fff;
     box-sizing: border-box;
   }
-  .form-group.form-check { display: flex; gap: 0.6rem; align-items: flex-start; }
-  .form-group.form-check input { width: auto; margin-top: 0.35rem; }
-  .form-group.form-check label { font-weight: normal; margin: 0; }
-  .kontakt-form-card .btn { border: 0; cursor: pointer; font: inherit; font-weight: bold; margin-top: 0.3rem; }
+  .form-group textarea { resize: vertical; min-height: 8rem; }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: #6b6b6b; }
+
+  .form-group.form-check { display: flex; gap: 0.7rem; align-items: flex-start; }
+  .form-group.form-check input {
+    width: 1.4rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+    margin: 0.1rem 0 0;
+    accent-color: var(--primary);
+  }
+  .form-group.form-check label { font-weight: normal; margin: 0; font-size: 0.9rem; }
+
+  .kontakt-form-card .btn {
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+    margin-top: 0.3rem;
+    padding: 0.7rem 1.4rem;
+  }
+  .kontakt-form-card .btn:disabled { opacity: 0.6; cursor: wait; }
+
+  .form-hint { font-size: 0.85rem; color: #555; margin: 0.9rem 0 0; }
+  #form-status { margin: 1rem 0 0; padding: 0.7rem 1rem; border-radius: 6px; font-weight: bold; }
+  #form-status:empty { display: none; }
+  #form-status.ok  { background: #eaf6ee; color: #17653a; border-left: 4px solid #1e8449; }
+  #form-status.err { background: #fdecea; color: #922b21; border-left: 4px solid #b03a2e; }
+
+  @media (max-width: 600px) {
+    .kontakt-form-card { padding: 1.2rem; }
+    .kontakt-form-card .btn { width: 100%; }
+  }
+
+  /* Nur für Screenreader sichtbar */
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* Spam-Falle: für Menschen unsichtbar, Bots füllen das Feld aus */
   .hp { position: absolute; left: -9999px; }
@@ -130,8 +175,8 @@
 
   <!-- Ansprechpartner & Spielort -->
   <div class="kontakt-spalte">
-    <div class="kontakt-card">
-      <h2><span aria-hidden="true">👥</span> Ansprechpartner</h2>
+    <section class="kontakt-card" aria-labelledby="h-ansprech">
+      <h2 id="h-ansprech"><span aria-hidden="true">👥</span> Ansprechpartner</h2>
       <p><strong>1. Vorstand / Vereinsanfragen:</strong><br>
       <a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
 
@@ -140,31 +185,34 @@
 
       <p><strong>Mannschaftsspielbetrieb:</strong><br>
       <a href="mailto:spielleiter@sg-afk.de">spielleiter@sg-afk.de</a></p>
-    </div>
+    </section>
 
-    <div class="kontakt-card ort">
-      <h2><span aria-hidden="true">📍</span> Spielort &amp; Zeiten</h2>
+    <section class="kontakt-card ort" aria-labelledby="h-ort">
+      <h2 id="h-ort"><span aria-hidden="true">📍</span> Spielort &amp; Zeiten</h2>
       <p><strong>Gymnasium Kirchheim</strong><br>
       Heimstettner Str. 20, 85551 Kirchheim</p>
       <p><strong>Jeden Freitag:</strong></p>
       <ul>
         <li><strong>18:00 – 19:30 Uhr:</strong> Jugendtraining</li>
-        <li><strong>ab 19:30 Uhr:</strong> Spielabend für Erwachsene (schon ab 18:00 Uhr willkommen)</li>
+        <li><strong>ab 19:30 Uhr:</strong> Spielabend für Erwachsene, Einlass schon ab 18:00 Uhr</li>
       </ul>
       <div class="btn-row">
-        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn btn-outline"><span aria-hidden="true">📍</span> Auf Google Maps öffnen</a>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn btn-outline"><span aria-hidden="true">📍</span> Auf Google Maps öffnen<span class="visually-hidden"> (öffnet in neuem Tab)</span></a>
       </div>
       <p style="margin-top:0.8rem;"><a href="neu-hier.html">Neu hier? So kommst du vorbei →</a></p>
-    </div>
+    </section>
   </div>
 
   <!-- Kontaktformular -->
-  <div class="kontakt-form-card">
-    <h2><span aria-hidden="true">✉️</span> Nachricht senden</h2>
+  <section class="kontakt-form-card" aria-labelledby="h-form">
+    <h2 id="h-form">
+      <svg class="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      Nachricht senden
+    </h2>
     <!-- TODO: Formspree-Adresse prüfen. Sie muss zu EUREM Formspree-Konto gehören,
          sonst kommen Nachrichten nirgends an. Der Dienst muss außerdem in der
          Datenschutzerklärung (impressum.html) genannt sein. -->
-    <form action="https://formspree.io/f/xbjnopqr" method="POST">
+    <form id="kontakt-form" action="https://formspree.io/f/xbjnopqr" method="POST">
       <input type="hidden" name="_subject" value="Neue Nachricht über die Vereinswebsite">
       <div class="hp" aria-hidden="true">
         <label>Dieses Feld bitte leer lassen <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
@@ -187,19 +235,57 @@
 
       <div class="form-group">
         <label for="nachricht">Nachricht:</label>
-        <textarea id="nachricht" name="nachricht" rows="5" required placeholder="Deine Nachricht an uns..."></textarea>
+        <textarea id="nachricht" name="nachricht" rows="5" required placeholder="Deine Nachricht an uns …"></textarea>
       </div>
 
       <div class="form-group form-check">
         <input type="checkbox" id="datenschutz" name="datenschutz" required>
-        <label for="datenschutz">Ich habe die <a href="impressum.html">Hinweise zum Datenschutz</a> gelesen und bin einverstanden, dass meine Angaben zur Beantwortung meiner Anfrage über den Dienst Formspree an den Verein übermittelt werden.</label>
+        <label for="datenschutz">Ich habe die <a href="impressum.html#datenschutz" target="_blank" rel="noopener">Hinweise zum Datenschutz</a> gelesen und bin einverstanden, dass meine Angaben zur Beantwortung meiner Anfrage über den Dienst Formspree an den Verein übermittelt werden.</label>
       </div>
 
       <button type="submit" class="btn">Nachricht absenden</button>
+      <p id="form-status" role="status" aria-live="polite"></p>
+      <p class="form-hint">Wir antworten in der Regel innerhalb weniger Tage.</p>
     </form>
-  </div>
+  </section>
 
 </div>
+
+<script>
+(function () {
+  var form = document.getElementById('kontakt-form');
+  if (!form || !window.fetch || !window.FormData) return;   // Ohne JS: normales Absenden
+
+  var btn = form.querySelector('button[type=submit]');
+  var status = document.getElementById('form-status');
+  var label = btn.textContent;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Wird gesendet …';
+    status.className = '';
+    status.textContent = '';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      form.reset();
+      status.className = 'ok';
+      status.textContent = 'Danke! Deine Nachricht ist angekommen, wir melden uns bei dir.';
+    }).catch(function () {
+      status.className = 'err';
+      status.textContent = 'Das hat leider nicht geklappt. Schreib uns bitte direkt an info@sg-afk.de.';
+    }).then(function () {
+      btn.disabled = false;
+      btn.textContent = label;
+    });
+  });
+})();
+</script>
   </main>
 
   <footer>
