@@ -7,6 +7,7 @@ import subprocess
 import urllib.parse
 import urllib.request
 import html as htmllib
+import shutil
 from urllib.parse import quote
 
 try:
@@ -1002,25 +1003,42 @@ def build_oberlandquartett():
 # ==========================================
 # 4. BLITZJAHRESWERTUNG PARSER
 # ==========================================
+def _page_no(path):
+    m = re.search(r'(\d+)\.svg$', path)
+    return int(m.group(1)) if m else 0
+
+
 def build_blitzjahreswertung():
     folder_path = os.path.join("turniere", "blitzjahreswertung")
     main_typ = os.path.join(folder_path, "main.typ")
-    output_svg_path = os.path.join(folder_path, "output.svg")
-    
-    # 1. Lokales Compiling als SVG (falls lokal ausgeführt)
+    tmp_dir = os.path.join(folder_path, "_tmp")
+
+    # 1. Alle Seiten als SVG kompilieren. Klappt das nicht (z. B. kein Typst installiert),
+    #    bleiben die vorhandenen SVG-Dateien unverändert erhalten.
     if os.path.exists(main_typ):
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+        os.makedirs(tmp_dir, exist_ok=True)
         try:
-            subprocess.run(["typst", "compile", main_typ, output_svg_path], check=True)
+            subprocess.run(["typst", "compile", main_typ, os.path.join(tmp_dir, "output-{p}.svg")], check=True)
+            new_pages = glob.glob(os.path.join(tmp_dir, "output-*.svg"))
+            if new_pages:
+                for old in glob.glob(os.path.join(folder_path, "output*.svg")):
+                    os.remove(old)
+                for p in new_pages:
+                    shutil.move(p, os.path.join(folder_path, os.path.basename(p)))
         except Exception as e:
             print(f"Typst Compiling Hinweis: {e}")
+        shutil.rmtree(tmp_dir, ignore_errors=True)
 
+    # 2. SVG-Seiten einbetten, sonst Notlösung: HTML-Tabelle aus dem Typst-Code
     table_content = "<p>Keine Daten für die Blitzjahreswertung vorhanden.</p>"
-
-    # 2. Falls SVG existiert, direkt als Vektorgrafik einbetten
-    if os.path.exists(output_svg_path):
-        with open(output_svg_path, "r", encoding="utf-8") as f:
-            svg_data = f.read()
-        table_content = f'<div class="svg-container">{svg_data}</div>'
+    svg_files = sorted(glob.glob(os.path.join(folder_path, "output*.svg")), key=_page_no)
+    if svg_files:
+        parts = []
+        for p in svg_files:
+            with open(p, "r", encoding="utf-8") as f:
+                parts.append(f'<div class="svg-container">{f.read()}</div>')
+        table_content = "".join(parts)
     elif os.path.exists(main_typ):
         with open(main_typ, "r", encoding="utf-8") as f:
             code = f.read()
@@ -1028,7 +1046,7 @@ def build_blitzjahreswertung():
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-    <h1 style="margin-top:1rem;"><span aria-hidden="true">⚡</span> Blitzjahreswertung</h1>
+    <h1 style="margin-top:1rem;">⚡ Blitzjahreswertung</h1>
     <div class="table-responsive">
       {table_content}
     </div>
@@ -1036,6 +1054,7 @@ def build_blitzjahreswertung():
 
     styles = """<style>
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
+      .svg-container { margin-bottom: 1rem; }
       .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle, table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
       th, td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
