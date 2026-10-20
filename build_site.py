@@ -1003,9 +1003,26 @@ def build_oberlandquartett():
 # ==========================================
 # 4. BLITZJAHRESWERTUNG PARSER
 # ==========================================
+BLITZ_MAX_WIDTH = "1200px"   # maximale Breite der Wertungs-Tabellen (darf breiter sein als der Textbereich)
+
+
 def _page_no(path):
     m = re.search(r'(\d+)\.svg$', path)
     return int(m.group(1)) if m else 0
+
+
+def _uniq_svg_ids(svg, prefix):
+    """Macht IDs in einer SVG eindeutig, damit mehrere SVGs auf einer Seite sich nicht stören."""
+    svg = re.sub(r'\bid="([^"]+)"', lambda m: f'id="{prefix}{m.group(1)}"', svg)
+    svg = re.sub(r'href="#([^"]+)"', lambda m: f'href="#{prefix}{m.group(1)}"', svg)
+    svg = re.sub(r'url\(#([^)]+)\)', lambda m: f'url(#{prefix}{m.group(1)})', svg)
+    return svg
+
+
+def _blitz_turnier_namen(code):
+    """Namen der Einzelturnier-Seiten aus main.typ (Reihenfolge = Seitenreihenfolge, Kommentare ignoriert)."""
+    code = re.sub(r'(?m)^\s*//.*$', '', code)
+    return re.findall(r'#einzelturnier-tabelle\([^,]+,\s*"([^"]+)"', code)
 
 
 def build_blitzjahreswertung():
@@ -1013,9 +1030,14 @@ def build_blitzjahreswertung():
     main_typ = os.path.join(folder_path, "main.typ")
     tmp_dir = os.path.join(folder_path, "_tmp")
 
+    code = ""
+    if os.path.exists(main_typ):
+        with open(main_typ, "r", encoding="utf-8") as f:
+            code = f.read()
+
     # 1. Alle Seiten als SVG kompilieren. Klappt das nicht (z. B. kein Typst installiert),
     #    bleiben die vorhandenen SVG-Dateien unverändert erhalten.
-    if os.path.exists(main_typ):
+    if code:
         shutil.rmtree(tmp_dir, ignore_errors=True)
         os.makedirs(tmp_dir, exist_ok=True)
         try:
@@ -1030,39 +1052,64 @@ def build_blitzjahreswertung():
             print(f"Typst Compiling Hinweis: {e}")
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    # 2. SVG-Seiten einbetten, sonst Notlösung: HTML-Tabelle aus dem Typst-Code
-    table_content = "<p>Keine Daten für die Blitzjahreswertung vorhanden.</p>"
+    # 2. SVG-Seiten einlesen (IDs eindeutig machen, sonst stören sich die Seiten gegenseitig)
     svg_files = sorted(glob.glob(os.path.join(folder_path, "output*.svg")), key=_page_no)
-    if svg_files:
-        parts = []
-        for p in svg_files:
-            with open(p, "r", encoding="utf-8") as f:
-                parts.append(f'<div class="svg-container">{f.read()}</div>')
-        table_content = "".join(parts)
-    elif os.path.exists(main_typ):
-        with open(main_typ, "r", encoding="utf-8") as f:
-            code = f.read()
+    pages = []
+    for i, p in enumerate(svg_files):
+        with open(p, "r", encoding="utf-8") as f:
+            pages.append(f'<div class="svg-container">{_uniq_svg_ids(f.read(), f"p{i}-")}</div>')
+
+    # 3. Seiten gruppieren: die letzten k Seiten sind die Einzelturniere, alles davor die Gesamtwertung
+    names = _blitz_turnier_namen(code)
+    n, k = len(pages), len(names)
+    if k and n > k:
+        groups = [("Gesamt", pages[:n - k])] + [(names[i], [pages[n - k + i]]) for i in range(k)]
+    else:
+        groups = [("Wertung", pages)]
+
+    tab_css = ""
+    if not pages and code:   # Notlösung ohne SVG: HTML-Tabelle aus dem Typst-Code
         table_content = f'<table class="custom-tabelle">{parse_typst_table_to_html(code)}</table>'
+    elif not pages:
+        table_content = "<p>Keine Daten für die Blitzjahreswertung vorhanden.</p>"
+    elif len(groups) == 1:
+        table_content = "".join(groups[0][1])
+    else:
+        g = len(groups)
+        inputs = "".join(f'<input type="radio" name="bw" id="bw{i}"{" checked" if i == 0 else ""}>' for i in range(g))
+        labels = "".join(f'<label for="bw{i}">{htmllib.escape(label)}</label>' for i, (label, _) in enumerate(groups))
+        panels = "".join(f'<div class="tab-panel" id="bwp{i}">{"".join(files)}</div>' for i, (_, files) in enumerate(groups))
+        table_content = f'<div class="tabs">{inputs}<div class="tab-bar">{labels}</div>{panels}</div>'
+
+        active = ",".join(f"#bw{i}:checked ~ .tab-bar label[for=bw{i}]" for i in range(g))
+        show = ",".join(f"#bw{i}:checked ~ #bwp{i}" for i in range(g))
+        tab_css = ("""
+      .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+      .tab-bar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+      .tab-bar label { cursor: pointer; padding: 0.55rem 1.1rem; border-radius: 6px; background: #e8ecf3; color: #0a1f44; font-weight: bold; }
+      .tab-bar label:hover { background: #d5dcea; }
+      .tab-panel { display: none; }
+      """ + active + """ { background: #0a1f44; color: #fff; }
+      """ + show + """ { display: block; }""")
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">⚡ Blitzjahreswertung</h1>
-    <div class="table-responsive">
+    <div class="bw-wrap">
       {table_content}
     </div>
     """
 
     styles = """<style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
+      .bw-wrap { width: min(96vw, """ + BLITZ_MAX_WIDTH + """); position: relative; left: 50%; transform: translateX(-50%); margin-top: 1.5rem; text-align: center; overflow-x: auto; }
       .svg-container { margin-bottom: 1rem; }
-      .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-      .custom-tabelle, table { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
-      th, td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
-      th { background-color: #0a1f44; color: white; font-weight: bold; }
+      .svg-container svg { display: block; margin: 0 auto; max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+      .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
+      .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
+      .custom-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; }""" + tab_css + """
     </style>"""
 
     render_page("Blitzjahreswertung", content, "blitzjahreswertung.html", extra_styles=styles)
-
 
 # ==========================================
 # 5. HALL OF FAME PARSER

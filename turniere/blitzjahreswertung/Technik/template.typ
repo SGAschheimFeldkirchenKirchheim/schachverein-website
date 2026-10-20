@@ -15,7 +15,7 @@
     paper: "a4",           
     flipped: true,
     margin: (x: 1.5cm, top: 2cm, bottom: 2cm),
-    height: auto,
+    // height: auto,
 
     
     footer: [

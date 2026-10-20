@@ -18,9 +18,12 @@
   // (name: "Weihnachtsblitz", daten: weihnachtsblitz),
 )
 // Weniger Turniere ==> besserer Platz
+// Gesamtwertung: breit (Querformat-Breite), Höhe passt sich an, also alles auf einer Seite
+#set page(width: 297mm, height: auto, flipped: false)
 #jahreswertung-tabelle(alle-turniere, mitglieder)
 
-#set page(flipped: false)
+// Einzelturniere: wieder A4 hoch
+#set page(width: 210mm, height: 297mm, flipped: false)
 #einzelturnier-tabelle(neujahrsblitz, "Neujahrsblitz", mitglieder, turnier-url: turnier-links.neujahrsblitz)
 
 #einzelturnier-tabelle(osterblitz, "Osterblitz", mitglieder, turnier-url: turnier-links.osterblitz)
