@@ -9,6 +9,7 @@ import urllib.request
 import html as htmllib
 import shutil
 from urllib.parse import quote
+from itertools import groupby
 
 try:
     from zoneinfo import ZoneInfo
@@ -1179,6 +1180,7 @@ REPORT_COLORS = {
 }
 
 NEWS_CSS = """
+      .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
       .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
       .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
       .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
@@ -1488,10 +1490,8 @@ def build_berichte():
         render_page(r['title'], article_content, os.path.join("berichte", r['filename']),
                     css_path="../", nav_path="../", extra_styles=article_styles,
                     description=r['snippet'] or None)
-
-    cards = []
-    for r in reports:
-        cards.append(f"""
+    def overview_card(r):
+        return f"""
         <div class="card news-card">
           {thumb_html(r)}
           <h3>{r['title']}</h3>
@@ -1499,7 +1499,21 @@ def build_berichte():
           <p class="news-snippet">{r['snippet']}</p>
           <a href="berichte/{r['filename']}" class="btn">Bericht lesen →</a>
         </div>
-        """)
+        """
+
+    sections = []
+    for year, group in groupby(reports, key=lambda r: r['when'].year):
+        label = "Ohne Datum" if year == 1 else str(year)
+        cards = "\n".join(overview_card(r) for r in group)
+        sections.append(
+            f"<h2 class='jahr-titel'>{label}</h2>"
+            f"<div class='grid' style='grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));'>{cards}</div>"
+        )
+
+    body = "\n".join(sections) if sections else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
+    overview_content = "<h1>Aktuelle Berichte &amp; News</h1>" + body
+    render_page("Berichte & News", overview_content, "berichte.html",
+                extra_styles="<style>" + NEWS_CSS + "</style>")
 
     home_news_snippets = []
     for r in reports[:2]:
@@ -1512,14 +1526,6 @@ def build_berichte():
           <a href="berichte/{r['filename']}">Weiterlesen →</a>
         </div>
         """)
-
-    cards_html = "\n".join(cards) if cards else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
-    overview_content = (
-        "<h1>Aktuelle Berichte &amp; News</h1>"
-        f"<div class='grid' style='grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));'>{cards_html}</div>"
-    )
-    render_page("Berichte & News", overview_content, "berichte.html",
-                extra_styles="<style>" + NEWS_CSS + "</style>")
     return home_news_snippets
 
 
