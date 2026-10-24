@@ -1191,6 +1191,10 @@ NEWS_CSS = """
       .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
       .news-card a { font-weight: bold; text-decoration: none; }
       .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
+      .news-card { position: relative; }
+      .news-card a::after { content: ""; position: absolute; inset: 0; }
+      .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .news-card:hover h3 { text-decoration: underline; }
 """
 
 ARTICLE_CSS = """
