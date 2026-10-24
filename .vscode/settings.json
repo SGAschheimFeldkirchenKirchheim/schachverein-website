@@ -1,0 +1,7 @@
+{
+  "tinymist.typstExtraArgs": ["--root", "C:/Users/korbi/Desktop/schachverein-website"],
+  "files.exclude": {
+    "berichte/*.html": true,
+    "berichte/bilder": true
+  }
+}

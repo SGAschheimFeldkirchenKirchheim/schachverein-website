@@ -1183,6 +1183,7 @@ NEWS_CSS = """
       .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
       .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
       .news-card a { font-weight: bold; text-decoration: none; }
+      .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
 """
 
 ARTICLE_CSS = """
@@ -1190,6 +1191,9 @@ ARTICLE_CSS = """
       .article-content h3, .article-content h4 { color: var(--navy); }
       .article-content p, .article-content li { max-width: 70ch; }
       .article-content li { margin-bottom: 0.3rem; }
+      .report-img { margin: 1.5rem 0; }
+      .report-img img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+      .report-img figcaption { font-size: 0.85rem; color: #666; margin-top: 0.4rem; }
 """
 
 
@@ -1253,8 +1257,11 @@ def report_inline(text):
     return t
 
 
-def report_blocks(body):
-    """Zerlegt den Berichtstext in HTML-Blöcke (Überschriften, Absätze, Listen)."""
+IMG_RE = re.compile(r'^#image\(\s*"([^"]+)"\s*(?:,(.*))?\)\s*$')
+
+
+def report_blocks(body, img=None):
+    """Zerlegt den Berichtstext in HTML-Blöcke (Überschriften, Absätze, Listen, Bilder)."""
     out, para, items, list_tag = [], [], [], None
 
     def flush():
@@ -1278,6 +1285,16 @@ def report_blocks(body):
             flush()
             continue
         if line.startswith('//') or re.match(r'#(set|show|let|import)\b', line):
+            continue
+
+        im = IMG_RE.match(line)
+        if im:
+            flush()
+            if img:
+                alt_m = re.search(r'alt:\s*"([^"]*)"', im.group(2) or "")
+                html = img(im.group(1), alt_m.group(1) if alt_m else "")
+                if html:
+                    out.append(html)
             continue
 
         h = re.match(r'^(={1,3})\s+(.*)$', line)
@@ -1319,8 +1336,7 @@ def make_snippet(blocks, limit=200):
             return htmllib.escape(out, quote=False)
     return ""
 
-
-def typst_to_html_article(typst_text):
+def typst_to_html_article(typst_text, img=None):
     def meta(name):
         m = re.search(r'#' + name + r'\[(.*?)\]', typst_text)
         return m.group(1).strip() if m else ""
@@ -1329,8 +1345,8 @@ def typst_to_html_article(typst_text):
     date = meta("date")
     author = meta("author")
 
-    body = re.sub(r'#(?:title|date|author)\[.*?\]', '', typst_text)
-    blocks = report_blocks(body)
+    body = re.sub(r'#(?:title|date|author|entwurf)\[.*?\]', '', typst_text)
+    blocks = report_blocks(body, img)
 
     esc = lambda s: htmllib.escape(s, quote=False)
     return esc(title), esc(date), esc(author), "\n".join(blocks), make_snippet(blocks)
@@ -1341,41 +1357,119 @@ def is_draft_report(filepath, code, title):
     Entwürfe und Vorlagen werden nicht veröffentlicht, wenn
     - der Dateiname 'vorlage' enthält, oder
     - der Titel 'Vorlage' heißt, oder
+    - im Bericht eine Zeile '#entwurf[ja]' steht, oder
     - irgendwo im Bericht eine Zeile '// entwurf' bzw. '// draft' steht.
     """
     if "vorlage" in filepath.lower():
         return True
     if plain_text(title).strip().lower() == "vorlage":
         return True
+    if re.search(r'(?im)^\s*#entwurf\[\s*(ja|true|wahr|yes|x)\s*\]', code):
+        return True
     return bool(re.search(r'(?im)^\s*//\s*(entwurf|draft)\b', code))
+
+
+IMG_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
+IMG_WARN_KB = 1024
+
+
+def report_slug(filepath):
+    """berichte/2026/Kooperationsturnier_EBE/Bericht.typ -> 2026-kooperationsturnier-ebe"""
+    rel = os.path.relpath(filepath, "berichte").replace(os.sep, "/")
+    parts = rel[:-4].split("/")                       # ".typ" abschneiden
+    if len(parts) > 1 and parts[-1].lower() == "bericht":
+        parts = parts[:-1]                            # "Bericht" ist nur der Dateiname
+    return slugify(" ".join(parts))
+
+
+def is_hidden_report(filepath):
+    """Ordner/Dateien mit '_' am Anfang (z. B. _funktionen.typ, _Vorlage) sind nie Berichte."""
+    rel = os.path.relpath(filepath, "berichte").replace(os.sep, "/")
+    return any(p.startswith("_") for p in rel.split("/"))
+
+
+def make_img_handler(filepath, slug, images):
+    """Kopiert Bilder neben der Bericht.typ nach berichte/bilder/<slug>/ und liefert das HTML."""
+    folder = os.path.dirname(filepath)
+
+    def handler(name, alt):
+        base = os.path.basename(name)
+        src = os.path.join(folder, base)
+        if base != name or os.path.splitext(base)[1].lower() not in IMG_EXT:
+            print(f"WARNUNG [{filepath}]: Bild '{name}' ungültig (nur Dateiname aus demselben Ordner; jpg/png/webp/gif).")
+            return ""
+        if not os.path.isfile(src):
+            print(f"WARNUNG [{filepath}]: Bild '{name}' nicht gefunden (nicht mit committet?).")
+            return ""
+        kb = os.path.getsize(src) // 1024
+        if kb > IMG_WARN_KB:
+            print(f"WARNUNG [{filepath}]: Bild '{name}' hat {kb} KB, bitte verkleinern (ca. 1600 px Breite).")
+        dest_dir = os.path.join("berichte", "bilder", slug)
+        os.makedirs(dest_dir, exist_ok=True)
+        shutil.copy2(src, os.path.join(dest_dir, base))
+        url = f"bilder/{slug}/{quote(base)}"
+        images.append(f"berichte/{url}")
+        alt_attr = htmllib.escape(alt, quote=True)
+        cap = f"<figcaption>{htmllib.escape(alt, quote=False)}</figcaption>" if alt else ""
+        return f'<figure class="report-img"><img src="{url}" alt="{alt_attr}" loading="lazy">{cap}</figure>'
+
+    return handler
+
+
+def thumb_html(r):
+    return f'<img class="news-thumb" src="{r["thumb"]}" alt="" loading="lazy">' if r.get('thumb') else ""
 
 
 def build_berichte():
     reports = []
+    seen = {}
 
     if os.path.exists("berichte"):
-        for filepath in glob.glob("berichte/*.typ"):
-            stem = os.path.splitext(os.path.basename(filepath))[0]
+        # Kopierte Bilder werden bei jedem Build neu erzeugt
+        shutil.rmtree(os.path.join("berichte", "bilder"), ignore_errors=True)
+
+        for filepath in sorted(glob.glob("berichte/**/*.typ", recursive=True)):
+            if is_hidden_report(filepath):
+                continue
+            slug = report_slug(filepath)
             with open(filepath, "r", encoding="utf-8") as f:
                 code = f.read()
-            title, date, author, body_html, snippet = typst_to_html_article(code)
-            if is_draft_report(filepath, code, title):
+
+            tm = re.search(r'#title\[(.*?)\]', code)
+            if is_draft_report(filepath, code, tm.group(1) if tm else ""):
                 continue
+
+            if slug in seen:
+                print(f"WARNUNG: {filepath} hat dieselbe Adresse wie {seen[slug]} und wird übersprungen.")
+                continue
+            seen[slug] = filepath
+
+            images = []
+            title, date, author, body_html, snippet = typst_to_html_article(
+                code, make_img_handler(filepath, slug, images))
+
+            when = parse_german_date(date)
+            if when is None:
+                print(f"WARNUNG [{filepath}]: Datum fehlt oder ist nicht lesbar (erwartet TT.MM.JJJJ).")
+            elif when > TODAY:
+                print(f"WARNUNG [{filepath}]: Datum {date} liegt in der Zukunft (Tippfehler?).")
+
             meta = date + (f" · von {author}" if author and date else (f"von {author}" if author else ""))
             reports.append({
-                'stem': stem,
-                'filename': stem + ".html",
+                'stem': slug,
+                'filename': slug + ".html",
                 'title': title,
                 'meta': meta,
                 'body': body_html,
                 'snippet': snippet,
-                'when': parse_german_date(date) or date_from_filename(stem) or datetime.date.min,
+                'thumb': images[0] if images else "",
+                'when': when or date_from_filename(slug) or datetime.date.min,
             })
 
-        # Neueste zuerst (nach dem Datum im Bericht, sonst nach dem Dateinamen)
+        # Neueste zuerst
         reports.sort(key=lambda r: (r['when'], r['stem']), reverse=True)
 
-        # HTML-Dateien ohne passende .typ (z. B. gelöschte Berichte oder Entwürfe) entfernen
+        # HTML-Dateien ohne passenden Bericht (gelöscht oder Entwurf) entfernen
         valid = {r['filename'] for r in reports}
         for old in glob.glob("berichte/*.html"):
             if os.path.basename(old) not in valid:
@@ -1399,6 +1493,7 @@ def build_berichte():
     for r in reports:
         cards.append(f"""
         <div class="card news-card">
+          {thumb_html(r)}
           <h3>{r['title']}</h3>
           <p class="news-meta">{r['meta']}</p>
           <p class="news-snippet">{r['snippet']}</p>
@@ -1410,6 +1505,7 @@ def build_berichte():
     for r in reports[:2]:
         home_news_snippets.append(f"""
         <div class="card news-card">
+          {thumb_html(r)}
           <h3>{r['title']}</h3>
           <p class="news-meta">{r['meta']}</p>
           <p class="news-snippet">{r['snippet']}</p>
