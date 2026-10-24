@@ -1180,6 +1180,11 @@ REPORT_COLORS = {
 }
 
 NEWS_CSS = """
+      .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
+      .vergangene-jahre > summary { cursor: pointer; font-size: 1.4rem; font-weight: bold; color: var(--navy); padding: 0.6rem 0; }
+      .jahr-archiv { margin: 0.5rem 0 0.5rem 1rem; }
+      .jahr-archiv > summary { cursor: pointer; font-size: 1.15rem; font-weight: bold; padding: 0.4rem 0; }
+      .jahr-archiv .grid { margin-top: 0.8rem; }
       .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
       .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
       .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
@@ -1501,16 +1506,33 @@ def build_berichte():
         </div>
         """
 
-    sections = []
-    for year, group in groupby(reports, key=lambda r: r['when'].year):
-        label = "Ohne Datum" if year == 1 else str(year)
+    def year_grid(group):
         cards = "\n".join(overview_card(r) for r in group)
-        sections.append(
-            f"<h2 class='jahr-titel'>{label}</h2>"
-            f"<div class='grid' style='grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));'>{cards}</div>"
-        )
+        return f"<div class='grid' style='grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));'>{cards}</div>"
 
-    body = "\n".join(sections) if sections else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
+    def year_label(y):
+        return "Ohne Datum" if y == 1 else str(y)
+
+    by_year = [(y, list(g)) for y, g in groupby(reports, key=lambda r: r['when'].year)]
+    parts = []
+    if by_year:
+        # Offen: neuestes Jahr mit Berichten (höchstens das aktuelle Jahr); älteres wandert ins Archiv
+        candidates = [y for y, _ in by_year if y <= TODAY.year]
+        current = max(candidates) if candidates else by_year[0][0]
+
+        for y, g in by_year:
+            if y >= current:
+                parts.append(f"<h2 class='jahr-titel'>{year_label(y)}</h2>" + year_grid(g))
+
+        older = [(y, g) for y, g in by_year if y < current]
+        if older:
+            inner = "".join(
+                f"<details class='jahr-archiv'><summary>{year_label(y)}</summary>{year_grid(g)}</details>"
+                for y, g in older
+            )
+            parts.append(f"<details class='vergangene-jahre'><summary>Vergangene Jahre</summary>{inner}</details>")
+
+    body = "\n".join(parts) if parts else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
     overview_content = "<h1>Aktuelle Berichte &amp; News</h1>" + body
     render_page("Berichte & News", overview_content, "berichte.html",
                 extra_styles="<style>" + NEWS_CSS + "</style>")
