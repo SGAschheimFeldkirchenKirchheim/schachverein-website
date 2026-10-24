@@ -15,7 +15,7 @@
   (name: "Osterblitz", daten: osterblitz),
   (name: "Sommerblitz", daten: sommerblitz),
   (name: "Herbstblitz", daten: herbstblitz),
-  (name: "Weihnachtsblitz", daten: weihnachtsblitz),
+  // (name: "Weihnachtsblitz", daten: weihnachtsblitz),
 )
 // Weniger Turniere ==> besserer Platz
 // Gesamtwertung: breit (Querformat-Breite), Höhe passt sich an, also alles auf einer Seite
@@ -32,4 +32,4 @@
 
 #einzelturnier-tabelle(herbstblitz, "Herbstblitz", mitglieder, turnier-url: turnier-links.herbstblitz)
 
-#einzelturnier-tabelle(weihnachtsblitz, "Weihnachtsblitz", mitglieder, turnier-url: turnier-links.weihnachtsblitz)
+// #einzelturnier-tabelle(weihnachtsblitz, "Weihnachtsblitz", mitglieder, turnier-url: turnier-links.weihnachtsblitz)
