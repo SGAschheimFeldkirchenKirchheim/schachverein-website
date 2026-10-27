@@ -8,44 +8,6 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
-UID:2026-10-02-18-vereinsabend-afk-5@sg-afk
-DTSTAMP:20261002T000000Z
-DTSTART:20261002T160000Z
-DTEND:20261002T190000Z
-SUMMARY:Vereinsabend
-LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 20\, 85551 Kirchheim
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-09-19-kooperationsturnier-mit-der-schule-afk-5@sg-afk
-DTSTAMP:20261009T000000Z
-DTSTART:20261009T170000Z
-DTEND:20261009T200000Z
-SUMMARY:Kooperationsturnier mit der Schule
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-16-19-schnellschach-vm-kooperationsturnier-mit-ebersberg-afk-5@
- sg-afk
-DTSTAMP:20261016T000000Z
-DTSTART:20261016T173000Z
-DTEND:20261016T203000Z
-SUMMARY:Schnellschach-VM+Kooperationsturnier mit Ebersberg
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-21-19-afk-5-mmm-runde-1-afk-5@sg-afk
-DTSTAMP:20261021T000000Z
-DTSTART:20261021T170000Z
-DTEND:20261021T200000Z
-SUMMARY:AFK 5: MMM Runde 1
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
 UID:2026-11-06-ganztag-vereinsabend-herbstferien-afk-5@sg-afk
 DTSTAMP:20261106T000000Z
 DTSTART;VALUE=DATE:20261106
@@ -133,33 +95,6 @@ DTSTAMP:20270219T000000Z
 DTSTART:20270219T183000Z
 DTEND:20270219T213000Z
 SUMMARY:AFK 5: MMM Runde 6
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2027-03-12-19-afk-5-mmm-runde-7-afk-5@sg-afk
-DTSTAMP:20270312T000000Z
-DTSTART:20270312T183000Z
-DTEND:20270312T213000Z
-SUMMARY:AFK 5: MMM Runde 7
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2027-04-09-19-afk-5-mmm-runde-8-afk-5@sg-afk
-DTSTAMP:20270409T000000Z
-DTSTART:20270409T173000Z
-DTEND:20270409T203000Z
-SUMMARY:AFK 5: MMM Runde 8
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2027-04-30-19-afk-5-mmm-runde-9-afk-5@sg-afk
-DTSTAMP:20270430T000000Z
-DTSTART:20270430T173000Z
-DTEND:20270430T203000Z
-SUMMARY:AFK 5: MMM Runde 9
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
