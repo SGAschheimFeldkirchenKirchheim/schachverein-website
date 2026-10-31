@@ -46,5 +46,10 @@
   [20.02. Sa, 10:00 Uhr], [], [], [], [], [], [], [], [], [Landesliga Süd Runde 6+7],
   [21.02. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, 1.Liga Runde 6+7],
   [24.02. Mi, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 4], [],
+  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("März")]],
+  [09.03. Di, 19:30 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 6], [], [],
+  table.cell(fill: DarkSlateGray)[12.03. Fr, 19:00 Uhr], [], [], table.cell(fill: green)[MMM Runde 7], [], [], [], [], [], [],
+  table.cell(fill: DarkSlateGray)[12.03. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 7], [], table.cell(fill: green)[MMM Runde 7], table.cell(fill: green)[MMM Runde 7], table.cell(fill: green)[MMM Runde 7], [], [], [],
+  table.cell(fill: DarkSlateGray)[19.03. Fr, 19:30 Uhr], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Runde 5], [],
 )
 ]
