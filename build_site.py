@@ -698,10 +698,21 @@ def farben_css():
     return "\n".join(zeilen) + "\n"
 
 
+TERMINE_PDF = "termine.pdf"   # PDF zum Herunterladen/Mailen (liegt im Website-Root)
+
+
 def build_termine():
     folder_path = "termine"
     main_typ = os.path.join(folder_path, "termine.typ")
     svg_path = os.path.join(folder_path, "output.svg")
+
+    # 0. PDF (A3 quer, mit template.typ) aus termine/main.typ
+    pdf_typ = os.path.join(folder_path, "main.typ")
+    if os.path.exists(pdf_typ):
+        try:
+            subprocess.run(["typst", "compile", pdf_typ, TERMINE_PDF], check=True)
+        except Exception as e:
+            print(f"Typst Compiling Hinweis (Termine-PDF): {e}")
 
     # 1. Lokales Kompilieren versuchen (nur nötig, wenn die SVG verwendet wird)
     if USE_SVG_FOR_TERMINE and os.path.exists(main_typ):
@@ -732,8 +743,12 @@ def build_termine():
     else:
         table_html = "<p>Keine Termine vorhanden.</p>"
 
+    pdf_link = (f'<p><a href="{TERMINE_PDF}" download>📄 Termine als PDF herunterladen</a></p>'
+                if os.path.exists(TERMINE_PDF) else "")
+
     content = f"""{read_hinweis()}
     <h1>Termine & Spielplan</h1>
+    {pdf_link}
     {calendar_html}
     <div class="full-bleed">
       <div class="table-responsive">
