@@ -1,48 +1,77 @@
-#import "../database.typ": * 
+// Turnierdateien dürfen beide Formate enthalten:
+//   alt: "AntonM": 20
+//   neu: "AntonM": (punkte: 20, platz: 2)   <- schreibt main.py
+#let eintrag-punkte(e) = if type(e) == dictionary { e.punkte } else { e }
 
-#let berechne-jahreswertung(turniere-liste, mitglieder-db) = {
-  
-  // 1. Alle Spieler-IDs sammeln, die in mindestens einem Turnier vorkommen
+#let ist-gespielt(t) = t.at("gespielt", default: true)
+
+#let spieler-name(id, mitglieder-db) = {
+  let m = mitglieder-db.at(id, default: none)
+  if m == none { id } else { m.Vorname + " " + m.Nachname }
+}
+
+// Rangliste eines Turniers, sortiert nach chess-results-Platz.
+// Ohne explizites "platz" gilt die Reihenfolge in der Datei.
+#let turnier-rangliste(daten, mitglieder-db) = {
+  let liste = ()
+  for (i, (id, e)) in daten.pairs().enumerate() {
+    let platz = if type(e) == dictionary and "platz" in e { e.platz } else { i + 1 }
+    liste.push((id: id, name: spieler-name(id, mitglieder-db), punkte: eintrag-punkte(e), platz: platz))
+  }
+  liste.sorted(key: x => x.platz)
+}
+
+// Jahreswertung: beste `beste` Ergebnisse zählen, punktgleich = gleicher Platz.
+// `sieg-punkte` wird für die Maximal-Berechnung bei offenen Turnieren genutzt.
+#let berechne-jahreswertung(turniere-liste, mitglieder-db, beste: 3, sieg-punkte: 20) = {
+  let gespielt = turniere-liste.filter(ist-gespielt)
+  let offen = turniere-liste.len() - gespielt.len()
+
   let alle-ids = ()
-  for t in turniere-liste {
+  for t in gespielt {
     for id in t.daten.keys() {
-      if not alle-ids.contains(id) {
-        alle-ids.push(id)
-      }
+      if id not in alle-ids { alle-ids.push(id) }
     }
   }
 
-  // 2. Für jeden Spieler die Punkte sammeln und die Top-3 addieren
-  let gesamt-liste = ()
+  let spieler = ()
   for id in alle-ids {
-    // Vor- und Nachname aus der Mitglieder-Datenbank holen
-    let m = mitglieder-db.at(id, default: (Vorname: id, Nachname: ""))
-    let voller-name = m.Vorname + " " + m.Nachname
+    // none = nicht teilgenommen bzw. Turnier noch offen
+    let einzel = turniere-liste.map(t =>
+      if ist-gespielt(t) and id in t.daten { eintrag-punkte(t.daten.at(id)) } else { none }
+    )
+    let teilgenommen = einzel.enumerate().filter(x => x.at(1) != none)
+    // stabil sortiert: bei gleichem Wert zählt das frühere Turnier
+    let sortiert = teilgenommen.sorted(key: x => -x.at(1))
+    let gewertet = sortiert.slice(0, calc.min(beste, sortiert.len())).map(x => x.at(0))
+    let summe = gewertet.map(i => einzel.at(i)).sum(default: 0)
 
-    // Punkte und Teilnahme für jedes Turnier einsammeln
-    let spieler-punkte = ()
-    let spieler-teilnahme = ()
+    let moeglich = teilgenommen.map(x => x.at(1)) + (sieg-punkte,) * offen
+    let maximal = moeglich.sorted(key: x => -x).slice(0, calc.min(beste, moeglich.len())).sum(default: 0)
 
-    for t in turniere-liste {
-      spieler-punkte.push(punkte(id, t.daten))
-      // True, wenn der Spieler im Turnier-Dictionary steht (auch mit 0 Punkten)
-      spieler-teilnahme.push(t.daten.keys().contains(id))
-    }
-
-    // Top-3 Regel: Absteigend sortieren, max. 3 nehmen und summieren (Fehlende Turniere/0 Pkt ändern nichts)
-    let sorted-p = spieler-punkte.sorted(key: x => -x)
-    let top3 = sorted-p.slice(0, calc.min(3, sorted-p.len()))
-    let summe = top3.fold(0, (acc, val) => acc + val)
-
-    gesamt-liste.push((
+    spieler.push((
       id: id,
-      name: voller-name,
-      einzel: spieler-punkte,
-      teilnahme: spieler-teilnahme,
-      summe: summe
+      name: spieler-name(id, mitglieder-db),
+      einzel: einzel,
+      gewertet: gewertet,
+      teilnahmen: teilgenommen.len(),
+      summe: summe,
+      maximal: maximal,
     ))
   }
 
-  // 3. Nach Gesamtpunkten absteigend sortieren
-  return gesamt-liste.sorted(key: x => -x.summe)
+  // erst nach Name, dann (stabil) nach Punkten -> Gleichstände alphabetisch
+  spieler = spieler.sorted(key: x => x.name).sorted(key: x => -x.summe)
+
+  // Plätze (punktgleich = gleicher Platz) und Titelchance
+  let ergebnis = ()
+  let rang = 1
+  for (i, s) in spieler.enumerate() {
+    if i > 0 and s.summe < spieler.at(i - 1).summe { rang = i + 1 }
+    let beste-andere = spieler.enumerate().filter(x => x.at(0) != i).map(x => x.at(1).summe)
+    let titelchance = offen > 0 and s.maximal >= beste-andere.fold(0, calc.max)
+    ergebnis.push(s + (rang: rang, titelchance: titelchance))
+  }
+
+  (spieler: ergebnis, gespielt: gespielt.len(), gesamt: turniere-liste.len(), offen: offen)
 }

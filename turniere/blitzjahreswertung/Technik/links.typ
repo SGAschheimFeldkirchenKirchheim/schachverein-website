@@ -5,3 +5,4 @@
   herbstblitz: "https://s1.chess-results.com/tnr1505138.aspx?lan=0&art=1&SNode=S0",
   weihnachtsblitz: "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/blitzjahreswertung.html",
 )
+#let stand = "31.10.2026"

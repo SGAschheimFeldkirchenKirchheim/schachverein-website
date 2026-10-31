@@ -4,32 +4,37 @@
 #import "Turniere/Neujahrsblitz.typ": *
 #import "Turniere/Osterblitz.typ": *
 #import "Turniere/Sommerblitz.typ": *
-#import "Turniere/Herbstblitz.typ": * 
-#import "Turniere/Weihnachtsblitz.typ": * 
-#import "Technik/wertung.typ": * 
-#import "Technik/tabelle.typ": * 
-#import "Technik/links.typ": turnier-links
+#import "Turniere/Herbstblitz.typ": *
+#import "Turniere/Weihnachtsblitz.typ": *
+#import "Technik/tabelle.typ": *
+#import "Technik/links.typ": turnier-links, stand
 
-#let alle-turniere = (
-  (name: "Neujahrsblitz", daten: neujahrsblitz),
-  (name: "Osterblitz", daten: osterblitz),
-  (name: "Sommerblitz", daten: sommerblitz),
-  (name: "Herbstblitz", daten: herbstblitz),
-  // (name: "Weihnachtsblitz", daten: weihnachtsblitz),
+// "web" (von build_site.py gesetzt): Gesamtwertung auf EINER hohen Seite für die SVG.
+// Sonst (PDF): normales A4.
+#let web = sys.inputs.at("format", default: "pdf") == "web"
+
+// gespielt: false -> Spalte grau "ausstehend", zählt nicht, keine Einzelseite.
+// Nach dem Turnier einfach auf true setzen (oder ", gespielt: false" löschen).
+#let turniere = (
+  (name: "Neujahrsblitz",   daten: neujahrsblitz,   url: turnier-links.neujahrsblitz),
+  (name: "Osterblitz",      daten: osterblitz,      url: turnier-links.osterblitz),
+  (name: "Sommerblitz",     daten: sommerblitz,     url: turnier-links.sommerblitz),
+  (name: "Herbstblitz",     daten: herbstblitz,     url: turnier-links.herbstblitz),
+  (name: "Weihnachtsblitz", daten: weihnachtsblitz, url: turnier-links.weihnachtsblitz, gespielt: false),
 )
-// Weniger Turniere ==> besserer Platz
-// Gesamtwertung: breit (Querformat-Breite), Höhe passt sich an, also alles auf einer Seite
-#set page(width: 297mm, height: auto, flipped: false)
-#jahreswertung-tabelle(alle-turniere, mitglieder)
 
-// Einzelturniere: wieder A4 hoch
+#set page(width: 297mm, height: auto, flipped: false) if web
+#jahreswertung-tabelle(
+  turniere,
+  mitglieder,
+  titel: "SG AFK – Blitzjahreswertung 2026",
+  stand: stand,
+  beste: 3,
+  sieg-punkte: 20,
+)
+
+#pagebreak(weak: true)
 #set page(width: 210mm, height: 297mm, flipped: false)
-#einzelturnier-tabelle(neujahrsblitz, "Neujahrsblitz", mitglieder, turnier-url: turnier-links.neujahrsblitz)
-
-#einzelturnier-tabelle(osterblitz, "Osterblitz", mitglieder, turnier-url: turnier-links.osterblitz)
-
-#einzelturnier-tabelle(sommerblitz, "Sommerblitz", mitglieder, turnier-url: turnier-links.sommerblitz)
-
-#einzelturnier-tabelle(herbstblitz, "Herbstblitz", mitglieder, turnier-url: turnier-links.herbstblitz)
-
-// #einzelturnier-tabelle(weihnachtsblitz, "Weihnachtsblitz", mitglieder, turnier-url: turnier-links.weihnachtsblitz)
+#for t in turniere.filter(t => t.at("gespielt", default: true)) {
+  einzelturnier-tabelle(t, mitglieder)
+}
