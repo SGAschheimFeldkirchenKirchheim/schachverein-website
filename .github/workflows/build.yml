@@ -44,10 +44,7 @@ jobs:
             typst compile termine/termine.typ termine/output.svg \
               || echo "::warning::Typst-Kompilierung von termine/termine.typ fehlgeschlagen"
           fi
-          if [ -f "turniere/blitzjahreswertung/main.typ" ]; then
-            typst compile turniere/blitzjahreswertung/main.typ turniere/blitzjahreswertung/output.svg \
-              || echo "::warning::Typst-Kompilierung von turniere/blitzjahreswertung/main.typ fehlgeschlagen"
-          fi
+          # Blitzjahreswertung (SVG + PDF) kompiliert build_site.py selbst
 
       # 4. Python Build-Skript ausführen
       - name: Run Build Script
@@ -64,4 +61,4 @@ jobs:
           else
             git commit -m "Auto-generate HTML and SVG files"
             git push
-          fi
+          fi  
