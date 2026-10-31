@@ -1020,10 +1020,19 @@ def _uniq_svg_ids(svg, prefix):
     return svg
 
 
+BLITZ_PDF = "blitzjahreswertung.pdf"   # PDF zum Herunterladen (liegt im Website-Root)
+
+
 def _blitz_turnier_namen(code):
-    """Namen der Einzelturnier-Seiten aus main.typ (Reihenfolge = Seitenreihenfolge, Kommentare ignoriert)."""
+    """Namen der gespielten Turniere aus der Liste `#let turniere = (...)` in main.typ
+    (Reihenfolge = Seitenreihenfolge; Kommentare und `gespielt: false` werden ignoriert)."""
     code = re.sub(r'(?m)^\s*//.*$', '', code)
-    return re.findall(r'#einzelturnier-tabelle\([^,]+,\s*"([^"]+)"', code)
+    namen = []
+    for zeile in re.findall(r'\(name:\s*"[^"]+"[^\n]*', code):
+        if re.search(r'gespielt:\s*false', zeile):
+            continue
+        namen.append(re.search(r'name:\s*"([^"]+)"', zeile).group(1))
+    return namen
 
 
 def build_blitzjahreswertung():
@@ -1036,19 +1045,21 @@ def build_blitzjahreswertung():
         with open(main_typ, "r", encoding="utf-8") as f:
             code = f.read()
 
-    # 1. Alle Seiten als SVG kompilieren. Klappt das nicht (z. B. kein Typst installiert),
-    #    bleiben die vorhandenen SVG-Dateien unverändert erhalten.
+    # 1. SVG (Webansicht, Gesamtwertung auf einer Seite) und PDF (A4) kompilieren.
+    #    Klappt das nicht (z. B. kein Typst installiert), bleiben die alten Dateien erhalten.
     if code:
         shutil.rmtree(tmp_dir, ignore_errors=True)
         os.makedirs(tmp_dir, exist_ok=True)
         try:
-            subprocess.run(["typst", "compile", main_typ, os.path.join(tmp_dir, "output-{p}.svg")], check=True)
+            subprocess.run(["typst", "compile", "--input", "format=web", main_typ,
+                            os.path.join(tmp_dir, "output-{p}.svg")], check=True)
             new_pages = glob.glob(os.path.join(tmp_dir, "output-*.svg"))
             if new_pages:
                 for old in glob.glob(os.path.join(folder_path, "output*.svg")):
                     os.remove(old)
                 for p in new_pages:
                     shutil.move(p, os.path.join(folder_path, os.path.basename(p)))
+            subprocess.run(["typst", "compile", main_typ, BLITZ_PDF], check=True)
         except Exception as e:
             print(f"Typst Compiling Hinweis: {e}")
         shutil.rmtree(tmp_dir, ignore_errors=True)
@@ -1093,9 +1104,13 @@ def build_blitzjahreswertung():
       """ + active + """ { background: #0a1f44; color: #fff; }
       """ + show + """ { display: block; }""")
 
+    pdf_link = (f'<p><a href="{BLITZ_PDF}" download>📄 Aktuelle Wertung als PDF herunterladen</a></p>'
+                if os.path.exists(BLITZ_PDF) else "")
+
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
         <h1 style="margin-top:1rem;">Blitzjahreswertung</h1>
+    {pdf_link}
     <div class="bw-wrap">
       {table_content}
     </div>
