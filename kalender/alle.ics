@@ -323,4 +323,40 @@ SUMMARY:MSMM Runde 4 (Senioren)
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-09-19-mmm-runde-6-afk-6-alle@sg-afk
+DTSTAMP:20270309T000000Z
+DTSTART:20270309T183000Z
+DTEND:20270309T213000Z
+SUMMARY:MMM Runde 6 (AFK 6)
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-12-19-mmm-runde-7-afk-2-alle@sg-afk
+DTSTAMP:20270312T000000Z
+DTSTART:20270312T180000Z
+DTEND:20270312T210000Z
+SUMMARY:MMM Runde 7 (AFK 2)
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-12-19-mmm-runde-7-afk-1-afk-3-afk-4-afk-5-alle@sg-afk
+DTSTAMP:20270312T000000Z
+DTSTART:20270312T183000Z
+DTEND:20270312T213000Z
+SUMMARY:MMM Runde 7 (AFK 1\, AFK 3\, AFK 4\, AFK 5)
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-19-19-msmm-runde-5-senioren-alle@sg-afk
+DTSTAMP:20270319T000000Z
+DTSTART:20270319T183000Z
+DTEND:20270319T213000Z
+SUMMARY:MSMM Runde 5 (Senioren)
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
 END:VCALENDAR

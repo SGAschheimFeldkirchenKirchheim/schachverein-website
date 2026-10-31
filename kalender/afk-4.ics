@@ -98,4 +98,13 @@ SUMMARY:AFK 4: MMM Runde 6
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-12-19-afk-4-mmm-runde-7-afk-4@sg-afk
+DTSTAMP:20270312T000000Z
+DTSTART:20270312T183000Z
+DTEND:20270312T213000Z
+SUMMARY:AFK 4: MMM Runde 7
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
 END:VCALENDAR

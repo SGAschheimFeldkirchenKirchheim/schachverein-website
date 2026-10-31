@@ -89,4 +89,13 @@ SUMMARY:Senioren: MSMM Runde 4
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-19-19-senioren-msmm-runde-5-senioren@sg-afk
+DTSTAMP:20270319T000000Z
+DTSTART:20270319T183000Z
+DTEND:20270319T213000Z
+SUMMARY:Senioren: MSMM Runde 5
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
 END:VCALENDAR
