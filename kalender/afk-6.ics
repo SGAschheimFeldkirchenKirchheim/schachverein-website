@@ -80,4 +80,49 @@ SUMMARY:Weihnachtsblitz
 URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
+BEGIN:VEVENT
+UID:2027-01-06-ganztag-dreikoenigsturnier-afk-6@sg-afk
+DTSTAMP:20270106T000000Z
+DTSTART;VALUE=DATE:20270106
+DTEND;VALUE=DATE:20270107
+SUMMARY:Dreikönigsturnier
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-01-25-19-afk-6-mmm-runde-4-afk-6@sg-afk
+DTSTAMP:20270125T000000Z
+DTSTART:20270125T180000Z
+DTEND:20270125T210000Z
+SUMMARY:AFK 6: MMM Runde 4
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-02-19-19-afk-6-mmm-runde-5-afk-6@sg-afk
+DTSTAMP:20270219T000000Z
+DTSTART:20270219T183000Z
+DTEND:20270219T213000Z
+SUMMARY:AFK 6: MMM Runde 5
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-03-09-19-afk-6-mmm-runde-6-afk-6@sg-afk
+DTSTAMP:20270309T000000Z
+DTSTART:20270309T183000Z
+DTEND:20270309T213000Z
+SUMMARY:AFK 6: MMM Runde 6
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
+UID:2027-04-09-19-afk-6-mmm-runde-7-afk-6@sg-afk
+DTSTAMP:20270409T000000Z
+DTSTART:20270409T173000Z
+DTEND:20270409T203000Z
+SUMMARY:AFK 6: MMM Runde 7
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
 END:VCALENDAR
