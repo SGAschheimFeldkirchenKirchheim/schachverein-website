@@ -47,11 +47,76 @@
 
       .footer-link { color: #aaa; }
     </style><style>
-  .team-grid .card { display: flex; flex-direction: column; }
-  .team-grid .card h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 0.7rem; margin-bottom: 0.4rem; }
-  .team-tag { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; }
-  .team-klasse { margin: 0 0 1rem; color: #555; }
-  .team-grid .card .btn { margin-top: auto; align-self: flex-start; }
+      .klein { font-size: 0.85rem; color: #555; }
+      .team-grid .team-karte { display: block; color: inherit; text-decoration: none; }
+      a.team-karte:hover { border-color: var(--link); }
+      .team-karte h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.6rem; margin-bottom: 0.4rem; }
+      .team-karte p { margin: 0.3rem 0; }
+      .team-klasse { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; }
+
+      .team { margin-top: 2.5rem; scroll-margin-top: 5rem; }
+      .team-kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1rem; border-bottom: 3px solid var(--navy); }
+      .team-kopf h2 { margin: 0; color: var(--navy); display: flex; align-items: baseline; gap: 0.6rem; }
+      .team-platz { font-weight: bold; color: var(--navy); }
+
+      .tab-wrap { overflow-x: auto; }
+      .liga-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+      .liga-tab th, .liga-tab td { padding: 0.4rem 0.5rem; text-align: center; border-bottom: 1px solid var(--border); }
+      .liga-tab th { background: var(--navy); color: #fff; }
+      .liga-tab .name { text-align: left; }
+      .liga-tab tr.eigen td { background: #dcebf7; font-weight: bold; }
+      .liga-tab tr.auf td:first-child { box-shadow: inset 4px 0 #1e8449; }
+      .liga-tab tr.ab td:first-child { box-shadow: inset 4px 0 #c0392b; }
+      .liga-tab tr.trenn td { border-top: 2px dashed #888; }
+      .liga-tab .delta { font-size: 0.8rem; font-weight: bold; }
+      .delta.hoch { color: #1e8449; } .delta.runter { color: #c0392b; }
+      @media (max-width: 600px) {
+        .neben { display: none; }
+        .liga-tab { font-size: 0.85rem; }
+        .liga-tab th, .liga-tab td { padding: 0.35rem 0.3rem; }
+      }
+
+      details.block { margin-top: 1rem; border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; background: #fff; }
+      details.block > summary { cursor: pointer; font-weight: bold; color: var(--navy); }
+      details.block[open] > summary { margin-bottom: 0.6rem; }
+
+      .spiel { border-top: 1px solid var(--border); padding: 0.35rem 0; }
+      .spiel > summary { cursor: pointer; list-style: none; }
+      .spiel > summary::-webkit-details-marker { display: none; }
+      .spiel > summary, div.spiel { display: flex; align-items: center; gap: 0.6rem; }
+      details.spiel > summary::after { content: "▸"; color: #888; margin-left: 0.2rem; }
+      details.spiel[open] > summary::after { content: "▾"; }
+      .rd { width: 2.2rem; font-weight: bold; color: #555; }
+      .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
+      .geg { flex: 1; }
+      .dwz { margin-left: 0.5rem; font-size: 0.8rem; color: #777; }
+
+      .erg { display: inline-block; min-width: 3.6rem; text-align: center; border-radius: 999px; padding: 0.05rem 0.6rem; font-weight: bold; font-size: 0.9rem; background: #e3e6ea; color: #333; }
+      .erg.klein { min-width: 3rem; font-size: 0.8rem; }
+      .erg-s { background: #d4efdf; color: #145a32; }
+      .erg-u { background: #fdebd0; color: #7e5109; }
+      .erg-n { background: #fadbd8; color: #922b21; }
+      .erg-offen { background: transparent; color: #888; font-weight: normal; }
+
+      .bretter { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.4rem 0 0.6rem; }
+      .bretter td { padding: 0.2rem 0.4rem; text-align: center; }
+      .bretter td.name { text-align: left; }
+      .bretter td:first-child { width: 2rem; color: #777; }
+
+      .quelle { margin-top: 0.8rem; }
+
+      .rechner p { margin: 0.4rem 0; }
+      .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
+      .rechner .r-runde-box { border-top: 1px solid var(--border); }
+      .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
+      .rechner .r-spiel.eigen { background: #eef5fb; }
+      .rechner .r-spiel span:last-child { text-align: right; }
+      .rechner select { font: inherit; padding: 0.15rem 0.3rem; }
+      .rechner .r-knoepfe { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+      .rechner button { font: inherit; cursor: pointer; border: 1px solid var(--border); background: var(--soft); border-radius: 6px; padding: 0.3rem 0.8rem; }
+      .rechner button:hover { border-color: var(--link); }
+      .rechner .r-tabelle { margin: 0.5rem 0 1rem; }
+      @media (max-width: 600px) { .rechner .r-spiel { grid-template-columns: 1fr; } .rechner .r-spiel span:last-child { text-align: left; } }
 </style>
   <meta property="og:title" content="Mannschaften | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
@@ -84,97 +149,364 @@
   </header>
 
   <main id="main" class="container">
-    <h1>Unsere Mannschaften &amp; Liga-Ergebnisse</h1>
-<p>Hier findest du die Links zu den aktuellen Tabellen und Ergebnissen unserer Teams in der laufenden Saison<span id="saison-label"></span>. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.</p>
+    
+    <h1>Unsere Mannschaften</h1>
+    <p>Aktuelle Tabellen, Ergebnisse und Statistiken unserer Teams. Wann wir spielen, steht im
+      <a href="termine.html">Spielplan</a>.</p>
+    <div class="grid-3 team-grid">
+      <a class="card team-karte" href="#mf1">
+        <h3>AFK 1 <span class="team-klasse">Bezirksliga</span></h3>
+        <p class="k-platz"><strong>Platz 9</strong> von 10 · 0 MP · 2 BP</p><p>Zuletzt: bei SC Garching 1980 5 <span class="erg erg-n" title="Niederlage">2 : 6</span></p><p>Nächstes Spiel (R2): vs. SC Roter Turm München 1</p>
+      </a>
+      <a class="card team-karte" href="#mf2">
+        <h3>AFK 2 <span class="team-klasse">A-Klasse</span></h3>
+        <p class="k-platz"><strong>Platz 3</strong> von 10 · 2 MP · 5 BP</p><p>Zuletzt: vs. FC Bayern München 6 <span class="erg erg-s" title="Sieg">5 : 3</span></p><p>Nächstes Spiel (R2): bei TSV Solln 1</p>
+      </a>
+      <a class="card team-karte" href="#mf3">
+        <h3>AFK 3 <span class="team-klasse">B-Klasse</span></h3>
+        <p class="k-platz"><strong>Platz 5</strong> von 10 · 1 MP · 3½ BP</p><p>Zuletzt: vs. SK Markt Schwaben 1 <span class="erg erg-u" title="Unentschieden">3½ : 3½</span></p><p>Nächstes Spiel (R2): bei SV Höhenkirchen 1</p>
+      </a>
+      <a class="card team-karte" href="#mf4">
+        <h3>AFK 4 <span class="team-klasse">C-Klasse</span></h3>
+        <p class="k-platz"><strong>Platz 3</strong> von 10 · 2 MP · 4½ BP</p><p>Zuletzt: bei FC Bayern München 9 <span class="erg erg-s" title="Sieg">4½ : 1½</span></p><p>Nächstes Spiel (R2): vs. SC Haar 1931 4</p>
+      </a>
+      <a class="card team-karte" href="#mf5">
+        <h3>AFK 5 <span class="team-klasse">D-Klasse</span></h3>
+        <p class="k-platz"><strong>Platz 1</strong> von 10 · 2 MP · 4 BP</p><p>Zuletzt: bei SC Eching 3 <span class="erg erg-s" title="Sieg">4 : 2</span></p><p>Nächstes Spiel (R2): vs. SF Deisenhofen 3</p>
+      </a>
+      <a class="card team-karte" href="#mf6">
+        <h3>AFK 6 <span class="team-klasse">E-Klasse</span></h3>
+        <p>Nächstes Spiel (R1): bei 1. SK Neuperlach 3</p>
+      </a>
+      <div class="card team-karte">
+        <h3>Jugendmannschaften <span class="team-klasse">Jugendrunden</span></h3>
+        <p>Liga wird nachgetragen.</p>
+      </div></div>
+    
+    <section class="team" id="mf1">
+      <div class="team-kopf">
+        <h2>AFK 1 <span class="team-klasse">Bezirksliga</span></h2>
+        <span class="team-platz">Platz 9 von 10</span>
+      </div>
+      <p class="klein">Tabelle nach Runde 1 von 9</p>
+      
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+          <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
+          <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
+        <tbody><tr><td>1</td><td class="name">SC Roter Turm München 1</td><td>1</td><td><strong>2</strong></td><td>6½</td><td class="neben">1</td><td class="neben">6</td></tr><tr><td>2</td><td class="name">SC Garching 1980 5</td><td>1</td><td><strong>2</strong></td><td>6</td><td class="neben">1</td><td class="neben">5</td></tr><tr><td>3</td><td class="name">FC Bayern München 4</td><td>1</td><td><strong>2</strong></td><td>5</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>4</td><td class="name">SG Schwabing München Nord 1</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>5</td><td class="name">SK Tarrasch 1945 München 2</td><td>1</td><td><strong>1</strong></td><td>4</td><td class="neben">0</td><td class="neben">3</td></tr><tr><td>5</td><td class="name">SF Deisenhofen 1</td><td>1</td><td><strong>1</strong></td><td>4</td><td class="neben">0</td><td class="neben">3</td></tr><tr><td>7</td><td class="name">Münchener SC 1836 3</td><td>1</td><td><strong>0</strong></td><td>3½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>8</td><td class="name">Schach-Union München 1</td><td>1</td><td><strong>0</strong></td><td>3</td><td class="neben">0</td><td class="neben">1</td></tr><tr class="eigen"><td>9</td><td class="name">SG AFK 1</td><td>1</td><td><strong>0</strong></td><td>2</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>10</td><td class="name">SC Sendling 1</td><td>1</td><td><strong>0</strong></td><td>1½</td><td class="neben">0</td><td class="neben">1</td></tr></tbody>
+      </table></div>
+      <details class="block" open><summary>Unsere Spiele</summary><details class="spiel"><summary><span class="rd">R1</span><span class="ha">A</span><span class="geg">SC Garching 1980 5<span class="dwz">Ø 2017</span></span><span class="erg erg-n" title="Niederlage">2 : 6</span></summary><table class="bretter"><tbody><tr><td>1</td><td class="name">David Mehlhorn</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Pascal Thielke</td></tr><tr><td>2</td><td class="name">Stefans Kasims</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Alexander Eichler</td></tr><tr><td>3</td><td class="name">Anton Mai</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Robert Lörner</td></tr><tr><td>4</td><td class="name">Arthur Krumm</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Valentin Krasotin</td></tr><tr><td>5</td><td class="name">Pierre Tassell</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Martin Wimmer</td></tr><tr><td>6</td><td class="name">Alexander Wittko</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Hans Schmidt</td></tr><tr><td>7</td><td class="name">Peter Esser</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Bernhard Swienty</td></tr><tr><td>8</td><td class="name">Emil Janeba</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Christian Wltschek</td></tr></tbody></table></details><div class="spiel"><span class="rd">R2</span><span class="ha">H</span><span class="geg">SC Roter Turm München 1<span class="dwz">Ø 2078</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R3</span><span class="ha">A</span><span class="geg">SC Sendling 1<span class="dwz">Ø 2012</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R4</span><span class="ha">H</span><span class="geg">SK Tarrasch 1945 München 2<span class="dwz">Ø 2019</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R5</span><span class="ha">H</span><span class="geg">FC Bayern München 4<span class="dwz">Ø 2070</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R6</span><span class="ha">A</span><span class="geg">Münchener SC 1836 3<span class="dwz">Ø 2005</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R7</span><span class="ha">H</span><span class="geg">SF Deisenhofen 1<span class="dwz">Ø 2065</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R8</span><span class="ha">A</span><span class="geg">SG Schwabing München Nord 1<span class="dwz">Ø 2056</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R9</span><span class="ha">H</span><span class="geg">Schach-Union München 1<span class="dwz">Ø 2027</span></span><span class="erg erg-offen">offen</span></div></details>
+      
+      <details class="block"><summary>Spielerstatistik</summary>
+        <div class="tab-wrap"><table class="liga-tab spieler">
+          <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
+            <th class="neben">Brett</th><th class="neben"></th></tr></thead>
+          <tbody><tr><td class="name">David Mehlhorn</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">1</td><td class="neben klein"></td></tr><tr><td class="name">Stefans Kasims</td><td>1</td><td>0</td><td>0 %</td><td class="neben">2</td><td class="neben klein"></td></tr><tr><td class="name">Anton Mai</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">3</td><td class="neben klein"></td></tr><tr><td class="name">Arthur Krumm</td><td>1</td><td>0</td><td>0 %</td><td class="neben">4</td><td class="neben klein"></td></tr><tr><td class="name">Pierre Tassell</td><td>1</td><td>0</td><td>0 %</td><td class="neben">5</td><td class="neben klein"></td></tr><tr><td class="name">Alexander Wittko</td><td>1</td><td>1</td><td>100 %</td><td class="neben">6</td><td class="neben klein"></td></tr><tr><td class="name">Peter Esser</td><td>1</td><td>0</td><td>0 %</td><td class="neben">7</td><td class="neben klein"></td></tr><tr><td class="name">Emil Janeba</td><td>1</td><td>0</td><td>0 %</td><td class="neben">8</td><td class="neben klein"></td></tr></tbody>
+        </table></div>
+        <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>
+      </details>
+      
+      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
+        <div class="rechner" data-key="mf1"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+        <script type="application/json" id="liga-mf1">{"key":"mf1","kurz":"AFK 1","bretter":8,"eigen":3,"teams":{"1":"SC Roter Turm München 1","2":"SC Sendling 1","3":"SG AFK 1","4":"FC Bayern München 4","5":"Münchener SC 1836 3","6":"SF Deisenhofen 1","7":"SG Schwabing München Nord 1","8":"Schach-Union München 1","9":"SC Garching 1980 5","10":"SK Tarrasch 1945 München 2"},"tabelle":[{"platz":1,"tlnr":1,"sp":1,"mp":2,"bp":6.5,"siege":1,"gp":6},{"platz":2,"tlnr":9,"sp":1,"mp":2,"bp":6,"siege":1,"gp":5},{"platz":3,"tlnr":4,"sp":1,"mp":2,"bp":5,"siege":1,"gp":3},{"platz":4,"tlnr":7,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":3},{"platz":5,"tlnr":10,"sp":1,"mp":1,"bp":4,"siege":0,"gp":3},{"platz":5,"tlnr":6,"sp":1,"mp":1,"bp":4,"siege":0,"gp":3},{"platz":7,"tlnr":5,"sp":1,"mp":0,"bp":3.5,"siege":0,"gp":2},{"platz":8,"tlnr":8,"sp":1,"mp":0,"bp":3,"siege":0,"gp":1},{"platz":9,"tlnr":3,"sp":1,"mp":0,"bp":2,"siege":0,"gp":1},{"platz":10,"tlnr":2,"sp":1,"mp":0,"bp":1.5,"siege":0,"gp":1}],"auf":0,"ab":0,"matches":[{"r":1,"h":9,"g":3,"gesp":true,"bh":6,"bg":2,"wh":5,"wg":1,"dh":2017,"dg":2042},{"r":1,"h":1,"g":2,"gesp":true,"bh":6.5,"bg":1.5,"wh":6,"wg":1,"dh":2078,"dg":2012},{"r":1,"h":7,"g":5,"gesp":true,"bh":4.5,"bg":3.5,"wh":3,"wg":2,"dh":2049,"dg":1999},{"r":1,"h":10,"g":6,"gesp":true,"bh":4,"bg":4,"wh":3,"wg":3,"dh":2000,"dg":2065},{"r":1,"h":8,"g":4,"gesp":true,"bh":3,"bg":5,"wh":1,"wg":3,"dh":1987,"dg":2049},{"r":2,"h":4,"g":9,"gesp":false,"dh":2070,"dg":2019},{"r":2,"h":5,"g":8,"gesp":false,"dh":2005,"dg":2027},{"r":2,"h":2,"g":10,"gesp":false,"dh":2012,"dg":2019},{"r":2,"h":6,"g":7,"gesp":false,"dh":2065,"dg":2056},{"r":2,"h":3,"g":1,"gesp":false,"dh":2099,"dg":2078},{"r":3,"h":9,"g":5,"gesp":false,"dh":2019,"dg":2005},{"r":3,"h":1,"g":4,"gesp":false,"dh":2078,"dg":2070},{"r":3,"h":2,"g":3,"gesp":false,"dh":2012,"dg":2099},{"r":3,"h":10,"g":7,"gesp":false,"dh":2019,"dg":2056},{"r":3,"h":8,"g":6,"gesp":false,"dh":2027,"dg":2065},{"r":4,"h":4,"g":2,"gesp":false,"dh":2070,"dg":2012},{"r":4,"h":5,"g":1,"gesp":false,"dh":2005,"dg":2078},{"r":4,"h":6,"g":9,"gesp":false,"dh":2065,"dg":2019},{"r":4,"h":3,"g":10,"gesp":false,"dh":2099,"dg":2019},{"r":4,"h":7,"g":8,"gesp":false,"dh":2056,"dg":2027},{"r":5,"h":9,"g":7,"gesp":false,"dh":2019,"dg":2056},{"r":5,"h":1,"g":6,"gesp":false,"dh":2078,"dg":2065},{"r":5,"h":2,"g":5,"gesp":false,"dh":2012,"dg":2005},{"r":5,"h":3,"g":4,"gesp":false,"dh":2099,"dg":2070},{"r":5,"h":10,"g":8,"gesp":false,"dh":2019,"dg":2027},{"r":6,"h":4,"g":10,"gesp":false,"dh":2070,"dg":2019},{"r":6,"h":5,"g":3,"gesp":false,"dh":2005,"dg":2099},{"r":6,"h":6,"g":2,"gesp":false,"dh":2065,"dg":2012},{"r":6,"h":7,"g":1,"gesp":false,"dh":2056,"dg":2078},{"r":6,"h":8,"g":9,"gesp":false,"dh":2027,"dg":2019},{"r":7,"h":4,"g":5,"gesp":false,"dh":2070,"dg":2005},{"r":7,"h":1,"g":8,"gesp":false,"dh":2078,"dg":2027},{"r":7,"h":2,"g":7,"gesp":false,"dh":2012,"dg":2056},{"r":7,"h":3,"g":6,"gesp":false,"dh":2099,"dg":2065},{"r":7,"h":10,"g":9,"gesp":false,"dh":2019,"dg":2019},{"r":8,"h":5,"g":10,"gesp":false,"dh":2005,"dg":2019},{"r":8,"h":9,"g":1,"gesp":false,"dh":2019,"dg":2078},{"r":8,"h":6,"g":4,"gesp":false,"dh":2065,"dg":2070},{"r":8,"h":7,"g":3,"gesp":false,"dh":2056,"dg":2099},{"r":8,"h":8,"g":2,"gesp":false,"dh":2027,"dg":2012},{"r":9,"h":4,"g":7,"gesp":false,"dh":2070,"dg":2056},{"r":9,"h":5,"g":6,"gesp":false,"dh":2005,"dg":2065},{"r":9,"h":1,"g":10,"gesp":false,"dh":2078,"dg":2019},{"r":9,"h":2,"g":9,"gesp":false,"dh":2012,"dg":2019},{"r":9,"h":3,"g":8,"gesp":false,"dh":2099,"dg":2027}]}</script>
+      </details>
+      <p class="klein quelle"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=340&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a></p>
+    </section>
+    <section class="team" id="mf2">
+      <div class="team-kopf">
+        <h2>AFK 2 <span class="team-klasse">A-Klasse</span></h2>
+        <span class="team-platz">Platz 3 von 10</span>
+      </div>
+      <p class="klein">Tabelle nach Runde 1 von 9</p>
+      
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+          <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
+          <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
+        <tbody><tr><td>1</td><td class="name">TSV Forstenried 1</td><td>1</td><td><strong>2</strong></td><td>8</td><td class="neben">1</td><td class="neben">8</td></tr><tr><td>2</td><td class="name">TSV Solln 1</td><td>1</td><td><strong>2</strong></td><td>5½</td><td class="neben">1</td><td class="neben">4</td></tr><tr class="eigen"><td>3</td><td class="name">SG AFK 2</td><td>1</td><td><strong>2</strong></td><td>5</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>4</td><td class="name">1. SK Neuperlach 1</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>5</td><td class="name">SG Schwabing München Nord 2</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">2</td></tr><tr><td>6</td><td class="name">SC Unterhaching 2</td><td>1</td><td><strong>0</strong></td><td>3½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>7</td><td class="name">TSV Poing 1</td><td>1</td><td><strong>0</strong></td><td>3½</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>8</td><td class="name">FC Bayern München 6</td><td>1</td><td><strong>0</strong></td><td>3</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>9</td><td class="name">MSA Zugzwang 82 4</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>10</td><td class="name">SC Roter Turm München 2</td><td>1</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr></tbody>
+      </table></div>
+      <details class="block" open><summary>Unsere Spiele</summary><details class="spiel"><summary><span class="rd">R1</span><span class="ha">H</span><span class="geg">FC Bayern München 6<span class="dwz">Ø 1944</span></span><span class="erg erg-s" title="Sieg">5 : 3</span></summary><table class="bretter"><tbody><tr><td>1</td><td class="name">Christian Graf</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Günter Schütz</td></tr><tr><td>2</td><td class="name">Frederik Prause</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Christian Todd</td></tr><tr><td>3</td><td class="name">Rudolf Oster</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Andreas Jüttner</td></tr><tr><td>4</td><td class="name">Ronny Damaske</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Felix Kreh</td></tr><tr><td>5</td><td class="name">Korbinian Ruff</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Andres Gonzales Nunez</td></tr><tr><td>6</td><td class="name">Konrad Keblat</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Yige Zhang</td></tr><tr><td>7</td><td class="name">Dominik Dax</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Max Sager</td></tr><tr><td>8</td><td class="name">Alexander Meißner</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Ivan Martynenko</td></tr></tbody></table></details><div class="spiel"><span class="rd">R2</span><span class="ha">A</span><span class="geg">TSV Solln 1<span class="dwz">Ø 1994</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R3</span><span class="ha">H</span><span class="geg">SC Roter Turm München 2<span class="dwz">Ø 1925</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R4</span><span class="ha">A</span><span class="geg">MSA Zugzwang 82 4<span class="dwz">Ø 1814</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R5</span><span class="ha">A</span><span class="geg">TSV Forstenried 1<span class="dwz">Ø 2014</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R6</span><span class="ha">H</span><span class="geg">SC Unterhaching 2<span class="dwz">Ø 1914</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R7</span><span class="ha">A</span><span class="geg">TSV Poing 1<span class="dwz">Ø 1825</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R8</span><span class="ha">H</span><span class="geg">SG Schwabing München Nord 2<span class="dwz">Ø 1949</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R9</span><span class="ha">A</span><span class="geg">1. SK Neuperlach 1<span class="dwz">Ø 1906</span></span><span class="erg erg-offen">offen</span></div></details>
+      
+      <details class="block"><summary>Spielerstatistik</summary>
+        <div class="tab-wrap"><table class="liga-tab spieler">
+          <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
+            <th class="neben">Brett</th><th class="neben"></th></tr></thead>
+          <tbody><tr><td class="name">Christian Graf</td><td>1</td><td>1</td><td>100 %</td><td class="neben">1</td><td class="neben klein"></td></tr><tr><td class="name">Frederik Prause</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">2</td><td class="neben klein"></td></tr><tr><td class="name">Rudolf Oster</td><td>1</td><td>0</td><td>0 %</td><td class="neben">3</td><td class="neben klein"></td></tr><tr><td class="name">Ronny Damaske</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">4</td><td class="neben klein"></td></tr><tr><td class="name">Korbinian Ruff</td><td>1</td><td>1</td><td>100 %</td><td class="neben">5</td><td class="neben klein"></td></tr><tr><td class="name">Konrad Keblat</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">6</td><td class="neben klein"></td></tr><tr><td class="name">Dominik Dax</td><td>1</td><td>1</td><td>100 %</td><td class="neben">7</td><td class="neben klein"></td></tr><tr><td class="name">Alexander Meißner</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">8</td><td class="neben klein"></td></tr></tbody>
+        </table></div>
+        <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>
+      </details>
+      
+      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
+        <div class="rechner" data-key="mf2"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+        <script type="application/json" id="liga-mf2">{"key":"mf2","kurz":"AFK 2","bretter":8,"eigen":8,"teams":{"1":"TSV Poing 1","2":"SG Schwabing München Nord 2","3":"1. SK Neuperlach 1","4":"FC Bayern München 6","5":"TSV Solln 1","6":"SC Roter Turm München 2","7":"MSA Zugzwang 82 4","8":"SG AFK 2","9":"SC Unterhaching 2","10":"TSV Forstenried 1"},"tabelle":[{"platz":1,"tlnr":10,"sp":1,"mp":2,"bp":8,"siege":1,"gp":8},{"platz":2,"tlnr":5,"sp":1,"mp":2,"bp":5.5,"siege":1,"gp":4},{"platz":3,"tlnr":8,"sp":1,"mp":2,"bp":5,"siege":1,"gp":3},{"platz":4,"tlnr":3,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":3},{"platz":5,"tlnr":2,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":2},{"platz":6,"tlnr":9,"sp":1,"mp":0,"bp":3.5,"siege":0,"gp":2},{"platz":7,"tlnr":1,"sp":1,"mp":0,"bp":3.5,"siege":0,"gp":1},{"platz":8,"tlnr":4,"sp":1,"mp":0,"bp":3,"siege":0,"gp":1},{"platz":9,"tlnr":7,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":1},{"platz":10,"tlnr":6,"sp":1,"mp":0,"bp":0,"siege":0,"gp":0}],"auf":0,"ab":0,"matches":[{"r":1,"h":7,"g":5,"gesp":true,"bh":2.5,"bg":5.5,"wh":1,"wg":4,"dh":1785,"dg":1948},{"r":1,"h":9,"g":3,"gesp":true,"bh":3.5,"bg":4.5,"wh":2,"wg":3,"dh":1917,"dg":1898},{"r":1,"h":8,"g":4,"gesp":true,"bh":5,"bg":3,"wh":3,"wg":1,"dh":1860,"dg":1944},{"r":1,"h":10,"g":6,"gesp":true,"bh":8,"bg":0,"wh":8,"wg":0,"dh":2030,"dg":1907},{"r":1,"h":1,"g":2,"gesp":true,"bh":3.5,"bg":4.5,"wh":1,"wg":2,"dh":1835,"dg":1969},{"r":2,"h":3,"g":1,"gesp":false,"dh":1906,"dg":1825},{"r":2,"h":4,"g":9,"gesp":false,"dh":1953,"dg":1914},{"r":2,"h":6,"g":7,"gesp":false,"dh":1925,"dg":1814},{"r":2,"h":2,"g":10,"gesp":false,"dh":1949,"dg":2014},{"r":2,"h":5,"g":8,"gesp":false,"dh":1994,"dg":1960},{"r":3,"h":9,"g":5,"gesp":false,"dh":1914,"dg":1994},{"r":3,"h":8,"g":6,"gesp":false,"dh":1960,"dg":1925},{"r":3,"h":2,"g":3,"gesp":false,"dh":1949,"dg":1906},{"r":3,"h":10,"g":7,"gesp":false,"dh":2014,"dg":1814},{"r":3,"h":1,"g":4,"gesp":false,"dh":1825,"dg":1953},{"r":4,"h":3,"g":10,"gesp":false,"dh":1906,"dg":2014},{"r":4,"h":4,"g":2,"gesp":false,"dh":1953,"dg":1949},{"r":4,"h":7,"g":8,"gesp":false,"dh":1814,"dg":1960},{"r":4,"h":6,"g":9,"gesp":false,"dh":1925,"dg":1914},{"r":4,"h":5,"g":1,"gesp":false,"dh":1994,"dg":1825},{"r":5,"h":3,"g":4,"gesp":false,"dh":1906,"dg":1953},{"r":5,"h":9,"g":7,"gesp":false,"dh":1914,"dg":1814},{"r":5,"h":2,"g":5,"gesp":false,"dh":1949,"dg":1994},{"r":5,"h":10,"g":8,"gesp":false,"dh":2014,"dg":1960},{"r":5,"h":1,"g":6,"gesp":false,"dh":1825,"dg":1925},{"r":6,"h":4,"g":10,"gesp":false,"dh":1953,"dg":2014},{"r":6,"h":7,"g":1,"gesp":false,"dh":1814,"dg":1825},{"r":6,"h":6,"g":2,"gesp":false,"dh":1925,"dg":1949},{"r":6,"h":8,"g":9,"gesp":false,"dh":1960,"dg":1914},{"r":6,"h":5,"g":3,"gesp":false,"dh":1994,"dg":1906},{"r":7,"h":3,"g":6,"gesp":false,"dh":1906,"dg":1925},{"r":7,"h":4,"g":5,"gesp":false,"dh":1953,"dg":1994},{"r":7,"h":2,"g":7,"gesp":false,"dh":1949,"dg":1814},{"r":7,"h":10,"g":9,"gesp":false,"dh":2014,"dg":1914},{"r":7,"h":1,"g":8,"gesp":false,"dh":1825,"dg":1960},{"r":8,"h":7,"g":3,"gesp":false,"dh":1814,"dg":1906},{"r":8,"h":6,"g":4,"gesp":false,"dh":1925,"dg":1953},{"r":8,"h":9,"g":1,"gesp":false,"dh":1914,"dg":1825},{"r":8,"h":8,"g":2,"gesp":false,"dh":1960,"dg":1949},{"r":8,"h":5,"g":10,"gesp":false,"dh":1994,"dg":2014},{"r":9,"h":3,"g":8,"gesp":false,"dh":1906,"dg":1960},{"r":9,"h":4,"g":7,"gesp":false,"dh":1953,"dg":1814},{"r":9,"h":2,"g":9,"gesp":false,"dh":1949,"dg":1914},{"r":9,"h":1,"g":10,"gesp":false,"dh":1825,"dg":2014},{"r":9,"h":5,"g":6,"gesp":false,"dh":1994,"dg":1925}]}</script>
+      </details>
+      <p class="klein quelle"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=341&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a></p>
+    </section>
+    <section class="team" id="mf3">
+      <div class="team-kopf">
+        <h2>AFK 3 <span class="team-klasse">B-Klasse</span></h2>
+        <span class="team-platz">Platz 5 von 10</span>
+      </div>
+      <p class="klein">Tabelle nach Runde 1 von 9</p>
+      
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+          <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
+          <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
+        <tbody><tr><td>1</td><td class="name">SV Höhenkirchen 1</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">4</td></tr><tr><td>1</td><td class="name">FC Bayern München 8</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">4</td></tr><tr><td>3</td><td class="name">SF Deisenhofen 2</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>4</td><td class="name">TSV Solln 2</td><td>1</td><td><strong>2</strong></td><td>4</td><td class="neben">1</td><td class="neben">3</td></tr><tr class="eigen"><td>5</td><td class="name">SG AFK 3</td><td>1</td><td><strong>1</strong></td><td>3½</td><td class="neben">0</td><td class="neben">3</td></tr><tr><td>5</td><td class="name">SK Markt Schwaben 1</td><td>1</td><td><strong>1</strong></td><td>3½</td><td class="neben">0</td><td class="neben">3</td></tr><tr><td>7</td><td class="name">Schachfreunde München 3</td><td>1</td><td><strong>0</strong></td><td>3</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>8</td><td class="name">SK München Südost 3</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>8</td><td class="name">SC Garching 1980 7</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>10</td><td class="name">SC Eching 2</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">1</td></tr></tbody>
+      </table></div>
+      <details class="block" open><summary>Unsere Spiele</summary><details class="spiel"><summary><span class="rd">R1</span><span class="ha">H</span><span class="geg">SK Markt Schwaben 1<span class="dwz">Ø 1775</span></span><span class="erg erg-u" title="Unentschieden">3½ : 3½</span></summary><table class="bretter"><tbody><tr><td>1</td><td class="name">Christoph Keil</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Matthias Eberspächer</td></tr><tr><td>2</td><td class="name">Gaurav Singh Mudan</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Bernward Klocke</td></tr><tr><td>3</td><td class="name">Andras Centgraf</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Stefan Dreßler</td></tr><tr><td>4</td><td class="name">Emil Kasims</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Stefan Rothneiger</td></tr><tr><td>5</td><td class="name">Yaran Quan</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Jürgen Dreisch</td></tr><tr><td>6</td><td class="name">Aiman El Sewisy</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Srinivas Kallepalli</td></tr><tr><td>7</td><td class="name">Lothar Egersdörfer</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Matthias Kranz</td></tr></tbody></table></details><div class="spiel"><span class="rd">R2</span><span class="ha">A</span><span class="geg">SV Höhenkirchen 1<span class="dwz">Ø 1864</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R3</span><span class="ha">H</span><span class="geg">Schachfreunde München 3<span class="dwz">Ø 1813</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R4</span><span class="ha">A</span><span class="geg">SK München Südost 3<span class="dwz">Ø 1837</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R5</span><span class="ha">A</span><span class="geg">TSV Solln 2<span class="dwz">Ø 1895</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R6</span><span class="ha">H</span><span class="geg">FC Bayern München 8<span class="dwz">Ø 1847</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R7</span><span class="ha">A</span><span class="geg">SF Deisenhofen 2<span class="dwz">Ø 1936</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R8</span><span class="ha">H</span><span class="geg">SC Eching 2<span class="dwz">Ø 1866</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R9</span><span class="ha">A</span><span class="geg">SC Garching 1980 7<span class="dwz">Ø 1791</span></span><span class="erg erg-offen">offen</span></div></details>
+      
+      <details class="block"><summary>Spielerstatistik</summary>
+        <div class="tab-wrap"><table class="liga-tab spieler">
+          <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
+            <th class="neben">Brett</th><th class="neben"></th></tr></thead>
+          <tbody><tr><td class="name">Christoph Keil</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">1</td><td class="neben klein"></td></tr><tr><td class="name">Gaurav Singh Mudan</td><td>1</td><td>1</td><td>100 %</td><td class="neben">2</td><td class="neben klein"></td></tr><tr><td class="name">Andras Centgraf</td><td>1</td><td>0</td><td>0 %</td><td class="neben">3</td><td class="neben klein"></td></tr><tr><td class="name">Emil Kasims</td><td>1</td><td>0</td><td>0 %</td><td class="neben">4</td><td class="neben klein"></td></tr><tr><td class="name">Yaran Quan</td><td>1</td><td>1</td><td>100 %</td><td class="neben">5</td><td class="neben klein"></td></tr><tr><td class="name">Aiman El Sewisy</td><td>1</td><td>1</td><td>100 %</td><td class="neben">6</td><td class="neben klein"></td></tr><tr><td class="name">Lothar Egersdörfer</td><td>1</td><td>0</td><td>0 %</td><td class="neben">7</td><td class="neben klein"></td></tr></tbody>
+        </table></div>
+        <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>
+      </details>
+      
+      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
+        <div class="rechner" data-key="mf3"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+        <script type="application/json" id="liga-mf3">{"key":"mf3","kurz":"AFK 3","bretter":7,"eigen":8,"teams":{"1":"SF Deisenhofen 2","2":"SC Eching 2","3":"SC Garching 1980 7","4":"SK Markt Schwaben 1","5":"SV Höhenkirchen 1","6":"Schachfreunde München 3","7":"SK München Südost 3","8":"SG AFK 3","9":"FC Bayern München 8","10":"TSV Solln 2"},"tabelle":[{"platz":1,"tlnr":5,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":4},{"platz":1,"tlnr":9,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":4},{"platz":3,"tlnr":1,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":3},{"platz":4,"tlnr":10,"sp":1,"mp":2,"bp":4,"siege":1,"gp":3},{"platz":5,"tlnr":8,"sp":1,"mp":1,"bp":3.5,"siege":0,"gp":3},{"platz":5,"tlnr":4,"sp":1,"mp":1,"bp":3.5,"siege":0,"gp":3},{"platz":7,"tlnr":6,"sp":1,"mp":0,"bp":3,"siege":0,"gp":2},{"platz":8,"tlnr":7,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":8,"tlnr":3,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":10,"tlnr":2,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":1}],"auf":0,"ab":0,"matches":[{"r":1,"h":9,"g":3,"gesp":true,"bh":4.5,"bg":2.5,"wh":4,"wg":2,"dh":1839,"dg":1778},{"r":1,"h":1,"g":2,"gesp":true,"bh":4.5,"bg":2.5,"wh":3,"wg":1,"dh":1859,"dg":1745},{"r":1,"h":8,"g":4,"gesp":true,"bh":3.5,"bg":3.5,"wh":3,"wg":3,"dh":1790,"dg":1775},{"r":1,"h":7,"g":5,"gesp":true,"bh":2.5,"bg":4.5,"wh":2,"wg":4,"dh":1747,"dg":1880},{"r":1,"h":10,"g":6,"gesp":true,"bh":4,"bg":3,"wh":3,"wg":2,"dh":1877,"dg":1758},{"r":2,"h":2,"g":10,"gesp":false,"dh":1866,"dg":1895},{"r":2,"h":3,"g":1,"gesp":false,"dh":1791,"dg":1936},{"r":2,"h":4,"g":9,"gesp":false,"dh":1878,"dg":1847},{"r":2,"h":5,"g":8,"gesp":false,"dh":1864,"dg":1798},{"r":2,"h":6,"g":7,"gesp":false,"dh":1813,"dg":1837},{"r":3,"h":9,"g":5,"gesp":false,"dh":1847,"dg":1864},{"r":3,"h":2,"g":3,"gesp":false,"dh":1866,"dg":1791},{"r":3,"h":1,"g":4,"gesp":false,"dh":1936,"dg":1878},{"r":3,"h":8,"g":6,"gesp":false,"dh":1798,"dg":1813},{"r":3,"h":10,"g":7,"gesp":false,"dh":1895,"dg":1837},{"r":4,"h":3,"g":10,"gesp":false,"dh":1791,"dg":1895},{"r":4,"h":4,"g":2,"gesp":false,"dh":1878,"dg":1866},{"r":4,"h":7,"g":8,"gesp":false,"dh":1837,"dg":1798},{"r":4,"h":5,"g":1,"gesp":false,"dh":1864,"dg":1936},{"r":4,"h":6,"g":9,"gesp":false,"dh":1813,"dg":1847},{"r":5,"h":9,"g":7,"gesp":false,"dh":1847,"dg":1837},{"r":5,"h":2,"g":5,"gesp":false,"dh":1866,"dg":1864},{"r":5,"h":3,"g":4,"gesp":false,"dh":1791,"dg":1878},{"r":5,"h":1,"g":6,"gesp":false,"dh":1936,"dg":1813},{"r":5,"h":10,"g":8,"gesp":false,"dh":1895,"dg":1798},{"r":6,"h":8,"g":9,"gesp":false,"dh":1798,"dg":1847},{"r":6,"h":4,"g":10,"gesp":false,"dh":1878,"dg":1895},{"r":6,"h":7,"g":1,"gesp":false,"dh":1837,"dg":1936},{"r":6,"h":5,"g":3,"gesp":false,"dh":1864,"dg":1791},{"r":6,"h":6,"g":2,"gesp":false,"dh":1813,"dg":1866},{"r":7,"h":2,"g":7,"gesp":false,"dh":1866,"dg":1837},{"r":7,"h":3,"g":6,"gesp":false,"dh":1791,"dg":1813},{"r":7,"h":1,"g":8,"gesp":false,"dh":1936,"dg":1798},{"r":7,"h":4,"g":5,"gesp":false,"dh":1878,"dg":1864},{"r":7,"h":10,"g":9,"gesp":false,"dh":1895,"dg":1847},{"r":8,"h":9,"g":1,"gesp":false,"dh":1847,"dg":1936},{"r":8,"h":8,"g":2,"gesp":false,"dh":1798,"dg":1866},{"r":8,"h":7,"g":3,"gesp":false,"dh":1837,"dg":1791},{"r":8,"h":5,"g":10,"gesp":false,"dh":1864,"dg":1895},{"r":8,"h":6,"g":4,"gesp":false,"dh":1813,"dg":1878},{"r":9,"h":2,"g":9,"gesp":false,"dh":1866,"dg":1847},{"r":9,"h":3,"g":8,"gesp":false,"dh":1791,"dg":1798},{"r":9,"h":1,"g":10,"gesp":false,"dh":1936,"dg":1895},{"r":9,"h":4,"g":7,"gesp":false,"dh":1878,"dg":1837},{"r":9,"h":5,"g":6,"gesp":false,"dh":1864,"dg":1813}]}</script>
+      </details>
+      <p class="klein quelle"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=344&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a></p>
+    </section>
+    <section class="team" id="mf4">
+      <div class="team-kopf">
+        <h2>AFK 4 <span class="team-klasse">C-Klasse</span></h2>
+        <span class="team-platz">Platz 3 von 10</span>
+      </div>
+      <p class="klein">Tabelle nach Runde 1 von 9</p>
+      
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+          <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
+          <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
+        <tbody><tr><td>1</td><td class="name">Schachfreunde München 4</td><td>1</td><td><strong>2</strong></td><td>6</td><td class="neben">1</td><td class="neben">6</td></tr><tr><td>2</td><td class="name">SC Sendling 3</td><td>1</td><td><strong>2</strong></td><td>5</td><td class="neben">1</td><td class="neben">4</td></tr><tr class="eigen"><td>3</td><td class="name">SG AFK 4</td><td>1</td><td><strong>2</strong></td><td>4½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>4</td><td class="name">1. SK Neuperlach 2</td><td>1</td><td><strong>2</strong></td><td>4</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>5</td><td class="name">SC Haar 1931 4</td><td>1</td><td><strong>1</strong></td><td>3</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>5</td><td class="name">SK Tarrasch 1945 München 5</td><td>1</td><td><strong>1</strong></td><td>3</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>7</td><td class="name">FC Bayern München 10</td><td>1</td><td><strong>0</strong></td><td>2</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>8</td><td class="name">FC Bayern München 9</td><td>1</td><td><strong>0</strong></td><td>1½</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>9</td><td class="name">SV Weiß-Blau Allianz München 1</td><td>1</td><td><strong>0</strong></td><td>1</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>10</td><td class="name">TSV Solln 4</td><td>1</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr></tbody>
+      </table></div>
+      <details class="block" open><summary>Unsere Spiele</summary><details class="spiel"><summary><span class="rd">R1</span><span class="ha">A</span><span class="geg">FC Bayern München 9<span class="dwz">Ø 1682</span></span><span class="erg erg-s" title="Sieg">4½ : 1½</span></summary><table class="bretter"><tbody><tr><td>1</td><td class="name">Bernd Nowotny</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Johannes Dieterich</td></tr><tr><td>2</td><td class="name">Hanspeter Hecht</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Ulrich Rogun</td></tr><tr><td>3</td><td class="name">Jörg Gerstenberg</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Benedikt Bumm</td></tr><tr><td>4</td><td class="name">Dieter Vischer</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Brandon Proctor</td></tr><tr><td>5</td><td class="name">Tobias Felser</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Martin Braun</td></tr><tr><td>6</td><td class="name">Emrah Kocak</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Olexandr Klyuka</td></tr></tbody></table></details><div class="spiel"><span class="rd">R2</span><span class="ha">H</span><span class="geg">SC Haar 1931 4<span class="dwz">Ø 1640</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R3</span><span class="ha">A</span><span class="geg">SK Tarrasch 1945 München 5<span class="dwz">Ø 1697</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R4</span><span class="ha">H</span><span class="geg">TSV Solln 4<span class="dwz">Ø 1602</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R5</span><span class="ha">H</span><span class="geg">FC Bayern München 10<span class="dwz">Ø 1612</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R6</span><span class="ha">A</span><span class="geg">SV Weiß-Blau Allianz München 1<span class="dwz">Ø 1807</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R7</span><span class="ha">H</span><span class="geg">Schachfreunde München 4<span class="dwz">Ø 1707</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R8</span><span class="ha">A</span><span class="geg">SC Sendling 3<span class="dwz">Ø 1695</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R9</span><span class="ha">H</span><span class="geg">1. SK Neuperlach 2<span class="dwz">Ø 1769</span></span><span class="erg erg-offen">offen</span></div></details>
+      
+      <details class="block"><summary>Spielerstatistik</summary>
+        <div class="tab-wrap"><table class="liga-tab spieler">
+          <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
+            <th class="neben">Brett</th><th class="neben"></th></tr></thead>
+          <tbody><tr><td class="name">Bernd Nowotny</td><td>1</td><td>1</td><td>100 %</td><td class="neben">1</td><td class="neben klein"></td></tr><tr><td class="name">Hanspeter Hecht</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">2</td><td class="neben klein"></td></tr><tr><td class="name">Jörg Gerstenberg</td><td>1</td><td>1</td><td>100 %</td><td class="neben">3</td><td class="neben klein"></td></tr><tr><td class="name">Dieter Vischer</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">4</td><td class="neben klein"></td></tr><tr><td class="name">Tobias Felser</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">5</td><td class="neben klein"></td></tr><tr><td class="name">Emrah Kocak</td><td>1</td><td>1</td><td>100 %</td><td class="neben">6</td><td class="neben klein"></td></tr></tbody>
+        </table></div>
+        <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>
+      </details>
+      
+      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
+        <div class="rechner" data-key="mf4"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+        <script type="application/json" id="liga-mf4">{"key":"mf4","kurz":"AFK 4","bretter":6,"eigen":3,"teams":{"1":"SC Haar 1931 4","2":"SK Tarrasch 1945 München 5","3":"SG AFK 4","4":"FC Bayern München 10","5":"SV Weiß-Blau Allianz München 1","6":"Schachfreunde München 4","7":"SC Sendling 3","8":"1. SK Neuperlach 2","9":"FC Bayern München 9","10":"TSV Solln 4"},"tabelle":[{"platz":1,"tlnr":6,"sp":1,"mp":2,"bp":6,"siege":1,"gp":6},{"platz":2,"tlnr":7,"sp":1,"mp":2,"bp":5,"siege":1,"gp":4},{"platz":3,"tlnr":3,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":3},{"platz":4,"tlnr":8,"sp":1,"mp":2,"bp":4,"siege":1,"gp":3},{"platz":5,"tlnr":1,"sp":1,"mp":1,"bp":3,"siege":0,"gp":1},{"platz":5,"tlnr":2,"sp":1,"mp":1,"bp":3,"siege":0,"gp":1},{"platz":7,"tlnr":4,"sp":1,"mp":0,"bp":2,"siege":0,"gp":1},{"platz":8,"tlnr":9,"sp":1,"mp":0,"bp":1.5,"siege":0,"gp":0},{"platz":9,"tlnr":5,"sp":1,"mp":0,"bp":1,"siege":0,"gp":0},{"platz":10,"tlnr":10,"sp":1,"mp":0,"bp":0,"siege":0,"gp":0}],"auf":0,"ab":0,"matches":[{"r":1,"h":8,"g":4,"gesp":true,"bh":4,"bg":2,"wh":3,"wg":1,"dh":1773,"dg":1612},{"r":1,"h":9,"g":3,"gesp":true,"bh":1.5,"bg":4.5,"wh":0,"wg":3,"dh":1682,"dg":1766},{"r":1,"h":1,"g":2,"gesp":true,"bh":3,"bg":3,"wh":1,"wg":1,"dh":1606,"dg":1697},{"r":1,"h":7,"g":5,"gesp":true,"bh":5,"bg":1,"wh":4,"wg":0,"dh":1695,"dg":1601},{"r":1,"h":10,"g":6,"gesp":true,"bh":0,"bg":6,"wh":0,"wg":6,"dh":1528,"dg":1719},{"r":2,"h":4,"g":9,"gesp":false,"dh":1612,"dg":1741},{"r":2,"h":3,"g":1,"gesp":false,"dh":1795,"dg":1640},{"r":2,"h":2,"g":10,"gesp":false,"dh":1697,"dg":1602},{"r":2,"h":5,"g":8,"gesp":false,"dh":1807,"dg":1769},{"r":2,"h":6,"g":7,"gesp":false,"dh":1707,"dg":1695},{"r":3,"h":8,"g":6,"gesp":false,"dh":1769,"dg":1707},{"r":3,"h":9,"g":5,"gesp":false,"dh":1741,"dg":1807},{"r":3,"h":1,"g":4,"gesp":false,"dh":1640,"dg":1612},{"r":3,"h":2,"g":3,"gesp":false,"dh":1697,"dg":1795},{"r":3,"h":10,"g":7,"gesp":false,"dh":1602,"dg":1695},{"r":4,"h":4,"g":2,"gesp":false,"dh":1612,"dg":1697},{"r":4,"h":7,"g":8,"gesp":false,"dh":1695,"dg":1769},{"r":4,"h":3,"g":10,"gesp":false,"dh":1795,"dg":1602},{"r":4,"h":5,"g":1,"gesp":false,"dh":1807,"dg":1640},{"r":4,"h":6,"g":9,"gesp":false,"dh":1707,"dg":1741},{"r":5,"h":9,"g":7,"gesp":false,"dh":1741,"dg":1695},{"r":5,"h":1,"g":6,"gesp":false,"dh":1640,"dg":1707},{"r":5,"h":3,"g":4,"gesp":false,"dh":1795,"dg":1612},{"r":5,"h":2,"g":5,"gesp":false,"dh":1697,"dg":1807},{"r":5,"h":10,"g":8,"gesp":false,"dh":1602,"dg":1769},{"r":6,"h":8,"g":9,"gesp":false,"dh":1769,"dg":1741},{"r":6,"h":4,"g":10,"gesp":false,"dh":1612,"dg":1602},{"r":6,"h":7,"g":1,"gesp":false,"dh":1695,"dg":1640},{"r":6,"h":5,"g":3,"gesp":false,"dh":1807,"dg":1795},{"r":6,"h":6,"g":2,"gesp":false,"dh":1707,"dg":1697},{"r":7,"h":4,"g":5,"gesp":false,"dh":1612,"dg":1807},{"r":7,"h":1,"g":8,"gesp":false,"dh":1640,"dg":1769},{"r":7,"h":3,"g":6,"gesp":false,"dh":1795,"dg":1707},{"r":7,"h":2,"g":7,"gesp":false,"dh":1697,"dg":1695},{"r":7,"h":10,"g":9,"gesp":false,"dh":1602,"dg":1741},{"r":8,"h":8,"g":2,"gesp":false,"dh":1769,"dg":1697},{"r":8,"h":9,"g":1,"gesp":false,"dh":1741,"dg":1640},{"r":8,"h":7,"g":3,"gesp":false,"dh":1695,"dg":1795},{"r":8,"h":5,"g":10,"gesp":false,"dh":1807,"dg":1602},{"r":8,"h":6,"g":4,"gesp":false,"dh":1707,"dg":1612},{"r":9,"h":4,"g":7,"gesp":false,"dh":1612,"dg":1695},{"r":9,"h":1,"g":10,"gesp":false,"dh":1640,"dg":1602},{"r":9,"h":3,"g":8,"gesp":false,"dh":1795,"dg":1769},{"r":9,"h":2,"g":9,"gesp":false,"dh":1697,"dg":1741},{"r":9,"h":5,"g":6,"gesp":false,"dh":1807,"dg":1707}]}</script>
+      </details>
+      <p class="klein quelle"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=345&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a></p>
+    </section>
+    <section class="team" id="mf5">
+      <div class="team-kopf">
+        <h2>AFK 5 <span class="team-klasse">D-Klasse</span></h2>
+        <span class="team-platz">Platz 1 von 10</span>
+      </div>
+      <p class="klein">Tabelle nach Runde 1 von 9</p>
+      
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+          <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
+          <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
+        <tbody><tr class="eigen"><td>1</td><td class="name">SG AFK 5</td><td>1</td><td><strong>2</strong></td><td>4</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>2</td><td class="name">TSV Forstenried 2</td><td>1</td><td><strong>2</strong></td><td>3½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>2</td><td class="name">SK Tarrasch 1945 München 6</td><td>1</td><td><strong>2</strong></td><td>3½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>2</td><td class="name">SC Garching 1980 8</td><td>1</td><td><strong>2</strong></td><td>3½</td><td class="neben">1</td><td class="neben">3</td></tr><tr><td>5</td><td class="name">MSA Zugzwang 82 5</td><td>1</td><td><strong>2</strong></td><td>3½</td><td class="neben">1</td><td class="neben">2</td></tr><tr><td>6</td><td class="name">SK München Südost 5</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>6</td><td class="name">Münchener SC 1836 5</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>6</td><td class="name">SK Markt Schwaben 2</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">2</td></tr><tr><td>9</td><td class="name">SF Deisenhofen 3</td><td>1</td><td><strong>0</strong></td><td>2½</td><td class="neben">0</td><td class="neben">1</td></tr><tr><td>10</td><td class="name">SC Eching 3</td><td>1</td><td><strong>0</strong></td><td>2</td><td class="neben">0</td><td class="neben">1</td></tr></tbody>
+      </table></div>
+      <details class="block" open><summary>Unsere Spiele</summary><details class="spiel"><summary><span class="rd">R1</span><span class="ha">A</span><span class="geg">SC Eching 3<span class="dwz">Ø 1576</span></span><span class="erg erg-s" title="Sieg">4 : 2</span></summary><table class="bretter"><tbody><tr><td>1</td><td class="name">Rainer Seidl</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Fabian Zoeller</td></tr><tr><td>2</td><td class="name">Jonathan Hix</td><td><span class="erg erg-u klein">0½ – 0½</span></td><td class="name">Josef Schredl</td></tr><tr><td>3</td><td class="name">Bastian Fischer</td><td><span class="erg erg-n klein">0 – 1</span></td><td class="name">Nils Polch</td></tr><tr><td>4</td><td class="name">Laura Röll</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Hartmut Fenge</td></tr><tr><td>5</td><td class="name">Kian Herrmann</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Anasztazia Kiraly</td></tr><tr><td>6</td><td class="name">Lorenz Röll</td><td><span class="erg erg-s klein">1 – 0</span></td><td class="name">Artur Gruszka</td></tr></tbody></table></details><div class="spiel"><span class="rd">R2</span><span class="ha">H</span><span class="geg">SF Deisenhofen 3<span class="dwz">Ø 1736</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R3</span><span class="ha">A</span><span class="geg">MSA Zugzwang 82 5<span class="dwz">Ø 1673</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R4</span><span class="ha">H</span><span class="geg">TSV Forstenried 2<span class="dwz">Ø 1747</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R5</span><span class="ha">H</span><span class="geg">SK Markt Schwaben 2<span class="dwz">Ø 1683</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R6</span><span class="ha">A</span><span class="geg">Münchener SC 1836 5<span class="dwz">Ø 1664</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R7</span><span class="ha">H</span><span class="geg">SK München Südost 5<span class="dwz">Ø 1542</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R8</span><span class="ha">A</span><span class="geg">SK Tarrasch 1945 München 6<span class="dwz">Ø 1617</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R9</span><span class="ha">H</span><span class="geg">SC Garching 1980 8<span class="dwz">Ø 1667</span></span><span class="erg erg-offen">offen</span></div></details>
+      
+      <details class="block"><summary>Spielerstatistik</summary>
+        <div class="tab-wrap"><table class="liga-tab spieler">
+          <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
+            <th class="neben">Brett</th><th class="neben"></th></tr></thead>
+          <tbody><tr><td class="name">Rainer Seidl</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">1</td><td class="neben klein"></td></tr><tr><td class="name">Jonathan Hix</td><td>1</td><td>0½</td><td>50 %</td><td class="neben">2</td><td class="neben klein"></td></tr><tr><td class="name">Bastian Fischer</td><td>1</td><td>0</td><td>0 %</td><td class="neben">3</td><td class="neben klein"></td></tr><tr><td class="name">Laura Röll</td><td>1</td><td>1</td><td>100 %</td><td class="neben">4</td><td class="neben klein"></td></tr><tr><td class="name">Kian Herrmann</td><td>1</td><td>1</td><td>100 %</td><td class="neben">5</td><td class="neben klein"></td></tr><tr><td class="name">Lorenz Röll</td><td>1</td><td>1</td><td>100 %</td><td class="neben">6</td><td class="neben klein"></td></tr></tbody>
+        </table></div>
+        <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>
+      </details>
+      
+      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
+        <div class="rechner" data-key="mf5"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+        <script type="application/json" id="liga-mf5">{"key":"mf5","kurz":"AFK 5","bretter":6,"eigen":3,"teams":{"1":"SF Deisenhofen 3","2":"MSA Zugzwang 82 5","3":"SG AFK 5","4":"SK Markt Schwaben 2","5":"Münchener SC 1836 5","6":"SK München Südost 5","7":"SK Tarrasch 1945 München 6","8":"SC Garching 1980 8","9":"SC Eching 3","10":"TSV Forstenried 2"},"tabelle":[{"platz":1,"tlnr":3,"sp":1,"mp":2,"bp":4,"siege":1,"gp":3},{"platz":2,"tlnr":10,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":3},{"platz":2,"tlnr":7,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":3},{"platz":2,"tlnr":8,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":3},{"platz":5,"tlnr":2,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":2},{"platz":6,"tlnr":6,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":6,"tlnr":5,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":6,"tlnr":4,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":9,"tlnr":1,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":1},{"platz":10,"tlnr":9,"sp":1,"mp":0,"bp":2,"siege":0,"gp":1}],"auf":0,"ab":0,"matches":[{"r":1,"h":9,"g":3,"gesp":true,"bh":2,"bg":4,"wh":1,"wg":3,"dh":1576,"dg":1629},{"r":1,"h":8,"g":4,"gesp":true,"bh":3.5,"bg":2.5,"wh":3,"wg":2,"dh":1616,"dg":1652},{"r":1,"h":1,"g":2,"gesp":true,"bh":2.5,"bg":3.5,"wh":1,"wg":2,"dh":1615,"dg":1694},{"r":1,"h":7,"g":5,"gesp":true,"bh":3.5,"bg":2.5,"wh":3,"wg":2,"dh":1617,"dg":1623},{"r":1,"h":10,"g":6,"gesp":true,"bh":3.5,"bg":2.5,"wh":3,"wg":2,"dh":1573,"dg":1544},{"r":2,"h":2,"g":10,"gesp":false,"dh":1673,"dg":1747},{"r":2,"h":5,"g":8,"gesp":false,"dh":1664,"dg":1667},{"r":2,"h":3,"g":1,"gesp":false,"dh":1592,"dg":1736},{"r":2,"h":4,"g":9,"gesp":false,"dh":1683,"dg":1640},{"r":2,"h":6,"g":7,"gesp":false,"dh":1542,"dg":1617},{"r":3,"h":2,"g":3,"gesp":false,"dh":1673,"dg":1592},{"r":3,"h":9,"g":5,"gesp":false,"dh":1640,"dg":1664},{"r":3,"h":8,"g":6,"gesp":false,"dh":1667,"dg":1542},{"r":3,"h":1,"g":4,"gesp":false,"dh":1736,"dg":1683},{"r":3,"h":10,"g":7,"gesp":false,"dh":1747,"dg":1617},{"r":4,"h":5,"g":1,"gesp":false,"dh":1664,"dg":1736},{"r":4,"h":3,"g":10,"gesp":false,"dh":1592,"dg":1747},{"r":4,"h":4,"g":2,"gesp":false,"dh":1683,"dg":1673},{"r":4,"h":6,"g":9,"gesp":false,"dh":1542,"dg":1640},{"r":4,"h":7,"g":8,"gesp":false,"dh":1617,"dg":1667},{"r":5,"h":2,"g":5,"gesp":false,"dh":1673,"dg":1664},{"r":5,"h":9,"g":7,"gesp":false,"dh":1640,"dg":1617},{"r":5,"h":1,"g":6,"gesp":false,"dh":1736,"dg":1542},{"r":5,"h":3,"g":4,"gesp":false,"dh":1592,"dg":1683},{"r":5,"h":10,"g":8,"gesp":false,"dh":1747,"dg":1667},{"r":6,"h":5,"g":3,"gesp":false,"dh":1664,"dg":1592},{"r":6,"h":8,"g":9,"gesp":false,"dh":1667,"dg":1640},{"r":6,"h":4,"g":10,"gesp":false,"dh":1683,"dg":1747},{"r":6,"h":6,"g":2,"gesp":false,"dh":1542,"dg":1673},{"r":6,"h":7,"g":1,"gesp":false,"dh":1617,"dg":1736},{"r":7,"h":2,"g":7,"gesp":false,"dh":1673,"dg":1617},{"r":7,"h":1,"g":8,"gesp":false,"dh":1736,"dg":1667},{"r":7,"h":3,"g":6,"gesp":false,"dh":1592,"dg":1542},{"r":7,"h":4,"g":5,"gesp":false,"dh":1683,"dg":1664},{"r":7,"h":10,"g":9,"gesp":false,"dh":1747,"dg":1640},{"r":8,"h":5,"g":10,"gesp":false,"dh":1664,"dg":1747},{"r":8,"h":9,"g":1,"gesp":false,"dh":1640,"dg":1736},{"r":8,"h":8,"g":2,"gesp":false,"dh":1667,"dg":1673},{"r":8,"h":6,"g":4,"gesp":false,"dh":1542,"dg":1683},{"r":8,"h":7,"g":3,"gesp":false,"dh":1617,"dg":1592},{"r":9,"h":2,"g":9,"gesp":false,"dh":1673,"dg":1640},{"r":9,"h":5,"g":6,"gesp":false,"dh":1664,"dg":1542},{"r":9,"h":1,"g":10,"gesp":false,"dh":1736,"dg":1747},{"r":9,"h":3,"g":8,"gesp":false,"dh":1592,"dg":1667},{"r":9,"h":4,"g":7,"gesp":false,"dh":1683,"dg":1617}]}</script>
+      </details>
+      <p class="klein quelle"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=347&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a></p>
+    </section>
+    <section class="team" id="mf6">
+      <div class="team-kopf">
+        <h2>AFK 6 <span class="team-klasse">E-Klasse</span></h2>
+        <span class="team-platz">Platz 1 von 8</span>
+      </div>
+      <p class="klein">Tabelle noch kein Spieltag gespielt</p>
+      
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+          <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
+          <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
+        <tbody><tr><td>1</td><td class="name">SC Kirchseeon 2</td><td>1</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>1</td><td class="name">SF Dachau 1932 4</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>1</td><td class="name">SC Unterhaching 3</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>1</td><td class="name">1. SK Neuperlach 3</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr class="eigen"><td>1</td><td class="name">SG AFK 6</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>1</td><td class="name">Schachfreunde München 5</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>1</td><td class="name">SG Schwabing München Nord 5</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr><tr><td>1</td><td class="name">Schachtreff Obermenzing 1</td><td>0</td><td><strong>0</strong></td><td>0</td><td class="neben">0</td><td class="neben">0</td></tr></tbody>
+      </table></div>
+      <details class="block" open><summary>Unsere Spiele</summary><div class="spiel"><span class="rd">R1</span><span class="ha">A</span><span class="geg">1. SK Neuperlach 3<span class="dwz">Ø 1618</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R2</span><span class="ha">H</span><span class="geg">Schachfreunde München 5<span class="dwz">Ø 1593</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R3</span><span class="ha">A</span><span class="geg">SG Schwabing München Nord 5<span class="dwz">Ø 1537</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R4</span><span class="ha">A</span><span class="geg">Schachtreff Obermenzing 1<span class="dwz">Ø 1557</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R5</span><span class="ha">H</span><span class="geg">SC Unterhaching 3<span class="dwz">Ø 1763</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R6</span><span class="ha">A</span><span class="geg">SC Kirchseeon 2<span class="dwz">Ø 1299</span></span><span class="erg erg-offen">offen</span></div><div class="spiel"><span class="rd">R7</span><span class="ha">H</span><span class="geg">SF Dachau 1932 4<span class="dwz">Ø 1579</span></span><span class="erg erg-offen">offen</span></div></details>
+      
+      
+      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
+        <div class="rechner" data-key="mf6"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+        <script type="application/json" id="liga-mf6">{"key":"mf6","kurz":"AFK 6","bretter":null,"eigen":6,"teams":{"1":"SC Kirchseeon 2","2":"SF Dachau 1932 4","3":"1. SK Neuperlach 3","4":"Schachfreunde München 5","5":"SG Schwabing München Nord 5","6":"SG AFK 6","7":"SC Unterhaching 3","8":"Schachtreff Obermenzing 1"},"tabelle":[{"platz":1,"tlnr":1,"sp":1,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":2,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":7,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":3,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":6,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":4,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":5,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":8,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0}],"auf":0,"ab":0,"matches":[{"r":1,"h":3,"g":6,"gesp":false,"dh":1618,"dg":1516},{"r":1,"h":1,"g":null,"gesp":true,"sf":true,"bh":0,"bg":0,"wh":0,"wg":0},{"r":1,"h":1,"g":8,"gesp":false,"dh":1299,"dg":1557},{"r":1,"h":2,"g":7,"gesp":false,"dh":1579,"dg":1763},{"r":1,"h":4,"g":5,"gesp":false,"dh":1593,"dg":1537},{"r":2,"h":1,"g":2,"gesp":false,"dh":1299,"dg":1579},{"r":2,"h":7,"g":3,"gesp":false,"dh":1763,"dg":1618},{"r":2,"h":6,"g":4,"gesp":false,"dh":1516,"dg":1593},{"r":2,"h":8,"g":5,"gesp":false,"dh":1557,"dg":1537},{"r":3,"h":3,"g":1,"gesp":false,"dh":1618,"dg":1299},{"r":3,"h":2,"g":8,"gesp":false,"dh":1579,"dg":1557},{"r":3,"h":5,"g":6,"gesp":false,"dh":1537,"dg":1516},{"r":3,"h":4,"g":7,"gesp":false,"dh":1593,"dg":1763},{"r":4,"h":1,"g":4,"gesp":false,"dh":1299,"dg":1593},{"r":4,"h":7,"g":5,"gesp":false,"dh":1763,"dg":1537},{"r":4,"h":2,"g":3,"gesp":false,"dh":1579,"dg":1618},{"r":4,"h":8,"g":6,"gesp":false,"dh":1557,"dg":1516},{"r":5,"h":3,"g":8,"gesp":false,"dh":1618,"dg":1557},{"r":5,"h":6,"g":7,"gesp":false,"dh":1516,"dg":1763},{"r":5,"h":5,"g":1,"gesp":false,"dh":1537,"dg":1299},{"r":5,"h":4,"g":2,"gesp":false,"dh":1593,"dg":1579},{"r":6,"h":3,"g":4,"gesp":false,"dh":1618,"dg":1593},{"r":6,"h":1,"g":6,"gesp":false,"dh":1299,"dg":1516},{"r":6,"h":2,"g":5,"gesp":false,"dh":1579,"dg":1537},{"r":6,"h":8,"g":7,"gesp":false,"dh":1557,"dg":1763},{"r":7,"h":7,"g":1,"gesp":false,"dh":1763,"dg":1299},{"r":7,"h":6,"g":2,"gesp":false,"dh":1516,"dg":1579},{"r":7,"h":5,"g":3,"gesp":false,"dh":1537,"dg":1618},{"r":7,"h":4,"g":8,"gesp":false,"dh":1593,"dg":1557}]}</script>
+      </details>
+      <p class="klein quelle"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=348&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a></p>
+    </section>
+    <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
+      Gewinnpartien; Gleichstand = geteilter Platz). Daten: Schachbezirk München, Saison-ID 16.
+      Letzte Änderung: 01.11.2026, 14:52 Uhr.</p>
+    <script>
+(function () {
+  function zahl(x) { var g = Math.floor(x); return (x - g) ? (g ? g + "½" : "½") : String(g); }
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
-<div class="grid-3 team-grid" id="mannschaften">
-  <noscript>
-    <p>Diese Übersicht braucht JavaScript. Alle Ligen findest du auch direkt beim
-      <a href="https://www.schachbezirk-muenchen.de" target="_blank" rel="noopener">Schachbezirk München</a>.</p>
-  </noscript>
-</div>
-
-<script>
-  // ============================================================
-  //  HIER PFLEGEN: Pro neuer Saison nur diese Werte anpassen
-  // ============================================================
-  const SAISON = 16;
-  const SAISON_LABEL = "2026/27";   // nur zur Anzeige, bitte prüfen
-  const ITEMID = 4164;
-  const BASIS  = "https://schachbezirk-muenchen.de/component/clm/";
-
-  // liga = Liga-Nummer, tlnr = Mannschaftsnummer in dieser Liga
-  // klasse = Spielklasse (optional, z. B. "Bezirksliga A")
-  // kurz = Kürzel wie im Spielplan (AFK 1 ...)
-  // liga: null  ->  Karte ohne Link ("wird nachgetragen")
-  const MANNSCHAFTEN = [
-    { name: "1. Mannschaft",      kurz: "AFK 1",  liga: 340,  tlnr: 3, klasse: "Bezirksliga" },
-    { name: "2. Mannschaft",      kurz: "AFK 2",  liga: 341,  tlnr: 8, klasse: "A-Klasse" },
-    { name: "3. Mannschaft",      kurz: "AFK 3",  liga: 344,  tlnr: 8, klasse: "B-Klasse" },
-    { name: "4. Mannschaft",      kurz: "AFK 4",  liga: 345,  tlnr: 3, klasse: "C-Klasse" },
-    { name: "5. Mannschaft",      kurz: "AFK 5",  liga: 347,  tlnr: 3, klasse: "D-Klasse" },
-    { name: "6. Mannschaft",      kurz: "AFK 6",  liga: 348,  tlnr: 6, klasse: "E-Klasse" },
-    { name: "Jugendmannschaften", kurz: "Jugend", liga: null, tlnr: null, klasse: "Jugendrunden", jugend: true },
-  ];
-  // ============================================================
-
-  function tabellenUrl(m) {
-    const p = new URLSearchParams({
-      view: "mannschaft",
-      saison: SAISON,
-      liga: m.liga,
-      tlnr: m.tlnr,
-      Itemid: ITEMID,
+  // §15: 2 MP bei mehr als der Hälfte der ERZIELBAREN Brettpunkte (= Bretterzahl), 1 MP bei genau der Hälfte
+  function tabelle(d, sim) {
+    var stats = {}, reihe = {};
+    d.tabelle.forEach(function (r, i) { reihe[r.tlnr] = i; });
+    d.matches.forEach(function (m) {
+      [m.h, m.g].forEach(function (t) {
+        if (t != null && !stats[t]) stats[t] = { tlnr: t, sp: 0, mp: 0, bp: 0, siege: 0, gp: 0 };
+      });
     });
-    return BASIS + "?" + p.toString();
+    d.matches.forEach(function (m, i) {
+      var e = m.gesp ? m : sim[i];
+      if (!e) return;
+      var erzielbar = d.bretter || (e.bh + e.bg), half = erzielbar / 2;
+      [[m.h, e.bh, e.wh], [m.g, e.bg, e.wg]].forEach(function (s) {
+        if (s[0] == null) return;
+        var r = stats[s[0]];
+        r.sp++; r.bp += s[1]; r.gp += s[2];
+        if (erzielbar > 0) {
+          if (s[1] > half) { r.mp += 2; r.siege++; }
+          else if (s[1] === half) r.mp += 1;
+        }
+      });
+    });
+    var rows = Object.keys(stats).map(function (k) { return stats[k]; });
+    rows.sort(function (a, b) {
+      return (b.mp - a.mp) || (b.bp - a.bp) || (b.siege - a.siege) || (b.gp - a.gp)
+        || ((reihe[a.tlnr] == null ? 999 : reihe[a.tlnr]) - (reihe[b.tlnr] == null ? 999 : reihe[b.tlnr]));
+    });
+    var platz = [];
+    rows.forEach(function (r, i) {
+      var p = rows[i - 1];
+      platz.push(i && r.mp === p.mp && r.bp === p.bp && r.siege === p.siege && r.gp === p.gp ? platz[i - 1] : i + 1);
+    });
+    rows.forEach(function (r, i) { r.platz = platz[i]; });
+    return rows;
   }
 
-  document.getElementById("saison-label").textContent = " (Saison " + SAISON_LABEL + ")";
+  // Ergebnis -> Gewinnpartien wie im Python-Rechner: maximal viele Siege, Rest Remis
+  function ergebnis(bh, bg) {
+    var wh = Math.floor(bh), remis = Math.round(2 * (bh - wh));
+    return { bh: bh, bg: bg, wh: wh, wg: Math.round(bg - remis / 2) };
+  }
 
-  const container = document.getElementById("mannschaften");
+  function zeichneTabelle(d, ziel, rows) {
+    var alt = {};
+    d.tabelle.forEach(function (r) { alt[r.tlnr] = r.platz; });
+    ziel.textContent = "";
+    var wrap = el("div", "tab-wrap"), t = el("table", "liga-tab"), kopf = el("tr");
+    ["Rg", "", "Mannschaft", "Sp", "MP", "BP"].forEach(function (h, i) {
+      var th = el("th", i === 2 ? "name" : "", h); kopf.appendChild(th);
+    });
+    var thead = el("thead"); thead.appendChild(kopf); t.appendChild(thead);
+    var tb = el("tbody"), n = rows.length;
+    rows.forEach(function (r, i) {
+      var tr = el("tr");
+      if (r.tlnr === d.eigen) tr.className = "eigen";
+      if (d.auf && i < d.auf) tr.classList.add("auf");
+      if (d.ab && i >= n - d.ab) tr.classList.add("ab");
+      var diff = (alt[r.tlnr] || r.platz) - r.platz;
+      var dz = el("span", "delta " + (diff > 0 ? "hoch" : diff < 0 ? "runter" : ""), diff > 0 ? "▲" + diff : diff < 0 ? "▼" + (-diff) : "");
+      var cells = [String(r.platz), dz, d.teams[r.tlnr] || ("Team " + r.tlnr), r.sp, r.mp, zahl(r.bp)];
+      cells.forEach(function (c, j) {
+        var td = el("td", j === 2 ? "name" : "");
+        if (c instanceof Node) td.appendChild(c); else td.textContent = c;
+        tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb); wrap.appendChild(t); ziel.appendChild(wrap);
+  }
 
-  MANNSCHAFTEN.forEach((m) => {
-    const card = document.createElement("div");
-    card.className = "card";
+  document.querySelectorAll(".rechner[data-key]").forEach(function (box) {
+    var quelle = document.getElementById("liga-" + box.dataset.key);
+    if (!quelle) return;
+    var d = JSON.parse(quelle.textContent), sim = {}, selects = [];
+    var B = d.bretter || 8, hoch = Math.floor(B / 2) + 1;
+    box.textContent = "";
+    box.appendChild(el("p", "klein", "Trag Ergebnisse für offene Spiele ein – die Tabelle unten rechnet sofort neu (▲▼ = Veränderung zum echten Stand). Nichts wird gespeichert."));
 
-    const h3 = document.createElement("h3");
-    h3.appendChild(document.createTextNode(m.name));
-    if (m.kurz) {
-      const tag = document.createElement("span");
-      tag.className = "team-tag";
-      tag.textContent = m.kurz;
-      h3.appendChild(tag);
+    var knoepfe = el("div", "r-knoepfe");
+    function knopf(text, fn) { var b = el("button", "", text); b.type = "button"; b.onclick = fn; knoepfe.appendChild(b); }
+    box.appendChild(knoepfe);
+
+    var liste = el("div"), ausgabe = el("div", "r-tabelle");
+    var runden = {};
+    d.matches.forEach(function (m, i) { if (!m.gesp && !m.sf) (runden[m.r] = runden[m.r] || []).push(i); });
+
+    var optionen = [["", "–"]];
+    for (var x = B; x >= 0; x -= 0.5) optionen.push([String(x), zahl(x) + " : " + zahl(B - x)]);
+
+    Object.keys(runden).sort(function (a, b) { return a - b; }).forEach(function (r, nr) {
+      var det = el("details", "r-runde-box"), sum = el("summary", "r-runde", "Runde " + r);
+      det.appendChild(sum);
+      if (nr === 0) det.open = true;        // nächste offene Runde aufgeklappt
+      liste.appendChild(det);
+      runden[r].forEach(function (i) {
+        var m = d.matches[i], z = el("div", "r-spiel" + ((m.h === d.eigen || m.g === d.eigen) ? " eigen" : ""));
+        z.appendChild(el("span", "", d.teams[m.h]));
+        var s = el("select");
+        s.setAttribute("aria-label", "Ergebnis " + d.teams[m.h] + " gegen " + d.teams[m.g]);
+        optionen.forEach(function (o) { var op = el("option", "", o[1]); op.value = o[0]; s.appendChild(op); });
+        s.onchange = function () {
+          if (s.value === "") delete sim[i]; else { var bh = parseFloat(s.value); sim[i] = ergebnis(bh, B - bh); }
+          neu();
+        };
+        selects.push([s, i]);
+        z.appendChild(s);
+        z.appendChild(el("span", "", d.teams[m.g]));
+        det.appendChild(z);
+      });
+    });
+
+    function setze(i, bh) {
+      selects.forEach(function (p) { if (p[1] === i) p[0].value = bh == null ? "" : String(bh); });
+      if (bh == null) delete sim[i]; else sim[i] = ergebnis(bh, B - bh);
     }
-    card.appendChild(h3);
+    knopf(d.kurz + " gewinnt alles knapp", function () {
+      d.matches.forEach(function (m, i) {
+        if (m.gesp || m.sf) return;
+        if (m.h === d.eigen) setze(i, hoch); else if (m.g === d.eigen) setze(i, B - hoch);
+      });
+      neu();
+    });
+    knopf("Alle offenen Remis", function () {
+      selects.forEach(function (p) { setze(p[1], B / 2); }); neu();
+    });
+    knopf("Zurücksetzen", function () { selects.forEach(function (p) { setze(p[1], null); }); neu(); });
 
-    if (m.klasse) {
-      const p = document.createElement("p");
-      p.className = "team-klasse";
-      p.textContent = m.klasse;
-      card.appendChild(p);
+    box.appendChild(ausgabe);
+    box.appendChild(liste);
+    function neu() {
+      var n = Object.keys(sim).length;
+      zeichneTabelle(d, ausgabe, tabelle(d, sim));
+      var info = el("p", "klein", n ? n + " Ergebnis(se) eingetragen." : "Noch nichts eingetragen – das ist der echte Stand.");
+      ausgabe.insertBefore(info, ausgabe.firstChild);
     }
-
-    if (m.liga !== null && m.tlnr !== null) {
-      const a = document.createElement("a");
-      a.href = tabellenUrl(m);
-      a.target = "_blank";
-      a.rel = "noopener";
-      a.className = "btn";
-      a.textContent = m.jugend ? "Jugend-Ergebnisse öffnen" : "Tabelle & Ergebnisse";
-      // Der sichtbare Text steht am Anfang des Labels (Screenreader / Sprachsteuerung)
-      a.setAttribute("aria-label",
-        a.textContent + (m.jugend ? "" : " der " + m.name) + " (neuer Tab)");
-      card.appendChild(a);
-    } else {
-      const p = document.createElement("p");
-      p.className = "team-klasse";
-      p.textContent = "Liga wird nachgetragen.";
-      card.appendChild(p);
-    }
-
-    container.appendChild(card);
+    neu();
   });
+
+  // fürs Testen (node): window.__ligaTabelle(d, sim)
+  window.__ligaTabelle = tabelle;
+})();
 </script>
+    
   </main>
 
   <footer>

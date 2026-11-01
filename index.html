@@ -126,6 +126,15 @@
       .news-card a::after { content: ""; position: absolute; inset: 0; }
       .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
       .news-card:hover h3 { text-decoration: underline; }
+
+      .ticker { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.8rem; }
+      .tick { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.6rem; padding: 0.7rem 0.9rem; border-radius: 6px; background: var(--soft); border-left: 4px solid #95a5a6; color: inherit; text-decoration: none; }
+      .tick:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .tick-s { border-left-color: #1e8449; } .tick-u { border-left-color: #b9770e; } .tick-n { border-left-color: #c0392b; }
+      .tick-team { font-weight: bold; color: var(--navy); }
+      .tick-erg { font-weight: bold; font-size: 1.1rem; text-align: right; }
+      .tick-geg, .tick-info { grid-column: 1 / -1; font-size: 0.9rem; color: #555; }
+      .tick-info { font-size: 0.8rem; }
 </style>
   <meta property="og:title" content="Startseite | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
@@ -239,6 +248,45 @@
       </div>
       <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
       <p class="ev-legend"><strong>MMM</strong> = Münchner Mannschaftsmeisterschaft</p>
+    </section>
+
+    
+    <section>
+      <div class="section-head">
+        <h2>Letzte Ergebnisse</h2>
+        <a href="mannschaften.html">Alle Tabellen →</a>
+      </div>
+      <div class="ticker">
+        <a class="tick tick-n" href="mannschaften.html#mf1">
+          <span class="tick-team">AFK 1</span>
+          <span class="tick-erg">2 : 6</span>
+          <span class="tick-geg">bei SC Garching 1980 5</span>
+          <span class="tick-info">Runde 1 · Platz 9</span>
+        </a>
+        <a class="tick tick-s" href="mannschaften.html#mf2">
+          <span class="tick-team">AFK 2</span>
+          <span class="tick-erg">5 : 3</span>
+          <span class="tick-geg">vs. FC Bayern München 6</span>
+          <span class="tick-info">Runde 1 · Platz 3</span>
+        </a>
+        <a class="tick tick-u" href="mannschaften.html#mf3">
+          <span class="tick-team">AFK 3</span>
+          <span class="tick-erg">3½ : 3½</span>
+          <span class="tick-geg">vs. SK Markt Schwaben 1</span>
+          <span class="tick-info">Runde 1 · Platz 5</span>
+        </a>
+        <a class="tick tick-s" href="mannschaften.html#mf4">
+          <span class="tick-team">AFK 4</span>
+          <span class="tick-erg">4½ : 1½</span>
+          <span class="tick-geg">bei FC Bayern München 9</span>
+          <span class="tick-info">Runde 1 · Platz 3</span>
+        </a>
+        <a class="tick tick-s" href="mannschaften.html#mf5">
+          <span class="tick-team">AFK 5</span>
+          <span class="tick-erg">4 : 2</span>
+          <span class="tick-geg">bei SC Eching 3</span>
+          <span class="tick-info">Runde 1 · Platz 1</span>
+        </a></div>
     </section>
 
     <section>
