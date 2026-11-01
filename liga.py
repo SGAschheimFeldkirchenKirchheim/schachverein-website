@@ -202,20 +202,44 @@ def bretter_html(d, m):
     return f'<table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>'
 
 
-def paarungen_html(d, runde):
+def bretter_neutral_html(m):
+    """Einzelergebnisse aus Heim-Sicht (für die Spieltags-Ansicht). Sieger fett."""
+    if not m.get("bretter"):
+        return ""
     zeilen = []
+    for brett, sp_h, sp_g, art, h, g in m["bretter"]:
+        if art == "score":
+            erg = f"{zahl(h)} – {zahl(g)}"
+            sieger = "h" if h > g else "g" if g > h else ""
+        else:
+            erg = {"forfeit_heim": "+ / –", "forfeit_gast": "– / +", "annulliert": "– / –"}.get(art, "")
+            sieger = {"forfeit_heim": "h", "forfeit_gast": "g"}.get(art, "")
+        fett = lambda seite, name: f"<strong>{esc(name)}</strong>" if sieger == seite else esc(name)
+        zeilen.append(f'<tr><td>{brett}</td><td class="name">{fett("h", sp_h)}</td>'
+                      f'<td><span class="erg klein">{erg}</span></td>'
+                      f'<td class="name rechts">{fett("g", sp_g)}</td></tr>')
+    return f'<table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>'
+
+
+def paarungen_html(d, runde):
+    """Paarungen einer Runde; gespielte Wettkämpfe lassen sich aufklappen (Bretter mit Namen)."""
+    teile = []
     for m in (m for m in d["matches"] if m["r"] == runde):
-        cls = ' class="eigen"' if d["eigen"] in (m["h"], m["g"]) else ""
+        cls = "paar eigen" if d["eigen"] in (m["h"], m["g"]) else "paar"
         if m.get("sf"):
             erg = "–"
         elif m["gesp"]:
             erg = f'{zahl(m["bh"])} : {zahl(m["bg"])}'
         else:
             erg = '<span class="klein">offen</span>'
-        zeilen.append(f'<tr{cls}><td class="name">{esc(name_von(d, m["h"]))}</td>'
-                      f'<td class="erg-zelle">{erg}</td>'
-                      f'<td class="name rechts">{esc(name_von(d, m["g"]))}</td></tr>')
-    return f'<div class="tab-wrap"><table class="liga-tab paarungen"><tbody>{"".join(zeilen)}</tbody></table></div>'
+        zeile = (f'<span class="p-h">{esc(name_von(d, m["h"]))}</span><span class="p-e">{erg}</span>'
+                 f'<span class="p-g">{esc(name_von(d, m["g"]))}</span>')
+        bretter = bretter_neutral_html(m) if m["gesp"] else ""
+        teile.append(f'<details class="{cls}"><summary>{zeile}</summary>{bretter}</details>' if bretter
+                     else f'<div class="{cls}"><div class="p-zeile">{zeile}</div></div>')
+    hinweis = ('<p class="klein">Auf einen Wettkampf tippen, um die Einzelergebnisse zu sehen.</p>'
+               if any(m.get("bretter") and m["gesp"] for m in d["matches"] if m["r"] == runde) else "")
+    return f'{hinweis}<div class="paarungen">{"".join(teile)}</div>'
 
 
 # ==========================================
@@ -509,7 +533,21 @@ STYLES = """<style>
       .liga-tab tr.auf td:first-child { box-shadow: inset 4px 0 #1e8449; }
       .liga-tab tr.ab td:first-child { box-shadow: inset 4px 0 #c0392b; }
       .liga-tab tr.trenn td { border-top: 2px dashed #888; }
-      .paarungen .erg-zelle { white-space: nowrap; font-weight: bold; width: 6rem; }
+      .paarungen { border-top: 1px solid var(--border); }
+      .paar { border-bottom: 1px solid var(--border); }
+      .paar > summary { list-style: none; cursor: pointer; }
+      .paar > summary::-webkit-details-marker { display: none; }
+      .paar > summary, .p-zeile { display: grid; grid-template-columns: 1fr 6.5rem 1fr 1rem; align-items: center; gap: 0.5rem; padding: 0.45rem 0.5rem; }
+      .p-zeile::after { content: ""; }
+      .paar > summary::after { content: "▸"; color: #888; text-align: right; }
+      .paar[open] > summary::after { content: "▾"; }
+      .paar > summary:hover { background: var(--soft); }
+      .paar.eigen > summary, .paar.eigen .p-zeile { background: #dcebf7; font-weight: bold; }
+      .p-e { text-align: center; font-weight: bold; white-space: nowrap; }
+      .p-g { text-align: right; }
+      .paar .bretter { margin: 0.2rem 0 0.6rem; }
+      .bretter td.rechts { text-align: right; }
+      @media (max-width: 600px) { .paar > summary, .p-zeile { grid-template-columns: 1fr 5rem 1fr 0.8rem; gap: 0.3rem; font-size: 0.9rem; } }
       .delta { font-size: 0.8rem; font-weight: bold; }
       .delta.hoch { color: #1e8449; } .delta.runter { color: #c0392b; }
       @media (max-width: 600px) {
