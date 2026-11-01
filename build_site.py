@@ -11,6 +11,8 @@ import shutil
 from urllib.parse import quote
 from itertools import groupby
 
+import liga   # Mannschaften-Seite + Ergebnis-Ticker (Daten vom Tabellenrechner)
+
 try:
     from zoneinfo import ZoneInfo
 except ImportError:  # sehr alte Python-Versionen
@@ -55,7 +57,7 @@ DEFAULT_DESCRIPTION = "Schachverein in Aschheim, Feldkirchen &amp; Kirchheim –
 # Eigene Beschreibung pro Seite (Schlüssel = Dateiname). Fehlt eine Seite, gilt der Standard.
 PAGE_DESCRIPTIONS = {
     "termine.html": "Spielplan und Termine der SG Aschheim/Feldkirchen/Kirchheim: Mannschaftskämpfe, Turniere und Vereinsabende, mit Kalender-Abo fürs Handy.",
-    "mannschaften.html": "Unsere Mannschaften mit Links zu Ligen, Tabellen und Ergebnissen.",
+    "mannschaften.html": "Tabellen, Ergebnisse und Spielerstatistiken unserer Mannschaften – mit Tabellenrechner zum Ausprobieren.",
     "berichte.html": "Aktuelle Berichte und News aus dem Vereinsleben der SG AFK: Turniere, Mannschaftskämpfe und mehr.",
     "turniere.html": "Turniere der SG AFK: Oberlandquartett, Blitzjahreswertung, Hall of Fame und Ausschreibungen.",
     "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
@@ -854,7 +856,15 @@ def build_ausschreibungen():
     render_page("Ausschreibungen", content, "ausschreibungen.html", extra_styles=styles)
 
 
+# Mitgliedsbeiträge pro Jahr (Seite "Neu hier?")
+BEITRAEGE = [
+    ("Kinder, Schüler &amp; Studenten", "24 €"),
+    ("Erwachsene", "75 €"),
+]
+
+
 def build_neu_hier():
+    beitraege = "".join(f"<li><strong>{wer}:</strong> {preis} im Jahr</li>" for wer, preis in BEITRAEGE)
     content = f"""
     <h1>Neu hier? So kommst du vorbei</h1>
     <p>Egal ob Einsteiger, Jugendlicher oder Turnierspieler: Komm einfach an einem Freitag bei uns vorbei.</p>
@@ -877,6 +887,15 @@ def build_neu_hier():
       </div>
 
       <div class="neu-card">
+        <h3><span aria-hidden="true">👋</span> Wer kann kommen?</h3>
+        <ul>
+          <li><strong>Jeder, von 0 bis 99.</strong> Die Regeln musst du noch nicht kennen.</li>
+          <li><strong>Schnuppern ist kostenlos und unverbindlich</strong>, so oft du willst.</li>
+          <li><strong>Anmelden?</strong> Nicht nötig, einfach vorbeischauen. Wer mag, <a href="kontakt.html">meldet sich vorher kurz</a>.</li>
+        </ul>
+      </div>
+
+      <div class="neu-card">
         <h3><span aria-hidden="true">♟️</span> Was erwartet dich?</h3>
         <ul>
           <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
@@ -884,6 +903,12 @@ def build_neu_hier():
           <li><strong>Mannschaftsschach:</strong> Teams von der E-Klasse bis zur Bezirksliga, für jedes Spielniveau</li>
         </ul>
         <a href="mannschaften.html">Unsere Teams →</a>
+      </div>
+
+      <div class="neu-card">
+        <h3><span aria-hidden="true">💶</span> Was kostet es?</h3>
+        <ul>{beitraege}</ul>
+        <p>Schnuppern kostet nichts.</p>
       </div>
 
       <div class="neu-card">
@@ -1600,11 +1625,12 @@ MEMBER_CACHE = "mitglieder_anzahl.txt"   # letzter erfolgreich gelesener Wert (m
 MEMBER_FALLBACK = "80+"                  # falls Abruf scheitert und noch kein Cache existiert
 
 # Zahlenleiste: (große Zahl/Wort, Beschriftung, Link oder None); {members} wird ersetzt
-# ACHTUNG: Mannschaftszahl bitte prüfen, nur ein Platzhalter!
+# {teams} = Zahl der Mannschaften mit Liga-Daten (sonst MANNSCHAFTEN_FALLBACK)
 STATS = [
     ("{members}", "Mitglieder", DSB_VEREIN_URL),
-    ("6", "Mannschaften", "mannschaften.html"),
+    ("{teams}", "Mannschaften", "mannschaften.html"),
 ]
+MANNSCHAFTEN_FALLBACK = "6"
 
 # Wird im Browser ausgeführt, damit "heute / in 3 Tagen" und der nächste
 # Freitag immer stimmen, auch wenn die Seite schon länger nicht neu gebaut wurde.
@@ -1784,11 +1810,11 @@ def read_ausfall(path="ausfall.txt"):
     return result
 
 
-def stats_html():
+def stats_html(teams=()):
     members = fetch_member_count()
     items = []
     for big, label, href in STATS:
-        text = big.replace("{members}", members)
+        text = big.replace("{members}", members).replace("{teams}", str(len(teams)) if teams else MANNSCHAFTEN_FALLBACK)
         inner = f'<strong>{text}</strong><span>{label}</span>'
         if href:
             ext = ' target="_blank" rel="noopener"' if href.startswith("http") else ""
@@ -1828,7 +1854,7 @@ def event_card_html(ev):
         </a>"""
 
 
-def build_index(upcoming_events, home_news_snippets):
+def build_index(upcoming_events, home_news_snippets, teams=()):
     news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
     event_cards = "".join(event_card_html(ev) for ev in upcoming_events) or "<p>Keine anstehenden Termine gefunden.</p>"
     legend = legend_html(upcoming_events)
@@ -1867,7 +1893,7 @@ def build_index(upcoming_events, home_news_snippets):
       <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
     </section>
 
-    {stats_html()}
+    {stats_html(teams)}
 
     <section>
       <div class="section-head">
@@ -1881,6 +1907,8 @@ def build_index(upcoming_events, home_news_snippets):
       <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
       {legend}
     </section>
+
+    {liga.ticker_html(teams)}
 
     <section>
       <div class="section-head">
@@ -1971,7 +1999,7 @@ def build_index(upcoming_events, home_news_snippets):
     </style>"""
 
     render_page("Startseite", index_content, "index.html",
-                extra_styles=styles.replace("</style>", NEWS_CSS + "</style>"))
+                extra_styles=styles.replace("</style>", NEWS_CSS + liga.TICKER_CSS + "</style>"))
 
 
 # ==========================================
@@ -2008,9 +2036,20 @@ def build_sitemap():
         f.write(xml)
 
 
-def build_static_pages():
+def build_mannschaften(teams):
+    """Mannschaften-Seite aus mannschaften/*.json. Ohne Daten bleibt seiten/mannschaften.html."""
+    if not teams:
+        return False
+    content, styles = liga.mannschaften_seite(teams)
+    render_page("Mannschaften", content, "mannschaften.html", extra_styles=styles)
+    return True
+
+
+def build_static_pages(skip=()):
     """Baut die handgeschriebenen Seiten aus seiten/<name>.html in die Vorlage ein."""
     for name, title in STATIC_PAGES:
+        if name in skip:
+            continue
         src = os.path.join("seiten", f"{name}.html")
         if not os.path.exists(src):
             print(f"Hinweis: {src} fehlt, Seite wird übersprungen.")
@@ -2035,8 +2074,9 @@ if __name__ == "__main__":
     build_ausschreibungen()
     build_neu_hier()
     news = build_berichte()
-    build_index(upcoming, news)
+    teams = liga.lade_teams()
+    build_index(upcoming, news, teams)
     build_404()
-    build_static_pages()
+    build_static_pages(skip={"mannschaften"} if build_mannschaften(teams) else set())
     build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
     print("Build erfolgreich abgeschlossen!")
