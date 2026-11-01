@@ -1,9 +1,10 @@
 """
-Mannschaften-Seite und Ergebnis-Ticker aus mannschaften/*.json.
+Mannschaften: Übersicht (mannschaften.html), eine Seite pro Team (afk-1.html ...)
+und die "Letzten Ergebnisse" auf der Startseite.
 
-Die JSON-Dateien schreibt der Tabellenrechner (py main.py website). Darin steht SEINE
-Wertung nach TO §15 – nicht die Tabelle vom Schachbezirk.
-build_site.py ruft lade_teams(), mannschaften_seite() und ticker_html() auf.
+Die Daten (mannschaften/*.json) schreibt der Tabellenrechner (py main.py website).
+Darin steht SEINE Wertung nach TO §15, nicht die Tabelle vom Schachbezirk.
+build_site.py ruft lade_teams(), uebersicht_seite(), team_seite() und ticker_html() auf.
 """
 
 import glob
@@ -16,33 +17,51 @@ from datetime import datetime
 # EINSTELLUNGEN
 # ==========================================
 DATEN_ORDNER = "mannschaften"
+SEITE = "{slug}.html"           # Dateiname der Team-Seite; slug aus "AFK 1" -> "afk-1"
+DEZIMAL = "."                   # "." -> 3.5   |   "," -> 3,5
+BP_IMMER_NACHKOMMA = True       # Brettpunkte in Tabellen immer mit Nachkommastelle (6.0, 6.5)
 
-# Zusätzliche Karten ohne Liga-Daten (erscheinen in der Übersicht)
+# Eigener (langer) Vereinsname in Tabellen -> kürzer; None = unverändert
+EIGENER_NAME = "SG {kurz}"
+
+# Reiter auf der Team-Seite (Reihenfolge = Anzeige; Eintrag löschen = Reiter weg)
+REITER = [
+    ("tabelle", "Tabelle"),
+    ("spieltage", "Spieltage"),
+    ("spiele", "Unsere Spiele"),
+    ("spieler", "Spieler"),
+    ("verlauf", "Verlauf"),
+    ("rechner", "Tabellenrechner"),
+]
+
+# Zusätzliche Karten ohne Liga-Daten (nur in der Übersicht)
 EXTRA_KARTEN = [
     {"name": "Jugendmannschaften", "kurz": "Jugend", "klasse": "Jugendrunden",
      "text": "Liga wird nachgetragen.", "url": None},
 ]
 
-# Eigener (langer) Vereinsname in Tabellen -> kürzer, z. B. "SG AFK 2"; None = unverändert
-EIGENER_NAME = "SG {kurz}"
-
 TICKER_TITEL = "Letzte Ergebnisse"
-ZEIGE_SPIELER = True          # Spielerstatistik auf der Seite anzeigen
-ZEIGE_RECHNER = True          # Was-wäre-wenn-Rechner anzeigen
-
 ERGEBNIS_TEXT = {"s": "Sieg", "u": "Unentschieden", "n": "Niederlage"}
+KEIN_TEAM = "spielfrei"
 
 
+# ==========================================
+# HILFSFUNKTIONEN
+# ==========================================
 def esc(x):
     return html.escape(str(x if x is not None else ""))
 
 
-def zahl(x):
-    """3.0 -> '3', 3.5 -> '3½'"""
+def zahl(x, fest=False):
+    """3.0 -> '3' (fest: '3.0'), 3.5 -> '3.5'"""
     if x is None:
         return ""
-    ganz = int(x)
-    return f"{ganz}½" if x - ganz else str(ganz)
+    text = f"{x:.1f}" if fest or x % 1 else str(int(x))
+    return text.replace(".", DEZIMAL)
+
+
+def bp(x):
+    return zahl(x, BP_IMMER_NACHKOMMA)
 
 
 def stand_text(iso):
@@ -50,6 +69,10 @@ def stand_text(iso):
         return datetime.fromisoformat(iso).strftime("%d.%m.%Y, %H:%M Uhr")
     except (TypeError, ValueError):
         return ""
+
+
+def seite_datei(d):
+    return SEITE.format(slug=d["kurz"].lower().replace(" ", "-"))
 
 
 # ==========================================
@@ -64,21 +87,22 @@ def lade_teams(ordner=DATEN_ORDNER):
         except (OSError, ValueError) as e:
             print(f"Hinweis: {pfad} nicht lesbar ({e})")
             continue
-        if d.get("version") == 1 and d.get("tabelle") is not None:
-            if EIGENER_NAME and d.get("eigen") is not None:
-                d["teams"][str(d["eigen"])] = EIGENER_NAME.format(kurz=d["kurz"])
-            teams.append(d)
+        if d.get("version") != 1 or d.get("tabelle") is None:
+            continue
+        if EIGENER_NAME and d.get("eigen") is not None:
+            d["teams"][str(d["eigen"])] = EIGENER_NAME.format(kurz=d["kurz"])
+        d.setdefault("runden_tabellen", {})
+        teams.append(d)
     teams.sort(key=lambda d: (len(d["key"]), d["key"]))
     return teams
 
 
 def name_von(d, tlnr):
-    return d["teams"].get(str(tlnr), "spielfrei") if tlnr is not None else "spielfrei"
+    return d["teams"].get(str(tlnr), f"Team {tlnr}") if tlnr is not None else KEIN_TEAM
 
 
 def sicht(d, m):
-    """Ergebnis aus Sicht der eigenen Mannschaft:
-    (heim?, gegner, eigene BP, gegner BP, 's'/'u'/'n' oder None)"""
+    """Aus Sicht der eigenen Mannschaft: (heim?, gegner, eigene BP, gegner BP, 's'/'u'/'n'/None)"""
     heim = m["h"] == d["eigen"]
     gegner = name_von(d, m["g"] if heim else m["h"])
     if not m["gesp"]:
@@ -94,7 +118,7 @@ def eigene_spiele(d):
 
 
 def letztes_spiel(d):
-    gespielt = [m for m in eigene_spiele(d) if m["gesp"]]
+    gespielt = [m for m in eigene_spiele(d) if m["gesp"] and not m.get("sf")]
     return gespielt[-1] if gespielt else None
 
 
@@ -102,31 +126,31 @@ def naechstes_spiel(d):
     return next((m for m in eigene_spiele(d) if not m["gesp"]), None)
 
 
-def eigene_zeile(d):
-    return next((r for r in d["tabelle"] if r["tlnr"] == d["eigen"]), None)
+def eigene_zeile(d, tabelle=None):
+    return next((r for r in (tabelle or d["tabelle"]) if r["tlnr"] == d["eigen"]), None)
 
 
 # ==========================================
-# HTML-BAUSTEINE
+# BAUSTEINE
 # ==========================================
 def ergebnis_badge(art, mein, sein):
     if art is None:
         return '<span class="erg erg-offen">offen</span>'
-    return (f'<span class="erg erg-{art}" title="{ERGEBNIS_TEXT[art]}">'
-            f'{zahl(mein)} : {zahl(sein)}</span>')
+    return f'<span class="erg erg-{art}" title="{ERGEBNIS_TEXT[art]}">{zahl(mein)} : {zahl(sein)}</span>'
 
 
 def spiel_text(d, m):
     if m.get("sf"):
-        return "spielfrei"
+        return KEIN_TEAM
     heim, gegner, *_ = sicht(d, m)
     return f'{"vs." if heim else "bei"} {esc(gegner)}'
 
 
-def tabelle_html(d):
-    n = len(d["tabelle"])
+def tabelle_html(d, tabelle, mit_delta=None):
+    """mit_delta: {tlnr: Platz vorher} -> ▲▼ anzeigen"""
+    n = len(tabelle)
     zeilen = []
-    for i, r in enumerate(d["tabelle"]):
+    for i, r in enumerate(tabelle):
         klassen = []
         if r["tlnr"] == d["eigen"]:
             klassen.append("eigen")
@@ -134,16 +158,23 @@ def tabelle_html(d):
             klassen.append("auf")
         if d.get("ab") and i >= n - d["ab"]:
             klassen.append("ab")
-        if d.get("auf") and i == d["auf"] or d.get("ab") and i == n - d["ab"]:
+        if (d.get("auf") and i == d["auf"]) or (d.get("ab") and i == n - d["ab"]):
             klassen.append("trenn")
         cls = f' class="{" ".join(klassen)}"' if klassen else ""
+        delta = ""
+        if mit_delta is not None:
+            v = mit_delta.get(r["tlnr"], r["platz"]) - r["platz"]
+            delta = (f'<span class="delta hoch">▲{v}</span>' if v > 0 else
+                     f'<span class="delta runter">▼{-v}</span>' if v < 0 else "")
+            delta = f"<td>{delta}</td>"
         zeilen.append(
-            f'<tr{cls}><td>{r["platz"]}</td><td class="name">{esc(name_von(d, r["tlnr"]))}</td>'
-            f'<td>{r["sp"]}</td><td><strong>{r["mp"]}</strong></td><td>{zahl(r["bp"])}</td>'
+            f'<tr{cls}><td>{r["platz"]}</td>{delta}<td class="name">{esc(name_von(d, r["tlnr"]))}</td>'
+            f'<td>{r["sp"]}</td><td><strong>{r["mp"]}</strong></td><td>{bp(r["bp"])}</td>'
             f'<td class="neben">{r["siege"]}</td><td class="neben">{r["gp"]}</td></tr>')
+    delta_kopf = "<th></th>" if mit_delta is not None else ""
     return f"""
       <div class="tab-wrap"><table class="liga-tab">
-        <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
+        <thead><tr><th>Rg</th>{delta_kopf}<th class="name">Mannschaft</th><th title="Spiele">Sp</th>
           <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
           <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
         <tbody>{"".join(zeilen)}</tbody>
@@ -156,43 +187,89 @@ def bretter_html(d, m):
     heim = m["h"] == d["eigen"]
     zeilen = []
     for brett, sp_h, sp_g, art, h, g in m["bretter"]:
-        if art == "score":
-            erg = f"{zahl(h)} – {zahl(g)}"
-        else:
-            erg = {"forfeit_heim": "+ / –", "forfeit_gast": "– / +", "annulliert": "– / –"}.get(art, "")
         eigen, gegner = (sp_h, sp_g) if heim else (sp_g, sp_h)
         if art == "score":
-            mein = h if heim else g
-            cls = "s" if mein == 1 else "n" if mein == 0 else "u"
+            mein, sein = (h, g) if heim else (g, h)
+            erg, cls = f"{zahl(mein)} – {zahl(sein)}", "s" if mein == 1 else "n" if mein == 0 else "u"
+        elif art == "annulliert":
+            erg, cls = "– / –", "n"
         else:
-            cls = "s" if (art == "forfeit_heim") == heim and art != "annulliert" else "n"
+            gewonnen = (art == "forfeit_heim") == heim
+            erg, cls = ("+ / –", "s") if gewonnen else ("– / +", "n")
         zeilen.append(f'<tr><td>{brett}</td><td class="name">{esc(eigen)}</td>'
-                      f'<td><span class="erg erg-{cls} klein">{erg if heim else " ".join(reversed(erg.split(" ")))}</span></td>'
+                      f'<td><span class="erg erg-{cls} klein">{erg}</span></td>'
                       f'<td class="name">{esc(gegner)}</td></tr>')
     return f'<table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>'
 
 
-def spiele_html(d):
+def paarungen_html(d, runde):
+    zeilen = []
+    for m in (m for m in d["matches"] if m["r"] == runde):
+        cls = ' class="eigen"' if d["eigen"] in (m["h"], m["g"]) else ""
+        if m.get("sf"):
+            erg = "–"
+        elif m["gesp"]:
+            erg = f'{zahl(m["bh"])} : {zahl(m["bg"])}'
+        else:
+            erg = '<span class="klein">offen</span>'
+        zeilen.append(f'<tr{cls}><td class="name">{esc(name_von(d, m["h"]))}</td>'
+                      f'<td class="erg-zelle">{erg}</td>'
+                      f'<td class="name rechts">{esc(name_von(d, m["g"]))}</td></tr>')
+    return f'<div class="tab-wrap"><table class="liga-tab paarungen"><tbody>{"".join(zeilen)}</tbody></table></div>'
+
+
+# ==========================================
+# REITER
+# ==========================================
+def reiter_tabelle(d):
+    runde = d.get("aktuelle_runde") or 0
+    nach = f"nach Runde {runde} von {d['runden']}" if runde else "noch kein Spieltag gespielt"
+    vorher = d["runden_tabellen"].get(str(runde - 1)) if runde > 1 else None
+    delta = {r["tlnr"]: r["platz"] for r in vorher} if vorher else None
+    hinweis = " · ▲▼ = Veränderung zum Spieltag davor" if delta else ""
+    return f'<p class="klein">Tabelle {nach}{hinweis}</p>{tabelle_html(d, d["tabelle"], delta)}'
+
+
+def reiter_spieltage(d):
+    runden = d["runden"] or max((m["r"] for m in d["matches"]), default=0)
+    if not runden:
+        return ""
+    start = d.get("aktuelle_runde") or 1
+    teile = []
+    for r in range(1, runden + 1):
+        tab = d["runden_tabellen"].get(str(r))
+        vorher = d["runden_tabellen"].get(str(r - 1))
+        delta = {x["tlnr"]: x["platz"] for x in vorher} if vorher else None
+        tabelle = (f'<h3>Tabelle nach Runde {r}</h3>{tabelle_html(d, tab, delta)}' if tab
+                   else '<p class="klein">Noch nicht gespielt.</p>')
+        teile.append(f"""
+        <div class="runde" data-runde="{r}"{"" if r == start else " data-zu"}>
+          <h3>Runde {r}</h3>{paarungen_html(d, r)}{tabelle}
+        </div>""")
+    knoepfe = "".join(f'<button type="button" data-runde="{r}">{r}</button>' for r in range(1, runden + 1))
+    return f"""
+      <div class="runden-wahl" hidden><span class="klein">Runde:</span>{knoepfe}</div>
+      {"".join(teile)}"""
+
+
+def reiter_spiele(d):
     teile = []
     for m in eigene_spiele(d):
-        heim, gegner, mein, sein, art = sicht(d, m)
         if m.get("sf"):
-            kopf = f'<span class="rd">R{m["r"]}</span><span class="geg">spielfrei</span>'
-            teile.append(f'<div class="spiel">{kopf}</div>')
+            teile.append(f'<div class="spiel"><span class="rd">R{m["r"]}</span><span class="geg">{KEIN_TEAM}</span></div>')
             continue
+        heim, gegner, mein, sein, art = sicht(d, m)
         dwz = m.get("dg" if heim else "dh")
         info = f'<span class="dwz">Ø {dwz}</span>' if dwz else ""
         kopf = (f'<span class="rd">R{m["r"]}</span><span class="ha">{"H" if heim else "A"}</span>'
                 f'<span class="geg">{esc(gegner)}{info}</span>{ergebnis_badge(art, mein, sein)}')
         details = bretter_html(d, m)
-        if details:
-            teile.append(f'<details class="spiel"><summary>{kopf}</summary>{details}</details>')
-        else:
-            teile.append(f'<div class="spiel">{kopf}</div>')
-    return "".join(teile)
+        teile.append(f'<details class="spiel"><summary>{kopf}</summary>{details}</details>' if details
+                     else f'<div class="spiel">{kopf}</div>')
+    return '<p class="klein">Auf ein gespieltes Spiel tippen, um die Bretter zu sehen.</p>' + "".join(teile)
 
 
-def spieler_html(d):
+def reiter_spieler(d):
     if not d.get("spieler"):
         return ""
     zeilen = []
@@ -204,49 +281,110 @@ def spieler_html(d):
                       f'<td>{zahl(s["pkt"])}</td><td>{proz}</td><td class="neben">{bretter}</td>'
                       f'<td class="neben klein">{kl}</td></tr>')
     return f"""
-      <details class="block"><summary>Spielerstatistik</summary>
-        <div class="tab-wrap"><table class="liga-tab spieler">
-          <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
-            <th class="neben">Brett</th><th class="neben"></th></tr></thead>
-          <tbody>{"".join(zeilen)}</tbody>
-        </table></div>
-        <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>
-      </details>"""
+      <div class="tab-wrap"><table class="liga-tab spieler">
+        <thead><tr><th class="name">Spieler</th><th title="gespielte Partien">Sp</th><th>Pkt</th><th>%</th>
+          <th class="neben">Brett</th><th class="neben"></th></tr></thead>
+        <tbody>{"".join(zeilen)}</tbody>
+      </table></div>
+      <p class="klein">Nur gespielte Partien; kampflose Bretter stehen extra.</p>"""
+
+
+def verlauf_svg(punkte, n_teams, n_runden):
+    """punkte: [(runde, platz)] -> Liniendiagramm, Platz 1 oben."""
+    B, H, L, R, O, U = 640, 240, 34, 14, 14, 30
+    x = lambda r: L + (r - 1) * (B - L - R) / max(n_runden - 1, 1)
+    y = lambda p: O + (p - 1) * (H - O - U) / max(n_teams - 1, 1)
+    gitter = "".join(
+        f'<line x1="{L}" x2="{B - R}" y1="{y(p):.1f}" y2="{y(p):.1f}" class="g"/>'
+        f'<text x="{L - 8}" y="{y(p) + 4:.1f}" text-anchor="end">{p}</text>'
+        for p in range(1, n_teams + 1))
+    achse = "".join(f'<text x="{x(r):.1f}" y="{H - 8}" text-anchor="middle">R{r}</text>'
+                    for r in range(1, n_runden + 1))
+    linie = " ".join(f"{x(r):.1f},{y(p):.1f}" for r, p in punkte)
+    kreise = "".join(f'<circle cx="{x(r):.1f}" cy="{y(p):.1f}" r="5"><title>Runde {r}: Platz {p}</title></circle>'
+                     for r, p in punkte)
+    return (f'<svg class="verlauf" viewBox="0 0 {B} {H}" role="img" aria-label="Platzierung nach jeder Runde">'
+            f'{gitter}{achse}<polyline points="{linie}"/>{kreise}</svg>')
+
+
+def reiter_verlauf(d):
+    zeilen, punkte = [], []
+    for r in range(1, (d.get("aktuelle_runde") or 0) + 1):
+        tab = d["runden_tabellen"].get(str(r))
+        zeile = eigene_zeile(d, tab) if tab else None
+        if not zeile:
+            continue
+        punkte.append((r, zeile["platz"]))
+        m = next((m for m in eigene_spiele(d) if m["r"] == r), None)
+        if m and m.get("sf"):
+            spiel = KEIN_TEAM
+        elif m:
+            _, _, mein, sein, art = sicht(d, m)
+            spiel = f'{spiel_text(d, m)} {ergebnis_badge(art, mein, sein)}'
+        else:
+            spiel = "–"
+        zeilen.append(f'<tr><td>{r}</td><td class="name">{spiel}</td><td>{zeile["mp"]}</td>'
+                      f'<td>{bp(zeile["bp"])}</td><td><strong>{zeile["platz"]}</strong></td></tr>')
+    if not punkte:
+        return '<p class="klein">Noch kein Spieltag gespielt.</p>'
+    return f"""
+      {verlauf_svg(punkte, len(d["tabelle"]), d["runden"] or punkte[-1][0])}
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>R</th><th class="name">Spiel</th><th title="Mannschaftspunkte gesamt">MP</th>
+          <th title="Brettpunkte gesamt">BP</th><th>Platz</th></tr></thead>
+        <tbody>{"".join(zeilen)}</tbody>
+      </table></div>"""
 
 
 def json_fuer_script(d):
     daten = {k: d[k] for k in ("key", "kurz", "bretter", "eigen", "teams", "tabelle", "auf", "ab")}
     daten["matches"] = [{k: v for k, v in m.items() if k != "bretter"} for m in d["matches"]]
+    daten["dezimal"] = DEZIMAL
     return json.dumps(daten, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
 
-def team_section(d):
-    zeile = eigene_zeile(d)
-    platz = f'Platz {zeile["platz"]} von {len(d["tabelle"])}' if zeile else ""
-    runde = d.get("aktuelle_runde") or 0
-    nach = f"nach Runde {runde} von {d['runden']}" if runde else "noch kein Spieltag gespielt"
-    links = [f'<a href="{esc(d["url_liga"])}" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>']
-    rechner = ""
-    offen = sum(1 for m in d["matches"] if not m["gesp"] and not m.get("sf"))
-    if ZEIGE_RECHNER and offen:
-        rechner = f"""
-      <details class="block rechner-block"><summary>Tabellenrechner: Was wäre, wenn …?</summary>
-        <div class="rechner" data-key="{esc(d["key"])}"><noscript>Der Rechner braucht JavaScript.</noscript></div>
-        <script type="application/json" id="liga-{esc(d["key"])}">{json_fuer_script(d)}</script>
-      </details>"""
+def reiter_rechner(d):
+    if not any(not m["gesp"] and not m.get("sf") for m in d["matches"]):
+        return ""
     return f"""
-    <section class="team" id="{esc(d["key"])}">
-      <div class="team-kopf">
-        <h2>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h2>
-        <span class="team-platz">{platz}</span>
-      </div>
-      <p class="klein">Tabelle {nach}</p>
-      {tabelle_html(d)}
-      <details class="block" open><summary>Unsere Spiele</summary>{spiele_html(d)}</details>
-      {spieler_html(d) if ZEIGE_SPIELER else ""}
-      {rechner}
-      <p class="klein quelle">{" · ".join(links)}</p>
-    </section>"""
+      <div class="rechner" data-key="{esc(d["key"])}"><noscript>Der Rechner braucht JavaScript.</noscript></div>
+      <script type="application/json" id="liga-{esc(d["key"])}">{json_fuer_script(d)}</script>"""
+
+
+REITER_FUNKTIONEN = {
+    "tabelle": reiter_tabelle, "spieltage": reiter_spieltage, "spiele": reiter_spiele,
+    "spieler": reiter_spieler, "verlauf": reiter_verlauf, "rechner": reiter_rechner,
+}
+
+
+# ==========================================
+# SEITEN
+# ==========================================
+def team_seite(d):
+    """Rückgabe: (Titel, Dateiname, content, styles, Beschreibung)"""
+    zeile = eigene_zeile(d)
+    platz = f'Platz {zeile["platz"]} von {len(d["tabelle"])}' if zeile and d.get("aktuelle_runde") else ""
+    reiter = [(key, titel, REITER_FUNKTIONEN[key](d)) for key, titel in REITER if key in REITER_FUNKTIONEN]
+    reiter = [r for r in reiter if r[2]]
+    knoepfe = "".join(f'<a href="#p-{k}" data-reiter="{k}">{esc(t)}</a>' for k, t, _ in reiter)
+    panels = "".join(f'<section class="panel" id="p-{k}" data-reiter="{k}"><h2 class="panel-titel">{esc(t)}</h2>{inhalt}</section>'
+                     for k, t, inhalt in reiter)
+    links = [f'<a href="{esc(d["url_liga"])}" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>']
+    content = f"""
+    <p class="zurueck"><a href="mannschaften.html">← Alle Mannschaften</a></p>
+    <div class="team-kopf">
+      <h1>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h1>
+      <span class="team-platz">{platz}</span>
+    </div>
+    <nav class="reiter" aria-label="Bereiche">{knoepfe}</nav>
+    {panels}
+    <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
+      Gewinnpartien; Gleichstand = geteilter Platz). {" · ".join(links)}
+      {f"<br>Letzte Änderung: {stand_text(d.get('stand'))}" if d.get("stand") else ""}</p>
+    {TEAM_JS}{RECHNER_JS if "rechner" in [k for k, _, _ in reiter] else ""}
+    """
+    beschreibung = f"{d['kurz']} ({d.get('klasse', '')}): Tabelle, Spieltage, Ergebnisse und Statistik."
+    return d["kurz"], seite_datei(d), content, STYLES, beschreibung
 
 
 def karte_html(d):
@@ -255,16 +393,17 @@ def karte_html(d):
     zeilen = []
     if zeile and d.get("aktuelle_runde"):
         zeilen.append(f'<p class="k-platz"><strong>Platz {zeile["platz"]}</strong> von {len(d["tabelle"])}'
-                      f' · {zeile["mp"]} MP · {zahl(zeile["bp"])} BP</p>')
+                      f' · {zeile["mp"]} MP · {bp(zeile["bp"])} BP</p>')
     if letztes:
         _, _, mein, sein, art = sicht(d, letztes)
-        zeilen.append(f'<p>Zuletzt: {spiel_text(d, letztes)} {ergebnis_badge(art, mein, sein) if not letztes.get("sf") else ""}</p>')
+        zeilen.append(f'<p>Zuletzt: {spiel_text(d, letztes)} {ergebnis_badge(art, mein, sein)}</p>')
     if naechstes:
         zeilen.append(f'<p>Nächstes Spiel (R{naechstes["r"]}): {spiel_text(d, naechstes)}</p>')
     return f"""
-      <a class="card team-karte" href="#{esc(d["key"])}">
+      <a class="card team-karte" href="{seite_datei(d)}">
         <h3>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h3>
         {"".join(zeilen)}
+        <span class="k-mehr">Tabelle, Spieltage, Rechner →</span>
       </a>"""
 
 
@@ -279,24 +418,17 @@ def extra_karte_html(k):
       </div>"""
 
 
-# ==========================================
-# SEITEN
-# ==========================================
-def mannschaften_seite(teams):
-    """Rückgabe: (content, styles) für render_page."""
-    saison = teams[0].get("saison") if teams else ""
+def uebersicht_seite(teams):
+    """mannschaften.html: Rückgabe (content, styles)"""
     stand = max((d.get("stand", "") for d in teams), default="")
     karten = "".join(karte_html(d) for d in teams) + "".join(extra_karte_html(k) for k in EXTRA_KARTEN)
     content = f"""
     <h1>Unsere Mannschaften</h1>
-    <p>Aktuelle Tabellen, Ergebnisse und Statistiken unserer Teams. Wann wir spielen, steht im
-      <a href="termine.html">Spielplan</a>.</p>
+    <p>Klick auf eine Mannschaft für Tabelle, Spieltage, Ergebnisse, Spielerstatistik und den
+      Tabellenrechner. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.</p>
     <div class="grid-3 team-grid">{karten}</div>
-    {"".join(team_section(d) for d in teams)}
-    <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
-      Gewinnpartien; Gleichstand = geteilter Platz). Daten: Schachbezirk München, Saison-ID {esc(saison)}.
+    <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet.
       {f"Letzte Änderung: {stand_text(stand)}." if stand else ""}</p>
-    {RECHNER_JS if ZEIGE_RECHNER else ""}
     """
     return content, STYLES
 
@@ -306,13 +438,13 @@ def ticker_html(teams):
     karten = []
     for d in teams:
         m = letztes_spiel(d)
-        if not m or m.get("sf"):
+        if not m:
             continue
         heim, gegner, mein, sein, art = sicht(d, m)
         zeile = eigene_zeile(d)
         platz = f' · Platz {zeile["platz"]}' if zeile else ""
         karten.append(f"""
-        <a class="tick tick-{art}" href="mannschaften.html#{esc(d["key"])}">
+        <a class="tick tick-{art}" href="{seite_datei(d)}">
           <span class="tick-team">{esc(d["kurz"])}</span>
           <span class="tick-erg">{zahl(mein)} : {zahl(sein)}</span>
           <span class="tick-geg">{"vs." if heim else "bei"} {esc(gegner)}</span>
@@ -324,12 +456,15 @@ def ticker_html(teams):
     <section>
       <div class="section-head">
         <h2>{TICKER_TITEL}</h2>
-        <a href="mannschaften.html">Alle Tabellen →</a>
+        <a href="mannschaften.html">Alle Mannschaften →</a>
       </div>
       <div class="ticker">{"".join(karten)}</div>
     </section>"""
 
 
+# ==========================================
+# CSS / JS
+# ==========================================
 TICKER_CSS = """
       .ticker { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 0.8rem; }
       .tick { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.6rem; padding: 0.7rem 0.9rem; border-radius: 6px; background: var(--soft); border-left: 4px solid #95a5a6; color: inherit; text-decoration: none; }
@@ -343,37 +478,51 @@ TICKER_CSS = """
 
 STYLES = """<style>
       .klein { font-size: 0.85rem; color: #555; }
-      .team-grid .team-karte { display: block; color: inherit; text-decoration: none; }
-      a.team-karte:hover { border-color: var(--link); }
+      .team-grid .team-karte { display: flex; flex-direction: column; color: inherit; text-decoration: none; }
+      a.team-karte:hover { border-color: var(--link); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
       .team-karte h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.6rem; margin-bottom: 0.4rem; }
       .team-karte p { margin: 0.3rem 0; }
-      .team-klasse { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; }
+      .k-mehr { margin-top: auto; padding-top: 0.6rem; font-weight: bold; color: var(--link); font-size: 0.9rem; }
+      .team-klasse { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; vertical-align: middle; }
 
-      .team { margin-top: 2.5rem; scroll-margin-top: 5rem; }
-      .team-kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1rem; border-bottom: 3px solid var(--navy); }
-      .team-kopf h2 { margin: 0; color: var(--navy); display: flex; align-items: baseline; gap: 0.6rem; }
-      .team-platz { font-weight: bold; color: var(--navy); }
+      .zurueck { margin: 0 0 0.5rem; } .zurueck a { text-decoration: none; font-weight: bold; }
+      .team-kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1rem; }
+      .team-kopf h1 { margin: 0; color: var(--navy); display: flex; align-items: center; gap: 0.6rem; }
+      .team-platz { font-weight: bold; color: var(--navy); font-size: 1.1rem; }
+
+      .reiter { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 1rem 0 1.2rem; border-bottom: 3px solid var(--navy); }
+      .reiter a { padding: 0.5rem 0.9rem; border-radius: 6px 6px 0 0; text-decoration: none; font-weight: bold; color: var(--navy); background: var(--soft); }
+      .reiter a:hover { background: #dcebf7; }
+      .reiter a[aria-current="true"] { background: var(--navy); color: #fff; }
+      .js .panel-titel { display: none; }
+      .panel { scroll-margin-top: 5rem; }
+      .panel-titel { color: var(--navy); margin-top: 2rem; }
+      .panel h3 { color: var(--navy); margin: 1.2rem 0 0.5rem; font-size: 1.1rem; }
 
       .tab-wrap { overflow-x: auto; }
       .liga-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
       .liga-tab th, .liga-tab td { padding: 0.4rem 0.5rem; text-align: center; border-bottom: 1px solid var(--border); }
       .liga-tab th { background: var(--navy); color: #fff; }
       .liga-tab .name { text-align: left; }
+      .liga-tab .rechts { text-align: right; }
       .liga-tab tr.eigen td { background: #dcebf7; font-weight: bold; }
       .liga-tab tr.auf td:first-child { box-shadow: inset 4px 0 #1e8449; }
       .liga-tab tr.ab td:first-child { box-shadow: inset 4px 0 #c0392b; }
       .liga-tab tr.trenn td { border-top: 2px dashed #888; }
-      .liga-tab .delta { font-size: 0.8rem; font-weight: bold; }
+      .paarungen .erg-zelle { white-space: nowrap; font-weight: bold; width: 6rem; }
+      .delta { font-size: 0.8rem; font-weight: bold; }
       .delta.hoch { color: #1e8449; } .delta.runter { color: #c0392b; }
       @media (max-width: 600px) {
         .neben { display: none; }
         .liga-tab { font-size: 0.85rem; }
         .liga-tab th, .liga-tab td { padding: 0.35rem 0.3rem; }
+        .reiter a { padding: 0.4rem 0.6rem; font-size: 0.9rem; }
       }
 
-      details.block { margin-top: 1rem; border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; background: #fff; }
-      details.block > summary { cursor: pointer; font-weight: bold; color: var(--navy); }
-      details.block[open] > summary { margin-bottom: 0.6rem; }
+      .runden-wahl { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-bottom: 0.5rem; }
+      .runden-wahl button { font: inherit; min-width: 2.4rem; cursor: pointer; border: 1px solid var(--border); background: var(--soft); border-radius: 6px; padding: 0.25rem 0.5rem; }
+      .runden-wahl button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+      .js .runde[data-zu] { display: none; }
 
       .spiel { border-top: 1px solid var(--border); padding: 0.35rem 0; }
       .spiel > summary { cursor: pointer; list-style: none; }
@@ -386,7 +535,7 @@ STYLES = """<style>
       .geg { flex: 1; }
       .dwz { margin-left: 0.5rem; font-size: 0.8rem; color: #777; }
 
-      .erg { display: inline-block; min-width: 3.6rem; text-align: center; border-radius: 999px; padding: 0.05rem 0.6rem; font-weight: bold; font-size: 0.9rem; background: #e3e6ea; color: #333; }
+      .erg { display: inline-block; min-width: 3.6rem; text-align: center; border-radius: 999px; padding: 0.05rem 0.6rem; font-weight: bold; font-size: 0.9rem; background: #e3e6ea; color: #333; white-space: nowrap; }
       .erg.klein { min-width: 3rem; font-size: 0.8rem; }
       .erg-s { background: #d4efdf; color: #145a32; }
       .erg-u { background: #fdebd0; color: #7e5109; }
@@ -398,9 +547,14 @@ STYLES = """<style>
       .bretter td.name { text-align: left; }
       .bretter td:first-child { width: 2rem; color: #777; }
 
-      .quelle { margin-top: 0.8rem; }
+      .verlauf { width: 100%; max-width: 720px; height: auto; display: block; margin: 0 0 1rem; font-size: 12px; }
+      .verlauf .g { stroke: #e3e6ea; }
+      .verlauf text { fill: #666; }
+      .verlauf polyline { fill: none; stroke: var(--link); stroke-width: 3; }
+      .verlauf circle { fill: #fff; stroke: var(--link); stroke-width: 3; }
 
-      .rechner p { margin: 0.4rem 0; }
+      .quelle { margin-top: 2rem; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -415,10 +569,52 @@ STYLES = """<style>
 </style>"""
 
 
+# Reiter + Spieltag-Auswahl (ohne JavaScript ist einfach alles untereinander sichtbar)
+TEAM_JS = r"""<script>
+(function () {
+  document.documentElement.classList.add("js");
+  var links = document.querySelectorAll(".reiter a[data-reiter]");
+  var panels = document.querySelectorAll(".panel");
+  // Adresse "#spieler" (ohne passendes Element -> der Browser springt nicht nach unten)
+  function zeige(id) {
+    id = (id || "").replace(/^p-/, "");
+    var gibts = false;
+    panels.forEach(function (p) { if (p.dataset.reiter === id) gibts = true; });
+    if (!gibts && panels.length) id = panels[0].dataset.reiter;
+    panels.forEach(function (p) { p.hidden = p.dataset.reiter !== id; });
+    links.forEach(function (a) { a.setAttribute("aria-current", a.dataset.reiter === id ? "true" : "false"); });
+  }
+  links.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      history.replaceState(null, "", "#" + a.dataset.reiter);
+      zeige(a.dataset.reiter);
+    });
+  });
+  zeige(location.hash.slice(1));
+  window.addEventListener("hashchange", function () { zeige(location.hash.slice(1)); });
+
+  var wahl = document.querySelector(".runden-wahl");
+  if (wahl) {
+    wahl.hidden = false;
+    var runden = document.querySelectorAll(".runde[data-runde]");
+    function runde(r) {
+      runden.forEach(function (x) { if (x.dataset.runde === r) x.removeAttribute("data-zu"); else x.setAttribute("data-zu", ""); });
+      wahl.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.runde === r ? "true" : "false"); });
+    }
+    wahl.querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { runde(b.dataset.runde); }); });
+    var offen = document.querySelector(".runde:not([data-zu])");
+    runde(offen ? offen.dataset.runde : "1");
+  }
+})();
+</script>"""
+
+
 # Gleiche Rechnung wie chess_league.py (_tabellen_zeilen / _plaetze), nur im Browser.
 RECHNER_JS = r"""<script>
 (function () {
-  function zahl(x) { var g = Math.floor(x); return (x - g) ? (g ? g + "½" : "½") : String(g); }
+  var DEZ = ".";
+  function zahl(x, fest) { var t = (fest || x % 1) ? x.toFixed(1) : String(x); return t.replace(".", DEZ); }
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
   // §15: 2 MP bei mehr als der Hälfte der ERZIELBAREN Brettpunkte (= Bretterzahl), 1 MP bei genau der Hälfte
@@ -469,9 +665,8 @@ RECHNER_JS = r"""<script>
     d.tabelle.forEach(function (r) { alt[r.tlnr] = r.platz; });
     ziel.textContent = "";
     var wrap = el("div", "tab-wrap"), t = el("table", "liga-tab"), kopf = el("tr");
-    ["Rg", "", "Mannschaft", "Sp", "MP", "BP"].forEach(function (h, i) {
-      var th = el("th", i === 2 ? "name" : "", h); kopf.appendChild(th);
-    });
+    var spalten = [["Rg", ""], ["", ""], ["Mannschaft", "name"], ["Sp", ""], ["MP", ""], ["BP", ""], ["Siege", "neben"], ["GewP", "neben"]];
+    spalten.forEach(function (h) { kopf.appendChild(el("th", h[1], h[0])); });
     var thead = el("thead"); thead.appendChild(kopf); t.appendChild(thead);
     var tb = el("tbody"), n = rows.length;
     rows.forEach(function (r, i) {
@@ -481,9 +676,9 @@ RECHNER_JS = r"""<script>
       if (d.ab && i >= n - d.ab) tr.classList.add("ab");
       var diff = (alt[r.tlnr] || r.platz) - r.platz;
       var dz = el("span", "delta " + (diff > 0 ? "hoch" : diff < 0 ? "runter" : ""), diff > 0 ? "▲" + diff : diff < 0 ? "▼" + (-diff) : "");
-      var cells = [String(r.platz), dz, d.teams[r.tlnr] || ("Team " + r.tlnr), r.sp, r.mp, zahl(r.bp)];
+      var cells = [String(r.platz), dz, d.teams[r.tlnr] || ("Team " + r.tlnr), r.sp, r.mp, zahl(r.bp, true), r.siege, r.gp];
       cells.forEach(function (c, j) {
-        var td = el("td", j === 2 ? "name" : "");
+        var td = el("td", spalten[j][1]);
         if (c instanceof Node) td.appendChild(c); else td.textContent = c;
         tr.appendChild(td);
       });
@@ -496,9 +691,10 @@ RECHNER_JS = r"""<script>
     var quelle = document.getElementById("liga-" + box.dataset.key);
     if (!quelle) return;
     var d = JSON.parse(quelle.textContent), sim = {}, selects = [];
+    DEZ = d.dezimal || ".";
     var B = d.bretter || 8, hoch = Math.floor(B / 2) + 1;
     box.textContent = "";
-    box.appendChild(el("p", "klein", "Trag Ergebnisse für offene Spiele ein – die Tabelle unten rechnet sofort neu (▲▼ = Veränderung zum echten Stand). Nichts wird gespeichert."));
+    box.appendChild(el("p", "klein", "Trag Ergebnisse für offene Spiele ein – die Tabelle rechnet sofort neu (▲▼ = Veränderung zum echten Stand). Nichts wird gespeichert."));
 
     var knoepfe = el("div", "r-knoepfe");
     function knopf(text, fn) { var b = el("button", "", text); b.type = "button"; b.onclick = fn; knoepfe.appendChild(b); }

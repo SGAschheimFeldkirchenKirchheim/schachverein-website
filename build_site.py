@@ -2037,11 +2037,16 @@ def build_sitemap():
 
 
 def build_mannschaften(teams):
-    """Mannschaften-Seite aus mannschaften/*.json. Ohne Daten bleibt seiten/mannschaften.html."""
+    """mannschaften.html (Übersicht) + eine Seite pro Team aus mannschaften/*.json.
+    Ohne Daten bleibt die handgeschriebene seiten/mannschaften.html."""
     if not teams:
         return False
-    content, styles = liga.mannschaften_seite(teams)
+    content, styles = liga.uebersicht_seite(teams)
     render_page("Mannschaften", content, "mannschaften.html", extra_styles=styles)
+    for d in teams:
+        titel, datei, content, styles, beschreibung = liga.team_seite(d)
+        ACTIVE_PARENT[datei] = "mannschaften.html"      # Menüpunkt "Mannschaften" markieren
+        render_page(titel, content, datei, extra_styles=styles, description=beschreibung)
     return True
 
 
