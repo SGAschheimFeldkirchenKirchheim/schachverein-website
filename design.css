@@ -29,6 +29,13 @@
   --remis: #c08a1e;
   --niederlage: #b03a2e;
 
+  /* Startseite */
+  --hero-bild: url("hero.jpg");   /* Foto oben auf der Startseite: einfach hero.jpg austauschen */
+  --hero-abdunkeln: rgba(20, 40, 30, 0.72);   /* wie stark das Foto abgedunkelt wird (0 = gar nicht, 1 = ganz) */
+
+  /* Schriftgröße (alles andere skaliert mit) */
+  --schrift: 17.5px;
+
   /* Formen */
   --radius: 4px;
   --btn-radius: 2px;
@@ -51,6 +58,7 @@
 @font-face { font-family: "Fraunces"; src: url("fonts/fraunces-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
 
 /* ---------- Grundlagen ---------- */
+html { font-size: var(--schrift); }
 body { font-family: var(--font-text); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
 h1, h2, h3, .section-head h2 { font-family: var(--font-head); font-weight: 700; color: var(--head); letter-spacing: 0; }
 h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; }
@@ -59,6 +67,10 @@ a { color: var(--link-c); }
 /* ---------- Header & Footer ---------- */
 header { background: var(--accent); border-bottom: 3px solid var(--gold); }
 header .brand { font-family: var(--font-head); font-weight: 700; }
+.brand-logo { height: 42px; width: auto; background: #fff; border-radius: 6px; padding: 2px 4px; }
+header .brand { font-size: 1.1rem; }
+header nav { gap: 0.2rem 1.1rem; }
+header nav a { font-size: 0.9rem; }
 header nav a { font-weight: 600; }
 footer { background: var(--accent); color: #c9c2b0; }
 .footer-link { color: #c9c2b0; }
@@ -82,10 +94,13 @@ footer { background: var(--accent); color: #c9c2b0; }
 .btn-outline:hover { background: var(--accent); color: var(--on-accent); }
 
 /* ---------- Startseite ---------- */
-.hero { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-.hero h1 { color: var(--head); }
+.hero { background: linear-gradient(var(--hero-abdunkeln), var(--hero-abdunkeln)), var(--hero-bild) center / cover;
+  border: 0; border-radius: var(--radius); }
+.hero h1, .hero > p { color: #fff; }
+.hero-logo { mix-blend-mode: normal; background: #fff; border-radius: 12px; padding: 12px 16px; box-sizing: content-box; height: 130px; }
+.hero-facts li { background: rgba(255, 253, 248, 0.95); }
+.hero > .btn { background: var(--gold); border-color: var(--gold); color: var(--accent); }
 .hero h1::after { content: ""; display: block; width: 64px; height: 2px; background: var(--gold); margin: 1rem auto 0; }
-.hero > p { color: #5a5345; }
 .hero-facts strong { color: var(--head); }
 .stats strong { font-family: var(--font-head); font-size: 2rem; color: var(--head); }
 .section-head { border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
