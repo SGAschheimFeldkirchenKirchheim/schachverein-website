@@ -607,13 +607,13 @@ def calendar_box_html(feeds):
         https_url = f'{SITE_URL}kalender/{fname}'
         rows.append(
             f'<li><strong>{label}</strong> '
-            f'<a href="{webcal_base}kalender/{fname}"><span aria-hidden="true">📲</span> Abonnieren</a> '
+            f'<a href="{webcal_base}kalender/{fname}">Abonnieren</a> '
             f'<a href="{https_url}" data-url="{https_url}" '
-            f'onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent=\'✓ Link kopiert\';return false;"><span aria-hidden="true">🔗</span> Link kopieren</a></li>'
+            f'onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent=\'Link kopiert\';return false;">Link kopieren</a></li>'
         )
     return f"""
     <details class="kalender-box">
-      <summary><span aria-hidden="true">📆</span> Termine im Handy-Kalender abonnieren</summary>
+      <summary>Termine im Handy-Kalender abonnieren</summary>
       <p>Der Kalender aktualisiert sich automatisch, wenn sich der Spielplan ändert.
          <strong>iPhone / Mac / Outlook:</strong> „Abonnieren" antippen.
          <strong>Google Kalender:</strong> „Link kopieren" und in Google Kalender unter „Weitere Kalender → Per URL" einfügen.</p>
@@ -631,7 +631,7 @@ def read_hinweis():
         lines = [htmllib.escape(l.strip()) for l in f.read().splitlines() if l.strip()]
     if not lines:
         return ""
-    return '<div class="hinweis-banner"><span aria-hidden="true">📢</span> ' + '<br>'.join(lines) + '</div>'
+    return '<div class="hinweis-banner">' + '<br>'.join(lines) + '</div>'
 
 
 def build_turniere_overview():
@@ -654,13 +654,13 @@ def build_turniere_overview():
       </div>
 
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #27ae60; border-radius:6px;">
-        <h2><span aria-hidden="true">🥇</span> Vereinsintern & Hall of Fame</h2>
+        <h2>Vereinsintern & Hall of Fame</h2>
         <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
         <a href="vereinsintern.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Hall of Fame →</a>
       </div>
 
       <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #8e44ad; border-radius:6px;">
-        <h2><span aria-hidden="true">📄</span> Ausschreibungen</h2>
+        <h2>Ausschreibungen</h2>
         <p>Alle Turnierausschreibungen als PDF zum Ansehen und Herunterladen.</p>
         <a href="ausschreibungen.html" class="btn" style="background:#8e44ad; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zu den Ausschreibungen →</a>
       </div>
@@ -745,7 +745,7 @@ def build_termine():
     else:
         table_html = "<p>Keine Termine vorhanden.</p>"
 
-    pdf_link = (f'<p><a href="{TERMINE_PDF}" download>📄 Termine als PDF herunterladen</a></p>'
+    pdf_link = (f'<p><a href="{TERMINE_PDF}" download>Termine als PDF herunterladen</a></p>'
                 if os.path.exists(TERMINE_PDF) else "")
 
     content = f"""{read_hinweis()}
@@ -761,11 +761,10 @@ def build_termine():
     styles = """<style>""" + FULL_BLEED_CSS + HINWEIS_CSS + """
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
       .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-      .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
-      .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
+      .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white; border-radius: 8px; overflow: hidden; }
+      .custom-tabelle th, .custom-tabelle td { padding: 7px 8px; border: 1px solid #dcdcdc; text-align: center; line-height: 1.3; }
       .custom-tabelle th { background-color: #1a252f; color: white; }
       .custom-tabelle td:first-child { white-space: nowrap; }
-      .custom-tabelle td:nth-child(n+3) { white-space: nowrap; }
       .custom-tabelle td.monat-header { background: deepskyblue; font-weight: bold; font-size: 1.05rem; }
       .custom-tabelle .past td { opacity: 0.45; }
       .custom-tabelle td.bg-yellow { background: yellow; }
@@ -833,7 +832,7 @@ def build_ausschreibungen():
             stand = f" · Stand {e['date'].strftime('%d.%m.%Y')}" if e['date'] else ""
             items += f"""
             <a class="pdf-card" href="{e['url']}" target="_blank" rel="noopener">
-              <span class="pdf-icon" aria-hidden="true">📄</span>
+              <span class="pdf-icon" aria-hidden="true">PDF</span>
               <span class="pdf-text"><strong>{e['label']}</strong><br><small>PDF · {e['size']} KB{stand}</small></span>
             </a>"""
         body = f'<div class="pdf-grid">{items}</div>'
@@ -842,7 +841,7 @@ def build_ausschreibungen():
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-    <h1 style="margin-top:1rem;"><span aria-hidden="true">📄</span> Ausschreibungen</h1>
+    <h1 style="margin-top:1rem;">Ausschreibungen</h1>
     <p>Hier findest du die Ausschreibungen unserer Turniere. Ein Klick öffnet die PDF direkt.</p>
     {body}
     """
@@ -850,7 +849,7 @@ def build_ausschreibungen():
       .pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
       .pdf-card { display: flex; gap: 0.9rem; align-items: center; background: #f8f9fa; border-left: 4px solid #8e44ad; border-radius: 6px; padding: 1rem 1.2rem; text-decoration: none; color: #1a252f; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
       .pdf-card:hover { background: #eef1f8; }
-      .pdf-icon { font-size: 1.8rem; }
+      .pdf-icon { flex: none; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: #fff; background: #c0392b; border-radius: 4px; padding: 0.35rem 0.5rem; }
       .pdf-card small { color: #777; }
     </style>"""
     render_page("Ausschreibungen", content, "ausschreibungen.html", extra_styles=styles)
@@ -871,23 +870,23 @@ def build_neu_hier():
 
     <div class="neu-grid">
       <div class="neu-card">
-        <h3><span aria-hidden="true">🕒</span> Wann?</h3>
+        <h3>Wann?</h3>
         <p><strong>Jeden Freitag.</strong> Das Gebäude ist ab 18:00 Uhr geöffnet.</p>
         <ul>
           <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
-          <li><strong>Erwachsene &amp; Spielabend:</strong> ab 19:30 Uhr (open end)</li>
+          <li><strong>Erwachsene &amp; Spielabend:</strong> ab 19:30 Uhr (Open End)</li>
         </ul>
         <p>Die Zeiten sind flexibel: Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.</p>
       </div>
 
       <div class="neu-card">
-        <h3><span aria-hidden="true">📍</span> Wo?</h3>
+        <h3>Wo?</h3>
            <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 20<br>85551 Kirchheim</p>
-        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.5rem 1rem; text-decoration:none; border-radius:4px; font-size:0.9rem;"><span aria-hidden="true">📍</span> Auf Google Maps öffnen</a>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn btn-outline">Auf Google Maps öffnen</a>
       </div>
 
       <div class="neu-card">
-        <h3><span aria-hidden="true">👋</span> Wer kann kommen?</h3>
+        <h3>Wer kann kommen?</h3>
         <ul>
           <li><strong>Jeder, von 0 bis 99.</strong> Die Regeln musst du noch nicht kennen.</li>
           <li><strong>Schnuppern ist kostenlos und unverbindlich</strong>, so oft du willst.</li>
@@ -896,7 +895,7 @@ def build_neu_hier():
       </div>
 
       <div class="neu-card">
-        <h3><span aria-hidden="true">♟️</span> Was erwartet dich?</h3>
+        <h3>Was erwartet dich?</h3>
         <ul>
           <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
           <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen</li>
@@ -906,15 +905,15 @@ def build_neu_hier():
       </div>
 
       <div class="neu-card">
-        <h3><span aria-hidden="true">💶</span> Was kostet es?</h3>
+        <h3>Was kostet es?</h3>
         <ul>{beitraege}</ul>
         <p>Schnuppern kostet nichts.</p>
       </div>
 
       <div class="neu-card">
-        <h3><span aria-hidden="true">📝</span> Mitglied werden</h3>
+        <h3>Mitglied werden</h3>
         <p>Gefällt es dir bei uns? Den Mitgliedsantrag kannst du hier herunterladen:</p>
-        <a href="mitgliederantrag.pdf" download><span aria-hidden="true">📄</span> Mitgliedsantrag (PDF) →</a>
+        <a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF) →</a>
         <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
       </div>
     </div>
@@ -1144,7 +1143,7 @@ def build_blitzjahreswertung():
       """ + active + """ { background: #0a1f44; color: #fff; }
       """ + show + """ { display: block; }""")
 
-    pdf_link = (f'<p><a href="{BLITZ_PDF}" download>📄 Aktuelle Wertung als PDF herunterladen</a></p>'
+    pdf_link = (f'<p><a href="{BLITZ_PDF}" download>Aktuelle Wertung als PDF herunterladen</a></p>'
                 if os.path.exists(BLITZ_PDF) else "")
 
     content = f"""
@@ -1687,10 +1686,6 @@ HOME_JS = """<script>
     }
 
     el.textContent = "";
-    var icon = document.createElement("span");
-    icon.setAttribute("aria-hidden", "true");
-    icon.textContent = "🗓️ ";
-    el.appendChild(icon);
 
     if (hit) {
       el.appendChild(document.createTextNode("Aktuell kein Spielabend" + (hit.reason ? ": " + hit.reason : "")));
@@ -1875,20 +1870,19 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
 
       <ul class="hero-facts">
         <li>
-          <strong><span aria-hidden="true">📅</span> Jeden Freitag</strong>
-          <span>Gebäude ab 18:00 Uhr geöffnet</span>
+          <strong>Jeden Freitag ab 18:00 Uhr</strong>
+          <span>Für alle offen, Erwachsene dürfen auch früher kommen</span>
         </li>
         <li>
-          <strong><span aria-hidden="true">🕒</span> Jugendtraining 18:00 – 19:30 Uhr</strong>
-          <span>Spielabend für Erwachsene ab 19:30 Uhr, open end</span>
+          <strong>Jugend 18:00 – 19:30 Uhr</strong>
+          <span>Erwachsene ab 19:30 Uhr, Open End. Jugendliche dürfen gern länger bleiben.</span>
         </li>
         <li>
-          <strong><span aria-hidden="true">📍</span> Gymnasium Kirchheim</strong>
+          <strong>Gymnasium Kirchheim</strong>
              <span>Heimstettner Str. 20, 85551 Kirchheim<br>
             <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
         </li>
       </ul>
-      <p class="hero-note">Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche dürfen auch länger bleiben.</p>
 
       <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
     </section>
@@ -1987,7 +1981,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
         .stats span { font-size: 0.8rem; }
       }
 
-      .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1rem; }
+      .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap: 1rem; align-items: start; }
       .news-grid .card { margin-bottom: 0 !important; }
 
       .cta-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin: 3rem 0 1rem; padding: 1.6rem 2rem; background: var(--navy); color: #fff; border-radius: 8px; }

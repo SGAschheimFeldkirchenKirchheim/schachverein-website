@@ -18,7 +18,7 @@ from datetime import datetime
 # ==========================================
 DATEN_ORDNER = "mannschaften"
 SEITE = "{slug}.html"           # Dateiname der Team-Seite; slug aus "AFK 1" -> "afk-1"
-DEZIMAL = "."                   # "." -> 3.5   |   "," -> 3,5
+DEZIMAL = ","                   # "." -> 3.5   |   "," -> 3,5
 BP_IMMER_NACHKOMMA = True       # Brettpunkte in Tabellen immer mit Nachkommastelle (6.0, 6.5)
 
 # Eigener (langer) Vereinsname in Tabellen -> kürzer; None = unverändert

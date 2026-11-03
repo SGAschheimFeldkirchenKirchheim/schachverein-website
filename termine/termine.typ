@@ -28,7 +28,7 @@
   [08.12. Di, 19:30 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 3], [], [],
   table.cell(fill: DarkSlateGray)[11.12. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], [], [], [],
   [12.12. Sa, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: blueViolet)[U14/U16 MMM Runde 4+5],
-  [14.12. Mo], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Spiefrei], [],
+  [14.12. Mo], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM spielfrei], [],
   table.cell(fill: DarkSlateGray)[18.12. Fr], table.cell(fill: orange)[Weihnachtsblitz], [], [], [], [], [], [], [], [],
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Januar")]],
   [06.01. Mi], [Dreikönigsturnier], [], [], [], [], [], [], [], [],
