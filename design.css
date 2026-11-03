@@ -344,7 +344,11 @@ footer a:hover { color: #fff; }
 .liga-tab tr.auf td:first-child { background: #cfe8c6; color: #1f4d1a; box-shadow: none; font-weight: 700; }
 .liga-tab tr.ab td:first-child { background: #f2c4c0; color: #6e1d17; box-shadow: none; font-weight: 700; }
 .liga-tab tr.trenn td { border-top: 2px dashed var(--line); }
+.liga-tab tr.auf-evtl td:first-child { background: #e6f2e1; color: #2f5a28; }
+.liga-tab tr.ab-evtl td:first-child { background: #f9e1df; color: #7a2a23; }
 [data-theme="dark"] .liga-tab tr.auf td:first-child { background: #2b5a2a; color: #d4f3cc; }
+[data-theme="dark"] .liga-tab tr.auf-evtl td:first-child { background: #22391f; color: #bfe3b6; }
+[data-theme="dark"] .liga-tab tr.ab-evtl td:first-child { background: #3f201d; color: #f2c4bf; }
 [data-theme="dark"] .liga-tab tr.ab td:first-child { background: #6a2621; color: #ffd6d1; }
 
 /* Header-Reihenfolge: Name – Menü – Farbmodus (Handy: Name – Farbmodus – Burger, Menü darunter) */

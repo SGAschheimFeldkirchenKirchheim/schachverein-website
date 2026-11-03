@@ -158,6 +158,11 @@ def tabelle_html(d, tabelle, mit_delta=None):
             klassen.append("auf")
         if d.get("ab") and i >= n - d["ab"]:
             klassen.append("ab")
+        auf, ab = d.get("auf") or 0, d.get("ab") or 0
+        if d.get("auf_evtl") and auf <= i < auf + d["auf_evtl"]:
+            klassen.append("auf-evtl")
+        if d.get("ab_evtl") and n - ab - d["ab_evtl"] <= i < n - ab:
+            klassen.append("ab-evtl")
         if (d.get("auf") and i == d["auf"]) or (d.get("ab") and i == n - d["ab"]):
             klassen.append("trenn")
         cls = f' class="{" ".join(klassen)}"' if klassen else ""
@@ -361,7 +366,7 @@ def reiter_verlauf(d):
 
 
 def json_fuer_script(d):
-    daten = {k: d[k] for k in ("key", "kurz", "bretter", "eigen", "teams", "tabelle", "auf", "ab")}
+    daten = {k: d.get(k) for k in ("key", "kurz", "bretter", "eigen", "teams", "tabelle", "auf", "ab", "auf_evtl", "ab_evtl")}
     daten["matches"] = [{k: v for k, v in m.items() if k != "bretter"} for m in d["matches"]]
     daten["dezimal"] = DEZIMAL
     return json.dumps(daten, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -712,6 +717,9 @@ RECHNER_JS = r"""<script>
       if (r.tlnr === d.eigen) tr.className = "eigen";
       if (d.auf && i < d.auf) tr.classList.add("auf");
       if (d.ab && i >= n - d.ab) tr.classList.add("ab");
+      var au = d.auf || 0, ab = d.ab || 0;
+      if (d.auf_evtl && i >= au && i < au + d.auf_evtl) tr.classList.add("auf-evtl");
+      if (d.ab_evtl && i >= n - ab - d.ab_evtl && i < n - ab) tr.classList.add("ab-evtl");
       var diff = (alt[r.tlnr] || r.platz) - r.platz;
       var dz = el("span", "delta " + (diff > 0 ? "hoch" : diff < 0 ? "runter" : ""), diff > 0 ? "▲" + diff : diff < 0 ? "▼" + (-diff) : "");
       var cells = [String(r.platz), dz, d.teams[r.tlnr] || ("Team " + r.tlnr), r.sp, r.mp, zahl(r.bp, true), r.siege, r.gp];
