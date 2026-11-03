@@ -1,5 +1,5 @@
 {
-  "tinymist.typstExtraArgs": ["--root", "C:/Users/korbi/Desktop/schachverein-website"],
+  "tinymist.typstExtraArgs": ["--root", "C:/Python/Schach/schachverein-website"],
   "files.exclude": {
     "berichte/*.html": true,
     "berichte/bilder": true
