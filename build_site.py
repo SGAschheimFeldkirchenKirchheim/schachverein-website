@@ -684,17 +684,15 @@ def build_turniere_overview():
       </div>""" for titel, text, link, knopf in TURNIERE)
     content = f"""
     <h1>Turniere &amp; Ergebnisse</h1>
-
-    <section class="ausschreibungen-block">
-      <h2>Kommende Turniere – Ausschreibungen</h2>
-      <p>Hier findest du die Ausschreibungen zu den kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
-      {pdf_liste_html(ausschreibungen_eintraege())}
-    </section>
-
-    <h2 class="turniere-titel">Wertungen &amp; Ergebnisse</h2>
     <p>Übersichten zu unseren regionalen Wettkämpfen, die Gesamtwertung der Blitzschach-Serie und die Hall of Fame unserer Vereinsmeister.</p>
     <div class="turnier-liste">{zeilen}
     </div>
+
+    <section class="ausschreibungen-block">
+      <h2>Ausschreibungen</h2>
+      <p>Hier findest du die Ausschreibungen zu den kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
+      {pdf_liste_html(ausschreibungen_eintraege())}
+    </section>
     """
     render_page("Turniere & Ergebnisse", content, "turniere.html")
 

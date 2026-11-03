@@ -61,38 +61,68 @@
 }
 
 /* ---------- Dunkelmodus (folgt automatisch der Einstellung von Handy/PC) ---------- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0e1524;
-    --surface: #162036;
-    --line: #26324a;
-    --text: #d5dce8;
-    --muted: #9aa6ba;
-    --head: #e9eef7;
-    --link-c: #8fb7ea;
-    --soft: #1f2d4a;
-    --soft-text: #c3d5f0;
-    --accent: #1b2a4a;
-    --primary-dark: #24375f;
-    --dia-abdunkeln: rgba(8, 13, 26, 0.78);
-    --navy: var(--head);     /* ältere Seiten-Styles nutzen --navy für Text */
-  }
-  .btn { border-color: var(--hell); }
-  .btn-outline { color: var(--link-c); border-color: var(--link-c); }
-  .custom-tabelle, .liga-tab, .oq-tabelle, .hof-tabelle, table { background: var(--surface) !important; color: var(--text); }
-  .custom-tabelle td, .custom-tabelle th, .liga-tab td, table td { border-color: var(--line) !important; }
-  .liga-tab tr.eigen td, .liga-tab .eigen { background: var(--soft) !important; }
-  input, textarea, select { background: var(--bg) !important; color: var(--text) !important; border-color: var(--line) !important; }
-  .hero-facts li { background: rgba(22, 32, 54, 0.94) !important; }
-  .reiter a { background: var(--soft) !important; color: var(--text) !important; }
-  .reiter a[aria-current="true"] { background: var(--hell) !important; color: #0e1524 !important; }
-  .btn-outline { color: #cfe0f7 !important; border-color: var(--link-c) !important; }
-  .preis { color: var(--hell) !important; }
-  .team-grid > .card h3, .tick-team { color: color-mix(in srgb, var(--team, var(--head)) 65%, white) !important; }
-  .runden-wahl button[aria-pressed="true"] { background: var(--hell) !important; color: #0e1524 !important; border-color: var(--hell) !important; }
-  .hinweis-banner { background: #3a3215; border-color: #6b5a1e; color: #f3e3a6; }
-  img.news-thumb, .report-img img { filter: brightness(0.92); }
+/* ---------- Dunkelmodus ----------
+   Schalter oben rechts im Header (Auto / Hell / Dunkel). "Auto" folgt dem Handy/PC.
+   Das Skript in base.html setzt data-theme="dark" oder "light" auf <html>. */
+:root[data-theme="dark"] {
+  --bg: #0e1524;
+  --surface: #162036;
+  --line: #26324a;
+  --text: #d5dce8;
+  --muted: #9aa6ba;
+  --head: #e9eef7;
+  --link-c: #8fb7ea;
+  --soft: #1f2d4a;
+  --soft-text: #c3d5f0;
+  --accent: #1b2a4a;
+  --primary-dark: #24375f;
+  --dia-abdunkeln: rgba(8, 13, 26, 0.78);
+  --navy: var(--head);     /* ältere Seiten-Styles nutzen --navy für Text */
+  --border: var(--line);
+  color-scheme: dark;
 }
+[data-theme="dark"] .btn { border-color: var(--hell); }
+[data-theme="dark"] .btn-outline { color: #cfe0f7 !important; border-color: var(--link-c) !important; }
+[data-theme="dark"] .custom-tabelle, [data-theme="dark"] .liga-tab, [data-theme="dark"] .oq-tabelle,
+[data-theme="dark"] .hof-tabelle, [data-theme="dark"] table { background: var(--surface) !important; color: var(--text); }
+[data-theme="dark"] .custom-tabelle td, [data-theme="dark"] .custom-tabelle th, [data-theme="dark"] .liga-tab td,
+[data-theme="dark"] table td { border-color: var(--line) !important; }
+[data-theme="dark"] input, [data-theme="dark"] textarea, [data-theme="dark"] select { background: var(--bg) !important; color: var(--text) !important; border-color: var(--line) !important; }
+[data-theme="dark"] .hero-facts li { background: rgba(22, 32, 54, 0.94) !important; }
+[data-theme="dark"] .reiter a { background: var(--soft) !important; color: var(--text) !important; }
+[data-theme="dark"] .reiter a[aria-current="true"] { background: var(--hell) !important; color: #0e1524 !important; }
+[data-theme="dark"] .preis { color: var(--hell) !important; }
+[data-theme="dark"] .team-grid > .card h3, [data-theme="dark"] .tick-team { color: color-mix(in srgb, var(--team, var(--head)) 60%, white) !important; }
+[data-theme="dark"] .hinweis-banner { background: #3a3215; border-color: #6b5a1e; color: #f3e3a6; }
+[data-theme="dark"] img.news-thumb, [data-theme="dark"] .report-img img { filter: brightness(0.92); }
+/* Team-Seiten (Tabelle, Spieltage, Spieler, Rechner) */
+[data-theme="dark"] .liga-tab tr.eigen td,
+[data-theme="dark"] .paar.eigen > summary, [data-theme="dark"] .paar.eigen .p-zeile,
+[data-theme="dark"] .rechner .r-spiel.eigen { background: #24375f !important; color: #fff !important; }
+[data-theme="dark"] .paar > summary:hover { background: var(--soft); }
+[data-theme="dark"] .erg { background: #2a3650; color: #d5dce8; }
+[data-theme="dark"] .erg-s { background: #1f4d34; color: #b9ecca; }
+[data-theme="dark"] .erg-u { background: #4d3c14; color: #f5d98f; }
+[data-theme="dark"] .erg-n { background: #57231e; color: #f5b9b2; }
+[data-theme="dark"] .erg-offen { background: transparent; color: var(--muted); }
+[data-theme="dark"] .rechner button, [data-theme="dark"] .runden-wahl button { background: var(--soft); color: var(--text); border-color: var(--line); }
+[data-theme="dark"] .rechner button:hover { border-color: var(--hell); }
+[data-theme="dark"] .runden-wahl button[aria-pressed="true"] { background: var(--hell) !important; color: #0e1524 !important; border-color: var(--hell) !important; }
+[data-theme="dark"] .rd, [data-theme="dark"] .ha, [data-theme="dark"] .dwz, [data-theme="dark"] .bretter td:first-child { color: var(--muted); }
+
+/* Schalter im Header */
+.theme-schalter { background: none; border: 1px solid rgba(255,255,255,0.35); color: #fff; border-radius: 999px;
+  font: inherit; font-size: 0.72rem; font-weight: 600; padding: 0.15rem 0.6rem; cursor: pointer; white-space: nowrap; }
+@media (min-width: 961px) {
+  header { flex-wrap: nowrap !important; gap: 0.5rem 1.2rem !important; }
+  header .brand { font-size: 1rem !important; white-space: nowrap; }
+  header nav { gap: 0.2rem 0.85rem !important; flex-wrap: nowrap !important; margin-left: auto !important; }
+  header nav a { font-size: 0.85rem; white-space: nowrap; }
+}
+@media (min-width: 961px) and (max-width: 1180px) {
+  header .brand span { display: none; }   /* auf mittleren Bildschirmen nur Logo, damit das Menü in eine Zeile passt */
+}
+.theme-schalter:hover { border-color: var(--hell); }
 
 /* ---------- Schriften ---------- */
 @font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
@@ -183,6 +213,7 @@ footer a:hover { color: #fff; }
 .event-card.next { border-left-color: var(--hell); box-shadow: none; }
 .event-card.next .ev-rel:not(:empty) { background: var(--accent); color: var(--on-accent); }
 .ev-date { margin: 0 !important; color: var(--muted); }
+.ev-rel:not(:empty) { display: table !important; margin: 0.2rem 0 0 !important; }
 .ev-title { color: var(--head); }
 .ev-title { font-size: 1rem; }
 .ev-teams { margin: 0 !important; text-align: right; }
@@ -222,6 +253,8 @@ footer a:hover { color: #fff; }
 .team-grid > .card p { margin: 0 !important; font-size: 0.85rem; }
 .team-karte .k-mehr { margin: 0 !important; padding: 0 !important; text-align: right; }
 .team-klasse { background: var(--soft) !important; color: var(--soft-text) !important; }
+.team-grid > .card h3 { display: block !important; }
+.team-grid > .card h3 .team-klasse { display: table; margin-top: 0.3rem; font-family: var(--font-text); }
 @media (max-width: 900px) {
   .team-grid > .card { grid-template-columns: 1fr; row-gap: 0.3rem; }
   .team-karte .k-mehr { text-align: left; }
@@ -242,7 +275,7 @@ footer a:hover { color: #fff; }
 .news-card .btn:hover { background: none; text-decoration: underline; }
 
 /* ---------- Turniere: Ausschreibungen oben, darunter Liste ---------- */
-.ausschreibungen-block { background: var(--soft); border-radius: var(--radius); padding: 1.3rem 1.5rem; margin: 1.5rem 0 2.5rem; }
+.ausschreibungen-block { margin: 2.5rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .ausschreibungen-block h2 { margin: 0 0 0.3rem; }
 .ausschreibungen-block p { margin: 0 0 1rem; }
 .turniere-titel { margin-bottom: 0.3rem; }
@@ -305,3 +338,22 @@ footer a:hover { color: #fff; }
    Lieber die Typst-Farben? Diese zwei Zeilen löschen. */
 .custom-tabelle td.team-zelle { background: color-mix(in srgb, var(--team) 16%, var(--surface)); color: var(--text);
   box-shadow: inset 4px 0 0 var(--team); }
+
+/* ---------- Auf- und Abstieg in Ligatabellen ----------
+   Anzahl je Liga steht in config.json des Tabellenrechners ("aufsteiger", "absteiger"). */
+.liga-tab tr.auf td:first-child { background: #cfe8c6; color: #1f4d1a; box-shadow: none; font-weight: 700; }
+.liga-tab tr.ab td:first-child { background: #f2c4c0; color: #6e1d17; box-shadow: none; font-weight: 700; }
+.liga-tab tr.trenn td { border-top: 2px dashed var(--line); }
+[data-theme="dark"] .liga-tab tr.auf td:first-child { background: #2b5a2a; color: #d4f3cc; }
+[data-theme="dark"] .liga-tab tr.ab td:first-child { background: #6a2621; color: #ffd6d1; }
+
+/* Header-Reihenfolge: Name – Menü – Farbmodus (Handy: Name – Farbmodus – Burger, Menü darunter) */
+header .brand { order: 1; }
+header nav { order: 2; }
+.theme-schalter { order: 3; }
+@media (max-width: 960px) {
+  header .brand { flex: 1 1 0; min-width: 0; font-size: 0.92rem !important; }
+  .theme-schalter { order: 2; margin-left: auto; }
+  .nav-burger { order: 3; margin-left: 0.3rem !important; }
+  header nav { order: 4; }
+}
