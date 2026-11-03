@@ -101,7 +101,7 @@
         .stats span { font-size: 0.8rem; }
       }
 
-      .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1rem; }
+      .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap: 1rem; align-items: start; }
       .news-grid .card { margin-bottom: 0 !important; }
 
       .cta-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin: 3rem 0 1rem; padding: 1.6rem 2rem; background: var(--navy); color: #fff; border-radius: 8px; }
@@ -177,20 +177,19 @@
 
       <ul class="hero-facts">
         <li>
-          <strong><span aria-hidden="true">📅</span> Jeden Freitag</strong>
-          <span>Gebäude ab 18:00 Uhr geöffnet</span>
+          <strong>Jeden Freitag ab 18:00 Uhr</strong>
+          <span>Für alle offen, Erwachsene dürfen auch früher kommen</span>
         </li>
         <li>
-          <strong><span aria-hidden="true">🕒</span> Jugendtraining 18:00 – 19:30 Uhr</strong>
-          <span>Spielabend für Erwachsene ab 19:30 Uhr, open end</span>
+          <strong>Jugend 18:00 – 19:30 Uhr</strong>
+          <span>Erwachsene ab 19:30 Uhr, Open End. Jugendliche dürfen gern länger bleiben.</span>
         </li>
         <li>
-          <strong><span aria-hidden="true">📍</span> Gymnasium Kirchheim</strong>
+          <strong>Gymnasium Kirchheim</strong>
              <span>Heimstettner Str. 20, 85551 Kirchheim<br>
             <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
         </li>
       </ul>
-      <p class="hero-note">Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche dürfen auch länger bleiben.</p>
 
       <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
     </section>
@@ -271,13 +270,13 @@
         </a>
         <a class="tick tick-u" href="afk-3.html">
           <span class="tick-team">AFK 3</span>
-          <span class="tick-erg">3.5 : 3.5</span>
+          <span class="tick-erg">3,5 : 3,5</span>
           <span class="tick-geg">vs. SK Markt Schwaben 1</span>
           <span class="tick-info">Runde 1 · Platz 5</span>
         </a>
         <a class="tick tick-s" href="afk-4.html">
           <span class="tick-team">AFK 4</span>
-          <span class="tick-erg">4.5 : 1.5</span>
+          <span class="tick-erg">4,5 : 1,5</span>
           <span class="tick-geg">bei FC Bayern München 9</span>
           <span class="tick-info">Runde 1 · Platz 3</span>
         </a>
@@ -380,10 +379,6 @@
     }
 
     el.textContent = "";
-    var icon = document.createElement("span");
-    icon.setAttribute("aria-hidden", "true");
-    icon.textContent = "🗓️ ";
-    el.appendChild(icon);
 
     if (hit) {
       el.appendChild(document.createTextNode("Aktuell kein Spielabend" + (hit.reason ? ": " + hit.reason : "")));
