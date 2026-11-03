@@ -340,15 +340,27 @@ footer a:hover { color: #fff; }
   box-shadow: inset 4px 0 0 var(--team); }
 
 /* ---------- Auf- und Abstieg in Ligatabellen ----------
-   Anzahl je Liga steht in config.json des Tabellenrechners ("aufsteiger", "absteiger"). */
-.liga-tab tr.auf td:first-child { background: #cfe8c6; color: #1f4d1a; box-shadow: none; font-weight: 700; }
-.liga-tab tr.ab td:first-child { background: #f2c4c0; color: #6e1d17; box-shadow: none; font-weight: 700; }
+   Kommt automatisch vom Schachbezirk (Tabellenrechner, auf_ab.py).
+   Sicher = kräftige Farbe mit weißer Schrift, evtl. = helle Farbe mit farbigem Rand. */
+:root {
+  --auf: #2e7d4f;        --auf-evtl-bg: #d9eedf;  --auf-evtl-text: #1d5634;
+  --ab: #b8322a;         --ab-evtl-bg: #f8dedb;   --ab-evtl-text: #8a2a22;
+}
+[data-theme="dark"] {
+  --auf-evtl-bg: #1c3a28; --auf-evtl-text: #a9e0bb;
+  --ab-evtl-bg: #45201c;  --ab-evtl-text: #f4b8b1;
+}
+.liga-tab tr.auf td:first-child      { background: var(--auf) !important; color: #fff !important; font-weight: 700; box-shadow: none !important; }
+.liga-tab tr.ab td:first-child       { background: var(--ab) !important; color: #fff !important; font-weight: 700; box-shadow: none !important; }
+.liga-tab tr.auf-evtl td:first-child { background: var(--auf-evtl-bg) !important; color: var(--auf-evtl-text) !important; font-weight: 700; box-shadow: inset 4px 0 0 var(--auf) !important; }
+.liga-tab tr.ab-evtl td:first-child  { background: var(--ab-evtl-bg) !important; color: var(--ab-evtl-text) !important; font-weight: 700; box-shadow: inset 4px 0 0 var(--ab) !important; }
 .liga-tab tr.trenn td { border-top: 2px dashed var(--line); }
-.liga-tab tr.auf-evtl td:first-child { background: #e6f2e1; color: #2f5a28; }
-.liga-tab tr.ab-evtl td:first-child { background: #f9e1df; color: #7a2a23; }
-[data-theme="dark"] .liga-tab tr.auf td:first-child { background: #2b5a2a; color: #d4f3cc; }
-[data-theme="dark"] .liga-tab tr.auf-evtl td:first-child { background: #22391f; color: #bfe3b6; }
-[data-theme="dark"] .liga-tab tr.ab-evtl td:first-child { background: #3f201d; color: #f2c4bf; }
+.auf-ab-legende { display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; margin: 0.6rem 0 0; font-size: 0.82rem; color: var(--muted); }
+.auf-ab-legende span::before { content: ""; display: inline-block; width: 0.85rem; height: 0.85rem; border-radius: 3px; margin-right: 0.35rem; vertical-align: -0.1rem; }
+.auf-ab-legende .l-auf::before { background: var(--auf); }
+.auf-ab-legende .l-auf-evtl::before { background: var(--auf-evtl-bg); box-shadow: inset 3px 0 0 var(--auf); }
+.auf-ab-legende .l-ab-evtl::before { background: var(--ab-evtl-bg); box-shadow: inset 3px 0 0 var(--ab); }
+.auf-ab-legende .l-ab::before { background: var(--ab); }
 [data-theme="dark"] .liga-tab tr.ab td:first-child { background: #6a2621; color: #ffd6d1; }
 
 /* Header-Reihenfolge: Name – Menü – Farbmodus (Handy: Name – Farbmodus – Burger, Menü darunter) */

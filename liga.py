@@ -183,7 +183,15 @@ def tabelle_html(d, tabelle, mit_delta=None):
           <th title="Mannschaftspunkte">MP</th><th title="Brettpunkte">BP</th>
           <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
         <tbody>{"".join(zeilen)}</tbody>
-      </table></div>"""
+      </table></div>{auf_ab_legende(d)}"""
+
+
+def auf_ab_legende(d):
+    """Kleine Erklärung der Platzfarben (nur die Stufen, die in dieser Liga vorkommen)."""
+    teile = [(d.get("auf"), "l-auf", "Aufstieg"), (d.get("auf_evtl"), "l-auf-evtl", "evtl. Aufstieg"),
+             (d.get("ab_evtl"), "l-ab-evtl", "evtl. Abstieg"), (d.get("ab"), "l-ab", "Abstieg")]
+    spans = "".join(f'<span class="{k}">{t}</span>' for n, k, t in teile if n)
+    return f'<p class="auf-ab-legende">{spans}</p>' if spans else ""
 
 
 def bretter_html(d, m):
