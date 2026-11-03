@@ -1902,8 +1902,6 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
       {legend}
     </section>
 
-    {liga.ticker_html(teams)}
-
     <section>
       <div class="section-head">
         <h2>Aktuelle Berichte</h2>
@@ -1913,6 +1911,8 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
         {news_html}
       </div>
     </section>
+
+    {liga.ticker_html(teams)}
 
     <section class="cta-band">
       <div>

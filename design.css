@@ -37,8 +37,8 @@
   --schrift: 17.5px;
 
   /* Formen */
-  --radius: 4px;
-  --btn-radius: 2px;
+  --radius: 10px;
+  --btn-radius: 8px;
 
   /* alte Variablen aus style.css mitziehen */
   --navy: var(--accent);
