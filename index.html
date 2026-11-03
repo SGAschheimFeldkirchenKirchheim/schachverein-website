@@ -173,6 +173,7 @@
     
 
     <section class="hero">
+      <div class="diashow" aria-hidden="true"><div class="dia aktiv" style="background-image:url(diashow/01-vereinsmeisterschaft-2026.jpg)"></div></div>
       <img src="Logo.png" alt="Wappen der SG Aschheim / Feldkirchen / Kirchheim" class="hero-logo">
       <h1>Schach spielen in Aschheim, Feldkirchen &amp; Kirchheim</h1>
       <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
@@ -204,7 +205,7 @@
         <a href="termine.html">Termine ansehen →</a>
       </div>
       <p class="spielabend" id="spielabend" hidden></p>
-      <div class="events-grid" data-max="4">
+      <div class="events-grid" data-max="8">
         
         <a class="event-card" href="termine.html" data-date="2026-11-06">
           <div class="ev-date">06.11. Fr <span class="ev-rel"></span></div>
@@ -219,7 +220,7 @@
         <a class="event-card" href="termine.html" data-date="2026-11-13">
           <div class="ev-date">13.11. Fr, 19:30 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">MMM Runde 2</div>
-          <div class="ev-teams"><span class="pill">AFK 1</span><span class="pill">AFK 2</span><span class="pill">AFK 4</span><span class="pill">AFK 5</span></div>
+          <div class="ev-teams"><span class="pill team-afk-1">AFK 1</span><span class="pill team-afk-2">AFK 2</span><span class="pill team-afk-4">AFK 4</span><span class="pill team-afk-5">AFK 5</span></div>
         </a>
         <div class="event-card" data-date="2026-11-20">
           <div class="ev-date">20.11. Fr <span class="ev-rel"></span></div>
@@ -229,12 +230,12 @@
         <a class="event-card" href="termine.html" data-date="2026-11-21">
           <div class="ev-date">21.11. Sa, 14:00 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">Landesliga Süd Runde 1</div>
-          <div class="ev-teams"><span class="pill">Jugend</span></div>
+          <div class="ev-teams"><span class="pill team-jugend">Jugend</span></div>
         </a>
         <a class="event-card" href="termine.html" data-date="2026-11-22">
           <div class="ev-date">22.11. So, 10:00 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">U20 MMM, 1.Liga Runde 1</div>
-          <div class="ev-teams"><span class="pill">Jugend</span></div>
+          <div class="ev-teams"><span class="pill team-jugend">Jugend</span></div>
         </a>
         <a class="event-card" href="termine.html" data-date="2026-11-22">
           <div class="ev-date">22.11. So, 11:00 Uhr <span class="ev-rel"></span></div>
@@ -244,7 +245,27 @@
         <a class="event-card" href="termine.html" data-date="2026-11-26">
           <div class="ev-date">26.11. Do, 19:30 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">MMM Runde 3</div>
-          <div class="ev-teams"><span class="pill">AFK 1</span></div>
+          <div class="ev-teams"><span class="pill team-afk-1">AFK 1</span></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-27">
+          <div class="ev-date">27.11. Fr, 19:30 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 2</div>
+          <div class="ev-teams"><span class="pill team-afk-6">AFK 6</span></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-29">
+          <div class="ev-date">29.11. So, 10:00 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">U14/U16 MMM Runde 1-3</div>
+          <div class="ev-teams"><span class="pill team-jugend">Jugend</span></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-29">
+          <div class="ev-date">29.11. So, 11:00 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">Mannschafts-und Ligapokal</div>
+          
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-12-05">
+          <div class="ev-date">05.12. Sa <span class="ev-rel"></span></div>
+          <div class="ev-title">Schulschach EM</div>
+          <div class="ev-teams"><span class="pill team-jugend">Jugend</span></div>
         </a>
       </div>
       <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
@@ -285,31 +306,31 @@
         <a href="mannschaften.html">Alle Mannschaften →</a>
       </div>
       <div class="ticker">
-        <a class="tick tick-n" href="afk-1.html">
+        <a class="tick tick-n team-afk-1" href="afk-1.html">
           <span class="tick-team">AFK 1</span>
           <span class="tick-erg">2 : 6</span>
           <span class="tick-geg">bei SC Garching 1980 5</span>
           <span class="tick-info">Runde 1 · Platz 9</span>
         </a>
-        <a class="tick tick-s" href="afk-2.html">
+        <a class="tick tick-s team-afk-2" href="afk-2.html">
           <span class="tick-team">AFK 2</span>
           <span class="tick-erg">5 : 3</span>
           <span class="tick-geg">vs. FC Bayern München 6</span>
           <span class="tick-info">Runde 1 · Platz 3</span>
         </a>
-        <a class="tick tick-u" href="afk-3.html">
+        <a class="tick tick-u team-afk-3" href="afk-3.html">
           <span class="tick-team">AFK 3</span>
           <span class="tick-erg">3,5 : 3,5</span>
           <span class="tick-geg">vs. SK Markt Schwaben 1</span>
           <span class="tick-info">Runde 1 · Platz 5</span>
         </a>
-        <a class="tick tick-s" href="afk-4.html">
+        <a class="tick tick-s team-afk-4" href="afk-4.html">
           <span class="tick-team">AFK 4</span>
           <span class="tick-erg">4,5 : 1,5</span>
           <span class="tick-geg">bei FC Bayern München 9</span>
           <span class="tick-info">Runde 1 · Platz 3</span>
         </a>
-        <a class="tick tick-s" href="afk-5.html">
+        <a class="tick tick-s team-afk-5" href="afk-5.html">
           <span class="tick-team">AFK 5</span>
           <span class="tick-erg">4 : 2</span>
           <span class="tick-geg">bei SC Eching 3</span>
@@ -353,7 +374,7 @@
   // Termin-Karten: vergangene ausblenden, nur die ersten N zeigen
   var grid = document.querySelector(".events-grid");
   var max = (grid && parseInt(grid.dataset.max, 10)) || 4;
-  var total = 0, shown = 0;
+  var total = 0, shown = 0, last = null;
   document.querySelectorAll(".event-card[data-date]").forEach(function (c) {
     total++;
     var p = c.dataset.date.split("-");
@@ -361,9 +382,11 @@
     if (d < today || shown >= max) { c.style.display = "none"; return; }
     var r = c.querySelector(".ev-rel");
     if (r) r.textContent = rel(d);
-    if (shown === 0) c.classList.add("next");
+    if (shown === 0) c.classList.add("next", "first-visible");
     shown++;
+    last = c;
   });
+  if (last) last.classList.add("last-visible");
   var empty = document.getElementById("events-empty");
   if (empty && total > 0 && shown === 0) empty.hidden = false;
 
@@ -403,11 +426,52 @@
   }
 })();
 </script>
+    <script>
+(function () {
+  var dias = document.querySelectorAll(".diashow .dia");
+  var punkte = document.querySelectorAll(".dia-punkte button");
+  if (dias.length < 2) return;
+  dias.forEach(function (d) { if (d.dataset.bild) d.style.backgroundImage = "url('" + d.dataset.bild + "')"; });
+  var i = 0, timer = null, ms = 10 * 1000;
+  function zeige(n) {
+    dias[i].classList.remove("aktiv"); punkte[i].removeAttribute("aria-current");
+    i = (n + dias.length) % dias.length;
+    dias[i].classList.add("aktiv"); punkte[i].setAttribute("aria-current", "true");
+  }
+  function start() { stop(); timer = setInterval(function () { zeige(i + 1); }, ms); }
+  function stop() { if (timer) clearInterval(timer); timer = null; }
+  punkte.forEach(function (p, n) { p.addEventListener("click", function () { zeige(n); start(); }); });
+  var hero = document.querySelector(".hero");
+  hero.addEventListener("mouseenter", stop);
+  hero.addEventListener("mouseleave", start);
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) start();
+})();
+</script>
     
   </main>
 
   <footer>
-    <p>&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. | <a href="impressum.html" class="footer-link">Impressum &amp; Datenschutz</a></p>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
+        <p><a href="kontakt.html">Kontaktformular</a></p>
+        <p><a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="ueber-uns.html">Über uns</a></p>
+        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 03.11.2026</p>
   </footer>
 
 </body>
