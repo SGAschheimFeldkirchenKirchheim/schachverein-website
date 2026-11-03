@@ -171,6 +171,15 @@ URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
 BEGIN:VEVENT
+UID:2026-12-14-ganztag-msmm-spiefrei-senioren-alle@sg-afk
+DTSTAMP:20261214T000000Z
+DTSTART;VALUE=DATE:20261214
+DTEND;VALUE=DATE:20261215
+SUMMARY:MSMM Spiefrei (Senioren)
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
 UID:2026-12-18-ganztag-weihnachtsblitz-alle@sg-afk
 DTSTAMP:20261218T000000Z
 DTSTART;VALUE=DATE:20261218
