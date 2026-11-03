@@ -424,7 +424,7 @@ def karte_html(d):
     if naechstes:
         zeilen.append(f'<p>Nächstes Spiel (R{naechstes["r"]}): {spiel_text(d, naechstes)}</p>')
     return f"""
-      <a class="card team-karte" href="{seite_datei(d)}">
+      <a class="card team-karte team-{seite_datei(d)[:-5]}" href="{seite_datei(d)}">
         <h3>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h3>
         {"".join(zeilen)}
         <span class="k-mehr">Tabelle, Spieltage, Rechner →</span>
@@ -468,7 +468,7 @@ def ticker_html(teams):
         zeile = eigene_zeile(d)
         platz = f' · Platz {zeile["platz"]}' if zeile else ""
         karten.append(f"""
-        <a class="tick tick-{art}" href="{seite_datei(d)}">
+        <a class="tick tick-{art} team-{seite_datei(d)[:-5]}" href="{seite_datei(d)}">
           <span class="tick-team">{esc(d["kurz"])}</span>
           <span class="tick-erg">{zahl(mein)} : {zahl(sein)}</span>
           <span class="tick-geg">{"vs." if heim else "bei"} {esc(gegner)}</span>

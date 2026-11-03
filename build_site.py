@@ -28,10 +28,10 @@ USE_SVG_FOR_TERMINE = False
 
 # Wie viele kommende Termine beim Build in die Startseite geschrieben werden (Reserve:
 # vergangene Karten blendet der Browser aus, auch wenn die Seite länger nicht neu gebaut wurde)
-NEXT_EVENTS_COUNT = 8
+NEXT_EVENTS_COUNT = 12
 
 # Wie viele Termin-Karten gleichzeitig sichtbar sind
-HOME_EVENTS_VISIBLE = 4
+HOME_EVENTS_VISIBLE = 8
 
 # Öffentliche Adresse der Seite (für Kalender-Links)
 SITE_URL = "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/"
@@ -206,10 +206,27 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         head_icon=head_icon,
         description=desc,
         og_image_tag=og_image_tag,
+        jahr=TODAY.year,
+        stand=letzte_aenderung(),
     )
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(full_html)
+
+
+_STAND = None
+def letzte_aenderung():
+    """Datum der letzten echten Änderung (letzter Commit, der nicht vom automatischen Build stammt)."""
+    global _STAND
+    if _STAND is None:
+        try:
+            out = subprocess.run(["git", "log", "-1", "--format=%cd", "--date=format:%d.%m.%Y",
+                                  "--invert-grep", "--grep=Auto-generate"],
+                                 capture_output=True, text=True, timeout=10).stdout.strip()
+        except Exception:
+            out = ""
+        _STAND = out or TODAY.strftime("%d.%m.%Y")
+    return _STAND
 
 
 # ==========================================
@@ -401,10 +418,17 @@ def assign_dates(rows, today=TODAY):
             pass
 
 
+TEAM_SPALTEN = r"AFK \d+|Senioren|Jugend"   # Spaltenköpfe, die eine Mannschaftsfarbe bekommen
+
+
 def render_table_inner_html(parsed, today=TODAY):
     out = []
-    if parsed['header']:
-        out.append('<thead><tr>' + ''.join(f'<th>{h}</th>' for h in parsed['header']) + '</tr></thead>')
+    # Spalten der Mannschaften (AFK 1 ..., Senioren, Jugend) bekommen ihre Mannschaftsfarbe (design.css)
+    header = parsed['header'] or []
+    spalten_klasse = [team_klasse(h) if re.fullmatch(TEAM_SPALTEN, plain_text(h).strip()) else "" for h in header]
+    if header:
+        out.append('<thead><tr>' + ''.join(
+            f'<th class="{k}">{h}</th>' if k else f'<th>{h}</th>' for h, k in zip(header, spalten_klasse)) + '</tr></thead>')
     out.append('<tbody>')
     for r in parsed['rows']:
         if r['kind'] == 'month':
@@ -412,11 +436,17 @@ def render_table_inner_html(parsed, today=TODAY):
             continue
         past = r.get('date') is not None and r['date'] < today
         tr_cls = ' class="past"' if past else ''
-        tds = []
+        tds, spalte = [], 0
         for c in r['cells']:
-            cls = f' class="bg-{c["fill"].lower()}"' if c['fill'] else ''
+            klassen = []
+            if c['fill']:
+                klassen.append(f'bg-{c["fill"].lower()}')
+            if c['colspan'] == 1 and spalte < len(spalten_klasse) and spalten_klasse[spalte] and c['text'].strip():
+                klassen += ['team-zelle', spalten_klasse[spalte]]
+            cls = f' class="{" ".join(klassen)}"' if klassen else ''
             span = f' colspan="{c["colspan"]}"' if c['colspan'] > 1 else ''
             tds.append(f'<td{cls}{span}>{c["text"]}</td>')
+            spalte += c['colspan']
         out.append(f'<tr{tr_cls}>' + ''.join(tds) + '</tr>')
     out.append('</tbody>')
     return '\n'.join(out)
@@ -634,44 +664,41 @@ def read_hinweis():
     return '<div class="hinweis-banner">' + '<br>'.join(lines) + '</div>'
 
 
+TURNIERE = [
+    # (Titel, Beschreibung, Link, Button-Text)
+    ("Oberlandquartett", "Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.",
+     "oberlandquartett.html", "Zum Oberlandquartett"),
+    ("Blitzjahreswertung", "Die aktuelle Gesamtwertung und Zwischenstände unserer monatlichen Blitzschach-Turnierserie.",
+     "blitzjahreswertung.html", "Zur Blitzjahreswertung"),
+    ("Vereinsintern &amp; Hall of Fame", "Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.",
+     "vereinsintern.html", "Zur Hall of Fame"),
+]
+
+
 def build_turniere_overview():
-    content = """
-    <h1>Turniere & Ergebnisse</h1>
-    <p>Hier findest du Übersichten zu unseren regionalen Wettkämpfen, die Gesamtwertung der Blitzschach-Serie sowie die Hall of Fame unserer Vereinsmeister.</p>
-    
-    <div class="grid-3">
-      
-      <div class="card tile">
-        <h2>Oberlandquartett</h2>
-        <p>Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.</p>
-        <a href="oberlandquartett.html" class="btn">Zum Oberlandquartett →</a>
-      </div>
+    zeilen = "".join(f"""
+      <div class="turnier-zeile">
+        <h2>{titel}</h2>
+        <p>{text}</p>
+        <a href="{link}" class="btn">{knopf} →</a>
+      </div>""" for titel, text, link, knopf in TURNIERE)
+    content = f"""
+    <h1>Turniere &amp; Ergebnisse</h1>
 
-      <div class="card tile">
-        <h2>Blitzjahreswertung</h2>
-        <p>Die aktuelle Gesamtwertung und Zwischenstände unserer monatlichen Blitzschach-Turnierserie.</p>
-        <a href="blitzjahreswertung.html" class="btn">Zur Blitzjahreswertung →</a>
-      </div>
+    <section class="ausschreibungen-block">
+      <h2>Kommende Turniere – Ausschreibungen</h2>
+      <p>Hier findest du die Ausschreibungen zu den kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
+      {pdf_liste_html(ausschreibungen_eintraege())}
+    </section>
 
-      <div class="card tile">
-        <h2>Vereinsintern & Hall of Fame</h2>
-        <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
-        <a href="vereinsintern.html" class="btn">Zur Hall of Fame →</a>
-      </div>
-
-      <div class="card tile">
-        <h2>Ausschreibungen</h2>
-        <p>Alle Turnierausschreibungen als PDF zum Ansehen und Herunterladen.</p>
-        <a href="ausschreibungen.html" class="btn">Zu den Ausschreibungen →</a>
-      </div>
-
+    <h2 class="turniere-titel">Wertungen &amp; Ergebnisse</h2>
+    <p>Übersichten zu unseren regionalen Wettkämpfen, die Gesamtwertung der Blitzschach-Serie und die Hall of Fame unserer Vereinsmeister.</p>
+    <div class="turnier-liste">{zeilen}
     </div>
     """
     render_page("Turniere & Ergebnisse", content, "turniere.html")
 
 
-# Zusätzliche Zellfarben
-# Typst-Name (kleingeschrieben) -> (Hintergrund, Textfarbe), Werte aus package.typ
 BG_FARBEN = {
     "green":         ("#00CD00", ""),
     "yellow":        ("#ffff00", ""),
@@ -795,7 +822,8 @@ def git_last_date(path):
         return None
 
 
-def build_ausschreibungen():
+def ausschreibungen_eintraege():
+    """Alle PDFs aus Ausschreibungen/ (neueste zuerst). Anzeigenamen optional in Ausschreibungen/titel.txt."""
     folder = "Ausschreibungen"
     files = glob.glob(os.path.join(folder, "*.pdf")) if os.path.isdir(folder) else []
 
@@ -825,34 +853,31 @@ def build_ausschreibungen():
         })
     entries.sort(key=lambda e: e['name'])
     entries.sort(key=lambda e: e['date'] or datetime.date.min, reverse=True)
+    return entries
 
-    if entries:
-        items = ""
-        for e in entries:
-            stand = f" · Stand {e['date'].strftime('%d.%m.%Y')}" if e['date'] else ""
-            items += f"""
+
+def pdf_liste_html(entries):
+    if not entries:
+        return "<p>Aktuell sind keine Ausschreibungen vorhanden.</p>"
+    items = ""
+    for e in entries:
+        stand = f" · Stand {e['date'].strftime('%d.%m.%Y')}" if e['date'] else ""
+        items += f"""
             <a class="pdf-card" href="{e['url']}" target="_blank" rel="noopener">
               <span class="pdf-icon" aria-hidden="true">PDF</span>
               <span class="pdf-text"><strong>{e['label']}</strong><br><small>PDF · {e['size']} KB{stand}</small></span>
             </a>"""
-        body = f'<div class="pdf-grid">{items}</div>'
-    else:
-        body = "<p>Aktuell sind keine Ausschreibungen vorhanden.</p>"
+    return f'<div class="pdf-grid">{items}</div>'
 
+
+def build_ausschreibungen():
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">Ausschreibungen</h1>
-    <p>Hier findest du die Ausschreibungen unserer Turniere. Ein Klick öffnet die PDF direkt.</p>
-    {body}
+    <p>Hier findest du die Ausschreibungen zu den kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
+    {pdf_liste_html(ausschreibungen_eintraege())}
     """
-    styles = """<style>
-      .pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-      .pdf-card { display: flex; gap: 0.9rem; align-items: center; background: #f8f9fa; border-left: 4px solid var(--gold); border-radius: 6px; padding: 1rem 1.2rem; text-decoration: none; color: #1a252f; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-      .pdf-card:hover { background: #eef1f8; }
-      .pdf-icon { flex: none; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: #fff; background: #c0392b; border-radius: 4px; padding: 0.35rem 0.5rem; }
-      .pdf-card small { color: #777; }
-    </style>"""
-    render_page("Ausschreibungen", content, "ausschreibungen.html", extra_styles=styles)
+    render_page("Ausschreibungen", content, "ausschreibungen.html")
 
 
 # Mitgliedsbeiträge pro Jahr (Seite "Neu hier?")
@@ -888,7 +913,7 @@ def build_neu_hier():
       <div class="neu-card">
         <h3>Wer kann kommen?</h3>
         <ul>
-          <li><strong>Jeder, von 0 bis 99.</strong> Die Regeln musst du noch nicht kennen.</li>
+          <li><strong>Alle sind willkommen – egal wie alt.</strong> Die Regeln musst du noch nicht kennen.</li>
           <li><strong>Schnuppern ist kostenlos und unverbindlich</strong>, so oft du willst.</li>
           <li><strong>Anmelden?</strong> Nicht nötig, einfach vorbeischauen. Wer mag, <a href="kontakt.html">meldet sich vorher kurz</a>.</li>
         </ul>
@@ -1613,6 +1638,8 @@ def build_berichte():
 # 7. STARTSEITE BUILDEN
 # ==========================================
 # --- Einstellungen -------------------------------------------------
+DIASHOW_ORDNER = "diashow"      # Fotos für die Diashow oben auf der Startseite (jpg/png/webp), alphabetisch
+DIASHOW_SEKUNDEN = 10           # Anzeigedauer pro Foto
 HERO_TITLE = "Schach spielen in Aschheim, Feldkirchen &amp; Kirchheim"
 # Alternative: "Schach im Münchner Osten"
 
@@ -1658,7 +1685,7 @@ HOME_JS = """<script>
   // Termin-Karten: vergangene ausblenden, nur die ersten N zeigen
   var grid = document.querySelector(".events-grid");
   var max = (grid && parseInt(grid.dataset.max, 10)) || 4;
-  var total = 0, shown = 0;
+  var total = 0, shown = 0, last = null;
   document.querySelectorAll(".event-card[data-date]").forEach(function (c) {
     total++;
     var p = c.dataset.date.split("-");
@@ -1666,9 +1693,11 @@ HOME_JS = """<script>
     if (d < today || shown >= max) { c.style.display = "none"; return; }
     var r = c.querySelector(".ev-rel");
     if (r) r.textContent = rel(d);
-    if (shown === 0) c.classList.add("next");
+    if (shown === 0) c.classList.add("next", "first-visible");
     shown++;
+    last = c;
   });
+  if (last) last.classList.add("last-visible");
   var empty = document.getElementById("events-empty");
   if (empty && total > 0 && shown === 0) empty.hidden = false;
 
@@ -1828,10 +1857,15 @@ def legend_html(events):
     return f'<p class="ev-legend">{" · ".join(used)}</p>' if used else ""
 
 
+def team_klasse(name):
+    """'AFK 1' -> 'team-afk-1', 'Jugend' -> 'team-jugend' (Farben stehen in design.css)."""
+    return "team-" + slugify(plain_text(name).strip())
+
+
 def event_card_html(ev):
     teams = ""
     if ev["who"]:
-        pills = "".join(f'<span class="pill">{t.strip()}</span>' for t in ev["who"].split(","))
+        pills = "".join(f'<span class="pill {team_klasse(t)}">{t.strip()}</span>' for t in ev["who"].split(","))
         teams = f'<div class="ev-teams">{pills}</div>'
     date_attr = ev["date"].isoformat()
     inner = f"""
@@ -1849,6 +1883,54 @@ def event_card_html(ev):
         </a>"""
 
 
+def diashow_bilder():
+    if not os.path.isdir(DIASHOW_ORDNER):
+        return []
+    return sorted(f"{DIASHOW_ORDNER}/{quote(n)}" for n in os.listdir(DIASHOW_ORDNER)
+                  if os.path.splitext(n)[1].lower() in IMG_EXT)
+
+
+def diashow_html():
+    bilder = diashow_bilder()
+    if not bilder:
+        return ""
+    # Erstes Bild sofort, die anderen lädt das Skript nach (data-bild)
+    dias, knoepfe = [], []
+    for i, bild in enumerate(bilder):
+        if i == 0:
+            dias.append(f'<div class="dia aktiv" style="background-image:url({bild})"></div>')
+            knoepfe.append(f'<button type="button" aria-label="Foto {i + 1}" aria-current="true"></button>')
+        else:
+            dias.append(f'<div class="dia" data-bild="{bild}"></div>')
+            knoepfe.append(f'<button type="button" aria-label="Foto {i + 1}"></button>')
+    dias = "".join(dias)
+    punkte = f'<div class="dia-punkte">{"".join(knoepfe)}</div>' if len(bilder) > 1 else ""
+    return f'<div class="diashow" aria-hidden="true">{dias}</div>{punkte}'
+
+
+DIASHOW_JS = """<script>
+(function () {
+  var dias = document.querySelectorAll(".diashow .dia");
+  var punkte = document.querySelectorAll(".dia-punkte button");
+  if (dias.length < 2) return;
+  dias.forEach(function (d) { if (d.dataset.bild) d.style.backgroundImage = "url('" + d.dataset.bild + "')"; });
+  var i = 0, timer = null, ms = __SEKUNDEN__ * 1000;
+  function zeige(n) {
+    dias[i].classList.remove("aktiv"); punkte[i].removeAttribute("aria-current");
+    i = (n + dias.length) % dias.length;
+    dias[i].classList.add("aktiv"); punkte[i].setAttribute("aria-current", "true");
+  }
+  function start() { stop(); timer = setInterval(function () { zeige(i + 1); }, ms); }
+  function stop() { if (timer) clearInterval(timer); timer = null; }
+  punkte.forEach(function (p, n) { p.addEventListener("click", function () { zeige(n); start(); }); });
+  var hero = document.querySelector(".hero");
+  hero.addEventListener("mouseenter", stop);
+  hero.addEventListener("mouseleave", start);
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) start();
+})();
+</script>"""
+
+
 def build_index(upcoming_events, home_news_snippets, teams=()):
     news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
     event_cards = "".join(event_card_html(ev) for ev in upcoming_events) or "<p>Keine anstehenden Termine gefunden.</p>"
@@ -1864,6 +1946,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     {read_hinweis()}
 
     <section class="hero">
+      {diashow_html()}
       {hero_logo}
       <h1>{HERO_TITLE}</h1>
       <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
@@ -1926,6 +2009,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     </section>
 
     {home_js}
+    {DIASHOW_JS.replace("__SEKUNDEN__", str(DIASHOW_SEKUNDEN))}
     """
 
     styles = """<style>""" + HINWEIS_CSS + """

@@ -1,5 +1,5 @@
 /* ==========================================
-   DESIGN (Stil "Klassisch-elegant")
+   DESIGN – SG Aschheim / Feldkirchen / Kirchheim
    Wird NACH style.css und den Seiten-Styles geladen und gilt für alle Seiten.
    Farben, Schriften und Rundungen hier oben ändern – der Rest passt sich an.
    Die Schriften liegen in fonts/ (nicht von Google geladen -> DSGVO).
@@ -8,33 +8,42 @@
   /* Schriften */
   --font-text: "Inter", system-ui, sans-serif;
   --font-head: "Fraunces", Georgia, serif;
+  --schrift: 17.5px;        /* Grundgröße, alles andere skaliert mit */
 
-  /* Grundfarben */
-  --bg: #f8f5ee;            /* Seitenhintergrund (Creme) */
-  --surface: #fffdf8;       /* Karten */
-  --line: #e5dccb;          /* Rahmen, Trennlinien */
-  --text: #3a352c;
-  --head: #1f3a2e;          /* Überschriften */
+  /* Grundfarben (hell) */
+  --bg: #f6f8fb;            /* Seitenhintergrund */
+  --surface: #ffffff;       /* Karten */
+  --line: #dfe5ee;          /* Rahmen, Trennlinien */
+  --text: #2b3445;
+  --muted: #5b6577;         /* Nebentext (Datum, Hinweise) */
+  --head: #1b2a4a;          /* Überschriften */
 
-  /* Akzente */
-  --accent: #1f3a2e;        /* Buttons, Header, Footer (Dunkelgrün) */
-  --on-accent: #f8f5ee;     /* Schrift auf Buttons */
-  --gold: #b08d3c;          /* Linien, aktiver Menüpunkt */
-  --link-c: #7a5c1e;        /* Textlinks */
-  --soft: #efe6d2;          /* helle Hinterlegung (Pills, Hinweise) */
-  --soft-text: #5c4718;
+  /* Vereinsfarben */
+  --accent: #1b2a4a;        /* Navy: Header, Footer, Buttons */
+  --on-accent: #ffffff;     /* Schrift auf Navy */
+  --hell: #6f9fd8;          /* Hellblau: Linien, aktiver Menüpunkt, Akzente */
+  --link-c: #2c5d99;        /* Textlinks */
+  --soft: #e4edf8;          /* helle Hinterlegung (Pills, Hinweise) */
+  --soft-text: #1b3a66;
+
+  /* Mannschaftsfarben (überall gleich: Spielplan, Termine, Ergebnisse, Mannschaften) */
+  --afk-1: #2c5d99;
+  --afk-2: #2a8a86;
+  --afk-3: #4f8a3c;
+  --afk-4: #c08a1e;
+  --afk-5: #b5573a;
+  --afk-6: #7a4a8c;
+  --senioren: #6b7280;
+  --jugend: #d0457a;
 
   /* Ergebnisfarben */
   --sieg: #2e7d4f;
   --remis: #c08a1e;
   --niederlage: #b03a2e;
 
-  /* Startseite */
-  --hero-bild: url("hero.jpg");   /* Foto oben auf der Startseite: einfach hero.jpg austauschen */
-  --hero-abdunkeln: rgba(20, 40, 30, 0.72);   /* wie stark das Foto abgedunkelt wird (0 = gar nicht, 1 = ganz) */
-
-  /* Schriftgröße (alles andere skaliert mit) */
-  --schrift: 17.5px;
+  /* Startseite: Diashow (Fotos im Ordner diashow/) */
+  --dia-abdunkeln: rgba(18, 28, 52, 0.70);   /* 0 = Foto unverändert, 1 = ganz dunkel */
+  --dia-ueberblenden: 1.5s;                  /* Dauer des Überblendens */
 
   /* Formen */
   --radius: 10px;
@@ -43,11 +52,46 @@
   /* alte Variablen aus style.css mitziehen */
   --navy: var(--accent);
   --primary: var(--accent);
-  --primary-dark: #15291f;
+  --primary-dark: #111c33;
   --link: var(--link-c);
   --border: var(--line);
-  --nav-accent: var(--gold);
+  --nav-accent: var(--hell);
   --next-accent: var(--accent);
+  --gold: var(--hell);
+}
+
+/* ---------- Dunkelmodus (folgt automatisch der Einstellung von Handy/PC) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1524;
+    --surface: #162036;
+    --line: #26324a;
+    --text: #d5dce8;
+    --muted: #9aa6ba;
+    --head: #e9eef7;
+    --link-c: #8fb7ea;
+    --soft: #1f2d4a;
+    --soft-text: #c3d5f0;
+    --accent: #1b2a4a;
+    --primary-dark: #24375f;
+    --dia-abdunkeln: rgba(8, 13, 26, 0.78);
+    --navy: var(--head);     /* ältere Seiten-Styles nutzen --navy für Text */
+  }
+  .btn { border-color: var(--hell); }
+  .btn-outline { color: var(--link-c); border-color: var(--link-c); }
+  .custom-tabelle, .liga-tab, .oq-tabelle, .hof-tabelle, table { background: var(--surface) !important; color: var(--text); }
+  .custom-tabelle td, .custom-tabelle th, .liga-tab td, table td { border-color: var(--line) !important; }
+  .liga-tab tr.eigen td, .liga-tab .eigen { background: var(--soft) !important; }
+  input, textarea, select { background: var(--bg) !important; color: var(--text) !important; border-color: var(--line) !important; }
+  .hero-facts li { background: rgba(22, 32, 54, 0.94) !important; }
+  .reiter a { background: var(--soft) !important; color: var(--text) !important; }
+  .reiter a[aria-current="true"] { background: var(--hell) !important; color: #0e1524 !important; }
+  .btn-outline { color: #cfe0f7 !important; border-color: var(--link-c) !important; }
+  .preis { color: var(--hell) !important; }
+  .team-grid > .card h3, .tick-team { color: color-mix(in srgb, var(--team, var(--head)) 65%, white) !important; }
+  .runden-wahl button[aria-pressed="true"] { background: var(--hell) !important; color: #0e1524 !important; border-color: var(--hell) !important; }
+  .hinweis-banner { background: #3a3215; border-color: #6b5a1e; color: #f3e3a6; }
+  img.news-thumb, .report-img img { filter: brightness(0.92); }
 }
 
 /* ---------- Schriften ---------- */
@@ -63,28 +107,28 @@ body { font-family: var(--font-text); background: var(--bg); color: var(--text);
 h1, h2, h3, .section-head h2 { font-family: var(--font-head); font-weight: 700; color: var(--head); letter-spacing: 0; }
 h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; }
 a { color: var(--link-c); }
+.news-meta, .klein, .ev-legend, .stats span, .tick-geg, .tick-info, .quelle, .hero-facts span, .pdf-card small { color: var(--muted) !important; }
 
-/* ---------- Header & Footer ---------- */
-header { background: var(--accent); border-bottom: 3px solid var(--gold); }
-header .brand { font-family: var(--font-head); font-weight: 700; }
+/* ---------- Header ---------- */
+header { background: var(--accent); border-bottom: 3px solid var(--hell); }
+header .brand { font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; }
 .brand-logo { height: 42px; width: auto; background: #fff; border-radius: 6px; padding: 2px 4px; }
-header .brand { font-size: 1.1rem; }
 header nav { gap: 0.2rem 1.1rem; }
-header nav a { font-size: 0.9rem; }
-header nav a { font-weight: 600; }
-footer { background: var(--accent); color: #c9c2b0; }
-.footer-link { color: #c9c2b0; }
+header nav a { font-size: 0.9rem; font-weight: 600; }
+
+/* ---------- Footer (drei Spalten) ---------- */
+footer { background: var(--accent); color: #c8d0de; text-align: left; padding: 2.5rem max(1.25rem, calc((100% - 1200px) / 2)) 1.2rem; margin-top: 3rem; }
+footer a { color: #c8d0de; }
+footer a:hover { color: #fff; }
+.footer-spalten { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem 2.5rem; margin-bottom: 1.5rem; }
+.footer-spalten h2 { font-size: 1.05rem; color: #fff; margin: 0 0 0.6rem; }
+.footer-spalten p { margin: 0.25rem 0; font-size: 0.92rem; }
+.footer-unten { border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 1rem; margin: 0; font-size: 0.82rem; color: #9aa6ba; }
 
 /* ---------- Karten (alle gleich) ---------- */
 .card, .stats li, .hero-facts li, .tick, .event-card, .pdf-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: none;
 }
-.event-card, .tick { border-left: 4px solid var(--accent); }
-.event-card.next { border-left-color: var(--gold); box-shadow: none; }
-.event-card.next .ev-rel:not(:empty) { background: var(--accent); color: var(--on-accent); }
-.tick-s { border-left-color: var(--sieg); }
-.tick-u { border-left-color: var(--remis); }
-.tick-n { border-left-color: var(--niederlage); }
 .grid, .grid-3, .news-grid { align-items: start; }
 
 /* ---------- Buttons ---------- */
@@ -93,54 +137,162 @@ footer { background: var(--accent); color: #c9c2b0; }
 .btn-outline { background: transparent; color: var(--accent); }
 .btn-outline:hover { background: var(--accent); color: var(--on-accent); }
 
-/* ---------- Startseite ---------- */
-.hero { background: linear-gradient(var(--hero-abdunkeln), var(--hero-abdunkeln)), var(--hero-bild) center / cover;
-  border: 0; border-radius: var(--radius); }
+/* ---------- Mannschaftsfarben ---------- */
+.team-afk-1 { --team: var(--afk-1); }
+.team-afk-2 { --team: var(--afk-2); }
+.team-afk-3 { --team: var(--afk-3); }
+.team-afk-4 { --team: var(--afk-4); }
+.team-afk-5 { --team: var(--afk-5); }
+.team-afk-6 { --team: var(--afk-6); }
+.team-senioren { --team: var(--senioren); }
+.team-jugend { --team: var(--jugend); }
+.pill[class*="team-"] { background: var(--team); color: #fff; }
+
+/* ---------- Startseite: Kopf mit Diashow ---------- */
+.hero { position: relative; overflow: hidden; isolation: isolate; background: var(--accent); border: 0; border-radius: var(--radius); }
+.diashow { position: absolute; inset: 0; z-index: -1; }
+.diashow::after { content: ""; position: absolute; inset: 0; background: var(--dia-abdunkeln); }
+.dia { position: absolute; inset: 0; background: center / cover no-repeat; opacity: 0; transition: opacity var(--dia-ueberblenden) ease; }
+.dia.aktiv { opacity: 1; }
+.dia-punkte { position: absolute; left: 0; right: 0; bottom: 0.9rem; display: flex; justify-content: center; gap: 0.5rem; }
+.dia-punkte button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 0; cursor: pointer; background: rgba(255, 255, 255, 0.45); }
+.dia-punkte button[aria-current="true"] { background: #fff; transform: scale(1.25); }
+@media (prefers-reduced-motion: reduce) { .dia { transition: none; } }
 .hero h1, .hero > p { color: #fff; }
+.hero h1::after { content: ""; display: block; width: 64px; height: 2px; background: var(--hell); margin: 1rem auto 0; }
 .hero-logo { mix-blend-mode: normal; background: #fff; border-radius: 12px; padding: 12px 16px; box-sizing: content-box; height: 130px; }
-.hero-facts li { background: rgba(255, 253, 248, 0.95); }
-.hero > .btn { background: var(--gold); border-color: var(--gold); color: var(--accent); }
-.hero h1::after { content: ""; display: block; width: 64px; height: 2px; background: var(--gold); margin: 1rem auto 0; }
+.hero-facts li { background: rgba(255, 255, 255, 0.95); }
 .hero-facts strong { color: var(--head); }
+.hero > .btn, .cta-band .btn:not(.btn-ghost) { background: var(--hell); border-color: var(--hell); color: #0e1a33; }
+.hero > .btn:hover, .cta-band .btn:not(.btn-ghost):hover { background: #8ab3e3; border-color: #8ab3e3; }
 .stats strong { font-family: var(--font-head); font-size: 2rem; color: var(--head); }
 .section-head { border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
 .section-head a { color: var(--link-c); }
-.spielabend { background: var(--soft); border-left-color: var(--gold); color: var(--head); }
+.spielabend { background: var(--soft); border-left-color: var(--hell); color: var(--head); }
 .pill { background: var(--soft); color: var(--soft-text); }
 .cta-band { background: var(--accent); }
 .cta-band h2 { color: #fff; }
-.cta-band .btn:not(.btn-ghost) { background: var(--gold); border-color: var(--gold); color: var(--accent); }
 .cta-band .btn-ghost { color: #fff; border-color: #fff; }
 
-/* ---------- Berichte ---------- */
+/* Nächste Termine: kompakte Liste */
+.events-grid { display: flex !important; flex-direction: column; gap: 0 !important; }
+.event-card, a.event-card { display: grid; grid-template-columns: 13rem 1fr auto; align-items: center; gap: 0.3rem 1rem;
+  border-radius: 0; border-top-width: 0; border-left: 4px solid var(--line); padding: 0.6rem 1rem; }
+.event-card.first-visible { border-top-width: 1px; border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); }
+.event-card.last-visible { border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius); }
+.event-card.next { border-left-color: var(--hell); box-shadow: none; }
+.event-card.next .ev-rel:not(:empty) { background: var(--accent); color: var(--on-accent); }
+.ev-date { margin: 0 !important; color: var(--muted); }
+.ev-title { color: var(--head); }
+.ev-title { font-size: 1rem; }
+.ev-teams { margin: 0 !important; text-align: right; }
+@media (max-width: 700px) {
+  .event-card, a.event-card { grid-template-columns: 1fr; }
+  .ev-teams { text-align: left; }
+}
+
+/* Letzte Ergebnisse: Liste */
+.ticker { display: flex !important; flex-direction: column; gap: 0 !important; }
+.tick { display: grid !important; grid-template-columns: 6rem 1fr 11rem 6.5rem; align-items: center; gap: 0.2rem 1rem;
+  border-radius: 0; border-top-width: 0; border-left: 4px solid var(--team, var(--line)); padding: 0.6rem 1rem; }
+.ticker > .tick:first-child { border-top-width: 1px; border-radius: var(--radius) var(--radius) 0 0; }
+.ticker > .tick:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+.tick-team { order: 1; color: var(--team, var(--head)); }
+.tick-geg { order: 2; grid-column: auto !important; }
+.tick-info { order: 3; grid-column: auto !important; }
+.tick-erg { order: 4; text-align: right; }
+.tick-s .tick-erg { color: var(--sieg); }
+.tick-u .tick-erg { color: var(--remis); }
+.tick-n .tick-erg { color: var(--niederlage); }
+@media (max-width: 700px) {
+  .tick { grid-template-columns: 1fr auto; }
+  .tick-geg, .tick-info { grid-column: 1 / -1 !important; order: 5; }
+}
+
+/* ---------- Mannschaften-Übersicht: eine Zeile pro Team ---------- */
+.team-grid { display: flex !important; flex-direction: column; gap: 0 !important; }
+.team-grid > .card { display: grid !important; grid-template-columns: 9rem 11rem 1fr 1fr 7rem; align-items: center; column-gap: 1.2rem;
+  border-radius: 0; border-top-width: 0; border-left: 4px solid var(--team, var(--line)); padding: 0.85rem 1.2rem; margin: 0; }
+.team-grid > .card:first-child { border-top-width: 1px; border-radius: var(--radius) var(--radius) 0 0; }
+.team-grid > .card:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+.team-grid > .card { width: 100%; box-sizing: border-box; }
+.team-grid > div.card { grid-template-columns: 1fr; row-gap: 0.3rem; --team: var(--jugend); }
+.team-grid > .card .k-mehr { grid-column: -2; }
+.team-grid > .card h3 { margin: 0 !important; color: var(--team, var(--head)); font-size: 1.15rem; }
+.team-grid > .card p { margin: 0 !important; font-size: 0.85rem; }
+.team-karte .k-mehr { margin: 0 !important; padding: 0 !important; text-align: right; }
+.team-klasse { background: var(--soft) !important; color: var(--soft-text) !important; }
+@media (max-width: 900px) {
+  .team-grid > .card { grid-template-columns: 1fr; row-gap: 0.3rem; }
+  .team-karte .k-mehr { text-align: left; }
+}
+
+/* ---------- Berichte-Übersicht: Liste mit Bild links ---------- */
+.grid:has(> .news-card) { grid-template-columns: 1fr !important; }
+.grid > .news-card { display: grid; grid-template-columns: 16rem 1fr; column-gap: 1.6rem; align-content: start; }
+.grid > .news-card > * { grid-column: 2; }
+.grid > .news-card > .news-thumb { grid-column: 1; grid-row: 1 / span 5; height: 100%; min-height: 10rem; margin: 0; }
+.grid > .news-card:not(:has(.news-thumb)) > * { grid-column: 1 / -1; }
+@media (max-width: 700px) {
+  .grid > .news-card { grid-template-columns: 1fr; }
+  .grid > .news-card > *, .grid > .news-card > .news-thumb { grid-column: 1; grid-row: auto; }
+  .grid > .news-card > .news-thumb { height: 180px; margin-bottom: 0.8rem; }
+}
 .news-card .btn { background: none; border: 0; color: var(--link-c); padding: 0; margin-top: 0.4rem; }
 .news-card .btn:hover { background: none; text-decoration: underline; }
 
-/* ---------- Turniere-Übersicht ---------- */
-.tile { border-top: 4px solid var(--gold); }
+/* ---------- Turniere: Ausschreibungen oben, darunter Liste ---------- */
+.ausschreibungen-block { background: var(--soft); border-radius: var(--radius); padding: 1.3rem 1.5rem; margin: 1.5rem 0 2.5rem; }
+.ausschreibungen-block h2 { margin: 0 0 0.3rem; }
+.ausschreibungen-block p { margin: 0 0 1rem; }
+.turniere-titel { margin-bottom: 0.3rem; }
+.turnier-liste { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.2rem; }
+.turnier-zeile { display: grid; grid-template-columns: 16rem 1fr auto; align-items: center; column-gap: 1.5rem;
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--hell); border-radius: var(--radius); padding: 1rem 1.4rem; }
+.turnier-zeile h2 { margin: 0; font-size: 1.25rem; }
+.turnier-zeile p { margin: 0; }
+.turnier-zeile .btn { margin: 0; white-space: nowrap; }
+@media (max-width: 800px) { .turnier-zeile { grid-template-columns: 1fr; row-gap: 0.6rem; } .turnier-zeile .btn { justify-self: start; } }
+
+/* PDF-Liste (Turniere + Ausschreibungen-Seite) */
+.pdf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 0.8rem; }
+.pdf-card { display: flex; gap: 0.9rem; align-items: center; padding: 0.9rem 1.1rem; text-decoration: none; color: var(--text); border-left: 4px solid var(--hell); }
+.pdf-card:hover { border-color: var(--hell); }
+.pdf-icon { flex: none; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: #fff; background: #b03a2e; border-radius: 4px; padding: 0.35rem 0.5rem; }
+
+/* ---------- Neu hier?: Schritt für Schritt ---------- */
+.neu-grid { display: flex !important; flex-direction: column; gap: 0 !important; counter-reset: schritt; max-width: 52rem; margin-top: 1.5rem; }
+.neu-card { counter-increment: schritt; position: relative; background: none !important; border: 0 !important;
+  border-left: 2px solid var(--line) !important; border-radius: 0 !important; box-shadow: none !important;
+  margin-left: 1.3rem; padding: 0.3rem 0 1.6rem 2.6rem !important; }
+.neu-card:last-child { border-left-color: transparent !important; }
+.neu-card::before { content: counter(schritt); position: absolute; left: -1.25rem; top: 0; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  background: var(--accent); color: #fff; display: grid; place-items: center; font-family: var(--font-head); font-size: 1.15rem; }
+.neu-card h3 { margin-top: 0.3rem; }
+.neu-card a { color: var(--link-c); }
 
 /* ---------- Tabellen ---------- */
-.custom-tabelle th, .oq-tabelle th, .hof-tabelle th, .liga-tab th { background: var(--accent); }
+.custom-tabelle th, .oq-tabelle th, .hof-tabelle th, .liga-tab th { background: var(--accent); color: #fff; }
+.custom-tabelle th[class*="team-"] { box-shadow: inset 0 -4px 0 var(--team); }
 
-/* ---------- Unterseiten (Kontakt, Über uns, Neu hier?) ---------- */
-.kontakt-card, .kontakt-form-card, .preis-card, .neu-card {
+/* ---------- Unterseiten (Kontakt, Über uns) ---------- */
+.kontakt-card, .kontakt-form-card, .preis-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: none;
 }
 .kontakt-card { border-left: 4px solid var(--accent); }
-.kontakt-card.ort { border-left-color: var(--gold); }
-.kontakt-form-card, .neu-card { border-top: 4px solid var(--gold); }
+.kontakt-card.ort { border-left-color: var(--hell); }
+.kontakt-form-card { border-top: 4px solid var(--hell); }
 .preis { font-family: var(--font-head); color: var(--accent); }
+.preis-card h3, .preis-card p { color: var(--text); }
 .beitritt-box { background: var(--soft); border: 1px solid var(--line); border-radius: var(--radius); }
-.beitritt-box p { color: var(--text); }
+.beitritt-box h3, .beitritt-box p { color: var(--text); }
 
-/* ---------- Termine ---------- */
-.kalender-box { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); }
+/* ---------- Termine-Seite ---------- */
+.kalender-box { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--hell); color: var(--text); }
 .kalender-box li a { color: var(--link-c); }
-.custom-tabelle td.monat-header, .custom-tabelle td.bg-deepskyblue { background: var(--accent); color: var(--on-accent); font-family: var(--font-head); }
-.custom-tabelle td.bg-darkslategray { background: #3f5a4c; color: #fff; }   /* Freitage */
-.neu-card a { color: var(--link-c); }
-/* Termin-Farben aus der Typst-Datei, gedämpft (Bedeutung bleibt gleich).
-   Zurück zu den Originalfarben: diesen Block löschen. */
+.custom-tabelle td.monat-header, .custom-tabelle td.bg-deepskyblue { background: var(--accent); color: #fff; font-family: var(--font-head); }
+.custom-tabelle td.bg-darkslategray { background: #34466b; color: #fff; }   /* Freitage */
+/* Termin-Farben aus der Typst-Datei, gedämpft (Bedeutung bleibt gleich) */
 .custom-tabelle td.bg-green       { background: #d3e8d8; color: #1d4a2c; }
 .custom-tabelle td.bg-yellow      { background: #f6e9b8; color: #5c4718; }
 .custom-tabelle td.bg-orange      { background: #f5d9b5; color: #6b3d0c; }
@@ -148,3 +300,8 @@ footer { background: var(--accent); color: #c9c2b0; }
 .custom-tabelle td.bg-blueviolet,
 .custom-tabelle td.bg-purple      { background: #e0d6f0; color: #3e2470; }
 .custom-tabelle td.bg-blue        { background: #d4e2f2; color: #1b3f6b; }
+.custom-tabelle td[class*="bg-"] a { color: inherit; }
+/* Mannschaftsspalten: Eintrag in der Farbe der Mannschaft (überschreibt die Typst-Farbe).
+   Lieber die Typst-Farben? Diese zwei Zeilen löschen. */
+.custom-tabelle td.team-zelle { background: color-mix(in srgb, var(--team) 16%, var(--surface)); color: var(--text);
+  box-shadow: inset 4px 0 0 var(--team); }
