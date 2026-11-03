@@ -639,30 +639,30 @@ def build_turniere_overview():
     <h1>Turniere & Ergebnisse</h1>
     <p>Hier findest du Übersichten zu unseren regionalen Wettkämpfen, die Gesamtwertung der Blitzschach-Serie sowie die Hall of Fame unserer Vereinsmeister.</p>
     
-    <div class="grid-3" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-top:2rem;">
+    <div class="grid-3">
       
-      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #3498db; border-radius:6px;">
+      <div class="card tile">
         <h2>Oberlandquartett</h2>
         <p>Ergebnisse, Platzierungen und Rundenübersichten des traditionellen Oberlandquartetts.</p>
-        <a href="oberlandquartett.html" class="btn" style="background:#3498db; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zum Oberlandquartett →</a>
+        <a href="oberlandquartett.html" class="btn">Zum Oberlandquartett →</a>
       </div>
 
-      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #e67e22; border-radius:6px;">
+      <div class="card tile">
         <h2>Blitzjahreswertung</h2>
         <p>Die aktuelle Gesamtwertung und Zwischenstände unserer monatlichen Blitzschach-Turnierserie.</p>
-        <a href="blitzjahreswertung.html" class="btn" style="background:#e67e22; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Blitzjahreswertung →</a>
+        <a href="blitzjahreswertung.html" class="btn">Zur Blitzjahreswertung →</a>
       </div>
 
-      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #27ae60; border-radius:6px;">
+      <div class="card tile">
         <h2>Vereinsintern & Hall of Fame</h2>
         <p>Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.</p>
-        <a href="vereinsintern.html" class="btn" style="background:#27ae60; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Hall of Fame →</a>
+        <a href="vereinsintern.html" class="btn">Zur Hall of Fame →</a>
       </div>
 
-      <div class="card" style="padding:1.5rem; background:#f8f9fa; border-top:4px solid #8e44ad; border-radius:6px;">
+      <div class="card tile">
         <h2>Ausschreibungen</h2>
         <p>Alle Turnierausschreibungen als PDF zum Ansehen und Herunterladen.</p>
-        <a href="ausschreibungen.html" class="btn" style="background:#8e44ad; display:inline-block; margin-top:1rem; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zu den Ausschreibungen →</a>
+        <a href="ausschreibungen.html" class="btn">Zu den Ausschreibungen →</a>
       </div>
 
     </div>
@@ -847,7 +847,7 @@ def build_ausschreibungen():
     """
     styles = """<style>
       .pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-      .pdf-card { display: flex; gap: 0.9rem; align-items: center; background: #f8f9fa; border-left: 4px solid #8e44ad; border-radius: 6px; padding: 1rem 1.2rem; text-decoration: none; color: #1a252f; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .pdf-card { display: flex; gap: 0.9rem; align-items: center; background: #f8f9fa; border-left: 4px solid var(--gold); border-radius: 6px; padding: 1rem 1.2rem; text-decoration: none; color: #1a252f; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
       .pdf-card:hover { background: #eef1f8; }
       .pdf-icon { flex: none; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: #fff; background: #c0392b; border-radius: 4px; padding: 0.35rem 0.5rem; }
       .pdf-card small { color: #777; }
@@ -2004,7 +2004,7 @@ def build_404():
     <h1>Seite nicht gefunden</h1>
     <p>Diese Seite gibt es leider nicht (mehr). Vielleicht hilft dir einer dieser Links weiter:</p>
     <p>
-      <a href="{SITE_URL}index.html" class="btn" style="background:#3498db; display:inline-block; color:white; padding:0.6rem 1.2rem; text-decoration:none; border-radius:4px;">Zur Startseite</a>
+      <a href="{SITE_URL}index.html" class="btn">Zur Startseite</a>
       <a href="{SITE_URL}termine.html" style="margin-left:1rem;">Zu den Terminen →</a>
     </p>
     """

@@ -1,0 +1,135 @@
+/* ==========================================
+   DESIGN (Stil "Klassisch-elegant")
+   Wird NACH style.css und den Seiten-Styles geladen und gilt für alle Seiten.
+   Farben, Schriften und Rundungen hier oben ändern – der Rest passt sich an.
+   Die Schriften liegen in fonts/ (nicht von Google geladen -> DSGVO).
+   ========================================== */
+:root {
+  /* Schriften */
+  --font-text: "Inter", system-ui, sans-serif;
+  --font-head: "Fraunces", Georgia, serif;
+
+  /* Grundfarben */
+  --bg: #f8f5ee;            /* Seitenhintergrund (Creme) */
+  --surface: #fffdf8;       /* Karten */
+  --line: #e5dccb;          /* Rahmen, Trennlinien */
+  --text: #3a352c;
+  --head: #1f3a2e;          /* Überschriften */
+
+  /* Akzente */
+  --accent: #1f3a2e;        /* Buttons, Header, Footer (Dunkelgrün) */
+  --on-accent: #f8f5ee;     /* Schrift auf Buttons */
+  --gold: #b08d3c;          /* Linien, aktiver Menüpunkt */
+  --link-c: #7a5c1e;        /* Textlinks */
+  --soft: #efe6d2;          /* helle Hinterlegung (Pills, Hinweise) */
+  --soft-text: #5c4718;
+
+  /* Ergebnisfarben */
+  --sieg: #2e7d4f;
+  --remis: #c08a1e;
+  --niederlage: #b03a2e;
+
+  /* Formen */
+  --radius: 4px;
+  --btn-radius: 2px;
+
+  /* alte Variablen aus style.css mitziehen */
+  --navy: var(--accent);
+  --primary: var(--accent);
+  --primary-dark: #15291f;
+  --link: var(--link-c);
+  --border: var(--line);
+  --nav-accent: var(--gold);
+  --next-accent: var(--accent);
+}
+
+/* ---------- Schriften ---------- */
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("fonts/inter-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("fonts/fraunces-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("fonts/fraunces-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+/* ---------- Grundlagen ---------- */
+body { font-family: var(--font-text); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, .section-head h2 { font-family: var(--font-head); font-weight: 700; color: var(--head); letter-spacing: 0; }
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1.15; }
+a { color: var(--link-c); }
+
+/* ---------- Header & Footer ---------- */
+header { background: var(--accent); border-bottom: 3px solid var(--gold); }
+header .brand { font-family: var(--font-head); font-weight: 700; }
+header nav a { font-weight: 600; }
+footer { background: var(--accent); color: #c9c2b0; }
+.footer-link { color: #c9c2b0; }
+
+/* ---------- Karten (alle gleich) ---------- */
+.card, .stats li, .hero-facts li, .tick, .event-card, .pdf-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: none;
+}
+.event-card, .tick { border-left: 4px solid var(--accent); }
+.event-card.next { border-left-color: var(--gold); box-shadow: none; }
+.event-card.next .ev-rel:not(:empty) { background: var(--accent); color: var(--on-accent); }
+.tick-s { border-left-color: var(--sieg); }
+.tick-u { border-left-color: var(--remis); }
+.tick-n { border-left-color: var(--niederlage); }
+.grid, .grid-3, .news-grid { align-items: start; }
+
+/* ---------- Buttons ---------- */
+.btn { background: var(--accent); color: var(--on-accent); border: 2px solid var(--accent); border-radius: var(--btn-radius); font-weight: 600; letter-spacing: 0.02em; }
+.btn:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+.btn-outline { background: transparent; color: var(--accent); }
+.btn-outline:hover { background: var(--accent); color: var(--on-accent); }
+
+/* ---------- Startseite ---------- */
+.hero { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.hero h1 { color: var(--head); }
+.hero h1::after { content: ""; display: block; width: 64px; height: 2px; background: var(--gold); margin: 1rem auto 0; }
+.hero > p { color: #5a5345; }
+.hero-facts strong { color: var(--head); }
+.stats strong { font-family: var(--font-head); font-size: 2rem; color: var(--head); }
+.section-head { border-bottom: 1px solid var(--line); padding-bottom: 0.5rem; }
+.section-head a { color: var(--link-c); }
+.spielabend { background: var(--soft); border-left-color: var(--gold); color: var(--head); }
+.pill { background: var(--soft); color: var(--soft-text); }
+.cta-band { background: var(--accent); }
+.cta-band h2 { color: #fff; }
+.cta-band .btn:not(.btn-ghost) { background: var(--gold); border-color: var(--gold); color: var(--accent); }
+.cta-band .btn-ghost { color: #fff; border-color: #fff; }
+
+/* ---------- Berichte ---------- */
+.news-card .btn { background: none; border: 0; color: var(--link-c); padding: 0; margin-top: 0.4rem; }
+.news-card .btn:hover { background: none; text-decoration: underline; }
+
+/* ---------- Turniere-Übersicht ---------- */
+.tile { border-top: 4px solid var(--gold); }
+
+/* ---------- Tabellen ---------- */
+.custom-tabelle th, .oq-tabelle th, .hof-tabelle th, .liga-tab th { background: var(--accent); }
+
+/* ---------- Unterseiten (Kontakt, Über uns, Neu hier?) ---------- */
+.kontakt-card, .kontakt-form-card, .preis-card, .neu-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: none;
+}
+.kontakt-card { border-left: 4px solid var(--accent); }
+.kontakt-card.ort { border-left-color: var(--gold); }
+.kontakt-form-card, .neu-card { border-top: 4px solid var(--gold); }
+.preis { font-family: var(--font-head); color: var(--accent); }
+.beitritt-box { background: var(--soft); border: 1px solid var(--line); border-radius: var(--radius); }
+.beitritt-box p { color: var(--text); }
+
+/* ---------- Termine ---------- */
+.kalender-box { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); }
+.kalender-box li a { color: var(--link-c); }
+.custom-tabelle td.monat-header, .custom-tabelle td.bg-deepskyblue { background: var(--accent); color: var(--on-accent); font-family: var(--font-head); }
+.custom-tabelle td.bg-darkslategray { background: #3f5a4c; color: #fff; }   /* Freitage */
+.neu-card a { color: var(--link-c); }
+/* Termin-Farben aus der Typst-Datei, gedämpft (Bedeutung bleibt gleich).
+   Zurück zu den Originalfarben: diesen Block löschen. */
+.custom-tabelle td.bg-green       { background: #d3e8d8; color: #1d4a2c; }
+.custom-tabelle td.bg-yellow      { background: #f6e9b8; color: #5c4718; }
+.custom-tabelle td.bg-orange      { background: #f5d9b5; color: #6b3d0c; }
+.custom-tabelle td.bg-red         { background: #f2cdc8; color: #7a1f17; }
+.custom-tabelle td.bg-blueviolet,
+.custom-tabelle td.bg-purple      { background: #e0d6f0; color: #3e2470; }
+.custom-tabelle td.bg-blue        { background: #d4e2f2; color: #1b3f6b; }
