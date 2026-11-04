@@ -445,6 +445,8 @@ def karte_html(d):
 
 
 def extra_karte_html(k):
+    if isinstance(k, str):          # fertiges HTML (z. B. Jugend-Karte aus jugend.py)
+        return k
     inhalt = f'<p>{esc(k["text"])}</p>'
     if k.get("url"):
         inhalt += f'<a class="btn" href="{esc(k["url"])}" target="_blank" rel="noopener">Ergebnisse öffnen</a>'

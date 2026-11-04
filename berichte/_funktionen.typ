@@ -3,3 +3,4 @@
 #let date(body) = block(text(fill: gray, body))
 #let author(body) = block(text(fill: gray, body))
 #let entwurf(body) = block(text(fill: red, weight: "bold")[ENTWURF])
+#let kategorie(body) = block(text(fill: gray)[Kategorie: #body])

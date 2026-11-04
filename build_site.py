@@ -12,6 +12,7 @@ from urllib.parse import quote
 from itertools import groupby
 
 import liga   # Mannschaften-Seite + Ergebnis-Ticker (Daten vom Tabellenrechner)
+import jugend  # Jugend-Seite (Einstellungen in jugend.py)
 
 try:
     from zoneinfo import ZoneInfo
@@ -60,6 +61,7 @@ PAGE_DESCRIPTIONS = {
     "mannschaften.html": "Tabellen, Ergebnisse und Spielerstatistiken unserer Mannschaften – mit Tabellenrechner zum Ausprobieren.",
     "berichte.html": "Aktuelle Berichte und News aus dem Vereinsleben der SG AFK: Turniere, Mannschaftskämpfe und mehr.",
     "turniere.html": "Turniere der SG AFK: Oberlandquartett, Blitzjahreswertung, Hall of Fame und Ausschreibungen.",
+    "jugend.html": "Schach für Kinder und Jugendliche bei der SG AFK: Jugendtraining jeden Freitag, Jugendmannschaften, Termine und Ansprechpartner.",
     "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
     "kontakt.html": "Kontakt und Anfahrt zur SG Aschheim/Feldkirchen/Kirchheim im Gymnasium Kirchheim.",
     "ausschreibungen.html": "Alle Turnierausschreibungen der SG AFK als PDF zum Ansehen und Herunterladen.",
@@ -86,11 +88,12 @@ NAV = [
     ("index.html", "Start"),
     ("ueber-uns.html", "Über uns"),
     ("mannschaften.html", "Mannschaften"),
+    ("jugend.html", "Jugend"),
     ("termine.html", "Termine"),
     ("berichte.html", "Berichte"),
     ("turniere.html", "Turniere"),
-    ("neu-hier.html", "Neu hier?"),
     ("kontakt.html", "Kontakt"),
+    # "Neu hier?" ist über die Startseite und den Footer erreichbar
 ]
 
 # Unterseiten, bei denen im Menü der übergeordnete Reiter markiert wird
@@ -1433,7 +1436,7 @@ def typst_to_html_article(typst_text, img=None):
     date = meta("date")
     author = meta("author")
 
-    body = re.sub(r'#(?:title|date|author|entwurf)\[.*?\]', '', typst_text)
+    body = re.sub(r'#(?:title|date|author|entwurf|kategorie)\[.*?\]', '', typst_text)
     blocks = report_blocks(body, img)
 
     esc = lambda s: htmllib.escape(s, quote=False)
@@ -1508,6 +1511,9 @@ def thumb_html(r):
     return f'<img class="news-thumb" src="{r["thumb"]}" alt="" loading="lazy">' if r.get('thumb') else ""
 
 
+ALLE_BERICHTE = []   # wird von build_berichte() gefüllt (z. B. für die Jugendseite)
+
+
 def build_berichte():
     reports = []
     seen = {}
@@ -1542,6 +1548,9 @@ def build_berichte():
             elif when > TODAY:
                 print(f"WARNUNG [{filepath}]: Datum {date} liegt in der Zukunft (Tippfehler?).")
 
+            km = re.search(r'(?m)^\s*#kategorie\[(.*?)\]', code)
+            kategorien = {k.strip().lower() for k in km.group(1).split(",")} if km else set()
+
             meta = date + (f" · von {author}" if author and date else (f"von {author}" if author else ""))
             reports.append({
                 'stem': slug,
@@ -1552,10 +1561,12 @@ def build_berichte():
                 'snippet': snippet,
                 'thumb': images[0] if images else "",
                 'when': when or date_from_filename(slug) or datetime.date.min,
+                'kategorien': kategorien,
             })
 
         # Neueste zuerst
         reports.sort(key=lambda r: (r['when'], r['stem']), reverse=True)
+        ALLE_BERICHTE[:] = reports
 
         # HTML-Dateien ohne passenden Bericht (gelöscht oder Entwurf) entfernen
         valid = {r['filename'] for r in reports}
@@ -2126,6 +2137,34 @@ def build_mannschaften(teams):
     return True
 
 
+def jugend_termine(today=TODAY):
+    """Kommende Termine aus der Spalte jugend.TERMINE_SPALTE in termine/termine.typ."""
+    pfad = os.path.join("termine", "termine.typ")
+    if not os.path.exists(pfad):
+        return []
+    with open(pfad, "r", encoding="utf-8") as f:
+        parsed = parse_typst_table(f.read())
+    if jugend.TERMINE_SPALTE not in parsed['header']:
+        print(f"Hinweis: Spalte '{jugend.TERMINE_SPALTE}' fehlt in {pfad}.")
+        return []
+    idx = parsed['header'].index(jugend.TERMINE_SPALTE)
+    assign_dates(parsed['rows'])
+    events = []
+    for r in parsed['rows']:
+        if r['kind'] != 'row' or not r.get('date') or r['date'] < today or len(r['cells']) <= idx:
+            continue
+        title = r['cells'][idx]['text']
+        if title and 'spielfrei' not in title.lower():
+            events.append({'date': r['date'], 'when': r['cells'][0]['text'], 'title': title, 'who': ''})
+    return events
+
+
+def build_jugend(termine):
+    berichte = [r for r in ALLE_BERICHTE if "jugend" in r['kategorien']]
+    content, styles = jugend.seite(termine, berichte)
+    render_page("Jugend", content, "jugend.html", extra_styles=styles)
+
+
 def build_static_pages(skip=()):
     """Baut die handgeschriebenen Seiten aus seiten/<name>.html in die Vorlage ein."""
     for name, title in STATIC_PAGES:
@@ -2156,6 +2195,9 @@ if __name__ == "__main__":
     build_neu_hier()
     news = build_berichte()
     teams = liga.lade_teams()
+    j_termine = jugend_termine()
+    build_jugend(j_termine)
+    liga.EXTRA_KARTEN = [jugend.mannschaften_karte(j_termine)]
     build_index(upcoming, news, teams)
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams) else set())
