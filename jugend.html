@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jugend | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1f3a2e">
+  <link rel="icon" href="Logo.png">
+  <script>
+    /* Dunkelmodus: gespeicherte Wahl (auto/hell/dunkel) sofort anwenden, damit nichts aufblitzt */
+    (function () {
+      var wahl = "auto";
+      try { wahl = localStorage.getItem("theme") || "auto"; } catch (e) {}
+      var dunkel = wahl === "dunkel" || (wahl === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.theme = dunkel ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .klein { font-size: 0.85rem; color: var(--muted); }
+      .jugend-intro { max-width: 50rem; font-size: 1.05rem; }
+      .jugend-boxen { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
+      .jugend-box { padding: 1.1rem 1.3rem; border-top: 4px solid var(--jugend); }
+      .jugend-box h3 { margin-top: 0; }
+      .jugend-box p { margin: 0.35rem 0; }
+      .jugend-box ul { padding-left: 1.2rem; margin: 0.3rem 0 0; }
+      .jugend-training .btn { display: inline-block; margin-top: 0.5rem; text-decoration: none; padding: 0.5rem 1rem; }
+      section { margin-top: 2rem; }
+      .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+      .team-grid .team-karte { color: inherit; text-decoration: none; }
+      .k-mehr { font-weight: bold; color: var(--link); font-size: 0.9rem; }
+      .team-klasse { font-size: 0.8rem; font-weight: bold; border-radius: 999px; padding: 0.05rem 0.65rem; vertical-align: middle; }
+      a.team-karte:hover { border-color: var(--link); }
+      .jugend-termine > .event-card:first-child { border-top-width: 1px; border-radius: var(--radius) var(--radius) 0 0; }
+      .jugend-termine > .event-card:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+      .jugend-termine > .event-card:only-child { border-radius: var(--radius); }
+      .jugend-termine > .event-card { border-left-color: var(--jugend); color: inherit; text-decoration: none; }
+      .jugend-berichte { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .jugend-links { padding-left: 1.2rem; }
+    </style>
+  <link rel="stylesheet" href="design.css">
+  <meta property="og:title" content="Jugend | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <img src="Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Auto</button>
+    <nav aria-label="Hauptmenü">
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html">Mannschaften</a>
+      <a href="jugend.html" aria-current="page">Jugend</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+    <h1>Jugend</h1>
+    <p class="jugend-intro">Schach für Kinder und Jugendliche: Bei uns lernen Einsteiger die Regeln,
+      und Fortgeschrittene spielen in unseren Jugendmannschaften um Punkte.
+      Schnuppern ist kostenlos, eine Anmeldung ist nicht nötig.</p>
+
+    <div class="jugend-boxen">
+      <div class="card jugend-box jugend-training">
+        <h3>Jugendtraining</h3>
+        <p><strong>Jeden Freitag, 18:00 – 19:30 Uhr</strong></p>
+        <p>Gymnasium Kirchheim, Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p><a class="btn" href="neu-hier.html">Zum Schnuppern vorbeikommen →</a></p>
+      </div>
+      <div class="card jugend-box">
+        <h3>Ansprechpartner</h3>
+        <p><strong>Anton Mai</strong><br>Ansprechpartner Jugend</p><p>Erreichbar <a href="kontakt.html">über das Kontaktformular</a>.</p>
+      </div>
+      
+      <div class="card jugend-box">
+        <h3>Erfolge</h3>
+        <ul><li><strong>2024/25:</strong> Platz 2 in der U20 Landesliga Süd</li></ul>
+      </div>
+    </div>
+
+    <section>
+      <div class="section-head"><h2>Jugendmannschaften 2026/27</h2></div>
+      <div class="grid-3 team-grid">
+      <a class="card team-karte team-jugend" href="https://ligamanager.schachbund-bayern.de/bsj/2026-2027/u20-landesliga-sued-2610/spielplan" target="_blank" rel="noopener">
+        <h3>U20 I <span class="team-klasse">U20 Landesliga Süd</span></h3>
+        <p>Bayerische Jugendligen</p>
+        <p>Nächster Termin: <strong>21.11. Sa, 14:00 Uhr</strong></p>
+        <p>Landesliga Süd Runde 1</p>
+        <span class="k-mehr">Ergebnisse ↗</span>
+      </a>
+      <a class="card team-karte team-jugend" href="https://www.schachbezirk-muenchen.de/mm-u20.html" target="_blank" rel="noopener">
+        <h3>U20 II <span class="team-klasse">1. Jugend-Bezirksliga</span></h3>
+        <p>Münchner U20-Mannschaftsmeisterschaft</p>
+        <p>Nächster Termin: <strong>22.11. So, 10:00 Uhr</strong></p>
+        <p>U20 MMM, 1.Liga Runde 1</p>
+        <span class="k-mehr">Ergebnisse ↗</span>
+      </a>
+      <a class="card team-karte team-jugend" href="https://www.schachbezirk-muenchen.de/mm-u16-u14.html" target="_blank" rel="noopener">
+        <h3>U16 <span class="team-klasse">Münchner U16-Meisterschaft</span></h3>
+        <p>Schachbezirk München</p>
+        <p>Nächster Termin: <strong>29.11. So, 10:00 Uhr</strong></p>
+        <p>U14/U16 MMM Runde 1-3</p>
+        <span class="k-mehr">Ergebnisse ↗</span>
+      </a>
+      <a class="card team-karte team-jugend" href="https://www.schachbezirk-muenchen.de/mm-u16-u14.html" target="_blank" rel="noopener">
+        <h3>U14 <span class="team-klasse">Münchner U14-Meisterschaft</span></h3>
+        <p>Schachbezirk München</p>
+        <p>Nächster Termin: <strong>29.11. So, 10:00 Uhr</strong></p>
+        <p>U14/U16 MMM Runde 1-3</p>
+        <span class="k-mehr">Ergebnisse ↗</span>
+      </a></div>
+    </section>
+
+    <section>
+      <div class="section-head"><h2>Nächste Jugendtermine</h2></div>
+      <div class="events-grid jugend-termine">
+        <a class="event-card" href="termine.html" data-date="2026-11-21">
+          <div class="ev-date">21.11. Sa, 14:00 Uhr</div>
+          <div class="ev-title">Landesliga Süd Runde 1</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-22">
+          <div class="ev-date">22.11. So, 10:00 Uhr</div>
+          <div class="ev-title">U20 MMM, 1.Liga Runde 1</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-11-29">
+          <div class="ev-date">29.11. So, 10:00 Uhr</div>
+          <div class="ev-title">U14/U16 MMM Runde 1-3</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-12-05">
+          <div class="ev-date">05.12. Sa</div>
+          <div class="ev-title">Schulschach EM</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-12-05">
+          <div class="ev-date">05.12. Sa, 10:00 Uhr</div>
+          <div class="ev-title">Landesliga Süd Runde 2+3</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-12-06">
+          <div class="ev-date">06.12. So, 10:00 Uhr</div>
+          <div class="ev-title">U20 MMM, 1.Liga Runde 2+3</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-12-12">
+          <div class="ev-date">12.12. Sa, 10:00 Uhr</div>
+          <div class="ev-title">U14/U16 MMM Runde 4+5</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2027-01-23">
+          <div class="ev-date">23.01. Sa, 10:00 Uhr</div>
+          <div class="ev-title">Landesliga Süd Runde 4+5</div>
+          <div class="ev-teams"></div>
+        </a></div><p class="klein"><a href="termine.html">Ganzer Spielplan →</a> · <a href="kalender/jugend.ics">Jugendtermine als Kalender abonnieren</a></p>
+    </section>
+    
+
+    <section>
+      <div class="section-head"><h2>Weitere Infos</h2></div>
+      <ul class="jugend-links"><li><a href="https://www.schachbezirk-muenchen.de/jugend.html" target="_blank" rel="noopener">Münchner Schachjugend ↗</a></li><li><a href="https://bayerische-schachjugend.de/" target="_blank" rel="noopener">Bayerische Schachjugend ↗</a></li></ul>
+    </section>
+    
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
+        <p><a href="kontakt.html">Kontaktformular</a></p>
+        <p><a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="ueber-uns.html">Über uns</a></p>
+        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 04.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { auto: "Auto", hell: "Hell", dunkel: "Dunkel" }, folge = { auto: "hell", hell: "dunkel", dunkel: "auto" };
+      var medien = window.matchMedia("(prefers-color-scheme: dark)");
+      function setze(wahl) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = (wahl === "dunkel" || (wahl === "auto" && medien.matches)) ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + namen[wahl] + " (klicken zum Wechseln)";
+        try { localStorage.setItem("theme", wahl); } catch (e) {}
+      }
+      setze(html.dataset.themeWahl || "auto");
+      knopf.addEventListener("click", function () { setze(folge[html.dataset.themeWahl] || "auto"); });
+      medien.addEventListener("change", function () { if (html.dataset.themeWahl === "auto") setze("auto"); });
+    })();
+  </script>
+</body>
+</html>
