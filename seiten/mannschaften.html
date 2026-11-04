@@ -36,7 +36,7 @@
     { name: "4. Mannschaft",      kurz: "AFK 4",  liga: 345,  tlnr: 3, klasse: "C-Klasse" },
     { name: "5. Mannschaft",      kurz: "AFK 5",  liga: 347,  tlnr: 3, klasse: "D-Klasse" },
     { name: "6. Mannschaft",      kurz: "AFK 6",  liga: 348,  tlnr: 6, klasse: "E-Klasse" },
-    { name: "Jugendmannschaften", kurz: "Jugend", liga: null, tlnr: null, klasse: "Jugendrunden", jugend: true },
+    { name: "Jugendmannschaften", kurz: "Jugend", liga: null, tlnr: null, klasse: "siehe Jugendseite", jugend: true, href: "jugend.html" },
   ];
   // ============================================================
 
@@ -86,6 +86,12 @@
       // Der sichtbare Text steht am Anfang des Labels (Screenreader / Sprachsteuerung)
       a.setAttribute("aria-label",
         a.textContent + (m.jugend ? "" : " der " + m.name) + " (neuer Tab)");
+      card.appendChild(a);
+    } else if (m.href) {
+      const a = document.createElement("a");
+      a.href = m.href;
+      a.className = "btn";
+      a.textContent = "Zur Jugendseite";
       card.appendChild(a);
     } else {
       const p = document.createElement("p");

@@ -86,6 +86,21 @@ ERFOLGE = [
     ("2024/25", "Platz 2 in der U20 Landesliga Süd"),
 ]
 
+# Fragen von Eltern (Frage, Antwort als HTML). {beitrag} = Jahresbeitrag Kinder aus build_site.BEITRAEGE
+FAQ = [
+    ("Braucht mein Kind Vorkenntnisse?",
+     "Nein. Die Regeln lernen Einsteiger im Training. Fortgeschrittene trainieren auf ihrem Niveau weiter."),
+    ("Muss man sich anmelden?",
+     "Nein, einfach freitags um 18:00 Uhr vorbeikommen. Wer mag, meldet sich vorher kurz über das "
+     '<a href="kontakt.html">Kontaktformular</a>.'),
+    ("Was kostet es?",
+     "Schnuppern ist kostenlos und unverbindlich. Die Mitgliedschaft kostet für Kinder und Schüler {beitrag} im Jahr "
+     '(<a href="mitgliederantrag.pdf" download>Mitgliedsantrag als PDF</a>).'),
+    ("Muss mein Kind Mannschaft spielen?",
+     "Nein, das ist freiwillig. Wer Lust auf Wettkämpfe hat, kann in einer unserer Jugendmannschaften "
+     "oder bei Jugendturnieren mitspielen."),
+]
+
 # Weiterführende Links
 LINKS = [
     ("Münchner Schachjugend", "https://www.schachbezirk-muenchen.de/jugend.html"),
@@ -166,7 +181,19 @@ def kontakt_html():
 # ==========================================
 # SEITEN
 # ==========================================
-def seite(termine, berichte):
+def faq_html(beitrag):
+    if not FAQ:
+        return ""
+    eintraege = "".join(f"<details class='jugend-faq'><summary>{esc(f)}</summary><p>{a.format(beitrag=esc(beitrag))}</p></details>"
+                        for f, a in FAQ)
+    return f"""
+    <section>
+      <div class="section-head"><h2>Fragen von Eltern</h2></div>
+      {eintraege}
+    </section>"""
+
+
+def seite(termine, berichte, beitrag=""):
     """jugend.html. termine: kommende Termine der Jugend-Spalte, berichte: Jugendberichte.
     Rückgabe (content, styles)."""
     teams = aktive_teams()
@@ -227,6 +254,7 @@ def seite(termine, berichte):
       {termine_html}
     </section>
     {berichte_html}
+    {faq_html(beitrag)}
 
     <section>
       <div class="section-head"><h2>Weitere Infos</h2></div>
@@ -273,4 +301,7 @@ STYLES = """<style>
       .jugend-termine > .event-card { border-left-color: var(--jugend); color: inherit; text-decoration: none; }
       .jugend-berichte { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
       .jugend-links { padding-left: 1.2rem; }
+      .jugend-faq { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.7rem 1rem; margin-bottom: 0.5rem; }
+      .jugend-faq summary { cursor: pointer; font-weight: 600; color: var(--head); }
+      .jugend-faq p { margin: 0.6rem 0 0.2rem; }
     </style>"""

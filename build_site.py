@@ -924,7 +924,7 @@ def build_neu_hier():
         <h3>Was erwartet dich?</h3>
         <ul>
           <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
-          <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen</li>
+          <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen (<a href="jugend.html">mehr zur Jugend</a>)</li>
           <li><strong>Mannschaftsschach:</strong> Teams von der E-Klasse bis zur Bezirksliga, für jedes Spielniveau</li>
         </ul>
         <a href="mannschaften.html">Unsere Teams →</a>
@@ -1967,7 +1967,8 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
         </li>
         <li>
           <strong>Jugend 18:00 – 19:30 Uhr</strong>
-          <span>Erwachsene ab 19:30 Uhr, Open End. Jugendliche dürfen gern länger bleiben.</span>
+          <span>Erwachsene ab 19:30 Uhr, Open End. Jugendliche dürfen gern länger bleiben.<br>
+            <a href="jugend.html">Mehr zur Jugend</a></span>
         </li>
         <li>
           <strong>Gymnasium Kirchheim</strong>
@@ -2161,7 +2162,8 @@ def jugend_termine(today=TODAY):
 
 def build_jugend(termine):
     berichte = [r for r in ALLE_BERICHTE if "jugend" in r['kategorien']]
-    content, styles = jugend.seite(termine, berichte)
+    beitrag = next((preis for wer, preis in BEITRAEGE if "Kinder" in wer), "")
+    content, styles = jugend.seite(termine, berichte, beitrag)
     render_page("Jugend", content, "jugend.html", extra_styles=styles)
 
 
