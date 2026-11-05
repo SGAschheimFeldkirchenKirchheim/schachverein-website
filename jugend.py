@@ -8,6 +8,7 @@ build_site.py ruft seite() und mannschaften_karte() auf.
 """
 
 import html
+import os
 import re
 
 # ==========================================
@@ -26,6 +27,10 @@ ANSPRECHPARTNER = {
     "rolle": "Ansprechpartner Jugend",
     "mail": "",                 # leer = Kontakt über das Kontaktformular
 }
+
+# Anzahl Kinder & Jugendliche im Verein. Die Datei schreibt das DWZ-Skript (GetDWZTypst/main.py).
+# Fehlt sie, entfällt der Satz einfach.
+JUGEND_DATEI = "jugend_anzahl.txt"
 
 # Spalte in termine/termine.typ, aus der die Jugendtermine kommen
 TERMINE_SPALTE = "Jugend"
@@ -117,6 +122,15 @@ def esc(x):
 
 def plain(s):
     return re.sub(r"<[^>]+>", "", s or "").strip()
+
+
+def jugend_anzahl():
+    try:
+        with open(JUGEND_DATEI, encoding="utf-8") as f:
+            wert = int(f.read().strip())
+        return wert if wert > 0 else None
+    except (OSError, ValueError):
+        return None
 
 
 def aktive_teams():
@@ -224,10 +238,12 @@ def seite(termine, berichte, beitrag=""):
     links_html = "".join(f'<li><a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)} ↗</a></li>'
                          for n, u in LINKS)
 
+    anzahl = jugend_anzahl()
+    anzahl_satz = f" Über {anzahl // 10 * 10} Kinder und Jugendliche spielen schon bei uns." if anzahl and anzahl >= 10 else ""
     content = f"""
     <h1>Jugend</h1>
     <p class="jugend-intro">Schach für Kinder und Jugendliche: Bei uns lernen Einsteiger die Regeln,
-      und Fortgeschrittene spielen in unseren Jugendmannschaften um Punkte.
+      und Fortgeschrittene spielen in unseren Jugendmannschaften um Punkte.{anzahl_satz}
       Schnuppern ist kostenlos, eine Anmeldung ist nicht nötig.</p>
 
     <div class="jugend-boxen">

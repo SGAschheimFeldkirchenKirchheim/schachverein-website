@@ -21,6 +21,20 @@ SEITE = "{slug}.html"           # Dateiname der Team-Seite; slug aus "AFK 1" -> 
 DEZIMAL = ","                   # "." -> 3.5   |   "," -> 3,5
 BP_IMMER_NACHKOMMA = True       # Brettpunkte in Tabellen immer mit Nachkommastelle (6.0, 6.5)
 
+# Bretter pro Spielklasse. Gilt, solange in einer Liga noch kein Ergebnis steht
+# (danach wird die Zahl aus den Ergebnissen erkannt). Einmal pflegen, gilt für alle Ligen & Saisons.
+BRETTER = {
+    "Bezirksliga": 8,
+    "A-Klasse": 8,
+    "B-Klasse": 7,
+    "C-Klasse": 6,
+    "D-Klasse": 6,
+    "E-Klasse": 4,
+    "1. Jugend-Bezirksliga": 4,
+    "U20 Landesliga Süd": 4,
+}
+BRETTER_STANDARD = 8            # falls die Klasse oben fehlt
+
 # Eigener (langer) Vereinsname in Tabellen -> kürzer; None = unverändert
 EIGENER_NAME = "SG {kurz}"
 
@@ -78,6 +92,18 @@ def seite_datei(d):
 # ==========================================
 # DATEN
 # ==========================================
+def bretter_aus_ergebnissen(d):
+    """Höchste Summe der Brettpunkte eines gespielten Kampfes (None, wenn noch nichts gespielt)."""
+    summen = [m["bh"] + m["bg"] for m in d.get("matches", []) if m.get("gesp") and not m.get("sf")]
+    return int(max(summen)) if summen and max(summen) > 0 else None
+
+
+def bretter_bestimmen(d):
+    """Ergebnisse > Tabelle BRETTER (nach Klasse) > Angabe vom Tabellenrechner > BRETTER_STANDARD."""
+    return (bretter_aus_ergebnissen(d) or BRETTER.get(d.get("klasse", "").strip())
+            or d.get("bretter") or BRETTER_STANDARD)
+
+
 def lade_teams(ordner=DATEN_ORDNER):
     teams = []
     for pfad in sorted(glob.glob(os.path.join(ordner, "*.json"))):
@@ -92,6 +118,7 @@ def lade_teams(ordner=DATEN_ORDNER):
         if EIGENER_NAME and d.get("eigen") is not None:
             d["teams"][str(d["eigen"])] = EIGENER_NAME.format(kurz=d["kurz"])
         d.setdefault("runden_tabellen", {})
+        d["bretter"] = bretter_bestimmen(d)
         teams.append(d)
     teams.sort(key=lambda d: (len(d["key"]), d["key"]))
     return teams
