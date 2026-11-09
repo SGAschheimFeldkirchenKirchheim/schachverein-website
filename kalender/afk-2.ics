@@ -8,16 +8,6 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
-UID:2026-11-06-ganztag-vereinsabend-herbstferien-afk-2@sg-afk
-DTSTAMP:20261106T000000Z
-DTSTART;VALUE=DATE:20261106
-DTEND;VALUE=DATE:20261107
-SUMMARY:Vereinsabend (Herbstferien)
-LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 20\, 85551 Kirchheim
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
 UID:2026-11-13-19-afk-2-mmm-runde-2-afk-2@sg-afk
 DTSTAMP:20261113T000000Z
 DTSTART:20261113T183000Z

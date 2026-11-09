@@ -8,16 +8,6 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
-UID:2026-11-06-ganztag-vereinsabend-herbstferien-senioren@sg-afk
-DTSTAMP:20261106T000000Z
-DTSTART;VALUE=DATE:20261106
-DTEND;VALUE=DATE:20261107
-SUMMARY:Vereinsabend (Herbstferien)
-LOCATION:Gymnasium Kirchheim\, Heimstettner Str. 20\, 85551 Kirchheim
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
 UID:2026-11-20-ganztag-nacht-der-mathematik-senioren@sg-afk
 DTSTAMP:20261120T000000Z
 DTSTART;VALUE=DATE:20261120
