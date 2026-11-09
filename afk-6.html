@@ -65,6 +65,7 @@
       .k-mehr { margin-top: auto; padding-top: 0.6rem; font-weight: bold; color: var(--link); font-size: 0.9rem; }
       .team-klasse { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; vertical-align: middle; }
 
+      .partie-link { margin-left: .35rem; text-decoration: none; font-size: .8rem; color: var(--accent); }
       .zurueck { margin: 0 0 0.5rem; } .zurueck a { text-decoration: none; font-weight: bold; }
       .team-kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1rem; }
       .team-kopf h1 { margin: 0; color: var(--navy); display: flex; align-items: center; gap: 0.6rem; }
@@ -245,7 +246,7 @@
   var panels = document.querySelectorAll(".panel");
   // Adresse "#spieler" (ohne passendes Element -> der Browser springt nicht nach unten)
   function zeige(id) {
-    id = (id || "").replace(/^p-/, "");
+    id = (id || "").replace(/^p-/, "").split("/")[0];   // "#partien/123" -> Reiter "partien"
     var gibts = false;
     panels.forEach(function (p) { if (p.dataset.reiter === id) gibts = true; });
     if (!gibts && panels.length) id = panels[0].dataset.reiter;
