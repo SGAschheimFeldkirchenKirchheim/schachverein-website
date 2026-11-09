@@ -8,6 +8,9 @@ build_site.py ruft lade_teams(), uebersicht_seite(), team_seite() und ticker_htm
 """
 
 import glob
+
+import partien  # Reiter "Partien" (Partie-Viewer)
+import re
 import html
 import json
 import os
@@ -36,13 +39,16 @@ BRETTER = {
 BRETTER_STANDARD = 8            # falls die Klasse oben fehlt
 
 # Eigener (langer) Vereinsname in Tabellen -> kürzer; None = unverändert
-EIGENER_NAME = "SG {kurz}"
+#   {nr}   Mannschaftsnummer aus dem Namen beim Bezirk ("SG Aschheim/... 1" -> "1"; ohne Nummer leer)
+#   {kurz} Name der Mannschaft auf der Website ("AFK 1", "Senioren")
+EIGENER_NAME = "SG AFK {nr}"
 
 # Reiter auf der Team-Seite (Reihenfolge = Anzeige; Eintrag löschen = Reiter weg)
 REITER = [
     ("tabelle", "Tabelle"),
     ("spieltage", "Spieltage"),
     ("spiele", "Unsere Spiele"),
+    ("partien", "Partien"),          # nur wenn Partien hochgeladen sind (Ligamanager), siehe partien.py
     ("spieler", "Spieler"),
     ("verlauf", "Verlauf"),
     ("rechner", "Tabellenrechner"),
@@ -116,7 +122,9 @@ def lade_teams(ordner=DATEN_ORDNER):
         if d.get("version") != 1 or d.get("tabelle") is None:
             continue
         if EIGENER_NAME and d.get("eigen") is not None:
-            d["teams"][str(d["eigen"])] = EIGENER_NAME.format(kurz=d["kurz"])
+            original = d["teams"].get(str(d["eigen"]), "")
+            nr = re.search(r"(\d+)\s*$", original)
+            d["teams"][str(d["eigen"])] = EIGENER_NAME.format(kurz=d["kurz"], nr=nr.group(1) if nr else "").strip()
         d.setdefault("runden_tabellen", {})
         d["bretter"] = bretter_bestimmen(d)
         teams.append(d)
@@ -236,8 +244,11 @@ def bretter_html(d, m):
         else:
             gewonnen = (art == "forfeit_heim") == heim
             erg, cls = ("+ / –", "s") if gewonnen else ("– / +", "n")
+        pid = partien.partie_id(d, m, brett)
+        abspielen = (f' <a class="partie-link" href="#partien/{pid}" title="Partie nachspielen" '
+                     f'aria-label="Partie nachspielen">▶</a>' if pid else "")
         zeilen.append(f'<tr><td>{brett}</td><td class="name">{esc(eigen)}</td>'
-                      f'<td><span class="erg erg-{cls} klein">{erg}</span></td>'
+                      f'<td><span class="erg erg-{cls} klein">{erg}</span>{abspielen}</td>'
                       f'<td class="name">{esc(gegner)}</td></tr>')
     return f'<table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>'
 
@@ -418,6 +429,7 @@ def reiter_rechner(d):
 REITER_FUNKTIONEN = {
     "tabelle": reiter_tabelle, "spieltage": reiter_spieltage, "spiele": reiter_spiele,
     "spieler": reiter_spieler, "verlauf": reiter_verlauf, "rechner": reiter_rechner,
+    "partien": partien.reiter_partien,
 }
 
 
@@ -433,7 +445,7 @@ def team_seite(d):
     knoepfe = "".join(f'<a href="#p-{k}" data-reiter="{k}">{esc(t)}</a>' for k, t, _ in reiter)
     panels = "".join(f'<section class="panel" id="p-{k}" data-reiter="{k}"><h2 class="panel-titel">{esc(t)}</h2>{inhalt}</section>'
                      for k, t, inhalt in reiter)
-    links = [f'<a href="{esc(d["url_liga"])}" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>']
+    links = [f'<a href="{esc(d["url_liga"])}" target="_blank" rel="noopener">Liga beim {esc(d.get("quelle", "Schachbezirk"))} ↗</a>']
     content = f"""
     <p class="zurueck"><a href="{esc(d.get("zurueck_url", "mannschaften.html"))}">← {esc(d.get("zurueck_text", "Alle Mannschaften"))}</a></p>
     <div class="team-kopf">
@@ -551,6 +563,7 @@ STYLES = """<style>
       .k-mehr { margin-top: auto; padding-top: 0.6rem; font-weight: bold; color: var(--link); font-size: 0.9rem; }
       .team-klasse { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; vertical-align: middle; }
 
+      .partie-link { margin-left: .35rem; text-decoration: none; font-size: .8rem; color: var(--accent); }
       .zurueck { margin: 0 0 0.5rem; } .zurueck a { text-decoration: none; font-weight: bold; }
       .team-kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1rem; }
       .team-kopf h1 { margin: 0; color: var(--navy); display: flex; align-items: center; gap: 0.6rem; }
@@ -657,7 +670,7 @@ TEAM_JS = r"""<script>
   var panels = document.querySelectorAll(".panel");
   // Adresse "#spieler" (ohne passendes Element -> der Browser springt nicht nach unten)
   function zeige(id) {
-    id = (id || "").replace(/^p-/, "");
+    id = (id || "").replace(/^p-/, "").split("/")[0];   // "#partien/123" -> Reiter "partien"
     var gibts = false;
     panels.forEach(function (p) { if (p.dataset.reiter === id) gibts = true; });
     if (!gibts && panels.length) id = panels[0].dataset.reiter;
