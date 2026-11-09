@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senioren | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="Logo.png">
+  <script>
+    /* Dunkelmodus: gespeicherte Wahl (auto/hell/dunkel) sofort anwenden, damit nichts aufblitzt */
+    (function () {
+      var wahl = "auto";
+      try { wahl = localStorage.getItem("theme") || "auto"; } catch (e) {}
+      var dunkel = wahl === "dunkel" || (wahl === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.theme = dunkel ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .klein { font-size: 0.85rem; color: var(--muted); }
+      .sen-intro { max-width: 50rem; font-size: 1.05rem; }
+      .sen-boxen { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
+      .sen-box { padding: 1.1rem 1.3rem; border-top: 4px solid var(--senioren); }
+      .sen-box h3 { margin-top: 0; }
+      .sen-box p { margin: 0.35rem 0; }
+      .sen-box ul { padding-left: 1.2rem; margin: 0.3rem 0 0; }
+      .sen-box .btn { display: inline-block; margin-top: 0.5rem; text-decoration: none; padding: 0.5rem 1rem; }
+      section { margin-top: 2rem; }
+      .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+      .sen-termine > .event-card:first-child { border-top-width: 1px; border-radius: var(--radius) var(--radius) 0 0; }
+      .sen-termine > .event-card:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+      .sen-termine > .event-card:only-child { border-radius: var(--radius); }
+      .sen-termine > .event-card { border-left-color: var(--senioren); color: inherit; text-decoration: none; }
+      .sen-berichte { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    </style>
+  <link rel="stylesheet" href="design.css">
+  <meta property="og:title" content="Senioren | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <img src="Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Auto</button>
+    <nav aria-label="Hauptmenü">
+      <a href="index.html">Start</a>
+      <a href="ueber-uns.html">Über uns</a>
+      <a href="mannschaften.html" aria-current="page">Mannschaften</a>
+      <a href="jugend.html">Jugend</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <a href="turniere.html">Turniere</a>
+      <a href="faq.html">FAQ</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+    <a href="mannschaften.html" style="text-decoration:none;">← Alle Mannschaften</a>
+    <h1>Senioren</h1>
+    <p class="sen-intro">Unsere Seniorenmannschaft spielt in der Münchner Senioren-Mannschaftsmeisterschaft (MSMM). Die Spieltermine stehen unten und im Spielplan.</p>
+
+    <div class="sen-boxen">
+      <div class="card sen-box">
+        <h3>Mannschaft 2026/27</h3>
+        <p><strong>Münchner Senioren-Mannschaftsmeisterschaft (MSMM)</strong></p>
+        
+        
+        
+      </div>
+      <div class="card sen-box">
+        <h3>Mitspielen?</h3>
+        <p>Erreichbar <a href="kontakt.html">über das Kontaktformular</a>.</p>
+      </div>
+      
+    </div>
+
+    <section>
+      <div class="section-head"><h2>Nächste Termine</h2></div>
+      <div class="events-grid sen-termine">
+        <a class="event-card" href="termine.html" data-date="2027-01-22">
+          <div class="ev-date">22.01. Fr, 19:30 Uhr</div>
+          <div class="ev-title">MSMM Runde 3</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2027-02-24">
+          <div class="ev-date">24.02. Mi, 19:30 Uhr</div>
+          <div class="ev-title">MSMM Runde 4</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2027-03-19">
+          <div class="ev-date">19.03. Fr, 19:30 Uhr</div>
+          <div class="ev-title">MSMM Runde 5</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2027-04-13">
+          <div class="ev-date">13.04. Di, 19:00 Uhr</div>
+          <div class="ev-title">MSMM Runde 6</div>
+          <div class="ev-teams"></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2027-05-14">
+          <div class="ev-date">14.05. Fr, 19:30 Uhr</div>
+          <div class="ev-title">MSMM Runde 7</div>
+          <div class="ev-teams"></div>
+        </a></div><p class="klein"><a href="termine.html">Ganzer Spielplan →</a> · <a href="kalender/senioren.ics">Seniorentermine als Kalender abonnieren</a></p>
+    </section>
+    
+    
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
+        <p><a href="kontakt.html">Kontaktformular</a></p>
+        <p><a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="ueber-uns.html">Über uns</a></p>
+        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="faq.html">Häufige Fragen</a></p>
+        <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 09.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { auto: "Auto", hell: "Hell", dunkel: "Dunkel" }, folge = { auto: "hell", hell: "dunkel", dunkel: "auto" };
+      var medien = window.matchMedia("(prefers-color-scheme: dark)");
+      function setze(wahl) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = (wahl === "dunkel" || (wahl === "auto" && medien.matches)) ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + namen[wahl] + " (klicken zum Wechseln)";
+        try { localStorage.setItem("theme", wahl); } catch (e) {}
+      }
+      setze(html.dataset.themeWahl || "auto");
+      knopf.addEventListener("click", function () { setze(folge[html.dataset.themeWahl] || "auto"); });
+      medien.addEventListener("change", function () { if (html.dataset.themeWahl === "auto") setze("auto"); });
+    })();
+  </script>
+</body>
+</html>
