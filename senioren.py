@@ -32,6 +32,11 @@ ANSPRECHPARTNER = {
     "mail": "",                 # leer = Kontakt über das Kontaktformular
 }
 
+# Name der Seniorenmannschaft im Tabellenrechner (config.json "name"). Liefert der Tabellenrechner
+# dazu Daten, wird senioren.html zur vollen Teamseite (Tabelle, Spieltage, Spieler, Verlauf, Rechner)
+# wie bei AFK 1-6; diese Infoseite und ihre Extra-Karte entfallen dann.
+LIGA_TEAM_KURZ = "Senioren"
+
 # Spalte in termine/termine.typ, aus der die Seniorentermine kommen
 TERMINE_SPALTE = "Senioren"
 TERMINE_ANZAHL = 8

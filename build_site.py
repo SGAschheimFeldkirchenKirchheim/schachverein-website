@@ -2147,16 +2147,24 @@ def build_sitemap():
         f.write(xml)
 
 
+def jugend_kurznamen():
+    return {t.get("kurz") or t["name"] for t in jugend.TEAMS}
+
+
 def build_mannschaften(teams):
     """mannschaften.html (Übersicht) + eine Seite pro Team aus mannschaften/*.json.
-    Ohne Daten bleibt die handgeschriebene seiten/mannschaften.html."""
+    Jugendteams (siehe jugend.TEAMS) bekommen eine Teamseite, stehen in der Übersicht aber
+    nur gesammelt auf der Jugend-Karte. Ohne Daten bleibt die handgeschriebene seiten/mannschaften.html."""
     if not teams:
         return False
-    content, styles = liga.uebersicht_seite(teams)
+    jkurz = jugend_kurznamen()
+    content, styles = liga.uebersicht_seite([d for d in teams if d["kurz"] not in jkurz])
     render_page("Mannschaften", content, "mannschaften.html", extra_styles=styles)
     for d in teams:
+        if d["kurz"] in jkurz:
+            d["zurueck_url"], d["zurueck_text"] = "jugend.html", "Jugend"
         titel, datei, content, styles, beschreibung = liga.team_seite(d)
-        ACTIVE_PARENT[datei] = "mannschaften.html"      # Menüpunkt "Mannschaften" markieren
+        ACTIVE_PARENT[datei] = "jugend.html" if d["kurz"] in jkurz else "mannschaften.html"
         render_page(titel, content, datei, extra_styles=styles, description=beschreibung)
     return True
 
@@ -2183,10 +2191,10 @@ def spalten_termine(spalte, today=TODAY):
     return events
 
 
-def build_jugend(termine):
+def build_jugend(termine, liga_seiten=None):
     berichte = [r for r in ALLE_BERICHTE if "jugend" in r['kategorien']]
     beitrag = next((preis for wer, preis in BEITRAEGE if "Kinder" in wer), "")
-    content, styles = jugend.seite(termine, berichte, beitrag)
+    content, styles = jugend.seite(termine, berichte, beitrag, liga_seiten)
     render_page("Jugend", content, "jugend.html", extra_styles=styles)
 
 
@@ -2232,12 +2240,17 @@ if __name__ == "__main__":
     build_neu_hier()
     news = build_berichte()
     teams = liga.lade_teams()
+    liga_seiten = {d["kurz"]: liga.seite_datei(d) for d in teams}
     j_termine = spalten_termine(jugend.TERMINE_SPALTE)
-    build_jugend(j_termine)
+    build_jugend(j_termine, liga_seiten)
     s_termine = spalten_termine(senioren.TERMINE_SPALTE)
-    build_senioren(s_termine)
+    extra = []
+    # Senioren mit Daten vom Tabellenrechner -> volle Teamseite (senioren.html) aus liga.py
+    if senioren.LIGA_TEAM_KURZ not in liga_seiten:
+        build_senioren(s_termine)
+        extra.append(senioren.mannschaften_karte(s_termine))
     build_faq()
-    liga.EXTRA_KARTEN = [senioren.mannschaften_karte(s_termine), jugend.mannschaften_karte(j_termine)]
+    liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine)]
     build_index(upcoming, news, teams)
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams) else set())

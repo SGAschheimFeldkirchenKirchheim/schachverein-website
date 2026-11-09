@@ -42,6 +42,9 @@ TERMINE_ANZAHL = 8             # wie viele kommende Termine angezeigt werden
 #   ebene:  Kurzinfo darunter (z. B. Veranstalter)
 #   termin: Regex auf den Text in der Jugend-Spalte -> "Nächster Termin" auf der Karte
 #   url:    Tabelle/Ergebnisse (öffnet in neuem Tab); "" = ohne Link
+#   kurz:   optional: Name des Teams im Tabellenrechner (config.json "name", z. B. "U20 II").
+#           Liefert der Tabellenrechner dazu Daten, verlinkt die Karte auf die eigene Teamseite
+#           (Tabelle, Spieltage, Spieler, ...) statt auf url.
 #   aktiv:  False = Karte ausblenden (z. B. Team noch nicht gemeldet)
 TEAMS = [
     {
@@ -147,7 +150,7 @@ def naechster_termin(team, termine):
 # ==========================================
 # BAUSTEINE
 # ==========================================
-def team_karte(t, termine):
+def team_karte(t, termine, liga_seiten=None):
     nt = naechster_termin(t, termine)
     nt_text = f'Nächster Termin: <strong>{nt["when"]}</strong>' if nt else "Termine folgen"
     inner = f"""
@@ -155,6 +158,12 @@ def team_karte(t, termine):
         <p>{esc(t.get("ebene", ""))}</p>
         <p>{nt_text}</p>
         <p>{esc(plain(nt["title"])) if nt else ""}</p>"""
+    seite_intern = (liga_seiten or {}).get(t.get("kurz") or t["name"])
+    if seite_intern:
+        return f"""
+      <a class="card team-karte team-jugend" href="{esc(seite_intern)}">{inner}
+        <span class="k-mehr">Tabelle, Spieltage, Spieler →</span>
+      </a>"""
     if t.get("url"):
         return f"""
       <a class="card team-karte team-jugend" href="{esc(t["url"])}" target="_blank" rel="noopener">{inner}
@@ -207,11 +216,11 @@ def faq_html(beitrag):
     </section>"""
 
 
-def seite(termine, berichte, beitrag=""):
+def seite(termine, berichte, beitrag="", liga_seiten=None):
     """jugend.html. termine: kommende Termine der Jugend-Spalte, berichte: Jugendberichte.
     Rückgabe (content, styles)."""
     teams = aktive_teams()
-    karten = "".join(team_karte(t, termine) for t in teams)
+    karten = "".join(team_karte(t, termine, liga_seiten) for t in teams)
 
     termine_html = (f'<div class="events-grid jugend-termine">{"".join(termin_zeile(e) for e in termine[:TERMINE_ANZAHL])}</div>'
                     '<p class="klein"><a href="termine.html">Ganzer Spielplan →</a> · '

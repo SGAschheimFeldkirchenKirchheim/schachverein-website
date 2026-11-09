@@ -435,7 +435,7 @@ def team_seite(d):
                      for k, t, inhalt in reiter)
     links = [f'<a href="{esc(d["url_liga"])}" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>']
     content = f"""
-    <p class="zurueck"><a href="mannschaften.html">← Alle Mannschaften</a></p>
+    <p class="zurueck"><a href="{esc(d.get("zurueck_url", "mannschaften.html"))}">← {esc(d.get("zurueck_text", "Alle Mannschaften"))}</a></p>
     <div class="team-kopf">
       <h1>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h1>
       <span class="team-platz">{platz}</span>
