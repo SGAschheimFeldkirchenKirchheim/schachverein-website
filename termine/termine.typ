@@ -10,7 +10,6 @@
     [* Termin *], [* Verein *], [* AFK 1 *], [* AFK 2 *], [* AFK 3 *], [* AFK 4 *], [* AFK 5 *], [* AFK 6 *], [* Senioren *], [* Jugend *]
   ),
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("November")]],
-  table.cell(fill: DarkSlateGray)[06.11. Fr], [Vereinsabend (Herbstferien)], [], [], [], [], [], [], [], [],
   [10.11. Di, 19:30 Uhr], [], [], [], table.cell(fill: green)[MMM Runde 2], [], [], table.cell(fill: green)[MMM Runde 1], [], [],
   table.cell(fill: DarkSlateGray)[13.11. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 2], table.cell(fill: green)[MMM Runde 2], [], table.cell(fill: green)[MMM Runde 2], table.cell(fill: green)[MMM Runde 2], [], [], [],
   table.cell(fill: DarkSlateGray)[20.11. Fr], table.cell(fill: yellow)[#link("https://www.mathenacht.de/")[#underline[Nacht der Mathematik]]], [], [], [], [], [], [], [], [],
@@ -28,7 +27,7 @@
   [08.12. Di, 19:30 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 3], [], [],
   table.cell(fill: DarkSlateGray)[11.12. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], table.cell(fill: green)[MMM Runde 4], [], [], [],
   [12.12. Sa, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: blueViolet)[U14/U16 MMM Runde 4+5],
-  [14.12. Mo], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM spielfrei], [],
+  [14.12. Mo], [], [], [], [], [], [], [], table.cell(fill: green)[MSMM Spielfrei], [],
   table.cell(fill: DarkSlateGray)[18.12. Fr], table.cell(fill: orange)[Weihnachtsblitz], [], [], [], [], [], [], [], [],
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Januar")]],
   [06.01. Mi], [Dreikönigsturnier], [], [], [], [], [], [], [], [],
