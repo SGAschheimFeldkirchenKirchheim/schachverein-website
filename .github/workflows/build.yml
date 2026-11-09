@@ -25,9 +25,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 1. Typst CLI installieren
+      # 1. Typst CLI installieren – mit zweitem Versuch, falls GitHub kurz hakt (z. B. HTTP 504)
       - name: Setup Typst
+        id: typst1
+        continue-on-error: true
         uses: typst-community/setup-typst@v3
+
+      - name: Setup Typst (2. Versuch)
+        id: typst2
+        if: steps.typst1.outcome == 'failure'
+        continue-on-error: true
+        uses: typst-community/setup-typst@v3
+
+      - name: Hinweis ohne Typst
+        if: steps.typst1.outcome == 'failure' && steps.typst2.outcome == 'failure'
+        run: echo "::warning::Typst nicht verfügbar – Website wird ohne Termine-PDF/SVG gebaut"
 
       # 2. Python Umgebung einrichten
       - name: Setup Python
@@ -40,7 +52,9 @@ jobs:
       #    (vorher: "|| true" hat sie komplett versteckt)
       - name: Compile Typst to SVG
         run: |
-          if [ -f "termine/termine.typ" ]; then
+          if ! command -v typst >/dev/null; then
+            echo "Typst fehlt, überspringe."
+          elif [ -f "termine/termine.typ" ]; then
             typst compile termine/termine.typ termine/output.svg \
               || echo "::warning::Typst-Kompilierung von termine/termine.typ fehlgeschlagen"
           fi

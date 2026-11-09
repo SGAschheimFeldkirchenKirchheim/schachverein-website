@@ -47,6 +47,10 @@
 
   /* Formen */
   --radius: 10px;
+
+  /* Breite: Inhalt nutzt bis zu --breite, Fließtext bleibt für gute Lesbarkeit schmaler */
+  --breite: 1280px;
+  --text-breite: 52rem;
   --btn-radius: 8px;
 
   /* alte Variablen aus style.css mitziehen */
@@ -373,3 +377,42 @@ header nav { order: 2; }
   .nav-burger { order: 3; margin-left: 0.3rem !important; }
   header nav { order: 4; }
 }
+
+
+/* ---------- Breite ---------- */
+.container { max-width: var(--breite) !important; padding: 0 clamp(1rem, 3vw, 2rem) !important; }
+main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
+
+/* ---------- Oberlandquartett ---------- */
+.oq-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.oq-tabelle th, .oq-tabelle td { padding: 10px 12px; border: 1px solid var(--line); text-align: center; color: var(--text); }
+.oq-tabelle th { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.oq-tabelle td.links { text-align: left; }
+.oq-tabelle tbody tr:nth-child(even) td { background: var(--soft); }
+.oq-tabelle td.oq-sieg { background: var(--oq-sieg) !important; color: #1b2a4a; font-weight: 700; }
+.oq-tabelle td.oq-pokal { background: var(--accent) !important; color: #fff; font-weight: 700; }
+.oq-legende { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-size: 0.85rem; color: var(--muted); margin-top: 1rem; }
+.oq-legende span::before { content: ""; display: inline-block; width: 0.9em; height: 0.9em; border-radius: 3px; margin-right: 0.4em; vertical-align: -0.1em; background: var(--oq-sieg); }
+.oq-legende span.pokal::before { background: var(--accent); border: 1px solid var(--hell); }
+:root { --oq-sieg: #ffd54a; }
+[data-theme="dark"] { --oq-sieg: #e0b93a; }
+[data-theme="dark"] .oq-tabelle th { background: #24375f; }
+[data-theme="dark"] .oq-tabelle td.oq-pokal { background: var(--hell) !important; color: #0e1524; }
+[data-theme="dark"] .oq-legende span.pokal::before { background: var(--hell); }
+
+/* ---------- Spielort-Hinweis (Schachschule) ---------- */
+.spielort-hinweis { font-size: 0.85em; opacity: 0.9; }
+
+/* ---------- Hintergrundvideo (Startseite) ---------- */
+.hero-video { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+.hero-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-video::after { content: ""; position: absolute; inset: 0; background: var(--dia-abdunkeln); }
+
+/* ---------- FAQ ---------- */
+.faq-gruppe { margin-top: 2rem; max-width: var(--text-breite); }
+.faq-gruppe h2 { margin-bottom: 0.7rem; }
+.faq-eintrag { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0.7rem 1rem; margin-bottom: 0.5rem; }
+.faq-eintrag summary { cursor: pointer; font-weight: 600; color: var(--head); }
+.faq-eintrag[open] summary { margin-bottom: 0.4rem; }
+.faq-antwort { margin: 0.2rem 0 0.2rem; }
+.faq-antwort ul { margin: 0.3rem 0 0; padding-left: 1.2rem; }

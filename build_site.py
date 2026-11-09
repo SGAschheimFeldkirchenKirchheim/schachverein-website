@@ -13,6 +13,8 @@ from itertools import groupby
 
 import liga   # Mannschaften-Seite + Ergebnis-Ticker (Daten vom Tabellenrechner)
 import jugend  # Jugend-Seite (Einstellungen in jugend.py)
+import senioren  # Senioren-Seite (Einstellungen in senioren.py)
+import faq     # FAQ-Seite (Fragen in faq.py)
 
 try:
     from zoneinfo import ZoneInfo
@@ -41,6 +43,9 @@ SITE_URL = "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-websit
 CAL_TZ = "Europe/Berlin"
 EVENT_DURATION_HOURS = 3          # Standarddauer für Termine mit Uhrzeit
 SPIELORT = "Gymnasium Kirchheim, Heimstettner Str. 20, 85551 Kirchheim"
+# Satz unter dem Spielort (Startseite, "Neu hier?", Footer). "" = ausblenden
+SPIELORT_HINWEIS = "Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort."
+SPIELORT_HINWEIS_KURZ = "Schachschule GyKi"   # kurze Fassung für die Startseiten-Box; "" = ausblenden
 
 TODAY = datetime.date.today()
 
@@ -61,6 +66,8 @@ PAGE_DESCRIPTIONS = {
     "mannschaften.html": "Tabellen, Ergebnisse und Spielerstatistiken unserer Mannschaften – mit Tabellenrechner zum Ausprobieren.",
     "berichte.html": "Aktuelle Berichte und News aus dem Vereinsleben der SG AFK: Turniere, Mannschaftskämpfe und mehr.",
     "turniere.html": "Turniere der SG AFK: Oberlandquartett, Blitzjahreswertung, Hall of Fame und Ausschreibungen.",
+    "senioren.html": "Seniorenmannschaft der SG AFK in der Münchner Senioren-Mannschaftsmeisterschaft: Termine, Ansprechpartner und Berichte.",
+    "faq.html": "Häufige Fragen zur SG AFK: Schnuppern, Mitgliedschaft, Beiträge, Mannschaften, DWZ und Jugendtraining.",
     "jugend.html": "Schach für Kinder und Jugendliche bei der SG AFK: Jugendtraining jeden Freitag, Jugendmannschaften, Termine und Ansprechpartner.",
     "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
     "kontakt.html": "Kontakt und Anfahrt zur SG Aschheim/Feldkirchen/Kirchheim im Gymnasium Kirchheim.",
@@ -92,7 +99,9 @@ NAV = [
     ("termine.html", "Termine"),
     ("berichte.html", "Berichte"),
     ("turniere.html", "Turniere"),
+    ("faq.html", "FAQ"),
     ("kontakt.html", "Kontakt"),
+    # ("senioren.html", "Senioren"),   # einkommentieren = eigener Reiter (sonst über Mannschaften erreichbar)
     # "Neu hier?" ist über die Startseite und den Footer erreichbar
 ]
 
@@ -102,6 +111,7 @@ ACTIVE_PARENT = {
     "oberlandquartett.html": "turniere.html",
     "blitzjahreswertung.html": "turniere.html",
     "vereinsintern.html": "turniere.html",
+    "senioren.html": "mannschaften.html",
 }
 
 # Handgeschriebene Seiten: Inhalt liegt in seiten/<name>.html
@@ -210,6 +220,7 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         description=desc,
         og_image_tag=og_image_tag,
         jahr=TODAY.year,
+        spielort_hinweis=(f'<p class="spielort-hinweis">{SPIELORT_HINWEIS}</p>' if SPIELORT_HINWEIS else ""),
         stand=letzte_aenderung(),
     )
 
@@ -908,6 +919,7 @@ def build_neu_hier():
       <div class="neu-card">
         <h3>Wo?</h3>
            <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 20<br>85551 Kirchheim</p>
+           {f'<p>{SPIELORT_HINWEIS}</p>' if SPIELORT_HINWEIS else ''}
         <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn btn-outline">Auf Google Maps öffnen</a>
       </div>
 
@@ -1025,42 +1037,30 @@ def build_oberlandquartett():
         html.append('</tr></thead><tbody>')
 
         for i, (datum, ausrichter, results) in enumerate(data):
-            row_bg = '#eef1f8' if i % 2 == 1 else '#ffffff'
-            html.append(f'<tr style="background-color: {row_bg};">')
-            html.append(f'<td style="text-align:left;">{datum}</td>')
-            html.append(f'<td style="text-align:left;">{ausrichter}</td>')
-
+            html.append('<tr>')
+            html.append(f'<td class="links">{datum}</td>')
+            html.append(f'<td class="links">{ausrichter}</td>')
             for j, val in enumerate(results):
-                is_win = (i, j) in pokal_wins
-                bg_color = ""
-                text_color = ""
-                font_weight = "normal"
-
-                if is_win:
-                    bg_color = "background-color: #0a1f44;"
-                    text_color = "color: white;"
-                    font_weight = "bold"
-                elif isinstance(val, int) and val == 1:
-                    bg_color = "background-color: #ffd54a;"
-                    font_weight = "bold"
-
-                style = f'style="{bg_color} {text_color} font-weight:{font_weight};"' if bg_color or text_color or font_weight != "normal" else ""
-                html.append(f'<td {style}>{val}</td>')
-
+                if (i, j) in pokal_wins:
+                    klasse = ' class="oq-pokal" title="Pokalgewinn"'
+                elif val == 1:
+                    klasse = ' class="oq-sieg"'
+                else:
+                    klasse = ''
+                html.append(f'<td{klasse}>{val}</td>')
             html.append('</tr>')
 
         html.append('</tbody></table></div>')
-        html.append('<p style="font-size:0.85rem; font-style:italic; margin-top:1rem; color:#555;">')
-        html.append('Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>')
+        html.append('<p class="oq-legende"><span>Turniersieg</span><span class="pokal">Pokalgewinn</span></p>')
+        html.append('<p class="klein">Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>')
         html.append('Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.')
         html.append('</p>')
         content = "\n".join(html)
 
+    # Farben und Dunkelmodus der Tabelle stehen in design.css (.oq-tabelle)
     styles = """<style>
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
-      .oq-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }
-      .oq-tabelle th, .oq-tabelle td { padding: 10px 12px; border: 1px solid #0a1f44; text-align: center; }
-      .oq-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; }
+      .klein { font-size: 0.85rem; color: var(--muted); font-style: italic; }
     </style>"""
 
     render_page("Oberlandquartett", content, "oberlandquartett.html", extra_styles=styles)
@@ -1649,6 +1649,9 @@ def build_berichte():
 # --- Einstellungen -------------------------------------------------
 DIASHOW_ORDNER = "diashow"      # Fotos für die Diashow oben auf der Startseite (jpg/png/webp), alphabetisch
 DIASHOW_SEKUNDEN = 10           # Anzeigedauer pro Foto
+# Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
+# Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
+HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
 HERO_TITLE = "Schach spielen in Aschheim, Feldkirchen &amp; Kirchheim"
 # Alternative: "Schach im Münchner Osten"
 
@@ -1899,7 +1902,26 @@ def diashow_bilder():
                   if os.path.splitext(n)[1].lower() in IMG_EXT)
 
 
+def hero_video_html():
+    if not HERO_VIDEO:
+        return ""
+    quellen = [(f"{DIASHOW_ORDNER}/{HERO_VIDEO}{ext}", typ) for ext, typ in ((".webm", "video/webm"), (".mp4", "video/mp4"))
+               if os.path.exists(os.path.join(DIASHOW_ORDNER, HERO_VIDEO + ext))]
+    if not quellen:
+        return ""
+    bilder = diashow_bilder()
+    poster = f' poster="{bilder[0]}"' if bilder else ""
+    src = "".join(f'<source src="{quote(q)}" type="{t}">' for q, t in quellen)
+    # muted + playsinline: sonst starten Handys das Video nicht automatisch
+    return (f'<div class="hero-video" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata"{poster}>{src}</video></div>'
+            '<script>(function(){var v=document.querySelector(".hero-video video");'
+            'if(v&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){v.removeAttribute("autoplay");v.pause();}})();</script>')
+
+
 def diashow_html():
+    video = hero_video_html()
+    if video:
+        return video
     bilder = diashow_bilder()
     if not bilder:
         return ""
@@ -1963,16 +1985,17 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
       <ul class="hero-facts">
         <li>
           <strong>Jeden Freitag ab 18:00 Uhr</strong>
-          <span>Für alle offen, Erwachsene dürfen auch früher kommen</span>
+          <span>Für alle offen, Einsteiger und Gäste willkommen</span>
         </li>
         <li>
           <strong>Jugend 18:00 – 19:30 Uhr</strong>
-          <span>Erwachsene ab 19:30 Uhr, Open End. Jugendliche dürfen gern länger bleiben.<br>
+          <span>Erwachsene ab 19:30 Uhr (gern auch früher), Open End. Jugendliche dürfen gern länger bleiben.<br>
             <a href="jugend.html">Mehr zur Jugend</a></span>
         </li>
         <li>
           <strong>Gymnasium Kirchheim</strong>
              <span>Heimstettner Str. 20, 85551 Kirchheim<br>
+            {f'{SPIELORT_HINWEIS_KURZ}<br>' if SPIELORT_HINWEIS_KURZ else ''}
             <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
         </li>
       </ul>
@@ -2138,24 +2161,24 @@ def build_mannschaften(teams):
     return True
 
 
-def jugend_termine(today=TODAY):
-    """Kommende Termine aus der Spalte jugend.TERMINE_SPALTE in termine/termine.typ."""
+def spalten_termine(spalte, today=TODAY):
+    """Kommende Termine aus einer Spalte (z. B. "Jugend", "Senioren") in termine/termine.typ."""
     pfad = os.path.join("termine", "termine.typ")
     if not os.path.exists(pfad):
         return []
     with open(pfad, "r", encoding="utf-8") as f:
         parsed = parse_typst_table(f.read())
-    if jugend.TERMINE_SPALTE not in parsed['header']:
-        print(f"Hinweis: Spalte '{jugend.TERMINE_SPALTE}' fehlt in {pfad}.")
+    if spalte not in parsed['header']:
+        print(f"Hinweis: Spalte '{spalte}' fehlt in {pfad}.")
         return []
-    idx = parsed['header'].index(jugend.TERMINE_SPALTE)
+    idx = parsed['header'].index(spalte)
     assign_dates(parsed['rows'])
     events = []
     for r in parsed['rows']:
         if r['kind'] != 'row' or not r.get('date') or r['date'] < today or len(r['cells']) <= idx:
             continue
         title = r['cells'][idx]['text']
-        if title and 'spielfrei' not in title.lower():
+        if title and not re.search(r'spiel?frei', title, re.I):
             events.append({'date': r['date'], 'when': r['cells'][0]['text'], 'title': title, 'who': ''})
     return events
 
@@ -2165,6 +2188,18 @@ def build_jugend(termine):
     beitrag = next((preis for wer, preis in BEITRAEGE if "Kinder" in wer), "")
     content, styles = jugend.seite(termine, berichte, beitrag)
     render_page("Jugend", content, "jugend.html", extra_styles=styles)
+
+
+def build_senioren(termine):
+    berichte = [r for r in ALLE_BERICHTE if "senioren" in r['kategorien']]
+    content, styles = senioren.seite(termine, berichte)
+    render_page("Senioren", content, "senioren.html", extra_styles=styles)
+
+
+def build_faq():
+    adresse = SPIELORT.split(", ", 1)[-1]
+    content, styles = faq.seite(BEITRAEGE, adresse)
+    render_page("Häufige Fragen", content, "faq.html", extra_styles=styles)
 
 
 def build_static_pages(skip=()):
@@ -2197,9 +2232,12 @@ if __name__ == "__main__":
     build_neu_hier()
     news = build_berichte()
     teams = liga.lade_teams()
-    j_termine = jugend_termine()
+    j_termine = spalten_termine(jugend.TERMINE_SPALTE)
     build_jugend(j_termine)
-    liga.EXTRA_KARTEN = [jugend.mannschaften_karte(j_termine)]
+    s_termine = spalten_termine(senioren.TERMINE_SPALTE)
+    build_senioren(s_termine)
+    build_faq()
+    liga.EXTRA_KARTEN = [senioren.mannschaften_karte(s_termine), jugend.mannschaften_karte(j_termine)]
     build_index(upcoming, news, teams)
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams) else set())
