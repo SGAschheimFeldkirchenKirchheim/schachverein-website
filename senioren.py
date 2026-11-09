@@ -18,7 +18,7 @@ SAISON = "2026/27"
 # Wettbewerb der Seniorenmannschaft
 LIGA = "Münchner Senioren-Mannschaftsmeisterschaft (MSMM)"
 LIGA_KURZ = "MSMM"
-LIGA_URL = ""                  # Link zu Tabelle/Ergebnissen; "" = ohne Link
+LIGA_URL = "https://www.schachbezirk-muenchen.de/msenmm-2026-27.html"               # Link zu Tabelle/Ergebnissen; "" = ohne Link
 
 # Kurzer Text oben auf der Seite (HTML erlaubt). "" = Standardtext
 INTRO = ""
