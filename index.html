@@ -372,7 +372,7 @@
     <script>
 (function () {
   var today = new Date(); today.setHours(0, 0, 0, 0);
-  var AUSFALL = [];   // Spielabend-Ausfälle aus ausfall.txt
+  var AUSFALL = [{"start": "2026-12-25", "end": "2027-01-06", "reason": "Weihnachtsferien"}];   // Spielabend-Ausfälle aus ausfall.txt
 
   function two(x) { return ("0" + x).slice(-2); }
   function iso(d) { return d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()); }
