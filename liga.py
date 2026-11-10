@@ -348,8 +348,14 @@ def vorschau_html(d, tlnr):
     if not varianten:
         return ""
     erste = {k["name"] for k in varianten[0][1]}
+    erste_liste = varianten[0][1]
     spalten = []
     for i, (wk, liste) in enumerate(varianten, 1):
+        # wer fehlt gegenüber der wahrscheinlichsten (in Brettfolge), der Reihe nach den Neuen zugeordnet
+        namen = {k["name"] for k in liste}
+        raus = [k["name"] for k in erste_liste if k["name"] not in namen]
+        rein = [k["name"] for k in liste if k["name"] not in erste]
+        fuer = dict(zip(rein, raus))
         dwz = [k["dwz"] for k in liste if k.get("dwz")]
         schnitt = f"Ø {round(sum(dwz) / len(dwz))}" if dwz else ""
         zeilen = []
@@ -357,9 +363,12 @@ def vorschau_html(d, tlnr):
             titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
             anders = i > 1 and k["name"] not in erste
             chance = chance_html(p.get(k["name"], 0), k["name"] in neu) if i == 1 else ""
+            ersetzt = (f'<span class="fuer">⇄ für {esc(fuer[k["name"]])}</span>'
+                       if anders and k["name"] in fuer else "")
             cls = ' class="anders"' if anders else ""
             zeilen.append(f'<tr{cls}><td>{b}</td>'
-                          f'<td class="name">{titel}{esc(k["name"])}{vorbereitung_html(k)}</td><td>{k.get("dwz") or ""}</td>'
+                          f'<td class="name">{titel}{esc(k["name"])}{vorbereitung_html(k)}{ersetzt}</td>'
+                          f'<td>{k.get("dwz") or ""}</td>'
                           f'<td>{chance}</td></tr>')
         spalten.append(f"""
           <div class="variante">
@@ -372,7 +381,7 @@ def vorschau_html(d, tlnr):
         <p><strong>Voraussichtliche Aufstellung {esc(name_von(d, tlnr))}</strong></p>
         <div class="varianten">{"".join(spalten)}</div>
         <p class="klein">Prozente oben = Wahrscheinlichkeit der ganzen Aufstellung (es gibt sehr viele mögliche,
-          deshalb sind die Werte klein); hervorgehoben = anders als in der wahrscheinlichsten.
+          deshalb sind die Werte klein); markiert mit ⇄ = spielt in dieser Variante statt des genannten Spielers.
           {LEGENDE_GEGNER}</p>
       </div>"""
 
@@ -971,7 +980,9 @@ STYLES = """<style>
       .vorschau { padding: 0.3rem 0 0.6rem; }
       .varianten { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.4rem 1.2rem; }
       .variante .v-kopf { display: flex; justify-content: space-between; gap: 0.5rem; margin: 0.4rem 0 0; border-bottom: 2px solid var(--border); }
-      .variante tr.anders td { background: rgba(185, 119, 14, 0.15); font-weight: bold; }
+      .variante tr.anders td { background: rgba(230, 160, 20, 0.16); font-weight: bold; }
+      .variante tr.anders td:first-child { box-shadow: inset 4px 0 #e6a014; }
+      .variante .fuer { display: block; font-size: 0.78rem; font-weight: normal; color: #c98a0a; }
       @media (max-width: 600px) { .auf-dialog { padding: 0.8rem 0.5rem; width: 98vw; } .chance { min-width: 2.8rem; padding: 0 0.25rem; } }
       .vorschau p { margin: 0.3rem 0; }
 

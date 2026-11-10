@@ -10,3 +10,4 @@
 # Beispiele (ohne # davor aktiv):
 # 25.12.2026 = Weihnachten
 # 01.01.2027 = Neujahr
+25.12.2026 - 06.01.2027 = Weihnachtsferien
