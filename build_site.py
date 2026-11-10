@@ -1101,8 +1101,34 @@ def _blitz_turnier_namen(code):
     return namen
 
 
+BLITZ_ARCHIV = os.path.join("turniere", "blitzjahreswertung", "archiv")   # abgeschlossene Jahre: archiv/<Jahr>/
+
+
+def _blitz_jahr(code):
+    m = re.search(r"Blitzjahreswertung\s+(\d{4})", code or "")
+    return int(m.group(1)) if m else None
+
+
 def build_blitzjahreswertung():
-    folder_path = os.path.join("turniere", "blitzjahreswertung")
+    """Aktuelles Jahr -> blitzjahreswertung.html, abgeschlossene Jahre (archiv/<Jahr>/, angelegt vom
+    Jahresabschluss im Programm BlitzJahresWertung) -> blitzjahreswertung-<Jahr>.html, mit Jahresleiste."""
+    ordner = os.path.join("turniere", "blitzjahreswertung")
+    aktuell = None
+    if os.path.exists(os.path.join(ordner, "main.typ")):
+        with open(os.path.join(ordner, "main.typ"), encoding="utf-8") as f:
+            aktuell = _blitz_jahr(f.read())
+    archiv = sorted((int(os.path.basename(p)) for p in glob.glob(os.path.join(BLITZ_ARCHIV, "*"))
+                     if os.path.basename(p).isdigit() and os.path.exists(os.path.join(p, "main.typ"))), reverse=True)
+    seiten = [(aktuell, ordner, "blitzjahreswertung.html", BLITZ_PDF)] + [
+        (j, os.path.join(BLITZ_ARCHIV, str(j)), f"blitzjahreswertung-{j}.html", f"blitzjahreswertung-{j}.pdf")
+        for j in archiv if j != aktuell]
+    leiste = [(str(j or "aktuell"), datei) for j, _, datei, _ in seiten]
+    for j, pfad, datei, pdf in seiten:
+        ACTIVE_PARENT.setdefault(datei, "turniere.html")
+        _blitz_seite(pfad, datei, pdf, j, leiste, archiviert=pfad != ordner)
+
+
+def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=False):
     main_typ = os.path.join(folder_path, "main.typ")
     tmp_dir = os.path.join(folder_path, "_tmp")
 
@@ -1125,7 +1151,7 @@ def build_blitzjahreswertung():
                     os.remove(old)
                 for p in new_pages:
                     shutil.move(p, os.path.join(folder_path, os.path.basename(p)))
-            subprocess.run(["typst", "compile", main_typ, BLITZ_PDF], check=True)
+            subprocess.run(["typst", "compile", main_typ, blitz_pdf], check=True)
         except Exception as e:
             print(f"Typst Compiling Hinweis: {e}")
         shutil.rmtree(tmp_dir, ignore_errors=True)
@@ -1170,12 +1196,22 @@ def build_blitzjahreswertung():
       """ + active + """ { background: #0a1f44; color: #fff; }
       """ + show + """ { display: block; }""")
 
-    pdf_link = (f'<p><a href="{BLITZ_PDF}" download>Aktuelle Wertung als PDF herunterladen</a></p>'
-                if os.path.exists(BLITZ_PDF) else "")
+    pdf_link = (f'<p><a href="{blitz_pdf}" download>Wertung {jahr or ""} als PDF herunterladen</a></p>'
+                if os.path.exists(blitz_pdf) else "")
+    jahre = ""
+    if len(leiste) > 1:
+        aktiv = ' aria-current="page"'
+        knoepfe = "".join(f'<a href="{d}"{aktiv if d == html_datei else ""}>{htmllib.escape(t)}</a>'
+                          for t, d in leiste)
+        jahre = f'<nav class="bw-jahre" aria-label="Jahr">{knoepfe}</nav>'
+    hinweis = (f'<p class="bw-archiv">Abgeschlossenes Jahr {jahr}. <a href="blitzjahreswertung.html">Zum aktuellen Jahr →</a></p>'
+               if archiviert else "")
 
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-        <h1 style="margin-top:1rem;">Blitzjahreswertung</h1>
+        <h1 style="margin-top:1rem;">Blitzjahreswertung {jahr or ""}</h1>
+    {jahre}
+    {hinweis}
     {pdf_link}
     <div class="bw-wrap">
       {table_content}
@@ -1188,10 +1224,14 @@ def build_blitzjahreswertung():
       .svg-container svg { display: block; margin: 0 auto; max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
       .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; }
       .custom-tabelle th, .custom-tabelle td { padding: 10px 12px; border: 1px solid #dcdcdc; text-align: center; }
-      .custom-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; }""" + tab_css + """
+      .custom-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; }
+      .bw-jahre { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0 0.8rem; }
+      .bw-jahre a { padding: 0.15rem 0.7rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; background: var(--soft); color: var(--navy); }
+      .bw-jahre a[aria-current="page"] { background: var(--navy); color: #fff; font-weight: bold; }
+      .bw-archiv { padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; }""" + tab_css + """
     </style>"""
 
-    render_page("Blitzjahreswertung", content, "blitzjahreswertung.html", extra_styles=styles)
+    render_page(f"Blitzjahreswertung {jahr or ''}".strip(), content, html_datei, extra_styles=styles)
 
 # ==========================================
 # 5. HALL OF FAME PARSER
