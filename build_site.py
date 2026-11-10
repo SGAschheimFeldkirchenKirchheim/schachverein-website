@@ -2367,10 +2367,10 @@ if __name__ == "__main__":
     news = build_berichte()
     aktuell, teams, archiv = saisons_laden()
     saisons_verknuepfen(aktuell, teams, archiv)
-    # Einsatzquoten früherer Saisons für die Prognose (Gewichtung siehe aufstellung.py)
-    quoten = {j: liga.auf.saison_quoten(ts) for j, ts in archiv.items()}
+    # Einsätze früherer Saisons für die Prognose (Gewichtung siehe aufstellung.py)
+    ereignisse = {j: liga.auf.saison_ereignisse(ts) for j, ts in archiv.items()}
     for d in teams:
-        d["historie_quoten"] = [(aktuell - j, q) for j, q in quoten.items()]
+        d["historie_ereignisse"] = [(aktuell - j, ev) for j, ev in ereignisse.items()]
     liga_seiten = {d["kurz"]: liga.seite_datei(d) for d in teams}
     j_termine = spalten_termine(jugend.TERMINE_SPALTE)
     build_jugend(j_termine, liga_seiten)

@@ -127,7 +127,7 @@ def sammeln(teams, seite_datei, name_von):
             continue
         jahr = d.get("saison_jahr") or 0
         saison = d.get("saison_text") or (f"{jahr}/{(jahr + 1) % 100:02d}" if jahr else "")
-        for k in d.get("kader", []):
+        for k in ([] if d.get("archiv") else d.get("kader", [])):   # "gemeldet für" nur aktuelle Saison
             if k["name"].strip().lower() in KEIN_SPIELER:
                 continue
             p = hole(k["name"])
@@ -274,6 +274,9 @@ def seite_html(p, dsb, saison_jahr):
     meldungen = "".join(meldung(m) for m in p["meldungen"]) or "<li>–</li>"
     bezirk = (f'<p class="klein"><a href="{esc(p["url"])}" target="_blank" rel="noopener">'
               f'Beim Schachbezirk ansehen ↗</a></p>' if p.get("url") else "")
+    heim = sum(1 for x in p["partien"] if x["heim"] and x["art"] != "annulliert")
+    ausw = sum(1 for x in p["partien"] if not x["heim"] and x["art"] != "annulliert")
+    ha = f"<dt>Partien</dt><dd>Heim {heim} · Auswärts {ausw}</dd>" if heim + ausw else ""
     pkt, n = bilanz(p["partien"])
     gesamt = (f"<dt>Bilanz</dt><dd>{_punkte(pkt)} / {n} ({round(100 * pkt / n)} %)"
               f"{' seit ' + esc(p['partien'][-1]['saison']) if len({x['jahr'] for x in p['partien']}) > 1 else ''}</dd>"
@@ -288,6 +291,7 @@ def seite_html(p, dsb, saison_jahr):
         <dt>DWZ</dt><dd>{r_alt or "–"}</dd>
         {f"<dt>ELO</dt><dd>{elo}</dd>" if elo else ""}
         {gesamt}
+        {ha}
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
     </div>

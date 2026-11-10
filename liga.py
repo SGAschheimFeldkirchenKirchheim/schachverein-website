@@ -250,10 +250,13 @@ def team_url(d, tlnr):
 
 
 def _prognose(d, tlnr):
-    return auf.prognose(d, tlnr, kader_von(d, tlnr), d.get("historie_quoten") or [], d.get("bretter") or 0)
+    """-> ({Name: p}, {neue Spieler}) fürs nächste Spiel (Spielort automatisch)."""
+    return auf.prognose(d, tlnr, d.get("historie_ereignisse") or [], d.get("bretter") or 0, kader=kader_von(d, tlnr))
 
 
-def chance_html(p):
+def chance_html(p, neu=False):
+    if neu:
+        return '<span class="chance neu" title="noch keine Einsätze bekannt">neu</span>'
     pr = round(100 * p)
     return f'<span class="chance" style="--p:{pr}%">{pr} %</span>'
 
@@ -266,7 +269,7 @@ def aufstellung_tabelle(d, tlnr):
     runden, res = auf.ergebnisse(d, tlnr)
     namen = {k["name"] for k in kader}
     kader += [{"name": n, "nr": None, "ersatz": True} for n in res if n not in namen]
-    p = {} if eigen or d.get("archiv") else _prognose(d, tlnr)
+    p, neu = ({}, set()) if eigen or d.get("archiv") else _prognose(d, tlnr)
     alle_runden = range(1, (d.get("runden") or max(runden, default=0)) + 1)
     zeilen = []
     for k in kader:
@@ -281,7 +284,7 @@ def aufstellung_tabelle(d, tlnr):
         else:
             name = (f'<a class="sp-link" href="{esc(k["url"])}" target="_blank" rel="noopener">{esc(k["name"])}</a>'
                     if k.get("url") else esc(k["name"]))
-            letzte = f'<td>{chance_html(p[k["name"]])}</td>' if k["name"] in p else "<td></td>"
+            letzte = f'<td>{chance_html(p[k["name"]], k["name"] in neu)}</td>' if k["name"] in p else "<td></td>"
         titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
         cls = ' class="ersatz"' if k.get("ersatz") else ""
         zeilen.append(f'<tr{cls}><td>{k.get("nr") or "–"}</td><td class="neben">{"x" if k.get("stamm") else ""}</td>'
@@ -301,7 +304,8 @@ def aufstellung_tabelle(d, tlnr):
 LEGENDE_EIGEN = ("<strong>Einsätze</strong> = gespielte Runden von bisher gespielten Runden "
                  "(kein Prozent, keine Prognose).")
 LEGENDE_GEGNER = ("<strong>Prognose</strong> = geschätzte Wahrscheinlichkeit, dass der Spieler im nächsten "
-                  "Spiel dabei ist – aus den Einsätzen dieser Saison und (schwächer gewichtet) früherer Saisons. "
+                  "Spiel dabei ist – aus seinen Einsätzen (letzte Runden zählen mehr als frühere, frühere Saisons "
+                  "weniger, Heim/Auswärts berücksichtigt). <strong>neu</strong> = noch keine Einsätze bekannt. "
                   "Nur eine Statistik.")
 
 
@@ -310,7 +314,7 @@ def vorschau_html(d, tlnr):
     kader, n = kader_von(d, tlnr), d.get("bretter") or 0
     if not kader or not n or d.get("archiv"):
         return ""
-    p = _prognose(d, tlnr)
+    p, neu = _prognose(d, tlnr)
     liste = auf.voraussichtlich(kader, p, n)
     dwz = [k["dwz"] for k in liste if k.get("dwz")]
     schnitt = f' · Ø DWZ {round(sum(dwz) / len(dwz))}' if dwz else ""
@@ -318,7 +322,7 @@ def vorschau_html(d, tlnr):
     for i, k in enumerate(liste, 1):
         titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
         zeilen.append(f'<tr><td>{i}</td><td class="name">{titel}{esc(k["name"])}</td>'
-                      f'<td>{k.get("dwz") or ""}</td><td>{chance_html(p.get(k["name"], 0))}</td></tr>')
+                      f'<td>{k.get("dwz") or ""}</td><td>{chance_html(p.get(k["name"], 0), k["name"] in neu)}</td></tr>')
     zeilen = "".join(zeilen)
     return f"""
       <div class="vorschau">
@@ -916,6 +920,7 @@ STYLES = """<style>
       .titel { font-size: 0.7rem; font-weight: bold; color: #b9770e; }
       .chance { display: inline-block; min-width: 3.4rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold;
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
+      .chance.neu { background: rgba(127,127,127,0.15); font-weight: normal; font-style: italic; }
       .vorschau { padding: 0.3rem 0 0.6rem; }
       @media (max-width: 600px) { .auf-dialog { padding: 0.8rem 0.5rem; width: 98vw; } .chance { min-width: 2.8rem; padding: 0 0.25rem; } }
       .vorschau p { margin: 0.3rem 0; }
