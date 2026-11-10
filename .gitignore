@@ -1,3 +1,4 @@
 .env
 __pycache__/
-turniere/blitzjahreswertung/output*.svgturniere/blitzjahreswertung/archiv/*/output*.svg
+turniere/blitzjahreswertung/output*.svg
+turniere/blitzjahreswertung/archiv/*/output*.svg

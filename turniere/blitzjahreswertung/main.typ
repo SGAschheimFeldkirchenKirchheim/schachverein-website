@@ -14,7 +14,7 @@
 #let web = sys.inputs.at("format", default: "pdf") == "web"
 
 // gespielt: false -> Spalte grau "ausstehend", zählt nicht, keine Einzelseite.
-// Nach dem Turnier einfach auf true setzen (oder ", gespielt: false" löschen).
+// Setzt das Programm BlitzJahresWertung selbst: mit chess-results-Link = gespielt.
 #let turniere = (
   (name: "Neujahrsblitz",   daten: neujahrsblitz,   url: turnier-links.neujahrsblitz),
   (name: "Osterblitz",      daten: osterblitz,      url: turnier-links.osterblitz),
