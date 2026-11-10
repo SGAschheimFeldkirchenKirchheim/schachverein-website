@@ -11,6 +11,7 @@ import glob
 
 import partien  # Reiter "Partien" (Partie-Viewer)
 import spieler as spielerseiten  # Spielerseiten (spieler/<name>.html)
+import aufstellung as auf        # Meldelisten mit Ergebnissen + Einsatz-Prognose (Einstellungen dort)
 import re
 import html
 import json
@@ -50,7 +51,7 @@ REITER = [
     ("spieltage", "Spieltage"),
     ("spiele", "Unsere Spiele"),
     ("partien", "Partien"),          # nur wenn Partien hochgeladen sind (Ligamanager), siehe partien.py
-    ("spieler", "Spieler"),
+    ("aufstellung", "Aufstellung"),  # Meldeliste mit Ergebnissen je Runde (ohne Meldeliste: Spielerstatistik)
     ("verlauf", "Verlauf"),
     ("saisons", "Saisons"),          # Platz/Klasse aller Saisons (nur wenn es ein Archiv gibt)
     ("rechner", "Tabellenrechner"),  # nicht in abgeschlossenen Saisons
@@ -218,7 +219,7 @@ def tabelle_html(d, tabelle, mit_delta=None):
                      f'<span class="delta runter">▼{-v}</span>' if v < 0 else "")
             delta = f"<td>{delta}</td>"
         zeilen.append(
-            f'<tr{cls}><td>{r["platz"]}</td>{delta}<td class="name">{esc(name_von(d, r["tlnr"]))}</td>'
+            f'<tr{cls}><td>{r["platz"]}</td>{delta}<td class="name">{team_knopf(d, r["tlnr"])}</td>'
             f'<td>{r["sp"]}</td><td><strong>{r["mp"]}</strong></td><td>{bp(r["bp"])}</td>'
             f'<td class="neben">{r["siege"]}</td><td class="neben">{r["gp"]}</td></tr>')
     delta_kopf = "<th></th>" if mit_delta is not None else ""
@@ -229,6 +230,151 @@ def tabelle_html(d, tabelle, mit_delta=None):
           <th class="neben" title="Mannschaftssiege">Siege</th><th class="neben" title="Gewinnpartien">GewP</th></tr></thead>
         <tbody>{"".join(zeilen)}</tbody>
       </table></div>{auf_ab_legende(d)}"""
+
+
+def kader_von(d, tlnr):
+    return (d.get("kader_alle") or {}).get(str(tlnr)) or (d.get("kader") if tlnr == d.get("eigen") else None) or []
+
+
+def team_knopf(d, tlnr):
+    """Mannschaftsname; mit Meldeliste als Knopf, der das Aufstellungs-Fenster öffnet."""
+    if not kader_von(d, tlnr):
+        return esc(name_von(d, tlnr))
+    return (f'<button type="button" class="team-knopf" data-tlnr="{tlnr}" '
+            f'title="Aufstellung anzeigen">{esc(name_von(d, tlnr))}</button>')
+
+
+def team_url(d, tlnr):
+    url = d.get("url_team") or ""
+    return re.sub(r"tlnr=\d+", f"tlnr={tlnr}", url) if "tlnr=" in url else None
+
+
+def _prognose(d, tlnr):
+    return auf.prognose(d, tlnr, kader_von(d, tlnr), d.get("historie_quoten") or [], d.get("bretter") or 0)
+
+
+def chance_html(p):
+    pr = round(100 * p)
+    return f'<span class="chance" style="--p:{pr}%">{pr} %</span>'
+
+
+def aufstellung_tabelle(d, tlnr):
+    """Meldeliste wie beim Bezirk: Nr, Stamm, Name, DWZ, Ergebnis je Runde, Pkt, Spl +
+    eigene Mannschaft: Einsätze (gespielt / Runden) | Gegner: Prognose fürs nächste Spiel."""
+    eigen = tlnr == d.get("eigen")
+    kader = list(kader_von(d, tlnr))
+    runden, res = auf.ergebnisse(d, tlnr)
+    namen = {k["name"] for k in kader}
+    kader += [{"name": n, "nr": None, "ersatz": True} for n in res if n not in namen]
+    p = {} if eigen or d.get("archiv") else _prognose(d, tlnr)
+    alle_runden = range(1, (d.get("runden") or max(runden, default=0)) + 1)
+    zeilen = []
+    for k in kader:
+        rs = res.get(k["name"], {})
+        pkt = sum(x["p"] for x in rs.values() if x["p"] is not None)
+        spl = sum(1 for x in rs.values() if x["p"] is not None)
+        zellen = "".join(f'<td class="neben rd-erg{" kl" if rs.get(r, {}).get("t") in ("+", "–") else ""}">'
+                         f'{rs.get(r, {}).get("t", "")}</td>' for r in alle_runden)
+        if eigen:
+            name = spieler_html(k["name"], None, None, True)
+            letzte = f'<td>{sum(1 for x in rs.values() if x["e"])}/{len(runden)}</td>' if runden else "<td>–</td>"
+        else:
+            name = (f'<a class="sp-link" href="{esc(k["url"])}" target="_blank" rel="noopener">{esc(k["name"])}</a>'
+                    if k.get("url") else esc(k["name"]))
+            letzte = f'<td>{chance_html(p[k["name"]])}</td>' if k["name"] in p else "<td></td>"
+        titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
+        cls = ' class="ersatz"' if k.get("ersatz") else ""
+        zeilen.append(f'<tr{cls}><td>{k.get("nr") or "–"}</td><td class="neben">{"x" if k.get("stamm") else ""}</td>'
+                      f'<td class="name">{titel}{name}</td><td>{k.get("dwz") or ""}</td>{zellen}'
+                      f'<td>{zahl(pkt) if spl else ""}</td><td>{spl or ""}</td>{letzte}</tr>')
+    rkopf = "".join(f'<th class="neben">{r}</th>' for r in alle_runden)
+    letzte_kopf = ('<th title="gespielte Runden von bisher gespielten Runden">Einsätze</th>' if eigen else
+                   "" if not p else '<th title="geschätzte Wahrscheinlichkeit für einen Einsatz im nächsten Spiel">Prognose</th>')
+    return f"""
+      <div class="tab-wrap"><table class="liga-tab aufst">
+        <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
+          {rkopf}<th title="Punkte">Pkt</th><th title="gespielte Partien">Spl</th>{letzte_kopf}</tr></thead>
+        <tbody>{"".join(zeilen)}</tbody>
+      </table></div>"""
+
+
+LEGENDE_EIGEN = ("<strong>Einsätze</strong> = gespielte Runden von bisher gespielten Runden "
+                 "(kein Prozent, keine Prognose).")
+LEGENDE_GEGNER = ("<strong>Prognose</strong> = geschätzte Wahrscheinlichkeit, dass der Spieler im nächsten "
+                  "Spiel dabei ist – aus den Einsätzen dieser Saison und (schwächer gewichtet) früherer Saisons. "
+                  "Nur eine Statistik.")
+
+
+def vorschau_html(d, tlnr):
+    """Voraussichtliche Aufstellung einer Mannschaft im nächsten Spiel (Brettfolge = Meldereihenfolge)."""
+    kader, n = kader_von(d, tlnr), d.get("bretter") or 0
+    if not kader or not n or d.get("archiv"):
+        return ""
+    p = _prognose(d, tlnr)
+    liste = auf.voraussichtlich(kader, p, n)
+    dwz = [k["dwz"] for k in liste if k.get("dwz")]
+    schnitt = f' · Ø DWZ {round(sum(dwz) / len(dwz))}' if dwz else ""
+    zeilen = []
+    for i, k in enumerate(liste, 1):
+        titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
+        zeilen.append(f'<tr><td>{i}</td><td class="name">{titel}{esc(k["name"])}</td>'
+                      f'<td>{k.get("dwz") or ""}</td><td>{chance_html(p.get(k["name"], 0))}</td></tr>')
+    zeilen = "".join(zeilen)
+    return f"""
+      <div class="vorschau">
+        <p><strong>Voraussichtliche Aufstellung {esc(name_von(d, tlnr))}</strong>{schnitt}</p>
+        <table class="bretter"><tbody>{zeilen}</tbody></table>
+        <p class="klein">{LEGENDE_GEGNER}</p>
+      </div>"""
+
+
+def reiter_aufstellung(d):
+    if not d.get("kader"):
+        return reiter_spieler(d)          # Archiv / ohne Meldeliste: Spielerstatistik wie bisher
+    return (aufstellung_tabelle(d, d["eigen"]) +
+            f'<p class="klein">{LEGENDE_EIGEN} Ergebnisse je Runde: 1 / ½ / 0, + / – kampflos. '
+            f'Andere Mannschaften: in der Tabelle auf den Namen tippen.</p>')
+
+
+def aufstellungen_dialog(d):
+    """Ein Fenster für alle Mannschaften der Liga; die Tabellen-Namen öffnen den passenden Teil."""
+    if not d.get("kader_alle"):
+        return ""
+    bloecke = []
+    for t in sorted(d["teams"], key=int):
+        tlnr = int(t)
+        if not kader_von(d, tlnr):
+            continue
+        eigen = tlnr == d.get("eigen")
+        url = team_url(d, tlnr)
+        link = (f'<a href="{esc(url)}" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a>'
+                if url else "")
+        legende = LEGENDE_EIGEN if eigen else LEGENDE_GEGNER
+        bloecke.append(f"""
+        <div class="auf-block" data-tlnr="{tlnr}" hidden>
+          <h2>{esc(name_von(d, tlnr))}</h2>
+          {aufstellung_tabelle(d, tlnr)}
+          <p class="klein">{legende if (eigen or not d.get("archiv")) else ""} {link}</p>
+        </div>""")
+    return f"""
+    <dialog class="auf-dialog" aria-label="Mannschaftsaufstellung">
+      <form method="dialog"><button class="auf-zu" aria-label="Schließen">✕</button></form>
+      {"".join(bloecke)}
+    </dialog>
+    <script>
+    (function () {{
+      var dlg = document.querySelector(".auf-dialog");
+      if (!dlg || !dlg.showModal) return;
+      document.querySelectorAll(".team-knopf").forEach(function (b) {{
+        b.addEventListener("click", function () {{
+          dlg.querySelectorAll(".auf-block").forEach(function (x) {{ x.hidden = x.dataset.tlnr !== b.dataset.tlnr; }});
+          dlg.showModal();
+          dlg.scrollTop = 0;
+        }});
+      }});
+      dlg.addEventListener("click", function (e) {{ if (e.target === dlg) dlg.close(); }});
+    }})();
+    </script>"""
 
 
 def auf_ab_legende(d):
@@ -371,9 +517,12 @@ def reiter_spiele(d):
         kopf = (f'<span class="rd">R{m["r"]}</span><span class="ha">{"H" if heim else "A"}</span>'
                 f'<span class="geg">{esc(gegner)}{info}</span>{ergebnis_badge(art, mein, sein)}')
         details = bretter_html(d, m)
+        if not m["gesp"] and m is naechstes_spiel(d):
+            details = vorschau_html(d, m["g"] if heim else m["h"])
         teile.append(f'<details class="spiel"><summary>{kopf}</summary>{details}</details>' if details
                      else f'<div class="spiel">{kopf}</div>')
-    return '<p class="klein">Auf ein gespieltes Spiel tippen, um die Bretter zu sehen.</p>' + "".join(teile)
+    return ('<p class="klein">Auf ein gespieltes Spiel tippen, um die Bretter zu sehen – beim nächsten Spiel '
+            'die voraussichtliche Aufstellung des Gegners.</p>' + "".join(teile))
 
 
 def reiter_spieler(d):
@@ -517,7 +666,7 @@ def reiter_saisons(d):
 REITER_FUNKTIONEN = {
     "tabelle": reiter_tabelle, "spieltage": reiter_spieltage, "spiele": reiter_spiele,
     "spieler": reiter_spieler, "verlauf": reiter_verlauf, "rechner": reiter_rechner,
-    "saisons": reiter_saisons,
+    "saisons": reiter_saisons, "aufstellung": reiter_aufstellung,
     "partien": partien.reiter_partien,
 }
 
@@ -549,6 +698,7 @@ def team_seite(d):
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
       Gewinnpartien; Gleichstand = geteilter Platz). {" · ".join(links)}
       {f"<br>Letzte Änderung: {stand_text(d.get('stand'))}" if d.get("stand") else ""}</p>
+    {aufstellungen_dialog(d)}
     {TEAM_JS}{RECHNER_JS if "rechner" in [k for k, _, _ in reiter] else ""}
     """
     beschreibung = f"{d['kurz']} ({d.get('klasse', '')}): Tabelle, Spieltage, Ergebnisse und Statistik."
@@ -751,6 +901,24 @@ STYLES = """<style>
       .verlauf circle { fill: #fff; stroke: var(--link); stroke-width: 3; }
 
       .quelle { margin-top: 2rem; }
+
+      .team-knopf { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; border-bottom: 1px dotted #999; }
+      .team-knopf:hover { color: var(--link); border-bottom-color: var(--link); }
+      .auf-dialog { width: min(980px, 96vw); max-height: 88vh; padding: 1rem 1.2rem 1.2rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface, #fff); color: inherit; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+      .auf-dialog::backdrop { background: rgba(10, 18, 35, 0.6); }
+      .auf-dialog h2 { margin: 0 2rem 0.6rem 0; color: var(--navy); font-size: 1.3rem; }
+      .auf-dialog form { position: sticky; top: 0; float: right; z-index: 1; }
+      .auf-zu { font: inherit; font-size: 1.1rem; cursor: pointer; border: 1px solid var(--border); background: var(--soft); border-radius: 999px; width: 2.2rem; height: 2.2rem; }
+      .aufst td, .aufst th { white-space: nowrap; }
+      .aufst .rd-erg { min-width: 1.6rem; color: var(--navy); }
+      .aufst .rd-erg.kl { color: #888; }
+      .aufst tr.ersatz td { color: #777; font-style: italic; }
+      .titel { font-size: 0.7rem; font-weight: bold; color: #b9770e; }
+      .chance { display: inline-block; min-width: 3.4rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold;
+                background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
+      .vorschau { padding: 0.3rem 0 0.6rem; }
+      @media (max-width: 600px) { .auf-dialog { padding: 0.8rem 0.5rem; width: 98vw; } .chance { min-width: 2.8rem; padding: 0 0.25rem; } }
+      .vorschau p { margin: 0.3rem 0; }
 
       .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
       .saisons span { margin-right: 0.3rem; }
