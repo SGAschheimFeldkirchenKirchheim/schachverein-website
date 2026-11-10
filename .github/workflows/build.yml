@@ -63,6 +63,10 @@ jobs:
       # 4. Python Build-Skript ausführen
       - name: Run Build Script
         run: python build_site.py
+        env:
+          # aktuelle DWZ/Mitgliederzahl von der DSB-Vereinsliste (GitHub: Settings -> Secrets -> Actions)
+          DSB_TOKEN: ${{ secrets.DSB_TOKEN }}
+          DSB_VKZ: ${{ secrets.DSB_VKZ }}
 
       # 5. Änderungen committen und pushen
       - name: Commit and Push Changes

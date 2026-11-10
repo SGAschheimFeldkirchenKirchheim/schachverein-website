@@ -10,6 +10,7 @@ build_site.py ruft lade_teams(), uebersicht_seite(), team_seite() und ticker_htm
 import glob
 
 import partien  # Reiter "Partien" (Partie-Viewer)
+import spieler as spielerseiten  # Spielerseiten (spieler/<name>.html)
 import re
 import html
 import json
@@ -59,6 +60,11 @@ EXTRA_KARTEN = [
     {"name": "Jugendmannschaften", "kurz": "Jugend", "klasse": "Jugendrunden",
      "text": "Liga wird nachgetragen.", "url": None},
 ]
+
+# Bretter: DWZ hinter dem Namen anzeigen; Namen anklicken
+DWZ_AN_BRETTERN = True          # False = keine DWZ an den Brettern
+GEGNER_VERLINKEN = True         # Gegner -> Spielerseite beim Schachbezirk (neuer Tab)
+SPIELER_SEITEN = set()          # setzt build_site.py (eigene Spieler mit Spielerseite)
 
 TICKER_TITEL = "Letzte Ergebnisse"
 ERGEBNIS_TEXT = {"s": "Sieg", "u": "Unentschieden", "n": "Niederlage"}
@@ -229,13 +235,33 @@ def auf_ab_legende(d):
     return f'<p class="auf-ab-legende">{spans}</p>' if spans else ""
 
 
+def brett_felder(b):
+    """[Brett, Heim, Gast, Art, h, g, (DWZ H, DWZ G, Link H, Link G)] -> immer 10 Felder."""
+    return (list(b) + [None] * 10)[:10]
+
+
+def spieler_html(name, dwz, url, eigen, fett=False):
+    """Name (verlinkt: eigene -> Spielerseite, Gegner -> Bezirk) + DWZ klein dahinter."""
+    text = f"<strong>{esc(name)}</strong>" if fett else esc(name)
+    seite = spielerseiten.seite(name) if eigen else None
+    if seite in SPIELER_SEITEN:
+        text = f'<a class="sp-link" href="{esc(seite)}">{text}</a>'
+    elif url and GEGNER_VERLINKEN and name.strip().lower() not in spielerseiten.KEIN_SPIELER:
+        text = f'<a class="sp-link" href="{esc(url)}" target="_blank" rel="noopener">{text}</a>'
+    if DWZ_AN_BRETTERN and dwz:
+        text += f' <span class="dwz">{dwz}</span>'
+    return text
+
+
 def bretter_html(d, m):
     if not m.get("bretter"):
         return ""
     heim = m["h"] == d["eigen"]
     zeilen = []
-    for brett, sp_h, sp_g, art, h, g in m["bretter"]:
+    for b in m["bretter"]:
+        brett, sp_h, sp_g, art, h, g, dh, dg, uh, ug = brett_felder(b)
         eigen, gegner = (sp_h, sp_g) if heim else (sp_g, sp_h)
+        d_eigen, d_gegner, u_eigen, u_gegner = (dh, dg, uh, ug) if heim else (dg, dh, ug, uh)
         if art == "score":
             mein, sein = (h, g) if heim else (g, h)
             erg, cls = f"{zahl(mein)} – {zahl(sein)}", "s" if mein == 1 else "n" if mein == 0 else "u"
@@ -247,28 +273,30 @@ def bretter_html(d, m):
         pid = partien.partie_id(d, m, brett)
         abspielen = (f' <a class="partie-link" href="#partien/{pid}" title="Partie nachspielen" '
                      f'aria-label="Partie nachspielen">▶</a>' if pid else "")
-        zeilen.append(f'<tr><td>{brett}</td><td class="name">{esc(eigen)}</td>'
+        zeilen.append(f'<tr><td>{brett}</td><td class="name">{spieler_html(eigen, d_eigen, u_eigen, True)}</td>'
                       f'<td><span class="erg erg-{cls} klein">{erg}</span>{abspielen}</td>'
-                      f'<td class="name">{esc(gegner)}</td></tr>')
+                      f'<td class="name">{spieler_html(gegner, d_gegner, u_gegner, False)}</td></tr>')
     return f'<table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>'
 
 
-def bretter_neutral_html(m):
+def bretter_neutral_html(d, m):
     """Einzelergebnisse aus Heim-Sicht (für die Spieltags-Ansicht). Sieger fett."""
     if not m.get("bretter"):
         return ""
     zeilen = []
-    for brett, sp_h, sp_g, art, h, g in m["bretter"]:
+    for b in m["bretter"]:
+        brett, sp_h, sp_g, art, h, g, dh, dg, uh, ug = brett_felder(b)
         if art == "score":
             erg = f"{zahl(h)} – {zahl(g)}"
             sieger = "h" if h > g else "g" if g > h else ""
         else:
             erg = {"forfeit_heim": "+ / –", "forfeit_gast": "– / +", "annulliert": "– / –"}.get(art, "")
             sieger = {"forfeit_heim": "h", "forfeit_gast": "g"}.get(art, "")
-        fett = lambda seite, name: f"<strong>{esc(name)}</strong>" if sieger == seite else esc(name)
-        zeilen.append(f'<tr><td>{brett}</td><td class="name">{fett("h", sp_h)}</td>'
+        links = spieler_html(sp_h, dh, uh, m["h"] == d["eigen"], sieger == "h")
+        rechts = spieler_html(sp_g, dg, ug, m["g"] == d["eigen"], sieger == "g")
+        zeilen.append(f'<tr><td>{brett}</td><td class="name">{links}</td>'
                       f'<td><span class="erg klein">{erg}</span></td>'
-                      f'<td class="name rechts">{fett("g", sp_g)}</td></tr>')
+                      f'<td class="name rechts">{rechts}</td></tr>')
     return f'<table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>'
 
 
@@ -285,7 +313,7 @@ def paarungen_html(d, runde):
             erg = '<span class="klein">offen</span>'
         zeile = (f'<span class="p-h">{esc(name_von(d, m["h"]))}</span><span class="p-e">{erg}</span>'
                  f'<span class="p-g">{esc(name_von(d, m["g"]))}</span>')
-        bretter = bretter_neutral_html(m) if m["gesp"] else ""
+        bretter = bretter_neutral_html(d, m) if m["gesp"] else ""
         teile.append(f'<details class="{cls}"><summary>{zeile}</summary>{bretter}</details>' if bretter
                      else f'<div class="{cls}"><div class="p-zeile">{zeile}</div></div>')
     hinweis = ('<p class="klein">Auf einen Wettkampf tippen, um die Einzelergebnisse zu sehen.</p>'
@@ -352,7 +380,7 @@ def reiter_spieler(d):
         proz = f'{round(100 * s["pkt"] / s["sp"])} %' if s["sp"] else "–"
         kl = " ".join(f'{n}× kampfl. {z}' for n, z in ((s["kl_plus"], "+"), (s["kl_minus"], "–")) if n)
         bretter = ", ".join(map(str, s["bretter"])) or "–"
-        zeilen.append(f'<tr><td class="name">{esc(s["name"])}</td><td>{s["sp"]}</td>'
+        zeilen.append(f'<tr><td class="name">{spieler_html(s["name"], None, None, True)}</td><td>{s["sp"]}</td>'
                       f'<td>{zahl(s["pkt"])}</td><td>{proz}</td><td class="neben">{bretter}</td>'
                       f'<td class="neben klein">{kl}</td></tr>')
     return f"""
@@ -627,6 +655,9 @@ STYLES = """<style>
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
       .dwz { margin-left: 0.5rem; font-size: 0.8rem; color: #777; }
+      .bretter .dwz { margin-left: 0.25rem; font-size: 0.75rem; font-weight: normal; white-space: nowrap; }
+      a.sp-link { color: inherit; text-decoration: none; border-bottom: 1px dotted #999; }
+      a.sp-link:hover { color: var(--link); border-bottom-color: var(--link); }
 
       .erg { display: inline-block; min-width: 3.6rem; text-align: center; border-radius: 999px; padding: 0.05rem 0.6rem; font-weight: bold; font-size: 0.9rem; background: #e3e6ea; color: #333; white-space: nowrap; }
       .erg.klein { min-width: 3rem; font-size: 0.8rem; }

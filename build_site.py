@@ -15,6 +15,7 @@ import liga   # Mannschaften-Seite + Ergebnis-Ticker (Daten vom Tabellenrechner)
 import jugend  # Jugend-Seite (Einstellungen in jugend.py)
 import senioren  # Senioren-Seite (Einstellungen in senioren.py)
 import faq     # FAQ-Seite (Fragen in faq.py)
+import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
 
 try:
     from zoneinfo import ZoneInfo
@@ -1764,9 +1765,11 @@ def get_secret(name, default=""):
     return default
 
 
-def fetch_member_count():
-    """Anzahl aller Einträge der DSB-Vereinsliste; bei Fehlern letzter gespeicherter Wert, sonst Fallback."""
-    try:
+_DSB_LISTE = None
+def dsb_liste():
+    """DSB-Vereinsliste (einmal pro Build geladen). Fehler -> Exception mit Grund (ohne Token)."""
+    global _DSB_LISTE
+    if _DSB_LISTE is None:
         token = get_secret("DSB_TOKEN")
         if not token:
             raise ValueError("kein DSB_TOKEN gesetzt")
@@ -1775,13 +1778,22 @@ def fetch_member_count():
             f"{DSB_API_URL}?{query}",
             headers={"User-Agent": "Mozilla/5.0 (SG-AFK Website-Build)", "Accept": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=15) as r:
-            data = json.loads(r.read().decode("utf-8"))
-
-        if isinstance(data, dict):                       # z. B. {"members": [...]} -> längste Liste nehmen
+        try:
+            with urllib.request.urlopen(req, timeout=15) as r:
+                data = json.loads(r.read().decode("utf-8"))
+        except Exception as e:
+            raise ValueError(f"Schachbund-API nicht erreichbar ({type(e).__name__})") from None
+        if isinstance(data, dict):                       # z. B. {"spieler": [...]} -> längste Liste nehmen
             lists = [v for v in data.values() if isinstance(v, list)]
             data = max(lists, key=len) if lists else []
-        n = len(data)
+        _DSB_LISTE = data
+    return _DSB_LISTE
+
+
+def fetch_member_count():
+    """Anzahl aller Einträge der DSB-Vereinsliste; bei Fehlern letzter gespeicherter Wert, sonst Fallback."""
+    try:
+        n = len(dsb_liste())
         if n < 5:
             raise ValueError(f"unplausible Anzahl: {n}")
 
@@ -2151,6 +2163,25 @@ def jugend_kurznamen():
     return {t.get("kurz") or t["name"] for t in jugend.TEAMS}
 
 
+def build_spieler(teams):
+    """Spielerseiten (spieler/*.html); alte Seiten von Spielern, die nicht mehr vorkommen, werden gelöscht.
+    Muss VOR den Teamseiten laufen (liga.SPIELER_SEITEN = verlinkte Spieler)."""
+    alle = spieler.sammeln(teams, liga.seite_datei, liga.name_von)
+    liga.SPIELER_SEITEN = {spieler.seite(p["name"]) for p in alle.values()}
+    try:
+        dsb = dsb_liste()
+    except Exception as e:
+        print(f"Hinweis: DSB-Liste nicht abrufbar ({e}) - Spielerseiten mit DWZ aus der Meldeliste.")
+        dsb = []
+    os.makedirs(spieler.ORDNER, exist_ok=True)
+    for alt in glob.glob(os.path.join(spieler.ORDNER, "*.html")):
+        if alt.replace(os.sep, "/") not in liga.SPIELER_SEITEN:
+            os.remove(alt)
+    ACTIVE_PARENT.update({os.path.basename(x): "mannschaften.html" for x in liga.SPIELER_SEITEN})
+    n = spieler.bauen(alle, dsb, render_page, liga.STYLES, TODAY.year)
+    print(f"Spielerseiten: {n}")
+
+
 def build_mannschaften(teams):
     """mannschaften.html (Übersicht) + eine Seite pro Team aus mannschaften/*.json.
     Jugendteams (siehe jugend.TEAMS) bekommen eine Teamseite, stehen in der Übersicht aber
@@ -2251,6 +2282,7 @@ if __name__ == "__main__":
         extra.append(senioren.mannschaften_karte(s_termine))
     build_faq()
     liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine)]
+    build_spieler(teams)
     build_index(upcoming, news, teams)
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams) else set())
