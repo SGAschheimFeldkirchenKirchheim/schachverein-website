@@ -18,6 +18,11 @@ eingesetzt wird. Jede vergangene Runde ist ein "Ereignis" (gespielt ja/nein) mit
 Heim/Auswärts: dieselbe Rechnung nur über Runden mit gleichem Spielort wie das nächste Spiel,
 stark zu p hingezogen (HA_GEWICHT; groß = kaum Einfluss, 0 = aus).
 
+Verein (andere Mannschaften desselben Vereins in dieser Saison, nur was in den Daten steht):
+  VEREIN_FAKTOR: Runden in den anderen Mannschaften zählen mit diesem Faktor mit (0 = aus)
+  OBEN_ABZUG:    hat er zuletzt in einer HÖHEREN Mannschaft gespielt: p *= (1 - Abzug) (0 = aus)
+  Beide stehen auf 0, bis prognose_test.py zeigt, dass sie etwas bringen.
+
 Zum Schluss: Summe aller p einer Mannschaft = Bretterzahl (es spielen genau so viele).
 "neu" = in keiner Meldeliste/Partie früherer Saisons und in dieser Saison noch nicht gespielt.
 
@@ -27,6 +32,7 @@ prognose_parameter.json; fehlt die Datei, gelten die Standardwerte unten.
 
 import json
 import os
+import re
 
 # ==========================================
 # EINSTELLUNGEN (Standardwerte; prognose_parameter.json hat Vorrang)
@@ -38,6 +44,8 @@ STANDARD = {
     "stamm_start": 0.7,        # Startwert Stammspieler
     "ersatz_start": 0.15,      # Startwert Ersatzspieler
     "ha_gewicht": 6.0,         # Heim/Auswärts-Effekt: je kleiner, desto stärker (0 = aus)
+    "verein_faktor": 0.0,      # Einsätze in anderen Mannschaften des Vereins zählen mit (0 = aus)
+    "oben_abzug": 0.0,         # zuletzt in höherer Mannschaft des Vereins gespielt -> Abzug (0 = aus)
     "max_p": 0.97,             # nie 100 %
 }
 PARAMETER_DATEI = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prognose_parameter.json")
@@ -147,15 +155,42 @@ def saison_ereignisse(teams_einer_saison):
     return {"spieler": {n: ev for n, (_, ev) in beste.items()}, "namen": namen}
 
 
+def _verein_nummer(name):
+    """'SC Haar 1931 2' -> ('SC Haar 1931', 2); ohne Nummer -> (Name, 1)"""
+    m = re.match(r"^(.*?)\s+(\d+)\s*$", (name or "").strip())
+    if m and int(m.group(2)) < 50:          # "SC Haar 1931" ohne Nummer: 1931 ist keine Mannschaftsnummer
+        return m.group(1), int(m.group(2))
+    return (name or "").strip(), 1
+
+
+def verein_index(teams_einer_saison):
+    """Alle Mannschaften einer Saison nach Verein -> {Verein: [(d, tlnr, Nummer)]}.
+    Nur MMM-Mannschaften untereinander (Senioren laufen in eigenen Runden)."""
+    idx = {}
+    for d in teams_einer_saison:
+        if "senior" in (d.get("klasse") or "").lower():
+            continue
+        for t, name in d.get("teams", {}).items():
+            verein, nr = _verein_nummer(name)
+            idx.setdefault(verein, []).append((d, int(t), nr))
+    return idx
+
+
+def andere_teams(idx, d, tlnr):
+    """Die anderen Mannschaften desselben Vereins -> ([(d, tlnr, Nummer)], eigene Nummer)"""
+    verein, nr = _verein_nummer(d.get("teams", {}).get(str(tlnr), ""))
+    return [x for x in idx.get(verein, []) if not (x[0] is d and x[1] == tlnr)], nr
+
+
 # ==========================================
 # MODELL
 # ==========================================
 def wahrscheinlichkeit(stamm, ereignisse, naechst_heim, P):
-    """ereignisse = [(Saisons zurück, Runden zurück, heim, gespielt)]"""
+    """ereignisse = [(Saisons zurück, Runden zurück, heim, gespielt, Faktor)]"""
     start = P["stamm_start"] if stamm else P["ersatz_start"]
     zaehler = nenner = zh = nh = 0.0
-    for alter, rueck, heim, gespielt in ereignisse:
-        w = (P["saison_zerfall"] ** alter) * (P["runden_zerfall"] ** rueck)
+    for alter, rueck, heim, gespielt, faktor in ereignisse:
+        w = faktor * (P["saison_zerfall"] ** alter) * (P["runden_zerfall"] ** rueck)
         nenner += w
         zaehler += w * gespielt
         if naechst_heim is not None and heim == naechst_heim:
@@ -167,27 +202,45 @@ def wahrscheinlichkeit(stamm, ereignisse, naechst_heim, P):
     return p
 
 
-def prognose(d, tlnr, historie, bretter, bis_runde=None, naechst_heim="auto", P=None, kader=None):
+def prognose(d, tlnr, historie, bretter, bis_runde=None, naechst_heim="auto", P=None, kader=None, verein=None):
     """-> ({Name: Wahrscheinlichkeit}, {Namen "neu"}) für alle Gemeldeten der Mannschaft.
     historie = [(Saisons zurück, saison_ereignisse(...))]; bis_runde = nur Runden davor kennen
-    (für den Test); naechst_heim = Spielort des vorhergesagten Spiels ("auto" = nächstes Spiel)."""
+    (für den Test); naechst_heim = Spielort des vorhergesagten Spiels ("auto" = nächstes Spiel);
+    verein = andere_teams(...) für die Vereins-Gewichte."""
     P = P or PARAMETER
     kader = kader if kader is not None else kader_von(d, tlnr)
     if naechst_heim == "auto":
         naechst_heim = naechstes_spiel(d, tlnr)[1]
     runden = team_runden(d, tlnr, bis_runde)
     _, res = ergebnisse(d, tlnr)
+    andere, eigene_nr = verein if verein else ([], 1)
+    nutzt_verein = andere and (P.get("verein_faktor", 0) > 0 or P.get("oben_abzug", 0) > 0)
+    if nutzt_verein:      # bis zur gleichen Runde (MMM: gleiche Runde = gleiche Woche)
+        andere = [(team_runden(d2, t2, bis_runde if bis_runde else None), ergebnisse(d2, t2)[1], nr2)
+                  for d2, t2, nr2 in andere]
     p, neu = {}, set()
     for k in kader:
         name = k["name"]
-        ev = [(0, rueck, heim, g) for rueck, heim, g in _ereignisse(runden, res.get(name, {}))]
-        bekannt = any(g for *_, g in ev)
+        ev = [(0, rueck, heim, g, 1.0) for rueck, heim, g in _ereignisse(runden, res.get(name, {}))]
+        bekannt = any(e[3] for e in ev)
         for alter, saison in historie:
-            ev += [(alter, rueck, heim, g) for rueck, heim, g in saison["spieler"].get(name, [])]
+            ev += [(alter, rueck, heim, g, 1.0) for rueck, heim, g in saison["spieler"].get(name, [])]
             bekannt = bekannt or name in saison["namen"]
+        oben = False
+        if nutzt_verein:
+            for runden2, res2, nr2 in andere:
+                rs2 = res2.get(name)
+                if not rs2:
+                    continue
+                if P.get("verein_faktor", 0) > 0:
+                    ev += [(0, rueck, heim, g, P["verein_faktor"]) for rueck, heim, g in _ereignisse(runden2, rs2)]
+                if nr2 < eigene_nr and runden2 and rs2.get(runden2[-1][0], {}).get("e"):
+                    oben = True
         if not bekannt:
             neu.add(name)
         p[name] = wahrscheinlichkeit(k.get("stamm"), ev, naechst_heim, P)
+        if oben:
+            p[name] *= 1 - P.get("oben_abzug", 0)
     # Summe = Bretterzahl (Obergrenze max_p, Überschuss wird auf die anderen verteilt)
     if p and bretter:
         for _ in range(30):
@@ -204,3 +257,42 @@ def voraussichtlich(kader, p, bretter):
     """Die `bretter` wahrscheinlichsten Spieler, in Meldereihenfolge (= Brettfolge)."""
     beste = sorted(kader, key=lambda k: -p.get(k["name"], 0))[:bretter]
     return sorted(beste, key=lambda k: k.get("nr") or 999)
+
+
+def top_aufstellungen(kader, p, bretter, anzahl=3):
+    """Die `anzahl` wahrscheinlichsten Aufstellungen (welche `bretter` Spieler spielen).
+    Modell: genau `bretter` spielen; P(Aufstellung) ~ Produkt der Chancen p/(1-p) der Spieler darin.
+    -> [(Wahrscheinlichkeit, [Kader-Einträge in Meldereihenfolge])], beste zuerst.
+    Die zweit- und drittbeste unterscheiden sich von der besten höchstens durch 1-2 Tausche,
+    deshalb reicht es, diese durchzuprobieren."""
+    from itertools import combinations
+    spieler = [k for k in kader if p.get(k["name"], 0) > 0]
+    if not spieler or not bretter:
+        return []
+    if len(spieler) <= bretter:
+        return [(1.0, sorted(spieler, key=lambda k: k.get("nr") or 999))]
+    chance = {k["name"]: min(p[k["name"]], 0.999) / (1 - min(p[k["name"]], 0.999)) for k in spieler}
+
+    # Normierung: Summe über ALLE Aufstellungen = elementarsymmetrisches Polynom e_n(Chancen)
+    e = [1.0] + [0.0] * bretter
+    for k in spieler:
+        for j in range(bretter, 0, -1):
+            e[j] += e[j - 1] * chance[k["name"]]
+
+    def gewicht(menge):
+        w = 1.0
+        for k in menge:
+            w *= chance[k["name"]]
+        return w
+
+    beste = sorted(spieler, key=lambda k: -chance[k["name"]])[:bretter]
+    rest = [k for k in spieler if k not in beste]
+    kandidaten = {frozenset(k["name"] for k in beste): beste}
+    for anz in (1, 2):
+        for raus in combinations(beste, anz):
+            for rein in combinations(rest, anz):
+                menge = [k for k in beste if k not in raus] + list(rein)
+                kandidaten[frozenset(k["name"] for k in menge)] = menge
+    reihe = sorted(kandidaten.values(), key=gewicht, reverse=True)[:anzahl]
+    return [(gewicht(m) / e[bretter], sorted(m, key=lambda k: k.get("nr") or 999)) for m in reihe]
+

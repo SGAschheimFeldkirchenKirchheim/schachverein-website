@@ -2371,6 +2371,7 @@ if __name__ == "__main__":
     ereignisse = {j: liga.auf.saison_ereignisse(ts) for j, ts in archiv.items()}
     for d in teams:
         d["historie_ereignisse"] = [(aktuell - j, ev) for j, ev in ereignisse.items()]
+    liga.VEREIN_INDEX = liga.auf.verein_index(teams)
     liga_seiten = {d["kurz"]: liga.seite_datei(d) for d in teams}
     j_termine = spalten_termine(jugend.TERMINE_SPALTE)
     build_jugend(j_termine, liga_seiten)

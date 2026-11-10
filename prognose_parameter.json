@@ -1,9 +1,11 @@
 {
  "saison_zerfall": 0.25,
- "runden_zerfall": 0.9,
- "prior_gewicht": 2.5,
+ "runden_zerfall": 0.8,
+ "prior_gewicht": 1.5,
  "stamm_start": 0.7,
  "ersatz_start": 0.15,
  "ha_gewicht": 12.0,
+ "verein_faktor": 0.0,
+ "oben_abzug": 0.0,
  "max_p": 0.97
 }

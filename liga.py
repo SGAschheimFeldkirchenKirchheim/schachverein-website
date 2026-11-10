@@ -69,6 +69,7 @@ DWZ_AN_BRETTERN = True          # False = keine DWZ an den Brettern
 GEGNER_VERLINKEN = True         # Gegner -> Spielerseite beim Schachbezirk (neuer Tab)
 SPIELER_SEITEN = set()          # setzt build_site.py (eigene Spieler mit Spielerseite)
 WURZEL = ""                     # Weg zur Website-Wurzel; build_site.py setzt "../../" für Archivseiten
+VEREIN_INDEX = {}               # build_site.py: Mannschaften der aktuellen Saison nach Verein (Prognose)
 ARCHIV_HINWEIS = "Archiv – abgeschlossene Saison {saison}."
 
 TICKER_TITEL = "Letzte Ergebnisse"
@@ -251,7 +252,9 @@ def team_url(d, tlnr):
 
 def _prognose(d, tlnr):
     """-> ({Name: p}, {neue Spieler}) fürs nächste Spiel (Spielort automatisch)."""
-    return auf.prognose(d, tlnr, d.get("historie_ereignisse") or [], d.get("bretter") or 0, kader=kader_von(d, tlnr))
+    verein = auf.andere_teams(VEREIN_INDEX, d, tlnr) if VEREIN_INDEX else None
+    return auf.prognose(d, tlnr, d.get("historie_ereignisse") or [], d.get("bretter") or 0,
+                        kader=kader_von(d, tlnr), verein=verein)
 
 
 def chance_html(p, neu=False):
@@ -309,26 +312,45 @@ LEGENDE_GEGNER = ("<strong>Prognose</strong> = geschätzte Wahrscheinlichkeit, d
                   "Nur eine Statistik.")
 
 
+VARIANTEN = 3                   # so viele wahrscheinlichste Aufstellungen beim nächsten Gegner
+
+
 def vorschau_html(d, tlnr):
-    """Voraussichtliche Aufstellung einer Mannschaft im nächsten Spiel (Brettfolge = Meldereihenfolge)."""
+    """Die wahrscheinlichsten Aufstellungen einer Mannschaft im nächsten Spiel (Brettfolge = Meldereihenfolge)."""
     kader, n = kader_von(d, tlnr), d.get("bretter") or 0
     if not kader or not n or d.get("archiv"):
         return ""
     p, neu = _prognose(d, tlnr)
-    liste = auf.voraussichtlich(kader, p, n)
-    dwz = [k["dwz"] for k in liste if k.get("dwz")]
-    schnitt = f' · Ø DWZ {round(sum(dwz) / len(dwz))}' if dwz else ""
-    zeilen = []
-    for i, k in enumerate(liste, 1):
-        titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
-        zeilen.append(f'<tr><td>{i}</td><td class="name">{titel}{esc(k["name"])}</td>'
-                      f'<td>{k.get("dwz") or ""}</td><td>{chance_html(p.get(k["name"], 0), k["name"] in neu)}</td></tr>')
-    zeilen = "".join(zeilen)
+    varianten = auf.top_aufstellungen(kader, p, n, VARIANTEN)
+    if not varianten:
+        return ""
+    erste = {k["name"] for k in varianten[0][1]}
+    spalten = []
+    for i, (wk, liste) in enumerate(varianten, 1):
+        dwz = [k["dwz"] for k in liste if k.get("dwz")]
+        schnitt = f"Ø {round(sum(dwz) / len(dwz))}" if dwz else ""
+        zeilen = []
+        for b, k in enumerate(liste, 1):
+            titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
+            anders = i > 1 and k["name"] not in erste
+            chance = chance_html(p.get(k["name"], 0), k["name"] in neu) if i == 1 else ""
+            cls = ' class="anders"' if anders else ""
+            zeilen.append(f'<tr{cls}><td>{b}</td>'
+                          f'<td class="name">{titel}{esc(k["name"])}</td><td>{k.get("dwz") or ""}</td>'
+                          f'<td>{chance}</td></tr>')
+        spalten.append(f"""
+          <div class="variante">
+            <p class="v-kopf"><strong>{"Wahrscheinlichste" if i == 1 else f"Variante {i}"}</strong>
+              <span class="klein">{round(100 * wk)} % · {schnitt}</span></p>
+            <table class="bretter"><tbody>{"".join(zeilen)}</tbody></table>
+          </div>""")
     return f"""
       <div class="vorschau">
-        <p><strong>Voraussichtliche Aufstellung {esc(name_von(d, tlnr))}</strong>{schnitt}</p>
-        <table class="bretter"><tbody>{zeilen}</tbody></table>
-        <p class="klein">{LEGENDE_GEGNER}</p>
+        <p><strong>Voraussichtliche Aufstellung {esc(name_von(d, tlnr))}</strong></p>
+        <div class="varianten">{"".join(spalten)}</div>
+        <p class="klein">Prozente oben = Wahrscheinlichkeit der ganzen Aufstellung (es gibt sehr viele mögliche,
+          deshalb sind die Werte klein); hervorgehoben = anders als in der wahrscheinlichsten.
+          {LEGENDE_GEGNER}</p>
       </div>"""
 
 
@@ -922,6 +944,9 @@ STYLES = """<style>
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
       .chance.neu { background: rgba(127,127,127,0.15); font-weight: normal; font-style: italic; }
       .vorschau { padding: 0.3rem 0 0.6rem; }
+      .varianten { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.4rem 1.2rem; }
+      .variante .v-kopf { display: flex; justify-content: space-between; gap: 0.5rem; margin: 0.4rem 0 0; border-bottom: 2px solid var(--border); }
+      .variante tr.anders td { background: rgba(185, 119, 14, 0.15); font-weight: bold; }
       @media (max-width: 600px) { .auf-dialog { padding: 0.8rem 0.5rem; width: 98vw; } .chance { min-width: 2.8rem; padding: 0 0.25rem; } }
       .vorschau p { margin: 0.3rem 0; }
 
