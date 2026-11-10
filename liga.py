@@ -8,6 +8,7 @@ build_site.py ruft lade_teams(), uebersicht_seite(), team_seite() und ticker_htm
 """
 
 import glob
+from urllib.parse import quote
 
 import partien  # Reiter "Partien" (Partie-Viewer)
 import spieler as spielerseiten  # Spielerseiten (spieler/<name>.html)
@@ -70,6 +71,11 @@ GEGNER_VERLINKEN = True         # Gegner -> Spielerseite beim Schachbezirk (neue
 SPIELER_SEITEN = set()          # setzt build_site.py (eigene Spieler mit Spielerseite)
 WURZEL = ""                     # Weg zur Website-Wurzel; build_site.py setzt "../../" für Archivseiten
 VEREIN_INDEX = {}               # build_site.py: Mannschaften der aktuellen Saison nach Verein (Prognose)
+
+# Vorbereitung: Knopf neben jedem Gegner-Spieler (Aufstellungs-Fenster + voraussichtliche Aufstellung).
+# {nach} / {vor} = Nachname / Vorname, klein, Leerzeichen -> "-". None = kein Knopf.
+VORBEREITUNG_URL = "https://players.chessbase.com/en/player/{nach}_{vor}"
+VORBEREITUNG_TEXT = "Partien bei ChessBase"
 ARCHIV_HINWEIS = "Archiv – abgeschlossene Saison {saison}."
 
 TICKER_TITEL = "Letzte Ergebnisse"
@@ -257,6 +263,23 @@ def _prognose(d, tlnr):
                         kader=kader_von(d, tlnr), verein=verein)
 
 
+def vorbereitung_html(k):
+    """Kleiner Link zu den Partien des Spielers (Profil bei ChessBase)."""
+    if not VORBEREITUNG_URL:
+        return ""
+    roh = k.get("roh") or ""
+    if "," in roh:
+        nach, _, vor = roh.partition(",")
+    else:                                   # ältere Daten ohne "roh": letztes Wort = Nachname
+        vor, _, nach = k["name"].strip().rpartition(" ")
+    teil = lambda x: quote(re.sub(r"\s+", "-", x.strip().lower()))
+    if not nach.strip():
+        return ""
+    url = VORBEREITUNG_URL.format(nach=teil(nach), vor=teil(vor.split()[0] if vor.split() else ""))
+    return (f' <a class="vorb" href="{esc(url)}" target="_blank" rel="noopener" '
+            f'title="{esc(VORBEREITUNG_TEXT)}" aria-label="{esc(VORBEREITUNG_TEXT)}">♞</a>')
+
+
 def chance_html(p, neu=False):
     if neu:
         return '<span class="chance neu" title="noch keine Einsätze bekannt">neu</span>'
@@ -286,7 +309,7 @@ def aufstellung_tabelle(d, tlnr):
             letzte = f'<td>{sum(1 for x in rs.values() if x["e"])}/{len(runden)}</td>' if runden else "<td>–</td>"
         else:
             name = (f'<a class="sp-link" href="{esc(k["url"])}" target="_blank" rel="noopener">{esc(k["name"])}</a>'
-                    if k.get("url") else esc(k["name"]))
+                    if k.get("url") else esc(k["name"])) + vorbereitung_html(k)
             letzte = f'<td>{chance_html(p[k["name"]], k["name"] in neu)}</td>' if k["name"] in p else "<td></td>"
         titel = f'<span class="titel">{esc(k["titel"])}</span> ' if k.get("titel") else ""
         cls = ' class="ersatz"' if k.get("ersatz") else ""
@@ -336,7 +359,7 @@ def vorschau_html(d, tlnr):
             chance = chance_html(p.get(k["name"], 0), k["name"] in neu) if i == 1 else ""
             cls = ' class="anders"' if anders else ""
             zeilen.append(f'<tr{cls}><td>{b}</td>'
-                          f'<td class="name">{titel}{esc(k["name"])}</td><td>{k.get("dwz") or ""}</td>'
+                          f'<td class="name">{titel}{esc(k["name"])}{vorbereitung_html(k)}</td><td>{k.get("dwz") or ""}</td>'
                           f'<td>{chance}</td></tr>')
         spalten.append(f"""
           <div class="variante">
@@ -942,6 +965,8 @@ STYLES = """<style>
       .titel { font-size: 0.7rem; font-weight: bold; color: #b9770e; }
       .chance { display: inline-block; min-width: 3.4rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold;
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
+      a.vorb { text-decoration: none; font-size: 0.85rem; margin-left: 0.25rem; opacity: 0.6; }
+      a.vorb:hover { opacity: 1; }
       .chance.neu { background: rgba(127,127,127,0.15); font-weight: normal; font-style: italic; }
       .vorschau { padding: 0.3rem 0 0.6rem; }
       .varianten { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.4rem 1.2rem; }
