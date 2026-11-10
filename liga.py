@@ -52,8 +52,10 @@ REITER = [
     ("partien", "Partien"),          # nur wenn Partien hochgeladen sind (Ligamanager), siehe partien.py
     ("spieler", "Spieler"),
     ("verlauf", "Verlauf"),
-    ("rechner", "Tabellenrechner"),
+    ("saisons", "Saisons"),          # Platz/Klasse aller Saisons (nur wenn es ein Archiv gibt)
+    ("rechner", "Tabellenrechner"),  # nicht in abgeschlossenen Saisons
 ]
+NICHT_IM_ARCHIV = {"rechner"}        # Reiter, die es in alten Saisons nicht gibt
 
 # Zusätzliche Karten ohne Liga-Daten (nur in der Übersicht)
 EXTRA_KARTEN = [
@@ -65,6 +67,8 @@ EXTRA_KARTEN = [
 DWZ_AN_BRETTERN = True          # False = keine DWZ an den Brettern
 GEGNER_VERLINKEN = True         # Gegner -> Spielerseite beim Schachbezirk (neuer Tab)
 SPIELER_SEITEN = set()          # setzt build_site.py (eigene Spieler mit Spielerseite)
+WURZEL = ""                     # Weg zur Website-Wurzel; build_site.py setzt "../../" für Archivseiten
+ARCHIV_HINWEIS = "Archiv – abgeschlossene Saison {saison}."
 
 TICKER_TITEL = "Letzte Ergebnisse"
 ERGEBNIS_TEXT = {"s": "Sieg", "u": "Unentschieden", "n": "Niederlage"}
@@ -245,7 +249,7 @@ def spieler_html(name, dwz, url, eigen, fett=False):
     text = f"<strong>{esc(name)}</strong>" if fett else esc(name)
     seite = spielerseiten.seite(name) if eigen else None
     if seite in SPIELER_SEITEN:
-        text = f'<a class="sp-link" href="{esc(seite)}">{text}</a>'
+        text = f'<a class="sp-link" href="{esc(WURZEL + seite)}">{text}</a>'
     elif url and GEGNER_VERLINKEN and name.strip().lower() not in spielerseiten.KEIN_SPIELER:
         text = f'<a class="sp-link" href="{esc(url)}" target="_blank" rel="noopener">{text}</a>'
     if DWZ_AN_BRETTERN and dwz:
@@ -454,9 +458,66 @@ def reiter_rechner(d):
       <script type="application/json" id="liga-{esc(d["key"])}">{json_fuer_script(d)}</script>"""
 
 
+def platz_status(d, platz):
+    """Endstatus nach Platz: ('auf'|'auf-evtl'|'ab'|'ab-evtl'|'', Text)."""
+    n = len(d.get("tabelle") or [])
+    auf, ab = d.get("auf") or 0, d.get("ab") or 0
+    auf_e, ab_e = d.get("auf_evtl") or 0, d.get("ab_evtl") or 0
+    if not platz or not n:
+        return "", ""
+    if platz <= auf:
+        return "auf", "Aufstieg ↑"
+    if platz <= auf + auf_e:
+        return "auf-evtl", "evtl. Aufstieg"
+    if platz > n - ab:
+        return "ab", "Abstieg ↓"
+    if platz > n - ab - ab_e:
+        return "ab-evtl", "evtl. Abstieg"
+    return "", ""
+
+
+def saison_leiste(saisons):
+    """[(Text, href, aktiv)] -> Knöpfe zum Wechseln der Saison (leer bei nur einer Saison)."""
+    if not saisons or len(saisons) < 2:
+        return ""
+    aktiv = ' aria-current="page"'
+    knoepfe = "".join(f'<a href="{esc(h)}"{aktiv if a else ""}>{esc(t)}</a>' for t, h, a in saisons)
+    return f'<nav class="saisons" aria-label="Saison"><span class="klein">Saison</span>{knoepfe}</nav>'
+
+
+def archiv_banner(d):
+    if not d.get("archiv"):
+        return ""
+    aktuell = d.get("aktuell_url")
+    link = f' <a href="{esc(aktuell)}">Zur aktuellen Saison →</a>' if aktuell else ""
+    return f'<p class="archiv-hinweis">{esc(ARCHIV_HINWEIS.format(saison=d.get("saison_text", "")))}{link}</p>'
+
+
+def reiter_saisons(d):
+    """d["historie"] = [{saison, klasse, href, tabelle-d}] (setzt build_site.py), neueste zuerst."""
+    zeilen = []
+    for h in d.get("historie") or []:
+        x = h["d"]
+        z = eigene_zeile(x)
+        laufend = not x.get("archiv")
+        platz = f'{z["platz"]}. von {len(x["tabelle"])}' if z and x.get("aktuelle_runde") else "–"
+        cls, text = ("", "läuft") if laufend else platz_status(x, z["platz"] if z else None)
+        status = f'<span class="status s-{cls}">{text}</span>' if text else ""
+        zeilen.append(f'<tr><td><a href="{esc(h["href"])}">{esc(h["saison"])}</a></td>'
+                      f'<td class="name">{esc(x.get("klasse", ""))}</td><td>{platz}</td><td>{status}</td></tr>')
+    if len(zeilen) < 2:
+        return ""
+    return f"""
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Saison</th><th class="name">Klasse</th><th>Platz</th><th></th></tr></thead>
+        <tbody>{"".join(zeilen)}</tbody>
+      </table></div>"""
+
+
 REITER_FUNKTIONEN = {
     "tabelle": reiter_tabelle, "spieltage": reiter_spieltage, "spiele": reiter_spiele,
     "spieler": reiter_spieler, "verlauf": reiter_verlauf, "rechner": reiter_rechner,
+    "saisons": reiter_saisons,
     "partien": partien.reiter_partien,
 }
 
@@ -468,7 +529,8 @@ def team_seite(d):
     """Rückgabe: (Titel, Dateiname, content, styles, Beschreibung)"""
     zeile = eigene_zeile(d)
     platz = f'Platz {zeile["platz"]} von {len(d["tabelle"])}' if zeile and d.get("aktuelle_runde") else ""
-    reiter = [(key, titel, REITER_FUNKTIONEN[key](d)) for key, titel in REITER if key in REITER_FUNKTIONEN]
+    reiter = [(key, titel, REITER_FUNKTIONEN[key](d)) for key, titel in REITER if key in REITER_FUNKTIONEN
+              and not (d.get("archiv") and key in NICHT_IM_ARCHIV)]
     reiter = [r for r in reiter if r[2]]
     knoepfe = "".join(f'<a href="#p-{k}" data-reiter="{k}">{esc(t)}</a>' for k, t, _ in reiter)
     panels = "".join(f'<section class="panel" id="p-{k}" data-reiter="{k}"><h2 class="panel-titel">{esc(t)}</h2>{inhalt}</section>'
@@ -480,6 +542,8 @@ def team_seite(d):
       <h1>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h1>
       <span class="team-platz">{platz}</span>
     </div>
+    {archiv_banner(d)}
+    {saison_leiste(d.get("saisons"))}
     <nav class="reiter" aria-label="Bereiche">{knoepfe}</nav>
     {panels}
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
@@ -488,7 +552,8 @@ def team_seite(d):
     {TEAM_JS}{RECHNER_JS if "rechner" in [k for k, _, _ in reiter] else ""}
     """
     beschreibung = f"{d['kurz']} ({d.get('klasse', '')}): Tabelle, Spieltage, Ergebnisse und Statistik."
-    return d["kurz"], seite_datei(d), content, STYLES, beschreibung
+    titel = f"{d['kurz']} {d['saison_text']}" if d.get("archiv") else d["kurz"]
+    return titel, seite_datei(d), content, STYLES, beschreibung
 
 
 def karte_html(d):
@@ -496,8 +561,10 @@ def karte_html(d):
     letztes, naechstes = letztes_spiel(d), naechstes_spiel(d)
     zeilen = []
     if zeile and d.get("aktuelle_runde"):
+        cls, text = platz_status(d, zeile["platz"]) if d.get("archiv") else ("", "")
+        status = f' <span class="status s-{cls}">{text}</span>' if text else ""
         zeilen.append(f'<p class="k-platz"><strong>Platz {zeile["platz"]}</strong> von {len(d["tabelle"])}'
-                      f' · {zeile["mp"]} MP · {bp(zeile["bp"])} BP</p>')
+                      f' · {zeile["mp"]} MP · {bp(zeile["bp"])} BP{status}</p>')
     if letztes:
         _, _, mein, sein, art = sicht(d, letztes)
         zeilen.append(f'<p>Zuletzt: {spiel_text(d, letztes)} {ergebnis_badge(art, mein, sein)}</p>')
@@ -507,7 +574,7 @@ def karte_html(d):
       <a class="card team-karte team-{seite_datei(d)[:-5]}" href="{seite_datei(d)}">
         <h3>{esc(d["kurz"])} <span class="team-klasse">{esc(d.get("klasse", ""))}</span></h3>
         {"".join(zeilen)}
-        <span class="k-mehr">Tabelle, Spieltage, Rechner →</span>
+        <span class="k-mehr">{"Tabelle, Spieltage →" if d.get("archiv") else "Tabelle, Spieltage, Rechner →"}</span>
       </a>"""
 
 
@@ -524,14 +591,20 @@ def extra_karte_html(k):
       </div>"""
 
 
-def uebersicht_seite(teams):
-    """mannschaften.html: Rückgabe (content, styles)"""
+def uebersicht_seite(teams, saisons=None, archiv=None):
+    """mannschaften.html (archiv = {'saison_text', 'aktuell_url'} für alte Saisons): Rückgabe (content, styles)"""
     stand = max((d.get("stand", "") for d in teams), default="")
-    karten = "".join(karte_html(d) for d in teams) + "".join(extra_karte_html(k) for k in EXTRA_KARTEN)
+    extra = "" if archiv else "".join(extra_karte_html(k) for k in EXTRA_KARTEN)
+    karten = "".join(karte_html(d) for d in teams) + extra
+    text = ("Endstand dieser Saison. Klick auf eine Mannschaft für Tabelle, Spieltage, Ergebnisse und Spieler."
+            if archiv else
+            f'Klick auf eine Mannschaft für Tabelle, Spieltage, Ergebnisse, Spielerstatistik und den '
+            f'Tabellenrechner. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.')
     content = f"""
-    <h1>Unsere Mannschaften</h1>
-    <p>Klick auf eine Mannschaft für Tabelle, Spieltage, Ergebnisse, Spielerstatistik und den
-      Tabellenrechner. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.</p>
+    <div class="team-kopf"><h1>Unsere Mannschaften{f" {esc(archiv['saison_text'])}" if archiv else ""}</h1></div>
+    {archiv_banner({**archiv, "archiv": True}) if archiv else ""}
+    {saison_leiste(saisons)}
+    <p>{text}</p>
     <div class="grid-3 team-grid">{karten}</div>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet.
       {f"Letzte Änderung: {stand_text(stand)}." if stand else ""}</p>
@@ -678,6 +751,17 @@ STYLES = """<style>
       .verlauf circle { fill: #fff; stroke: var(--link); stroke-width: 3; }
 
       .quelle { margin-top: 2rem; }
+
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
 
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }

@@ -3,7 +3,7 @@ Spielerseiten (spieler/<name>.html) für alle eigenen Spieler aus den Mannschaft
 (mannschaften/*.json vom Tabellenrechner):
   - DWZ / ELO (aktuell von der DSB-Vereinsliste, sonst aus der Meldeliste)
   - gemeldet für: Mannschaft, Melde-Nr., Stamm (Meldeliste beim Bezirk)
-  - alle gespielten Partien über alle Mannschaften
+  - alle gespielten Partien über alle Mannschaften und Saisons (aktuelle offen, ältere zugeklappt)
   - inoffizielle DWZ-Prognose mit der AKTUELLEN DWZ (Wertungsordnung des DSB)
 
 build_site.py: erst sammeln(teams, dsb) -> liga.SPIELER_SEITEN, dann bauen(...).
@@ -111,20 +111,22 @@ def _int(x):
         return None
 
 
-def sammeln(teams, seite_datei, name_von, eigen_name=None):
-    """Alle eigenen Spieler aus Brettern und Meldelisten -> {slug: {...}}.
-    seite_datei(d) / name_von(d, tlnr) kommen aus liga.py."""
+def sammeln(teams, seite_datei, name_von):
+    """Alle eigenen Spieler aus Brettern und Meldelisten (aktuelle Saison + Archiv) -> {slug: {...}}.
+    seite_datei(d) = Pfad der Teamseite ab Website-Wurzel; name_von(d, tlnr) aus liga.py."""
     spieler = {}
 
     def hole(name):
         s = slug(name)
         return spieler.setdefault(s, {"name": name, "partien": [], "meldungen": [], "url": None,
-                                      "dwz_board": None})
+                                      "dwz_board": None, "dwz_board_jahr": 0})
 
     for d in teams:
         eigen = d.get("eigen")
         if eigen is None:
             continue
+        jahr = d.get("saison_jahr") or 0
+        saison = d.get("saison_text") or (f"{jahr}/{(jahr + 1) % 100:02d}" if jahr else "")
         for k in d.get("kader", []):
             if k["name"].strip().lower() in KEIN_SPIELER:
                 continue
@@ -152,15 +154,16 @@ def sammeln(teams, seite_datei, name_von, eigen_name=None):
                     erg = "+" if (art == "forfeit_heim") == heim else "-"
                 p = hole(name)
                 p["url"] = p["url"] or mein_url
-                p["dwz_board"] = mein_dwz or p["dwz_board"]
+                if mein_dwz and jahr >= p["dwz_board_jahr"]:
+                    p["dwz_board"], p["dwz_board_jahr"] = mein_dwz, jahr
                 p["partien"].append({
                     "team": d["kurz"], "klasse": d.get("klasse", ""), "datei": seite_datei(d), "rang": d["key"],
                     "r": m["r"], "heim": heim, "brett": brett, "gegner": geg, "gdwz": geg_dwz,
                     "gurl": geg_url, "gteam": name_von(d, m["g"] if heim else m["h"]),
-                    "erg": erg, "art": art,
+                    "erg": erg, "art": art, "jahr": jahr, "saison": saison,
                 })
     for p in spieler.values():
-        p["partien"].sort(key=lambda x: (len(x["rang"]), x["rang"], x["r"]))
+        p["partien"].sort(key=lambda x: (-x["jahr"], len(x["rang"]), x["rang"], x["r"]))
         p["meldungen"].sort(key=lambda x: (len(x["rang"]), x["rang"]))
     return spieler
 
@@ -186,46 +189,62 @@ def _punkte(x):
     return (str(int(x)) if float(x).is_integer() else str(x).replace(".5", "½").replace("0½", "½"))
 
 
-def partien_html(p):
-    if not p["partien"]:
-        return '<p class="klein">Noch keine gespielten Partien in dieser Saison.</p>'
-    teile = []
-    gruppen = {}
-    for x in p["partien"]:
-        gruppen.setdefault((x["team"], x["klasse"], x["datei"]), []).append(x)
-    for (team, klasse, datei), liste in gruppen.items():
-        zeilen = []
-        for x in liste:
-            gname = esc(x["gegner"])
-            if x.get("gurl"):
-                gname = f'<a href="{esc(x["gurl"])}" target="_blank" rel="noopener">{gname}</a>'
-            zeilen.append(
-                f'<tr><td>{x["r"]}</td><td class="neben">{"Heim" if x["heim"] else "Gast"}</td><td>{x["brett"]}</td>'
-                f'<td class="name">{gname}</td><td>{x["gdwz"] or "–"}</td>'
-                f'<td class="name neben">{esc(x["gteam"])}</td><td>{_erg_html(x["erg"])}</td></tr>')
-        gewertet = [x for x in liste if isinstance(x["erg"], (int, float))]
-        summe = sum(x["erg"] for x in gewertet)
-        teile.append(f"""
-        <h3><a href="../{esc(datei)}">{esc(team)}</a> <span class="team-klasse">{esc(klasse)}</span></h3>
+def bilanz(partien):
+    """-> (Punkte, gewertete Partien) ohne kampflose/annullierte."""
+    gewertet = [x for x in partien if x["art"] == "score" and isinstance(x["erg"], (int, float))]
+    return sum(x["erg"] for x in gewertet), len(gewertet)
+
+
+def _team_tabelle(team, klasse, datei, liste):
+    zeilen = []
+    for x in liste:
+        gname = esc(x["gegner"])
+        if x.get("gurl"):
+            gname = f'<a href="{esc(x["gurl"])}" target="_blank" rel="noopener">{gname}</a>'
+        zeilen.append(
+            f'<tr><td>{x["r"]}</td><td class="neben">{"Heim" if x["heim"] else "Gast"}</td><td>{x["brett"]}</td>'
+            f'<td class="name">{gname}</td><td>{x["gdwz"] or "–"}</td>'
+            f'<td class="name neben">{esc(x["gteam"])}</td><td>{_erg_html(x["erg"])}</td></tr>')
+    pkt, n = bilanz(liste)
+    return f"""
+        <h4><a href="../{esc(datei)}">{esc(team)}</a> <span class="team-klasse">{esc(klasse)}</span></h4>
         <div class="tab-wrap"><table class="liga-tab">
           <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
             <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
           <tbody>{"".join(zeilen)}</tbody>
-          <tfoot><tr><td colspan="3"></td><td class="name"><strong>Summe</strong></td><td></td>
-            <td class="neben"></td><td><strong>{_punkte(summe)} / {len(gewertet)}</strong></td></tr></tfoot>
-        </table></div>""")
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe {_punkte(pkt)} / {n}</strong></td></tr></tfoot>
+        </table></div>"""
+
+
+def partien_html(p, aktuell):
+    if not p["partien"]:
+        return '<p class="klein">Noch keine gespielten Partien.</p>'
+    saisons = {}
+    for x in p["partien"]:
+        saisons.setdefault((x["jahr"], x["saison"]), {}).setdefault((x["team"], x["klasse"], x["datei"]), []).append(x)
+    teile = []
+    for (jahr, saison), teams in saisons.items():
+        alle = [x for liste in teams.values() for x in liste]
+        pkt, n = bilanz(alle)
+        kopf = f'Saison {esc(saison)} <span class="klein">{_punkte(pkt)} / {n}</span>'
+        inhalt = "".join(_team_tabelle(*k, liste) for k, liste in teams.items())
+        offen = " open" if jahr == aktuell else ""
+        teile.append(f'<details class="sp-saison"{offen}><summary><h3>{kopf}</h3></summary>{inhalt}</details>')
+    if not any(jahr == aktuell for jahr, _ in saisons):
+        teile.insert(0, '<p class="klein">In dieser Saison noch keine gespielten Partien.</p>')
     return "".join(teile)
 
 
-def prognose_html(p, r_alt, quelle, alter, index):
-    gewertet = [x for x in p["partien"] if x["art"] == "score" and x["gdwz"] and isinstance(x["erg"], (int, float))]
+def prognose_html(p, r_alt, quelle, alter, index, aktuell):
+    gewertet = [x for x in p["partien"] if x["jahr"] == aktuell and x["art"] == "score" and x["gdwz"]
+                and isinstance(x["erg"], (int, float))]
     pr = prognose(r_alt, [x["gdwz"] for x in gewertet], [x["erg"] for x in gewertet], alter, index)
     if not pr:
         return ""
     diff = pr["neu"] - r_alt
     diff_txt = f'<span class="delta {"hoch" if diff > 0 else "runter" if diff < 0 else ""}">{diff:+d}</span>'
     return f"""
-      <h3>Inoffizielle DWZ-Prognose</h3>
+      <h3>Inoffizielle DWZ-Prognose (aktuelle Saison)</h3>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>DWZ jetzt</th><th title="Punkte">W</th><th title="Gewinnerwartung">W<sub>e</sub></th>
           <th class="neben" title="Entwicklungskoeffizient">E</th><th class="neben">Niveau</th>
@@ -239,6 +258,7 @@ def prognose_html(p, r_alt, quelle, alter, index):
 
 
 def seite_html(p, dsb, saison_jahr):
+    """saison_jahr = Startjahr der aktuellen Saison (für Alter und Prognose)."""
     r_dsb = _int(dsb.get("dwz")) if dsb else None
     elo = _int(dsb.get("elo")) if dsb else None
     r_alt = r_dsb or p.get("dwz_kader") or p.get("dwz_board")
@@ -254,6 +274,10 @@ def seite_html(p, dsb, saison_jahr):
     meldungen = "".join(meldung(m) for m in p["meldungen"]) or "<li>–</li>"
     bezirk = (f'<p class="klein"><a href="{esc(p["url"])}" target="_blank" rel="noopener">'
               f'Beim Schachbezirk ansehen ↗</a></p>' if p.get("url") else "")
+    pkt, n = bilanz(p["partien"])
+    gesamt = (f"<dt>Bilanz</dt><dd>{_punkte(pkt)} / {n} ({round(100 * pkt / n)} %)"
+              f"{' seit ' + esc(p['partien'][-1]['saison']) if len({x['jahr'] for x in p['partien']}) > 1 else ''}</dd>"
+              if n else "")
     zurueck = p["meldungen"][0]["datei"] if p["meldungen"] else (p["partien"][0]["datei"] if p["partien"] else "mannschaften.html")
     zurueck_text = p["meldungen"][0]["team"] if p["meldungen"] else (p["partien"][0]["team"] if p["partien"] else "Mannschaften")
     return f"""
@@ -263,13 +287,14 @@ def seite_html(p, dsb, saison_jahr):
       <dl>
         <dt>DWZ</dt><dd>{r_alt or "–"}</dd>
         {f"<dt>ELO</dt><dd>{elo}</dd>" if elo else ""}
+        {gesamt}
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
     </div>
     {bezirk}
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    {partien_html(p)}
-    {prognose_html(p, r_alt, quelle, alter, index) if PROGNOSE and r_alt else ""}
+    {partien_html(p, saison_jahr)}
+    {prognose_html(p, r_alt, quelle, alter, index, saison_jahr) if PROGNOSE and r_alt else ""}
     """
 
 
@@ -282,6 +307,13 @@ STYLES = """<style>
       .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
       .sp-titel { display: block !important; }
       .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
 </style>"""
 
 

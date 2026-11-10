@@ -2163,10 +2163,76 @@ def jugend_kurznamen():
     return {t.get("kurz") or t["name"] for t in jugend.TEAMS}
 
 
-def build_spieler(teams):
-    """Spielerseiten (spieler/*.html); alte Seiten von Spielern, die nicht mehr vorkommen, werden gelöscht.
-    Muss VOR den Teamseiten laufen (liga.SPIELER_SEITEN = verlinkte Spieler)."""
-    alle = spieler.sammeln(teams, liga.seite_datei, liga.name_von)
+# ==========================================
+# SAISONS (aktuelle + Archiv aus mannschaften/archiv/<Startjahr>/)
+# ==========================================
+SAISON_ORDNER = "saison"          # Archivseiten: saison/2022-23/afk-1.html
+
+
+def saison_text(jahr):
+    return f"{jahr}/{(jahr + 1) % 100:02d}"
+
+
+def saison_slug(jahr):
+    return f"{jahr}-{(jahr + 1) % 100:02d}"
+
+
+def saisons_laden():
+    """-> (aktuelles Startjahr, aktuelle Teams, {Jahr: Teams} fürs Archiv).
+    Aktuell = neuestes saison_jahr in mannschaften/*.json; ältere Dateien dort (z. B. eine
+    Mannschaft, die es in der neuen Saison nicht mehr gibt) werden nicht als aktuell gezeigt."""
+    teams = liga.lade_teams()
+    jahre = [d.get("saison_jahr") for d in teams if d.get("saison_jahr")]
+    aktuell = max(jahre) if jahre else (TODAY.year if (TODAY.month, TODAY.day) >= (10, 1) else TODAY.year - 1)
+    teams = [d for d in teams if d.get("saison_jahr") in (None, aktuell)]
+    archiv = {}
+    for ordner in sorted(glob.glob(os.path.join(liga.DATEN_ORDNER, "archiv", "*"))):
+        name = os.path.basename(ordner)
+        if not name.isdigit() or int(name) >= aktuell:
+            continue
+        ts = liga.lade_teams(ordner)
+        for d in ts:
+            d["archiv"] = True
+            d["saison_jahr"] = int(name)
+            d.setdefault("saison_text", saison_text(int(name)))
+        if ts:
+            archiv[int(name)] = ts
+    for d in teams:
+        d["saison_jahr"] = aktuell
+    return aktuell, teams, archiv
+
+
+def seiten_pfad(d, aktuell):
+    """Pfad der Teamseite ab Website-Wurzel."""
+    datei = liga.seite_datei(d)
+    return datei if d["saison_jahr"] == aktuell else f"{SAISON_ORDNER}/{saison_slug(d['saison_jahr'])}/{datei}"
+
+
+def saisons_verknuepfen(aktuell, teams, archiv):
+    """Setzt je Team: saisons (Umschalter), historie (Reiter Saisons), aktuell_url (Archiv-Hinweis)."""
+    alle = {aktuell: teams, **archiv}
+    nach_key = {}
+    for jahr, ts in alle.items():
+        for d in ts:
+            nach_key.setdefault(d["key"], {})[jahr] = d
+    for jahr, ts in alle.items():
+        wurzel = "" if jahr == aktuell else "../../"
+        for d in ts:
+            andere = nach_key[d["key"]]
+            d["saisons"] = [(saison_text(j), wurzel + seiten_pfad(andere[j], aktuell), j == jahr)
+                            for j in sorted(andere, reverse=True)]
+            d["historie"] = [{"saison": saison_text(j), "href": wurzel + seiten_pfad(andere[j], aktuell),
+                              "d": andere[j]} for j in sorted(andere, reverse=True)]
+            if jahr != aktuell:
+                d["aktuell_url"] = wurzel + (seiten_pfad(andere[aktuell], aktuell) if aktuell in andere
+                                             else "mannschaften.html")
+
+
+def build_spieler(aktuell, teams, archiv):
+    """Spielerseiten (spieler/*.html) über alle Saisons; alte Seiten von Spielern, die nicht mehr
+    vorkommen, werden gelöscht. Muss VOR den Teamseiten laufen (liga.SPIELER_SEITEN)."""
+    alle_teams = teams + [d for ts in archiv.values() for d in ts]
+    alle = spieler.sammeln(alle_teams, lambda d: seiten_pfad(d, aktuell), liga.name_von)
     liga.SPIELER_SEITEN = {spieler.seite(p["name"]) for p in alle.values()}
     try:
         dsb = dsb_liste()
@@ -2178,18 +2244,47 @@ def build_spieler(teams):
         if alt.replace(os.sep, "/") not in liga.SPIELER_SEITEN:
             os.remove(alt)
     ACTIVE_PARENT.update({os.path.basename(x): "mannschaften.html" for x in liga.SPIELER_SEITEN})
-    n = spieler.bauen(alle, dsb, render_page, liga.STYLES, TODAY.year)
+    n = spieler.bauen(alle, dsb, render_page, liga.STYLES, aktuell)
     print(f"Spielerseiten: {n}")
 
 
-def build_mannschaften(teams):
+def build_archiv(aktuell, archiv):
+    """saison/<2022-23>/mannschaften.html + Teamseiten jeder abgeschlossenen Saison.
+    Rückgabe: Saison-Umschalter für die aktuelle mannschaften.html."""
+    alle_jahre = sorted([aktuell, *archiv], reverse=True)
+    for jahr, ts in archiv.items():
+        ordner = os.path.join(SAISON_ORDNER, saison_slug(jahr))
+        os.makedirs(ordner, exist_ok=True)
+        liga.WURZEL = "../../"
+        try:
+            saisons = [(saison_text(j), "../../mannschaften.html" if j == aktuell
+                        else f"../{saison_slug(j)}/mannschaften.html", j == jahr) for j in alle_jahre]
+            content, styles = liga.uebersicht_seite(ts, saisons, {"saison_text": saison_text(jahr),
+                                                                  "aktuell_url": "../../mannschaften.html"})
+            render_page(f"Mannschaften {saison_text(jahr)}", content, os.path.join(ordner, "mannschaften.html"),
+                        css_path="../../", nav_path="../../", extra_styles=styles)
+            for d in ts:
+                titel, datei, content, styles, beschreibung = liga.team_seite(d)
+                ACTIVE_PARENT.setdefault(datei, "mannschaften.html")
+                render_page(titel, content, os.path.join(ordner, datei), css_path="../../", nav_path="../../",
+                            extra_styles=styles, description=beschreibung)
+        finally:
+            liga.WURZEL = ""
+    for alt in glob.glob(os.path.join(SAISON_ORDNER, "*")):   # Saisons, die es nicht mehr gibt
+        if os.path.basename(alt) not in {saison_slug(j) for j in archiv}:
+            shutil.rmtree(alt, ignore_errors=True)
+    return [(saison_text(j), "mannschaften.html" if j == aktuell
+             else f"{SAISON_ORDNER}/{saison_slug(j)}/mannschaften.html", j == aktuell) for j in alle_jahre]
+
+
+def build_mannschaften(teams, saisons=None):
     """mannschaften.html (Übersicht) + eine Seite pro Team aus mannschaften/*.json.
     Jugendteams (siehe jugend.TEAMS) bekommen eine Teamseite, stehen in der Übersicht aber
     nur gesammelt auf der Jugend-Karte. Ohne Daten bleibt die handgeschriebene seiten/mannschaften.html."""
     if not teams:
         return False
     jkurz = jugend_kurznamen()
-    content, styles = liga.uebersicht_seite([d for d in teams if d["kurz"] not in jkurz])
+    content, styles = liga.uebersicht_seite([d for d in teams if d["kurz"] not in jkurz], saisons)
     render_page("Mannschaften", content, "mannschaften.html", extra_styles=styles)
     for d in teams:
         if d["kurz"] in jkurz:
@@ -2270,7 +2365,8 @@ if __name__ == "__main__":
     build_ausschreibungen()
     build_neu_hier()
     news = build_berichte()
-    teams = liga.lade_teams()
+    aktuell, teams, archiv = saisons_laden()
+    saisons_verknuepfen(aktuell, teams, archiv)
     liga_seiten = {d["kurz"]: liga.seite_datei(d) for d in teams}
     j_termine = spalten_termine(jugend.TERMINE_SPALTE)
     build_jugend(j_termine, liga_seiten)
@@ -2282,9 +2378,10 @@ if __name__ == "__main__":
         extra.append(senioren.mannschaften_karte(s_termine))
     build_faq()
     liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine)]
-    build_spieler(teams)
+    build_spieler(aktuell, teams, archiv)
+    saisons = build_archiv(aktuell, archiv)
     build_index(upcoming, news, teams)
     build_404()
-    build_static_pages(skip={"mannschaften"} if build_mannschaften(teams) else set())
+    build_static_pages(skip={"mannschaften"} if build_mannschaften(teams, saisons) else set())
     build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
     print("Build erfolgreich abgeschlossen!")
