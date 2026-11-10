@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -206,6 +217,8 @@
       <h1>U20 I <span class="team-klasse">U20 Landesliga Süd</span></h1>
       <span class="team-platz"></span>
     </div>
+    
+    
     <nav class="reiter" aria-label="Bereiche"><a href="#p-tabelle" data-reiter="tabelle">Tabelle</a><a href="#p-spieltage" data-reiter="spieltage">Spieltage</a><a href="#p-spiele" data-reiter="spiele">Unsere Spiele</a><a href="#p-verlauf" data-reiter="verlauf">Verlauf</a><a href="#p-rechner" data-reiter="rechner">Tabellenrechner</a></nav>
     <section class="panel" id="p-tabelle" data-reiter="tabelle"><h2 class="panel-titel">Tabelle</h2><p class="klein">Tabelle noch kein Spieltag gespielt</p>
       <div class="tab-wrap"><table class="liga-tab">
@@ -241,7 +254,7 @@
       <script type="application/json" id="liga-u20a">{"key":"u20a","kurz":"U20 I","bretter":4,"eigen":21631,"teams":{"21627":"SK Tarrasch München","21628":"SC Haar","21629":"MSA Zugzwang","21630":"SK Gräfelfing","21631":"SG AFK","21632":"FC Bayern München","21633":"SF München","21634":"SF Augsburg 2"},"tabelle":[{"platz":1,"tlnr":21634,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21630,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21627,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21633,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21631,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21632,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21628,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":21629,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0}],"auf":0,"ab":0,"auf_evtl":0,"ab_evtl":0,"matches":[{"r":1,"h":21628,"g":21629,"gesp":false},{"r":1,"h":21634,"g":21630,"gesp":false},{"r":1,"h":21631,"g":21632,"gesp":false},{"r":1,"h":21627,"g":21633,"gesp":false},{"r":2,"h":21632,"g":21628,"gesp":false},{"r":2,"h":21629,"g":21631,"gesp":false},{"r":2,"h":21633,"g":21634,"gesp":false},{"r":2,"h":21627,"g":21630,"gesp":false},{"r":3,"h":21629,"g":21632,"gesp":false},{"r":3,"h":21634,"g":21627,"gesp":false},{"r":3,"h":21631,"g":21628,"gesp":false},{"r":3,"h":21630,"g":21633,"gesp":false},{"r":4,"h":21628,"g":21633,"gesp":false},{"r":4,"h":21631,"g":21634,"gesp":false},{"r":4,"h":21630,"g":21632,"gesp":false},{"r":4,"h":21627,"g":21629,"gesp":false},{"r":5,"h":21628,"g":21627,"gesp":false},{"r":5,"h":21634,"g":21632,"gesp":false},{"r":5,"h":21633,"g":21629,"gesp":false},{"r":5,"h":21631,"g":21630,"gesp":false},{"r":6,"h":21632,"g":21627,"gesp":false},{"r":6,"h":21629,"g":21634,"gesp":false},{"r":6,"h":21628,"g":21630,"gesp":false},{"r":6,"h":21633,"g":21631,"gesp":false},{"r":7,"h":21632,"g":21633,"gesp":false},{"r":7,"h":21634,"g":21628,"gesp":false},{"r":7,"h":21630,"g":21629,"gesp":false},{"r":7,"h":21627,"g":21631,"gesp":false}],"dezimal":","}</script></section>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
       Gewinnpartien; Gleichstand = geteilter Platz). <a href="https://ligamanager.schachbund-bayern.de/bsj/2026-2027/u20-landesliga-sued-2610/spielplan" target="_blank" rel="noopener">Liga beim Ligamanager ↗</a>
-      <br>Letzte Änderung: 09.11.2026, 12:16 Uhr</p>
+      <br>Letzte Änderung: 10.11.2026, 09:27 Uhr</p>
     <script>
 (function () {
   document.documentElement.classList.add("js");

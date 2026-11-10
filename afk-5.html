@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -206,7 +217,9 @@
       <h1>AFK 5 <span class="team-klasse">D-Klasse</span></h1>
       <span class="team-platz">Platz 1 von 10</span>
     </div>
-    <nav class="reiter" aria-label="Bereiche"><a href="#p-tabelle" data-reiter="tabelle">Tabelle</a><a href="#p-spieltage" data-reiter="spieltage">Spieltage</a><a href="#p-spiele" data-reiter="spiele">Unsere Spiele</a><a href="#p-spieler" data-reiter="spieler">Spieler</a><a href="#p-verlauf" data-reiter="verlauf">Verlauf</a><a href="#p-rechner" data-reiter="rechner">Tabellenrechner</a></nav>
+    
+    <nav class="saisons" aria-label="Saison"><span class="klein">Saison</span><a href="afk-5.html" aria-current="page">2026/27</a><a href="saison/2025-26/afk-5.html">2025/26</a></nav>
+    <nav class="reiter" aria-label="Bereiche"><a href="#p-tabelle" data-reiter="tabelle">Tabelle</a><a href="#p-spieltage" data-reiter="spieltage">Spieltage</a><a href="#p-spiele" data-reiter="spiele">Unsere Spiele</a><a href="#p-spieler" data-reiter="spieler">Spieler</a><a href="#p-verlauf" data-reiter="verlauf">Verlauf</a><a href="#p-saisons" data-reiter="saisons">Saisons</a><a href="#p-rechner" data-reiter="rechner">Tabellenrechner</a></nav>
     <section class="panel" id="p-tabelle" data-reiter="tabelle"><h2 class="panel-titel">Tabelle</h2><p class="klein">Tabelle nach Runde 1 von 9</p>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
@@ -260,12 +273,16 @@
         <thead><tr><th>R</th><th class="name">Spiel</th><th title="Mannschaftspunkte gesamt">MP</th>
           <th title="Brettpunkte gesamt">BP</th><th>Platz</th></tr></thead>
         <tbody><tr><td>1</td><td class="name">bei SC Eching 3 <span class="erg erg-s" title="Sieg">4 : 2</span></td><td>2</td><td>4,0</td><td><strong>1</strong></td></tr></tbody>
+      </table></div></section><section class="panel" id="p-saisons" data-reiter="saisons"><h2 class="panel-titel">Saisons</h2>
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Saison</th><th class="name">Klasse</th><th>Platz</th><th></th></tr></thead>
+        <tbody><tr><td><a href="afk-5.html">2026/27</a></td><td class="name">D-Klasse</td><td>1. von 10</td><td><span class="status s-">läuft</span></td></tr><tr><td><a href="saison/2025-26/afk-5.html">2025/26</a></td><td class="name">D-Klasse</td><td>4. von 9</td><td></td></tr></tbody>
       </table></div></section><section class="panel" id="p-rechner" data-reiter="rechner"><h2 class="panel-titel">Tabellenrechner</h2>
       <div class="rechner" data-key="mf5"><noscript>Der Rechner braucht JavaScript.</noscript></div>
       <script type="application/json" id="liga-mf5">{"key":"mf5","kurz":"AFK 5","bretter":6,"eigen":3,"teams":{"1":"SF Deisenhofen 3","2":"MSA Zugzwang 82 5","3":"SG AFK 5","4":"SK Markt Schwaben 2","5":"Münchener SC 1836 5","6":"SK München Südost 5","7":"SK Tarrasch 1945 München 6","8":"SC Garching 1980 8","9":"SC Eching 3","10":"TSV Forstenried 2"},"tabelle":[{"platz":1,"tlnr":3,"sp":1,"mp":2,"bp":4,"siege":1,"gp":3},{"platz":2,"tlnr":10,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":3},{"platz":2,"tlnr":7,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":3},{"platz":2,"tlnr":8,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":3},{"platz":5,"tlnr":2,"sp":1,"mp":2,"bp":3.5,"siege":1,"gp":2},{"platz":6,"tlnr":6,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":6,"tlnr":5,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":6,"tlnr":4,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":2},{"platz":9,"tlnr":1,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":1},{"platz":10,"tlnr":9,"sp":1,"mp":0,"bp":2,"siege":0,"gp":1}],"auf":2,"ab":2,"auf_evtl":0,"ab_evtl":0,"matches":[{"r":1,"h":9,"g":3,"gesp":true,"bh":2,"bg":4,"wh":1,"wg":3,"dh":1576,"dg":1629},{"r":1,"h":8,"g":4,"gesp":true,"bh":3.5,"bg":2.5,"wh":3,"wg":2,"dh":1616,"dg":1651},{"r":1,"h":1,"g":2,"gesp":true,"bh":2.5,"bg":3.5,"wh":1,"wg":2,"dh":1615,"dg":1661},{"r":1,"h":7,"g":5,"gesp":true,"bh":3.5,"bg":2.5,"wh":3,"wg":2,"dh":1617,"dg":1623},{"r":1,"h":10,"g":6,"gesp":true,"bh":3.5,"bg":2.5,"wh":3,"wg":2,"dh":1578,"dg":1526},{"r":2,"h":2,"g":10,"gesp":false,"dh":1653,"dg":1747},{"r":2,"h":5,"g":8,"gesp":false,"dh":1664,"dg":1666},{"r":2,"h":3,"g":1,"gesp":false,"dh":1592,"dg":1736},{"r":2,"h":4,"g":9,"gesp":false,"dh":1679,"dg":1637},{"r":2,"h":6,"g":7,"gesp":false,"dh":1543,"dg":1617},{"r":3,"h":2,"g":3,"gesp":false,"dh":1653,"dg":1592},{"r":3,"h":9,"g":5,"gesp":false,"dh":1637,"dg":1664},{"r":3,"h":8,"g":6,"gesp":false,"dh":1666,"dg":1543},{"r":3,"h":1,"g":4,"gesp":false,"dh":1736,"dg":1679},{"r":3,"h":10,"g":7,"gesp":false,"dh":1747,"dg":1617},{"r":4,"h":5,"g":1,"gesp":false,"dh":1664,"dg":1736},{"r":4,"h":3,"g":10,"gesp":false,"dh":1592,"dg":1747},{"r":4,"h":4,"g":2,"gesp":false,"dh":1679,"dg":1653},{"r":4,"h":6,"g":9,"gesp":false,"dh":1543,"dg":1637},{"r":4,"h":7,"g":8,"gesp":false,"dh":1617,"dg":1666},{"r":5,"h":2,"g":5,"gesp":false,"dh":1653,"dg":1664},{"r":5,"h":9,"g":7,"gesp":false,"dh":1637,"dg":1617},{"r":5,"h":1,"g":6,"gesp":false,"dh":1736,"dg":1543},{"r":5,"h":3,"g":4,"gesp":false,"dh":1592,"dg":1679},{"r":5,"h":10,"g":8,"gesp":false,"dh":1747,"dg":1666},{"r":6,"h":5,"g":3,"gesp":false,"dh":1664,"dg":1592},{"r":6,"h":8,"g":9,"gesp":false,"dh":1666,"dg":1637},{"r":6,"h":4,"g":10,"gesp":false,"dh":1679,"dg":1747},{"r":6,"h":6,"g":2,"gesp":false,"dh":1543,"dg":1653},{"r":6,"h":7,"g":1,"gesp":false,"dh":1617,"dg":1736},{"r":7,"h":2,"g":7,"gesp":false,"dh":1653,"dg":1617},{"r":7,"h":1,"g":8,"gesp":false,"dh":1736,"dg":1666},{"r":7,"h":3,"g":6,"gesp":false,"dh":1592,"dg":1543},{"r":7,"h":4,"g":5,"gesp":false,"dh":1679,"dg":1664},{"r":7,"h":10,"g":9,"gesp":false,"dh":1747,"dg":1637},{"r":8,"h":5,"g":10,"gesp":false,"dh":1664,"dg":1747},{"r":8,"h":9,"g":1,"gesp":false,"dh":1637,"dg":1736},{"r":8,"h":8,"g":2,"gesp":false,"dh":1666,"dg":1653},{"r":8,"h":6,"g":4,"gesp":false,"dh":1543,"dg":1679},{"r":8,"h":7,"g":3,"gesp":false,"dh":1617,"dg":1592},{"r":9,"h":2,"g":9,"gesp":false,"dh":1653,"dg":1637},{"r":9,"h":5,"g":6,"gesp":false,"dh":1664,"dg":1543},{"r":9,"h":1,"g":10,"gesp":false,"dh":1736,"dg":1747},{"r":9,"h":3,"g":8,"gesp":false,"dh":1592,"dg":1666},{"r":9,"h":4,"g":7,"gesp":false,"dh":1679,"dg":1617}],"dezimal":","}</script></section>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
       Gewinnpartien; Gleichstand = geteilter Platz). <a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=347&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>
-      <br>Letzte Änderung: 10.11.2026, 09:09 Uhr</p>
+      <br>Letzte Änderung: 10.11.2026, 09:27 Uhr</p>
     <script>
 (function () {
   document.documentElement.classList.add("js");

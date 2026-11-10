@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -201,9 +212,10 @@
 
   <main id="main" class="container">
     
-    <h1>Unsere Mannschaften</h1>
-    <p>Klick auf eine Mannschaft für Tabelle, Spieltage, Ergebnisse, Spielerstatistik und den
-      Tabellenrechner. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.</p>
+    <div class="team-kopf"><h1>Unsere Mannschaften</h1></div>
+    
+    <nav class="saisons" aria-label="Saison"><span class="klein">Saison</span><a href="mannschaften.html" aria-current="page">2026/27</a><a href="saison/2025-26/mannschaften.html">2025/26</a><a href="saison/2024-25/mannschaften.html">2024/25</a><a href="saison/2023-24/mannschaften.html">2023/24</a><a href="saison/2022-23/mannschaften.html">2022/23</a></nav>
+    <p>Klick auf eine Mannschaft für Tabelle, Spieltage, Ergebnisse, Spielerstatistik und den Tabellenrechner. Wann wir spielen, steht im <a href="termine.html">Spielplan</a>.</p>
     <div class="grid-3 team-grid">
       <a class="card team-karte team-afk-1" href="afk-1.html">
         <h3>AFK 1 <span class="team-klasse">Bezirksliga</span></h3>
@@ -248,7 +260,7 @@
         <span class="k-mehr">Zur Jugendseite →</span>
       </a></div>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet.
-      Letzte Änderung: 10.11.2026, 09:09 Uhr.</p>
+      Letzte Änderung: 10.11.2026, 09:27 Uhr.</p>
     
   </main>
 

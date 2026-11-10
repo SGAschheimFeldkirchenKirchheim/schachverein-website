@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -173,6 +184,13 @@
       .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
       .sp-titel { display: block !important; }
       .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Martin Mingrui Xie | SG AFK">
@@ -216,12 +234,13 @@
       <dl>
         <dt>DWZ</dt><dd>1187</dd>
         
+        
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-6.html">AFK 6</a> <span class="klein">E-Klasse · Nr. 13</span></li></ul></div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1111&amp;PKZ=NU4383904&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    <p class="klein">Noch keine gespielten Partien in dieser Saison.</p>
+    <p class="klein">Noch keine gespielten Partien.</p>
     
     
   </main>

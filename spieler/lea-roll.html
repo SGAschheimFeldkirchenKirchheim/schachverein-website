@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -173,6 +184,13 @@
       .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
       .sp-titel { display: block !important; }
       .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Lea Röll | SG AFK">
@@ -216,12 +234,41 @@
       <dl>
         <dt>DWZ</dt><dd>1638</dd>
         <dt>ELO</dt><dd>1617</dd>
+        <dt>Bilanz</dt><dd>8½ / 17 (50 %) seit 2023/24</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-5.html">AFK 5</a> <span class="klein">D-Klasse · Nr. 8 · Stamm</span></li></ul></div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1108&amp;PKZ=NU4265782&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    <p class="klein">Noch keine gespielten Partien in dieser Saison.</p>
+    <p class="klein">In dieser Saison noch keine gespielten Partien.</p><details class="sp-saison"><summary><h3>Saison 2025/26 <span class="klein">3 / 6</span></h3></summary>
+        <h4><a href="../saison/2025-26/afk-5.html">AFK 5</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Gast</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22043&amp;mglnr=1234&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Guido Klaus</a></td><td>–</td><td class="name neben">Münchener SC 1836 5</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>2</td><td class="neben">Heim</td><td>3</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22007&amp;mglnr=1219&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Daniel Derkacz-Bogner</a></td><td>1274</td><td class="name neben">SF Dachau 1932 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>3</td><td class="neben">Gast</td><td>3</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22046&amp;mglnr=1337&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Andreas Biehler</a></td><td>–</td><td class="name neben">SK München Südost 5</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>5</td><td class="neben">Gast</td><td>3</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22066&amp;mglnr=1204&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Jörg Borchardt</a></td><td>1442</td><td class="name neben">TSV Solln 4</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>7</td><td class="neben">Gast</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22015&amp;mglnr=1039&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Gian Paolo Verdi</a></td><td>1288</td><td class="name neben">SC Haar 1931 5</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>9</td><td class="neben">Heim</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22064&amp;mglnr=195&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Srinivas Kallepalli</a></td><td>1345</td><td class="name neben">SK Markt Schwaben 2</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 3 / 6</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2024/25 <span class="klein">5 / 8</span></h3></summary>
+        <h4><a href="../saison/2024-25/afk-3.html">AFK 3</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22061&amp;mglnr=1134&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Jasper Rademacher</a></td><td>1532</td><td class="name neben">SG Aschheim/Feldkirchen/Kirchheim 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>2</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22015&amp;mglnr=118&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Martin Schlederer</a></td><td>1305</td><td class="name neben">SC Haar 1931 5</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>4</td><td class="neben">Gast</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22059&amp;mglnr=197&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Kiril Velkov</a></td><td>1245</td><td class="name neben">SC Garching 1980 7</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>6</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22001&amp;mglnr=1442&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Alejandra Sarai Orozco Fuentes</a></td><td>–</td><td class="name neben">FC Bayern München 11</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 2½ / 4</strong></td></tr></tfoot>
+        </table></div>
+        <h4><a href="../saison/2024-25/afk-4.html">AFK 4</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22061&amp;mglnr=1134&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Jasper Rademacher</a></td><td>1532</td><td class="name neben">SG Aschheim/Feldkirchen/Kirchheim 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>2</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22015&amp;mglnr=118&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Martin Schlederer</a></td><td>1305</td><td class="name neben">SC Haar 1931 5</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>4</td><td class="neben">Gast</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22059&amp;mglnr=197&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Kiril Velkov</a></td><td>1245</td><td class="name neben">SC Garching 1980 7</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>6</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=14&amp;zps=22001&amp;mglnr=1442&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Alejandra Sarai Orozco Fuentes</a></td><td>–</td><td class="name neben">FC Bayern München 11</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 2½ / 4</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2023/24 <span class="klein">½ / 3</span></h3></summary>
+        <h4><a href="../saison/2023-24/afk-3.html">AFK 3</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>2</td><td class="neben">Heim</td><td>3</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22001&amp;mglnr=1376&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Victor Poenaru</a></td><td>1423</td><td class="name neben">FC Bayern München 11</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>3</td><td class="neben">Gast</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22007&amp;mglnr=1130&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Giulian d&#x27;Ettorre</a></td><td>1367</td><td class="name neben">SF Dachau 1932 3</td><td><span class="erg erg-s klein" title="kampflos">+</span></td></tr><tr><td>6</td><td class="neben">Heim</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22076&amp;mglnr=358&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Christo Botev</a></td><td>1035</td><td class="name neben">Schachfreunde München 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>7</td><td class="neben">Gast</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22055&amp;mglnr=1171&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Patrick Plechinger</a></td><td>1350</td><td class="name neben">TSV Forstenried 2</td><td><span class="erg erg-n klein">0</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe ½ / 3</strong></td></tr></tfoot>
+        </table></div></details>
     
     
   </main>

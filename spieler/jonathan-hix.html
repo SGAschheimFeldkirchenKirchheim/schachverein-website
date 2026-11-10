@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -173,6 +184,13 @@
       .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
       .sp-titel { display: block !important; }
       .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Jonathan Hix | SG AFK">
@@ -216,22 +234,50 @@
       <dl>
         <dt>DWZ</dt><dd>1659</dd>
         
+        <dt>Bilanz</dt><dd>5½ / 10 (55 %) seit 2023/24</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-2.html">AFK 2</a> <span class="klein">A-Klasse · Nr. 20</span></li><li><a href="../afk-3.html">AFK 3</a> <span class="klein">B-Klasse · Nr. 14</span></li><li><a href="../afk-4.html">AFK 4</a> <span class="klein">C-Klasse · Nr. 10</span></li><li><a href="../afk-5.html">AFK 5</a> <span class="klein">D-Klasse · Nr. 4</span></li></ul></div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1079&amp;PKZ=NU4144936&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    
-        <h3><a href="../afk-5.html">AFK 5</a> <span class="team-klasse">D-Klasse</span></h3>
+    <details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">½ / 1</span></h3></summary>
+        <h4><a href="../afk-5.html">AFK 5</a> <span class="team-klasse">D-Klasse</span></h4>
         <div class="tab-wrap"><table class="liga-tab">
           <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
             <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
           <tbody><tr><td>1</td><td class="neben">Gast</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22053&amp;mglnr=76&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Josef Schredl</a></td><td>1576</td><td class="name neben">SC Eching 3</td><td><span class="erg erg-u klein">½</span></td></tr></tbody>
-          <tfoot><tr><td colspan="3"></td><td class="name"><strong>Summe</strong></td><td></td>
-            <td class="neben"></td><td><strong>½ / 1</strong></td></tr></tfoot>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe ½ / 1</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2025/26 <span class="klein">4½ / 8</span></h3></summary>
+        <h4><a href="../saison/2025-26/afk-4.html">AFK 4</a> <span class="team-klasse">C-Klasse 1</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>2</td><td class="neben">Heim</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22019&amp;mglnr=330&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Elez Nuredini</a></td><td>–</td><td class="name neben">SC Ismaning 2</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>3</td><td class="neben">Gast</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22007&amp;mglnr=1148&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Lukas Steglich</a></td><td>1394</td><td class="name neben">SF Dachau 1932 3</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>5</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22055&amp;mglnr=92&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Markus Lahm</a></td><td>1441</td><td class="name neben">TSV Forstenried 2</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>6</td><td class="neben">Heim</td><td>3</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22026&amp;mglnr=1108&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">David Stahr</a></td><td>1547</td><td class="name neben">SG Schwabing München Nord 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>7</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22030&amp;mglnr=1142&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Eren Ergür</a></td><td>1649</td><td class="name neben">1. SK Neuperlach 2</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>9</td><td class="neben">Gast</td><td>3</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22001&amp;mglnr=1432&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Luca Marangi</a></td><td>1320</td><td class="name neben">FC Bayern München 10</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 3 / 6</strong></td></tr></tfoot>
         </table></div>
+        <h4><a href="../saison/2025-26/afk-5.html">AFK 5</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>4</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22001&amp;mglnr=1442&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Alejandra Sarai Orozco Fuentes</a></td><td>816</td><td class="name neben">FC Bayern München 11</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 1 / 1</strong></td></tr></tfoot>
+        </table></div>
+        <h4><a href="../saison/2025-26/afk-6.html">AFK 6</a> <span class="team-klasse">E-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Heim</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22076&amp;mglnr=456&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Mohammad Taheri</a></td><td>1429</td><td class="name neben">Schachfreunde München 5</td><td><span class="erg erg-u klein">½</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe ½ / 1</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2023/24 <span class="klein">½ / 1</span></h3></summary>
+        <h4><a href="../saison/2023-24/afk-3.html">AFK 3</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>4</td><td class="neben">Heim</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22067&amp;mglnr=1062&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Wolfgang Gruber</a></td><td>978</td><td class="name neben">SC Kirchseeon 2</td><td><span class="erg erg-u klein">½</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe ½ / 1</strong></td></tr></tfoot>
+        </table></div></details>
     
-      <h3>Inoffizielle DWZ-Prognose</h3>
+      <h3>Inoffizielle DWZ-Prognose (aktuelle Saison)</h3>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>DWZ jetzt</th><th title="Punkte">W</th><th title="Gewinnerwartung">W<sub>e</sub></th>
           <th class="neben" title="Entwicklungskoeffizient">E</th><th class="neben">Niveau</th>

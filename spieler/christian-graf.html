@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -173,6 +184,13 @@
       .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
       .sp-titel { display: block !important; }
       .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Christian Graf | SG AFK">
@@ -216,30 +234,36 @@
       <dl>
         <dt>DWZ</dt><dd>2033</dd>
         <dt>ELO</dt><dd>1929</dd>
+        <dt>Bilanz</dt><dd>6½ / 10 (65 %) seit 2025/26</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-1.html">AFK 1</a> <span class="klein">Bezirksliga · Nr. 9</span></li><li><a href="../afk-2.html">AFK 2</a> <span class="klein">A-Klasse · Nr. 1 · Stamm</span></li><li><a href="../senioren.html">Senioren</a> <span class="klein">2. Seniorenliga · Nr. 1</span></li></ul></div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1149&amp;PKZ=NU4119686&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    
-        <h3><a href="../afk-2.html">AFK 2</a> <span class="team-klasse">A-Klasse</span></h3>
+    <details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">1½ / 2</span></h3></summary>
+        <h4><a href="../afk-2.html">AFK 2</a> <span class="team-klasse">A-Klasse</span></h4>
         <div class="tab-wrap"><table class="liga-tab">
           <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
             <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
           <tbody><tr><td>1</td><td class="neben">Heim</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22001&amp;mglnr=310&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Günter Schütz</a></td><td>2071</td><td class="name neben">FC Bayern München 6</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
-          <tfoot><tr><td colspan="3"></td><td class="name"><strong>Summe</strong></td><td></td>
-            <td class="neben"></td><td><strong>1 / 1</strong></td></tr></tfoot>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 1 / 1</strong></td></tr></tfoot>
         </table></div>
-        <h3><a href="../senioren.html">Senioren</a> <span class="team-klasse">2. Seniorenliga</span></h3>
+        <h4><a href="../senioren.html">Senioren</a> <span class="team-klasse">2. Seniorenliga</span></h4>
         <div class="tab-wrap"><table class="liga-tab">
           <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
             <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
           <tbody><tr><td>1</td><td class="neben">Gast</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22076&amp;mglnr=422&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Jochen Straub</a></td><td>1814</td><td class="name neben">Schachfreunde München 1</td><td><span class="erg erg-u klein">½</span></td></tr></tbody>
-          <tfoot><tr><td colspan="3"></td><td class="name"><strong>Summe</strong></td><td></td>
-            <td class="neben"></td><td><strong>½ / 1</strong></td></tr></tfoot>
-        </table></div>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe ½ / 1</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2025/26 <span class="klein">5 / 8</span></h3></summary>
+        <h4><a href="../saison/2025-26/afk-2.html">AFK 2</a> <span class="team-klasse">B-Klasse 1</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Heim</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22064&amp;mglnr=45&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Stefan Lachenmaier</a></td><td>1816</td><td class="name neben">SK Markt Schwaben 1</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>2</td><td class="neben">Gast</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22019&amp;mglnr=30&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Hans Tauber</a></td><td>1845</td><td class="name neben">SC Ismaning 1</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>3</td><td class="neben">Heim</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22043&amp;mglnr=1011&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Michael Kwan</a></td><td>2078</td><td class="name neben">Münchener SC 1836 4</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>4</td><td class="neben">Gast</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22007&amp;mglnr=1194&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Erik Schaffer</a></td><td>1781</td><td class="name neben">SF Dachau 1932 2</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>5</td><td class="neben">Heim</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22010&amp;mglnr=1106&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Franz Xaver Paul</a></td><td>1836</td><td class="name neben">SF Deisenhofen 2</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>6</td><td class="neben">Gast</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22059&amp;mglnr=1498&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Filaretos Petropoulos</a></td><td>1768</td><td class="name neben">SC Garching 1980 6</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>8</td><td class="neben">Gast</td><td>1</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22001&amp;mglnr=1566&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Yanis Xabier Wilbrand Peña</a></td><td>1860</td><td class="name neben">FC Bayern München 8</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>9</td><td class="neben">Gast</td><td>2</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22040&amp;mglnr=282&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Ralf Strobl</a></td><td>1757</td><td class="name neben">SC Roter Turm Altstadt 3</td><td><span class="erg erg-u klein">½</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 5 / 8</strong></td></tr></tfoot>
+        </table></div></details>
     
-      <h3>Inoffizielle DWZ-Prognose</h3>
+      <h3>Inoffizielle DWZ-Prognose (aktuelle Saison)</h3>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>DWZ jetzt</th><th title="Punkte">W</th><th title="Gewinnerwartung">W<sub>e</sub></th>
           <th class="neben" title="Entwicklungskoeffizient">E</th><th class="neben">Niveau</th>

@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -206,6 +217,8 @@
       <h1>U20 II <span class="team-klasse">1. Jugend-Bezirksliga</span></h1>
       <span class="team-platz"></span>
     </div>
+    
+    
     <nav class="reiter" aria-label="Bereiche"><a href="#p-tabelle" data-reiter="tabelle">Tabelle</a><a href="#p-spieltage" data-reiter="spieltage">Spieltage</a><a href="#p-spiele" data-reiter="spiele">Unsere Spiele</a><a href="#p-verlauf" data-reiter="verlauf">Verlauf</a><a href="#p-rechner" data-reiter="rechner">Tabellenrechner</a></nav>
     <section class="panel" id="p-tabelle" data-reiter="tabelle"><h2 class="panel-titel">Tabelle</h2><p class="klein">Tabelle noch kein Spieltag gespielt</p>
       <div class="tab-wrap"><table class="liga-tab">
@@ -241,7 +254,7 @@
       <script type="application/json" id="liga-u20b">{"key":"u20b","kurz":"U20 II","bretter":4,"eigen":2,"teams":{"1":"SC Vaterstetten-Grasbrunn 1","2":"SG AFK 2","3":"SF Dachau 1932 1","4":"Münchener SC 1836 1","5":"FC Bayern München 2","6":"MSA Zugzwang 82 2","7":"SV Höhenkirchen 1","8":"SF München 2"},"tabelle":[{"platz":1,"tlnr":1,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":8,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":2,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":7,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":3,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":6,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":4,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0},{"platz":1,"tlnr":5,"sp":0,"mp":0,"bp":0,"siege":0,"gp":0}],"auf":0,"ab":0,"auf_evtl":0,"ab_evtl":0,"matches":[{"r":1,"h":4,"g":5,"gesp":false},{"r":1,"h":1,"g":8,"gesp":false},{"r":1,"h":3,"g":6,"gesp":false},{"r":1,"h":2,"g":7,"gesp":false},{"r":2,"h":1,"g":4,"gesp":false},{"r":2,"h":8,"g":5,"gesp":false},{"r":2,"h":2,"g":3,"gesp":false},{"r":2,"h":7,"g":6,"gesp":false},{"r":3,"h":5,"g":1,"gesp":false},{"r":3,"h":6,"g":2,"gesp":false},{"r":3,"h":4,"g":8,"gesp":false},{"r":3,"h":3,"g":7,"gesp":false},{"r":4,"h":5,"g":6,"gesp":false},{"r":4,"h":4,"g":3,"gesp":false},{"r":4,"h":1,"g":2,"gesp":false},{"r":4,"h":8,"g":7,"gesp":false},{"r":5,"h":6,"g":4,"gesp":false},{"r":5,"h":3,"g":5,"gesp":false},{"r":5,"h":2,"g":8,"gesp":false},{"r":5,"h":7,"g":1,"gesp":false},{"r":6,"h":6,"g":8,"gesp":false},{"r":6,"h":3,"g":1,"gesp":false},{"r":6,"h":2,"g":4,"gesp":false},{"r":6,"h":7,"g":5,"gesp":false},{"r":7,"h":5,"g":2,"gesp":false},{"r":7,"h":4,"g":7,"gesp":false},{"r":7,"h":1,"g":6,"gesp":false},{"r":7,"h":8,"g":3,"gesp":false}],"dezimal":","}</script></section>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
       Gewinnpartien; Gleichstand = geteilter Platz). <a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=352&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>
-      <br>Letzte Änderung: 09.11.2026, 12:16 Uhr</p>
+      <br>Letzte Änderung: 10.11.2026, 09:27 Uhr</p>
     <script>
 (function () {
   document.documentElement.classList.add("js");

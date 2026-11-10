@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -173,6 +184,13 @@
       .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
       .sp-titel { display: block !important; }
       .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Emrah Kocak | SG AFK">
@@ -216,22 +234,50 @@
       <dl>
         <dt>DWZ</dt><dd>1631</dd>
         
+        <dt>Bilanz</dt><dd>8½ / 17 (50 %) seit 2022/23</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-2.html">AFK 2</a> <span class="klein">A-Klasse · Nr. 19</span></li><li><a href="../afk-3.html">AFK 3</a> <span class="klein">B-Klasse · Nr. 13</span></li><li><a href="../afk-4.html">AFK 4</a> <span class="klein">C-Klasse · Nr. 12</span></li></ul></div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1085&amp;PKZ=NU4176200&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    
-        <h3><a href="../afk-4.html">AFK 4</a> <span class="team-klasse">C-Klasse</span></h3>
+    <details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">1 / 1</span></h3></summary>
+        <h4><a href="../afk-4.html">AFK 4</a> <span class="team-klasse">C-Klasse</span></h4>
         <div class="tab-wrap"><table class="liga-tab">
           <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
             <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
           <tbody><tr><td>1</td><td class="neben">Gast</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22001&amp;mglnr=1568&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Olexandr Klyuka</a></td><td>1644</td><td class="name neben">FC Bayern München 9</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
-          <tfoot><tr><td colspan="3"></td><td class="name"><strong>Summe</strong></td><td></td>
-            <td class="neben"></td><td><strong>1 / 1</strong></td></tr></tfoot>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 1 / 1</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2025/26 <span class="klein">3½ / 6</span></h3></summary>
+        <h4><a href="../saison/2025-26/afk-3.html">AFK 3</a> <span class="team-klasse">C-Klasse 2</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Heim</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22076&amp;mglnr=449&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Noel Nida-Rümelin</a></td><td>1310</td><td class="name neben">Schachfreunde München 4</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>3</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22002&amp;mglnr=1019&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Roland Moroff</a></td><td>1308</td><td class="name neben">SK Tarrasch 1945 München 5</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>4</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22001&amp;mglnr=1569&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Martin Braun</a></td><td>1465</td><td class="name neben">FC Bayern München 9</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>7</td><td class="neben">Heim</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22017&amp;mglnr=1135&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Jakob Kleinschrod</a></td><td>1692</td><td class="name neben">SV Höhenkirchen 2</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>8</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22046&amp;mglnr=1336&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Miras Talgatbek</a></td><td>–</td><td class="name neben">SK München Südost 4</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>9</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22009&amp;mglnr=1400&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Kemelbek Choroev</a></td><td>1298</td><td class="name neben">SC Vaterstetten-Grasbrunn 1</td><td><span class="erg erg-n klein">0</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 3½ / 6</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2023/24 <span class="klein">1 / 4</span></h3></summary>
+        <h4><a href="../saison/2023-24/afk-2.html">AFK 2</a> <span class="team-klasse">B-Klasse 1</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Gast</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22046&amp;mglnr=1216&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Lukas Windhager</a></td><td>1257</td><td class="name neben">SK München Südost 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>4</td><td class="neben">Gast</td><td>7</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22040&amp;mglnr=402&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Jan van Ermingen</a></td><td>1556</td><td class="name neben">SC Roter Turm Altstadt 4</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>9</td><td class="neben">Heim</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22076&amp;mglnr=73&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Wynfried Schulz-Nottar</a></td><td>1641</td><td class="name neben">Schachfreunde München 2</td><td><span class="erg erg-n klein">0</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 0 / 3</strong></td></tr></tfoot>
         </table></div>
+        <h4><a href="../saison/2023-24/afk-3.html">AFK 3</a> <span class="team-klasse">D-Klasse</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>7</td><td class="neben">Gast</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=13&amp;zps=22055&amp;mglnr=1105&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Georg Sebald</a></td><td>1238</td><td class="name neben">TSV Forstenried 2</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 1 / 1</strong></td></tr></tfoot>
+        </table></div></details><details class="sp-saison"><summary><h3>Saison 2022/23 <span class="klein">3 / 6</span></h3></summary>
+        <h4><a href="../saison/2022-23/afk-2.html">AFK 2</a> <span class="team-klasse">B-Klasse 1</span></h4>
+        <div class="tab-wrap"><table class="liga-tab">
+          <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
+            <th class="name">Gegner</th><th>DWZ</th><th class="name neben">Mannschaft</th><th>Erg.</th></tr></thead>
+          <tbody><tr><td>1</td><td class="neben">Heim</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=12&amp;zps=22002&amp;mglnr=1133&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Nico Joebges</a></td><td>1693</td><td class="name neben">SK Tarrasch 1945 München 3</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>2</td><td class="neben">Gast</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=12&amp;zps=22076&amp;mglnr=279&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Alexander Stahl</a></td><td>1526</td><td class="name neben">Schachfreunde München 2</td><td><span class="erg erg-n klein">0</span></td></tr><tr><td>3</td><td class="neben">Heim</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=12&amp;zps=22010&amp;mglnr=102&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Friedrich Kanduth</a></td><td>1508</td><td class="name neben">SF Deisenhofen 2</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>4</td><td class="neben">Heim</td><td>6</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=12&amp;zps=22017&amp;mglnr=1028&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Heinz Wunder</a></td><td>1049</td><td class="name neben">SV Höhenkirchen 2</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>6</td><td class="neben">Heim</td><td>7</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=12&amp;zps=22067&amp;mglnr=1058&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Maximilian Nießl</a></td><td>–</td><td class="name neben">SC Kirchseeon 1</td><td><span class="erg erg-s klein">1</span></td></tr><tr><td>7</td><td class="neben">Gast</td><td>5</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=12&amp;zps=22040&amp;mglnr=343&amp;PKZ=&amp;Itemid=4103" target="_blank" rel="noopener">Fabian Grede</a></td><td>1461</td><td class="name neben">SC Roter Turm Altstadt 4</td><td><span class="erg erg-n klein">0</span></td></tr></tbody>
+          <tfoot><tr><td colspan="7" class="rechts"><strong>Summe 3 / 6</strong></td></tr></tfoot>
+        </table></div></details>
     
-      <h3>Inoffizielle DWZ-Prognose</h3>
+      <h3>Inoffizielle DWZ-Prognose (aktuelle Saison)</h3>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>DWZ jetzt</th><th title="Punkte">W</th><th title="Gewinnerwartung">W<sub>e</sub></th>
           <th class="neben" title="Entwicklungskoeffizient">E</th><th class="neben">Niveau</th>

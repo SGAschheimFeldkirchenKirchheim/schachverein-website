@@ -153,6 +153,17 @@
 
       .quelle { margin-top: 2rem; }
 
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
       .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
       .rechner .r-runde-box { border-top: 1px solid var(--border); }
       .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
@@ -206,7 +217,9 @@
       <h1>AFK 2 <span class="team-klasse">A-Klasse</span></h1>
       <span class="team-platz">Platz 3 von 10</span>
     </div>
-    <nav class="reiter" aria-label="Bereiche"><a href="#p-tabelle" data-reiter="tabelle">Tabelle</a><a href="#p-spieltage" data-reiter="spieltage">Spieltage</a><a href="#p-spiele" data-reiter="spiele">Unsere Spiele</a><a href="#p-spieler" data-reiter="spieler">Spieler</a><a href="#p-verlauf" data-reiter="verlauf">Verlauf</a><a href="#p-rechner" data-reiter="rechner">Tabellenrechner</a></nav>
+    
+    <nav class="saisons" aria-label="Saison"><span class="klein">Saison</span><a href="afk-2.html" aria-current="page">2026/27</a><a href="saison/2025-26/afk-2.html">2025/26</a><a href="saison/2024-25/afk-2.html">2024/25</a><a href="saison/2023-24/afk-2.html">2023/24</a><a href="saison/2022-23/afk-2.html">2022/23</a></nav>
+    <nav class="reiter" aria-label="Bereiche"><a href="#p-tabelle" data-reiter="tabelle">Tabelle</a><a href="#p-spieltage" data-reiter="spieltage">Spieltage</a><a href="#p-spiele" data-reiter="spiele">Unsere Spiele</a><a href="#p-spieler" data-reiter="spieler">Spieler</a><a href="#p-verlauf" data-reiter="verlauf">Verlauf</a><a href="#p-saisons" data-reiter="saisons">Saisons</a><a href="#p-rechner" data-reiter="rechner">Tabellenrechner</a></nav>
     <section class="panel" id="p-tabelle" data-reiter="tabelle"><h2 class="panel-titel">Tabelle</h2><p class="klein">Tabelle nach Runde 1 von 9</p>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>Rg</th><th class="name">Mannschaft</th><th title="Spiele">Sp</th>
@@ -260,12 +273,16 @@
         <thead><tr><th>R</th><th class="name">Spiel</th><th title="Mannschaftspunkte gesamt">MP</th>
           <th title="Brettpunkte gesamt">BP</th><th>Platz</th></tr></thead>
         <tbody><tr><td>1</td><td class="name">vs. FC Bayern München 6 <span class="erg erg-s" title="Sieg">5 : 3</span></td><td>2</td><td>5,0</td><td><strong>3</strong></td></tr></tbody>
+      </table></div></section><section class="panel" id="p-saisons" data-reiter="saisons"><h2 class="panel-titel">Saisons</h2>
+      <div class="tab-wrap"><table class="liga-tab">
+        <thead><tr><th>Saison</th><th class="name">Klasse</th><th>Platz</th><th></th></tr></thead>
+        <tbody><tr><td><a href="afk-2.html">2026/27</a></td><td class="name">A-Klasse</td><td>3. von 10</td><td><span class="status s-">läuft</span></td></tr><tr><td><a href="saison/2025-26/afk-2.html">2025/26</a></td><td class="name">B-Klasse 1</td><td>2. von 10</td><td><span class="status s-auf">Aufstieg ↑</span></td></tr><tr><td><a href="saison/2024-25/afk-2.html">2024/25</a></td><td class="name">B-Klasse 2</td><td>3. von 10</td><td></td></tr><tr><td><a href="saison/2023-24/afk-2.html">2023/24</a></td><td class="name">B-Klasse 1</td><td>6. von 10</td><td></td></tr><tr><td><a href="saison/2022-23/afk-2.html">2022/23</a></td><td class="name">B-Klasse 1</td><td>7. von 8</td><td></td></tr></tbody>
       </table></div></section><section class="panel" id="p-rechner" data-reiter="rechner"><h2 class="panel-titel">Tabellenrechner</h2>
       <div class="rechner" data-key="mf2"><noscript>Der Rechner braucht JavaScript.</noscript></div>
       <script type="application/json" id="liga-mf2">{"key":"mf2","kurz":"AFK 2","bretter":8,"eigen":8,"teams":{"1":"TSV Poing 1","2":"SG Schwabing München Nord 2","3":"1. SK Neuperlach 1","4":"FC Bayern München 6","5":"TSV Solln 1","6":"SC Roter Turm München 2","7":"MSA Zugzwang 82 4","8":"SG AFK 2","9":"SC Unterhaching 2","10":"TSV Forstenried 1"},"tabelle":[{"platz":1,"tlnr":10,"sp":1,"mp":2,"bp":8,"siege":1,"gp":8},{"platz":2,"tlnr":5,"sp":1,"mp":2,"bp":5.5,"siege":1,"gp":4},{"platz":3,"tlnr":8,"sp":1,"mp":2,"bp":5,"siege":1,"gp":3},{"platz":4,"tlnr":3,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":3},{"platz":5,"tlnr":2,"sp":1,"mp":2,"bp":4.5,"siege":1,"gp":2},{"platz":6,"tlnr":9,"sp":1,"mp":0,"bp":3.5,"siege":0,"gp":2},{"platz":7,"tlnr":1,"sp":1,"mp":0,"bp":3.5,"siege":0,"gp":1},{"platz":8,"tlnr":4,"sp":1,"mp":0,"bp":3,"siege":0,"gp":1},{"platz":9,"tlnr":7,"sp":1,"mp":0,"bp":2.5,"siege":0,"gp":1},{"platz":10,"tlnr":6,"sp":1,"mp":0,"bp":0,"siege":0,"gp":0}],"auf":1,"ab":1,"auf_evtl":1,"ab_evtl":2,"matches":[{"r":1,"h":7,"g":5,"gesp":true,"bh":2.5,"bg":5.5,"wh":1,"wg":4,"dh":1786,"dg":1946},{"r":1,"h":9,"g":3,"gesp":true,"bh":3.5,"bg":4.5,"wh":2,"wg":3,"dh":1917,"dg":1903},{"r":1,"h":8,"g":4,"gesp":true,"bh":5,"bg":3,"wh":3,"wg":1,"dh":1860,"dg":1944},{"r":1,"h":10,"g":6,"gesp":true,"bh":8,"bg":0,"wh":8,"wg":0,"dh":2029,"dg":1907},{"r":1,"h":1,"g":2,"gesp":true,"bh":3.5,"bg":4.5,"wh":1,"wg":2,"dh":1834,"dg":1969},{"r":2,"h":3,"g":1,"gesp":false,"dh":1911,"dg":1825},{"r":2,"h":4,"g":9,"gesp":false,"dh":1953,"dg":1914},{"r":2,"h":6,"g":7,"gesp":false,"dh":1925,"dg":1815},{"r":2,"h":2,"g":10,"gesp":false,"dh":1949,"dg":2013},{"r":2,"h":5,"g":8,"gesp":false,"dh":1994,"dg":1960},{"r":3,"h":9,"g":5,"gesp":false,"dh":1914,"dg":1994},{"r":3,"h":8,"g":6,"gesp":false,"dh":1960,"dg":1925},{"r":3,"h":2,"g":3,"gesp":false,"dh":1949,"dg":1911},{"r":3,"h":10,"g":7,"gesp":false,"dh":2013,"dg":1815},{"r":3,"h":1,"g":4,"gesp":false,"dh":1825,"dg":1953},{"r":4,"h":3,"g":10,"gesp":false,"dh":1911,"dg":2013},{"r":4,"h":4,"g":2,"gesp":false,"dh":1953,"dg":1949},{"r":4,"h":7,"g":8,"gesp":false,"dh":1815,"dg":1960},{"r":4,"h":6,"g":9,"gesp":false,"dh":1925,"dg":1914},{"r":4,"h":5,"g":1,"gesp":false,"dh":1994,"dg":1825},{"r":5,"h":3,"g":4,"gesp":false,"dh":1911,"dg":1953},{"r":5,"h":9,"g":7,"gesp":false,"dh":1914,"dg":1815},{"r":5,"h":2,"g":5,"gesp":false,"dh":1949,"dg":1994},{"r":5,"h":10,"g":8,"gesp":false,"dh":2013,"dg":1960},{"r":5,"h":1,"g":6,"gesp":false,"dh":1825,"dg":1925},{"r":6,"h":4,"g":10,"gesp":false,"dh":1953,"dg":2013},{"r":6,"h":7,"g":1,"gesp":false,"dh":1815,"dg":1825},{"r":6,"h":6,"g":2,"gesp":false,"dh":1925,"dg":1949},{"r":6,"h":8,"g":9,"gesp":false,"dh":1960,"dg":1914},{"r":6,"h":5,"g":3,"gesp":false,"dh":1994,"dg":1911},{"r":7,"h":3,"g":6,"gesp":false,"dh":1911,"dg":1925},{"r":7,"h":4,"g":5,"gesp":false,"dh":1953,"dg":1994},{"r":7,"h":2,"g":7,"gesp":false,"dh":1949,"dg":1815},{"r":7,"h":10,"g":9,"gesp":false,"dh":2013,"dg":1914},{"r":7,"h":1,"g":8,"gesp":false,"dh":1825,"dg":1960},{"r":8,"h":7,"g":3,"gesp":false,"dh":1815,"dg":1911},{"r":8,"h":6,"g":4,"gesp":false,"dh":1925,"dg":1953},{"r":8,"h":9,"g":1,"gesp":false,"dh":1914,"dg":1825},{"r":8,"h":8,"g":2,"gesp":false,"dh":1960,"dg":1949},{"r":8,"h":5,"g":10,"gesp":false,"dh":1994,"dg":2013},{"r":9,"h":3,"g":8,"gesp":false,"dh":1911,"dg":1960},{"r":9,"h":4,"g":7,"gesp":false,"dh":1953,"dg":1815},{"r":9,"h":2,"g":9,"gesp":false,"dh":1949,"dg":1914},{"r":9,"h":1,"g":10,"gesp":false,"dh":1825,"dg":2013},{"r":9,"h":5,"g":6,"gesp":false,"dh":1994,"dg":1925}],"dezimal":","}</script></section>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
       Gewinnpartien; Gleichstand = geteilter Platz). <a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=16&amp;liga=341&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>
-      <br>Letzte Änderung: 10.11.2026, 09:09 Uhr</p>
+      <br>Letzte Änderung: 10.11.2026, 09:26 Uhr</p>
     <script>
 (function () {
   document.documentElement.classList.add("js");
