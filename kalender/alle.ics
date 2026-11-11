@@ -8,24 +8,6 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
-UID:2026-11-10-19-mmm-runde-2-afk-3-alle@sg-afk
-DTSTAMP:20261110T000000Z
-DTSTART:20261110T183000Z
-DTEND:20261110T213000Z
-SUMMARY:MMM Runde 2 (AFK 3)
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-10-19-mmm-runde-1-afk-6-alle@sg-afk
-DTSTAMP:20261110T000000Z
-DTSTART:20261110T183000Z
-DTEND:20261110T213000Z
-SUMMARY:MMM Runde 1 (AFK 6)
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
 UID:2026-11-13-19-mmm-runde-2-afk-1-afk-2-afk-4-afk-5-alle@sg-afk
 DTSTAMP:20261113T000000Z
 DTSTART:20261113T183000Z
