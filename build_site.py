@@ -48,6 +48,10 @@ SPIELORT = "Gymnasium Kirchheim, Heimstettner Str. 20, 85551 Kirchheim"
 SPIELORT_HINWEIS = "Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort."
 SPIELORT_HINWEIS_KURZ = "Schachschule GyKi"   # kurze Fassung für die Startseiten-Box; "" = ausblenden
 
+# VORÜBERGEHEND: alle Adressen @sg-afk.de (info@, jugend@, spielleiter@ ...) auf allen Seiten durch diese
+# eine Adresse ersetzen (Text und mailto-Link). "" = normale Adressen, dann ist alles wieder wie vorher.
+MAIL_UMLEITUNG = "sgafk1952@gmail.com"
+
 TODAY = datetime.date.today()
 
 # Kürzel -> Erklärung. Erscheint als kleine Legende unter den Termin-Karten,
@@ -224,6 +228,9 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         spielort_hinweis=(f'<p class="spielort-hinweis">{SPIELORT_HINWEIS}</p>' if SPIELORT_HINWEIS else ""),
         stand=letzte_aenderung(),
     )
+
+    if MAIL_UMLEITUNG:
+        full_html = re.sub(r"[\w.+-]+@sg-afk\.de", MAIL_UMLEITUNG, full_html)
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(full_html)
