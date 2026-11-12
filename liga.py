@@ -76,6 +76,11 @@ VEREIN_INDEX = {}               # build_site.py: Mannschaften der aktuellen Sais
 # {nach} / {vor} = Nachname / Vorname, klein, Leerzeichen -> "-". None = kein Knopf.
 VORBEREITUNG_URL = "https://players.chessbase.com/en/player/{nach}_{vor}"
 VORBEREITUNG_TEXT = "Partien bei ChessBase"
+# Zweiter Knopf: kopiert "Vorname Nachname" in die Zwischenablage und öffnet die ChessBase-Datenbank;
+# dort ins Suchfeld "Quick Search" mit Strg+V einfügen. None = kein zweiter Knopf.
+DATENBANK_URL = "https://database.chessbase.com/"
+DATENBANK_ZEICHEN = "DB"
+DATENBANK_TEXT = "Name kopieren und ChessBase-Datenbank öffnen (dort mit Strg+V suchen)"
 ARCHIV_HINWEIS = "Archiv – abgeschlossene Saison {saison}."
 
 TICKER_TITEL = "Letzte Ergebnisse"
@@ -263,6 +268,11 @@ def _prognose(d, tlnr):
                         kader=kader_von(d, tlnr), verein=verein)
 
 
+# Kopiert den Namen und zeigt kurz "Name kopiert"; der Link öffnet danach normal die Datenbank
+DATENBANK_JS = ("var a=this;try{navigator.clipboard.writeText(a.dataset.name)}catch(e){}"
+                "a.classList.add('kopiert');setTimeout(function(){a.classList.remove('kopiert')},1800)")
+
+
 def vorbereitung_html(k):
     """Kleiner Link zu den Partien des Spielers (Profil bei ChessBase)."""
     if not VORBEREITUNG_URL:
@@ -276,8 +286,14 @@ def vorbereitung_html(k):
     if not nach.strip():
         return ""
     url = VORBEREITUNG_URL.format(nach=teil(nach), vor=teil(vor.split()[0] if vor.split() else ""))
-    return (f' <a class="vorb" href="{esc(url)}" target="_blank" rel="noopener" '
-            f'title="{esc(VORBEREITUNG_TEXT)}" aria-label="{esc(VORBEREITUNG_TEXT)}">♞</a>')
+    knopf = (f' <a class="vorb" href="{esc(url)}" target="_blank" rel="noopener" '
+             f'title="{esc(VORBEREITUNG_TEXT)}" aria-label="{esc(VORBEREITUNG_TEXT)}">♞</a>')
+    if DATENBANK_URL:
+        name = f"{vor.strip()} {nach.strip()}".strip()
+        knopf += (f' <a class="vorb vorb-db" href="{esc(DATENBANK_URL)}" target="_blank" rel="noopener" '
+                  f'data-name="{esc(name)}" onclick="{DATENBANK_JS}" '
+                  f'title="{esc(DATENBANK_TEXT)}" aria-label="{esc(DATENBANK_TEXT)}">{esc(DATENBANK_ZEICHEN)}</a>')
+    return knopf
 
 
 def chance_html(p, neu=False):
@@ -976,6 +992,10 @@ STYLES = """<style>
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
       a.vorb { text-decoration: none; font-size: 0.85rem; margin-left: 0.25rem; opacity: 0.6; }
       a.vorb:hover { opacity: 1; }
+      a.vorb-db { font-size: 0.62rem; font-weight: bold; letter-spacing: 0.03em; border: 1px solid currentColor;
+                  border-radius: 4px; padding: 0 0.22rem; vertical-align: 0.1em; position: relative; }
+      a.vorb-db.kopiert::after { content: "Name kopiert ✓"; position: absolute; left: 50%; bottom: 135%; transform: translateX(-50%);
+                  white-space: nowrap; background: #2e7d4f; color: #fff; font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 4px; }
       .chance.neu { background: rgba(127,127,127,0.15); font-weight: normal; font-style: italic; }
       .vorschau { padding: 0.3rem 0 0.6rem; }
       .varianten { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.4rem 1.2rem; }

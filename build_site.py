@@ -1335,16 +1335,19 @@ HOF_CSS = """<style>
       .hof-filter select { font: inherit; padding: 0.25rem 0.5rem; border: 1px solid var(--border); border-radius: 6px; }
       .table-responsive { overflow-x: auto; }
       .hof-breit { max-width: 1400px; }   /* breiter als der Textbereich, damit die Namen nicht umbrechen */
-      .hof-tafel { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; }
+      .hof-tafel { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface, transparent); color: var(--text, inherit); }
       .hof-tafel th, .hof-tafel td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
       .hof-tafel th { white-space: nowrap; }
       @media (min-width: 1100px) { .hof-tafel td { white-space: nowrap; } .hof-tafel td.mehrere { white-space: normal; min-width: 9rem; } }
-      .hof-tafel thead th { background: var(--afk-navy); color: #fff; }
-      .hof-tafel tbody th { color: var(--afk-navy); font-variant-numeric: tabular-nums; }
-      .hof-tafel tbody tr:nth-child(even) { background: #f7f8fa; }
-      .hof-tafel td.leer { color: #c3c8d0; }
-      .hof-tafel.gefiltert td[data-spieler] { color: #9aa1ad; }
-      .hof-tafel.gefiltert td.treffer { color: var(--afk-navy); background: #dcebf7; font-weight: bold; }
+      .hof-tafel thead th { background: var(--accent, var(--afk-navy)); color: #fff; }
+      .hof-tafel tbody th { color: inherit; font-weight: bold; font-variant-numeric: tabular-nums; }
+      /* Streifen wie bei den anderen Tabellen der Seite (design.css: --soft), passt zu hell und dunkel */
+      .hof-tafel tbody tr > * { background: transparent; color: var(--text, inherit); }
+      .hof-tafel tbody tr:nth-child(even) > * { background: var(--soft, rgba(128,128,128,.08)); }
+      .hof-tafel tbody tr:hover > * { background: color-mix(in srgb, var(--text, currentColor) 10%, transparent); }
+      .hof-tafel tbody td.leer { color: color-mix(in srgb, var(--text, currentColor) 35%, transparent); }
+      .hof-tafel.gefiltert tbody td[data-spieler] { color: color-mix(in srgb, var(--text, currentColor) 40%, transparent); }
+      .hof-tafel.gefiltert tbody td.treffer { color: var(--text, inherit); background: color-mix(in srgb, #4a90d9 30%, transparent); font-weight: bold; }
     </style>"""
 
 
