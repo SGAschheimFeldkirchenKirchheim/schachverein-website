@@ -1734,6 +1734,16 @@ HOME_JS = """<script>
     if (n === 1) return "morgen";
     return "in " + n + " Tagen";
   }
+  function dmi(s) { var p = s.split("-"); return p[2] + "." + p[1] + "."; }
+  // Ausfälle, die angezeigt werden: ab dem 1. des Monats, in dem sie beginnen, bis zu ihrem Ende
+  function angekuendigt() {
+    var t = iso(today), out = [];
+    for (var i = 0; i < AUSFALL.length; i++) {
+      var a = AUSFALL[i];
+      if (t >= a.start.slice(0, 8) + "01" && t <= a.end) out.push(a);
+    }
+    return out;
+  }
   function blocked(d) {
     var s = iso(d);
     for (var i = 0; i < AUSFALL.length; i++) {
@@ -1781,14 +1791,14 @@ HOME_JS = """<script>
     } else {
       el.appendChild(document.createTextNode(
         "Nächster Spielabend: Freitag, " + dm(f) + " ab 18:00 Uhr (" + rel(f) + ")"));
-      if (skipped.length) {
-        var first = skipped[0], last = skipped[skipped.length - 1];
-        var why = first.reason ? " (" + first.reason + ")" : "";
+      var ank = angekuendigt();
+      for (var k = 0; k < ank.length; k++) {
+        var why = ank[k].reason ? " (" + ank[k].reason + ")" : "";
         var note = document.createElement("span");
         note.className = "spielabend-note";
-        note.textContent = skipped.length === 1
-          ? "Am " + dm(first.d) + " kein Spielabend" + why
-          : "Vom " + dm(first.d) + " bis " + dm(last.d) + " kein Spielabend" + why;
+        note.textContent = ank[k].start === ank[k].end
+          ? "Am " + dmi(ank[k].start) + " kein Spielabend" + why
+          : "Vom " + dmi(ank[k].start) + " bis " + dmi(ank[k].end) + " kein Spielabend" + why;
         el.appendChild(document.createElement("br"));
         el.appendChild(note);
       }
