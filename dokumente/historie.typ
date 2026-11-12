@@ -218,16 +218,18 @@
   Infolge der durch unsere jugendlichen Mitglieder deutlich gewachsenen Anzahl an aktiven Mitgliedern war unsere Schachgemeinschaft erstmalig mit 3 Mannschaften in den Münchner Mannschaftsmeisterschaften vertreten und erreichte folgende erfreulichen Platzierungen: mit der 1. Mannschaft in der B-Klasse einen 2. Platz und damit den Aufstieg in die A-Klasse, mit der 2. Mannschaft in der D-Klasse den 4. Platz sowie mit der neu gegründeten 3. Mannschaft mit überwiegend jugendlichen Spielern in der E-Klasse den 2. Platz.
 
   Pokalsieger wurde unser neues Vereinsmitglied Pierre Tassell, Blitzschachmeister wie schon so oft Frederik Prause und Sieger unseres Weihnachtsblitzturnieres im zweiten Jahr seiner Vereinszugehörigkeit Rudolf Oster.
+
+  Ende September war Internationaler Meister Frank Zeller zu Gast und spielte simultan gegen unsere Mitglieder. Im Herbst konnten sich zudem unsere Jugendlichen bei den Münchner U16-Mannschaftsmeisterschaften und den Münchner Schüler-Einzelmeisterschaften über schöne Erfolge freuen.
 ]
 
 #jahr("2019")[
   Nach ihrem Abstieg aus der 1. Seniorenliga des Schachbezirks München in die 2. Seniorenliga gelang unserer Senioren-Mannschaft (Ü60) der direkte Wiederaufstieg in die 1. Seniorenliga: die „siegreichen Vier“ waren Frederik Prause (3,5 / 4), Hanspeter Hecht (3,5 / 4), Rudolf Oster (2 / 4) und Matthias Naumann (2,5 / 3).
 
-  In den Münchner Mannschaftsmeisterschaften konnte sich unsere 1. Mannschaft nach ihrem Aufstieg in die A-Klasse dort im Mittelfeld (8:10 Mannschaftspunkte) ebenso souverän behaupten wie unsere 2. Mannschaft im ersten Jahr ihrer Spielberechtigung in der C-Klasse (9:5 Mannschaftspunkte).
+  In den Münchner Mannschaftsmeisterschaften konnte sich unsere 1. Mannschaft nach ihrem Aufstieg in die A-Klasse dort im Mittelfeld (8:10 Mannschaftspunkte) ebenso souverän behaupten wie unsere 2. Mannschaft im ersten Jahr ihrer Spielberechtigung in der C-Klasse (9:5 Mannschaftspunkte). Unsere Jugendmannschaft (U20), die schon in der Vorsaison in die 1. Jugendbezirksliga aufgestiegen war, sicherte dort als Fünfter von sieben Mannschaften den Klassenerhalt. Damit war die Saison 2018/19 für alle vier Mannschaften ein Erfolg. Die besten Punktesammler: Pierre Tassell (6 aus 7) in der 1. Mannschaft, Korbinian Ruff (5 aus 7) in der 2. Mannschaft, Frederik Prause und Hanspeter Hecht (je 2,5 aus 3) bei den Senioren sowie András Centgraf (4 aus 6) in der U20.
 
-  Als bisher jüngster Spieler in der Vereins-Historie errang der 15-jährige Arthur Krumm den Titel des Vereinsmeisters, gefolgt von den vier an sich favorisierten „Oldies“ Dieter Vischer, Hanspeter Hecht, Rudolf Oster und Frederik Prause. Den Vereinspokal konnte Pierre Tassell erfolgreich
+  Beim Oberland-Quartett in Höhenkirchen belegte unsere Mannschaft nach engen Wettkämpfen den 3. Platz; gegen den Turniersieger Deisenhofen ging die letzte Runde nur knapp mit 3,5 : 4,5 verloren.
 
-  verteidigen, genauso wie David Mehlhorn den Vereins-Jugend-Pokal. Meister im Blitzschach unserer Schachgemeinschaft wurde Dieter Vischer.
+  Als bisher jüngster Spieler in der Vereins-Historie errang der 15-jährige Arthur Krumm den Titel des Vereinsmeisters, gefolgt von den vier an sich favorisierten „Oldies“ Dieter Vischer, Hanspeter Hecht, Rudolf Oster und Frederik Prause. Den Vereinspokal konnte Pierre Tassell erfolgreich verteidigen, genauso wie David Mehlhorn den Vereins-Jugend-Pokal. Meister im Blitzschach unserer Schachgemeinschaft wurde Dieter Vischer. Die Blitzmeisterschaft wurde in diesem Jahr an vier Spielabenden ausgetragen, von denen die besten drei Ergebnisse zählten.
 ]
 
 #jahr("2020")[

@@ -1029,6 +1029,10 @@ def build_neu_hier():
 # 3. OBERLANDQUARTETT PARSER
 # ==========================================
 OQ_NEUESTE_OBEN = True     # True = neuestes Turnier oben
+# Fotos unter der Übersicht: (Datei, Bildunterschrift); fehlt eine Datei, wird sie einfach weggelassen
+OQ_FOTOS = [
+    ("turniere/oberlandquartett/sieger-2015.jpg", "Unsere Siegermannschaft beim Oberlandquartett 2015"),
+]
 OQ_POKAL_SERIE, OQ_POKAL_GESAMT = 3, 5   # Pokal: 3x hintereinander oder 5x insgesamt (seit dem letzten Pokal)
 
 
@@ -1113,6 +1117,11 @@ def build_oberlandquartett():
                 f'<span class="oq-zahlen"><b>{siege}</b> Turniersiege · <b>{anz_pokale}</b> {"Pokal" if anz_pokale == 1 else "Pokale"}</span>'
                 f'<span class="oq-stand">{"Zum nächsten Pokal: " + ", ".join(stand) if stand else "Zum nächsten Pokal: noch kein Sieg"}</span></li>')
         html.append(f'<ul class="oq-karten">{"".join(karten)}</ul>')
+        fotos = [(d, t) for d, t in OQ_FOTOS if os.path.exists(d)]
+        if fotos:
+            html.append('<div class="oq-fotos">' + "".join(
+                f'<figure><img src="{quote(d)}" alt="{esc(t)}" loading="lazy"><figcaption>{esc(t)}</figcaption></figure>'
+                for d, t in fotos) + '</div>')
 
         kopf = "".join(f"<th>{esc(t)}</th>" for t in teams)
         reihen = []
@@ -1155,6 +1164,10 @@ def build_oberlandquartett():
       .oq-karten { list-style: none; padding: 0; margin: 1.2rem 0 1.4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 42vw), 1fr)); gap: 0.6rem; }
       .oq-karten li { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.7rem 0.9rem; border-radius: 10px; background: var(--soft, #f3f5f9); border: 1px solid var(--border, #e3e7ee); }
       .oq-team { font-weight: 800; font-size: 1.05rem; }
+      .oq-fotos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.8rem; margin: 0 0 1.4rem; }
+      .oq-fotos figure { margin: 0; }
+      .oq-fotos img { width: 100%; max-width: 720px; height: auto; border-radius: 10px; display: block; }
+      .oq-fotos figcaption { font-size: 0.85rem; margin-top: 0.35rem; color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
       .oq-zahlen { font-size: 0.9rem; }
       .oq-stand { font-size: 0.8rem; color: color-mix(in srgb, var(--text, #000) 65%, transparent); }
       .oq-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border, #d6dbe4); }
