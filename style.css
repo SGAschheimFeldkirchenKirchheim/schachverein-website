@@ -211,9 +211,28 @@ nav.saisons a[aria-current="page"]::after {
 
 /* Dunkler Modus: helle Pille, weißer Akzent, damit sie sich abheben */
 @media (prefers-color-scheme: dark) {
-  nav.saisons a[aria-current="page"] {
-    --badge-bg: #6fa3dc;
-    --badge-text: #101828;
-    --badge-akzent: #ffffff;
-  }
+/* Saison-Umschalter: aktive Saison als Pille mit versetzter hellblauer Pille darunter (3D-Effekt).
+   "nav.saisons" ist absichtlich spezifischer als die Regel in liga.py, damit diese hier gewinnt. */
+nav.saisons a[aria-current="page"] {
+  --badge-bg: #1c2d52;       /* Pille: Navy */
+  --badge-text: #ffffff;
+  --badge-akzent: #6fa3dc;   /* versetzte Pille: Hellblau */
+  --badge-versatz: 5px;
+
+  display: inline-block;
+  padding: 0.35em 1.1em;
+  margin-bottom: var(--badge-versatz);
+  border: none;
+  border-radius: 999px;
+  background: var(--badge-bg);
+  background-image: none;
+  color: var(--badge-text);
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 var(--badge-versatz) 0 0 var(--badge-akzent);   /* harter Schatten = zweite Pille */
+}
+
+nav.saisons a[aria-current="page"]::before,
+nav.saisons a[aria-current="page"]::after {
+  display: none;             /* alte Balken aus liga.py abschalten */
 }
