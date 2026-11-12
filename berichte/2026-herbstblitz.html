@@ -58,6 +58,27 @@
         nav a[aria-current="page"] { text-underline-offset: 5px; }
       }
 
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.38em; height: 0.38em; margin-left: 0.4em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--navy); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      @media (max-width: 960px) {
+        .nav-gruppe { display: block; }
+        .nav-gruppe > a { display: block; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-unter, .nav-gruppe:hover .nav-unter { display: flex; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
       .footer-link { color: #aaa; }
     </style><style>
       .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
@@ -107,12 +128,12 @@
     <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
     <nav aria-label="Hauptmenü">
       <a href="../index.html">Start</a>
-      <a href="../ueber-uns.html">Über uns</a>
-      <a href="../mannschaften.html">Mannschaften</a>
+      <div class="nav-gruppe"><a href="../ueber-uns.html">Über uns</a><div class="nav-unter"><a href="../neu-hier.html">Neu hier?</a></div></div>
+      <div class="nav-gruppe"><a href="../mannschaften.html">Mannschaften</a><div class="nav-unter"><a href="../afk-1.html">AFK 1</a><a href="../afk-2.html">AFK 2</a><a href="../afk-3.html">AFK 3</a><a href="../afk-4.html">AFK 4</a><a href="../afk-5.html">AFK 5</a><a href="../afk-6.html">AFK 6</a><a href="../senioren.html">Senioren</a></div></div>
       <a href="../jugend.html">Jugend</a>
       <a href="../termine.html">Termine</a>
       <a href="../berichte.html" aria-current="page">Berichte</a>
-      <a href="../turniere.html">Turniere</a>
+      <div class="nav-gruppe"><a href="../turniere.html">Turniere</a><div class="nav-unter"><a href="../oberlandquartett.html">Oberlandquartett</a><a href="../blitzjahreswertung.html">Blitzjahreswertung</a><a href="../vereinsintern.html">Hall of Fame</a><a href="../ausschreibungen.html">Ausschreibungen</a></div></div>
       <a href="../faq.html">FAQ</a>
       <a href="../kontakt.html">Kontakt</a>
     </nav>
