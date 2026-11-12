@@ -80,6 +80,7 @@ PAGE_DESCRIPTIONS = {
     "oberlandquartett.html": "Ergebnisse und Pokalstand des Oberlandquartetts.",
     "blitzjahreswertung.html": "Gesamtwertung der Blitzjahreswertung der SG AFK.",
     "vereinsintern.html": "Vereinsmeister und Sieger der vereinsinternen Turniere: die Hall of Fame der SG AFK.",
+    "geschichte.html": "Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute.",
 }
 
 # Favicon, solange es kein logo.png im Hauptverzeichnis gibt (Emoji als SVG)
@@ -116,6 +117,8 @@ NAV = [
 SUBNAV = {
     "ueber-uns.html": [
         ("neu-hier.html", "Neu hier?"),
+        ("geschichte.html", "Vereinsgeschichte"),
+        ("dokumente/satzung.pdf", "Satzung (PDF)"),
     ],
     "turniere.html": [
         ("oberlandquartett.html", "Oberlandquartett"),
@@ -132,6 +135,7 @@ ACTIVE_PARENT = {
     "blitzjahreswertung.html": "turniere.html",
     "vereinsintern.html": "turniere.html",
     "senioren.html": "mannschaften.html",
+    "geschichte.html": "ueber-uns.html",
 }
 
 # Handgeschriebene Seiten: Inhalt liegt in seiten/<name>.html
@@ -1289,50 +1293,206 @@ def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=Fa
 # ==========================================
 # 5. HALL OF FAME PARSER
 # ==========================================
-def build_hall_of_fame():
-    path = os.path.join("turniere", "vereinsintern", "main.typ")
-    if not os.path.exists(path):
-        path = os.path.join("turniere", "hall_of_fame.typ")
+# Hall of Fame: Spalten der Ehrentafel (Reihenfolge = Reihenfolge der Spalten).
+# Ein Titel landet in der ersten Spalte, deren Muster im Turniernamen vorkommt (Groß-/Kleinschreibung egal).
+# Turniere, die zu keinem Muster passen, bekommen automatisch eine eigene Spalte.
+HOF_SPALTEN = [
+    ("Vereinsmeister", r"^vereinsmeist"),
+    ("Pokal", r"pokal"),
+    ("Blitzserie", r"blitzserie|blitzjahres"),
+    ("Blitz", r"blitzschach|blitzmeist"),
+    ("Schnellschach", r"schnellschach"),
+    ("Weihnachtsblitz", r"weihnacht"),
+    ("Osterblitz", r"oster"),
+    ("Stadtmeister", r"stadtmeist"),
+    ("Jugend", r"jugend"),
+]
+HOF_JUGEND_ZUERST = True   # "Jugend-Pokal" usw. zählt zur Jugend, nicht zum Pokal
+HOF_TOP = 6                # so viele Spieler stehen oben bei "Meiste Titel"
+HOF_DATEIEN = [            # erste vorhandene Datei mit Daten; doppelte Einträge zählen nur einmal
+    os.path.join("turniere", "vereinsintern", "main.typ"),
+    os.path.join("turniere", "hall_of_fame.typ"),
+]
 
-    if not os.path.exists(path):
-        content = "<p>Keine Daten für Hall of Fame gefunden.</p>"
-    else:
-        with open(path, "r", encoding="utf-8") as f:
-            code = f.read()
+HOF_SKRIPT = """<script>
+  document.getElementById("hof-wahl").addEventListener("change", function () {
+    var wer = this.value;
+    document.querySelectorAll(".hof-tafel td[data-spieler]").forEach(function (td) {
+      td.classList.toggle("treffer", !!wer && td.dataset.spieler.split("|").indexOf(wer) >= 0);
+    });
+    document.querySelector(".hof-tafel").classList.toggle("gefiltert", !!wer);
+  });
+</script>"""
 
-        data_block_m = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', code, re.DOTALL)
-        entries = []
-        if data_block_m:
-            raw_tuples = re.findall(r'\((.*?)\)', data_block_m.group(1), re.DOTALL)
-            for raw_tuple in raw_tuples:
-                parts = [p.strip().strip('"\'') for p in raw_tuple.split(',') if p.strip()]
-                if len(parts) >= 3:
-                    entries.append((parts[1], parts[2], parts[0]))
-
-        html = ['<a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>']
-        html.append('<h1 style="margin-top:1rem;">Vereinsinterne Turniere & Hall of Fame</h1>')
-        html.append('<div class="table-responsive"><table class="hof-tabelle">')
-        html.append('<thead><tr><th>Turnier</th><th>Jahr</th><th>Spieler</th></tr></thead><tbody>')
-
-        for i, (turnier, jahr, spieler) in enumerate(entries):
-            row_bg = '#eef1f8' if i % 2 == 1 else '#ffffff'
-            html.append(f'<tr style="background-color: {row_bg};">')
-            html.append(f'<td style="text-align:left;">{turnier}</td>')
-            html.append(f'<td style="text-align:center;">{jahr}</td>')
-            html.append(f'<td style="text-align:left;">{spieler}</td>')
-            html.append('</tr>')
-
-        html.append('</tbody></table></div>')
-        content = "\n".join(html)
-
-    styles = """<style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
-      .hof-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }
-      .hof-tabelle th, .hof-tabelle td { padding: 10px 12px; border: 1px solid #0a1f44; }
-      .hof-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; text-align: center; }
+HOF_CSS = """<style>
+      .hof-zurueck { text-decoration: none; }
+      .hof-top { list-style: none; padding: 0; margin: 0.8rem 0 1.6rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.6rem; counter-reset: platz; }
+      .hof-top li { counter-increment: platz; display: flex; align-items: center; gap: 0.7rem; background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.9rem; }
+      .hof-top li::before { content: counter(platz) "."; color: #6b7280; font-weight: bold; min-width: 1.4em; }
+      .hof-name { flex: 1; font-weight: 600; }
+      .hof-zahl { background: var(--navy); color: #fff; border-radius: 999px; min-width: 2em; text-align: center; padding: 0.05rem 0.5rem; font-weight: bold; }
+      .hof-filter { margin: 0.4rem 0 0.6rem; }
+      .hof-filter select { font: inherit; padding: 0.25rem 0.5rem; border: 1px solid var(--border); border-radius: 6px; }
+      .table-responsive { overflow-x: auto; }
+      .hof-breit { max-width: 1400px; }   /* breiter als der Textbereich, damit die Namen nicht umbrechen */
+      .hof-tafel { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; }
+      .hof-tafel th, .hof-tafel td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      .hof-tafel th { white-space: nowrap; }
+      @media (min-width: 1100px) { .hof-tafel td { white-space: nowrap; } .hof-tafel td.mehrere { white-space: normal; min-width: 9rem; } }
+      .hof-tafel thead th { background: var(--navy); color: #fff; }
+      .hof-tafel tbody th { color: var(--navy); font-variant-numeric: tabular-nums; }
+      .hof-tafel tbody tr:nth-child(even) { background: #f7f8fa; }
+      .hof-tafel td.leer { color: #c3c8d0; }
+      .hof-tafel.gefiltert td[data-spieler] { color: #9aa1ad; }
+      .hof-tafel.gefiltert td.treffer { color: var(--navy); background: #dcebf7; font-weight: bold; }
     </style>"""
 
-    render_page("Vereinsinterne Turniere & Hall of Fame", content, "vereinsintern.html", extra_styles=styles)
+
+def hof_spalte(turnier):
+    t = turnier.lower()
+    if HOF_JUGEND_ZUERST and "jugend" in t:
+        return "Jugend"
+    return next((name for name, muster in HOF_SPALTEN if re.search(muster, t)), turnier)
+
+
+def hof_spieler(text):
+    """'Ronny Damaske und Pierre Tassell' -> ['Ronny Damaske', 'Pierre Tassell']"""
+    return [n.strip() for n in re.split(r'\s+(?:und|u\.)\s+|\s*&\s*', text) if n.strip()]
+
+
+def hof_eintraege():
+    """Alle Titel aus den Typst-Dateien: [(spieler, turnier, jahr)], doppelte (Turnier, Jahr) nur einmal."""
+    gesehen, eintraege = set(), []
+    for pfad in HOF_DATEIEN:
+        if not os.path.exists(pfad):
+            continue
+        with open(pfad, "r", encoding="utf-8") as f:
+            code = f.read()
+        block = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', code, re.DOTALL)
+        if not block:
+            continue
+        for roh in re.findall(r'\((.*?)\)', block.group(1), re.DOTALL):
+            teile = [t.strip().strip('"\'') for t in roh.split(',') if t.strip()]
+            if len(teile) < 3:
+                continue
+            spieler, turnier, jahr = teile[0], teile[1], teile[2]
+            schluessel = (turnier.lower(), jahr)
+            if schluessel not in gesehen:
+                gesehen.add(schluessel)
+                eintraege.append((spieler, turnier, jahr))
+    return eintraege
+
+
+def build_hall_of_fame():
+    eintraege = hof_eintraege()
+    if not eintraege:
+        render_page("Hall of Fame", "<p>Keine Daten für die Hall of Fame gefunden.</p>", "vereinsintern.html")
+        return
+    tafel, titel = {}, {}
+    for spieler, turnier, jahr in eintraege:
+        tafel.setdefault(jahr, {}).setdefault(hof_spalte(turnier), []).append((spieler, turnier))
+        for name in hof_spieler(spieler):
+            titel[name] = titel.get(name, 0) + 1
+    benutzt = {sp for zeile in tafel.values() for sp in zeile}
+    feste = [n for n, _ in HOF_SPALTEN]
+    spalten = [n for n in feste if n in benutzt] + sorted(benutzt - set(feste))
+    jahre = sorted(tafel, reverse=True)
+    rangliste = sorted(titel.items(), key=lambda x: (-x[1], x[0]))
+    esc = htmllib.escape
+
+    html = ['<a href="turniere.html" class="hof-zurueck">← Zurück zur Turniere-Übersicht</a>',
+            '<h1>Hall of Fame</h1>',
+            f'<p class="lead">Alle Sieger unserer vereinsinternen Turniere von {jahre[-1]} bis {jahre[0]}.</p>',
+            '<h2>Meiste Titel</h2>', '<ol class="hof-top">']
+    for name, n in rangliste[:HOF_TOP]:
+        html.append(f'<li><span class="hof-name">{esc(name)}</span><span class="hof-zahl">{n}</span></li>')
+    html.append('</ol>')
+    optionen = "".join(f'<option>{esc(n)}</option>' for n in sorted(titel))
+    html.append(f'<div class="hof-filter"><label for="hof-wahl">Spieler hervorheben:</label> '
+                f'<select id="hof-wahl"><option value="">alle</option>{optionen}</select></div>')
+    kopf = "".join(f'<th>{esc(sp)}</th>' for sp in spalten)
+    html.append(f'<div class="table-responsive full-bleed hof-breit"><table class="hof-tafel"><thead><tr><th>Jahr</th>{kopf}</tr></thead><tbody>')
+    for jahr in jahre:
+        zellen = []
+        for sp in spalten:
+            titel_hier = tafel[jahr].get(sp)
+            if titel_hier:
+                alle = [n for wer, _ in titel_hier for n in hof_spieler(wer)]
+                namen = esc("|".join(alle), quote=True)
+                mehrere = ' class="mehrere"' if len(alle) > 1 else ''
+                if len(titel_hier) == 1:
+                    inhalt = esc(titel_hier[0][0])
+                else:   # zwei Turniere in derselben Spalte, z. B. Jugend-VM und Jugend-Schnellschach
+                    inhalt = "<br>".join(f'{esc(wer)} <small>({esc(turnier)})</small>' for wer, turnier in titel_hier)
+                zellen.append(f'<td data-spieler="{namen}"{mehrere}>{inhalt}</td>')
+            else:
+                zellen.append('<td class="leer">–</td>')
+        html.append(f'<tr><th scope="row">{esc(jahr)}</th>{"".join(zellen)}</tr>')
+    html.append('</tbody></table></div>')
+    html.append(HOF_SKRIPT)
+    render_page("Hall of Fame", "\n".join(html), "vereinsintern.html", extra_styles="<style>" + FULL_BLEED_CSS + "</style>" + HOF_CSS)
+
+
+# ==========================================
+# VEREINSDOKUMENTE (Satzung, Vereinsgeschichte)
+# Quellen in dokumente/*.typ, gemeinsames Aussehen in dokumente/afk-vorlage.typ.
+# Beim Build werden geänderte Quellen zu PDF übersetzt; die Geschichte wird zusätzlich eine Webseite.
+# ==========================================
+DOKUMENTE_ORDNER = "dokumente"
+DOKUMENTE = ["satzung", "historie"]
+
+GESCHICHTE_CSS = """<style>
+      .zeitleiste { margin-top: 1.5rem; }
+      .zl-jahr { display: grid; grid-template-columns: 6rem 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
+      .zl-jahr h2 { margin: 0; font-size: 1.25rem; color: var(--navy); font-variant-numeric: tabular-nums; }
+      .zl-jahr > div { border-left: 3px solid #6fa3dc; padding-left: 1.1rem; }
+      .zl-jahr p { margin: 0 0 0.7rem; }
+      @media (max-width: 600px) { .zl-jahr { grid-template-columns: 1fr; gap: 0.3rem; } }
+    </style>"""
+
+
+def build_dokumente():
+    vorlage = os.path.join(DOKUMENTE_ORDNER, "afk-vorlage.typ")
+    for name in DOKUMENTE:
+        quelle = os.path.join(DOKUMENTE_ORDNER, f"{name}.typ")
+        ziel = os.path.join(DOKUMENTE_ORDNER, f"{name}.pdf")
+        if not os.path.exists(quelle):
+            continue
+        zeit = max(os.path.getmtime(p) for p in (quelle, vorlage) if os.path.exists(p))
+        if os.path.exists(ziel) and os.path.getmtime(ziel) >= zeit:
+            continue   # PDF ist aktuell
+        try:
+            subprocess.run(["typst", "compile", quelle, ziel], check=True)
+        except (OSError, subprocess.CalledProcessError) as e:
+            print(f"Hinweis: {quelle} konnte nicht übersetzt werden ({e}); das alte PDF bleibt.")
+
+
+def typst_absatz_html(text):
+    """Einfacher Typst-Text (Zeilenumbrüche mit Backslash, maskierte Zeichen) -> HTML."""
+    text = re.sub(r'\s*\\\s*\n\s*', '\n', text.strip())
+    text = re.sub(r'\\(.)', r'\1', text)
+    return htmllib.escape(text, quote=False).replace('\n', '<br>')
+
+
+def build_geschichte():
+    quelle = os.path.join(DOKUMENTE_ORDNER, "historie.typ")
+    if not os.path.exists(quelle):
+        return
+    with open(quelle, "r", encoding="utf-8") as f:
+        code = f.read()
+    jahre = re.findall(r'#jahr\("([^"]+)"\)\[\n(.*?)\n\]', code, re.DOTALL)
+    teile = ['<h1>Vereinsgeschichte</h1>',
+             '<p class="lead">Von den Schachfreunden Feldkirchen 1952 bis heute.</p>',
+             '<p><a class="btn btn-outline" href="dokumente/historie.pdf">Als PDF herunterladen</a></p>',
+             '<div class="zeitleiste">']
+    for jahr, inhalt in jahre:
+        inhalt = re.sub(r'(?m)^\s*//.*\n?', '', inhalt)   # Kommentare (offene Fragen) nicht anzeigen
+        absaetze = "".join(f'<p>{typst_absatz_html(a)}</p>' for a in re.split(r'\n\s*\n', inhalt) if a.strip())
+        anker = htmllib.escape(jahr.replace("/", "-"))
+        teile.append(f'<section class="zl-jahr" id="j{anker}"><h2>{htmllib.escape(jahr)}</h2><div>{absaetze}</div></section>')
+    teile.append('</div>')
+    render_page("Vereinsgeschichte", "\n".join(teile), "geschichte.html", extra_styles=GESCHICHTE_CSS,
+                description="Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute.")
 
 
 # ==========================================
@@ -2465,6 +2625,8 @@ if __name__ == "__main__":
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
+    build_dokumente()
+    build_geschichte()
     upcoming = build_termine()
     build_oberlandquartett()
     build_blitzjahreswertung()
