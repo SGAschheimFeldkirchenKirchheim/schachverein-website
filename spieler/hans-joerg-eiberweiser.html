@@ -194,6 +194,10 @@
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
       a.vorb { text-decoration: none; font-size: 0.85rem; margin-left: 0.25rem; opacity: 0.6; }
       a.vorb:hover { opacity: 1; }
+      a.vorb-db { font-size: 0.62rem; font-weight: bold; letter-spacing: 0.03em; border: 1px solid currentColor;
+                  border-radius: 4px; padding: 0 0.22rem; vertical-align: 0.1em; position: relative; }
+      a.vorb-db.kopiert::after { content: "Name kopiert ✓"; position: absolute; left: 50%; bottom: 135%; transform: translateX(-50%);
+                  white-space: nowrap; background: #2e7d4f; color: #fff; font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 4px; }
       .chance.neu { background: rgba(127,127,127,0.15); font-weight: normal; font-style: italic; }
       .vorschau { padding: 0.3rem 0 0.6rem; }
       .varianten { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.4rem 1.2rem; }
