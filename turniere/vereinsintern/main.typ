@@ -5,7 +5,9 @@
 #let navy-light = rgb("#eef1f8")
 
 // Hier neue Einträge oben anhängen: (Spieler, Turnier, Jahr)
-// Mehrere Sieger: "Name A und Name B". Blitzserienmeister = Sieger der Blitzjahreswertung (seit 2025).
+// Mehrere Sieger: "Name A und Name B".
+// Blitzmeister: Seit Einführung der Blitzjahreswertung ist ihr Sieger der Blitzmeister.
+// Der Osterblitz gehört nicht in die Hall of Fame (Absprache mit Pierre und Frederik).
 #let data = (
   ("Alexander Wittko", "Vereinsmeister", "2026"),
   ("Alexander Wittko", "Pokalsieger", "2026"),
@@ -21,13 +23,11 @@
   ("Stefans Kasims", "Weihnachtsblitz", "2024"),
   ("Pierre Tassell", "Vereinsmeister", "2024"),
   ("Pierre Tassell", "Pokalsieger", "2024"),
-  ("Moritz Stöttner", "Osterblitz", "2024"),
   ("Ronny Damaske und Pierre Tassell", "Blitzschachmeister", "2023"),
   ("Ronny Damaske", "Weihnachtsblitz", "2023"),
   ("Armin Tobisch", "Schnellschachmeister", "2023"),
   ("Armin Tobisch", "Kirchheimer Stadtmeister", "2023"),
   ("Pierre Tassell", "Vereinsmeister", "2023"),
-  ("Ronny Damaske", "Osterblitz", "2023"),
   ("Pierre Tassell", "Blitzschachmeister", "2022"),
   ("Lars Goldbeck", "Weihnachtsblitz", "2022"),
   ("David Mehlhorn", "Schnellschachmeister", "2022"),
@@ -35,7 +35,6 @@
   ("David Mehlhorn", "Weihnachtsblitz", "2021"),
   ("Arthur Krumm", "Kirchheimer Stadtmeister", "2021"),
   ("Pierre Tassell", "Schnellschachmeister", "2021"),
-  ("Frederik Prause", "Osterblitz", "2021"),
   ("Pierre Tassell", "Weihnachtsblitz", "2020"),
   ("Frederik Prause", "Blitzschachmeister", "2020"),
   ("Dieter Vischer", "Blitzschachmeister", "2019"),

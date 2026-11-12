@@ -1300,11 +1300,9 @@ def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=Fa
 HOF_SPALTEN = [
     ("Vereinsmeister", r"^vereinsmeist"),
     ("Pokal", r"pokal"),
-    ("Blitzserie", r"blitzserie|blitzjahres"),
-    ("Blitz", r"blitzschach|blitzmeist"),
+    ("Blitzmeister", r"blitzschach|blitzmeist|blitzserie|blitzjahres"),   # Vereins-Blitzmeister und Sieger der Blitzjahreswertung
     ("Schnellschach", r"schnellschach"),
     ("Weihnachtsblitz", r"weihnacht"),
-    ("Osterblitz", r"oster"),
     ("Stadtmeister", r"stadtmeist"),
     ("Jugend", r"jugend"),
 ]
