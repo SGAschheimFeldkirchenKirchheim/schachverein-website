@@ -1028,7 +1028,11 @@ def build_neu_hier():
 # ==========================================
 # 3. OBERLANDQUARTETT PARSER
 # ==========================================
-def compute_pokal_wins(teams_count, data_list):
+OQ_NEUESTE_OBEN = True     # True = neuestes Turnier oben
+OQ_POKAL_SERIE, OQ_POKAL_GESAMT = 3, 5   # Pokal: 3x hintereinander oder 5x insgesamt (seit dem letzten Pokal)
+
+
+def compute_pokal_wins(teams_count, data_list, mit_stand=False):
     streak = [0] * teams_count
     total = [0] * teams_count
     wins = []
@@ -1041,14 +1045,37 @@ def compute_pokal_wins(teams_count, data_list):
                 total[j] += 1
             else:
                 streak[j] = 0
-                
+
         for j in range(teams_count):
-            if streak[j] >= 3 or total[j] >= 5:
+            if streak[j] >= OQ_POKAL_SERIE or total[j] >= OQ_POKAL_GESAMT:
                 wins.append((i, j))
                 streak = [0] * teams_count
                 total = [0] * teams_count
 
-    return wins
+    return (wins, streak, total) if mit_stand else wins
+
+
+def _oq_daten(code):
+    """[(jahr, datum, ausrichter, [ergebnisse])] aus main.typ; das Jahr steht im Kommentar darüber (// 2019)."""
+    block = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', code, re.DOTALL)
+    daten, jahr, notiz = [], None, ""
+    for zeile in (block.group(1).splitlines() if block else []):
+        k = re.match(r'\s*//\s*(\d{4})\s*(.*)', zeile)
+        if k:
+            jahr, notiz = int(k.group(1)), k.group(2).strip(" ()")
+            continue
+        m = re.match(r'\s*\(\s*"([^"]*)"\s*,\s*"([^"]*)"\s*,\s*\((.*)\)\s*\)\s*,?\s*$', zeile)
+        if not m:
+            continue
+        werte = []
+        for teil in re.findall(r'"[^"]*"|[^,\s]+', m.group(3)):
+            teil = teil.strip('"')
+            werte.append(int(teil) if teil.isdigit() else teil)
+        if jahr is None and re.search(r"\d{4}$", m.group(1)):
+            jahr = int(m.group(1)[-4:])
+        daten.append((jahr, m.group(1), m.group(2), werte, notiz))
+        jahr, notiz = None, ""
+    return daten
 
 
 def build_oberlandquartett():
@@ -1056,73 +1083,105 @@ def build_oberlandquartett():
     if not os.path.exists(path):
         path = os.path.join("turniere", "oberlandquartett.typ")
 
+    html = ['<a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>',
+            '<h1 style="margin-top:1rem;">Oberlandquartett</h1>']
     if not os.path.exists(path):
-        content = "<p>Keine Daten für Oberlandquartett gefunden.</p>"
+        html.append("<p>Keine Daten für Oberlandquartett gefunden.</p>")
     else:
         with open(path, "r", encoding="utf-8") as f:
-            content_code = f.read()
+            code = f.read()
+        teams_m = re.search(r'#let\s+teams\s*=\s*\((.*?)\)', code, re.DOTALL)
+        teams = [t.strip().strip('"\'') for t in teams_m.group(1).split(',') if t.strip()] if teams_m else []
+        zeilen = _oq_daten(code)
+        n = len(teams)
+        pokale, serie, gesamt = compute_pokal_wins(n, [(d, a, w) for _, d, a, w, _ in zeilen], mit_stand=True)
+        pokal_set = set(pokale)
+        esc = htmllib.escape
 
-        teams_m = re.search(r'#let\s+teams\s*=\s*\((.*?)\)', content_code, re.DOTALL)
-        teams = []
-        if teams_m:
-            teams = [t.strip().strip('"\'') for t in teams_m.group(1).split(',') if t.strip()]
+        # Übersicht je Mannschaft: Turniersiege, Pokale, Stand zum nächsten Pokal
+        karten = []
+        for j, t in enumerate(teams):
+            siege = sum(1 for z in zeilen if j < len(z[3]) and z[3][j] == 1)
+            anz_pokale = sum(1 for _, jj in pokale if jj == j)
+            stand = []
+            if serie[j]:
+                stand.append(f"{serie[j]}× in Folge")
+            if gesamt[j]:
+                stand.append(f"{gesamt[j]}/{OQ_POKAL_GESAMT} Siege")
+            karten.append(
+                f'<li><span class="oq-team">{esc(t)}</span>'
+                f'<span class="oq-zahlen"><b>{siege}</b> Turniersiege · <b>{anz_pokale}</b> {"Pokal" if anz_pokale == 1 else "Pokale"}</span>'
+                f'<span class="oq-stand">{"Zum nächsten Pokal: " + ", ".join(stand) if stand else "Zum nächsten Pokal: noch kein Sieg"}</span></li>')
+        html.append(f'<ul class="oq-karten">{"".join(karten)}</ul>')
 
-        data = []
-        data_block_m = re.search(r'#let\s+data\s*=\s*\((.*?)\n\s*\)', content_code, re.DOTALL)
-        if data_block_m:
-            raw_tuples = re.findall(r'\((.*?)\)', data_block_m.group(1), re.DOTALL)
-            for raw_tuple in raw_tuples:
-                parts = [p.strip() for p in raw_tuple.split(',') if p.strip()]
-                if len(parts) >= 3:
-                    datum = parts[0].strip('()"\'')
-                    ausrichter = parts[1].strip('()"\'')
-                    results = []
-                    for res_val in parts[2:]:
-                        res_val = res_val.strip('()"\'')
-                        if res_val.isdigit():
-                            results.append(int(res_val))
-                        else:
-                            results.append(res_val)
-                    data.append((datum, ausrichter, results))
+        kopf = "".join(f"<th>{esc(t)}</th>" for t in teams)
+        reihen = []
+        reihenfolge = list(enumerate(zeilen))
+        if OQ_NEUESTE_OBEN:
+            reihenfolge.reverse()
+        for i, (jahr, datum, ausrichter, werte, notiz) in reihenfolge:
+            ausgefallen = all(not isinstance(v, int) for v in werte)
+            jahr_txt = esc(str(jahr)) if jahr else "?"
+            datum_txt = datum if re.match(r"\d", datum) else ""
+            zellen = [f'<td class="oq-jahr">{jahr_txt}<small>{esc(datum_txt[:6]) if datum_txt else ""}</small></td>',
+                      f'<td class="oq-ort">{esc(ausrichter) if ausrichter.strip("-? ") else ""}</td>']
+            if ausgefallen:
+                text = notiz or "nicht ausgetragen"
+                zellen.append(f'<td class="oq-aus" colspan="{n}">{esc(text)}</td>')
+            else:
+                for j, v in enumerate(werte):
+                    if (i, j) in pokal_set:
+                        zellen.append('<td><span class="oq-platz oq-p1 oq-pokal" title="Turniersieg und Pokalgewinn">🏆 1</span></td>')
+                    elif v == 1:
+                        zellen.append('<td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td>')
+                    elif isinstance(v, int):
+                        zellen.append(f'<td><span class="oq-platz">{v}</span></td>')
+                    elif str(v).strip("- "):
+                        zellen.append(f'<td class="oq-ersatz" title="Ersatzmannschaft">{esc(str(v))}</td>')
+                    else:
+                        zellen.append('<td class="oq-leer">–</td>')
+            reihen.append(f'<tr{" class=oq-ausfall" if ausgefallen else ""}>{"".join(zellen)}</tr>')
 
-        pokal_wins = compute_pokal_wins(len(teams), data)
+        html.append(f'<div class="oq-scroll"><table class="oq-tab"><thead><tr><th class="oq-jahr">Jahr</th>'
+                    f'<th class="oq-ort">Ausrichter</th>{kopf}</tr></thead><tbody>{"".join(reihen)}</tbody></table></div>')
+        html.append('<p class="oq-legende2"><span class="oq-platz oq-p1">1</span> Turniersieg '
+                    '<span class="oq-platz oq-p1 oq-pokal">🏆 1</span> Pokalgewinn</p>')
+        html.append(f'<p class="klein">Den Pokal gewinnt die Mannschaft, die entweder {OQ_POKAL_SERIE}x hintereinander gewinnt '
+                    f'oder insgesamt {OQ_POKAL_GESAMT}x.<br>Nach dem Pokalgewinn beginnt die Zählung von vorne! '
+                    'Der Gewinner spendiert den neuen Pokal.</p>')
 
-        html = ['<a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>']
-        html.append('<h1 style="margin-top:1rem;">Oberlandquartett</h1>')
-        html.append('<div class="table-responsive"><table class="oq-tabelle">')
-        html.append('<thead><tr><th>Datum</th><th>Ausrichter</th>')
-        for t in teams:
-            html.append(f'<th>{t}</th>')
-        html.append('</tr></thead><tbody>')
-
-        for i, (datum, ausrichter, results) in enumerate(data):
-            html.append('<tr>')
-            html.append(f'<td class="links">{datum}</td>')
-            html.append(f'<td class="links">{ausrichter}</td>')
-            for j, val in enumerate(results):
-                if (i, j) in pokal_wins:
-                    klasse = ' class="oq-pokal" title="Pokalgewinn"'
-                elif val == 1:
-                    klasse = ' class="oq-sieg"'
-                else:
-                    klasse = ''
-                html.append(f'<td{klasse}>{val}</td>')
-            html.append('</tr>')
-
-        html.append('</tbody></table></div>')
-        html.append('<p class="oq-legende"><span>Turniersieg</span><span class="pokal">Pokalgewinn</span></p>')
-        html.append('<p class="klein">Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>')
-        html.append('Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.')
-        html.append('</p>')
-        content = "\n".join(html)
-
-    # Farben und Dunkelmodus der Tabelle stehen in design.css (.oq-tabelle)
     styles = """<style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
       .klein { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+      .oq-karten { list-style: none; padding: 0; margin: 1.2rem 0 1.4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 42vw), 1fr)); gap: 0.6rem; }
+      .oq-karten li { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.7rem 0.9rem; border-radius: 10px; background: var(--soft, #f3f5f9); border: 1px solid var(--border, #e3e7ee); }
+      .oq-team { font-weight: 800; font-size: 1.05rem; }
+      .oq-zahlen { font-size: 0.9rem; }
+      .oq-stand { font-size: 0.8rem; color: color-mix(in srgb, var(--text, #000) 65%, transparent); }
+      .oq-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border, #d6dbe4); }
+      .oq-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface, #fff); color: var(--text, inherit); }
+      .oq-tab th, .oq-tab td { padding: 0.5rem 0.65rem; text-align: center; border-bottom: 1px solid var(--border, #e3e7ee); white-space: nowrap; }
+      .oq-tab thead th { background: var(--accent, #1c2d52); color: #fff; font-weight: 700; }
+      .oq-tab .oq-jahr, .oq-tab .oq-ort { text-align: left; }
+      .oq-tab td.oq-jahr { font-weight: 700; font-variant-numeric: tabular-nums; }
+      .oq-tab td.oq-jahr small { display: inline-block; margin-left: 0.5rem; font-weight: normal; font-size: 0.78rem; color: color-mix(in srgb, var(--text, #000) 55%, transparent); }
+      .oq-tab tbody tr:nth-child(even) > * { background-color: var(--soft, #f5f7fa); }
+      .oq-tab tbody tr:hover > * { background-color: color-mix(in srgb, var(--text, #000) 9%, var(--surface, #fff)); }
+      .oq-platz { display: inline-block; min-width: 2em; padding: 0.1rem 0.45rem; border-radius: 6px; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+      .oq-platz.oq-p1 { background: var(--oq-sieg, #ffd54a); color: #1b2a4a; font-weight: 800; }
+      .oq-platz.oq-pokal { box-shadow: 0 0 0 2px var(--surface, #fff), 0 0 0 4px var(--oq-sieg, #ffd54a); }
+      .oq-tab .oq-leer { color: color-mix(in srgb, var(--text, #000) 30%, transparent); }
+      .oq-tab .oq-ersatz { font-size: 0.82rem; font-style: italic; color: color-mix(in srgb, var(--text, #000) 60%, transparent); }
+      .oq-tab td.oq-aus { font-style: italic; color: color-mix(in srgb, var(--text, #000) 50%, transparent);
+                          background-image: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--text, #000) 6%, transparent) 6px 12px); }
+      .oq-legende2 { font-size: 0.85rem; margin-top: 0.8rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+      .oq-legende2 .oq-platz.oq-pokal { margin-left: 1rem; }
+      @media (max-width: 700px) {
+        .oq-tab { font-size: 0.85rem; } .oq-tab th, .oq-tab td { padding: 0.4rem 0.4rem; }
+        .oq-tab td.oq-jahr small, .oq-tab .oq-ort { display: none; }
+      }
     </style>"""
 
-    render_page("Oberlandquartett", content, "oberlandquartett.html", extra_styles=styles)
+    render_page("Oberlandquartett", "\n".join(html), "oberlandquartett.html", extra_styles=styles)
 
 
 # ==========================================
@@ -1186,6 +1245,158 @@ def build_blitzjahreswertung():
         _blitz_seite(pfad, datei, pdf, j, leiste, archiviert=pfad != ordner)
 
 
+# Blitzjahreswertung als echte HTML-Tabelle (passt sich hell/dunkel und dem Handy an).
+# Die Wertung rechnet weiterhin Typst (Technik/wertung.typ); build_site.py holt sich nur das Ergebnis
+# per "typst query" als JSON. Klappt das nicht (kein Typst, altes Archiv), bleibt es bei den SVG-Bildern.
+BLITZ_HTML = True              # False = wie früher: Typst-Bilder (SVG) statt HTML-Tabelle
+BLITZ_MEDAILLEN = True         # Plätze 1-3 farbig markieren
+
+BLITZ_DATEN_TYP = """#import "main.typ": turniere
+#import "database.typ": mitglieder
+#import "Technik/wertung.typ": berechne-jahreswertung, turnier-rangliste, ist-gespielt
+#import "Technik/links.typ": stand
+#metadata((
+  wertung: berechne-jahreswertung(turniere, mitglieder,
+    beste: int(sys.inputs.at("beste", default: "3")), sieg-punkte: int(sys.inputs.at("sieg", default: "20"))),
+  turniere: turniere.map(t => (name: t.name, url: t.at("url", default: none), gespielt: ist-gespielt(t),
+    rangliste: if ist-gespielt(t) { turnier-rangliste(t.daten, mitglieder) } else { () })),
+  stand: stand,
+)) <bjw-daten>
+"""
+
+
+def _blitz_daten(folder_path, code):
+    """Fertig berechnete Wertung aus Typst (dict) oder None."""
+    if not BLITZ_HTML or not code:
+        return None
+    beste = re.search(r"\bbeste:\s*(\d+)", code)
+    sieg = re.search(r"\bsieg-punkte:\s*(\d+)", code)
+    beste, sieg = (beste.group(1) if beste else "3"), (sieg.group(1) if sieg else "20")
+    hilfe = os.path.join(folder_path, "_web_daten.typ")
+    try:
+        with open(hilfe, "w", encoding="utf-8") as f:
+            f.write(BLITZ_DATEN_TYP)
+        r = subprocess.run(["typst", "query", hilfe, "<bjw-daten>", "--field", "value", "--one",
+                            "--input", f"beste={beste}", "--input", f"sieg={sieg}"],
+                           capture_output=True, text=True, encoding="utf-8")
+        if r.returncode != 0:
+            print(f"Blitzjahreswertung: HTML-Tabelle nicht möglich, nehme SVG ({r.stderr.strip()[:200]})")
+            return None
+        daten = json.loads(r.stdout)
+        daten["beste"], daten["sieg"] = int(beste), int(sieg)
+        return daten
+    except Exception as e:
+        print(f"Blitzjahreswertung: HTML-Tabelle nicht möglich, nehme SVG ({e})")
+        return None
+    finally:
+        if os.path.exists(hilfe):
+            os.remove(hilfe)
+
+
+def _bw_turnier_kopf(t):
+    name = htmllib.escape(t["name"])
+    if not t["gespielt"]:
+        return f'<th class="bw-offen">{name}<small>ausstehend</small></th>'
+    if t.get("url"):
+        return (f'<th><a href="{htmllib.escape(t["url"])}" target="_blank" rel="noopener" '
+                f'title="Ergebnisse bei chess-results">{name}</a></th>')
+    return f"<th>{name}</th>"
+
+
+def _bw_platz(rang):
+    klasse = f' class="bw-p{rang}"' if BLITZ_MEDAILLEN and rang <= 3 else ""
+    return f"<td{klasse}>{rang}</td>"
+
+
+def _bw_gesamt_html(d):
+    w, turniere = d["wertung"], d["turniere"]
+    mit_max = w["offen"] > 0
+    kopf = "".join(_bw_turnier_kopf(t) for t in turniere)
+    kopf = (f'<tr><th>Pl.</th><th class="bw-name">Spieler</th>{kopf}<th>Teiln.</th><th>Gesamt</th>'
+            + ('<th title="höchstmögliche Endpunktzahl">Max.</th>' if mit_max else "") + "</tr>")
+    zeilen = []
+    for s in w["spieler"]:
+        zellen = [_bw_platz(s["rang"]), f'<td class="bw-name">{htmllib.escape(s["name"])}</td>']
+        for i, p in enumerate(s["einzel"]):
+            if not turniere[i]["gespielt"]:
+                zellen.append('<td class="bw-offen"></td>')
+            elif p is None:
+                zellen.append('<td class="bw-leer">–</td>')
+            elif i in s["gewertet"]:
+                zellen.append(f'<td><span class="bw-punkte">{p}</span></td>')
+            else:
+                zellen.append(f'<td class="bw-streich" title="gestrichen"><s>{p}</s></td>')
+        zellen.append(f'<td class="bw-teiln">{s["teilnahmen"]}/{w["gespielt"]}</td>')
+        zellen.append(f'<td class="bw-summe">{s["summe"]}</td>')
+        if mit_max:
+            zellen.append(f'<td class="bw-max{" bw-chance" if s["titelchance"] else ""}">{s["maximal"]}</td>')
+        zeilen.append("<tr>" + "".join(zellen) + "</tr>")
+
+    stand = f'Stand: {htmllib.escape(str(d["stand"]))} · ' if d.get("stand") else ""
+    legende = (f'{stand}nach {w["gespielt"]} von {w["gesamt"]} Turnieren. '
+               f'Es zählen die besten {d["beste"]} Ergebnisse (<span class="bw-punkte">grün</span>), '
+               f'gestrichene sind <s>durchgestrichen</s>, – = nicht teilgenommen.')
+    if mit_max:
+        legende += f' Max. = höchstmögliche Endpunktzahl mit {d["sieg"]} Punkten in jedem offenen Turnier.'
+        kandidaten = sorted((s for s in w["spieler"] if s["titelchance"]), key=lambda s: -s["maximal"])
+        if kandidaten:
+            legende += ("<br><strong>Titel noch möglich:</strong> "
+                        + ", ".join(f'{htmllib.escape(s["name"])} (max. {s["maximal"]})' for s in kandidaten))
+    return (f'<div class="bw-scroll"><table class="bw-tab"><thead>{kopf}</thead><tbody>{"".join(zeilen)}</tbody></table></div>'
+            f'<p class="bw-legende">{legende}</p>')
+
+
+def _bw_turnier_html(t):
+    zeilen = "".join(f'<tr>{_bw_platz(s["platz"])}<td class="bw-name">{htmllib.escape(s["name"])}</td>'
+                     f'<td>{"<span class=bw-punkte>" + str(s["punkte"]) + "</span>" if s["punkte"] else s["punkte"]}</td></tr>'
+                     for s in t["rangliste"])
+    link = (f'<p class="bw-legende"><a href="{htmllib.escape(t["url"])}" target="_blank" rel="noopener">'
+            f'Vollständige Ergebnisse bei chess-results ↗</a></p>' if t.get("url") else "")
+    return (f'<div class="bw-scroll"><table class="bw-tab bw-einzel"><thead><tr><th>Pl.</th><th class="bw-name">Spieler</th>'
+            f'<th>Punkte</th></tr></thead><tbody>{zeilen}</tbody></table></div>{link}')
+
+
+def _bw_html_gruppen(d):
+    """[(Reitername, HTML)] – Gesamt + jedes gespielte Turnier."""
+    return [("Gesamt", _bw_gesamt_html(d))] + [(t["name"], _bw_turnier_html(t)) for t in d["turniere"] if t["gespielt"]]
+
+
+BLITZ_HTML_CSS = """
+      .bw-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border, #d6dbe4); }
+      .bw-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface, #fff); color: var(--text, inherit); }
+      .bw-tab th, .bw-tab td { padding: 0.5rem 0.65rem; text-align: center; border-bottom: 1px solid var(--border, #e3e7ee); white-space: nowrap; }
+      .bw-tab thead th { background: var(--accent, #1c2d52); color: #fff; font-weight: 700; }
+      .bw-tab thead th a { color: #fff; text-decoration: none; border-bottom: 1px dotted rgba(255,255,255,0.6); }
+      .bw-tab thead th a:hover { border-bottom-style: solid; }
+      .bw-tab .bw-name { text-align: left; font-weight: 600; }
+      .bw-tab tbody tr:nth-child(even) > * { background: var(--soft, #f5f7fa); }
+      .bw-tab tbody tr:hover > * { background: color-mix(in srgb, var(--text, #000) 9%, var(--surface, #fff)); }
+      .bw-punkte { display: inline-block; min-width: 2.2em; padding: 0.1rem 0.4rem; border-radius: 6px; background: #3f7d4a; color: #fff; font-weight: 700; }
+      .bw-tab .bw-streich { color: color-mix(in srgb, var(--text, #000) 45%, transparent); }
+      .bw-tab .bw-leer { color: color-mix(in srgb, var(--text, #000) 30%, transparent); }
+      .bw-tab th.bw-offen { background: color-mix(in srgb, var(--accent, #1c2d52) 45%, #888); font-weight: 600; }
+      .bw-tab th.bw-offen small { display: block; font-weight: normal; font-size: 0.72rem; opacity: 0.85; }
+      .bw-tab tbody td.bw-offen { background: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--text, #000) 6%, transparent) 6px 12px); }
+      .bw-tab .bw-teiln { color: color-mix(in srgb, var(--text, #000) 70%, transparent); font-variant-numeric: tabular-nums; }
+      .bw-tab tbody .bw-summe { font-weight: 800; font-size: 1.05rem; background: color-mix(in srgb, var(--accent, #1c2d52) 14%, var(--surface, #fff)); }
+      .bw-tab .bw-max { color: color-mix(in srgb, var(--text, #000) 40%, transparent); }
+      .bw-tab .bw-max.bw-chance { color: inherit; font-weight: 700; }
+      .bw-tab td.bw-p1, .bw-tab td.bw-p2, .bw-tab td.bw-p3 { font-weight: 800; box-shadow: inset 4px 0 0 var(--medaille); }
+      .bw-tab td.bw-p1 { --medaille: #d4a017; } .bw-tab td.bw-p2 { --medaille: #a8b0bd; } .bw-tab td.bw-p3 { --medaille: #b87333; }
+      .bw-einzel { max-width: 32rem; }
+      .bw-scroll:has(.bw-einzel) { max-width: 32rem; margin: 0 auto; }
+      .bw-legende { font-size: 0.85rem; text-align: left; margin-top: 0.7rem; color: color-mix(in srgb, var(--text, #000) 80%, transparent); line-height: 1.6; }
+      .bw-legende .bw-punkte { min-width: 0; padding: 0 0.35rem; }
+      @media (max-width: 700px) {
+        .bw-tab { font-size: 0.85rem; } .bw-tab th, .bw-tab td { padding: 0.4rem 0.45rem; }
+        /* Handy: Namensspalte bleibt beim seitlichen Wischen stehen */
+        .bw-tab .bw-name { position: sticky; left: 0; z-index: 1; background: var(--surface, #fff); box-shadow: 1px 0 0 var(--border, #e3e7ee); }
+        .bw-tab thead th.bw-name { background: var(--accent, #1c2d52); }
+        .bw-tab tbody tr:nth-child(even) > td.bw-name { background: var(--soft, #f5f7fa); }
+      }
+"""
+
+
 def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=False):
     main_typ = os.path.join(folder_path, "main.typ")
     tmp_dir = os.path.join(folder_path, "_tmp")
@@ -1195,14 +1406,18 @@ def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=Fa
         with open(main_typ, "r", encoding="utf-8") as f:
             code = f.read()
 
-    # 1. SVG (Webansicht, Gesamtwertung auf einer Seite) und PDF (A4) kompilieren.
+    # 0. Wertung als Daten aus Typst holen -> HTML-Tabelle (sonst None -> SVG-Bilder wie früher)
+    daten = _blitz_daten(folder_path, code)
+
+    # 1. SVG (Webansicht, nur noch als Ersatz) und PDF (A4) kompilieren.
     #    Klappt das nicht (z. B. kein Typst installiert), bleiben die alten Dateien erhalten.
     if code:
         shutil.rmtree(tmp_dir, ignore_errors=True)
         os.makedirs(tmp_dir, exist_ok=True)
         try:
-            subprocess.run(["typst", "compile", "--input", "format=web", main_typ,
-                            os.path.join(tmp_dir, "output-{p}.svg")], check=True)
+            if not daten:
+                subprocess.run(["typst", "compile", "--input", "format=web", main_typ,
+                                os.path.join(tmp_dir, "output-{p}.svg")], check=True)
             new_pages = glob.glob(os.path.join(tmp_dir, "output-*.svg"))
             if new_pages:
                 for old in glob.glob(os.path.join(folder_path, "output*.svg")):
@@ -1224,7 +1439,10 @@ def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=Fa
     # 3. Seiten gruppieren: die letzten k Seiten sind die Einzelturniere, alles davor die Gesamtwertung
     names = _blitz_turnier_namen(code)
     n, k = len(pages), len(names)
-    if k and n > k:
+    if daten:
+        groups = [(label, [inhalt]) for label, inhalt in _bw_html_gruppen(daten)]
+        pages = pages or ["html"]   # nur damit unten nicht die Notlösung greift
+    elif k and n > k:
         groups = [("Gesamt", pages[:n - k])] + [(names[i], [pages[n - k + i]]) for i in range(k)]
     else:
         groups = [("Wertung", pages)]
@@ -1248,10 +1466,11 @@ def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=Fa
         tab_css = ("""
       .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
       .tab-bar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-      .tab-bar label { cursor: pointer; padding: 0.55rem 1.1rem; border-radius: 6px; background: #e8ecf3; color: #0a1f44; font-weight: bold; }
-      .tab-bar label:hover { background: #d5dcea; }
+      .tab-bar label { cursor: pointer; padding: 0.55rem 1.1rem; border-radius: 999px; background: var(--soft, #e8ecf3); color: var(--text, #0a1f44); border: 1px solid var(--border, transparent); font-weight: bold; }
+      .tab-bar label:hover { border-color: var(--accent, #0a1f44); }
       .tab-panel { display: none; }
-      """ + active + """ { background: #0a1f44; color: #fff; }
+      """ + active + """ { background: var(--accent, #0a1f44); border-color: var(--accent, #0a1f44); color: #fff; }
+      [data-theme="dark"] """ + active.replace(",", ', [data-theme="dark"] ') + """ { background: var(--hell); border-color: var(--hell); color: #0e1524; }
       """ + show + """ { display: block; }""")
 
     pdf_link = (f'<p><a href="{blitz_pdf}" download>Wertung {jahr or ""} als PDF herunterladen</a></p>'
@@ -1286,7 +1505,7 @@ def _blitz_seite(folder_path, html_datei, blitz_pdf, jahr, leiste, archiviert=Fa
       .bw-jahre { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0 0.8rem; }
       .bw-jahre a { padding: 0.15rem 0.7rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; background: var(--soft); color: var(--navy); }
       .bw-jahre a[aria-current="page"] { background: var(--navy); color: #fff; font-weight: bold; }
-      .bw-archiv { padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; }""" + tab_css + """
+      .bw-archiv { padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; }""" + tab_css + BLITZ_HTML_CSS + """
     </style>"""
 
     render_page(f"Blitzjahreswertung {jahr or ''}".strip(), content, html_datei, extra_styles=styles)
