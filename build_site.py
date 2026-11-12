@@ -150,6 +150,7 @@ STATIC_PAGES = [
 GLOBAL_CSS = """<style>
       :root {
         --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
       }
 
       /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
@@ -157,7 +158,7 @@ GLOBAL_CSS = """<style>
       .skip-link:focus { left: 0; }
 
       header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
-      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
 
       header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
       header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
@@ -174,7 +175,7 @@ GLOBAL_CSS = """<style>
       .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
       .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
 
-      @media (max-width: 960px) {
+      @media (max-width: 1180px) {
         header { gap: 0.3rem 1rem; }
         header .brand { font-size: 1rem; }
         .nav-burger { display: block; }
@@ -186,16 +187,16 @@ GLOBAL_CSS = """<style>
 
       /* Untermenüs (Inhalt siehe SUBNAV) */
       .nav-gruppe { position: relative; display: flex; align-items: center; }
-      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.38em; height: 0.38em; margin-left: 0.4em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
       .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
-      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--navy); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
       .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
-      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
       header nav .nav-unter a:first-child { margin-top: 0.3rem; }
       header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
       .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
 
-      @media (max-width: 960px) {
+      @media (max-width: 1180px) {
         .nav-gruppe { display: block; }
         .nav-gruppe > a { display: block; }
         .nav-gruppe > a::after { display: none; }
@@ -1325,12 +1326,13 @@ HOF_SKRIPT = """<script>
 </script>"""
 
 HOF_CSS = """<style>
+      :root { --afk-navy: #1c2d52; }   /* fest, unabhängig von --navy aus style.css */
       .hof-zurueck { text-decoration: none; }
       .hof-top { list-style: none; padding: 0; margin: 0.8rem 0 1.6rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.6rem; counter-reset: platz; }
       .hof-top li { counter-increment: platz; display: flex; align-items: center; gap: 0.7rem; background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.9rem; }
       .hof-top li::before { content: counter(platz) "."; color: #6b7280; font-weight: bold; min-width: 1.4em; }
       .hof-name { flex: 1; font-weight: 600; }
-      .hof-zahl { background: var(--navy); color: #fff; border-radius: 999px; min-width: 2em; text-align: center; padding: 0.05rem 0.5rem; font-weight: bold; }
+      .hof-zahl { background: var(--afk-navy); color: #fff; border-radius: 999px; min-width: 2em; text-align: center; padding: 0.05rem 0.5rem; font-weight: bold; }
       .hof-filter { margin: 0.4rem 0 0.6rem; }
       .hof-filter select { font: inherit; padding: 0.25rem 0.5rem; border: 1px solid var(--border); border-radius: 6px; }
       .table-responsive { overflow-x: auto; }
@@ -1339,12 +1341,12 @@ HOF_CSS = """<style>
       .hof-tafel th, .hof-tafel td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
       .hof-tafel th { white-space: nowrap; }
       @media (min-width: 1100px) { .hof-tafel td { white-space: nowrap; } .hof-tafel td.mehrere { white-space: normal; min-width: 9rem; } }
-      .hof-tafel thead th { background: var(--navy); color: #fff; }
-      .hof-tafel tbody th { color: var(--navy); font-variant-numeric: tabular-nums; }
+      .hof-tafel thead th { background: var(--afk-navy); color: #fff; }
+      .hof-tafel tbody th { color: var(--afk-navy); font-variant-numeric: tabular-nums; }
       .hof-tafel tbody tr:nth-child(even) { background: #f7f8fa; }
       .hof-tafel td.leer { color: #c3c8d0; }
       .hof-tafel.gefiltert td[data-spieler] { color: #9aa1ad; }
-      .hof-tafel.gefiltert td.treffer { color: var(--navy); background: #dcebf7; font-weight: bold; }
+      .hof-tafel.gefiltert td.treffer { color: var(--afk-navy); background: #dcebf7; font-weight: bold; }
     </style>"""
 
 
@@ -1442,9 +1444,10 @@ DOKUMENTE_ORDNER = "dokumente"
 DOKUMENTE = ["satzung", "historie"]
 
 GESCHICHTE_CSS = """<style>
+      :root { --afk-navy: #1c2d52; }   /* fest, unabhängig von --navy aus style.css */
       .zeitleiste { margin-top: 1.5rem; }
       .zl-jahr { display: grid; grid-template-columns: 6rem 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
-      .zl-jahr h2 { margin: 0; font-size: 1.25rem; color: var(--navy); font-variant-numeric: tabular-nums; }
+      .zl-jahr h2 { margin: 0; font-size: 1.25rem; color: var(--afk-navy); font-variant-numeric: tabular-nums; }
       .zl-jahr > div { border-left: 3px solid #6fa3dc; padding-left: 1.1rem; }
       .zl-jahr p { margin: 0 0 0.7rem; }
       @media (max-width: 600px) { .zl-jahr { grid-template-columns: 1fr; gap: 0.3rem; } }
