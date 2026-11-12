@@ -82,8 +82,34 @@
 
       .footer-link { color: #aaa; }
     </style><style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
       .klein { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+      .oq-karten { list-style: none; padding: 0; margin: 1.2rem 0 1.4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 42vw), 1fr)); gap: 0.6rem; }
+      .oq-karten li { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.7rem 0.9rem; border-radius: 10px; background: var(--soft, #f3f5f9); border: 1px solid var(--border, #e3e7ee); }
+      .oq-team { font-weight: 800; font-size: 1.05rem; }
+      .oq-zahlen { font-size: 0.9rem; }
+      .oq-stand { font-size: 0.8rem; color: color-mix(in srgb, var(--text, #000) 65%, transparent); }
+      .oq-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border, #d6dbe4); }
+      .oq-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface, #fff); color: var(--text, inherit); }
+      .oq-tab th, .oq-tab td { padding: 0.5rem 0.65rem; text-align: center; border-bottom: 1px solid var(--border, #e3e7ee); white-space: nowrap; }
+      .oq-tab thead th { background: var(--accent, #1c2d52); color: #fff; font-weight: 700; }
+      .oq-tab .oq-jahr, .oq-tab .oq-ort { text-align: left; }
+      .oq-tab td.oq-jahr { font-weight: 700; font-variant-numeric: tabular-nums; }
+      .oq-tab td.oq-jahr small { display: inline-block; margin-left: 0.5rem; font-weight: normal; font-size: 0.78rem; color: color-mix(in srgb, var(--text, #000) 55%, transparent); }
+      .oq-tab tbody tr:nth-child(even) > * { background-color: var(--soft, #f5f7fa); }
+      .oq-tab tbody tr:hover > * { background-color: color-mix(in srgb, var(--text, #000) 9%, var(--surface, #fff)); }
+      .oq-platz { display: inline-block; min-width: 2em; padding: 0.1rem 0.45rem; border-radius: 6px; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+      .oq-platz.oq-p1 { background: var(--oq-sieg, #ffd54a); color: #1b2a4a; font-weight: 800; }
+      .oq-platz.oq-pokal { box-shadow: 0 0 0 2px var(--surface, #fff), 0 0 0 4px var(--oq-sieg, #ffd54a); }
+      .oq-tab .oq-leer { color: color-mix(in srgb, var(--text, #000) 30%, transparent); }
+      .oq-tab .oq-ersatz { font-size: 0.82rem; font-style: italic; color: color-mix(in srgb, var(--text, #000) 60%, transparent); }
+      .oq-tab td.oq-aus { font-style: italic; color: color-mix(in srgb, var(--text, #000) 50%, transparent);
+                          background-image: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--text, #000) 6%, transparent) 6px 12px); }
+      .oq-legende2 { font-size: 0.85rem; margin-top: 0.8rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+      .oq-legende2 .oq-platz.oq-pokal { margin-left: 1rem; }
+      @media (max-width: 700px) {
+        .oq-tab { font-size: 0.85rem; } .oq-tab th, .oq-tab td { padding: 0.4rem 0.4rem; }
+        .oq-tab td.oq-jahr small, .oq-tab .oq-ort { display: none; }
+      }
     </style>
   <link rel="stylesheet" href="design.css">
   <meta property="og:title" content="Oberlandquartett | SG AFK">
@@ -122,258 +148,10 @@
   <main id="main" class="container">
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
 <h1 style="margin-top:1rem;">Oberlandquartett</h1>
-<div class="table-responsive"><table class="oq-tabelle">
-<thead><tr><th>Datum</th><th>Ausrichter</th>
-<th>Aschheim</th>
-<th>Deisenhofen</th>
-<th>Holzkirchen</th>
-<th>Höhenkirchen</th>
-</tr></thead><tbody>
-<tr>
-<td class="links">21.07.1997</td>
-<td class="links">Deisenhofen</td>
-<td class="oq-sieg">1</td>
-<td>3</td>
-<td>4</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">17.07.1998</td>
-<td class="links">Aschheim</td>
-<td class="oq-sieg">1</td>
-<td>3</td>
-<td>4</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">?</td>
-<td class="links">Höhenkirchen</td>
-<td class="oq-pokal" title="Pokalgewinn">1</td>
-<td>2</td>
-<td>4</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">30.06.2000</td>
-<td class="links">Holzkirchen</td>
-<td>3</td>
-<td class="oq-sieg">1</td>
-<td>4</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">29.06.2001</td>
-<td class="links">Deisenhofen</td>
-<td>3</td>
-<td>2</td>
-<td class="oq-sieg">1</td>
-<td>4</td>
-</tr>
-<tr>
-<td class="links">?</td>
-<td class="links">Aschheim</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td class="links">24.07.2003</td>
-<td class="links">Höhenkirchen</td>
-<td>4</td>
-<td>3</td>
-<td>2</td>
-<td class="oq-sieg">1</td>
-</tr>
-<tr>
-<td class="links">18.06.2004</td>
-<td class="links">Holzkirchen</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-<td class="oq-sieg">1</td>
-</tr>
-<tr>
-<td class="links">15.07.2005</td>
-<td class="links">Deisenhofen</td>
-<td>3</td>
-<td class="oq-sieg">1</td>
-<td>4</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">07.07.2006</td>
-<td class="links">Aschheim</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-</tr>
-<tr>
-<td class="links">29.06.2007</td>
-<td class="links">Höhenkirchen</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>4</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">04.07.2008</td>
-<td class="links">Holzkirchen</td>
-<td class="oq-pokal" title="Pokalgewinn">1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-</tr>
-<tr>
-<td class="links">26.06.2009</td>
-<td class="links">Deisenhofen</td>
-<td>3</td>
-<td class="oq-sieg">1</td>
-<td>4</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">11.06.2010</td>
-<td class="links">Aschheim</td>
-<td>2</td>
-<td class="oq-sieg">1</td>
-<td>4</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">24.06.2011</td>
-<td class="links">Höhenkirchen</td>
-<td>3</td>
-<td class="oq-pokal" title="Pokalgewinn">1</td>
-<td>4</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">29.06.2012</td>
-<td class="links">Holzkirchen</td>
-<td>3</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>4</td>
-</tr>
-<tr>
-<td class="links">28.06.2013</td>
-<td class="links">Deisenhofen</td>
-<td>4</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">13.06.2014</td>
-<td class="links">Aschheim</td>
-<td>3</td>
-<td>2</td>
-<td>4</td>
-<td class="oq-sieg">1</td>
-</tr>
-<tr>
-<td class="links">17.07.2015</td>
-<td class="links">Höhenkirchen</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>4</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">08.07.2016</td>
-<td class="links">Holzkirchen</td>
-<td>4</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">30.06.2017</td>
-<td class="links">Deisenhofen</td>
-<td>4</td>
-<td>3</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-</tr>
-<tr>
-<td class="links">29.06.2018</td>
-<td class="links">Aschheim</td>
-<td>2</td>
-<td class="oq-sieg">1</td>
-<td>3</td>
-<td>4</td>
-</tr>
-<tr>
-<td class="links">28.06.2019</td>
-<td class="links">Höhenkirchen</td>
-<td>3</td>
-<td class="oq-pokal" title="Pokalgewinn">1</td>
-<td>2</td>
-<td>4</td>
-</tr>
-<tr>
-<td class="links">-</td>
-<td class="links">-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td class="links">-</td>
-<td class="links">-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-</tr>
-<tr>
-<td class="links">01.07.2022</td>
-<td class="links">Holzkirchen</td>
-<td class="oq-sieg">1</td>
-<td>4</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">23.06.2023</td>
-<td class="links">Deisenhofen</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>4</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">28.06.2024</td>
-<td class="links">Aschheim</td>
-<td class="oq-pokal" title="Pokalgewinn">1</td>
-<td>2</td>
-<td>Aschheim II</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">27.06.2025</td>
-<td class="links">Höhenkirchen</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>4</td>
-<td>3</td>
-</tr>
-<tr>
-<td class="links">03.07.2026</td>
-<td class="links">Holzkirchen</td>
-<td class="oq-sieg">1</td>
-<td>2</td>
-<td>4</td>
-<td>3</td>
-</tr>
-</tbody></table></div>
-<p class="oq-legende"><span>Turniersieg</span><span class="pokal">Pokalgewinn</span></p>
-<p class="klein">Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>
-Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.
-</p>
+<ul class="oq-karten"><li><span class="oq-team">Aschheim</span><span class="oq-zahlen"><b>12</b> Turniersiege · <b>3</b> Pokale</span><span class="oq-stand">Zum nächsten Pokal: 2× in Folge, 2/5 Siege</span></li><li><span class="oq-team">Deisenhofen</span><span class="oq-zahlen"><b>10</b> Turniersiege · <b>2</b> Pokale</span><span class="oq-stand">Zum nächsten Pokal: noch kein Sieg</span></li><li><span class="oq-team">Holzkirchen</span><span class="oq-zahlen"><b>2</b> Turniersiege · <b>0</b> Pokale</span><span class="oq-stand">Zum nächsten Pokal: noch kein Sieg</span></li><li><span class="oq-team">Höhenkirchen</span><span class="oq-zahlen"><b>3</b> Turniersiege · <b>0</b> Pokale</span><span class="oq-stand">Zum nächsten Pokal: noch kein Sieg</span></li></ul>
+<div class="oq-scroll"><table class="oq-tab"><thead><tr><th class="oq-jahr">Jahr</th><th class="oq-ort">Ausrichter</th><th>Aschheim</th><th>Deisenhofen</th><th>Holzkirchen</th><th>Höhenkirchen</th></tr></thead><tbody><tr><td class="oq-jahr">2026<small>03.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2025<small>27.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2024<small>28.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz oq-p1 oq-pokal" title="Turniersieg und Pokalgewinn">🏆 1</span></td><td><span class="oq-platz">2</span></td><td class="oq-ersatz" title="Ersatzmannschaft">Aschheim II</td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2023<small>23.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2022<small>01.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td></tr><tr class=oq-ausfall><td class="oq-jahr">2021<small></small></td><td class="oq-ort"></td><td class="oq-aus" colspan="4">Ausfall Corona</td></tr><tr class=oq-ausfall><td class="oq-jahr">2020<small></small></td><td class="oq-ort"></td><td class="oq-aus" colspan="4">Ausfall Corona</td></tr><tr><td class="oq-jahr">2019<small>28.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1 oq-pokal" title="Turniersieg und Pokalgewinn">🏆 1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2018<small>29.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2017<small>30.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2016<small>08.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2015<small>17.07.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2014<small>13.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td></tr><tr><td class="oq-jahr">2013<small>28.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2012<small>29.06.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2011<small>24.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1 oq-pokal" title="Turniersieg und Pokalgewinn">🏆 1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2010<small>11.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2009<small>26.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2008<small>04.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz oq-p1 oq-pokal" title="Turniersieg und Pokalgewinn">🏆 1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2007<small>29.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2006<small>07.07.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2005<small>15.07.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2004<small>18.06.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td></tr><tr><td class="oq-jahr">2003<small>24.07.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td></tr><tr class=oq-ausfall><td class="oq-jahr">2002<small></small></td><td class="oq-ort">Aschheim</td><td class="oq-aus" colspan="4">nicht ausgetragen</td></tr><tr><td class="oq-jahr">2001<small>29.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2000<small>30.06.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">1999<small></small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1 oq-pokal" title="Turniersieg und Pokalgewinn">🏆 1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">1998<small>17.07.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">1997<small>21.07.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz oq-p1" title="Turniersieg">1</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr></tbody></table></div>
+<p class="oq-legende2"><span class="oq-platz oq-p1">1</span> Turniersieg <span class="oq-platz oq-p1 oq-pokal">🏆 1</span> Pokalgewinn</p>
+<p class="klein">Den Pokal gewinnt die Mannschaft, die entweder 3x hintereinander gewinnt oder insgesamt 5x.<br>Nach dem Pokalgewinn beginnt die Zählung von vorne! Der Gewinner spendiert den neuen Pokal.</p>
   </main>
 
   <footer>
