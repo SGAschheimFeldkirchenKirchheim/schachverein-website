@@ -170,3 +170,50 @@ footer {
   padding: 1.5rem;
   margin-top: 3rem;
 }
+/* Saison-Umschalter: aktive Saison als Pille mit versetzter Pille dahinter (3D-Effekt).
+   "nav.saisons" ist absichtlich spezifischer als die Regel in liga.py, damit diese hier gewinnt. */
+nav.saisons a[aria-current="page"] {
+  --badge-bg: #1c2d52;       /* Pille: Navy */
+  --badge-text: #ffffff;
+  --badge-akzent: #6fa3dc;   /* versetzte Pille: Hellblau */
+  --badge-versatz: 5px;
+
+  position: relative;
+  isolation: isolate;        /* hält die Pille dahinter hinter dem Text, aber vor dem Seitenhintergrund */
+  display: inline-block;
+  padding: 0.35em 1.1em;
+  margin-bottom: var(--badge-versatz);
+  border-radius: 999px;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  font-weight: 800;
+  text-decoration: none;
+
+  /* alten Balken aus liga.py abschalten */
+  border: none;
+  box-shadow: none;
+  background-image: none;
+}
+
+nav.saisons a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--badge-akzent);
+  transform: translateY(var(--badge-versatz));
+  z-index: -1;
+}
+
+nav.saisons a[aria-current="page"]::after {
+  display: none;             /* falls der alte Balken als ::after gebaut ist */
+}
+
+/* Dunkler Modus: helle Pille, weißer Akzent, damit sie sich abheben */
+@media (prefers-color-scheme: dark) {
+  nav.saisons a[aria-current="page"] {
+    --badge-bg: #6fa3dc;
+    --badge-text: #101828;
+    --badge-akzent: #ffffff;
+  }
+}
