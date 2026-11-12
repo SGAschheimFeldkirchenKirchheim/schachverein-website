@@ -110,6 +110,21 @@ NAV = [
     # "Neu hier?" ist über die Startseite und den Footer erreichbar
 ]
 
+# Untermenüs: klappen am PC beim Darüberfahren auf, am Handy stehen sie eingerückt unter dem Reiter.
+# Reiter -> Liste (Seite, Text). Reiter ohne Eintrag haben kein Untermenü.
+# "mannschaften.html" wird beim Build automatisch mit den aktuellen Teams gefüllt (siehe MAIN).
+SUBNAV = {
+    "ueber-uns.html": [
+        ("neu-hier.html", "Neu hier?"),
+    ],
+    "turniere.html": [
+        ("oberlandquartett.html", "Oberlandquartett"),
+        ("blitzjahreswertung.html", "Blitzjahreswertung"),
+        ("vereinsintern.html", "Hall of Fame"),
+        ("ausschreibungen.html", "Ausschreibungen"),
+    ],
+}
+
 # Unterseiten, bei denen im Menü der übergeordnete Reiter markiert wird
 ACTIVE_PARENT = {
     "ausschreibungen.html": "turniere.html",
@@ -165,6 +180,27 @@ GLOBAL_CSS = """<style>
         nav a[aria-current="page"] { text-underline-offset: 5px; }
       }
 
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.38em; height: 0.38em; margin-left: 0.4em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--navy); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      @media (max-width: 960px) {
+        .nav-gruppe { display: block; }
+        .nav-gruppe > a { display: block; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-unter, .nav-gruppe:hover .nav-unter { display: flex; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
       .footer-link { color: #aaa; }
     </style>"""
 
@@ -172,11 +208,21 @@ GLOBAL_CSS = """<style>
 # ==========================================
 # 1. HELPER: RENDER PAGE MIT TEMPLATE
 # ==========================================
-def build_nav(nav_path, active):
+def build_nav(nav_path, active, seite=None):
+    """active = markierter Reiter, seite = aktuelle Datei (markiert den Eintrag im Untermenü)."""
     links = []
     for href, label in NAV:
         cur = ' aria-current="page"' if href == active else ''
-        links.append(f'<a href="{nav_path}{href}"{cur}>{label}</a>')
+        haupt = f'<a href="{nav_path}{href}"{cur}>{label}</a>'
+        unter = SUBNAV.get(href)
+        if not unter:
+            links.append(haupt)
+            continue
+        eintraege = ""
+        for u_href, u_label in unter:
+            u_cur = ' aria-current="page"' if u_href == seite else ''
+            eintraege += f'<a href="{nav_path}{u_href}"{u_cur}>{u_label}</a>'
+        links.append(f'<div class="nav-gruppe">{haupt}<div class="nav-unter">{eintraege}</div></div>')
     return "\n      ".join(links)
 
 
@@ -218,7 +264,7 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         content=content,
         css_path=css_path,
         nav_path=nav_path,
-        nav=build_nav(nav_path, active),
+        nav=build_nav(nav_path, active, name),
         extra_styles=GLOBAL_CSS + extra_styles,
         logo=logo,
         head_icon=head_icon,
@@ -2414,6 +2460,11 @@ def build_static_pages(skip=()):
 # MAIN EXECUTION
 # ==========================================
 if __name__ == "__main__":
+    # Teams zuerst laden: das Untermenü "Mannschaften" steht auf jeder Seite
+    aktuell, teams, archiv = saisons_laden()
+    SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
+    if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
+        SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
     upcoming = build_termine()
     build_oberlandquartett()
     build_blitzjahreswertung()
@@ -2422,7 +2473,6 @@ if __name__ == "__main__":
     build_ausschreibungen()
     build_neu_hier()
     news = build_berichte()
-    aktuell, teams, archiv = saisons_laden()
     saisons_verknuepfen(aktuell, teams, archiv)
     # Einsätze früherer Saisons für die Prognose (Gewichtung siehe aufstellung.py)
     ereignisse = {j: liga.auf.saison_ereignisse(ts) for j, ts in archiv.items()}
