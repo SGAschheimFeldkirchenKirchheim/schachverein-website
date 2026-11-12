@@ -8,12 +8,15 @@
   <meta name="theme-color" content="#1b2a4a">
   <link rel="icon" href="../Logo.png">
   <script>
-    /* Dunkelmodus: gespeicherte Wahl (auto/hell/dunkel) sofort anwenden, damit nichts aufblitzt */
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
     (function () {
-      var wahl = "auto";
-      try { wahl = localStorage.getItem("theme") || "auto"; } catch (e) {}
-      var dunkel = wahl === "dunkel" || (wahl === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.dataset.theme = dunkel ? "dark" : "light";
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
       document.documentElement.dataset.themeWahl = wahl;
     })();
   </script>
@@ -238,7 +241,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Auto</button>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
     <nav aria-label="Hauptmenü">
       <a href="../index.html">Start</a>
       <a href="../ueber-uns.html">Über uns</a>
@@ -308,7 +311,7 @@
       </div>
       <div>
         <h2>Kontakt</h2>
-        <p><a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
         <p><a href="../kontakt.html">Kontaktformular</a></p>
         <p><a href="../mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
       </div>
@@ -320,24 +323,22 @@
         <p><a href="../impressum.html">Impressum &amp; Datenschutz</a></p>
       </div>
     </div>
-    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 11.11.2026</p>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 12.11.2026</p>
   </footer>
 
   <script>
     (function () {
       var html = document.documentElement, knopf = document.getElementById("theme-schalter");
-      var namen = { auto: "Auto", hell: "Hell", dunkel: "Dunkel" }, folge = { auto: "hell", hell: "dunkel", dunkel: "auto" };
-      var medien = window.matchMedia("(prefers-color-scheme: dark)");
-      function setze(wahl) {
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
         html.dataset.themeWahl = wahl;
-        html.dataset.theme = (wahl === "dunkel" || (wahl === "auto" && medien.matches)) ? "dark" : "light";
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
         knopf.textContent = namen[wahl];
-        knopf.title = "Farbmodus: " + namen[wahl] + " (klicken zum Wechseln)";
-        try { localStorage.setItem("theme", wahl); } catch (e) {}
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
       }
-      setze(html.dataset.themeWahl || "auto");
-      knopf.addEventListener("click", function () { setze(folge[html.dataset.themeWahl] || "auto"); });
-      medien.addEventListener("change", function () { if (html.dataset.themeWahl === "auto") setze("auto"); });
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
     })();
   </script>
 </body>

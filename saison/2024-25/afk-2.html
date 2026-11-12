@@ -8,12 +8,15 @@
   <meta name="theme-color" content="#1b2a4a">
   <link rel="icon" href="../../Logo.png">
   <script>
-    /* Dunkelmodus: gespeicherte Wahl (auto/hell/dunkel) sofort anwenden, damit nichts aufblitzt */
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
     (function () {
-      var wahl = "auto";
-      try { wahl = localStorage.getItem("theme") || "auto"; } catch (e) {}
-      var dunkel = wahl === "dunkel" || (wahl === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.dataset.theme = dunkel ? "dark" : "light";
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
       document.documentElement.dataset.themeWahl = wahl;
     })();
   </script>
@@ -222,7 +225,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
-    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Auto</button>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
     <nav aria-label="Hauptmenü">
       <a href="../../index.html">Start</a>
       <a href="../../ueber-uns.html">Über uns</a>
@@ -349,7 +352,7 @@
       </table></div></section><section class="panel" id="p-saisons" data-reiter="saisons"><h2 class="panel-titel">Saisons</h2>
       <div class="tab-wrap"><table class="liga-tab">
         <thead><tr><th>Saison</th><th class="name">Klasse</th><th>Platz</th><th></th></tr></thead>
-        <tbody><tr><td><a href="../../afk-2.html">2026/27</a></td><td class="name">A-Klasse</td><td>5. von 10</td><td><span class="status s-">läuft</span></td></tr><tr><td><a href="../../saison/2025-26/afk-2.html">2025/26</a></td><td class="name">B-Klasse 1</td><td>2. von 10</td><td><span class="status s-auf">Aufstieg ↑</span></td></tr><tr><td><a href="../../saison/2024-25/afk-2.html">2024/25</a></td><td class="name">B-Klasse 2</td><td>3. von 10</td><td></td></tr><tr><td><a href="../../saison/2023-24/afk-2.html">2023/24</a></td><td class="name">B-Klasse 1</td><td>6. von 10</td><td></td></tr><tr><td><a href="../../saison/2022-23/afk-2.html">2022/23</a></td><td class="name">B-Klasse 1</td><td>7. von 8</td><td></td></tr></tbody>
+        <tbody><tr><td><a href="../../afk-2.html">2026/27</a></td><td class="name">A-Klasse</td><td>6. von 10</td><td><span class="status s-">läuft</span></td></tr><tr><td><a href="../../saison/2025-26/afk-2.html">2025/26</a></td><td class="name">B-Klasse 1</td><td>2. von 10</td><td><span class="status s-auf">Aufstieg ↑</span></td></tr><tr><td><a href="../../saison/2024-25/afk-2.html">2024/25</a></td><td class="name">B-Klasse 2</td><td>3. von 10</td><td></td></tr><tr><td><a href="../../saison/2023-24/afk-2.html">2023/24</a></td><td class="name">B-Klasse 1</td><td>6. von 10</td><td></td></tr><tr><td><a href="../../saison/2022-23/afk-2.html">2022/23</a></td><td class="name">B-Klasse 1</td><td>7. von 8</td><td></td></tr></tbody>
       </table></div></section>
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
       Gewinnpartien; Gleichstand = geteilter Platz). <a href="https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&amp;saison=14&amp;liga=294&amp;Itemid=4164" target="_blank" rel="noopener">Liga beim Schachbezirk ↗</a>
@@ -525,7 +528,7 @@
       </div>
       <div>
         <h2>Kontakt</h2>
-        <p><a href="mailto:info@sg-afk.de">info@sg-afk.de</a></p>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
         <p><a href="../../kontakt.html">Kontaktformular</a></p>
         <p><a href="../../mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
       </div>
@@ -537,24 +540,22 @@
         <p><a href="../../impressum.html">Impressum &amp; Datenschutz</a></p>
       </div>
     </div>
-    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 11.11.2026</p>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 12.11.2026</p>
   </footer>
 
   <script>
     (function () {
       var html = document.documentElement, knopf = document.getElementById("theme-schalter");
-      var namen = { auto: "Auto", hell: "Hell", dunkel: "Dunkel" }, folge = { auto: "hell", hell: "dunkel", dunkel: "auto" };
-      var medien = window.matchMedia("(prefers-color-scheme: dark)");
-      function setze(wahl) {
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
         html.dataset.themeWahl = wahl;
-        html.dataset.theme = (wahl === "dunkel" || (wahl === "auto" && medien.matches)) ? "dark" : "light";
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
         knopf.textContent = namen[wahl];
-        knopf.title = "Farbmodus: " + namen[wahl] + " (klicken zum Wechseln)";
-        try { localStorage.setItem("theme", wahl); } catch (e) {}
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
       }
-      setze(html.dataset.themeWahl || "auto");
-      knopf.addEventListener("click", function () { setze(folge[html.dataset.themeWahl] || "auto"); });
-      medien.addEventListener("change", function () { if (html.dataset.themeWahl === "auto") setze("auto"); });
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
     })();
   </script>
 </body>
