@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vereinsinterne Turniere & Hall of Fame | SG AFK</title>
+  <title>Hall of Fame | SG AFK</title>
   <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
   <meta name="theme-color" content="#1b2a4a">
   <link rel="icon" href="Logo.png">
@@ -81,13 +81,31 @@
 
       .footer-link { color: #aaa; }
     </style><style>
-      .table-responsive { overflow-x: auto; margin-top: 1.5rem; }
-      .hof-tabelle { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #0a1f44; }
-      .hof-tabelle th, .hof-tabelle td { padding: 10px 12px; border: 1px solid #0a1f44; }
-      .hof-tabelle th { background-color: #0a1f44; color: white; font-weight: bold; text-align: center; }
+      .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
+</style><style>
+      .hof-zurueck { text-decoration: none; }
+      .hof-top { list-style: none; padding: 0; margin: 0.8rem 0 1.6rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.6rem; counter-reset: platz; }
+      .hof-top li { counter-increment: platz; display: flex; align-items: center; gap: 0.7rem; background: var(--soft); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.9rem; }
+      .hof-top li::before { content: counter(platz) "."; color: #6b7280; font-weight: bold; min-width: 1.4em; }
+      .hof-name { flex: 1; font-weight: 600; }
+      .hof-zahl { background: var(--navy); color: #fff; border-radius: 999px; min-width: 2em; text-align: center; padding: 0.05rem 0.5rem; font-weight: bold; }
+      .hof-filter { margin: 0.4rem 0 0.6rem; }
+      .hof-filter select { font: inherit; padding: 0.25rem 0.5rem; border: 1px solid var(--border); border-radius: 6px; }
+      .table-responsive { overflow-x: auto; }
+      .hof-breit { max-width: 1400px; }   /* breiter als der Textbereich, damit die Namen nicht umbrechen */
+      .hof-tafel { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: #fff; }
+      .hof-tafel th, .hof-tafel td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+      .hof-tafel th { white-space: nowrap; }
+      @media (min-width: 1100px) { .hof-tafel td { white-space: nowrap; } .hof-tafel td.mehrere { white-space: normal; min-width: 9rem; } }
+      .hof-tafel thead th { background: var(--navy); color: #fff; }
+      .hof-tafel tbody th { color: var(--navy); font-variant-numeric: tabular-nums; }
+      .hof-tafel tbody tr:nth-child(even) { background: #f7f8fa; }
+      .hof-tafel td.leer { color: #c3c8d0; }
+      .hof-tafel.gefiltert td[data-spieler] { color: #9aa1ad; }
+      .hof-tafel.gefiltert td.treffer { color: var(--navy); background: #dcebf7; font-weight: bold; }
     </style>
   <link rel="stylesheet" href="design.css">
-  <meta property="og:title" content="Vereinsinterne Turniere & Hall of Fame | SG AFK">
+  <meta property="og:title" content="Hall of Fame | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_DE">
@@ -109,7 +127,7 @@
     <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
     <nav aria-label="Hauptmenü">
       <a href="index.html">Start</a>
-      <div class="nav-gruppe"><a href="ueber-uns.html">Über uns</a><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a></div></div>
+      <div class="nav-gruppe"><a href="ueber-uns.html">Über uns</a><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a><a href="geschichte.html">Vereinsgeschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
       <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a></div></div>
       <a href="jugend.html">Jugend</a>
       <a href="termine.html">Termine</a>
@@ -121,31 +139,50 @@
   </header>
 
   <main id="main" class="container">
-    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
-<h1 style="margin-top:1rem;">Vereinsinterne Turniere & Hall of Fame</h1>
-<div class="table-responsive"><table class="hof-tabelle">
-<thead><tr><th>Turnier</th><th>Jahr</th><th>Spieler</th></tr></thead><tbody>
-<tr style="background-color: #ffffff;">
-<td style="text-align:left;">Weihnachtsblitz</td>
-<td style="text-align:center;">2020</td>
-<td style="text-align:left;">Max Mustermann</td>
-</tr>
-<tr style="background-color: #eef1f8;">
-<td style="text-align:left;">Sommeropen</td>
-<td style="text-align:center;">2016</td>
-<td style="text-align:left;">Erika Musterfrau</td>
-</tr>
-<tr style="background-color: #ffffff;">
-<td style="text-align:left;">Vereinsmeisterschaft</td>
-<td style="text-align:center;">2017</td>
-<td style="text-align:left;">Hans Beispiel</td>
-</tr>
-<tr style="background-color: #eef1f8;">
-<td style="text-align:left;">Blitzturnier</td>
-<td style="text-align:center;">2018</td>
-<td style="text-align:left;">Anna Test</td>
-</tr>
+    <a href="turniere.html" class="hof-zurueck">← Zurück zur Turniere-Übersicht</a>
+<h1>Hall of Fame</h1>
+<p class="lead">Alle Sieger unserer vereinsinternen Turniere von 2007 bis 2026.</p>
+<h2>Meiste Titel</h2>
+<ol class="hof-top">
+<li><span class="hof-name">Frederik Prause</span><span class="hof-zahl">14</span></li>
+<li><span class="hof-name">Pierre Tassell</span><span class="hof-zahl">14</span></li>
+<li><span class="hof-name">Ronny Damaske</span><span class="hof-zahl">13</span></li>
+<li><span class="hof-name">Armin Tobisch</span><span class="hof-zahl">9</span></li>
+<li><span class="hof-name">Dieter Vischer</span><span class="hof-zahl">9</span></li>
+<li><span class="hof-name">Alexander Wittko</span><span class="hof-zahl">4</span></li>
+</ol>
+<div class="hof-filter"><label for="hof-wahl">Spieler hervorheben:</label> <select id="hof-wahl"><option value="">alle</option><option>Alexander Wittko</option><option>Armin Tobisch</option><option>Arthur Krumm</option><option>David Mehlhorn</option><option>Dieter Vischer</option><option>Dominik Dax</option><option>Fabian Müller</option><option>Frederik Prause</option><option>Hanspeter Hecht</option><option>Konrad Keblat</option><option>Lars Goldbeck</option><option>Moritz Stöttner</option><option>Pierre Tassell</option><option>Ronny Damaske</option><option>Rudolf Oster</option><option>Stefans Kasims</option></select></div>
+<div class="table-responsive full-bleed hof-breit"><table class="hof-tafel"><thead><tr><th>Jahr</th><th>Vereinsmeister</th><th>Pokal</th><th>Blitzserie</th><th>Blitz</th><th>Schnellschach</th><th>Weihnachtsblitz</th><th>Osterblitz</th><th>Stadtmeister</th><th>Jugend</th></tr></thead><tbody>
+<tr><th scope="row">2026</th><td data-spieler="Alexander Wittko">Alexander Wittko</td><td data-spieler="Alexander Wittko">Alexander Wittko</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Dominik Dax">Dominik Dax</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Konrad Keblat">Konrad Keblat</td></tr>
+<tr><th scope="row">2025</th><td data-spieler="Pierre Tassell">Pierre Tassell</td><td data-spieler="Alexander Wittko">Alexander Wittko</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td data-spieler="Fabian Müller">Fabian Müller</td><td data-spieler="Stefans Kasims">Stefans Kasims</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Alexander Wittko">Alexander Wittko</td></tr>
+<tr><th scope="row">2024</th><td data-spieler="Pierre Tassell">Pierre Tassell</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td data-spieler="Stefans Kasims">Stefans Kasims</td><td data-spieler="Moritz Stöttner">Moritz Stöttner</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2023</th><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Ronny Damaske|Pierre Tassell" class="mehrere">Ronny Damaske und Pierre Tassell</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td></tr>
+<tr><th scope="row">2022</th><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td data-spieler="David Mehlhorn">David Mehlhorn</td><td data-spieler="Lars Goldbeck">Lars Goldbeck</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2021</th><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td data-spieler="David Mehlhorn">David Mehlhorn</td><td data-spieler="Frederik Prause">Frederik Prause</td><td data-spieler="Arthur Krumm">Arthur Krumm</td><td class="leer">–</td></tr>
+<tr><th scope="row">2020</th><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2019</th><td data-spieler="Arthur Krumm">Arthur Krumm</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td data-spieler="Dieter Vischer">Dieter Vischer</td><td class="leer">–</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2018</th><td class="leer">–</td><td data-spieler="Pierre Tassell">Pierre Tassell</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Rudolf Oster">Rudolf Oster</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2017</th><td data-spieler="Dieter Vischer">Dieter Vischer</td><td data-spieler="Dieter Vischer">Dieter Vischer</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2016</th><td data-spieler="Frederik Prause">Frederik Prause</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2015</th><td data-spieler="Hanspeter Hecht">Hanspeter Hecht</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2014</th><td data-spieler="Hanspeter Hecht">Hanspeter Hecht</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2013</th><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2012</th><td data-spieler="Armin Tobisch|Dieter Vischer" class="mehrere">Armin Tobisch und Dieter Vischer</td><td data-spieler="Dieter Vischer">Dieter Vischer</td><td class="leer">–</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2011</th><td data-spieler="Ronny Damaske">Ronny Damaske</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2010</th><td data-spieler="Dieter Vischer">Dieter Vischer</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2009</th><td data-spieler="Dieter Vischer">Dieter Vischer</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Dieter Vischer">Dieter Vischer</td><td class="leer">–</td><td data-spieler="Armin Tobisch">Armin Tobisch</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2008</th><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
+<tr><th scope="row">2007</th><td data-spieler="Dieter Vischer">Dieter Vischer</td><td class="leer">–</td><td class="leer">–</td><td data-spieler="Ronny Damaske">Ronny Damaske</td><td class="leer">–</td><td data-spieler="Frederik Prause">Frederik Prause</td><td class="leer">–</td><td class="leer">–</td><td class="leer">–</td></tr>
 </tbody></table></div>
+<script>
+  document.getElementById("hof-wahl").addEventListener("change", function () {
+    var wer = this.value;
+    document.querySelectorAll(".hof-tafel td[data-spieler]").forEach(function (td) {
+      td.classList.toggle("treffer", !!wer && td.dataset.spieler.split("|").indexOf(wer) >= 0);
+    });
+    document.querySelector(".hof-tafel").classList.toggle("gefiltert", !!wer);
+  });
+</script>
   </main>
 
   <footer>

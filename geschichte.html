@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vereinsgeschichte | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="Logo.png">
+  <script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 960px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.38em; height: 0.38em; margin-left: 0.4em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--navy); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      @media (max-width: 960px) {
+        .nav-gruppe { display: block; }
+        .nav-gruppe > a { display: block; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-unter, .nav-gruppe:hover .nav-unter { display: flex; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style><style>
+      .zeitleiste { margin-top: 1.5rem; }
+      .zl-jahr { display: grid; grid-template-columns: 6rem 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
+      .zl-jahr h2 { margin: 0; font-size: 1.25rem; color: var(--navy); font-variant-numeric: tabular-nums; }
+      .zl-jahr > div { border-left: 3px solid #6fa3dc; padding-left: 1.1rem; }
+      .zl-jahr p { margin: 0 0 0.7rem; }
+      @media (max-width: 600px) { .zl-jahr { grid-template-columns: 1fr; gap: 0.3rem; } }
+    </style>
+  <link rel="stylesheet" href="design.css">
+  <meta property="og:title" content="Vereinsgeschichte | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <img src="Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
+    <nav aria-label="Hauptmenü">
+      <a href="index.html">Start</a>
+      <div class="nav-gruppe"><a href="ueber-uns.html" aria-current="page">Über uns</a><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a><a href="geschichte.html" aria-current="page">Vereinsgeschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a></div></div>
+      <a href="jugend.html">Jugend</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <div class="nav-gruppe"><a href="turniere.html">Turniere</a><div class="nav-unter"><a href="oberlandquartett.html">Oberlandquartett</a><a href="blitzjahreswertung.html">Blitzjahreswertung</a><a href="vereinsintern.html">Hall of Fame</a><a href="ausschreibungen.html">Ausschreibungen</a></div></div>
+      <a href="faq.html">FAQ</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    <h1>Vereinsgeschichte</h1>
+<p class="lead">Von den Schachfreunden Feldkirchen 1952 bis heute.</p>
+<p><a class="btn btn-outline" href="dokumente/historie.pdf">Als PDF herunterladen</a></p>
+<div class="zeitleiste">
+<section class="zl-jahr" id="j1952"><h2>1952</h2><div><p>Gründung der Schachfreunde Feldkirchen durch Klaus Weckert und Hans Schleicher. Genauere Informationen zur Geschichte der Schachfreunde sind leider zurzeit nicht bekannt – das wird noch erforscht. Sobald Ergebnisse vorliegen, werden diese hier veröffentlicht.</p></div></section>
+<section class="zl-jahr" id="j1984"><h2>1984</h2><div><p>Die Gründungsversammlung wird für den 14. September festgelegt. An diesem Tag gründen 15 Schachspieler den Schach-Club Aschheim.</p><p>1. Vorsitzender: Helmut Gundel<br>2. Vorsitzender: Janos Barabas<br>Turnierleiter: Karlheinz Weber<br>Kassier: Norbert Brandl<br>Schriftführerin: Angelika Fischer</p></div></section>
+<section class="zl-jahr" id="j1985"><h2>1985</h2><div><p>Die erste Clubmeisterschaft gewinnt Karlheinz Weber (6 Punkte) vor Xaver Spaegele (5) und Christoph Sindern (4,5). Gespielt wurden sieben Runden nach Schweizer System.</p><p>Das Weihnachts-Blitzturnier holte sich Christoph Sindern (8 Punkte) vor Karlheinz Weber (7,5), Daniel Pohl (7) und Patrick Pohl (6).</p><p>Mitglieder: 32 (davon 13 Jugendliche)</p></div></section>
+<section class="zl-jahr" id="j1986"><h2>1986</h2><div><p>Das erste Auftreten des Vereins in einem Mannschaftswettbewerb war in der D-Klasse des Schachbezirkes München.</p><p>In der Jugendabteilung wird Patrick Pohl Blitzmeister vor Daniel Pohl und Florian Weber. Bei der Jugend-Clubmeisterschaft dreht Daniel gegen seinen Bruder Patrick den Spieß um. Dritte wird das einzige Mädchen der Schachjugend Gisi Gundel.</p><p>Am 16. September wird der Zusammenschluss mit den Schachfreunden Feldkirchen auf ein Jahr Probe beschlossen. Neuer Name: Schachgemeinschaft Aschheim/Feldkirchen.</p></div></section>
+<section class="zl-jahr" id="j1987"><h2>1987</h2><div><p>Am 10. Juli wird die endgültige Fusion beschlossen. 1. Vorsitzender der SG Aschheim/Feldkirchen wird Helmut Gundel. Spiellokal bleibt die Gaststätte „Tassilo“, Spielabend ist der Freitag.</p></div></section>
+<section class="zl-jahr" id="j1992"><h2>1992</h2><div><p>Als Gast zum Weihnachtsblitz-Turnier konnte der IM Alexander Banguiev gewonnen werden. Der Gast von der ukrainischen Halbinsel Krim gewann alle 15 Partien und siegte souverän vor Claus Pakmor (13) und Hans Wunder (10,5). Wen wundert’s: Banguiev weist eine ELO-Einschätzung von 2400 (!) auf.</p></div></section>
+<section class="zl-jahr" id="j1994-95"><h2>1994/95</h2><div><p>Vereinsmeister wird Prof. Dr. Hans Schmidt. Am Ende der 13 Runden stehen 10 Punkte auf seinem Konto. Den zweiten Platz teilen sich Dr. Günter Kopp und Hans Schleicher mit je 9,5 Zählern.</p><p>Bei den Münchner Schnellschachmeisterschaften gelang der Mannschaft des Vereins mit Claus Pakmor, Neuzugang Frederik Prause, Klaus Weckert und Dr. Günter Kopp sensationell der Aufstieg in die Hauptrunde gegen erheblich höher eingeschätzte Gegner aus der Bezirks- und A-Klasse. In der Endrunde hingen für den einzigen teilnehmenden Verein der B-Klasse die Trauben dann zu hoch.</p><p>Die erste Mannschaft kann sich in der B-Klasse halten, die zweite steigt in die C-Klasse auf.</p><p>Das Weihnachts-Blitzturnier holte sich auf Anhieb Frederik Prause (12 von 14 Punkten) vor Claus Pakmor (11) und Dr. Schmidt (10,5)</p></div></section>
+<section class="zl-jahr" id="j1996-97"><h2>1996/97</h2><div><p>Der 62jährige Klaus Weckert sorgt mit seinem Sieg bei der Pokalmeisterschaft für eine dicke Überraschung. Er verweist Prause, Hahn und Dr. Kopp auf die Plätze.</p><p>In einem echten „Endspiel“ bei der letzten Runde setzte sich bei den Clubmeisterschaften Pakmor gegen Prause durch. Dritter wurde Horst Hahn.</p><p>Die Rangliste des Vereins zu diesem Zeitpunkt lautete nach DWZ: Pakmor (1962), Prause (1832), Holler (1802), Hahn (1753), Weckert (1722), Dr. Kopp (1708).</p><p>Bei den Münchner Mannschaftsmeisterschaften wird die erste Mannschaft (Pakmor, Prause, Hahn, Kopp, Weckert, Holler, Schleicher, Schmidt) Vierter in der B-Gruppe. Die zweite Mannschaft (Sindern, Gundel, Gruner, Wunder, Brand, Blaha, Dillinger) verlor in der D-Gruppe keine einzige Partie, verpasst trotzdem den Aufstieg in die C-Klasse um einen halben Punkt.</p></div></section>
+<section class="zl-jahr" id="j1998"><h2>1998</h2><div><p>Die SG Aschheim/Feldkirchen trauert um Prof. Dr. Hans Schmidt. Das Gründungsmitglied stirbt im März plötzlich und unerwartet.</p><p>Der Ranglistenerste Claus Pakmor steht der 1. Mannschaft aus beruflichen Gründen nicht mehr zur Verfügung. Für Verstärkung sorgt Neuzugang Ronny Damaske.</p><p>Eine eigene Homepage wird eingerichtet.</p></div></section>
+<section class="zl-jahr" id="j1999"><h2>1999</h2><div><p>Bei den Münchner Mannschaftsmeisterschaften erzielt Dr. Günter Kopp sein 12. Remis hintereinander! Der Mannschaftsführer spielt an Brett 4.</p><p>Ganz im Zeichen von Frederik Prause standen die internen Turniere. Der Spitzenspieler wird Blitz- und Vereinsmeister.</p><p>Die erste Mannschaft kann sich trotz zahlreichen Ausfällen in der B-Klasse halten.</p><p>Weihnachtsblitz: Pakmor sen. vor Pakmor jr. und Prause.</p></div></section>
+<section class="zl-jahr" id="j2000"><h2>2000</h2><div><p>Der erst 17jährige Rüdiger Pakmor wird Vereinsmeister. Zweiter wird Horst Hahn vor Ronny Damaske.</p><p>Schade, dass der Clubmeister und sein Vater bei den Münchner Mannschaftsmeisterschaften für Vaterstetten spielen.</p><p>Den Franz-Lackermeier-Gedächtnispokal holt sich zum vierten Male in Folge Frederik Prause.</p></div></section>
+<section class="zl-jahr" id="j2001"><h2>2001</h2><div><p>Sensation im Pokal-Turnier: Außenseiter Richard Brand (12. der Vereinsrangliste) gewinnt im Finale gegen Peter Blaha (14.).</p><p>Der Vorstand mit Helmut Gundel an der Spitze wird einstimmig bestätigt. Neu ist Turnierleiter Ronny Damaske, der den nicht mehr angetretenen Dr. Kopp ablöst.</p><p>Die erste Mannschaft kann sich in der B-Liga nicht halten und steigt ab.</p><p>Erstmals wird über einen Zusammenschluss mit dem Schachklub Kirchheim debattiert.</p></div></section>
+<section class="zl-jahr" id="j2002"><h2>2002</h2><div><p>Die Schachgemeinschaft trauert um Peter Stojanov.</p><p>Die erste Mannschaft schafft postwendend den Wiederaufstieg in die B-Klasse. Auch die zweite Mannschaft steigt auf und spielt in Zukunft in der C-Klasse.</p><p>Dr. Günter Kopp wird wieder Turnierleiter, da Ronny Damaske wegen beruflicher Mehrbelastung kürzer treten muss.</p><p>Weihnachtsblitz: Prause klar vor Armin Tobisch und Claus Pakmor.</p></div></section>
+<section class="zl-jahr" id="j2003"><h2>2003</h2><div><p>Die Vereinsmeisterschaft gewinnt Claus Pakmor vor Horst Hahn und Ronny Damaske.</p><p>Sowohl die 1. (B-Klasse) als auch die 2. Mannschaft (C-Klasse) können sich in den Ligen halten.</p><p>Frederik Prause gewinnt zum fünften Mal den Franz-Lackermeier-Pokal und darf ihn mit nach Hause nehmen.</p></div></section>
+<section class="zl-jahr" id="j2004"><h2>2004</h2><div><p>Nach seiner überraschenden Qualifikation für das Vormeisterturnier der Münchner Einzelmeisterschaften ist Ronny Damaske der klare Favorit für die Vereinsmeisterschaft. Der Feldkirchener lässt nichts anbrennen und siegt vor Horst Hahn und den punktgleichen Dr. Günter Kopp und Michael Miller.</p><p>Die 1. Mannschaft belegt in der B-Klasse mit dem wieder für den Verein am Spitzenbrett spielenden Claus Pakmor (4,5 Punkte aus 6 Partien) einen ausgezeichneten dritten Rang. Weitere Punktelieferanten sind Frederik Prause (5 aus 7) und Neuzugang Dr. Peter Esser (3 aus 5).</p><p>Dagegen ist die 2. Mannschaft in der C-Klasse überfordert und steigt in die D-Klasse ab.</p></div></section>
+<section class="zl-jahr" id="j2005"><h2>2005</h2><div><p>Die Schachfreunde trauern um Klaus Weckert, der 70jährig stirbt. Als 18jähriger gründete er gemeinsam mit Hans Schleicher den Schachklub Feldkirchen.</p><p>Bei den Münchner Mannschaftsmeisterschaften endet die 1. Mannschaft in der B-Klasse im Mittelfeld, die 2. wird in der D-Klasse Dritte.</p><p>Zur ersten Austragung eines offenen Schnellschachturniers konnte der SG-Vorsitzende Helmut Gundel 28 Teilnehmer begrüßen. Unter ihnen den ukrainischen IM Sasha Beletzky (ELO 2380). Der große Favorit holte sieben Punkte aus sieben Partien.</p></div></section>
+<section class="zl-jahr" id="j2006"><h2>2006</h2><div><p>Titelverteidiger Ronny Damaske (10 Punkte) wird wieder Clubmeister. Zweiter wird Michael Müller (8,5) vor Horst Hahn, Dr. Günter Kopp und Hans Schleicher (je 6).</p><p>Die erste Mannschaft (C. Pakmor, Prause, Dr. Esser, Damaske, R. Pakmor, Holler, Hahn, Miller) erreicht in der B-Klasse einen achtungsvollen zweiten Rang.</p><p>Ganz groß trumpft Team 2 (Dr. Daniel Pohl, Dr. Kopp, Sindern, Gundel, Brand, Blaha) auf, gewinnt alle 8 Begegnungen und steigt in die C-Klasse auf.</p></div></section>
+<section class="zl-jahr" id="j2007"><h2>2007</h2><div><p>Richard Brand wird überraschenderweise Clubmeister. Peter Blaha und Dr. Günter Kopp teilen sich den zweiten Platz vor Horst Hahn.</p><p>Die Fusion mit den Schachfreunden Kirchheim wird zum 1.1.2008 beschlossen. Neuer gemeinsamer Name: Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim (SG AFK)</p></div></section>
+<section class="zl-jahr" id="j2008"><h2>2008</h2><div><p>Die Fusion mit den Schachfreunden Kirchheim.</p><p>Der Kirchheimer Schachklub wurde 1975 gegründet. Gründungsmitglied war u.a. auch Hans-Peter Hecht, der bis zur Fusion auch Kassier des Clubs war. Gespielt wurde damals beim Neuwirt, zeitweise sogar im Sitzungssaal der Gemeinde und am Ende im Merowinger Hof. 1976 wurde erstmals in einer Mannschaftsmeisterschaft teilgenommen. Und zwar in einer von 8(!) verschiedenen D-Klassen. Ein Punktspiel wurde gewonnen, alle anderen verloren! Aber schon im nächsten Jahr sah alles ganz anders aus: Die Mannschaft wurde Zweiter und stieg auf. Bei der Fusion bekleidete Helmut Kaufmann den Posten des 1. Vorsitzenden des Kirchheimer Schachclubs. Im neuen Verein tauchen zum ersten Male u.a. die Namen Eiberweiser, Hecht, Kaufmann, Nicolay, Nowotny, Tobisch und Vischer auf.</p><p>Beflügelt durch die Verstärkung schafft die 1. Mannschaft zum ersten Mal den Aufstieg in die A-Klasse. Dies ist die zweithöchste Liga im Schachbezirk München. Die Spieler waren Prause, Dr. Esser, Damaske, Vischer, Hecht, Hahn, Kaufmann, Miller und Holler.</p></div></section>
+<section class="zl-jahr" id="j2009"><h2>2009</h2><div><p>Aschheims Bürgermeister, Helmut Englmann, 1984 Initiator und Gründungsmitglied des Schach-Club Aschheim, wird zum Ehrenmitglied ernannt.</p><p>Die Vereinsmeisterschaft sichert sich Ronny Damaske vor Bernd Nowotny und Dieter Vischer.</p></div></section>
+<section class="zl-jahr" id="j2012"><h2>2012</h2><div><p>Dieter Vischer wird zur bestimmenden Figur und sichert sich Meisterschaft und Pokal.</p><p>Die Blitzmeisterschaft geht an Ronny Damaske.</p></div></section>
+<section class="zl-jahr" id="j2014"><h2>2014</h2><div><p>Matthias Naumann wird zum 1. Vorsitzenden gewählt und wird Nachfolger von Helmut Gundel, der nicht mehr kandidiert.</p><p>Da alle Teilnehmer des von Frederik Prause und Dr. Peter Esser geleiteten Kinder- und Jugendtrainings genügende Kenntnisse erworben haben, wird ein erstes Schnellschachturnier der Youngsters mit 15 Minuten Bedenkzeit veranstaltet. In den drei nach Geburtsjahrgängen geteilten Gruppen siegten Korbinian Ruff, Amelie Huber und Colin Reimann.</p><p>In sieben Runden nach Schweizer System wurde die Clubmeisterschaft ausgetragen. Keine Partie verlor Hanspeter Hecht (5 Siege, 2 Remis) und verwies Ronny Damaske und Armin Tobisch auf die Plätze.</p><p>Beim Weihnachts-Blitzturnier ist Armin Tobisch nicht zu halten, gewinnt alle 11 Partien und siegt vor Ronny Damaske (10), Frederik Prause (8) und den punktgleichen Rolf Nicolay und Dieter Vischer (je 6,5).</p></div></section>
+<section class="zl-jahr" id="j2015"><h2>2015</h2><div><p>Nach einer längeren Durststrecke holte die SG AFK den begehrten Wanderpokal des „Oberlandquartetts“. Es spielten: Prause, Damaske, Vischer, Tobisch, Hecht, Nowotny, Sindern, Miller und Naumann.</p><p>Hanspeter Hecht (6,5 Punkte) verteidigt seinen Vereinstitel gegen Frederik Prause (6) und Dieter Vischer (4,5).</p><p>Die Vereinsblitzmeisterschaft wird eine sichere Beute von Frederik Prause (7 Siege in sieben Partien!). Zweiter wird Hans Jörg Eiberweiser vor Hanspeter Hecht (beide 4,5). Das Weihnachts-Blitzturnier musste nach</p><p>Stichkampf zwischen Ronny Damaske und Frederik Prause (je 11,5 Punkte) entschieden werden. Dabei hatte der Erstgenannte knapp den Kopf vorne. Dritter wurde Hans Jörg Eiberweiser (10,5).</p></div></section>
+<section class="zl-jahr" id="j2016"><h2>2016</h2><div><p>Mit ganz starken Leistungen sicherten sich unsere Senioren den Sieg in ihrer Gruppe bei den Münchner Meisterschaften und stiegen in die Gruppe 1 auf. Für diesen Triumph sorgten in erster Linie Frederik Prause, Hanspeter Hecht und Hans Jörg Eiberweiser.</p><p>In verschiedenen Turnieren des Landkreises München konnten unsere Jugendlichen erste Erfahrungen sammeln. Besonders gut aus der Affäre zogen sich beim Einstand Korbinian Ruff, Colin Reimann, Amelie Huber und Katharina Esser.</p><p>In gewohnt souveräner Manier wurde Frederik Prause Vereinsblitzmeister. Neun Punkte aus neun Partien sprechen für sich. Da blieb für Dieter Vischer (8), Matthias Naumann und Hans Jörg Eiberweiser (je 5,5) nur Rang zwei bis vier über.</p><p>Weihnachts-Blitz: Ronny Damaske (13 Punkte) vor Frederik Prause und Dr. Peter Esser (je 11)</p></div></section>
+<section class="zl-jahr" id="j2017"><h2>2017</h2><div><p>Die Jugendlichen unseres Vereins erreichten bei den Münchner Schulschach-Einzelmeisterschaften erfreuliche Platzierungen. Bei den Schülern der 3. Klasse wurde Colin Reimann mit vier Punkten aus sechs Partien in einem Feld von 40 Schülern Neunter. Mit der gleichen Punktzahl belegte Simon Esser den 13. Diego Heinze mit drei Punkten den 21. Platz. Bei den Schülern der Klassen 7-9 erkämpfte sich David Mehlhorn 4 Punkte aus sechs Partien und wurde Vierter. Arthur Krumm hatte am Ende einen Punkt weniger auf seinem Konto und belegte Rang 12. Insgesamt nahmen 28 Kinder teil. Ebenfalls ein stark beachteter vierter Platz war die Ausbeute von Mesut Ceylan in der Kategorie der Klassen 10-12. Hier waren 16 Teilnehmer am Start.</p><p>Neuer Vereinsmeister wurde Dieter Vischer.</p></div></section>
+<section class="zl-jahr" id="j2018"><h2>2018</h2><div><p>Die Schachgemeinschaft trauert um Helmut Kaufmann, Vorsitzender des Schach-Klubs Kirchheim bis zur Fusion und später langjähriger Spielleiter der Schachgemeinschaft.</p><p>Den dank des erfreulichen Zuwachses an jugendlichen Mitgliedern nach Dekaden erstmalig wieder ausgespielten Jugend-Pokal der Schachgemeinschaft sicherte sich David Mehlhorn durch einen Sieg im Finale gegen Arthur Krumm.</p><p>Infolge der durch unsere jugendlichen Mitglieder deutlich gewachsenen Anzahl an aktiven Mitgliedern war unsere Schachgemeinschaft erstmalig mit 3 Mannschaften in den Münchner Mannschaftsmeisterschaften vertreten und erreichte folgende erfreulichen Platzierungen: mit der 1. Mannschaft in der B-Klasse einen 2. Platz und damit den Aufstieg in die A-Klasse, mit der 2. Mannschaft in der D-Klasse den 4. Platz sowie mit der neu gegründeten 3. Mannschaft mit überwiegend jugendlichen Spielern in der E-Klasse den 2. Platz.</p><p>Pokalsieger wurde unser neues Vereinsmitglied Pierre Tassell, Blitzschachmeister wie schon so oft Frederik Prause und Sieger unseres Weihnachtsblitzturnieres im zweiten Jahr seiner Vereinszugehörigkeit Rudolf Oster.</p></div></section>
+<section class="zl-jahr" id="j2019"><h2>2019</h2><div><p>Nach ihrem Abstieg aus der 1. Seniorenliga des Schachbezirks München in die 2. Seniorenliga gelang unserer Senioren-Mannschaft (Ü60) der direkte Wiederaufstieg in die 1. Seniorenliga: die „siegreichen Vier“ waren Frederik Prause (3,5 / 4), Hanspeter Hecht (3,5 / 4), Rudolf Oster (2 / 4) und Matthias Naumann (2,5 / 3).</p><p>In den Münchner Mannschaftsmeisterschaften konnte sich unsere 1. Mannschaft nach ihrem Aufstieg in die A-Klasse dort im Mittelfeld (8:10 Mannschaftspunkte) ebenso souverän behaupten wie unsere 2. Mannschaft im ersten Jahr ihrer Spielberechtigung in der C-Klasse (9:5 Mannschaftspunkte).</p><p>Als bisher jüngster Spieler in der Vereins-Historie errang der 15-jährige Arthur Krumm den Titel des Vereinsmeisters, gefolgt von den vier an sich favorisierten „Oldies“ Dieter Vischer, Hanspeter Hecht, Rudolf Oster und Frederik Prause. Den Vereinspokal konnte Pierre Tassell erfolgreich</p><p>verteidigen, genauso wie David Mehlhorn den Vereins-Jugend-Pokal. Meister im Blitzschach unserer Schachgemeinschaft wurde Dieter Vischer.</p></div></section>
+<section class="zl-jahr" id="j2020"><h2>2020</h2><div><p>Die Schachgemeinschaft trauert um Christoph Sindern, Gründungsmitglied des Schach-Clubs Aschheim und später langjähriger Spielleiter der Schachgemeinschaft und Mannschaftsführer der 2. Mannschaft.</p><p>Da bei den Wahlen zum Vorstand des Vereins Matthias Naumann nach 6 Jahren als 1. Vorsitzender aus familiären Gründen nicht für eine vierte Amtszeit kandidierte, wurde für mehrere Vorstandspositionen neu kandidiert und wie folgt gewählt: 1. Vorsitzender Andreas Schwarz, 2. Vorsitzender Dr. Daniel Pohl, Kassenwart Frederik Prause, Spielleiter Pierre Tassell, Schriftführer Rudolf Oster.</p><p>Unsere 1. Jugendmannschaft wird Jugend-Mannschafts-Meister des Schachbezirks München und steigt in die Jugend-Landesliga Süd auf.</p><p>Großer Erfolg auch für die 1. Mannschaft, die erstmals in der Vereinsgeschichte in die Bezirksliga, die höchste Spielklasse des Schachbezirks München, aufsteigt. Für die meisten Punkte sorgten Frederik Prause, Ronny Damaske (verlor keine einzige Partie!) und Dieter Vischer.</p><p>Infolge der Corona-Pandemie konnten nicht alle vereins-internen Titel neu ausgespielt werden. Als online-Turniere wurden durchgeführt: die Vereins-Blitzmeisterschaft, die sich Frederik Prause sicherte, sowie das Weihnachts-Blitzturnier mit dem Gewinner Pierre Tassell.</p></div></section>
+<section class="zl-jahr" id="j2021"><h2>2021</h2><div><p>Die Schnellschach-Vereinsmeisterschaft gewinnt Pierre Tassell. Erster Kirchheimer Stadtmeister in unseren Reihen wird Arthur Krumm.</p><p>Den Osterblitz holt sich Frederik Prause, das Weihnachts-Blitzturnier David Mehlhorn.</p></div></section>
+<section class="zl-jahr" id="j2022"><h2>2022</h2><div><p>Pierre Tassell wird erstmals Vereinsmeister und sichert sich auch die Blitzmeisterschaft. Schnellschachmeister wird David Mehlhorn.</p><p>Das Weihnachts-Blitzturnier gewinnt Lars Goldbeck.</p></div></section>
+<section class="zl-jahr" id="j2023"><h2>2023</h2><div><p>Pierre Tassell verteidigt seinen Titel als Vereinsmeister. Die Blitzmeisterschaft teilen sich Ronny Damaske und Pierre Tassell.</p><p>Armin Tobisch wird Schnellschachmeister und Kirchheimer Stadtmeister. Ronny Damaske gewinnt sowohl den Osterblitz als auch das Weihnachts-Blitzturnier.</p></div></section>
+<section class="zl-jahr" id="j2024"><h2>2024</h2><div><p>Pierre Tassell gewinnt alles, was es an großen Vereinstiteln zu gewinnen gibt: Vereinsmeisterschaft, Blitzmeisterschaft und Pokal.</p><p>Den Osterblitz entscheidet Moritz Stöttner für sich, das Weihnachts-Blitzturnier Stefans Kasims.</p></div></section>
+<section class="zl-jahr" id="j2025"><h2>2025</h2><div><p>In der Saison 2024/25 starten gleich zwei Mannschaften in der D-Klasse. Die 4. Mannschaft mit Mannschaftsführer Korbinian Ruff wird Erster und steigt auf, die 5. Mannschaft belegt Platz zwei.</p><p>Neu im Vereinsleben ist die Blitzjahreswertung: Die Blitzturniere des Jahres werden zu einer Serie zusammengefasst. Erster Blitzserienmeister wird Pierre Tassell.</p><p>Pierre Tassell gewinnt zum vierten Mal in Folge die Vereinsmeisterschaft. Alexander Wittko holt den Vereinspokal und wird Jugend-Vereinsmeister. Schnellschachmeister wird Stefans Kasims, Blitzmeister Fabian Müller.</p></div></section>
+<section class="zl-jahr" id="j2026"><h2>2026</h2><div><p>Mit sechs Mannschaften ist die Schachgemeinschaft in der Saison 2025/26 so breit aufgestellt wie nie. Die Aufsteiger des Vorjahres, jetzt als 3. Mannschaft in der C-Klasse, marschieren direkt durch und steigen in die B-Klasse auf. Auch die 2. Mannschaft feiert den Aufstieg, sie spielt künftig in der A-Klasse. Alle anderen Mannschaften halten ihre Klasse.</p><p>Im September zieht der Verein in das Gymnasium Kirchheim um. Die Schule ist Schachschule und unser neuer Spielort.</p><p>Alexander Wittko wird Vereinsmeister und gewinnt auch den Pokal.</p><p>Dominik Dax ist der Mann des Herbstes: Beim OIS gewinnt er das C-Turnier souverän mit 6,5 aus 7 Punkten, kurz darauf den Herbstblitz (10,5 aus 13) und schließlich die Schnellschach-Vereinsmeisterschaft. Diese wird als Kooperationsturnier mit der SU Ebersberg-Grafing ausgetragen und bringt mit 40 Teilnehmern einen Rekord. Arthur Krumm wird punktgleich Zweiter, Schnellschach-Jugendmeister Konrad Keblat.</p><p>Beim Kooperationsturnier mit dem Gymnasium Kirchheim gewinnen Poldi Elger und Stefans Kasims das Profiturnier.</p></div></section>
+</div>
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+        <p><a href="kontakt.html">Kontaktformular</a></p>
+        <p><a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="ueber-uns.html">Über uns</a></p>
+        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="faq.html">Häufige Fragen</a></p>
+        <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 12.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+</body>
+</html>
