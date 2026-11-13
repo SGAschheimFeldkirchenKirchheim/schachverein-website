@@ -193,6 +193,16 @@
       .tick-erg { font-weight: bold; font-size: 1.1rem; text-align: right; }
       .tick-geg, .tick-info { grid-column: 1 / -1; font-size: 0.9rem; color: #555; }
       .tick-info { font-size: 0.8rem; }
+</style><style>
+  .geburtstag { display: flex; align-items: center; gap: 0.9rem; margin: 0 0 1rem; padding: 0.8rem 1.1rem;
+                border-radius: 12px; border: 1px solid var(--border, #e3e7ee); background: var(--soft, #f5f7fa);
+                box-shadow: inset 4px 0 0 #e8b931; }
+  .geburtstag p { margin: 0; line-height: 1.5; }
+  .gb-torte { font-size: 2rem; line-height: 1; }
+  .gb-gruss { color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+  .gb-schnipsel { position: fixed; top: -12px; width: 8px; height: 13px; border-radius: 2px; z-index: 9999;
+                  pointer-events: none; animation: gb-fall var(--d) cubic-bezier(.3,.6,.5,1) forwards; }
+  @keyframes gb-fall { to { transform: translate(var(--x), 105vh) rotate(var(--r)); opacity: 0.2; } }
 </style>
   <link rel="stylesheet" href="design.css">
   <meta property="og:title" content="Startseite | SG AFK">
@@ -231,6 +241,29 @@
   <main id="main" class="container">
     
     
+    <section class="geburtstag" aria-label="Geburtstag">
+      <span class="gb-torte" aria-hidden="true">🎂</span>
+      <p><strong>Raphael</strong> wird heute 28! <span class="gb-gruss">Alles Gute vom ganzen Verein!</span></p>
+    </section><script>
+(function () {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var tag = "2026-11-13";
+  try { if (localStorage.getItem("gb-konfetti") === tag) return; localStorage.setItem("gb-konfetti", tag); } catch (e) {}
+  var farben = ["#e8b931", "#6fa3e8", "#1c2d52", "#ffffff", "#e8b931"];
+  for (var i = 0; i < 45; i++) {
+    var s = document.createElement("span");
+    s.className = "gb-schnipsel";
+    s.style.left = (Math.random() * 100) + "vw";
+    s.style.background = farben[i % farben.length];
+    s.style.setProperty("--x", (Math.random() * 160 - 80) + "px");
+    s.style.setProperty("--r", (Math.random() * 720 - 360) + "deg");
+    s.style.setProperty("--d", (1.8 + Math.random() * 1.2) + "s");
+    s.style.animationDelay = (Math.random() * 0.6) + "s";
+    document.body.appendChild(s);
+    setTimeout(function (el) { return function () { el.remove(); }; }(s), 3600);
+  }
+})();
+</script>
 
     <section class="hero">
       <div class="diashow" aria-hidden="true"><div class="dia aktiv" style="background-image:url(diashow/01-vereinsmeisterschaft-2026.jpg)"></div><div class="dia" data-bild="diashow/02-spielabend-02.jpg"></div><div class="dia" data-bild="diashow/03-spielabend-03.jpg"></div><div class="dia" data-bild="diashow/04-spielabend-01.jpg"></div><div class="dia" data-bild="diashow/05-oberlandquartett-2015.jpg"></div><div class="dia" data-bild="diashow/06-spielabend-04.jpg"></div></div><div class="dia-punkte"><button type="button" aria-label="Foto 1" aria-current="true"></button><button type="button" aria-label="Foto 2"></button><button type="button" aria-label="Foto 3"></button><button type="button" aria-label="Foto 4"></button><button type="button" aria-label="Foto 5"></button><button type="button" aria-label="Foto 6"></button></div>
@@ -516,7 +549,7 @@
   var punkte = document.querySelectorAll(".dia-punkte button");
   if (dias.length < 2) return;
   dias.forEach(function (d) { if (d.dataset.bild) d.style.backgroundImage = "url('" + d.dataset.bild + "')"; });
-  var i = 0, timer = null, ms = 5 * 1000, DIASHOW_IMMER = true;
+  var i = 0, timer = null, ms = 5 * 1000, DIASHOW_IMMER = false;
   function zeige(n) {
     dias[i].classList.remove("aktiv"); punkte[i].removeAttribute("aria-current");
     i = (n + dias.length) % dias.length;
