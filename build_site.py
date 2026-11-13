@@ -2165,7 +2165,7 @@ def build_berichte():
 # ==========================================
 # --- Einstellungen -------------------------------------------------
 DIASHOW_ORDNER = "diashow"      # Fotos für die Diashow oben auf der Startseite (jpg/png/webp), alphabetisch
-DIASHOW_SEKUNDEN = 10           # Anzeigedauer pro Foto
+DIASHOW_SEKUNDEN = 5           # Anzeigedauer pro Foto
 # Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
 # Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
 HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
