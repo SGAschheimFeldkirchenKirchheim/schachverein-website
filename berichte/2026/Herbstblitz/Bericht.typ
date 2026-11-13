@@ -1,15 +1,14 @@
-#title[Spannende Duelle beim Herbstblitzturnier 2026]
+#title[Dominik Dax gewinnt den Herbstblitz 2026]
 #date[25. September 2026]
 #author[Korbinian Ruff]
 
-Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt. 
-Mit einer hervorragenden Beteiligung von 18 Spielern – von unseren Nachwuchstalenten bis hin zu den Routiniers der ersten Mannschaft – spielten wir 9 spannende Runden im Schweizer System.
+Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt. Mit 25 Teilnehmern – von unseren Nachwuchstalenten bis zu den Routiniers der ersten Mannschaft – war das Turnier hervorragend besucht. Gespielt wurden 13 Runden im Schweizer System.
 
-= Das Treppchen
-Nach vielen umkämpften Partien und knappen Zeitnotphasen konnte sich die vordere Platzierung erst in der letzten Runde entscheiden:
+= Der Sieger
+Dominik Dax gewinnt das Turnier mit starken 10,5 Punkten aus 13 Partien. Herzlichen Glückwunsch!
 
-1. *Platz 1:* Max Mustermann (8.0 / 9)
-2. *Platz 2:* Anton Beispiel (7.5 / 9)
-3. *Platz 3:* Stefan Schach (6.0 / 9)
+// Platz 2 und 3 hier ergänzen, z. B.:
+// + *Platz 2:* Vorname Nachname (x / 13)
+// + *Platz 3:* Vorname Nachname (x / 13)
 
-Ein besonderer Dank geht an alle Teilnehmer für die faire Atmosphäre und die tolle Organisation!
+Ein besonderer Dank geht an alle Teilnehmer für die faire Atmosphäre!
