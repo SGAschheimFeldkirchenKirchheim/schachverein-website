@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simultan mit IM Frank Zeller | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="../Logo.png">
+  <script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 1180px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      .nav-auf { display: none; }
+
+      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
+      @media (max-width: 560px) {
+        header .brand span { font-size: 0; }
+        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
+      }
+
+      @media (max-width: 1180px) {
+        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
+        .nav-gruppe > a { display: block; border-top: none; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
+        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
+        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
+        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
+        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
+        .nav-gruppe.offen .nav-unter { display: flex; }
+        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style>
+    <script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
+      .vergangene-jahre > summary { cursor: pointer; font-size: 1.4rem; font-weight: bold; color: var(--navy); padding: 0.6rem 0; }
+      .jahr-archiv { margin: 0.5rem 0 0.5rem 1rem; }
+      .jahr-archiv > summary { cursor: pointer; font-size: 1.15rem; font-weight: bold; padding: 0.4rem 0; }
+      .jahr-archiv .grid { margin-top: 0.8rem; }
+      .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
+      .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+      .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
+      .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
+      .news-card a { font-weight: bold; text-decoration: none; }
+      .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
+      .news-card { position: relative; }
+      .news-card a::after { content: ""; position: absolute; inset: 0; }
+      .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .news-card:hover h3 { text-decoration: underline; }
+
+      .article-content h2 { margin-top: 2rem; color: var(--navy); }
+      .article-content h3, .article-content h4 { color: var(--navy); }
+      .article-content p, .article-content li { max-width: 70ch; }
+      .article-content li { margin-bottom: 0.3rem; }
+      .report-img { margin: 1.5rem 0; }
+      .report-img img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+      .report-img figcaption { font-size: 0.85rem; color: #666; margin-top: 0.4rem; }
+</style>
+  <link rel="stylesheet" href="../design.css">
+  <meta property="og:title" content="Simultan mit IM Frank Zeller | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="../index.html">
+      <img src="../Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
+    <nav aria-label="Hauptmenü">
+      <a href="../index.html">Start</a>
+      <div class="nav-gruppe"><a href="../ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="../neu-hier.html">Neu hier?</a><a href="../geschichte.html">Vereinsgeschichte</a><a href="../dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="../mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="../afk-1.html">AFK 1</a><a href="../afk-2.html">AFK 2</a><a href="../afk-3.html">AFK 3</a><a href="../afk-4.html">AFK 4</a><a href="../afk-5.html">AFK 5</a><a href="../afk-6.html">AFK 6</a><a href="../senioren.html">Senioren</a></div></div>
+      <a href="../jugend.html">Jugend</a>
+      <a href="../termine.html">Termine</a>
+      <a href="../berichte.html" aria-current="page">Berichte</a>
+      <div class="nav-gruppe"><a href="../turniere.html">Turniere</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Turniere aufklappen"></button><div class="nav-unter"><a href="../oberlandquartett.html">Oberlandquartett</a><a href="../blitzjahreswertung.html">Blitzjahreswertung</a><a href="../vereinsintern.html">Hall of Fame</a><a href="../ausschreibungen.html">Ausschreibungen</a></div></div>
+      <a href="../faq.html">FAQ</a>
+      <a href="../kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+        <a href="../berichte.html" style="text-decoration:none;">← Zurück zur Berichte-Übersicht</a>
+        <h1 style="margin-top:1rem;">Simultan mit IM Frank Zeller</h1>
+        <p class="news-meta">30.09.2018</p>
+        <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
+        <div class="article-content"><p>He is back again...</p>
+<p>Nachdem IM Frank Zeller im letzten Jahr bereits die <a href="https://gymnasium-kirchheim.de/nachrichten-leser/in-der-hoelle-von-kirchheim-kopie.html" target="_blank" rel="noopener">Hölle von Kirchheim</a> - durchaus erfolgreich mit 40:0 - "durchschritten" hatte ... war er an diesem Wochenende wieder vor Ort um es mit 24 alten und neuen Gegnern im ehrwürdigen Festsaal der Sportgaststätte Tassilo aufzunehmen.∗</p>
+<p>Seine Gegnerschaft setzte sich zusammen aus erfahrenen Recken des Vereins, Schülern∗∗ unseres Kooperationspartners (des Gymnasiums Kirchheim) und zwei wagemutigen Eltern aus letzterem Rudel. Unter den Kiebitzen war mit Feldkirchens Bürgermeister Werner van der Weck auch politische (Lokal-)Prominenz zugegen. Frau Heidacher - die für SPD im Kirchheimer Gemeinderat sitzt - wagte sich sogar ans Brett und verteidigte lange eine schwierige Stellung in einer skandinavischen Verteidigung∗∗∗.</p>
+<p>Die (etwas freche) Ansage von Frank Zeller, dass man bei einer sehr schnellen Niederlage (t&lt;60 min) nochmal von vorne anfangen dürfte ... wurde standesgemäß von niemandem angenommen und den ersten Punkt mussten wir erst nach zwei Stunden (hartem) Kampf abgeben ... zugegebenermaßen war allerdings auch die eine oder andere weitere Stellung zu diesem Zeitpunkt schon ein wenig sturmreif geschossen.</p>
+<p>(Erste Verluste werden an der rechten Flanke sichtbar)</p>
+<p>Natürlich nicht in meiner Umgebung ... Matthias experimenteller Franzose (auf theoretischen Abwegen) sah vielleicht optisch bedenklich aus ... aber da er mir versicherte, dass sein Springer auf h8 wie ein Phönix aus der Asche über f7 in die Schlacht stürmen würde (mit katastrophalen Folgen für die weißen Siegchancen) machte ich mir keine (großen) Sorgen ... gut ... auch beim Anblick des Hippopotamus 2.0 (mit Vorpostenspringer auf g4) von Daniel mochte dem uneingeweihten Zuschauer Angst und Bange werden ... aber was sollte schon passieren solange der Damenflügel nicht zusammenbricht!?</p>
+<p>Etwas weiter entfernt verwaltete Mesut eine passiv (aber noch nicht bedrohlich) aussehende Benonistellung während Quentin in aller Ruhe über einer vogelwilden Königsgambitstellung thronte. Johanna und Juma waren trotz erster Materialverluste bester Dinge. Unsere "Gastelternfraktion" bestehend aus Frau Heidacher und Herrn Manhes schienen ähnlich gut gelaunt und letzterer gab durch Mimik und Ausstrahlung klar zu verstehen, dass sein Kampfesmut durch die fehlende Leichtfigur keineswegs gebrochen wäre!</p>
+<p>Bei Rudolf und Peter sieht alles solide bis gut aus ... nanu ... was macht Korbinian da eigentlich!?! Mit b5 und a6 gegen Englisch ... tja ... irgendwie konsequent wenn man mit Weiß auch gerne 1.g4 spielt ;-) Kurz ein Blick auf Davids Brett ... scheint ok zu sein.</p>
+<p>Zwei Bretter weiter sieht es bei Hans allerdings bereits so gefährlich aus, dass sich Frank Zeller nach dem Zug 11...0-0-0 zu der dunklen Prophezeihung / Tatsachenbeschreibung "Du hast verloren" (begleitet von einem süffisanten Lächeln) hinreißen lässt...</p>
+<p>Wie sieht denn der zugehörige (semikonkrete) weiße Gewinnplan aus?</p>
+<p>Ende der Exkursion und zurück zum eigenen Brett...</p>
+<p>Passt schon. Erstmal Pfefferminztee nachtanken.∗∗∗∗</p>
+<p>Streifzug in die andere Richtung ... Arthur - schon totgeglaubt, macht dann aber das, was Matthias Springer eigentlich tun wollte... - ... Andra's Stellung (interessant aber etwas renovierungsbedürftig) ... Emil und Quirin halten noch tapfer durch während Hanna und Rainer durchaus Gegenspiel haben, wenn auch ihr nicht rochierter König im Zentrum latent gefährdet wirkt. Die Ecke von Andreas, Hans-Jörg, Horst und Ralf erreiche ich bei meinen Streifzügen (unvorsichtigerweise) leider nie, so dass ich hier keinen (fragwürdigen) Momenteindrücke dokumentieren kann.</p>
+<p>Wie bei jedem guten Simultan kommt irgendwann die Zeitnotphase ... bei der sich nach und nach das Feld lichtet und der Simultanspieler immer öfter zu Besuch kommt ... nun braucht man ein wenig Glück um in besserer oder ausgeglichener Stellung häufig gepaart mit taktischem Dschungelfeeling keinen Fehlschritt zu begehen.</p>
+<p>Kurz gesagt Fortuna ist uns in der Endphase an den Brettern von Arthur und Peter∗∗∗∗∗ nicht hold gewesen, während sie bei mir in den richtigen Momenten auftauchte als Frank Zeller seine Chance auf großen Vorteil im 22. Zug nicht sah und später in ausgeglichener Stellung den entscheidenen Fehltritt beging.</p>
+<p>Mit welcher Kombination hätte Weiß im 22. Zug alle schwarzen Hoffnungen beerdigen können?</p>
+<p>Das Ende des Simultans wurde durch das ästhetische Matt mit zwei Springern und dem h-Bauern auf dem Brett von "Ich gebe nur Karten auf..."-Korbinian markiert:</p>
+<p>Alle Punktelieferanten (Pierre) und Marathonspieler (Korbinian) durften sich noch über einen von Frank Zeller gesponserten Buchpreis freuen.</p>
+<p>Summa summarum spielten wir ein solides 1:23, was in etwa unserer vorher abgeschätzten Gewinnerwartung entspricht ;-)</p>
+<p>Es war auf jeden Fall ein tolles Event ... genauso wie die bereits einen Tag vorher stattgefundene Trainingssession mit Frank Zeller für die er eine wohlüberlegte Auswahl an Stellungen und Partien rausgesucht hatte!</p>
+<p>Vielen Dank an Frank Zeller für diese beiden großartigen Veranstaltungen!</p>
+<p>Großer Dank gilt Matthias für die hervorragende Organisation! Zusätzlicher Dank gilt natürlich allen Helfern und Mitspielern!</p>
+<p>Pierre Tassell<br> <br></p>
+<p>Mehr oder minder seriöse Anmerkungen:<br> ∗ Gerüchten zufolge hatte er als strikte Konditionen (diesmal) Temperaturen unter 35° C und keinen entkoffiinierten Kaffee gefordert. Schade, obwohl es sich dabei um anerkannte Hausmittel handelt um einem IM beim Simultan beizukommen ;-)<br> ∗∗ Hierbei sei auch noch auf die nichtleere Schnittmenge zwischen Schülern und (erfahrenen) Recken des Vereins zu verweisen.<br> ∗∗∗ ...und besaß noch eine Dame als Tochter Juma diese schon längst abhanden gekommen war ;-)<br> ∗∗∗∗ Pfefferminztee hat den großen Vorteil, dass er im Gegensatz zu Kaffee sämtliche Dopingtests unterläuft ... wie naiv von diesen Dopingärzten ;-)<br> ∗∗∗∗∗ Plus möglicherweise einer endlichen Anzahl weiterer mir unbekannter Bretter. Hier z.B. die Stellung von Matthias am Scheideweg ... der Phönix ist bereits auf f7 eingeflogen, aber nun ist von Schwarz eine mutige Entscheidung gefragt um nicht unter die Räder zu kommen ... welche!?</p>
+<p>Nachdem Arthur sich mittlerweile eine ordentliche Stellung erarbeitet hatte ... dachte er, dass nach dem Einschlag 24. Txc7 gefolgt von Sxd6+ alles (wieder) verloren ist. Dies stimmt auch nach dem gespielten 25...Kb8? ... jedoch hätte man ganz im Sinne unserer freitäglichen Traininseinheit das unternehmungslustige Ross "ärgern" können. Wie wäre es gegangen!?</p>
+<p>Lösungen zu den Aufgaben (in order of appearance):</p>
+<p>⁠1. Aufgabe:</p>
+<p>Die große Rochade leitet gewissermaßen ein Selbstmordkommando des schwarzen Königs ein. Egal ob Weiß mit 12.d5 oder 12.a5 beginnt ... der schwarze Damenflügel wird mit vernichtendem Resultat (für den schwarzen Monarchen) aufgerissen. (Hans konnte das prophezeite Ende noch um 18 Züge hinauszögern.)</p>
+<p>⁠2. Aufgabe:<br> Weiß hätte statt 22.Sxe6? Txe5! lieber 22.Lxf5! exf gefolgt von dem tödlichen 23.Sxc5! (dummerweise hängt der Läufer auf b7) spielen sollen ... es folgt 23...Dxg5 24.Sxb7 Sce7 und die schwarze Perspektive ist mit Minusqualität und Koordinationsproblemen (sehr) trist.</p>
+<p>⁠3. Aufgabe:<br> ⁠16.e5! hätte den schwarzen Problemläufer auf c8 aktiviert und gleichzeitig Angriffsspiel gegen f2 ermöglicht. Das zahmere 16.Se7 leitete leider den Anfang vom Ende ein.</p>
+<p>⁠4. Aufgabe:<br> Der schwarze Springer lässt sich einfangen:<br> ⁠24.Txc7+ Txc7 25.Sxd6+ und nun erhält Schwarz eine leicht bessere Stellung mit 25...Kc6! (statt 25.Kb8??) 26.Sxe8 Te7 27.Sf6 gxf 28.gxf Txe6 29.f7 und das Feld f8 kann mithilfe von 29...Sd7 kontrolliert werden.</p>
+<p><em>Aus dem Archiv der alten Vereinsseite übernommen; das Datum ist teilweise rekonstruiert, Fotos sind leider nicht erhalten.</em></p></div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+        <p><a href="../kontakt.html">Kontaktformular</a></p>
+        <p><a href="../mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="../ueber-uns.html">Über uns</a></p>
+        <p><a href="../neu-hier.html">Neu hier?</a></p>
+        <p><a href="../faq.html">Häufige Fragen</a></p>
+        <p><a href="../impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 13.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+</body>
+</html>

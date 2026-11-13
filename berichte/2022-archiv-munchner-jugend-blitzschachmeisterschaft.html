@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Münchner Jugend-Blitzschachmeisterschaft | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="../Logo.png">
+  <script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 1180px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      .nav-auf { display: none; }
+
+      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
+      @media (max-width: 560px) {
+        header .brand span { font-size: 0; }
+        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
+      }
+
+      @media (max-width: 1180px) {
+        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
+        .nav-gruppe > a { display: block; border-top: none; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
+        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
+        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
+        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
+        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
+        .nav-gruppe.offen .nav-unter { display: flex; }
+        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style>
+    <script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
+      .vergangene-jahre > summary { cursor: pointer; font-size: 1.4rem; font-weight: bold; color: var(--navy); padding: 0.6rem 0; }
+      .jahr-archiv { margin: 0.5rem 0 0.5rem 1rem; }
+      .jahr-archiv > summary { cursor: pointer; font-size: 1.15rem; font-weight: bold; padding: 0.4rem 0; }
+      .jahr-archiv .grid { margin-top: 0.8rem; }
+      .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
+      .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+      .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
+      .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
+      .news-card a { font-weight: bold; text-decoration: none; }
+      .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
+      .news-card { position: relative; }
+      .news-card a::after { content: ""; position: absolute; inset: 0; }
+      .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .news-card:hover h3 { text-decoration: underline; }
+
+      .article-content h2 { margin-top: 2rem; color: var(--navy); }
+      .article-content h3, .article-content h4 { color: var(--navy); }
+      .article-content p, .article-content li { max-width: 70ch; }
+      .article-content li { margin-bottom: 0.3rem; }
+      .report-img { margin: 1.5rem 0; }
+      .report-img img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+      .report-img figcaption { font-size: 0.85rem; color: #666; margin-top: 0.4rem; }
+</style>
+  <link rel="stylesheet" href="../design.css">
+  <meta property="og:title" content="Münchner Jugend-Blitzschachmeisterschaft | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="../index.html">
+      <img src="../Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
+    <nav aria-label="Hauptmenü">
+      <a href="../index.html">Start</a>
+      <div class="nav-gruppe"><a href="../ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="../neu-hier.html">Neu hier?</a><a href="../geschichte.html">Vereinsgeschichte</a><a href="../dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="../mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="../afk-1.html">AFK 1</a><a href="../afk-2.html">AFK 2</a><a href="../afk-3.html">AFK 3</a><a href="../afk-4.html">AFK 4</a><a href="../afk-5.html">AFK 5</a><a href="../afk-6.html">AFK 6</a><a href="../senioren.html">Senioren</a></div></div>
+      <a href="../jugend.html">Jugend</a>
+      <a href="../termine.html">Termine</a>
+      <a href="../berichte.html" aria-current="page">Berichte</a>
+      <div class="nav-gruppe"><a href="../turniere.html">Turniere</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Turniere aufklappen"></button><div class="nav-unter"><a href="../oberlandquartett.html">Oberlandquartett</a><a href="../blitzjahreswertung.html">Blitzjahreswertung</a><a href="../vereinsintern.html">Hall of Fame</a><a href="../ausschreibungen.html">Ausschreibungen</a></div></div>
+      <a href="../faq.html">FAQ</a>
+      <a href="../kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+        <a href="../berichte.html" style="text-decoration:none;">← Zurück zur Berichte-Übersicht</a>
+        <h1 style="margin-top:1rem;">Münchner Jugend-Blitzschachmeisterschaft</h1>
+        <p class="news-meta">06.07.2022</p>
+        <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
+        <div class="article-content"><p>Bei der Münchner Jugend-Blitzmeisterschaft hat <strong>Emil</strong> einen super starken 3. Platz erreicht und nur knapp die Qualifikation für die bayerischen Meisterschaften verpasst!</p>
+<p>Seine (bedrohliche) Blitzstärke hat er auch dadurch unter Beweis gestellt, dass er als einziger im Feld gegen den Erstplatzierten gewonnen hat ... und das auch noch mit einem schönen Matt bei nur noch einer Sekunde auf der Uhr ;-)</p>
+<p>Alle Ergebnisse finden sich <a href="https://www.schachbezirk-muenchen.de/mjbem-2021-22/u16.html" target="_blank" rel="noopener">hier</a>.</p>
+<p><em>Aus dem Archiv der alten Vereinsseite übernommen; das Datum ist teilweise rekonstruiert, Fotos sind leider nicht erhalten.</em></p></div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+        <p><a href="../kontakt.html">Kontaktformular</a></p>
+        <p><a href="../mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="../ueber-uns.html">Über uns</a></p>
+        <p><a href="../neu-hier.html">Neu hier?</a></p>
+        <p><a href="../faq.html">Häufige Fragen</a></p>
+        <p><a href="../impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 13.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rise of the Vize-Lars... | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="../Logo.png">
+  <script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 1180px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      .nav-auf { display: none; }
+
+      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
+      @media (max-width: 560px) {
+        header .brand span { font-size: 0; }
+        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
+      }
+
+      @media (max-width: 1180px) {
+        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
+        .nav-gruppe > a { display: block; border-top: none; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
+        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
+        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
+        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
+        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
+        .nav-gruppe.offen .nav-unter { display: flex; }
+        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style>
+    <script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
+      .vergangene-jahre > summary { cursor: pointer; font-size: 1.4rem; font-weight: bold; color: var(--navy); padding: 0.6rem 0; }
+      .jahr-archiv { margin: 0.5rem 0 0.5rem 1rem; }
+      .jahr-archiv > summary { cursor: pointer; font-size: 1.15rem; font-weight: bold; padding: 0.4rem 0; }
+      .jahr-archiv .grid { margin-top: 0.8rem; }
+      .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
+      .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+      .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
+      .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
+      .news-card a { font-weight: bold; text-decoration: none; }
+      .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
+      .news-card { position: relative; }
+      .news-card a::after { content: ""; position: absolute; inset: 0; }
+      .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .news-card:hover h3 { text-decoration: underline; }
+
+      .article-content h2 { margin-top: 2rem; color: var(--navy); }
+      .article-content h3, .article-content h4 { color: var(--navy); }
+      .article-content p, .article-content li { max-width: 70ch; }
+      .article-content li { margin-bottom: 0.3rem; }
+      .report-img { margin: 1.5rem 0; }
+      .report-img img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+      .report-img figcaption { font-size: 0.85rem; color: #666; margin-top: 0.4rem; }
+</style>
+  <link rel="stylesheet" href="../design.css">
+  <meta property="og:title" content="Rise of the Vize-Lars... | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="../index.html">
+      <img src="../Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
+    <nav aria-label="Hauptmenü">
+      <a href="../index.html">Start</a>
+      <div class="nav-gruppe"><a href="../ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="../neu-hier.html">Neu hier?</a><a href="../geschichte.html">Vereinsgeschichte</a><a href="../dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="../mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="../afk-1.html">AFK 1</a><a href="../afk-2.html">AFK 2</a><a href="../afk-3.html">AFK 3</a><a href="../afk-4.html">AFK 4</a><a href="../afk-5.html">AFK 5</a><a href="../afk-6.html">AFK 6</a><a href="../senioren.html">Senioren</a></div></div>
+      <a href="../jugend.html">Jugend</a>
+      <a href="../termine.html">Termine</a>
+      <a href="../berichte.html" aria-current="page">Berichte</a>
+      <div class="nav-gruppe"><a href="../turniere.html">Turniere</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Turniere aufklappen"></button><div class="nav-unter"><a href="../oberlandquartett.html">Oberlandquartett</a><a href="../blitzjahreswertung.html">Blitzjahreswertung</a><a href="../vereinsintern.html">Hall of Fame</a><a href="../ausschreibungen.html">Ausschreibungen</a></div></div>
+      <a href="../faq.html">FAQ</a>
+      <a href="../kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+        <a href="../berichte.html" style="text-decoration:none;">← Zurück zur Berichte-Übersicht</a>
+        <h1 style="margin-top:1rem;">Rise of the Vize-Lars...</h1>
+        <p class="news-meta">28.09.2023</p>
+        <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
+        <div class="article-content"><p><strong>Mein Weg zum Bayerischen Vizemeister-Titel</strong></p>
+<p>(fotografiert von Jan Fischer): Präsident des Bayerischen Schachbunds Peter Eberl überreicht Lars den Pokal</p>
+<p><br> <strong>Mein Weg zur <a href="https://www.schachbund-bayern.de/bayerische-einzelmeisterschaften/bayerische-meisterschaft-2023/" target="_blank" rel="noopener">Bayerischen Einzelmeisterschaft</a></strong><br> Da ich die Oberpfalz-Meisterschaft nicht spielen konnte und die Münchener Plätze frei ausgeschrieben wurden, bewarb ich mich darauf und bekam prompt einen Platz, so dass dies das erste Turnier war, bei dem ich offiziell für die <strong>SG AFK</strong> gespielt habe.</p>
+<p><br> <strong>Turnierverlauf</strong><br> Bei sommerlichen Temperaturen startete dann direkt die erste Runde. Zu allseitiger Erleichterung war der Spielsaal klimatisiert. In der ersten Runde bekam ich die weißen Steine gegen <strong>Christoph Sesselmann</strong> (ELO 2025) zugelost. Da dieser kürzlich noch 2150 hatte, ging ich mit erhöhter Vorsicht in die Partie, damit er diese, zumindest von mir, nicht so schnell wieder bekommt. Da die Paarungen erst kurz vor Rundenbeginn bekannt gegeben wurden, machte ich mir keine Gedanken über Vorbereitung. Lustigerweise folgten wir dann länger einer meiner Partien, nur dass ich da Schwarz gehabt hatte. Da ich die damalige Spielweise meines Gegners als unangenehm in Erinnerung hatte, dachte ich, ich folge der Partie einfach so lange wie möglich. Das klappte dann auch sehr gut und mein Gegner stand relativ schnell unter starkem positionellen Druck und ich konnte mit einer netten Taktik in ein gewonnenes Endspiel abwickeln und verwerten.</p>
+<p><br> Als mein Zimmerkollege (FM <strong>Tobias Kolb</strong> vom SC Bamberg) und ich zum ersten Mal aufs Zimmer kamen, bemerkten wir dann, dass unser Zimmer irgendwie übersehen wurde beim Reinigen. Zum Glück konnte uns dann noch die Rezeption frische Bettwäsche und Handtücher geben. Zudem hatten wir leider ein Zimmer direkt an der Straße bekommen, sodass wir nicht gut nachts lüften konnten und unser Zimmer sich langsam aufheizte. Auf der positiven Seite animierte das dann erheblich mehr zum raus gehen und Wetter genießen :-)</p>
+<p><br> Als nächstes stand die nächste Einzelrunde an, in der ich gegen <strong>Tobias Becker</strong> (2201) mit Schwarz gelost wurde. Diesmal experimentierte ich mit der Kalashnikov-Variante der sizilianischen Verteidigung. Die Überraschung zeigte auch direkt ihre Wirkung und ich hatte sehr schnell Zeitvorteil. Leider ließ sich mein Gegner davon nicht aus dem Konzept bringen und ich fühlte mich verleitet, die Stellung mit f5 anzuhebeln und zu verschärfen. Mein Gegner reagierte cool, sodass ich es irgendwann nicht übertreiben wollte mit dem Risiko und erlaubte meinem Gegner, in ein leicht zu halten aussehendes Endspiel abzuwickeln. Auf dem zweiten Blick jedoch hatte Schwarz große Aktivität. Leider übersah ich dann eine gute Chance kurz vor der Zeitkontrolle, die Initiative an mich zu reißen und wir segelten paar Abtäusche später in den Remishafen ein.</p>
+<p><br> Am nächsten Tag stand dann die erste von zwei Doppelrunden an. Vormittags bekam ich <strong>Michael Willim</strong> (2143) mit Weiß zugelost. Ich versuchte von Anfang an, alle Figuren auf dem Brett zu lassen und einen komplizierten Kampf zu forcieren. Das Mittelspiel gestaltete sich dann auch sehr umkämpft, wo wir beide teils unsere Chancen hatten. Kurz vor der Zeitkontrolle dachte ich dann, dass er mit ein paar präzisen Zügen in ein ausgeglichenes Endspiel überleiten könnte und sollte. Diese Chance ließ er verstreichen und nach der Zeitkontrolle gefiel mir meine Stellung auf einmal sehr, da ich einen Springer auf d6 und einen auf g5 installieren konnte. Zudem konnte ich noch eine Schwäche auf a6 anvisieren. Dies erwies sich dann irgendwann als zu viel für meinen Gegner und er lief in eine Taktik, die ihn kurze Zeit später nach über fünf Stunden Kampf zur Aufgabe zwang.</p>
+<p><br> Danach dann ein schnelles Mitttagessen und kurz einmal Dateien durchklicken, bevor es gegen den amtierenden Bayerischen Vizemeister FM <strong>Eduard Miller</strong> (2325) vom SC Erlangen ging. Es kam wie erwartet Londoner System aufs Brett. Ich interpretierte dies als Remis-Gebot und bot prompt im 5. Zug Remis, was mein Gegner nutzte, um mir nach der Partie eine Moralpredigt zu halten. London-Spieler, das Mysterium unserer Zeit ;). Da ich auch noch relativ müde von der kürzeren Nacht und der langen Vormittagspartie war, hätte ich nichts dagegen gehabt, schnell fertig zu werden. Es sollte aber anders kommen. Es tauschten sich zwar zwei paar Leichtfiguren, aber mit Läufer gegen Springer und ungewöhnlicher Struktur (exf5 in einer typischen Karlsbader Struktur) entwickelte sich ein spannender strategischer Kampf. Ich konnte nach und nach die Initiative an mich reißen und ihn nach und nach überspielen und mir einen großen Vorteil erarbeiten. Die Engine schrie zwischenzeitlich schon +10 für mich. Ich verwechselte aber leider entscheidend die Zugreihenfolge und der Gewinn wurde erheblich komplizierter. Zusätzlich verrechnete ich mich nochmals und übersah eine komische Ressource und musste dann nochmal genau rechnen, damit mein Gegner nicht noch Chancen bekam. Am Ende bekamen wir ein Endspiel, wo ich mit 3 verbundenen Bauern am Königsflügel gegen Läufer und b-Bauer spielen musste. Mit genauem Spiel erwies sich dies aber als eine machbare Verteidigungsaufgabe. Damit hatte ich mich auf dem geteilten 2. Platz hinter dem führenden FM <strong>Sebastian Reimann</strong> (2323) vorgearbeitet, der zu dem Zeitpunkt alle Partien gewinnen konnte!</p>
+<p><br> Der nächste Tag war dann etwas komisch. Ich hätte eigentlich gegen <strong>Avigdor Bergauz</strong> (2197) mit Weiß spielen sollen. Dieser musste leider kurzfristig das Turnier aus persönlichen Gründen abbrechen, sodass ich kampflos zum nächsten Punkt kam. Ich nutze die Zeit für einen längeren Spaziergang, um dann frisch für den nächsten Tag und die letzte Doppelrunde des Turniers zu sein. Als ich dann mal reinschaute, konnte ich mein Glück kaum fassen: Sebastian Reimann stand auf Verlust gegen FM <strong>Robin Schlichtmann</strong> (2277) und die meisten Partien vorne sahen nach Remis aus. Robin übersah aber eine entscheidende Idee kurz vor der Zeitkontrolle, sodass diese Partie Remis endete.</p>
+<p>Am nächsten Tag kam es dann zum Topduell gegen Sebastian Reimann. Die Eröffnung verlief leider etwas suboptimal für mich. Komischerweise hatte mein Gegner etwas vorbereitet, was ich noch nie zuvor gespielt hatte (aber sonst nichts), da er sich irgendwie in der Datenbank verguckt hatte. Leider spielte ich genau diese Variante. Dementsprechend fiel ich auf der Uhr zurück und bekam Sorgen um meinen König in der Mitte. Auf einmal interessierte sich mein Gegner dann aber mehr für einen Bauerngewinn, als dafür, meinen König in der Mitte zu behalten, wonach ich nur noch schmale Pfade zum Ausgleich gehabt hätte. Als ich dann doch noch rochieren konnte, bot ich reflexartig Remis. Ich dachte irgendwie, er würde sicher nicht annehmen und ich würde ihn nur zu längerem Nachdenken bringen und seinen Zeitvorteil verkleinern. Leider hatte ich es mental nicht geschafft darüber nachzudenken, dass ich besser stehen könnte, nachdem ich in Vorbereitung gelaufen war. Er entschied sich dann aber anzunehmen und erst dann registrierte ich langsam, dass ich eine riesige Chance liegen gelassen hatte. Ich hatte zwar einen Bauern weniger, aber mehr als ausreichend positionelle Kompensation, sowie einen erheblich besseren König, sodass die Engines schon von sehr großem bis gewinnbringenden Vorteil für mich sprachen.</p>
+<p><br> Ich versuchte das dann schnellstmöglich auszublenden und in der nächsten Runde wieder mit Weiß zu punkten, was bisher ja auch gut funktioniert hatte. Ich bekam es mit FM <strong>Petro Lohvinov</strong> (2237) zu tun, gegen den ich schon einige Partien gespielt hatte. In der letzten bin ich in sehr tiefe Vorbereitung gelaufen und konnte meine schlechte Stellung dann auch nicht mehr retten. Da Petros Spielweise sehr dynamisch orientiert ist, war mein Plan, die Stellung möglichst solide zu halten und ihn unnötige Risiken eingehen zu lassen. Zudem hatte ich eine sehr tiefe Eröffnungsidee mit verbundener Neuerung vorbereitet. Er fing dann schnell an sehr lange nachzudenken und traf dann irgendwann eine sehr zweischneidige Entscheidung, das Zentrum aufzugeben und auf Matt-Angriff und Läuferpaar zu setzen. Da ich mir für die Partie auch die Strukturen genauer angeschaut hatte und wusste, dass dem Computer diese Spielweise nicht gefällt, spielte ich dann zuversichtlich nach vorne und schaffte es, ihn anzugreifen, bevor er mich angreifen konnte und gewann schließlich im Mattangriff. Währenddessen machten Sebastian Reimann und Eduard Miller schnell Remis, sodass ich erstmalig Erster in der Tabelle war, da ich nach Punkten Sebastian eingeholt hatte und ihn, aufgrund der besseren Zweitwertung, überholt hatte.</p>
+<p>In der vorletzten Runde ging es dann gegen den amtierenden bayerischen Meister und die Nummer 1 der Setzliste FM <strong>Lukas Schulz</strong> (2347) mit Schwarz. Objektiv gesehen war nie etwas los, ich hatte zwar laut Lichess die bessere Genauigkeit (98%), aber er machte es mit 97% nicht schlechter, sodass wir uns auf Remis, in einem total ausgeglichenen Turmendspiel, einigten. Parallel dazu spielte Sebastian Reimann mit Weiß gegen Sebastian Böhme (2271). Schwarz fand zwischenzeitlich ein sehr starkes Opfer und die besten Fortsetzungen und als es dann so aussah, als ob er gewinnen würde, sah er leider die letzte entscheidende Pointe nicht und es tauschte sich stattdessen alles in ein ausgeglichenes Turmendspiel ab, in dem keine Seite mehr etwas anbrennen ließ und sich beide den Punkt teilten.</p>
+<p><strong>Letzte Runde</strong><br> So sah dann die Tabelle vor der letzten Runde so aus, dass ich führte mit 6/8 aufgrund der besseren Zweitwertung vor Sebastian Reimann. Dahinter befanden sich dann vier Spieler mit 5,5 und einige weitere mit 5. Von den Leuten mit 5,5 oder 5 Punkten bestand nur bei Eduard Miller (5,5 Punkte) die Möglichkeit, dass er mich bei Punktgleichheit nach Zweitwertung überholen könnte, sodass ich im Falle eines Remis sicher mindestens 3. Wäre. Aber die begehrte Qualifikation zur Deutschen war noch nicht sicher, da hier nur die ersten beiden fahren dürfen und ich wollte ja sowieso gewinnen und auf den Titel schielen! Die Paarungen waren dann wie folgt: Ich spielte mit Weiß gegen Ediz Kocak (2176), gegen den Cédric schon in der Liga gespielt hatte, Eduard Miller spielte mit Weiß gegen Sebastian Böhme und Sebastian Reimann spielte mit Schwarz gegen Lukas Schulz. Auf dem Papier also eine sehr gute Auslosung für mich, aber gespielt werden muss ja trotzdem.</p>
+<p><br> Anfangs war ich irgendwie etwas nervös in der letzten Runde, sodass ich direkt erstmal meine Vorbereitung vergaß und dann dachte, ich wüsste sie wieder, aber in Wahrheit hatte ich die Stellungen verwechselt. Mein Gegner bekam dann eine harmlos aussehende Karlsbad-Struktur, in der er aber g6 gespielt hatte. Ich kann aus Erfahrung sagen, dass diese Struktur menschlich sehr schwer zu handhaben ist und so verfolgte mein Gegner dann direkt einen falschen Plan. Als ihm dann auffiel, dass es nicht so funktionierte, wie er sich das vorgestellt hatte, hatte ich schon die Initiative an mich gerissen. Als ich dann schließlich Drohungen an beiden Flügeln aufstellte, hatte mein Gegner nur Sorge um seinen König, sodass er übersah, dass ich auch Drohungen am Damenflügel aufgestellt hatte, die ihn eine Qualität kosteten. Selbstbewusst führte ich den Zug aus und verließ das Brett, um etwas frische Luft zu schnappen, um dann danach mit freiem Kopf die Verwertung beginnen zu können und mir des Sieges nicht zu sicher zu sein. Als ich dann zurückkam, hatte mein Gegner schon aufgebaut und die Könige in die Mitte gestellt und beide Partieformulare unterschrieben. Er war zu frustriert, um mit Material weniger noch weiter zu kämpfen. Damit waren die 100% mit Weiß und der mindestens geteilte 1. Platz gesichert!</p>
+<p><br> Zu diesem Zeitpunkt hatte <strong>Sebastian Böhme</strong> zwei Figuren gegen einen Turm gegeben gegen Eduard Miller, wonach dieser klar auf Gewinn stand. Auf Brett 1 hatte Lukas Schulz im scharfen Königsgambit zwei Figuren geopfert, konnte aber Dauerschach geben und fing auch schon an, zu wiederholen. Glücklich, dass ich damit sicher Erster wäre, wenn Sebastian Reimann nicht gewinnen würde, verließ ich den Spielsaal. Da Lukas davon träumte noch unter die ersten 2 zu kommen, obwohl es eigentlich klar war, dass Eduard Miller und ich sicher vor ihm wären, entschied er sich mit einer Stunde und zwei Figuren weniger, weiterzuspielen. Die Engine sprang direkt von 0.00 auf -6. Nach wenigen schwarzen Zügen waren die Damen getauscht und obwohl Weiß eine Figur zurückgewann, war da ja noch die andere Mehrfigur, sodass Schwarz ohne Probleme kurze Zeit danach gewann. Eduard Miller gewann seine Partie ebenfalls und sicherte sich damit den 3. Platz. Leider stellten einige meiner vorigen Gegner klar bessere Stellungen ein, sodass es mir schon schwante, dass ich vermutlich in der Zweitwertung überholt werden würde, was dann leider auch geschah.</p>
+<p>Eigentlich glücklich, aber auch irgendwie sehr frustriert, dass alles gegen mich lief nach meinem Sieg in der letzten Runde, wartete ich auf die Siegerehrung und erfuhr dann, dass mir ein Buchholzpunkt fehlte für Platz 1. Immerhin die Qualifikation für die Deutsche konnte mir nicht mehr genommen werden.</p>
+<p><br> <br></p>
+<p><strong>Fazit</strong><br> Ich bin mit meinem Schach mehr als zufrieden und stand eigentlich in keiner Partie schlechter und gewann mit Weiß sehr souveräne Partien. Hätte mir jemand vor dem Turnier gesagt, ich würde punktgleich mit dem Ersten Zweiter werden ohne Niederlage, dann hätte ich das nicht glauben können, vor allem nach meiner schlechten Leistung in Italien. Aber irgendwie hatte ich dann am Ende schon das Gefühl, dass ich einiges an Pech hatte, da ich sowohl von Punkten eingeholt, als auch nach Buchholz überholt wurde. Glück gehört nun auch mal zum Schach dazu und Vizemeister ist auch ein fantastisches Ergebnis und ich freue mich schon drauf die Deutsche Meisterschaft der Erwachsenen spielen zu dürfen!</p>
+<p>Und auch für die Bayerische Meisterschaft nächstes Jahr bin ich vorqualifiziert, so dass ich dann wieder direkt den Titel angreifen kann! Da lasse ich dann hoffentlich keine +10 Stellungen mehr liegen!<br> Wieder einmal war es ein sehr schönes, gut organisiertes Turnier im Gasthof Höhensteiger und, dass der Zimmerservice unser Zimmer mehrmals nicht fand, ist wirklich ein absolutes Novum, das jetzt sicher nie wieder vorkommen wird.<br> Abgesehen von einem Matt mit 5 Springern gab es auch keine großen Zwischenfälle. Nur ein Kelheimer setzte die Kräfte der Physik außer Kraft. Er spielte seine Partie und schaffte es zeitgleich den Lichess-Broadcast mit seinem Lichess-Account anzuschauen.</p>
+<p><br> <strong>Ausblick:</strong><br> Ich hoffe die nächsten Turniere, die ich für die SG AFK bestreite, laufen ähnlich erfolgreich!</p>
+<p><br> <strong>Partien:</strong><br> Wen die Partien interessieren, ich habe alle Partien auf einem Livebrett gespielt, das heißt, man findet sie alle in folgendem Broadcast: <a href="https://lichess.org/broadcast/bavarian-championship-2023/round-1/ORtrHJDL" target="_blank" rel="noopener">https://lichess.org/broadcast/bavarian-championship-2023/round-1/ORtrHJDL</a></p>
+<p>Zusätzlich hab ich auch noch eine Partie selber kommentiert:<br></p>
+<p><em>Aus dem Archiv der alten Vereinsseite übernommen; das Datum ist teilweise rekonstruiert, Fotos sind leider nicht erhalten.</em></p></div>
+        
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+        <p><a href="../kontakt.html">Kontaktformular</a></p>
+        <p><a href="../mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="../ueber-uns.html">Über uns</a></p>
+        <p><a href="../neu-hier.html">Neu hier?</a></p>
+        <p><a href="../faq.html">Häufige Fragen</a></p>
+        <p><a href="../impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 13.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+</body>
+</html>
