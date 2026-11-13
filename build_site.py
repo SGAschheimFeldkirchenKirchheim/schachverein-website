@@ -2167,7 +2167,7 @@ def build_berichte():
 DIASHOW_ORDNER = "diashow"      # Fotos für die Diashow oben auf der Startseite (jpg/png/webp), alphabetisch
 DIASHOW_SEKUNDEN = 5           # Anzeigedauer pro Foto
 # Wer in Windows/Handy "Animationen reduzieren" eingeschaltet hat, sieht sonst nur das erste Foto. True = trotzdem wechseln
-DIASHOW_AUCH_OHNE_ANIMATIONEN = False
+DIASHOW_AUCH_OHNE_ANIMATIONEN = True
 # Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
 # Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
 HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
