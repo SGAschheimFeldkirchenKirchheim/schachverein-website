@@ -31,6 +31,7 @@
   ("Pierre Tassell", "Blitzschachmeister", "2022"),
   ("Lars Goldbeck", "Weihnachtsblitz", "2022"),
   ("David Mehlhorn", "Schnellschachmeister", "2022"),
+  ("David Mehlhorn", "Kirchheimer Stadtmeister", "2022"),
   ("Pierre Tassell", "Vereinsmeister", "2022"),
   ("David Mehlhorn", "Weihnachtsblitz", "2021"),
   ("Arthur Krumm", "Kirchheimer Stadtmeister", "2021"),

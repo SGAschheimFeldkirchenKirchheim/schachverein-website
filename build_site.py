@@ -52,7 +52,15 @@ SPIELORT_HINWEIS_KURZ = "Schachschule GyKi"   # kurze Fassung für die Startseit
 # eine Adresse ersetzen (Text und mailto-Link). "" = normale Adressen, dann ist alles wieder wie vorher.
 MAIL_UMLEITUNG = "sgafk1952@gmail.com"
 
-TODAY = datetime.date.today()
+# Datum in deutscher Zeit (GitHub rechnet in UTC; der nächtliche Lauf kurz nach Mitternacht soll schon den neuen Tag sehen)
+def _heute_deutsch():
+    try:
+        return datetime.datetime.now(ZoneInfo("Europe/Berlin")).date()
+    except Exception:  # Windows ohne Paket "tzdata": PC-Uhr ist dort ohnehin deutsche Zeit
+        return datetime.date.today()
+
+
+TODAY = _heute_deutsch()
 
 # Kürzel -> Erklärung. Erscheint als kleine Legende unter den Termin-Karten,
 # aber nur für Kürzel, die gerade wirklich angezeigt werden.
@@ -2165,9 +2173,9 @@ def build_berichte():
 # ==========================================
 # --- Einstellungen -------------------------------------------------
 DIASHOW_ORDNER = "diashow"      # Fotos für die Diashow oben auf der Startseite (jpg/png/webp), alphabetisch
-DIASHOW_SEKUNDEN = 5           # Anzeigedauer pro Foto
+DIASHOW_SEKUNDEN = 5            # Anzeigedauer pro Foto
 # Wer in Windows/Handy "Animationen reduzieren" eingeschaltet hat, sieht sonst nur das erste Foto. True = trotzdem wechseln
-DIASHOW_AUCH_OHNE_ANIMATIONEN = True
+DIASHOW_AUCH_OHNE_ANIMATIONEN = False
 # Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
 # Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
 HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
@@ -2502,6 +2510,113 @@ DIASHOW_JS = """<script>
 </script>"""
 
 
+# ==========================================
+# GEBURTSTAGE auf der Startseite ("Max wird heute 34") + einmal am Tag kurzes Konfetti
+# Quelle: GitHub-Secret GEBURTSTAGE (lädt update_all.py hoch) oder lokal ../Geburtstag/daten/geburtstage.json
+# Es landen nur die Geburtstagskinder von heute im HTML, nie die ganze Liste.
+# ==========================================
+GEBURTSTAGE_AN = True                 # False = keine Geburtstage auf der Startseite
+GEBURTSTAG_KONFETTI = True            # False = nur die Karte, kein Konfetti
+GEBURTSTAG_LOKAL = os.path.join("..", "Geburtstag", "daten", "geburtstage.json")
+GEBURTSTAG_TEXT = "Alles Gute vom ganzen Verein!"
+
+
+def _geburtstag_liste():
+    """[{'vorname','nachname','geburtstag' (TT.MM.JJJJ)}] aus dem Secret oder der lokalen Datei."""
+    roh = os.environ.get("GEBURTSTAGE", "").strip()
+    try:
+        if roh:
+            daten = json.loads(roh)
+        elif os.path.exists(GEBURTSTAG_LOKAL):
+            with open(GEBURTSTAG_LOKAL, encoding="utf-8") as f:
+                daten = json.load(f)
+        else:
+            return []
+    except (OSError, ValueError) as e:
+        print(f"Hinweis: Geburtstage nicht lesbar ({type(e).__name__})")
+        return []
+    if isinstance(daten, dict):
+        daten = daten.get("mitglieder", [])
+    return [m for m in daten if isinstance(m, dict)]
+
+
+def geburtstage_heute(heute=None):
+    """[(Anzeigename, neues Alter)]; Vorname, bei doppeltem Vornamen mit Nachname. 29.02. -> 28.02. in Nicht-Schaltjahren."""
+    if not GEBURTSTAGE_AN:
+        return []
+    heute = heute or TODAY
+    liste = _geburtstag_liste()
+    vornamen = {}
+    for m in liste:
+        v = str(m.get("vorname", "")).strip().lower()
+        vornamen[v] = vornamen.get(v, 0) + 1
+    schaltjahr = heute.year % 4 == 0 and (heute.year % 100 != 0 or heute.year % 400 == 0)
+    treffer = []
+    for m in liste:
+        try:
+            tag, monat, jahr = (int(x) for x in str(m.get("geburtstag", "")).split("."))
+        except ValueError:
+            continue
+        feiertag = (monat, tag)
+        if (monat, tag) == (2, 29) and not schaltjahr:
+            feiertag = (2, 28)
+        alter = heute.year - jahr
+        if feiertag != (heute.month, heute.day) or not 0 < alter < 120:
+            continue
+        v, n = str(m.get("vorname", "")).strip(), str(m.get("nachname", "")).strip()
+        name = v if vornamen.get(v.lower(), 0) == 1 else f"{v} {n}".strip()
+        treffer.append((name, alter))
+    return sorted(treffer)
+
+
+def geburtstag_html(heute=None):
+    leute = geburtstage_heute(heute)
+    if not leute:
+        return ""
+    teile = [f"<strong>{htmllib.escape(n)}</strong> wird heute {a}" for n, a in leute]
+    satz = teile[0] if len(teile) == 1 else ", ".join(teile[:-1]) + " und " + teile[-1]
+    konfetti = GEBURTSTAG_JS.replace("__TAG__", (heute or TODAY).isoformat()) if GEBURTSTAG_KONFETTI else ""
+    return f"""<section class="geburtstag" aria-label="Geburtstag">
+      <span class="gb-torte" aria-hidden="true">🎂</span>
+      <p>{satz}! <span class="gb-gruss">{htmllib.escape(GEBURTSTAG_TEXT)}</span></p>
+    </section>{konfetti}"""
+
+
+GEBURTSTAG_CSS = """<style>
+  .geburtstag { display: flex; align-items: center; gap: 0.9rem; margin: 0 0 1rem; padding: 0.8rem 1.1rem;
+                border-radius: 12px; border: 1px solid var(--border, #e3e7ee); background: var(--soft, #f5f7fa);
+                box-shadow: inset 4px 0 0 #e8b931; }
+  .geburtstag p { margin: 0; line-height: 1.5; }
+  .gb-torte { font-size: 2rem; line-height: 1; }
+  .gb-gruss { color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+  .gb-schnipsel { position: fixed; top: -12px; width: 8px; height: 13px; border-radius: 2px; z-index: 9999;
+                  pointer-events: none; animation: gb-fall var(--d) cubic-bezier(.3,.6,.5,1) forwards; }
+  @keyframes gb-fall { to { transform: translate(var(--x), 105vh) rotate(var(--r)); opacity: 0.2; } }
+</style>"""
+
+# Einmal pro Tag und Browser, ca. 2,5 s, ohne Konfetti bei "Animationen reduzieren"
+GEBURTSTAG_JS = """<script>
+(function () {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var tag = "__TAG__";
+  try { if (localStorage.getItem("gb-konfetti") === tag) return; localStorage.setItem("gb-konfetti", tag); } catch (e) {}
+  var farben = ["#e8b931", "#6fa3e8", "#1c2d52", "#ffffff", "#e8b931"];
+  for (var i = 0; i < 45; i++) {
+    var s = document.createElement("span");
+    s.className = "gb-schnipsel";
+    s.style.left = (Math.random() * 100) + "vw";
+    s.style.background = farben[i % farben.length];
+    s.style.setProperty("--x", (Math.random() * 160 - 80) + "px");
+    s.style.setProperty("--r", (Math.random() * 720 - 360) + "deg");
+    s.style.setProperty("--d", (1.8 + Math.random() * 1.2) + "s");
+    s.style.animationDelay = (Math.random() * 0.6) + "s";
+    document.body.appendChild(s);
+    setTimeout(function (el) { return function () { el.remove(); }; }(s), 3600);
+  }
+})();
+</script>"""
+
+
 def build_index(upcoming_events, home_news_snippets, teams=()):
     news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
     event_cards = "".join(event_card_html(ev) for ev in upcoming_events) or "<p>Keine anstehenden Termine gefunden.</p>"
@@ -2515,6 +2630,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
 
     index_content = f"""
     {read_hinweis()}
+    {geburtstag_html()}
 
     <section class="hero">
       {diashow_html()}
@@ -2650,7 +2766,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     </style>"""
 
     render_page("Startseite", index_content, "index.html",
-                extra_styles=styles.replace("</style>", NEWS_CSS + liga.TICKER_CSS + "</style>"))
+                extra_styles=styles.replace("</style>", NEWS_CSS + liga.TICKER_CSS + "</style>") + GEBURTSTAG_CSS)
 
 
 # ==========================================

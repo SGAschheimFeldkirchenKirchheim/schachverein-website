@@ -189,9 +189,11 @@
 
   Hanspeter Hecht (6,5 Punkte) verteidigt seinen Vereinstitel gegen Frederik Prause (6) und Dieter Vischer (4,5).
 
-  Die Vereinsblitzmeisterschaft wird eine sichere Beute von Frederik Prause (7 Siege in sieben Partien!). Zweiter wird Hans Jörg Eiberweiser vor Hanspeter Hecht (beide 4,5). Das Weihnachts-Blitzturnier musste nach
+  Die Vereinsblitzmeisterschaft wird eine sichere Beute von Frederik Prause (7 Siege in sieben Partien!). Zweiter wird Hans Jörg Eiberweiser vor Hanspeter Hecht (beide 4,5). Das Weihnachts-Blitzturnier musste nach Stichkampf zwischen Ronny Damaske und Frederik Prause (je 11,5 Punkte) entschieden werden. Dabei hatte der Erstgenannte knapp den Kopf vorne. Dritter wurde Hans Jörg Eiberweiser (10,5). Mit Korbinian Ruff spielte erstmals seit vielen Jahren wieder ein Jugendlicher mit.
 
-  Stichkampf zwischen Ronny Damaske und Frederik Prause (je 11,5 Punkte) entschieden werden. Dabei hatte der Erstgenannte knapp den Kopf vorne. Dritter wurde Hans Jörg Eiberweiser (10,5).
+  Ab dem 17. September bietet die Schachgemeinschaft wieder ein regelmäßiges Kinder- und Jugendtraining an: jeden Donnerstag von 18:00 bis 19:30 Uhr in der Sportgaststätte Tassilo. Neuer Spielleiter wird Christoph Sindern.
+
+  In den Münchner Mannschaftsmeisterschaften belegt die 1. Mannschaft in der B-Klasse den 5., die 2. Mannschaft in der D-Klasse den 6. Platz. Im Münchner Ligapokal scheidet unsere Mannschaft nach einem 2:2 gegen den favorisierten SC Haar nur wegen der schlechteren Brettwertung aus.
 ]
 
 #jahr("2016")[
@@ -202,24 +204,28 @@
   In gewohnt souveräner Manier wurde Frederik Prause Vereinsblitzmeister. Neun Punkte aus neun Partien sprechen für sich. Da blieb für Dieter Vischer (8), Matthias Naumann und Hans Jörg Eiberweiser (je 5,5) nur Rang zwei bis vier über.
 
   Weihnachts-Blitz: Ronny Damaske (13 Punkte) vor Frederik Prause und Dr. Peter Esser (je 11)
+
+  Den Vereinspokal gewinnt Armin Tobisch im Finale gegen Frederik Prause. In den Münchner Mannschaftsmeisterschaften erreicht die 1. Mannschaft in der B-Klasse einen starken 2. Platz (9:5 Mannschaftspunkte; herausragend Armin Tobisch mit 5,5 aus 7), die 2. Mannschaft in der D-Klasse den 3. Platz (11:5 Mannschaftspunkte). Beim Oberlandquartett in Holzkirchen kann der Wanderpokal nicht verteidigt werden.
 ]
 
 #jahr("2017")[
   Die Jugendlichen unseres Vereins erreichten bei den Münchner Schulschach-Einzelmeisterschaften erfreuliche Platzierungen. Bei den Schülern der 3. Klasse wurde Colin Reimann mit vier Punkten aus sechs Partien in einem Feld von 40 Schülern Neunter. Mit der gleichen Punktzahl belegte Simon Esser den 13. Diego Heinze mit drei Punkten den 21. Platz. Bei den Schülern der Klassen 7-9 erkämpfte sich David Mehlhorn 4 Punkte aus sechs Partien und wurde Vierter. Arthur Krumm hatte am Ende einen Punkt weniger auf seinem Konto und belegte Rang 12. Insgesamt nahmen 28 Kinder teil. Ebenfalls ein stark beachteter vierter Platz war die Ausbeute von Mesut Ceylan in der Kategorie der Klassen 10-12. Hier waren 16 Teilnehmer am Start.
 
-  Neuer Vereinsmeister wurde Dieter Vischer.
+  Neuer Vereinsmeister wurde Dieter Vischer, der auch den Vereinspokal gewann. In der Hauptgruppe qualifizierten sich Thomas Bauer und Rolf Nicolay für die Meistergruppe; die Plätze drei bis fünf gingen bereits an unsere Jugendlichen Mesut Ceylan, Korbinian Ruff und Arthur Krumm.
 ]
 
 #jahr("2018")[
   Die Schachgemeinschaft trauert um Helmut Kaufmann, Vorsitzender des Schach-Klubs Kirchheim bis zur Fusion und später langjähriger Spielleiter der Schachgemeinschaft.
 
-  Den dank des erfreulichen Zuwachses an jugendlichen Mitgliedern nach Dekaden erstmalig wieder ausgespielten Jugend-Pokal der Schachgemeinschaft sicherte sich David Mehlhorn durch einen Sieg im Finale gegen Arthur Krumm.
+  Den dank des erfreulichen Zuwachses an jugendlichen Mitgliedern nach Dekaden erstmalig wieder ausgespielten Jugend-Pokal der Schachgemeinschaft – gestiftet von Dorothea Gundel, der früheren langjährigen Schriftführerin – sicherte sich David Mehlhorn durch einen Sieg im Finale gegen Arthur Krumm.
 
   Infolge der durch unsere jugendlichen Mitglieder deutlich gewachsenen Anzahl an aktiven Mitgliedern war unsere Schachgemeinschaft erstmalig mit 3 Mannschaften in den Münchner Mannschaftsmeisterschaften vertreten und erreichte folgende erfreulichen Platzierungen: mit der 1. Mannschaft in der B-Klasse einen 2. Platz und damit den Aufstieg in die A-Klasse, mit der 2. Mannschaft in der D-Klasse den 4. Platz sowie mit der neu gegründeten 3. Mannschaft mit überwiegend jugendlichen Spielern in der E-Klasse den 2. Platz.
 
   Pokalsieger wurde unser neues Vereinsmitglied Pierre Tassell, Blitzschachmeister wie schon so oft Frederik Prause und Sieger unseres Weihnachtsblitzturnieres im zweiten Jahr seiner Vereinszugehörigkeit Rudolf Oster.
 
-  Ende September war Internationaler Meister Frank Zeller zu Gast und spielte simultan gegen unsere Mitglieder. Im Herbst konnten sich zudem unsere Jugendlichen bei den Münchner U16-Mannschaftsmeisterschaften und den Münchner Schüler-Einzelmeisterschaften über schöne Erfolge freuen.
+  Ende September war Internationaler Meister Frank Zeller – nach seinem Simultan im Vorjahr in Kirchheim, das er mit 40:0 gewann – erneut zu Gast und spielte im Festsaal der Sportgaststätte Tassilo gegen 24 Gegner: Vereinsmitglieder, Schüler unseres Kooperationspartners Gymnasium Kirchheim und Eltern. Unter den Zuschauern war Feldkirchens Bürgermeister Werner van der Weck.
+
+  Unsere U16-Mannschaft wurde Münchner Vizemeister (Arthur Krumm, David Mehlhorn, András Centgraf, Erik Schubert, Finn Hess, Nils Heuwinkel). Bei den Münchner Schüler-Einzelmeisterschaften erreichte Mesut Ceylan in der Wertung der 11./12. Klassen den 2. Platz.
 ]
 
 #jahr("2019")[
@@ -230,6 +236,8 @@
   Beim Oberland-Quartett in Höhenkirchen belegte unsere Mannschaft nach engen Wettkämpfen den 3. Platz; gegen den Turniersieger Deisenhofen ging die letzte Runde nur knapp mit 3,5 : 4,5 verloren.
 
   Als bisher jüngster Spieler in der Vereins-Historie errang der 15-jährige Arthur Krumm den Titel des Vereinsmeisters, gefolgt von den vier an sich favorisierten „Oldies“ Dieter Vischer, Hanspeter Hecht, Rudolf Oster und Frederik Prause. Den Vereinspokal konnte Pierre Tassell erfolgreich verteidigen, genauso wie David Mehlhorn den Vereins-Jugend-Pokal. Meister im Blitzschach unserer Schachgemeinschaft wurde Dieter Vischer. Die Blitzmeisterschaft wurde in diesem Jahr an vier Spielabenden ausgetragen, von denen die besten drei Ergebnisse zählten.
+
+  Im November wird unsere U16-Mannschaft erneut Münchner Vizemeister.
 ]
 
 #jahr("2020")[
@@ -237,36 +245,51 @@
 
   Da bei den Wahlen zum Vorstand des Vereins Matthias Naumann nach 6 Jahren als 1. Vorsitzender aus familiären Gründen nicht für eine vierte Amtszeit kandidierte, wurde für mehrere Vorstandspositionen neu kandidiert und wie folgt gewählt: 1. Vorsitzender Andreas Schwarz, 2. Vorsitzender Dr. Daniel Pohl, Kassenwart Frederik Prause, Spielleiter Pierre Tassell, Schriftführer Rudolf Oster.
 
-  Unsere 1. Jugendmannschaft wird Jugend-Mannschafts-Meister des Schachbezirks München und steigt in die Jugend-Landesliga Süd auf.
+  Unsere 1. Jugendmannschaft (Arthur Krumm, András Centgraf, Korbinian Ruff, Felix Zurbuchen, David Mehlhorn) wird Jugend-Mannschafts-Meister des Schachbezirks München und steigt in die Jugend-Landesliga Süd auf. Die 2. Jugendmannschaft belegt in der 2. Jugendbezirksliga den 5. von 8 Plätzen. Insgesamt spielt der Verein mit fünf Mannschaften und zählt 34 Nachwuchsspieler.
 
-  Großer Erfolg auch für die 1. Mannschaft, die erstmals in der Vereinsgeschichte in die Bezirksliga, die höchste Spielklasse des Schachbezirks München, aufsteigt. Für die meisten Punkte sorgten Frederik Prause, Ronny Damaske (verlor keine einzige Partie!) und Dieter Vischer.
+  Großer Erfolg auch für die 1. Mannschaft, die erstmals in der Vereinsgeschichte in die Bezirksliga, die höchste Spielklasse des Schachbezirks München, aufsteigt. Für die meisten Punkte sorgten Frederik Prause, Ronny Damaske (verlor keine einzige Partie!) und Dieter Vischer. Die 2. Mannschaft muss die B-Klasse nach einem Jahr leider wieder verlassen.
 
-  Infolge der Corona-Pandemie konnten nicht alle vereins-internen Titel neu ausgespielt werden. Als online-Turniere wurden durchgeführt: die Vereins-Blitzmeisterschaft, die sich Frederik Prause sicherte, sowie das Weihnachts-Blitzturnier mit dem Gewinner Pierre Tassell.
+  Infolge der Corona-Pandemie konnten nicht alle vereins-internen Titel neu ausgespielt werden. Als online-Turniere wurden durchgeführt: die erste SG AFK Online-Blitzserie an drei Abenden im Frühjahr, die sich Frederik Prause vor Pierre Tassell und Felix Zurbuchen sicherte, sowie das Weihnachts-Blitzturnier mit dem Gewinner Pierre Tassell. Dazu gab es auf lichess ein Team-Battle gegen den SK Markt Schwaben.
+
+  Am 25. September wird das Gymnasium Kirchheim als Deutsche Schachschule ausgezeichnet – als einzige Schule in München. Maßgeblich dafür verantwortlich: Schulleiter Matthias Wermuth, Lehrer Pierre Tassell und unser langjähriger Vorsitzender Matthias Naumann.
 ]
 
 #jahr("2021")[
-  // OFFEN: Mannschaften 2020/21 (AFK 1 in der Bezirksliga?), Jugend, Vereinsmeisterschaft wegen Corona ausgefallen?
-  Die Schnellschach-Vereinsmeisterschaft gewinnt Pierre Tassell. Erster Kirchheimer Stadtmeister in unseren Reihen wird Arthur Krumm.
+  Unsere 1. Jugendmannschaft spielt erstmals in der U20-Landesliga Süd und gewinnt sie souverän mit fünf Siegen aus fünf Kämpfen – damit geht es in die Bayernliga, die höchste Jugendliga Bayerns.
 
-  Den Osterblitz holt sich Frederik Prause, das Weihnachts-Blitzturnier David Mehlhorn.
+  Nach sieben Jahren Pause wird wieder eine Schnellschach-Vereinsmeisterschaft ausgetragen; Sieger wird Pierre Tassell. Erster Kirchheimer Stadtmeister in unseren Reihen wird Arthur Krumm, der auch das Sommerturnier gewinnt. Eine Vereinsmeisterschaft wird 2020 und 2021 nicht ausgespielt.
+
+  Das Oster-Turnier (online) holt sich Frederik Prause, das Sommerblitz Rudolf Oster, das Weihnachts-Blitzturnier David Mehlhorn.
+
+  Unsere Jugend ist auch auswärts unterwegs: Beim Innsbruck Open erreicht David Mehlhorn im B-Open mit 6,5 aus 9 den 8. Platz von 126; beim Weihnachtsturnier der Deutschen Schachjugend wird unser U20-Team Siebter von 34 Mannschaften.
 ]
 
 #jahr("2022")[
-  // OFFEN: Mannschaften 2021/22, Pokalsieger 2022
-  Pierre Tassell wird erstmals Vereinsmeister und sichert sich auch die Blitzmeisterschaft. Schnellschachmeister wird David Mehlhorn.
+  // OFFEN: Pokalsieger 2022
+  In ihrer ersten Bezirksliga-Saison holt die 1. Mannschaft gegen Tarrasch München den ersten Mannschaftspunkt der Vereinsgeschichte in dieser Klasse, feiert am 29. April gegen Deisenhofen den ersten Sieg und schafft den Klassenerhalt. Die Senioren steigen trotz eines 4. Platzes in die 1. Seniorenliga auf, weil die vor ihnen platzierten Vereine dort schon vertreten sind. Unsere U20 belegt in ihrer ersten Bayernliga-Saison einen starken 4. Platz.
 
-  Das Weihnachts-Blitzturnier gewinnt Lars Goldbeck.
+  Bei der ersten Vereinsmeisterschaft seit 2019 setzt sich Pierre Tassell knapp nach Buchholz vor Arthur Krumm durch und wird erstmals Vereinsmeister. Die Blitzmeisterschaft wird als Blitz-Jahreswertung über fünf Turniere ausgetragen, von denen die besten drei zählen; auch hier gewinnt Pierre Tassell, vor Korbinian Ruff. Schnellschachmeister wird David Mehlhorn, der als bester Kirchheimer bei der Stadtmeisterschaft (57 Teilnehmer) auch Kirchheimer Stadtmeister wird.
+
+  Den Osterblitz gewinnt Korbinian Ruff, das Sommerblitz Pierre Tassell und das Weihnachts-Blitzturnier Lars Goldbeck. Beim Oberlandquartett in Holzkirchen holt die SG AFK erstmals seit 2015 wieder den Wanderpokal.
+
+  Bei der Mitgliederversammlung am 15. Juli wird der Vorstand einstimmig wiedergewählt: Andreas Schwarz (1. Vorsitzender), Dr. Daniel Pohl (2. Vorsitzender), Pierre Tassell (Spielleiter), Frederik Prause (Kassenwart) und Rudolf Oster (Schriftführer).
 ]
 
 #jahr("2023")[
-  // OFFEN: Mannschaften 2022/23, Pokalsieger 2023, Ergebnis der Vorstandswahl 2023
-  Pierre Tassell verteidigt seinen Titel als Vereinsmeister. Die Blitzmeisterschaft teilen sich Ronny Damaske und Pierre Tassell.
+  // OFFEN: Pokalsieger 2023
+  Größter Erfolg der Jugendarbeit: Unsere U20 wird in der Bayernliga Bayerischer Vizemeister! Lars Goldbeck wird in seinem ersten Turnier für die SG AFK Bayerischer Vizemeister im Einzel. Fabian Müller belegt bei der Bayerischen U16-Meisterschaft den 6. Platz, David Mehlhorn und Arthur Krumm spielen beim Reykjavik Open mit über 400 Teilnehmern aus 46 Ländern.
 
-  Armin Tobisch wird Schnellschachmeister und Kirchheimer Stadtmeister. Ronny Damaske gewinnt sowohl den Osterblitz als auch das Weihnachts-Blitzturnier.
+  Die 1. Mannschaft hält erneut die Bezirksliga – nach einer Niederlage in der letzten Runde dank Schützenhilfe des SC Haar. Beste Punktesammler waren David Mehlhorn und Pierre Tassell (je 5,5 Punkte). Auch die 2. Mannschaft und die Senioren in der 1. Seniorenliga bleiben in ihren Klassen. Beim 25. Oberlandquartett in Deisenhofen verteidigt die SG AFK ihren Titel.
+
+  Pierre Tassell verteidigt seinen Titel als Vereinsmeister. Die Blitzmeisterschaft teilen sich Ronny Damaske und Pierre Tassell. Armin Tobisch wird Schnellschachmeister und Kirchheimer Stadtmeister. Den Osterblitz gewinnt Pierre Tassell, das Sommerblitz Lars Goldbeck mit 9 aus 9, den Herbstblitz David Mehlhorn und das Weihnachts-Blitzturnier Ronny Damaske.
+
+  Andreas Schwarz wird als 1. Vorsitzender wiedergewählt.
 ]
 
 #jahr("2024")[
-  // OFFEN: Mannschaften 2023/24 (wie viele?), Schnellschachmeister 2024
+  // OFFEN: Schnellschachmeister 2024
+  In der Saison 2023/24 spielt die 1. Mannschaft weiter in der Bezirksliga, die 2. Mannschaft in der B-Klasse und eine neu gemeldete Mannschaft in der D-Klasse. Die Senioren müssen die 1. Seniorenliga am Saisonende leider wieder verlassen.
+
   Pierre Tassell gewinnt alles, was es an großen Vereinstiteln zu gewinnen gibt: Vereinsmeisterschaft, Blitzmeisterschaft und Pokal.
 
   Den Osterblitz entscheidet Moritz Stöttner für sich, das Weihnachts-Blitzturnier Stefans Kasims.
