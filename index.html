@@ -516,7 +516,7 @@
   var punkte = document.querySelectorAll(".dia-punkte button");
   if (dias.length < 2) return;
   dias.forEach(function (d) { if (d.dataset.bild) d.style.backgroundImage = "url('" + d.dataset.bild + "')"; });
-  var i = 0, timer = null, ms = 10 * 1000;
+  var i = 0, timer = null, ms = 5 * 1000;
   function zeige(n) {
     dias[i].classList.remove("aktiv"); punkte[i].removeAttribute("aria-current");
     i = (n + dias.length) % dias.length;
