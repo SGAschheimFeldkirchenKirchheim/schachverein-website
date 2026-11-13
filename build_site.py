@@ -2171,7 +2171,7 @@ DIASHOW_AUCH_OHNE_ANIMATIONEN = False
 # Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
 # Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
 HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
-HERO_TITLE = "Schach spielen in Aschheim, Feldkirchen &amp; Kirchheim"
+HERO_TITLE = "Schach spielen in<br>Aschheim, Feldkirchen &amp; Kirchheim"
 # Alternative: "Schach im Münchner Osten"
 
 # Mitgliederzahl vom Schachbund (Wertungsportal-API)
