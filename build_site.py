@@ -2166,6 +2166,8 @@ def build_berichte():
 # --- Einstellungen -------------------------------------------------
 DIASHOW_ORDNER = "diashow"      # Fotos für die Diashow oben auf der Startseite (jpg/png/webp), alphabetisch
 DIASHOW_SEKUNDEN = 5           # Anzeigedauer pro Foto
+# Wer in Windows/Handy "Animationen reduzieren" eingeschaltet hat, sieht sonst nur das erste Foto. True = trotzdem wechseln
+DIASHOW_AUCH_OHNE_ANIMATIONEN = False
 # Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
 # Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
 HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
@@ -2483,7 +2485,7 @@ DIASHOW_JS = """<script>
   var punkte = document.querySelectorAll(".dia-punkte button");
   if (dias.length < 2) return;
   dias.forEach(function (d) { if (d.dataset.bild) d.style.backgroundImage = "url('" + d.dataset.bild + "')"; });
-  var i = 0, timer = null, ms = __SEKUNDEN__ * 1000;
+  var i = 0, timer = null, ms = __SEKUNDEN__ * 1000, DIASHOW_IMMER = __IMMER__;
   function zeige(n) {
     dias[i].classList.remove("aktiv"); punkte[i].removeAttribute("aria-current");
     i = (n + dias.length) % dias.length;
@@ -2492,10 +2494,10 @@ DIASHOW_JS = """<script>
   function start() { stop(); timer = setInterval(function () { zeige(i + 1); }, ms); }
   function stop() { if (timer) clearInterval(timer); timer = null; }
   punkte.forEach(function (p, n) { p.addEventListener("click", function () { zeige(n); start(); }); });
-  var hero = document.querySelector(".hero");
-  hero.addEventListener("mouseenter", stop);
-  hero.addEventListener("mouseleave", start);
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) start();
+  // Anhalten nur, wenn die Maus auf den Punkten liegt (nicht über dem ganzen Bild)
+  var leiste = document.querySelector(".dia-punkte");
+  if (leiste) { leiste.addEventListener("mouseenter", stop); leiste.addEventListener("mouseleave", start); }
+  if (DIASHOW_IMMER || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) start();
 })();
 </script>"""
 
@@ -2580,7 +2582,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     </section>
 
     {home_js}
-    {DIASHOW_JS.replace("__SEKUNDEN__", str(DIASHOW_SEKUNDEN))}
+    {DIASHOW_JS.replace("__SEKUNDEN__", str(DIASHOW_SEKUNDEN)).replace("__IMMER__", "true" if DIASHOW_AUCH_OHNE_ANIMATIONEN else "false")}
     """
 
     styles = """<style>""" + HINWEIS_CSS + """
