@@ -29,8 +29,8 @@ FRAGEN = [
          "Erwachsene spielen ab 19:30 Uhr mit Open End. Das GyKi ist eine Schachschule und unser Spielort. "
          '<a href="neu-hier.html">So kommst du vorbei →</a>'),
         ("Findet der Spielabend auch in den Ferien statt?",
-         'Meistens ja. Fällt ein Abend aus, steht das auf der <a href="index.html">Startseite</a> und im '
-         '<a href="termine.html">Spielplan</a>.'),
+         'Meistens ja. Fällt ein Abend aus, steht das oben auf der <a href="index.html">Startseite</a>, '
+         'direkt über den nächsten Terminen.'),
     ]),
     ("Mitgliedschaft", [
         ("Was kostet die Mitgliedschaft?",
