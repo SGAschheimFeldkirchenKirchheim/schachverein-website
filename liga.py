@@ -894,8 +894,11 @@ STYLES = """<style>
       .team-kopf h1 { margin: 0; color: var(--navy); display: flex; align-items: center; gap: 0.6rem; }
       .team-platz { font-weight: bold; color: var(--navy); font-size: 1.1rem; }
 
-      .reiter { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 1rem 0 1.2rem; border-bottom: 3px solid var(--navy); }
-      .reiter a { padding: 0.5rem 0.9rem; border-radius: 6px 6px 0 0; text-decoration: none; font-weight: bold; color: var(--navy); background: var(--soft); }
+      /* Reiter in einer Zeile; wenn der Platz nicht reicht, seitlich wischen statt umbrechen */
+      .reiter { display: flex; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; position: relative;
+                gap: 0.3rem; margin: 1rem 0 1.2rem; border-bottom: 3px solid var(--navy); }
+      .reiter::-webkit-scrollbar { display: none; }
+      .reiter a { flex: 0 0 auto; white-space: nowrap; padding: 0.5rem 0.9rem; border-radius: 6px 6px 0 0; text-decoration: none; font-weight: bold; color: var(--navy); background: var(--soft); }
       .reiter a:hover { background: #dcebf7; }
       .reiter a[aria-current="true"] { background: var(--navy); color: #fff; }
       .js .panel-titel { display: none; }
@@ -1045,6 +1048,9 @@ TEAM_JS = r"""<script>
     if (!gibts && panels.length) id = panels[0].dataset.reiter;
     panels.forEach(function (p) { p.hidden = p.dataset.reiter !== id; });
     links.forEach(function (a) { a.setAttribute("aria-current", a.dataset.reiter === id ? "true" : "false"); });
+    // aktiven Reiter in den sichtbaren Bereich wischen (schmale Bildschirme)
+    var akt = document.querySelector('.reiter a[aria-current="true"]');
+    if (akt) { var r = akt.parentNode; r.scrollLeft = akt.offsetLeft - (r.clientWidth - akt.offsetWidth) / 2; }
   }
   links.forEach(function (a) {
     a.addEventListener("click", function (e) {

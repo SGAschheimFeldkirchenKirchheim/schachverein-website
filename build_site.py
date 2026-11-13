@@ -196,18 +196,41 @@ GLOBAL_CSS = """<style>
       header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
       .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
 
+      .nav-auf { display: none; }
+
+      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
+      @media (max-width: 560px) {
+        header .brand span { font-size: 0; }
+        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
+      }
+
       @media (max-width: 1180px) {
-        .nav-gruppe { display: block; }
-        .nav-gruppe > a { display: block; }
+        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
+        .nav-gruppe > a { display: block; border-top: none; }
         .nav-gruppe > a::after { display: none; }
-        .nav-unter, .nav-gruppe:hover .nav-unter { display: flex; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
+        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
+        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
+        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
+        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
+        .nav-gruppe.offen .nav-unter { display: flex; }
+        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
         .nav-unter::before { display: none; }
         header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
         header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
       }
 
       .footer-link { color: #aaa; }
-    </style>"""
+    </style>
+    <script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script>"""
 
 
 # ==========================================
@@ -227,7 +250,11 @@ def build_nav(nav_path, active, seite=None):
         for u_href, u_label in unter:
             u_cur = ' aria-current="page"' if u_href == seite else ''
             eintraege += f'<a href="{nav_path}{u_href}"{u_cur}>{u_label}</a>'
-        links.append(f'<div class="nav-gruppe">{haupt}<div class="nav-unter">{eintraege}</div></div>')
+        # Handy: Unterpunkte zugeklappt, Pfeil-Knopf klappt auf; der Bereich, in dem man gerade ist, ist offen
+        offen = href == active or any(u == seite for u, _ in unter)
+        knopf = (f'<button type="button" class="nav-auf" aria-expanded="{"true" if offen else "false"}" '
+                 f'aria-label="{label} aufklappen"></button>')
+        links.append(f'<div class="nav-gruppe{" offen" if offen else ""}">{haupt}{knopf}<div class="nav-unter">{eintraege}</div></div>')
     return "\n      ".join(links)
 
 
