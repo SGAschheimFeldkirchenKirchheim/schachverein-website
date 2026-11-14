@@ -95,7 +95,9 @@ GEGNER_KUERZEL_DATEI = os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 KUERZEL_VORSAETZE = {"sg", "sc", "sv", "tsv", "fc", "sk", "msa", "tus", "tv", "esv", "psv", "sf", "ssc", "sgem",
                      "schachclub", "schachfreunde", "schachklub", "schachverein", "schachgemeinschaft"}
 KUERZEL_LAENGE = 8              # max. Buchstaben des Namensteils
-GEGEN_UNS_TEXT = "gegen uns"    # Tooltip-Zusatz der hervorgehobenen Spalte (Kampf gegen die eigene Mannschaft)
+GEGEN_UNS_TEXT = "gegen uns"
+# Farbstrich unter dem Gegnerkürzel = Ergebnis aus Sicht der Mannschaft im Fenster (nicht des Gegners)
+ERGEBNIS_FARBE = {"s": "#2e9d5b", "u": "#e0b020", "n": "#d0453a"}    # Tooltip-Zusatz der hervorgehobenen Spalte (Kampf gegen die eigene Mannschaft)
 
 
 # ==========================================
@@ -398,12 +400,14 @@ def aufstellung_tabelle(d, tlnr):
             return f'<th class="neben rd-geg{uns_cls(r)}"></th>'
         tip = g["name"] if g["sf"] else f'R{r}: {"vs." if g.get("heim") else "bei"} {g["name"]}'
         if g["art"]:
-            tip += f' – {zahl(g["mein"])} : {zahl(g["sein"])} ({ERGEBNIS_TEXT[g["art"]]})'
+            tip += (f' – {zahl(g["mein"])} : {zahl(g["sein"])} '
+                    f'({ERGEBNIS_TEXT[g["art"]]} für {name_von(d, tlnr)})')
         if g["uns"] and not eigen:
             tip += f" – {GEGEN_UNS_TEXT}"
         offen = "" if g["gesp"] else " offen"
-        return (f'<th class="neben rd-geg{offen}{uns_cls(r)}" tabindex="0" title="{esc(tip)}" data-tip="{esc(tip)}">'
-                f'{esc(g["kurz"])}</th>')
+        strich = f' style="--erg:{ERGEBNIS_FARBE[g["art"]]}"' if g["art"] else ""
+        return (f'<th class="neben rd-geg{offen}{" mit-erg" if g["art"] else ""}{uns_cls(r)}"{strich} tabindex="0" '
+                f'title="{esc(tip)}" data-tip="{esc(tip)}">{esc(g["kurz"])}</th>')
 
     def ergebnis(r):
         g = geg.get(r)
@@ -431,6 +435,8 @@ def aufstellung_tabelle(d, tlnr):
       </table></div>"""
 
 
+LEGENDE_RUNDEN = ("Unter der Runde steht der Gegner; Farbstrich = Ergebnis dieser Mannschaft "
+                  "(grün Sieg, gelb Unentschieden, rot Niederlage), orange Spalte = Spiel gegen uns. ")
 LEGENDE_EIGEN = ("<strong>Einsätze</strong> = gespielte Runden von bisher gespielten Runden "
                  "(kein Prozent, keine Prognose).")
 LEGENDE_GEGNER = ("<strong>Prognose</strong> = geschätzte Wahrscheinlichkeit, dass der Spieler im nächsten "
@@ -516,7 +522,7 @@ def aufstellungen_dialog(d):
         <div class="auf-block" data-tlnr="{tlnr}" hidden>
           <h2>{esc(name_von(d, tlnr))}</h2>
           {aufstellung_tabelle(d, tlnr)}
-          <p class="klein">{legende if (eigen or not d.get("archiv")) else ""} {link}</p>
+          <p class="klein">{LEGENDE_RUNDEN}{legende if (eigen or not d.get("archiv")) else ""} {link}</p>
         </div>""")
     return f"""
     <dialog class="auf-dialog" aria-label="Mannschaftsaufstellung">
@@ -1086,6 +1092,9 @@ STYLES = """<style>
                   z-index: 3; white-space: nowrap; background: var(--navy); color: #fff; font-size: 0.75rem; font-style: normal;
                   padding: 0.2rem 0.5rem; border-radius: 4px; opacity: 1; }
       .aufst .gg-uns { background: rgba(230, 160, 20, 0.16); }
+      [data-theme="dark"] .aufst .gg-uns { background: rgba(230, 160, 20, 0.2); }
+      [data-theme="dark"] .aufst thead th.gg-uns { background: #e6a014; color: #1a252f; }
+      .aufst th.rd-geg.mit-erg { box-shadow: inset 0 -4px var(--erg); }
       .aufst thead th.gg-uns, .aufst thead th.rd-geg.gg-uns { background: #e6a014; color: #1a252f; }
       .aufst tfoot td { border-top: 2px solid var(--border); font-weight: bold; }
       .aufst .rd-mk { display: inline-block; font-size: 0.7rem; padding: 0 0.25rem; border-radius: 4px; }
