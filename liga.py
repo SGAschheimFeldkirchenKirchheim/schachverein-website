@@ -96,8 +96,9 @@ KUERZEL_VORSAETZE = {"sg", "sc", "sv", "tsv", "fc", "sk", "msa", "tus", "tv", "e
                      "schachclub", "schachfreunde", "schachklub", "schachverein", "schachgemeinschaft"}
 KUERZEL_LAENGE = 8              # max. Buchstaben des Namensteils
 GEGEN_UNS_TEXT = "gegen uns"
-# Farbstrich unter dem Gegnerkürzel = Ergebnis aus Sicht der Mannschaft im Fenster (nicht des Gegners)
-ERGEBNIS_FARBE = {"s": "#2e9d5b", "u": "#e0b020", "n": "#d0453a"}    # Tooltip-Zusatz der hervorgehobenen Spalte (Kampf gegen die eigene Mannschaft)
+# Ergebnis unter dem Gegnerkürzel, immer aus Sicht der Mannschaft im Fenster (nicht des Gegners)
+ERGEBNIS_KURZ = {"s": "S", "u": "U", "n": "N"}   # "" = nur Ergebnis ohne Buchstaben
+MANNSCHAFT_ZEILE = False        # zusätzlich Zeile "Mannschaft" unter der Tabelle (doppelt zum Kopf)    # Tooltip-Zusatz der hervorgehobenen Spalte (Kampf gegen die eigene Mannschaft)
 
 
 # ==========================================
@@ -297,6 +298,12 @@ def gegner_kuerzel(name):
     return f"{wort} {nr}".strip()
 
 
+def halb(x):
+    """4.5 -> '4½', 4.0 -> '4', 0.5 -> '½'"""
+    ganz, rest = int(x), x - int(x)
+    return (str(ganz) if ganz or not rest else "") + ("½" if rest else "")
+
+
 def runden_gegner(d, tlnr):
     """-> {Runde: {'name', 'kurz', 'gesp', 'mein', 'sein', 'art', 'sf', 'uns'}} aus Sicht von tlnr."""
     aus = {}
@@ -405,9 +412,11 @@ def aufstellung_tabelle(d, tlnr):
         if g["uns"] and not eigen:
             tip += f" – {GEGEN_UNS_TEXT}"
         offen = "" if g["gesp"] else " offen"
-        strich = f' style="--erg:{ERGEBNIS_FARBE[g["art"]]}"' if g["art"] else ""
-        return (f'<th class="neben rd-geg{offen}{" mit-erg" if g["art"] else ""}{uns_cls(r)}"{strich} tabindex="0" '
-                f'title="{esc(tip)}" data-tip="{esc(tip)}">{esc(g["kurz"])}</th>')
+        erg = ""
+        if g["art"]:
+            erg = f'<span class="rd-k-erg">{ERGEBNIS_KURZ.get(g["art"], "")} {halb(g["mein"])}:{halb(g["sein"])}</span>'
+        return (f'<th class="neben rd-geg{offen}{uns_cls(r)}" tabindex="0" '
+                f'title="{esc(tip)}" data-tip="{esc(tip)}">{esc(g["kurz"])}{erg}</th>')
 
     def ergebnis(r):
         g = geg.get(r)
@@ -418,7 +427,7 @@ def aufstellung_tabelle(d, tlnr):
 
     gzeile = "".join(gkopf(r) for r in alle_runden)
     fuss = ""
-    if any(g["art"] for g in geg.values()):
+    if MANNSCHAFT_ZEILE and any(g["art"] for g in geg.values()):
         rest = 3 if (eigen or p) else 2
         fuss = (f'<tfoot><tr class="mk-zeile"><td></td><td class="neben"></td><td class="name">Mannschaft</td><td></td>'
                 f'{"".join(ergebnis(r) for r in alle_runden)}{"<td></td>" * rest}</tr></tfoot>')
@@ -435,8 +444,8 @@ def aufstellung_tabelle(d, tlnr):
       </table></div>"""
 
 
-LEGENDE_RUNDEN = ("Unter der Runde steht der Gegner; Farbstrich = Ergebnis dieser Mannschaft "
-                  "(grün Sieg, gelb Unentschieden, rot Niederlage), orange Spalte = Spiel gegen uns. ")
+LEGENDE_RUNDEN = ("Unter der Runde steht der Gegner und das Ergebnis aus Sicht dieser Mannschaft "
+                  "(S Sieg, U Unentschieden, N Niederlage); orange Spalte = Spiel gegen uns. ")
 LEGENDE_EIGEN = ("<strong>Einsätze</strong> = gespielte Runden von bisher gespielten Runden "
                  "(kein Prozent, keine Prognose).")
 LEGENDE_GEGNER = ("<strong>Prognose</strong> = geschätzte Wahrscheinlichkeit, dass der Spieler im nächsten "
@@ -1094,7 +1103,7 @@ STYLES = """<style>
       .aufst .gg-uns { background: rgba(230, 160, 20, 0.16); }
       [data-theme="dark"] .aufst .gg-uns { background: rgba(230, 160, 20, 0.2); }
       [data-theme="dark"] .aufst thead th.gg-uns { background: #e6a014; color: #1a252f; }
-      .aufst th.rd-geg.mit-erg { box-shadow: inset 0 -4px var(--erg); }
+      .aufst .rd-k-erg { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: bold; font-style: normal; white-space: nowrap; }
       .aufst thead th.gg-uns, .aufst thead th.rd-geg.gg-uns { background: #e6a014; color: #1a252f; }
       .aufst tfoot td { border-top: 2px solid var(--border); font-weight: bold; }
       .aufst .rd-mk { display: inline-block; font-size: 0.7rem; padding: 0 0.25rem; border-radius: 4px; }
