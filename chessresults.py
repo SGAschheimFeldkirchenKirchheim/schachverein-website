@@ -18,13 +18,17 @@ import os
 import re
 import time
 
+import urllib.request
+
 try:
     import requests
-except ImportError:          # Fallback ohne requests
+except ImportError:          # Fallback ohne requests (z. B. auf GitHub ohne pip install)
     requests = None
-    import urllib.request
 
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except ImportError:          # ohne beautifulsoup4 werden keine Turnierseiten gebaut (Website-Build läuft weiter)
+    BeautifulSoup = None
 
 # ==========================================
 # EINSTELLUNGEN
@@ -278,6 +282,10 @@ def turnier_seite(t, render_page):
 def bauen(render_page):
     """Baut alle eingetragenen Turniere. -> Liste (Seite, Name, Text) der gebauten Seiten."""
     gebaut = []
+    turniere = [t for t in lade_konfig() if t.get("tnr") and t.get("seite") and not t.get("aus")]
+    if turniere and BeautifulSoup is None:
+        print("WARNUNG: beautifulsoup4 fehlt (pip install beautifulsoup4) – keine Turnierseiten von chess-results.")
+        return gebaut
     for t in lade_konfig():
         if not t.get("tnr") or not t.get("seite") or t.get("aus"):
             continue

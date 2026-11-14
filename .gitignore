@@ -2,4 +2,3 @@
 __pycache__/
 turniere/blitzjahreswertung/output*.svg
 turniere/blitzjahreswertung/archiv/*/output*.svg
-turniere/chessresults_cache/

@@ -1,229 +1,493 @@
 {
-  "_hinweis": [
-    "Mannschaftshistorie: ältere Saisons (vor dem Archiv in mannschaften/archiv/) und Korrekturen.",
-    "Saison = '1994/95'. Je Mannschaft: klasse, optional platz, status ('auf' / 'ab' / '' = gehalten), notiz.",
-    "Quelle bisher: Vereinschronik (dokumente/historie.typ). Ab 2022/23 kommt alles automatisch aus dem Archiv.",
-    "'korrekturen' überschreibt einzelne Felder automatisch erzeugter Saisons (z. B. wenn ein Aufstieg nicht aus der Tabelle folgt).",
-    "'ausgefallen' = Saisons ohne Mannschaftsmeisterschaft."
-  ],
-  "gruendung": {
-    "AFK 1": "1985/86 – erstes Auftreten des Schach-Clubs Aschheim in der D-Klasse",
-    "AFK 3": "2017/18 – neu gegründet, überwiegend Jugendspieler (seit 2023/24 wieder gemeldet)"
+ "_hinweis": [
+  "Mannschaftshistorie (mannschaftshistorie.html).",
+  "Ab 2022/23 kommen Erwachsene und Senioren automatisch aus mannschaften/archiv/ (die laufende Saison aus mannschaften/).",
+  "saisons: Saison -> Mannschaft -> klasse, platz, n (Teams in der Liga), status ('auf'/'ab'), notiz, titel (z. B. 'Vizemeister' -> Meilenstein).",
+  "Quellen: Vereinschronik (bis 2007/08), gespeicherte Tabellen des Schachbezirks (ab 2013/14), Berichte.",
+  "korrekturen: überschreibt Felder der automatisch erzeugten Saisons.",
+  "anzahl: geschätzte Zahl der Mannschaften für Saisons ohne Tabellen (vermutet = schraffiert).",
+  "Mannschaftsnamen: AFK 1-6, Senioren, U20 I-IV, U16 (+ U16 II), U14 – gleicher Name = durchgehende Linie in der Grafik."
+ ],
+ "gruendung": {
+  "AFK 1": "1985/86 – erstes Auftreten des Schach-Clubs Aschheim in der D-Klasse",
+  "Senioren": "2014/15 – erste bekannte Saison",
+  "U20 I": "2016/17 – die ersten Jugendmannschaften"
+ },
+ "ausgefallen": {
+  "2020/21": "Wegen Corona keine Erwachsenen- und Seniorenmeisterschaft."
+ },
+ "saisons": {
+  "1985/86": {
+   "AFK 1": {
+    "klasse": "D-Klasse",
+    "notiz": "erstes Auftreten in einem Mannschaftswettbewerb (SC Aschheim)"
+   }
   },
-  "ausgefallen": {
-    "2020/21": "Wegen Corona keine Mannschaftsmeisterschaft."
+  "1994/95": {
+   "AFK 1": {
+    "klasse": "B-Klasse"
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "status": "auf"
+   }
   },
-  "saisons": {
-    "1985/86": {
-      "AFK 1": {
-        "klasse": "D-Klasse",
-        "notiz": "erstes Auftreten in einem Mannschaftswettbewerb (SC Aschheim)"
-      }
-    },
-    "1994/95": {
-      "AFK 1": {
-        "klasse": "B-Klasse"
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "status": "auf"
-      }
-    },
-    "1996/97": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "platz": 4
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "notiz": "ohne Verlustpartie, Aufstieg um einen halben Punkt verpasst"
-      }
-    },
-    "1998/99": {
-      "AFK 1": {
-        "klasse": "B-Klasse"
-      }
-    },
-    "2000/01": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "status": "ab"
-      }
-    },
-    "2001/02": {
-      "AFK 1": {
-        "klasse": "C-Klasse",
-        "status": "auf",
-        "notiz": "postwendender Wiederaufstieg"
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "status": "auf"
-      }
-    },
-    "2002/03": {
-      "AFK 1": {
-        "klasse": "B-Klasse"
-      },
-      "AFK 2": {
-        "klasse": "C-Klasse"
-      }
-    },
-    "2003/04": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "platz": 3
-      },
-      "AFK 2": {
-        "klasse": "C-Klasse",
-        "status": "ab"
-      }
-    },
-    "2004/05": {
-      "AFK 1": {
-        "klasse": "B-Klasse"
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "platz": 3
-      }
-    },
-    "2005/06": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "platz": 2
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "platz": 1,
-        "status": "auf",
-        "notiz": "alle 8 Kämpfe gewonnen"
-      }
-    },
-    "2007/08": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "status": "auf",
-        "notiz": "erstmals Aufstieg in die A-Klasse"
-      }
-    },
-    "2014/15": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "platz": 5
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "platz": 6
-      }
-    },
-    "2015/16": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "platz": 2
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "platz": 3
-      },
-      "Senioren": {
-        "klasse": "2. Seniorenliga",
-        "platz": 1,
-        "status": "auf"
-      }
-    },
-    "2017/18": {
-      "AFK 1": {
-        "klasse": "B-Klasse",
-        "platz": 2,
-        "status": "auf"
-      },
-      "AFK 2": {
-        "klasse": "D-Klasse",
-        "platz": 4,
-        "status": "auf",
-        "notiz": "2018/19 laut Chronik in der C-Klasse"
-      },
-      "AFK 3": {
-        "klasse": "E-Klasse",
-        "platz": 2,
-        "notiz": "neu gegründet"
-      },
-      "Senioren": {
-        "klasse": "1. Seniorenliga",
-        "status": "ab"
-      }
-    },
-    "2018/19": {
-      "AFK 1": {
-        "klasse": "A-Klasse"
-      },
-      "AFK 2": {
-        "klasse": "C-Klasse",
-        "status": "auf"
-      },
-      "Senioren": {
-        "klasse": "2. Seniorenliga",
-        "status": "auf",
-        "notiz": "direkter Wiederaufstieg"
-      }
-    },
-    "2019/20": {
-      "AFK 1": {
-        "klasse": "A-Klasse",
-        "status": "auf",
-        "notiz": "erstmals Aufstieg in die Bezirksliga"
-      },
-      "AFK 2": {
-        "klasse": "B-Klasse",
-        "status": "ab"
-      }
-    },
-    "2021/22": {
-      "AFK 1": {
-        "klasse": "Bezirksliga",
-        "notiz": "erste Bezirksliga-Saison, Klassenerhalt"
-      },
-      "Senioren": {
-        "klasse": "2. Seniorenliga",
-        "platz": 4,
-        "status": "auf",
-        "notiz": "aufgestiegen, weil die Vereine davor schon in der 1. Seniorenliga waren"
-      }
-    }
+  "1996/97": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 4
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "notiz": "ohne Verlustpartie, Aufstieg um einen halben Punkt verpasst"
+   }
   },
-  "korrekturen": {
-    "2024/25": {
-      "AFK 4": {
-        "platz": 1,
-        "status": "auf",
-        "notiz": "Meister der D-Klasse"
-      },
-      "AFK 3": {
-        "notiz": "Vizemeister der D-Klasse"
-      }
-    }
+  "1998/99": {
+   "AFK 1": {
+    "klasse": "B-Klasse"
+   }
   },
-  "meilensteine": [
-    {
-      "saison": "1984/85",
-      "text": "14. September 1984: 15 Schachspieler gründen den Schach-Club Aschheim."
-    },
-    {
-      "saison": "1986/87",
-      "text": "Fusion zur SG Aschheim/Feldkirchen (Juli 1987)."
-    },
-    {
-      "saison": "2007/08",
-      "text": "Fusion mit den Schachfreunden Kirchheim zur SG Aschheim/Feldkirchen/Kirchheim (1.1.2008)."
-    },
-    {
-      "saison": "2017/18",
-      "text": "Erstmals drei Mannschaften in den Münchner Mannschaftsmeisterschaften."
-    },
-    {
-      "saison": "2025/26",
-      "text": "Mit sechs Mannschaften so breit aufgestellt wie nie."
-    }
-  ]
+  "2000/01": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "status": "ab"
+   }
+  },
+  "2001/02": {
+   "AFK 1": {
+    "klasse": "C-Klasse",
+    "status": "auf",
+    "notiz": "postwendender Wiederaufstieg"
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "status": "auf"
+   }
+  },
+  "2002/03": {
+   "AFK 1": {
+    "klasse": "B-Klasse"
+   },
+   "AFK 2": {
+    "klasse": "C-Klasse"
+   }
+  },
+  "2003/04": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 3
+   },
+   "AFK 2": {
+    "klasse": "C-Klasse",
+    "status": "ab"
+   }
+  },
+  "2004/05": {
+   "AFK 1": {
+    "klasse": "B-Klasse"
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "platz": 3
+   }
+  },
+  "2005/06": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 2
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "platz": 1,
+    "status": "auf",
+    "notiz": "alle 8 Kämpfe gewonnen"
+   }
+  },
+  "2007/08": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "status": "auf",
+    "notiz": "erstmals Aufstieg in die A-Klasse"
+   }
+  },
+  "2013/14": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 6,
+    "n": 8
+   },
+   "AFK 2": {
+    "klasse": "C-Klasse",
+    "platz": 7,
+    "n": 7,
+    "status": "ab"
+   }
+  },
+  "2014/15": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 5,
+    "n": 8
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "platz": 6,
+    "n": 7
+   },
+   "Senioren": {
+    "klasse": "MSenMM, Vorrunde Gruppe 3",
+    "platz": 2,
+    "n": 3
+   }
+  },
+  "2015/16": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 2,
+    "n": 8
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "platz": 3,
+    "n": 9,
+    "status": "auf"
+   }
+  },
+  "2016/17": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 7,
+    "n": 8
+   },
+   "AFK 2": {
+    "klasse": "C-Klasse",
+    "platz": 7,
+    "n": 7,
+    "status": "ab"
+   },
+   "Senioren": {
+    "klasse": "2. Seniorenliga, Gruppe B",
+    "platz": 1,
+    "status": "auf"
+   },
+   "U20 I": {
+    "klasse": "3. Jugend-Bezirksliga",
+    "platz": 1,
+    "n": 6,
+    "status": "auf"
+   },
+   "U20 II": {
+    "klasse": "3. Jugend-Bezirksliga",
+    "platz": 2,
+    "n": 6,
+    "status": "auf"
+   }
+  },
+  "2017/18": {
+   "AFK 1": {
+    "klasse": "B-Klasse",
+    "platz": 2,
+    "n": 10,
+    "status": "auf"
+   },
+   "AFK 2": {
+    "klasse": "D-Klasse",
+    "platz": 4,
+    "n": 9,
+    "status": "auf"
+   },
+   "AFK 3": {
+    "klasse": "E-Klasse",
+    "platz": 2,
+    "n": 8
+   },
+   "Senioren": {
+    "klasse": "1. Seniorenliga, Vorrunde A",
+    "platz": 4,
+    "status": "ab"
+   },
+   "U20 I": {
+    "klasse": "2. Jugend-Bezirksliga",
+    "platz": 2,
+    "n": 8,
+    "status": "auf"
+   },
+   "U20 II": {
+    "klasse": "2. Jugend-Bezirksliga",
+    "platz": 8,
+    "n": 8,
+    "status": "ab"
+   },
+   "U16": {
+    "klasse": "MM U16",
+    "platz": 4,
+    "n": 5
+   }
+  },
+  "2018/19": {
+   "AFK 1": {
+    "klasse": "A-Klasse",
+    "platz": 6,
+    "n": 10
+   },
+   "AFK 2": {
+    "klasse": "C-Klasse",
+    "platz": 4,
+    "n": 8,
+    "status": "auf"
+   },
+   "Senioren": {
+    "klasse": "2. Seniorenliga, Gruppe B",
+    "platz": 1,
+    "n": 5,
+    "status": "auf",
+    "notiz": "direkter Wiederaufstieg"
+   },
+   "U20 I": {
+    "klasse": "1. Jugend-Bezirksliga",
+    "platz": 5,
+    "n": 7
+   },
+   "U16": {
+    "klasse": "MM U16",
+    "platz": 2,
+    "titel": "Münchner U16-Vizemeister"
+   }
+  },
+  "2019/20": {
+   "AFK 1": {
+    "klasse": "A-Klasse",
+    "platz": 2,
+    "n": 10,
+    "status": "auf"
+   },
+   "AFK 2": {
+    "klasse": "B-Klasse",
+    "platz": 10,
+    "n": 10,
+    "notiz": "Tabellenletzter, 2021/22 trotzdem weiter in der B-Klasse"
+   },
+   "Senioren": {
+    "klasse": "1. Seniorenliga",
+    "platz": 7,
+    "n": 8,
+    "status": "ab"
+   },
+   "U20 I": {
+    "klasse": "1. Jugend-Bezirksliga",
+    "platz": 1,
+    "n": 8,
+    "status": "auf",
+    "titel": "Jugend-Mannschaftsmeister des Schachbezirks München"
+   },
+   "U20 II": {
+    "klasse": "2. Jugend-Bezirksliga",
+    "platz": 5,
+    "n": 8
+   },
+   "U16": {
+    "klasse": "MM U16",
+    "platz": 2,
+    "n": 4,
+    "titel": "Münchner U16-Vizemeister"
+   }
+  },
+  "2021/22": {
+   "AFK 1": {
+    "klasse": "Bezirksliga",
+    "platz": 8,
+    "n": 10,
+    "notiz": "erste Bezirksliga-Saison, Klassenerhalt"
+   },
+   "AFK 2": {
+    "klasse": "B-Klasse",
+    "platz": 9,
+    "n": 9
+   },
+   "Senioren": {
+    "klasse": "2. Seniorenliga",
+    "platz": 4,
+    "n": 8,
+    "status": "auf",
+    "notiz": "aufgestiegen, weil die Vereine davor schon in der 1. Seniorenliga waren"
+   },
+   "U20 I": {
+    "klasse": "U20 Bayernliga",
+    "platz": 4
+   },
+   "U20 II": {
+    "klasse": "2. Jugend-Bezirksliga",
+    "platz": 4,
+    "n": 8
+   },
+   "U16": {
+    "klasse": "MM U16",
+    "platz": 3,
+    "n": 6
+   }
+  },
+  "2020/21": {
+   "U20 I": {
+    "klasse": "U20 Landesliga Süd",
+    "platz": 1,
+    "status": "auf",
+    "titel": "Meister der U20-Landesliga Süd"
+   },
+   "U20 II": {
+    "klasse": "1. Jugend-Bezirksliga",
+    "platz": 7,
+    "n": 8
+   },
+   "U16": {
+    "klasse": "MM U16",
+    "platz": 3,
+    "n": 5
+   },
+   "U14": {
+    "klasse": "MM U14",
+    "platz": 7,
+    "n": 7
+   }
+  },
+  "2022/23": {
+   "U20 I": {
+    "klasse": "U20 Bayernliga",
+    "platz": 2,
+    "titel": "Bayerischer U20-Vizemeister"
+   },
+   "U20 II": {
+    "klasse": "1. Jugend-Bezirksliga",
+    "platz": 8,
+    "n": 8,
+    "status": "ab"
+   },
+   "U16": {
+    "klasse": "MM U16",
+    "platz": 2,
+    "n": 6,
+    "titel": "Münchner U16-Vizemeister"
+   }
+  },
+  "2023/24": {
+   "U20 I": {
+    "klasse": "U20 Bayernliga",
+    "platz": 7,
+    "n": 8,
+    "status": "ab"
+   },
+   "U20 II": {
+    "klasse": "2. Jugend-Bezirksliga",
+    "platz": 2,
+    "n": 8,
+    "status": "auf"
+   },
+   "U16": {
+    "klasse": "U16 1. Liga",
+    "platz": 6,
+    "n": 6,
+    "status": "ab"
+   }
+  },
+  "2024/25": {
+   "U20 I": {
+    "klasse": "U20 Landesliga Süd",
+    "platz": 2,
+    "titel": "Vizemeister der U20-Landesliga Süd"
+   },
+   "U20 II": {
+    "klasse": "1. Jugend-Bezirksliga",
+    "platz": 5,
+    "n": 8
+   },
+   "U20 III": {
+    "klasse": "3. Jugend-Bezirksliga",
+    "platz": 4,
+    "n": 8
+   },
+   "U20 IV": {
+    "klasse": "3. Jugend-Bezirksliga",
+    "platz": 3,
+    "n": 8
+   },
+   "U16": {
+    "klasse": "U16 2. Liga",
+    "platz": 2,
+    "n": 5,
+    "status": "auf"
+   }
+  },
+  "2025/26": {
+   "U20 I": {
+    "klasse": "U20 Landesliga Süd",
+    "notiz": "Klassenerhalt"
+   },
+   "U20 II": {
+    "klasse": "1. Jugend-Bezirksliga",
+    "platz": 4,
+    "n": 8
+   },
+   "U20 III": {
+    "klasse": "3. Jugend-Bezirksliga",
+    "platz": 5,
+    "n": 8
+   },
+   "U16 II": {
+    "klasse": "U16 2. Liga",
+    "platz": 2,
+    "n": 5
+   },
+   "U16": {
+    "klasse": "U16 1. Liga",
+    "platz": 2,
+    "n": 6,
+    "titel": "Münchner U16-Vizemeister"
+   }
+  },
+  "2026/27": {
+   "U16": {
+    "klasse": "U16 2. Liga",
+    "notiz": "läuft"
+   },
+   "U14": {
+    "klasse": "U14 3. Liga",
+    "notiz": "läuft"
+   }
+  }
+ },
+ "korrekturen": {
+  "2024/25": {
+   "AFK 4": {
+    "platz": 1,
+    "status": "auf",
+    "notiz": "Meister der D-Klasse"
+   },
+   "AFK 3": {
+    "status": "auf",
+    "notiz": "ebenfalls aufgestiegen"
+   }
+  }
+ },
+ "meilensteine": [
+  {
+   "saison": "1984/85",
+   "text": "14. September 1984: 15 Schachspieler gründen den Schach-Club Aschheim."
+  },
+  {
+   "saison": "1986/87",
+   "text": "Fusion zur SG Aschheim/Feldkirchen (Juli 1987)."
+  },
+  {
+   "saison": "2007/08",
+   "text": "Fusion mit den Schachfreunden Kirchheim zur SG Aschheim/Feldkirchen/Kirchheim (1.1.2008)."
+  }
+ ],
+ "anzahl": [
+  {
+   "von": "1985/86",
+   "bis": "2012/13",
+   "Erwachsene": 2,
+   "vermutet": true,
+   "hinweis": "genaue Zahl unbekannt, vermutlich von Anfang an 2 Mannschaften"
+  }
+ ]
 }

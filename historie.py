@@ -1,11 +1,11 @@
 """
-Mannschaftshistorie (mannschaftshistorie.html): in welcher Klasse welche Mannschaft wann gespielt hat,
-Auf- und Abstiege, Steckbriefe und Meilensteine.
+Mannschaftshistorie (mannschaftshistorie.html): wie der Verein an Mannschaften gewachsen ist,
+in welcher Liga welche Mannschaft wann gespielt hat (Erwachsene, Senioren, Jugend), Steckbriefe, Meilensteine.
 
 Daten:
-  - ab dem Archiv (mannschaften/archiv/<Jahr>/) und die laufende Saison: automatisch
-  - ältere Saisons, Gründungen, Korrekturen, Meilensteine: mannschaften_historie.json (von Hand)
-build_site.py ruft seite(aktuell, teams, archiv, seiten_pfad) auf.
+  - Erwachsene + Senioren ab dem Archiv (mannschaften/archiv/<Jahr>/) und die laufende Saison: automatisch
+  - alles andere (ältere Saisons, Jugend, Schätzungen, Korrekturen, Meilensteine): mannschaften_historie.json
+build_site.py ruft seite(aktuell, teams, archiv, seiten_pfad) und karte() auf.
 """
 
 import html
@@ -22,31 +22,46 @@ DATEI = "mannschaften_historie.json"
 SEITE = "mannschaftshistorie.html"
 TITEL = "Mannschaftshistorie"
 
-# Ligastufen von oben nach unten: (Muster im Klassennamen, Beschriftung). Erste passende gewinnt.
-STUFEN = [
-    (r"bezirksliga", "Bezirksliga"),
-    (r"^a-klasse", "A-Klasse"),
-    (r"^b-klasse", "B-Klasse"),
-    (r"^c-klasse", "C-Klasse"),
-    (r"^d-klasse", "D-Klasse"),
-    (r"^e-klasse", "E-Klasse"),
+# Bereiche: je eine Liga-Grafik. muster = Mannschaftsname; stufen = (Muster im Klassennamen, Beschriftung),
+# von oben nach unten. lueckenlos_ab = ab dieser Saison sind alle Saisons bekannt ("erstmals ..." nur ab da).
+BEREICHE = [
+    {"key": "erw", "titel": "Erwachsene", "untertitel": "Münchner Mannschaftsmeisterschaft (MMM)",
+     "muster": r"^AFK \d+$", "lueckenlos_ab": 2013, "farbe": "#1c4e9c",
+     "stufen": [(r"bezirksliga", "Bezirksliga"), (r"^a-klasse", "A-Klasse"), (r"^b-klasse", "B-Klasse"),
+                (r"^c-klasse", "C-Klasse"), (r"^d-klasse", "D-Klasse"), (r"^e-klasse", "E-Klasse")]},
+    {"key": "sen", "titel": "Senioren", "untertitel": "Münchner Senioren-Mannschaftsmeisterschaft",
+     "muster": r"^Senioren", "lueckenlos_ab": 2014, "farbe": "#7d3c98",
+     "stufen": [(r"^1\.\s*senioren", "1. Seniorenliga"), (r"^2\.\s*senioren", "2. Seniorenliga")]},
+    {"key": "u20", "titel": "Jugend U20", "untertitel": "Bayerische Jugendligen und Bezirksligen",
+     "muster": r"^U20", "lueckenlos_ab": 2011, "farbe": "#1e8449",
+     "stufen": [(r"bayernliga", "Bayernliga"), (r"landesliga", "Landesliga Süd"),
+                (r"^1\.\s*jugend", "1. Jugend-Bezirksliga"), (r"^2\.\s*jugend", "2. Jugend-Bezirksliga"),
+                (r"^3\.\s*jugend", "3. Jugend-Bezirksliga")]},
+    {"key": "u16", "titel": "Jugend U16", "untertitel": "bis 2022/23 eine gemeinsame Liga",
+     "muster": r"^U16", "lueckenlos_ab": 2011, "farbe": "#b9770e",
+     "stufen": [(r"1\.\s*liga|^mm u16", "1. Liga"), (r"2\.\s*liga", "2. Liga")]},
+    {"key": "u14", "titel": "Jugend U14", "untertitel": "",
+     "muster": r"^U14", "lueckenlos_ab": 2011, "farbe": "#16a085",
+     "stufen": [(r"1\.\s*liga|^mm u14", "1. Liga"), (r"2\.\s*liga", "2. Liga"), (r"3\.\s*liga", "3. Liga")]},
 ]
-SENIOREN_STUFEN = [
-    (r"^1\.\s*senioren", "1. Seniorenliga"),
-    (r"^2\.\s*senioren", "2. Seniorenliga"),
-]
-# Welche Teams (Kurzname) erscheinen? Muster; Jugendteams (U20 ...) bleiben draußen.
-TEAM_MUSTER = r"^(AFK \d+|Senioren)$"
-SENIOREN = "Senioren"
-
-# Linienfarben je Mannschaft (Reihenfolge AFK 1, 2, ...); Senioren eigene Farbe
+# Bereiche in der Wachstums-Grafik (Balken übereinander): (Beschriftung, Bereich-Keys, Farbe)
+WACHSTUM = [("Erwachsene", ["erw"], "#1c4e9c"), ("Senioren", ["sen"], "#7d3c98"),
+            ("Jugend", ["u20", "u16", "u14"], "#1e8449")]
+# Linienfarben je Mannschaft innerhalb eines Bereichs
 FARBEN = ["#1c4e9c", "#c0392b", "#1e8449", "#b9770e", "#7d3c98", "#16a085", "#5d6d7e", "#d35400"]
-SENIOREN_FARBE = "#7d3c98"
+
+# Kurztext oben ("6 Erwachsenen-, 1 Senioren- und 4 Jugend" + "mannschaften")
+KURZ_TEXT = {"Erwachsene": "Erwachsenen-", "Senioren": "Senioren-", "Jugend": "Jugend-"}
+# Text, wenn eine Gruppe zum ersten Mal Mannschaften hat ({n} = Anzahl)
+ERSTE_TEXT = {"Erwachsene": "Erste Mannschaft in der MMM",
+              "Senioren": "Erste bekannte Saison unserer Seniorenmannschaft",
+              "Jugend": "Die ersten Jugendmannschaften ({n})"}
 
 STATUS_TEXT = {"auf": "Aufstieg ↑", "ab": "Abstieg ↓", "läuft": "läuft"}
 
-INTRO = ("In welcher Klasse hat welche Mannschaft wann gespielt? Ab 2022/23 stammen die Daten aus den "
-         "Tabellen des Schachbezirks, ältere Saisons aus unserer Vereinschronik – dort gibt es noch Lücken. "
+INTRO = ("Wie ist die SG AFK an Mannschaften gewachsen, und wer spielte wann in welcher Liga? "
+         "Ab 2013/14 stammen die Daten aus den Tabellen des Schachbezirks und des Bayerischen Schachbunds, "
+         "ältere Saisons aus unserer Vereinschronik – dort gibt es noch Lücken. "
          "Wer alte Tabellen oder Unterlagen hat: gern beim Vorstand melden!")
 HINWEIS_NUMMERN = ("Die Nummern werden jede Saison nach Spielstärke neu vergeben – „AFK 3“ von 2017/18 ist "
                    "also nicht unbedingt dieselbe Mannschaft wie „AFK 3“ heute.")
@@ -68,9 +83,13 @@ def saison_jahr(text):
     return int(m.group(1)) if m else None
 
 
-def stufe(klasse, senioren=False):
+def bereich_von(team):
+    return next((b for b in BEREICHE if re.search(b["muster"], team)), None)
+
+
+def stufe(klasse, bereich):
     """-> (Index 0 = oben, Beschriftung) oder (None, None)"""
-    for i, (muster, name) in enumerate(SENIOREN_STUFEN if senioren else STUFEN):
+    for i, (muster, name) in enumerate(bereich["stufen"]):
         if re.search(muster, (klasse or "").strip(), re.I):
             return i, name
     return None, None
@@ -86,32 +105,30 @@ def lade_json():
         return {}
 
 
-def _status_aus_tabelle(d, platz):
-    art, _ = liga.platz_status(d, platz)
-    return art if art in ("auf", "ab") else ""
-
-
 def sammeln(aktuell, teams, archiv, seiten_pfad):
-    """-> {Jahr: {Team: Eintrag}}, Daten aus JSON (alt) + Archiv + laufende Saison."""
+    """-> ({Jahr: {Team: Eintrag}}, Rohdaten der JSON)"""
     roh = lade_json()
     daten = {}
     for s_text, mannschaften in (roh.get("saisons") or {}).items():
         j = saison_jahr(s_text)
         for team, e in mannschaften.items():
-            daten.setdefault(j, {})[team] = {"klasse": e.get("klasse", ""), "platz": e.get("platz"),
-                                             "n": e.get("n"), "status": e.get("status", ""),
-                                             "notiz": e.get("notiz", ""), "href": None, "quelle": "Chronik"}
+            daten.setdefault(j, {})[team] = {
+                "klasse": e.get("klasse", ""), "platz": e.get("platz"), "n": e.get("n"),
+                "status": "läuft" if j == aktuell else e.get("status", ""), "notiz": e.get("notiz", ""),
+                "titel": e.get("titel", ""), "href": None, "quelle": "Hand"}
     for jahr, ts in [*archiv.items(), (aktuell, teams)]:
         for d in ts:
-            if not re.match(TEAM_MUSTER, d.get("kurz", "")):
+            if not bereich_von(d.get("kurz", "")):
                 continue
             z = liga.eigene_zeile(d)
             platz = z["platz"] if z and d.get("aktuelle_runde") else None
-            laufend = jahr == aktuell
+            alt = daten.get(jahr, {}).get(d["kurz"], {})
+            art, _ = liga.platz_status(d, platz)
             daten.setdefault(jahr, {})[d["kurz"]] = {
                 "klasse": d.get("klasse", ""), "platz": platz, "n": len(d.get("tabelle") or []) or None,
-                "status": "läuft" if laufend else _status_aus_tabelle(d, platz),
-                "notiz": "", "href": seiten_pfad(d, aktuell), "quelle": "Schachbezirk"}
+                "status": "läuft" if jahr == aktuell else (art if art in ("auf", "ab") else ""),
+                "notiz": alt.get("notiz", ""), "titel": alt.get("titel", ""),
+                "href": seiten_pfad(d, aktuell), "quelle": "Schachbezirk"}
     for s_text, mannschaften in (roh.get("korrekturen") or {}).items():
         j = saison_jahr(s_text)
         for team, felder in mannschaften.items():
@@ -122,35 +139,189 @@ def sammeln(aktuell, teams, archiv, seiten_pfad):
     return daten, roh
 
 
-def team_reihenfolge(daten):
-    namen = {t for s in daten.values() for t in s}
-    return sorted(namen, key=lambda t: (t == SENIOREN, int(re.sub(r"\D", "", t) or 0), t))
+def teams_im_bereich(daten, bereich):
+    namen = {t for s in daten.values() for t in s if bereich_von(t) is bereich}
+
+    def nr(t):
+        m = re.search(r"(\d+|I{1,3}V?|IV)$", t)
+        if not m:
+            return 0
+        x = m.group(1)
+        return int(x) if x.isdigit() else {"I": 1, "II": 2, "III": 3, "IV": 4}.get(x, 9)
+    return sorted(namen, key=lambda t: (nr(t), t))
 
 
-def farbe(team, reihenfolge):
-    if team == SENIOREN:
-        return SENIOREN_FARBE
-    afk = [t for t in reihenfolge if t != SENIOREN]
-    return FARBEN[afk.index(team) % len(FARBEN)] if team in afk else "#888"
+def farbe(team, bereich, daten):
+    ts = teams_im_bereich(daten, bereich)
+    return FARBEN[ts.index(team) % len(FARBEN)] if team in ts else "#888"
+
+
+def anzahl_je_saison(daten, roh, aktuell):
+    """-> {Jahr: {Wachstums-Gruppe: (Anzahl, vermutet?)}} inkl. geschätzter Saisons aus der JSON."""
+    aus = {}
+    for j, s in daten.items():
+        for label, keys, _ in WACHSTUM:
+            n = sum(1 for t in s if (bereich_von(t) or {}).get("key") in keys)
+            aus.setdefault(j, {})[label] = (n, False)
+    for sch in roh.get("anzahl") or []:
+        von, bis = saison_jahr(sch.get("von")), saison_jahr(sch.get("bis") or sch.get("von"))
+        for j in range(von, bis + 1):
+            for label, _, _ in WACHSTUM:
+                if label in sch:
+                    bekannt = aus.get(j, {}).get(label, (0, False))[0]
+                    if sch[label] >= bekannt:
+                        aus.setdefault(j, {})[label] = (sch[label], bool(sch.get("vermutet")))
+    ausgefallen = {saison_jahr(s) for s in (roh.get("ausgefallen") or {})}
+    for j in ausgefallen:
+        aus.setdefault(j, {})
+    return {j: aus[j] for j in sorted(aus) if j <= aktuell}
 
 
 # ==========================================
-# BAUSTEINE
+# WACHSTUM
 # ==========================================
-def grafik(daten, reihenfolge, senioren=False):
-    """SVG: x = Saisons mit Daten, y = Ligastufe, eine Linie je Mannschaft."""
-    st = SENIOREN_STUFEN if senioren else STUFEN
-    teams = [t for t in reihenfolge if (t == SENIOREN) == senioren]
-    jahre = sorted(j for j, s in daten.items() if any(t in s and stufe(s[t]["klasse"], senioren)[0] is not None
-                                                       for t in teams))
-    if not jahre or not teams:
+def wachstum_grafik(anzahl, roh):
+    """Gestapelte Balken je Saison; gleiche geschätzte Saisons am Stück werden zu einem Balken."""
+    ausgefallen = {saison_jahr(s): t for s, t in (roh.get("ausgefallen") or {}).items()}
+    # Saisons in einem Schätz-Zeitraum ("anzahl" in der JSON) werden zu einem breiten Balken
+    bereiche = [(saison_jahr(x.get("von")), saison_jahr(x.get("bis") or x.get("von")))
+                for x in roh.get("anzahl") or [] if x.get("vermutet")]
+    gruppen = []
+    for j, werte in anzahl.items():
+        zr = next(((v, b) for v, b in bereiche if v <= j <= b), None)
+        if zr and gruppen and gruppen[-1].get("zr") == zr:
+            gruppen[-1]["bis"] = j
+            continue
+        gruppen.append({"von": j, "bis": j, "zr": zr,
+                        "werte": {k: (n, True) for k, (n, _) in werte.items()} if zr else werte})
+    if not gruppen:
         return ""
-    sp, zh, links, oben, unten = 46, 34, 104, 16, 44
+    maxi = max(sum(v[0] for v in g["werte"].values()) for g in gruppen) or 1
+    bw, gap, links, oben, unten, eh = 22, 8, 34, 14, 58, 26
+    breiten = [bw * (2.4 if g["von"] != g["bis"] else 1) for g in gruppen]
+    breite = links + sum(breiten) + gap * len(gruppen) + 10
+    hoehe = oben + eh * maxi + unten
+    teile = [f'<svg class="hist-svg" viewBox="0 0 {breite:.0f} {hoehe}" width="{breite:.0f}" height="{hoehe}" '
+             f'role="img" aria-label="Anzahl der Mannschaften je Saison">',
+             '<defs><pattern id="schraffur" width="6" height="6" patternUnits="userSpaceOnUse" '
+             'patternTransform="rotate(45)"><rect width="6" height="6" fill="#fff" opacity="0.0"/>'
+             '<line x1="0" y1="0" x2="0" y2="6" stroke="#fff" stroke-width="2.5" opacity="0.55"/></pattern></defs>']
+    for k in range(0, maxi + 1):
+        y = oben + eh * (maxi - k)
+        teile.append(f'<line class="hl" x1="{links - 4}" x2="{breite - 6}" y1="{y}" y2="{y}"/>'
+                     f'<text class="hy" x="{links - 8}" y="{y + 4}" text-anchor="end">{k}</text>')
+    x = links + gap / 2
+    for g, w in zip(gruppen, breiten):
+        y = oben + eh * maxi
+        label = saison_text(g["von"]) if g["von"] == g["bis"] else f'{g["von"]}–{g["bis"] + 1}'
+        tip = [label]
+        for name, _, f in WACHSTUM:
+            n, verm = g["werte"].get(name, (0, False))
+            if not n:
+                continue
+            h = eh * n
+            y -= h
+            teile.append(f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{h - 1.5}" rx="2" fill="{f}"/>')
+            if verm:
+                teile.append(f'<rect x="{x:.1f}" y="{y}" width="{w:.1f}" height="{h - 1.5}" rx="2" fill="url(#schraffur)"/>')
+            tip.append(f"{name}: {n}{' (vermutet)' if verm else ''}")
+        if g["von"] in ausgefallen:
+            tip.append(ausgefallen[g["von"]])
+            teile.append(f'<text class="hp" x="{x + w / 2:.1f}" y="{oben + eh * maxi - 6}" text-anchor="middle" '
+                         f'fill="#999">✕</text>')
+        gesamt = sum(v[0] for v in g["werte"].values())
+        if gesamt:
+            teile.append(f'<text class="hz" x="{x + w / 2:.1f}" y="{y - 4}" text-anchor="middle">{gesamt}</text>')
+        teile.append(f'<rect x="{x:.1f}" y="{oben}" width="{w:.1f}" height="{eh * maxi}" fill="transparent">'
+                     f'<title>{esc(" · ".join(tip))}</title></rect>')
+        lx = x + w / 2
+        teile.append(f'<text class="hx" x="{lx:.1f}" y="{oben + eh * maxi + 14}" text-anchor="end" '
+                     f'transform="rotate(-45 {lx:.1f} {oben + eh * maxi + 14})">{label}</text>')
+        x += w + gap
+    teile.append("</svg>")
+    legende = "".join(f'<span><i style="background:{f}"></i>{n}</span>' for n, _, f in WACHSTUM)
+    legende += '<span><i class="schraffiert"></i>vermutet</span><span>✕ ausgefallen (Corona)</span>'
+    return f'<div class="hist-legende">{legende}</div><div class="hist-scroll">{"".join(teile)}</div>'
+
+
+def erstmals(daten, anzahl, roh):
+    """Zeitleiste 'erstmals ...': -> [(Jahr, Rang, HTML)]"""
+    liste = []
+    # Zahl der Mannschaften: neues Maximum je Wachstums-Gruppe
+    for name, keys, _ in WACHSTUM:
+        hoch = 0
+        for j, werte in anzahl.items():
+            n, verm = werte.get(name, (0, False))
+            if n > hoch:
+                if not verm:
+                    if hoch == 0:
+                        text = ERSTE_TEXT.get(name, f"Erste Mannschaft: {name}")
+                        text = text.replace("{n}", str(n))
+                    elif name == "Erwachsene":
+                        text = f"Erstmals <strong>{n} Mannschaften</strong> in der MMM"
+                    else:
+                        text = f"Erstmals <strong>{n} {name}-Mannschaften</strong>"
+                    liste.append((j, 0, text + "."))
+                hoch = n
+    # höchste Liga je Bereich (nur ab lueckenlos_ab, außer die Chronik sagt "erstmals")
+    for b in BEREICHE:
+        eintr = sorted((j, t, e) for j in daten for t, e in daten[j].items() if bereich_von(t) is b)
+        stufen = [(j, t, e, stufe(e["klasse"], b)) for j, t, e in eintr]
+        stufen = [(j, t, e, k, name) for j, t, e, (k, name) in stufen if k is not None]
+        # was die (lückenhafte) Zeit vor lueckenlos_ab schon erreicht hat, inkl. Aufstiege
+        vorher = [k - 1 if e["status"] == "auf" and k > 0 else k
+                  for j, t, e, k, _ in stufen if j < b["lueckenlos_ab"]]
+        grenze = min(vorher) if vorher else None
+        beste = None
+        for j, t, e, k, name in stufen:
+            if (beste is not None and k < beste and j >= b["lueckenlos_ab"]
+                    and (grenze is None or k < grenze)):
+                liste.append((j, 1, f"{esc(b['titel'])}: erstmals in der <strong>{esc(name)}</strong> ({esc(t)})."))
+            beste = k if beste is None else min(beste, k)
+    # Titel und Chronik-"erstmals"
+    for j, s in daten.items():
+        for t, e in s.items():
+            if e.get("titel"):
+                liste.append((j, 2, f"<strong>{esc(t)}: {esc(e['titel'])}</strong>"))
+            elif e.get("platz") == 1 and e["status"] != "läuft" and stufe(e["klasse"], bereich_von(t))[0] is not None:
+                liste.append((j, 2, f"{esc(t)}: Platz 1 in der {esc(e['klasse'])}."))
+            if e.get("quelle") == "Hand" and re.search(r"erstmals|erstes", e.get("notiz", ""), re.I):
+                liste.append((j, 1, f"{esc(t)}: {esc(e['notiz'])}."))
+    for m in roh.get("meilensteine") or []:
+        j = saison_jahr(m.get("saison"))
+        if j is not None and m.get("text"):
+            liste.append((j, -1, esc(m["text"])))
+    for s_text, grund in (roh.get("ausgefallen") or {}).items():
+        liste.append((saison_jahr(s_text), 3, esc(grund)))
+    return liste
+
+
+def zeitleiste(liste):
+    jahre = sorted({m[0] for m in liste if m[0] is not None}, reverse=True)
+    gruppen = []
+    for j in jahre:
+        punkte = "".join(f"<li>{text}</li>" for jj, _, text in sorted(liste, key=lambda m: m[1]) if jj == j)
+        gruppen.append(f'<li><span class="hist-jahr">{saison_text(j)}</span><ul>{punkte}</ul></li>')
+    return f'<ol class="hist-meilensteine">{"".join(gruppen)}</ol>'
+
+
+# ==========================================
+# LIGA-GRAFIKEN + TABELLEN
+# ==========================================
+def liga_grafik(daten, bereich):
+    """SVG: x = Saisons mit Daten, y = Ligastufe, eine Linie je Mannschaft."""
+    st = bereich["stufen"]
+    teams = teams_im_bereich(daten, bereich)
+    jahre = sorted(j for j, s in daten.items()
+                   if any(t in s and stufe(s[t]["klasse"], bereich)[0] is not None for t in teams))
+    if not jahre:
+        return ""
+    sp, zh, links, oben, unten = 46, 34, 150, 18, 46
     breite, hoehe = links + sp * len(jahre) + 20, oben + zh * len(st) + unten
     x = {j: links + sp * i + sp / 2 for i, j in enumerate(jahre)}
     y = lambda k: oben + zh * k + zh / 2
     teile = [f'<svg class="hist-svg" viewBox="0 0 {breite} {hoehe}" width="{breite}" height="{hoehe}" '
-             f'role="img" aria-label="Ligastufen der Mannschaften je Saison">']
+             f'role="img" aria-label="Ligen {esc(bereich["titel"])} je Saison">']
     for k, (_, name) in enumerate(st):
         teile.append(f'<line class="hl" x1="{links - 6}" x2="{breite - 10}" y1="{y(k)}" y2="{y(k)}"/>'
                      f'<text class="hy" x="{links - 12}" y="{y(k) + 4}" text-anchor="end">{esc(name)}</text>')
@@ -158,100 +329,90 @@ def grafik(daten, reihenfolge, senioren=False):
         teile.append(f'<text class="hx" x="{x[j]}" y="{hoehe - unten + 16}" text-anchor="end" '
                      f'transform="rotate(-45 {x[j]} {hoehe - unten + 16})">{saison_text(j)}</text>')
     for t in teams:
-        f = farbe(t, reihenfolge)
-        punkte = [(j, stufe(daten[j][t]["klasse"], senioren)[0], daten[j][t]) for j in jahre if t in daten[j]]
+        f = farbe(t, bereich, daten)
+        punkte = [(j, stufe(daten[j][t]["klasse"], bereich)[0], daten[j][t]) for j in jahre if t in daten[j]]
         punkte = [p for p in punkte if p[1] is not None]
         for (j1, k1, _), (j2, k2, _) in zip(punkte, punkte[1:]):
-            luecke = jahre.index(j2) - jahre.index(j1) > 1 or j2 - j1 > 1
-            strich = ' stroke-dasharray="4 4" opacity="0.6"' if luecke else ""
+            strich = ' stroke-dasharray="4 4" opacity="0.6"' if j2 - j1 > 1 else ""
             teile.append(f'<line x1="{x[j1]}" y1="{y(k1)}" x2="{x[j2]}" y2="{y(k2)}" stroke="{f}" '
                          f'stroke-width="2.5"{strich}/>')
         for j, k, e in punkte:
             pfeil = {"auf": "▲", "ab": "▼"}.get(e["status"], "")
-            tip = f'{t} {saison_text(j)}: {e["klasse"]}' + (f', Platz {e["platz"]}' if e["platz"] else "") + \
-                  (f' – {STATUS_TEXT[e["status"]]}' if e["status"] in STATUS_TEXT else "")
+            stern = "★" if e.get("titel") or (e.get("platz") == 1 and e["status"] != "läuft") else ""
+            tip = (f'{t} {saison_text(j)}: {e["klasse"]}' + (f', Platz {e["platz"]}' if e["platz"] else "")
+                   + (f' – {STATUS_TEXT[e["status"]]}' if e["status"] in STATUS_TEXT else "")
+                   + (f' – {e["titel"]}' if e.get("titel") else ""))
+            zeichen = ""
+            if pfeil:
+                zeichen += (f'<text class="hp" x="{x[j]}" y="{y(k) + (-10 if pfeil == "▲" else 17)}" '
+                            f'text-anchor="middle" fill="{f}">{pfeil}</text>')
+            if stern:
+                zeichen += f'<text class="hs" x="{x[j] + 9}" y="{y(k) - 5}" fill="#d4a017">{stern}</text>'
             teile.append(f'<g><title>{esc(tip)}</title><circle cx="{x[j]}" cy="{y(k)}" r="5.5" fill="{f}" '
-                         f'stroke="var(--surface, #fff)" stroke-width="1.5"/>'
-                         + (f'<text class="hp" x="{x[j]}" y="{y(k) + (-10 if pfeil == "▲" else 17)}" text-anchor="middle" '
-                            f'fill="{f}">{pfeil}</text>' if pfeil else "")
-                         + "</g>")
+                         f'stroke="var(--surface, #fff)" stroke-width="1.5"/>{zeichen}</g>')
     teile.append("</svg>")
-    legende = "".join(f'<span><i style="background:{farbe(t, reihenfolge)}"></i>{esc(t)}</span>' for t in teams)
-    return (f'<div class="hist-legende">{legende}</div>'
-            f'<div class="hist-scroll">{"".join(teile)}</div>')
+    legende = "".join(f'<span><i style="background:{farbe(t, bereich, daten)}"></i>{esc(t)}</span>' for t in teams)
+    return f'<div class="hist-legende">{legende}</div><div class="hist-scroll">{"".join(teile)}</div>'
 
 
-def steckbrief(team, eintraege, roh):
-    """eintraege = [(Jahr, Eintrag)] aufsteigend."""
-    senioren = team == SENIOREN
-    stufen = [(stufe(e["klasse"], senioren)[0], j, e) for j, e in eintraege if stufe(e["klasse"], senioren)[0] is not None]
-    hoechste = min(stufen, key=lambda s: (s[0], s[1])) if stufen else None
+def steckbrief(team, eintraege, roh, bereich):
+    stufen = [(stufe(e["klasse"], bereich)[0], j, e) for j, e in eintraege
+              if stufe(e["klasse"], bereich)[0] is not None]
     hoechste_text = ""
-    if hoechste:
-        jahre_dort = [saison_text(j) for k, j, _ in stufen if k == hoechste[0]]
-        hoechste_text = f'{esc(stufe(hoechste[2]["klasse"], senioren)[1])} ({", ".join(jahre_dort)})'
+    if stufen:
+        k_best = min(s[0] for s in stufen)
+        jahre_dort = [saison_text(j) for k, j, _ in stufen if k == k_best]
+        hoechste_text = f'{esc(bereich["stufen"][k_best][1])} ({", ".join(jahre_dort)})'
     auf = sum(1 for _, e in eintraege if e["status"] == "auf")
     ab = sum(1 for _, e in eintraege if e["status"] == "ab")
-    meister = [saison_text(j) for j, e in eintraege if e.get("platz") == 1 and e["status"] != "läuft"]
-    gruendung = (roh.get("gruendung") or {}).get(team) or f"erste bekannte Saison: {saison_text(eintraege[0][0])}"
-    zeilen = [("Seit", esc(gruendung)), ("Höchste Klasse", hoechste_text),
+    erfolge = [f'{saison_text(j)}: {esc(e["titel"])}' for j, e in eintraege if e.get("titel")]
+    erfolge += [f'{saison_text(j)}: Platz 1' for j, e in eintraege
+                if not e.get("titel") and e.get("platz") == 1 and e["status"] != "läuft"]
+    seit = (roh.get("gruendung") or {}).get(team) or f"erste bekannte Saison: {saison_text(eintraege[0][0])}"
+    zeilen = [("Seit", esc(seit)), ("Höchste Liga", hoechste_text),
               ("Aufstiege / Abstiege", f"{auf} / {ab}"), ("Saisons erfasst", str(len(eintraege)))]
-    if meister:
-        zeilen.append(("Meister", ", ".join(meister)))
-    dl = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in zeilen if v)
-    return f'<dl class="hist-steckbrief">{dl}</dl>'
+    if erfolge:
+        zeilen.append(("Erfolge", "<br>".join(sorted(erfolge))))
+    return '<dl class="hist-steckbrief">' + "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in zeilen if v) + "</dl>"
 
 
-def tabelle(team, eintraege):
+def tabelle(eintraege):
     zeilen = []
     for j, e in sorted(eintraege, reverse=True):
-        saison = (f'<a href="{esc(e["href"])}">{saison_text(j)}</a>' if e.get("href") else saison_text(j))
+        saison = f'<a href="{esc(e["href"])}">{saison_text(j)}</a>' if e.get("href") else saison_text(j)
         platz = (f'{e["platz"]}.' + (f' von {e["n"]}' if e.get("n") else "")) if e.get("platz") else "–"
         st = e["status"]
         status = f'<span class="status s-{st}">{STATUS_TEXT[st]}</span>' if st in STATUS_TEXT else ""
-        notiz = f'<span class="hist-notiz">{esc(e["notiz"])}</span>' if e.get("notiz") else ""
+        extra = " · ".join(x for x in (e.get("titel"), e.get("notiz")) if x and x != "läuft")
+        notiz = f'<span class="hist-notiz">{esc(extra)}</span>' if extra else ""
         zeilen.append(f'<tr><td>{saison}</td><td class="name">{esc(e["klasse"])}{notiz}</td>'
                       f'<td>{platz}</td><td>{status}</td></tr>')
     return (f'<div class="tab-wrap"><table class="liga-tab hist-tab"><thead><tr><th>Saison</th>'
-            f'<th class="name">Klasse</th><th>Platz</th><th></th></tr></thead>'
+            f'<th class="name">Liga</th><th>Platz</th><th></th></tr></thead>'
             f'<tbody>{"".join(zeilen)}</tbody></table></div>')
 
 
-def meilensteine(daten, reihenfolge, roh):
-    """Automatisch: Auf-/Abstiege, erstmals in einer Klasse, neue Mannschaft; dazu die aus der JSON."""
-    liste = []
-    for s in roh.get("meilensteine") or []:
-        j = saison_jahr(s.get("saison"))
-        if j is not None and s.get("text"):
-            liste.append((j, 0, esc(s["text"])))
-    for s_text, grund in (roh.get("ausgefallen") or {}).items():
-        liste.append((saison_jahr(s_text), 0, esc(grund)))
-    for t in reihenfolge:
-        sen = t == SENIOREN
+def bereich_block(daten, roh, bereich):
+    teams = teams_im_bereich(daten, bereich)
+    if not teams:
+        return ""
+    karten = []
+    for t in teams:
         eintraege = sorted((j, s[t]) for j, s in daten.items() if t in s)
-        for i, (j, e) in enumerate(eintraege):
-            k, _ = stufe(e["klasse"], sen)
-            # "neu dabei" nur, wenn die Vorsaison bekannt ist (sonst ist es nur die erste bekannte Saison)
-            # (und vollständig, also aus den Tabellen des Schachbezirks – die Chronik nennt nicht jede Mannschaft)
-            vorher_bekannt = bool(daten.get(j - 1)) and all(x.get("quelle") == "Schachbezirk"
-                                                             for x in daten[j - 1].values())
-            if vorher_bekannt and t not in daten[j - 1]:
-                wort = "ist neu dabei" if i == 0 else "ist wieder dabei"
-                liste.append((j, 1, f"{esc(t)} {wort} – in der {esc(e['klasse'])}."))
-            if e["status"] == "auf":
-                ziel = (SENIOREN_STUFEN if sen else STUFEN)[k - 1][1] if k else "nächsthöhere Klasse"
-                liste.append((j, 2, f"{esc(t)} steigt aus der {esc(e['klasse'])} in die {esc(ziel)} auf."))
-            elif e["status"] == "ab":
-                liste.append((j, 2, f"{esc(t)} steigt aus der {esc(e['klasse'])} ab."))
-            if e.get("notiz") and e.get("quelle") == "Chronik" and re.search(r"erstmals|erste", e["notiz"], re.I):
-                liste.append((j, 3, f"<strong>{esc(t)}: {esc(e['notiz'])}</strong>"))
-    liste = [m for m in liste if m[0] is not None]
-    liste.sort(key=lambda m: (-m[0], m[1]))
-    gruppen = []
-    for j in sorted({m[0] for m in liste}, reverse=True):
-        punkte = "".join(f"<li>{text}</li>" for jj, _, text in liste if jj == j)
-        gruppen.append(f'<li><span class="hist-jahr">{saison_text(j)}</span><ul>{punkte}</ul></li>')
-    return f'<ol class="hist-meilensteine">{"".join(gruppen)}</ol>'
+        karten.append(f"""
+        <details class="card hist-team" style="--team:{farbe(t, bereich, daten)}">
+          <summary><h4>{esc(t)}</h4><span class="klein">{esc(eintraege[-1][1]['klasse'])}
+            ({saison_text(eintraege[-1][0])})</span></summary>
+          {steckbrief(t, eintraege, roh, bereich)}
+          {tabelle(eintraege)}
+        </details>""")
+    unter = f'<p class="klein">{esc(bereich["untertitel"])}</p>' if bereich.get("untertitel") else ""
+    return f"""
+      <section class="hist-bereich" id="{bereich['key']}">
+        <h3>{esc(bereich['titel'])}</h3>{unter}
+        {liga_grafik(daten, bereich)}
+        <div class="hist-teams">{"".join(karten)}</div>
+      </section>"""
 
 
 # ==========================================
@@ -260,32 +421,32 @@ def meilensteine(daten, reihenfolge, roh):
 def seite(aktuell, teams, archiv, seiten_pfad):
     """-> (content, styles)"""
     daten, roh = sammeln(aktuell, teams, archiv, seiten_pfad)
-    reihenfolge = team_reihenfolge(daten)
-    karten = []
-    for t in reihenfolge:
-        eintraege = sorted((j, s[t]) for j, s in daten.items() if t in s)
-        if not eintraege:
-            continue
-        karten.append(f"""
-        <details class="card hist-team" style="--team:{farbe(t, reihenfolge)}">
-          <summary><h3>{esc(t)}</h3><span class="klein">{esc(eintraege[-1][1]['klasse'])}</span></summary>
-          {steckbrief(t, eintraege, roh)}
-          {tabelle(t, eintraege)}
-        </details>""")
-    senioren_grafik = grafik(daten, reihenfolge, senioren=True)
+    anzahl = anzahl_je_saison(daten, roh, aktuell)
+    jetzt = anzahl.get(aktuell, {})
+    teile = [f"{jetzt[n][0]} {KURZ_TEXT.get(n, n)}" for n, _, _ in WACHSTUM if jetzt.get(n, (0,))[0]]
+    if teile:
+        teile[-1] = teile[-1].rstrip("-") + "mannschaften"
+    kurz = ", ".join(teile[:-1]) + " und " + teile[-1] if len(teile) > 1 else "".join(teile)
+    springen = " · ".join(f'<a href="#{b["key"]}">{esc(b["titel"])}</a>' for b in BEREICHE
+                          if teams_im_bereich(daten, b))
     content = f"""
       <a href="mannschaften.html" style="text-decoration:none;">← Mannschaften</a>
       <h1>{TITEL}</h1>
       <p class="lead">{INTRO}</p>
-      <h2>Wer spielte wo?</h2>
-      {grafik(daten, reihenfolge)}
-      <p class="klein">Punkt antippen oder darüberfahren für Klasse und Platz. ▲ Aufstieg, ▼ Abstieg,
-        gestrichelt = Saisons dazwischen fehlen. {HINWEIS_NUMMERN}</p>
-      {f'<h3>Senioren</h3>{senioren_grafik}' if senioren_grafik else ''}
-      <h2>Die Mannschaften</h2>
-      <div class="hist-teams">{"".join(karten)}</div>
+
+      <h2>So sind wir gewachsen</h2>
+      {f'<p>In der Saison {saison_text(aktuell)} spielen wir mit <strong>{kurz}</strong>.</p>' if kurz else ''}
+      {wachstum_grafik(anzahl, roh)}
+      <p class="klein">Balken antippen oder darüberfahren für die Zahlen.</p>
+
       <h2>Meilensteine</h2>
-      {meilensteine(daten, reihenfolge, roh)}
+      {zeitleiste(erstmals(daten, anzahl, roh))}
+
+      <h2>Wer spielte wo?</h2>
+      <p class="klein">Springen zu: {springen}. Punkt antippen für Liga und Platz.
+        ▲ Aufstieg, ▼ Abstieg, ★ Meister/Titel, gestrichelt = Saisons dazwischen fehlen.
+        {HINWEIS_NUMMERN}</p>
+      {"".join(bereich_block(daten, roh, b) for b in BEREICHE)}
     """
     return content, liga.STYLES + "<style>" + CSS + "</style>"
 
@@ -295,7 +456,7 @@ def karte():
     return f"""
       <a class="card team-karte" href="{SEITE}">
         <h3>{TITEL}</h3>
-        <p>Welche Mannschaft spielte wann in welcher Klasse? Auf- und Abstiege seit den Anfängen.</p>
+        <p>Wie der Verein an Mannschaften gewachsen ist und wer wann in welcher Liga spielte – Erwachsene, Senioren und Jugend.</p>
         <span class="k-mehr">Zur Historie →</span>
       </a>"""
 
@@ -306,16 +467,21 @@ CSS = """
       .hist-svg .hl { stroke: var(--border, #e3e6ea); stroke-width: 1; }
       .hist-svg .hy { font-size: 12px; fill: currentColor; font-weight: 600; }
       .hist-svg .hx { font-size: 11px; fill: #888; }
+      .hist-svg .hz { font-size: 11px; fill: currentColor; font-weight: bold; }
       .hist-svg .hp { font-size: 10px; font-weight: bold; }
+      .hist-svg .hs { font-size: 12px; }
       .hist-legende { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.9rem; margin-top: 0.6rem; }
-      .hist-legende i { display: inline-block; width: 1.1rem; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 0.35rem; }
-      .hist-teams { display: grid; gap: 0.8rem; }
-      .hist-team { border-left: 5px solid var(--team); padding: 0.6rem 1rem; }
+      .hist-legende i { display: inline-block; width: 1.1rem; height: 0.7rem; border-radius: 2px; vertical-align: middle; margin-right: 0.35rem; }
+      .hist-legende i.schraffiert { background: repeating-linear-gradient(45deg, #888, #888 2px, #ccc 2px, #ccc 5px); }
+      .hist-bereich { margin: 1.6rem 0 2.2rem; }
+      .hist-bereich h3 { margin-bottom: 0; }
+      .hist-teams { display: grid; gap: 0.6rem; margin-top: 0.6rem; }
+      .hist-team { border-left: 5px solid var(--team); padding: 0.5rem 1rem; }
       .hist-team > summary { cursor: pointer; display: flex; align-items: baseline; gap: 0.8rem; list-style: none; }
       .hist-team > summary::-webkit-details-marker { display: none; }
       .hist-team > summary::after { content: "▾"; margin-left: auto; color: #888; }
       .hist-team[open] > summary::after { content: "▴"; }
-      .hist-team h3 { margin: 0; color: var(--team); }
+      .hist-team h4 { margin: 0; color: var(--team); font-size: 1.05rem; }
       .hist-steckbrief { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1rem; margin: 0.8rem 0; }
       .hist-steckbrief dt { color: #777; }
       .hist-steckbrief dd { margin: 0; font-weight: 600; }
