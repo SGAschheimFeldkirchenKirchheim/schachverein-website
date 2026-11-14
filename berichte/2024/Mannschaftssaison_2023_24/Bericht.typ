@@ -1,0 +1,20 @@
+#import "../../_funktionen.typ": *
+
+#title[Mannschaftssaison 2023/24]
+#date[03.06.2024]
+#author[Frederik Prause]
+// Von der Wix-Vereinsseite übernommen
+
+Am 16. Oktober 2023 wurde vom Schach-Bezirksverband München für acht Ligen der Startschuss gegeben. Am 26. April 2024 standen die Abschlusstabellen fest. Die mit vier Mannschaften angetretene Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim kann auf eine positive Saison zurückblicken. Die verantwortlichen „Macher“ mit Vorsitzendem Andreas Schwarz und Spielleiter Pierre Tassell an der Spitze, haben die richtige Mischung aus Jung und Alt gefunden.
+
+Erste Mannschaft: 
+Im letzten Jahr konnte die Klasse in der #link("https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&saison=13&liga=266&Itemid=3893&typeid=21")[Bezirksliga] mit etwas Glück gehalten werden. Heuer lief es ganz anders und das Team konnte sich nach anfänglichen Schwierigkeiten stets im sicheren Mittelfeld aufhalten. Nach Siegen in den beiden letzten Runden gegen München Südost (4,5:3,5) und Roter Turm Altstadt (5:3) beendet die Mannschaft die Saison mit einem ausgezeichneten dritten Rang (10 Mannschaftspunkte). Souveräner Sieger mit der optimalen Ausbeute von 18 Punkten wurde der FC Bayern München vor Tarrasch 1945 München (13 Punkte).Die Jugendlichen David Mehlhorn (3 Punkte aus vier Partien), Arthur Krumm (2,5/8), Fabian Müller (5/9!) und Korbinian Ruff (3/6) haben sich endgültig ganz oben etabliert und sind wichtige Stützen des Teams. Wie gewohnt solide Ergebnisse lieferten Pierre Tassell (5/9), Armin Tobisch (4,5/7) und Peter Esser (4/6). Wieder zu alter Stärke ist Frederik Prause (5/8) zurückgekehrt, der eine ganze Reihe sehenswerter Partien spielte. Etwas unglücklich agierte Mannschaftsführer Ronny Damaske (3/9), der so manchen Punkt am Brett liegen ließ.
+
+Zweite Mannschaft:
+Mit einem „Kanter-Sieg“ von 6 zu 1 gegen München Südost startete die Mannschaft mit vollen Segeln in der #link("https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&saison=13&liga=269&Itemid=3893&typeid=21")[B-Klasse]. Danach folgten aber Niederlagen gegen Blau Allianz München und Eching und die Euphorie war ein wenig verblasst. Das Unentschieden bei Roter Turm Altstadt und erst recht der Sieg gegen Sendling brachte das Team wieder auf die richtige Spur. Nach der unglücklichen Niederlage gegen Neuperlach, war auch gegen die Übermächtigen vom FC Bayern nichts zu holen. Aber durch die letzten Erfolge gegen Höhenkirchen und Schachfreunde München war der Mittelplatz (6. mit 9 Mannschaftspunkten) gesichert. In dieser Mannschaft haben noch die Senioren das Sagen: Rudolf Oster (5,5/8), Hanspeter Hecht (5/7) und Dieter Vischer (4,5/9) spielten eine ausgezeichnete Saison. Verlass war auch auf die jungen Emil Janeba (4/7), Jakob Karpen (3,5/6) und Bernd Nowotny (4/8), während Jörg Gerstenberg (3,5/8) einige Siege in der Schlussphase leider nahezu verschenkte.
+
+Dritte Mannschaft:
+Vollgespickt mit Nachwuchsleuten kämpfte diese Formation sogar lange um den Sieg in der #link("https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&saison=13&liga=273&Itemid=3893&typeid=21")[D-Klasse]. Aber auch der dritte Platz mit dem punktgleichen Zweiten, Dachau 1932, kann sich sehen lassen. Beide Teams hatten am Ende 9 Mannschaftspunkte, aber die Brettpunkte (24,5 gegen 24) entschieden über die bessere Platzierung. Sieger wurden die Schachfreunde München (11 Mannschaftspunkte).Bester Punktelieferant war Ralf Eisl (4,5/7) vor den ungeschlagenen Rainer Seidl (4/5) und Bastian Fischer (3,5/5).
+
+Senioren-Mannschaft:
+Konnte man noch im letzten Jahre mit Glück und Geschick die Klasse halten, so zeigte sich dieses Mal, dass die #link("https://www.schachbezirk-muenchen.de/component/clm/?view=rangliste&saison=13&liga=274&Itemid=3895")[1. Seniorenliga] für unser Team eine Nummer zu groß war. In der kommenden Saison in der 2. Seniorenliga sieht die Gesamtsituation schon etwas besser aus, obwohl die dünne Besetzung des Teams weiterhin große Sorgen bereitet.

@@ -1,6 +1,6 @@
 #title[Stadtmeisterschaft 2023]
-#date[31.12.2023]
-#author[]
+#date[30.08.2023]
+#author[Frederik Prause]
 // Aus dem Archiv der alten Vereinsseite übernommen (Datum teils rekonstruiert)
 
 *Armin* gewinnt souverän mit 4,5 aus 5 Punkten die Kirchheimer Stadtmeisterschaft 2023 und wird damit en passant *Schnellschach-Vereinsmeister 2023*!!!

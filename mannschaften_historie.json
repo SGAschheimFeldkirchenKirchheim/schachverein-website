@@ -1,0 +1,229 @@
+{
+  "_hinweis": [
+    "Mannschaftshistorie: ältere Saisons (vor dem Archiv in mannschaften/archiv/) und Korrekturen.",
+    "Saison = '1994/95'. Je Mannschaft: klasse, optional platz, status ('auf' / 'ab' / '' = gehalten), notiz.",
+    "Quelle bisher: Vereinschronik (dokumente/historie.typ). Ab 2022/23 kommt alles automatisch aus dem Archiv.",
+    "'korrekturen' überschreibt einzelne Felder automatisch erzeugter Saisons (z. B. wenn ein Aufstieg nicht aus der Tabelle folgt).",
+    "'ausgefallen' = Saisons ohne Mannschaftsmeisterschaft."
+  ],
+  "gruendung": {
+    "AFK 1": "1985/86 – erstes Auftreten des Schach-Clubs Aschheim in der D-Klasse",
+    "AFK 3": "2017/18 – neu gegründet, überwiegend Jugendspieler (seit 2023/24 wieder gemeldet)"
+  },
+  "ausgefallen": {
+    "2020/21": "Wegen Corona keine Mannschaftsmeisterschaft."
+  },
+  "saisons": {
+    "1985/86": {
+      "AFK 1": {
+        "klasse": "D-Klasse",
+        "notiz": "erstes Auftreten in einem Mannschaftswettbewerb (SC Aschheim)"
+      }
+    },
+    "1994/95": {
+      "AFK 1": {
+        "klasse": "B-Klasse"
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "status": "auf"
+      }
+    },
+    "1996/97": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "platz": 4
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "notiz": "ohne Verlustpartie, Aufstieg um einen halben Punkt verpasst"
+      }
+    },
+    "1998/99": {
+      "AFK 1": {
+        "klasse": "B-Klasse"
+      }
+    },
+    "2000/01": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "status": "ab"
+      }
+    },
+    "2001/02": {
+      "AFK 1": {
+        "klasse": "C-Klasse",
+        "status": "auf",
+        "notiz": "postwendender Wiederaufstieg"
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "status": "auf"
+      }
+    },
+    "2002/03": {
+      "AFK 1": {
+        "klasse": "B-Klasse"
+      },
+      "AFK 2": {
+        "klasse": "C-Klasse"
+      }
+    },
+    "2003/04": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "platz": 3
+      },
+      "AFK 2": {
+        "klasse": "C-Klasse",
+        "status": "ab"
+      }
+    },
+    "2004/05": {
+      "AFK 1": {
+        "klasse": "B-Klasse"
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "platz": 3
+      }
+    },
+    "2005/06": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "platz": 2
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "platz": 1,
+        "status": "auf",
+        "notiz": "alle 8 Kämpfe gewonnen"
+      }
+    },
+    "2007/08": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "status": "auf",
+        "notiz": "erstmals Aufstieg in die A-Klasse"
+      }
+    },
+    "2014/15": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "platz": 5
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "platz": 6
+      }
+    },
+    "2015/16": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "platz": 2
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "platz": 3
+      },
+      "Senioren": {
+        "klasse": "2. Seniorenliga",
+        "platz": 1,
+        "status": "auf"
+      }
+    },
+    "2017/18": {
+      "AFK 1": {
+        "klasse": "B-Klasse",
+        "platz": 2,
+        "status": "auf"
+      },
+      "AFK 2": {
+        "klasse": "D-Klasse",
+        "platz": 4,
+        "status": "auf",
+        "notiz": "2018/19 laut Chronik in der C-Klasse"
+      },
+      "AFK 3": {
+        "klasse": "E-Klasse",
+        "platz": 2,
+        "notiz": "neu gegründet"
+      },
+      "Senioren": {
+        "klasse": "1. Seniorenliga",
+        "status": "ab"
+      }
+    },
+    "2018/19": {
+      "AFK 1": {
+        "klasse": "A-Klasse"
+      },
+      "AFK 2": {
+        "klasse": "C-Klasse",
+        "status": "auf"
+      },
+      "Senioren": {
+        "klasse": "2. Seniorenliga",
+        "status": "auf",
+        "notiz": "direkter Wiederaufstieg"
+      }
+    },
+    "2019/20": {
+      "AFK 1": {
+        "klasse": "A-Klasse",
+        "status": "auf",
+        "notiz": "erstmals Aufstieg in die Bezirksliga"
+      },
+      "AFK 2": {
+        "klasse": "B-Klasse",
+        "status": "ab"
+      }
+    },
+    "2021/22": {
+      "AFK 1": {
+        "klasse": "Bezirksliga",
+        "notiz": "erste Bezirksliga-Saison, Klassenerhalt"
+      },
+      "Senioren": {
+        "klasse": "2. Seniorenliga",
+        "platz": 4,
+        "status": "auf",
+        "notiz": "aufgestiegen, weil die Vereine davor schon in der 1. Seniorenliga waren"
+      }
+    }
+  },
+  "korrekturen": {
+    "2024/25": {
+      "AFK 4": {
+        "platz": 1,
+        "status": "auf",
+        "notiz": "Meister der D-Klasse"
+      },
+      "AFK 3": {
+        "notiz": "Vizemeister der D-Klasse"
+      }
+    }
+  },
+  "meilensteine": [
+    {
+      "saison": "1984/85",
+      "text": "14. September 1984: 15 Schachspieler gründen den Schach-Club Aschheim."
+    },
+    {
+      "saison": "1986/87",
+      "text": "Fusion zur SG Aschheim/Feldkirchen (Juli 1987)."
+    },
+    {
+      "saison": "2007/08",
+      "text": "Fusion mit den Schachfreunden Kirchheim zur SG Aschheim/Feldkirchen/Kirchheim (1.1.2008)."
+    },
+    {
+      "saison": "2017/18",
+      "text": "Erstmals drei Mannschaften in den Münchner Mannschaftsmeisterschaften."
+    },
+    {
+      "saison": "2025/26",
+      "text": "Mit sechs Mannschaften so breit aufgestellt wie nie."
+    }
+  ]
+}

@@ -15,6 +15,8 @@ import liga   # Mannschaften-Seite + Ergebnis-Ticker (Daten vom Tabellenrechner)
 import jugend  # Jugend-Seite (Einstellungen in jugend.py)
 import senioren  # Senioren-Seite (Einstellungen in senioren.py)
 import faq     # FAQ-Seite (Fragen in faq.py)
+import chessresults  # Vereinsturniere von chess-results.com (turniere/chessresults.json)
+import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
 
 try:
@@ -88,6 +90,7 @@ PAGE_DESCRIPTIONS = {
     "oberlandquartett.html": "Ergebnisse und Pokalstand des Oberlandquartetts.",
     "blitzjahreswertung.html": "Gesamtwertung der Blitzjahreswertung der SG AFK.",
     "vereinsintern.html": "Vereinsmeister und Sieger der vereinsinternen Turniere: die Hall of Fame der SG AFK.",
+    "mannschaftshistorie.html": "Welche Mannschaft der SG AFK spielte wann in welcher Klasse? Auf- und Abstiege und Meilensteine.",
     "geschichte.html": "Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute.",
 }
 
@@ -144,6 +147,7 @@ ACTIVE_PARENT = {
     "vereinsintern.html": "turniere.html",
     "senioren.html": "mannschaften.html",
     "geschichte.html": "ueber-uns.html",
+    "mannschaftshistorie.html": "mannschaften.html",
 }
 
 # Handgeschriebene Seiten: Inhalt liegt in seiten/<name>.html
@@ -781,6 +785,15 @@ TURNIERE = [
     ("Vereinsintern &amp; Hall of Fame", "Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.",
      "vereinsintern.html", "Zur Hall of Fame"),
 ]
+
+
+def build_chessresults():
+    """Turnierseiten von chess-results; stehen unter "Turniere" (Übersicht + Untermenü)."""
+    gebaut = chessresults.bauen(render_page)
+    for seite, name, text in reversed(gebaut):
+        TURNIERE.insert(0, (htmllib.escape(name), htmllib.escape(text), seite, "Tabelle &amp; Paarungen"))
+        SUBNAV["turniere.html"].insert(0, (seite, htmllib.escape(name)))
+        ACTIVE_PARENT[seite] = "turniere.html"
 
 
 def build_turniere_overview():
@@ -1860,7 +1873,15 @@ def _text_span(m):
 
 
 def report_inline(text):
-    """Typst-Auszeichnungen innerhalb eines Absatzes -> HTML."""
+    """Typst-Auszeichnungen innerhalb eines Absatzes -> HTML.
+    Maskierte Zeichen (\\*, \\_, \\#, \\[, ...) erscheinen als normale Zeichen."""
+    maskiert = []
+
+    def merken(m):
+        maskiert.append(m.group(1))
+        return f"\x00{len(maskiert) - 1}\x00"
+
+    text = re.sub(r'\\([*_#$@<>`\[\]\\])', merken, text)
     t = htmllib.escape(text, quote=False)
     t = re.sub(r'#text\(([^)]*)\)\[([^\]]*)\]', _text_span, t)
     t = re.sub(r'#underline\[([^\]]*)\]', r'<u>\1</u>', t)
@@ -1870,7 +1891,7 @@ def report_inline(text):
     t = re.sub(r'(?<!\w)_([^_\n]+)_(?!\w)', r'<em>\1</em>', t)
     t = re.sub(r'#link\("((?:https?://|mailto:)[^"]+)"\)\[([^\]]*)\]',
                r'<a href="\1" target="_blank" rel="noopener">\2</a>', t)
-    return t
+    return re.sub(r"\x00(\d+)\x00", lambda m: htmllib.escape(maskiert[int(m.group(1))], quote=False), t)
 
 
 IMG_RE = re.compile(r'^#image\(\s*"([^"]+)"\s*(?:,(.*))?\)\s*$')
@@ -2961,6 +2982,11 @@ def spalten_termine(spalte, today=TODAY):
     return events
 
 
+def build_historie(aktuell, teams, archiv):
+    content, styles = historie.seite(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a))
+    render_page(historie.TITEL, content, historie.SEITE, extra_styles=styles)
+
+
 def build_jugend(termine, liga_seiten=None):
     berichte = [r for r in ALLE_BERICHTE if "jugend" in r['kategorien']]
     beitrag = next((preis for wer, preis in BEITRAEGE if "Kinder" in wer), "")
@@ -3004,6 +3030,8 @@ if __name__ == "__main__":
     # Teams zuerst laden: das Untermenü "Mannschaften" steht auf jeder Seite
     aktuell, teams, archiv = saisons_laden()
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
+    SUBNAV["mannschaften.html"].append((historie.SEITE, "Historie"))
+    build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
     build_dokumente()
@@ -3032,7 +3060,8 @@ if __name__ == "__main__":
         build_senioren(s_termine)
         extra.append(senioren.mannschaften_karte(s_termine))
     build_faq()
-    liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine)]
+    liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine), historie.karte()]
+    build_historie(aktuell, teams, archiv)
     build_spieler(aktuell, teams, archiv)
     saisons = build_archiv(aktuell, archiv)
     build_index(upcoming, news, teams)

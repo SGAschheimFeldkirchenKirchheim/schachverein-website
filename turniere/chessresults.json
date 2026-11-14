@@ -1,0 +1,20 @@
+{
+  "_hinweis": [
+    "Laufende Vereinsturniere von chess-results.com auf der Website (Tabelle, Paarungen, Kreuztabelle).",
+    "tnr = Zahl hinter 'tnr' in der chess-results-Adresse (https://chess-results.com/tnr1171232.aspx -> 1171232).",
+    "tnr null oder \"aus\": true = Seite wird nicht gebaut. \"abgeschlossen\": true = chess-results nicht mehr fragen, nur Cache.",
+    "runden: null = automatisch erkennen. ohne: Reiter weglassen, z. B. [\"start\"] oder [\"kreuz\"].",
+    "seite = Dateiname der Seite; sie erscheint unter Turniere."
+  ],
+  "turniere": [
+    {
+      "name": "Vereinsmeisterschaft 2026",
+      "tnr": null,
+      "seite": "vereinsmeisterschaft.html",
+      "text": "Unsere laufende Vereinsmeisterschaft: Tabelle, Paarungen und Ergebnisse.",
+      "runden": null,
+      "abgeschlossen": false,
+      "ohne": []
+    }
+  ]
+}

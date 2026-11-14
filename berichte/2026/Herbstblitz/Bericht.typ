@@ -1,14 +1,23 @@
-#title[Dominik Dax gewinnt den Herbstblitz 2026]
-#date[25. September 2026]
-#author[Korbinian Ruff]
+#import "../../_funktionen.typ": *
 
-Am vergangenen Freitag fand unser traditionelles Herbstblitzturnier statt. Mit 25 Teilnehmern – von unseren Nachwuchstalenten bis zu den Routiniers der ersten Mannschaft – war das Turnier hervorragend besucht. Gespielt wurden 13 Runden im Schweizer System.
+#title[Herbstblitz 2026]
+#date[29.09.2026]
+#author[Pierre Tassell]
+// Von der Wix-Vereinsseite übernommen
 
-= Der Sieger
-Dominik Dax gewinnt das Turnier mit starken 10,5 Punkten aus 13 Partien. Herzlichen Glückwunsch!
+Das #link("https://s2.chess-results.com/tnr1505138.aspx?lan=0&art=4&SNode=S0")[Herbstblitz] war mit 25 Teilnehmern gut besucht! 
+Wir spielten (leicht) wahnsinnige 13 Runden Blitz bei 3 min Bedenkzeit.
 
-// Platz 2 und 3 hier ergänzen, z. B.:
-// + *Platz 2:* Vorname Nachname (x / 13)
-// + *Platz 3:* Vorname Nachname (x / 13)
+*Dominik Dax* konnte nach dem #link("https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-ois-2026-dominik-gewinnt-c-turnier.html")[Gewinn des OIS C-Turniers] erneut seine Klasse beweisen und gewann souverän mit 10,5 aus 13 Punkten!
 
-Ein besonderer Dank geht an alle Teilnehmer für die faire Atmosphäre!
+Das war sein erster "Erfolg" (= erster Platz) bei einem Turnier unserer Blitzserie.
+
+Auf dem 2. Platz landete *Anton Mai* und sicherte sich damit den ersten Platz in der *Blitzjahreswertung* (siehe unten).
+
+Ganz knapp - bei gleicher Buchholz entschied ein Punkt mehr in der Sonneborn-Berger-Wertung! - dahinter erkämpfte sich *Fabian Müller* den dritten Platz und rutscht damit auf den zweiten Platz in der Blitzjahreswertung.
+
+*Korbinian Ruff* wurde bester Spielleiter auf dem vierten Platz und *Rudolf Oster* erspielte sich gemäß dem Motto "Nicht mehr ganz taufrisch, aber immer noch sehr schnell!" den 5. Platz und wurde damit bester Senior im Feld!
+
+*Blitzjahreswertung (Stand 28.09.26):*
+
+// Anhang auf der alten Seite (nicht übernommen): Blitzjahreswertung_Stand2809
