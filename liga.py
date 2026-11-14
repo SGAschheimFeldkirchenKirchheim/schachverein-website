@@ -88,13 +88,14 @@ ERGEBNIS_TEXT = {"s": "Sieg", "u": "Unentschieden", "n": "Niederlage"}
 KEIN_TEAM = "spielfrei"
 
 # Aufstellungs-Fenster: Gegner je Runde unter der Rundennummer
-#   Kürzel automatisch: Vorsätze (SG, TSV, 1., ...) weg, erstes Wort gekürzt + Mannschaftsnummer
-#   ("TSV Solln 1" -> "Solln 1", "FC Bayern München 6" -> "Bayern 6").
-#   Feste Kürzel in gegner_kuerzel.json: {"SC Roter Turm München 2": "RT 2", ...}
+#   Kürzel automatisch: Vorsätze (SG, TSV, 1., ...) weg, erstes Wort gekürzt ("TSV Solln 1" -> "Solln").
+#   Mannschaftsnummer nur beim eigenen Verein ("AFK 2") und wenn ein Verein mehrfach in der Liga ist
+#   ("Bayern 7" / "Bayern 8").
+#   Feste Kürzel in gegner_kuerzel.json, Verein ohne Nummer: {"SC Roter Turm München": "R. Turm", ...}
 GEGNER_KUERZEL_DATEI = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gegner_kuerzel.json")
 KUERZEL_VORSAETZE = {"sg", "sc", "sv", "tsv", "fc", "sk", "msa", "tus", "tv", "esv", "psv", "sf", "ssc", "sgem",
                      "schachclub", "schachfreunde", "schachklub", "schachverein", "schachgemeinschaft"}
-KUERZEL_LAENGE = 8              # max. Buchstaben des Namensteils
+KUERZEL_LAENGE = 12             # max. Buchstaben des Namensteils
 GEGEN_UNS_TEXT = "gegen uns"
 # Ergebnis unter dem Gegnerkürzel, immer aus Sicht der Mannschaft im Fenster (nicht des Gegners)
 ERGEBNIS_KURZ = {"s": "S", "u": "U", "n": "N"}   # "" = nur Ergebnis ohne Buchstaben
@@ -277,7 +278,13 @@ def team_url(d, tlnr):
 _KUERZEL_FEST = None
 
 
-def gegner_kuerzel(name):
+def _teile(name):
+    """'TSV Solln 1' -> ('TSV Solln', '1'); ohne Nummer -> (name, '')"""
+    m = re.fullmatch(r"(.*?)\s+(\d+)", name.strip())
+    return (m.group(1), m.group(2)) if m else (name.strip(), "")
+
+
+def gegner_kuerzel(name, mit_nummer=False):
     """Kurzname fürs Aufstellungs-Fenster (fest aus gegner_kuerzel.json, sonst automatisch)."""
     global _KUERZEL_FEST
     if _KUERZEL_FEST is None:
@@ -286,16 +293,27 @@ def gegner_kuerzel(name):
                 _KUERZEL_FEST = json.load(f)
         except (OSError, ValueError):
             _KUERZEL_FEST = {}
-    if name in _KUERZEL_FEST:
+    if name in _KUERZEL_FEST:                       # ganzer Name = genau so, keine Nummer anhängen
         return _KUERZEL_FEST[name]
-    woerter = name.replace("/", " ").split()
-    nr = woerter.pop() if len(woerter) > 1 and woerter[-1].isdigit() else ""
-    kern = [w for w in woerter if w.lower().rstrip(".") not in KUERZEL_VORSAETZE
-            and not re.fullmatch(r"\d+\.?", w)] or woerter
-    wort = kern[0] if kern else name
-    if len(wort) > KUERZEL_LAENGE:
-        wort = wort[:KUERZEL_LAENGE - 1] + "."
-    return f"{wort} {nr}".strip()
+    verein, nr = _teile(name)
+    if verein in _KUERZEL_FEST:
+        wort = _KUERZEL_FEST[verein]
+    else:
+        woerter = verein.replace("/", " ").split()
+        kern = [w for w in woerter if w.lower().rstrip(".") not in KUERZEL_VORSAETZE
+                and not re.fullmatch(r"\d+\.?", w)] or woerter
+        wort = kern[0] if kern else verein
+        if len(wort) > KUERZEL_LAENGE:
+            wort = wort[:KUERZEL_LAENGE - 1] + "."
+    return f"{wort} {nr}".strip() if mit_nummer else wort
+
+
+def mit_nummer_noetig(d, tlnr):
+    """Nummer zeigen: eigener Verein immer, sonst nur wenn der Verein mehrfach in der Liga ist."""
+    verein = _teile(name_von(d, tlnr))[0]
+    if verein == _teile(name_von(d, d.get("eigen")))[0]:
+        return True
+    return sum(_teile(n)[0] == verein for n in d["teams"].values()) > 1
 
 
 def halb(x):
@@ -315,7 +333,7 @@ def runden_gegner(d, tlnr):
             continue
         heim = m["h"] == tlnr
         geg = m["g"] if heim else m["h"]
-        e = {"name": name_von(d, geg), "kurz": gegner_kuerzel(name_von(d, geg)), "gesp": bool(m["gesp"]),
+        e = {"name": name_von(d, geg), "kurz": gegner_kuerzel(name_von(d, geg), mit_nummer_noetig(d, geg)), "gesp": bool(m["gesp"]),
              "heim": heim, "art": None, "sf": False, "uns": geg == d.get("eigen")}
         if m["gesp"]:
             mein, sein = (m["bh"], m["bg"]) if heim else (m["bg"], m["bh"])
@@ -1084,7 +1102,7 @@ STYLES = """<style>
 
       .team-knopf { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; border-bottom: 1px dotted #999; }
       .team-knopf:hover { color: var(--link); border-bottom-color: var(--link); }
-      .auf-dialog { width: min(980px, 96vw); max-height: 88vh; padding: 1rem 1.2rem 1.2rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface, #fff); color: inherit; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+      .auf-dialog { width: min(1240px, 97vw); max-height: 88vh; padding: 1rem 1.2rem 1.2rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface, #fff); color: inherit; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
       .auf-dialog::backdrop { background: rgba(10, 18, 35, 0.6); }
       .auf-dialog h2 { margin: 0 2rem 0.6rem 0; color: var(--navy); font-size: 1.3rem; }
       .auf-dialog form { position: sticky; top: 0; float: right; z-index: 1; }
@@ -1094,7 +1112,9 @@ STYLES = """<style>
       .aufst .rd-erg.kl { color: #888; }
       .aufst tr.ersatz td { color: #777; font-style: italic; }
       .aufst tr.geg-zeile th { padding-top: 0; font-size: 0.66rem; font-weight: normal; line-height: 1.15; vertical-align: top; }
-      .aufst th.rd-geg { white-space: normal; max-width: 3.4rem; cursor: help; position: relative; }
+      .aufst th.rd-geg { white-space: nowrap; cursor: help; position: relative; }
+      .auf-dialog .aufst { width: 100%; }
+      .aufst th.neben, .aufst td.neben { text-align: center; }
       .aufst th.rd-geg.offen { font-style: italic; color: rgba(255,255,255,0.6); }
       .aufst th.rd-geg:focus { outline: none; }
       .aufst th.rd-geg:focus::after { content: attr(data-tip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
