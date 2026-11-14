@@ -215,6 +215,17 @@
       .aufst .rd-erg { min-width: 1.6rem; color: var(--navy); }
       .aufst .rd-erg.kl { color: #888; }
       .aufst tr.ersatz td { color: #777; font-style: italic; }
+      .aufst tr.geg-zeile th { padding-top: 0; font-size: 0.66rem; font-weight: normal; line-height: 1.15; vertical-align: top; }
+      .aufst th.rd-geg { white-space: normal; max-width: 3.4rem; cursor: help; position: relative; }
+      .aufst th.rd-geg.offen { font-style: italic; color: rgba(255,255,255,0.6); }
+      .aufst th.rd-geg:focus { outline: none; }
+      .aufst th.rd-geg:focus::after { content: attr(data-tip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+                  z-index: 3; white-space: nowrap; background: var(--navy); color: #fff; font-size: 0.75rem; font-style: normal;
+                  padding: 0.2rem 0.5rem; border-radius: 4px; opacity: 1; }
+      .aufst .gg-uns { background: rgba(230, 160, 20, 0.16); }
+      .aufst thead th.gg-uns, .aufst thead th.rd-geg.gg-uns { background: #e6a014; color: #1a252f; }
+      .aufst tfoot td { border-top: 2px solid var(--border); font-weight: bold; }
+      .aufst .rd-mk { display: inline-block; font-size: 0.7rem; padding: 0 0.25rem; border-radius: 4px; }
       .titel { font-size: 0.7rem; font-weight: bold; color: #b9770e; }
       .chance { display: inline-block; min-width: 3.4rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold;
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
