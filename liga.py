@@ -94,7 +94,7 @@ KEIN_TEAM = "spielfrei"
 #   Feste Kürzel in gegner_kuerzel.json, Verein ohne Nummer: {"SC Roter Turm München": "R. Turm", ...}
 GEGNER_KUERZEL_DATEI = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gegner_kuerzel.json")
 KUERZEL_VORSAETZE = {"sg", "sc", "sv", "tsv", "fc", "sk", "msa", "tus", "tv", "esv", "psv", "sf", "ssc", "sgem",
-                     "schachclub", "schachfreunde", "schachklub", "schachverein", "schachgemeinschaft"}
+                     "schachclub", "schachfreunde", "schachklub", "schachverein", "schachgemeinschaft", "schachtreff"}
 KUERZEL_LAENGE = 12             # max. Buchstaben des Namensteils
 GEGEN_UNS_TEXT = "gegen uns"
 # Ergebnis unter dem Gegnerkürzel, immer aus Sicht der Mannschaft im Fenster (nicht des Gegners)
