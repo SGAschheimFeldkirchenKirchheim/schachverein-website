@@ -87,6 +87,16 @@ TICKER_TITEL = "Letzte Ergebnisse"
 ERGEBNIS_TEXT = {"s": "Sieg", "u": "Unentschieden", "n": "Niederlage"}
 KEIN_TEAM = "spielfrei"
 
+# Aufstellungs-Fenster: Gegner je Runde unter der Rundennummer
+#   Kürzel automatisch: Vorsätze (SG, TSV, 1., ...) weg, erstes Wort gekürzt + Mannschaftsnummer
+#   ("TSV Solln 1" -> "Solln 1", "FC Bayern München 6" -> "Bayern 6").
+#   Feste Kürzel in gegner_kuerzel.json: {"SC Roter Turm München 2": "RT 2", ...}
+GEGNER_KUERZEL_DATEI = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gegner_kuerzel.json")
+KUERZEL_VORSAETZE = {"sg", "sc", "sv", "tsv", "fc", "sk", "msa", "tus", "tv", "esv", "psv", "sf", "ssc", "sgem",
+                     "schachclub", "schachfreunde", "schachklub", "schachverein", "schachgemeinschaft"}
+KUERZEL_LAENGE = 8              # max. Buchstaben des Namensteils
+GEGEN_UNS_TEXT = "gegen uns"    # Tooltip-Zusatz der hervorgehobenen Spalte (Kampf gegen die eigene Mannschaft)
+
 
 # ==========================================
 # HILFSFUNKTIONEN
@@ -261,6 +271,52 @@ def team_url(d, tlnr):
     return re.sub(r"tlnr=\d+", f"tlnr={tlnr}", url) if "tlnr=" in url else None
 
 
+_KUERZEL_FEST = None
+
+
+def gegner_kuerzel(name):
+    """Kurzname fürs Aufstellungs-Fenster (fest aus gegner_kuerzel.json, sonst automatisch)."""
+    global _KUERZEL_FEST
+    if _KUERZEL_FEST is None:
+        try:
+            with open(GEGNER_KUERZEL_DATEI, encoding="utf-8") as f:
+                _KUERZEL_FEST = json.load(f)
+        except (OSError, ValueError):
+            _KUERZEL_FEST = {}
+    if name in _KUERZEL_FEST:
+        return _KUERZEL_FEST[name]
+    woerter = name.replace("/", " ").split()
+    nr = woerter.pop() if len(woerter) > 1 and woerter[-1].isdigit() else ""
+    kern = [w for w in woerter if w.lower().rstrip(".") not in KUERZEL_VORSAETZE
+            and not re.fullmatch(r"\d+\.?", w)] or woerter
+    wort = kern[0] if kern else name
+    if len(wort) > KUERZEL_LAENGE:
+        wort = wort[:KUERZEL_LAENGE - 1] + "."
+    return f"{wort} {nr}".strip()
+
+
+def runden_gegner(d, tlnr):
+    """-> {Runde: {'name', 'kurz', 'gesp', 'mein', 'sein', 'art', 'sf', 'uns'}} aus Sicht von tlnr."""
+    aus = {}
+    for m in d.get("matches", []):
+        if tlnr not in (m["h"], m["g"]):
+            continue
+        if m.get("sf"):
+            aus[m["r"]] = {"name": KEIN_TEAM, "kurz": "frei", "gesp": False, "art": None, "sf": True, "uns": False}
+            continue
+        heim = m["h"] == tlnr
+        geg = m["g"] if heim else m["h"]
+        e = {"name": name_von(d, geg), "kurz": gegner_kuerzel(name_von(d, geg)), "gesp": bool(m["gesp"]),
+             "heim": heim, "art": None, "sf": False, "uns": geg == d.get("eigen")}
+        if m["gesp"]:
+            mein, sein = (m["bh"], m["bg"]) if heim else (m["bg"], m["bh"])
+            haelfte = (d["bretter"] or (mein + sein)) / 2
+            e.update(mein=mein, sein=sein,
+                     art="s" if mein > haelfte else "u" if mein == haelfte else "n")
+        aus[m["r"]] = e
+    return aus
+
+
 def _prognose(d, tlnr):
     """-> ({Name: p}, {neue Spieler}) fürs nächste Spiel (Spielort automatisch)."""
     verein = auf.andere_teams(VEREIN_INDEX, d, tlnr) if VEREIN_INDEX else None
@@ -313,13 +369,15 @@ def aufstellung_tabelle(d, tlnr):
     kader += [{"name": n, "nr": None, "ersatz": True} for n in res if n not in namen]
     p, neu = ({}, set()) if eigen or d.get("archiv") else _prognose(d, tlnr)
     alle_runden = range(1, (d.get("runden") or max(runden, default=0)) + 1)
+    geg = runden_gegner(d, tlnr)
+    uns_cls = lambda r: " gg-uns" if not eigen and geg.get(r, {}).get("uns") else ""
     zeilen = []
     for k in kader:
         rs = res.get(k["name"], {})
         pkt = sum(x["p"] for x in rs.values() if x["p"] is not None)
         spl = sum(1 for x in rs.values() if x["p"] is not None)
-        zellen = "".join(f'<td class="neben rd-erg{" kl" if rs.get(r, {}).get("t") in ("+", "–") else ""}">'
-                         f'{rs.get(r, {}).get("t", "")}</td>' for r in alle_runden)
+        zellen = "".join(f'<td class="neben rd-erg{" kl" if rs.get(r, {}).get("t") in ("+", "–") else ""}'
+                         f'{uns_cls(r)}">{rs.get(r, {}).get("t", "")}</td>' for r in alle_runden)
         if eigen:
             name = spieler_html(k["name"], None, None, True)
             letzte = f'<td>{sum(1 for x in rs.values() if x["e"])}/{len(runden)}</td>' if runden else "<td>–</td>"
@@ -332,14 +390,44 @@ def aufstellung_tabelle(d, tlnr):
         zeilen.append(f'<tr{cls}><td>{k.get("nr") or "–"}</td><td class="neben">{"x" if k.get("stamm") else ""}</td>'
                       f'<td class="name">{titel}{name}</td><td>{k.get("dwz") or ""}</td>{zellen}'
                       f'<td>{zahl(pkt) if spl else ""}</td><td>{spl or ""}</td>{letzte}</tr>')
-    rkopf = "".join(f'<th class="neben">{r}</th>' for r in alle_runden)
+    rkopf = "".join(f'<th class="neben{uns_cls(r)}">{r}</th>' for r in alle_runden)
+
+    def gkopf(r):
+        g = geg.get(r)
+        if not g:
+            return f'<th class="neben rd-geg{uns_cls(r)}"></th>'
+        tip = g["name"] if g["sf"] else f'R{r}: {"vs." if g.get("heim") else "bei"} {g["name"]}'
+        if g["art"]:
+            tip += f' – {zahl(g["mein"])} : {zahl(g["sein"])} ({ERGEBNIS_TEXT[g["art"]]})'
+        if g["uns"] and not eigen:
+            tip += f" – {GEGEN_UNS_TEXT}"
+        offen = "" if g["gesp"] else " offen"
+        return (f'<th class="neben rd-geg{offen}{uns_cls(r)}" tabindex="0" title="{esc(tip)}" data-tip="{esc(tip)}">'
+                f'{esc(g["kurz"])}</th>')
+
+    def ergebnis(r):
+        g = geg.get(r)
+        if not g or not g["art"]:
+            return f'<td class="neben{uns_cls(r)}"></td>'
+        return (f'<td class="neben{uns_cls(r)}"><span class="rd-mk erg-{g["art"]}" title="{ERGEBNIS_TEXT[g["art"]]}">'
+                f'{zahl(g["mein"])}–{zahl(g["sein"])}</span></td>')
+
+    gzeile = "".join(gkopf(r) for r in alle_runden)
+    fuss = ""
+    if any(g["art"] for g in geg.values()):
+        rest = 3 if (eigen or p) else 2
+        fuss = (f'<tfoot><tr class="mk-zeile"><td></td><td class="neben"></td><td class="name">Mannschaft</td><td></td>'
+                f'{"".join(ergebnis(r) for r in alle_runden)}{"<td></td>" * rest}</tr></tfoot>')
+    leer = '<th></th><th class="neben"></th><th class="name"></th><th></th>'
+    rest_kopf = "<th></th>" * (3 if (eigen or p) else 2)
     letzte_kopf = ('<th title="gespielte Runden von bisher gespielten Runden">Einsätze</th>' if eigen else
                    "" if not p else '<th title="geschätzte Wahrscheinlichkeit für einen Einsatz im nächsten Spiel">Prognose</th>')
     return f"""
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
-          {rkopf}<th title="Punkte">Pkt</th><th title="gespielte Partien">Spl</th>{letzte_kopf}</tr></thead>
-        <tbody>{"".join(zeilen)}</tbody>
+          {rkopf}<th title="Punkte">Pkt</th><th title="gespielte Partien">Spl</th>{letzte_kopf}</tr>
+          <tr class="geg-zeile">{leer}{gzeile}{rest_kopf}</tr></thead>
+        <tbody>{"".join(zeilen)}</tbody>{fuss}
       </table></div>"""
 
 
@@ -990,6 +1078,17 @@ STYLES = """<style>
       .aufst .rd-erg { min-width: 1.6rem; color: var(--navy); }
       .aufst .rd-erg.kl { color: #888; }
       .aufst tr.ersatz td { color: #777; font-style: italic; }
+      .aufst tr.geg-zeile th { padding-top: 0; font-size: 0.66rem; font-weight: normal; line-height: 1.15; vertical-align: top; }
+      .aufst th.rd-geg { white-space: normal; max-width: 3.4rem; cursor: help; position: relative; }
+      .aufst th.rd-geg.offen { font-style: italic; color: rgba(255,255,255,0.6); }
+      .aufst th.rd-geg:focus { outline: none; }
+      .aufst th.rd-geg:focus::after { content: attr(data-tip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+                  z-index: 3; white-space: nowrap; background: var(--navy); color: #fff; font-size: 0.75rem; font-style: normal;
+                  padding: 0.2rem 0.5rem; border-radius: 4px; opacity: 1; }
+      .aufst .gg-uns { background: rgba(230, 160, 20, 0.16); }
+      .aufst thead th.gg-uns, .aufst thead th.rd-geg.gg-uns { background: #e6a014; color: #1a252f; }
+      .aufst tfoot td { border-top: 2px solid var(--border); font-weight: bold; }
+      .aufst .rd-mk { display: inline-block; font-size: 0.7rem; padding: 0 0.25rem; border-radius: 4px; }
       .titel { font-size: 0.7rem; font-weight: bold; color: #b9770e; }
       .chance { display: inline-block; min-width: 3.4rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold;
                 background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
