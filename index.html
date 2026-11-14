@@ -241,29 +241,7 @@
   <main id="main" class="container">
     
     
-    <section class="geburtstag" aria-label="Geburtstag">
-      <span class="gb-torte" aria-hidden="true">🎂</span>
-      <p><strong>Raphael</strong> wird heute 28! <span class="gb-gruss">Alles Gute vom ganzen Verein!</span></p>
-    </section><script>
-(function () {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  var tag = "2026-11-13";
-  try { if (localStorage.getItem("gb-konfetti") === tag) return; localStorage.setItem("gb-konfetti", tag); } catch (e) {}
-  var farben = ["#e8b931", "#6fa3e8", "#1c2d52", "#ffffff", "#e8b931"];
-  for (var i = 0; i < 45; i++) {
-    var s = document.createElement("span");
-    s.className = "gb-schnipsel";
-    s.style.left = (Math.random() * 100) + "vw";
-    s.style.background = farben[i % farben.length];
-    s.style.setProperty("--x", (Math.random() * 160 - 80) + "px");
-    s.style.setProperty("--r", (Math.random() * 720 - 360) + "deg");
-    s.style.setProperty("--d", (1.8 + Math.random() * 1.2) + "s");
-    s.style.animationDelay = (Math.random() * 0.6) + "s";
-    document.body.appendChild(s);
-    setTimeout(function (el) { return function () { el.remove(); }; }(s), 3600);
-  }
-})();
-</script>
+    
 
     <section class="hero">
       <div class="diashow" aria-hidden="true"><div class="dia aktiv" style="background-image:url(diashow/01-vereinsmeisterschaft-2026.jpg)"></div><div class="dia" data-bild="diashow/02-spielabend-02.jpg"></div><div class="dia" data-bild="diashow/03-spielabend-03.jpg"></div><div class="dia" data-bild="diashow/04-spielabend-01.jpg"></div><div class="dia" data-bild="diashow/05-oberlandquartett-2015.jpg"></div><div class="dia" data-bild="diashow/06-spielabend-04.jpg"></div></div><div class="dia-punkte"><button type="button" aria-label="Foto 1" aria-current="true"></button><button type="button" aria-label="Foto 2"></button><button type="button" aria-label="Foto 3"></button><button type="button" aria-label="Foto 4"></button><button type="button" aria-label="Foto 5"></button><button type="button" aria-label="Foto 6"></button></div>
@@ -302,11 +280,6 @@
       <p class="spielabend" id="spielabend" hidden></p>
       <div class="events-grid" data-max="8">
         
-        <a class="event-card" href="termine.html" data-date="2026-11-13">
-          <div class="ev-date">13.11. Fr, 19:30 Uhr <span class="ev-rel"></span></div>
-          <div class="ev-title">MMM Runde 2</div>
-          <div class="ev-teams"><span class="pill team-afk-1">AFK 1</span><span class="pill team-afk-2">AFK 2</span><span class="pill team-afk-4">AFK 4</span><span class="pill team-afk-5">AFK 5</span></div>
-        </a>
         <div class="event-card" data-date="2026-11-20">
           <div class="ev-date">20.11. Fr <span class="ev-rel"></span></div>
           <div class="ev-title"><a href="https://www.mathenacht.de/" target="_blank" rel="noopener">Nacht der Mathematik</a></div>
@@ -361,6 +334,11 @@
           <div class="ev-date">06.12. So, 10:00 Uhr <span class="ev-rel"></span></div>
           <div class="ev-title">U20 MMM, 1.Liga Runde 2+3</div>
           <div class="ev-teams"><span class="pill team-jugend">Jugend</span></div>
+        </a>
+        <a class="event-card" href="termine.html" data-date="2026-12-08">
+          <div class="ev-date">08.12. Di, 19:30 Uhr <span class="ev-rel"></span></div>
+          <div class="ev-title">MMM Runde 3</div>
+          <div class="ev-teams"><span class="pill team-afk-6">AFK 6</span></div>
         </a>
       </div>
       <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
@@ -590,7 +568,7 @@
         <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
       </div>
     </div>
-    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 13.11.2026</p>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 14.11.2026</p>
   </footer>
 
   <script>
