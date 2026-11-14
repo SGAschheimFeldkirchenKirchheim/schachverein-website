@@ -10,7 +10,6 @@
     [* Termin *], [* Verein *], [* AFK 1 *], [* AFK 2 *], [* AFK 3 *], [* AFK 4 *], [* AFK 5 *], [* AFK 6 *], [* Senioren *], [* Jugend *]
   ),
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("November")]],
-  table.cell(fill: DarkSlateGray)[13.11. Fr, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 2], table.cell(fill: green)[MMM Runde 2], [], table.cell(fill: green)[MMM Runde 2], table.cell(fill: green)[MMM Runde 2], [], [], [],
   table.cell(fill: DarkSlateGray)[20.11. Fr], table.cell(fill: yellow)[#link("https://www.mathenacht.de/")[#underline[Nacht der Mathematik]]], [], [], [], [], [], [], [], [],
   [21.11. Sa, 14:00 Uhr], [], [], [], [], [], [], [], [], [Landesliga Süd Runde 1],
   [22.11. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, 1.Liga Runde 1],
