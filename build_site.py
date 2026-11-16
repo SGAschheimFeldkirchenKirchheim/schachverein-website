@@ -15,8 +15,6 @@ import liga   # Mannschaften-Seite + Ergebnis-Ticker (Daten vom Tabellenrechner)
 import jugend  # Jugend-Seite (Einstellungen in jugend.py)
 import senioren  # Senioren-Seite (Einstellungen in senioren.py)
 import faq     # FAQ-Seite (Fragen in faq.py)
-import chessresults  # Vereinsturniere von chess-results.com (turniere/chessresults.json)
-import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
 
 try:
@@ -90,7 +88,6 @@ PAGE_DESCRIPTIONS = {
     "oberlandquartett.html": "Ergebnisse und Pokalstand des Oberlandquartetts.",
     "blitzjahreswertung.html": "Gesamtwertung der Blitzjahreswertung der SG AFK.",
     "vereinsintern.html": "Vereinsmeister und Sieger der vereinsinternen Turniere: die Hall of Fame der SG AFK.",
-    "mannschaftshistorie.html": "Welche Mannschaft der SG AFK spielte wann in welcher Klasse? Auf- und Abstiege und Meilensteine.",
     "geschichte.html": "Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute.",
 }
 
@@ -147,7 +144,6 @@ ACTIVE_PARENT = {
     "vereinsintern.html": "turniere.html",
     "senioren.html": "mannschaften.html",
     "geschichte.html": "ueber-uns.html",
-    "mannschaftshistorie.html": "mannschaften.html",
 }
 
 # Handgeschriebene Seiten: Inhalt liegt in seiten/<name>.html
@@ -187,7 +183,7 @@ GLOBAL_CSS = """<style>
       .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
       .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
 
-      @media (max-width: 1180px) {
+      @media (max-width: 1260px) {
         header { gap: 0.3rem 1rem; }
         header .brand { font-size: 1rem; }
         .nav-burger { display: block; }
@@ -209,6 +205,12 @@ GLOBAL_CSS = """<style>
       .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
 
       .nav-auf { display: none; }
+      /* Mittlere Bildschirme mit Burger-Menü: vollen Namen zeigen, Burger ganz rechts (design.css blendet den Namen hier sonst aus) */
+      @media (min-width: 961px) and (max-width: 1260px) {
+        header .brand span { display: inline !important; }
+        header .brand { margin-right: auto !important; }
+        header .nav-burger { order: 4; margin-left: 0 !important; }
+      }
 
       /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
       @media (max-width: 560px) {
@@ -216,7 +218,7 @@ GLOBAL_CSS = """<style>
         header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
       }
 
-      @media (max-width: 1180px) {
+      @media (max-width: 1260px) {
         .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
         .nav-gruppe > a { display: block; border-top: none; }
         .nav-gruppe > a::after { display: none; }
@@ -785,15 +787,6 @@ TURNIERE = [
     ("Vereinsintern &amp; Hall of Fame", "Die historischen Vereinsmeister, Blitzschach-Champions und Pokalsieger unseres Vereins auf einen Blick.",
      "vereinsintern.html", "Zur Hall of Fame"),
 ]
-
-
-def build_chessresults():
-    """Turnierseiten von chess-results; stehen unter "Turniere" (Übersicht + Untermenü)."""
-    gebaut = chessresults.bauen(render_page)
-    for seite, name, text in reversed(gebaut):
-        TURNIERE.insert(0, (htmllib.escape(name), htmllib.escape(text), seite, "Tabelle &amp; Paarungen"))
-        SUBNAV["turniere.html"].insert(0, (seite, htmllib.escape(name)))
-        ACTIVE_PARENT[seite] = "turniere.html"
 
 
 def build_turniere_overview():
@@ -1728,7 +1721,7 @@ GESCHICHTE_CSS = """<style>
       :root { --afk-navy: #1c2d52; }   /* fest, unabhängig von --navy aus style.css */
       .zeitleiste { margin-top: 1.5rem; }
       .zl-jahr { display: grid; grid-template-columns: 6rem 1fr; gap: 1.2rem; margin-bottom: 1.4rem; }
-      .zl-jahr h2 { margin: 0; font-size: 1.25rem; color: var(--afk-navy); font-variant-numeric: tabular-nums; }
+      .zl-jahr h2 { margin: 0; font-size: 1.25rem; color: var(--text, var(--afk-navy)); font-variant-numeric: tabular-nums; }
       .zl-jahr > div { border-left: 3px solid #6fa3dc; padding-left: 1.1rem; }
       .zl-jahr p { margin: 0 0 0.7rem; }
       @media (max-width: 600px) { .zl-jahr { grid-template-columns: 1fr; gap: 0.3rem; } }
@@ -1873,15 +1866,7 @@ def _text_span(m):
 
 
 def report_inline(text):
-    """Typst-Auszeichnungen innerhalb eines Absatzes -> HTML.
-    Maskierte Zeichen (\\*, \\_, \\#, \\[, ...) erscheinen als normale Zeichen."""
-    maskiert = []
-
-    def merken(m):
-        maskiert.append(m.group(1))
-        return f"\x00{len(maskiert) - 1}\x00"
-
-    text = re.sub(r'\\([*_#$@<>`\[\]\\])', merken, text)
+    """Typst-Auszeichnungen innerhalb eines Absatzes -> HTML."""
     t = htmllib.escape(text, quote=False)
     t = re.sub(r'#text\(([^)]*)\)\[([^\]]*)\]', _text_span, t)
     t = re.sub(r'#underline\[([^\]]*)\]', r'<u>\1</u>', t)
@@ -1891,7 +1876,7 @@ def report_inline(text):
     t = re.sub(r'(?<!\w)_([^_\n]+)_(?!\w)', r'<em>\1</em>', t)
     t = re.sub(r'#link\("((?:https?://|mailto:)[^"]+)"\)\[([^\]]*)\]',
                r'<a href="\1" target="_blank" rel="noopener">\2</a>', t)
-    return re.sub(r"\x00(\d+)\x00", lambda m: htmllib.escape(maskiert[int(m.group(1))], quote=False), t)
+    return t
 
 
 IMG_RE = re.compile(r'^#image\(\s*"([^"]+)"\s*(?:,(.*))?\)\s*$')
@@ -2200,7 +2185,7 @@ DIASHOW_AUCH_OHNE_ANIMATIONEN = False
 # Hintergrundvideo statt Diashow: Datei in diashow/ ablegen (z. B. hero.mp4, optional hero.webm).
 # Fehlt die Datei, läuft die Diashow. Das erste Diashow-Foto dient als Standbild (Poster).
 HERO_VIDEO = "hero"             # Dateiname ohne Endung; "" = nie Video
-HERO_TITLE = "Schach spielen in<br>Aschheim, Feldkirchen &amp; Kirchheim"
+HERO_TITLE = "Schach spielen in <br>Aschheim, Feldkirchen &amp; Kirchheim"
 # Alternative: "Schach im Münchner Osten"
 
 # Mitgliederzahl vom Schachbund (Wertungsportal-API)
@@ -2784,6 +2769,8 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
       .cta-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; }
       .btn-ghost { background: transparent !important; border: 2px solid #fff; color: #fff !important; }
       .btn-ghost:hover { background: rgba(255,255,255,0.12) !important; }
+      /* Handy: Titel ohne festen Zeilenumbruch und etwas kleiner, sonst steht "in" allein in einer Zeile */
+      @media (max-width: 600px) { .hero h1 br { display: none; } .hero h1 { font-size: clamp(1.6rem, 7.5vw, 2.4rem); } }
     </style>"""
 
     render_page("Startseite", index_content, "index.html",
@@ -2982,11 +2969,6 @@ def spalten_termine(spalte, today=TODAY):
     return events
 
 
-def build_historie(aktuell, teams, archiv):
-    content, styles = historie.seite(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a))
-    render_page(historie.TITEL, content, historie.SEITE, extra_styles=styles)
-
-
 def build_jugend(termine, liga_seiten=None):
     berichte = [r for r in ALLE_BERICHTE if "jugend" in r['kategorien']]
     beitrag = next((preis for wer, preis in BEITRAEGE if "Kinder" in wer), "")
@@ -3030,8 +3012,6 @@ if __name__ == "__main__":
     # Teams zuerst laden: das Untermenü "Mannschaften" steht auf jeder Seite
     aktuell, teams, archiv = saisons_laden()
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
-    SUBNAV["mannschaften.html"].append((historie.SEITE, "Historie"))
-    build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
     build_dokumente()
@@ -3060,8 +3040,7 @@ if __name__ == "__main__":
         build_senioren(s_termine)
         extra.append(senioren.mannschaften_karte(s_termine))
     build_faq()
-    liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine), historie.karte()]
-    build_historie(aktuell, teams, archiv)
+    liga.EXTRA_KARTEN = extra + [jugend.mannschaften_karte(j_termine)]
     build_spieler(aktuell, teams, archiv)
     saisons = build_archiv(aktuell, archiv)
     build_index(upcoming, news, teams)

@@ -1,6 +1,6 @@
 <style>
   .legal-section {
-    background: #fff;
+    background: var(--surface, #fff);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 1.8rem;
@@ -9,14 +9,14 @@
   }
   .legal-section h2 {
     margin-top: 0;
-    color: var(--navy);
+    color: var(--text, var(--navy));
     border-bottom: 2px solid var(--link);
     padding-bottom: 0.5rem;
   }
-  .legal-section h3 { color: var(--navy); margin: 1.6rem 0 0.4rem; font-size: 1.1rem; }
+  .legal-section h3 { color: var(--text, var(--navy)); margin: 1.6rem 0 0.4rem; font-size: 1.1rem; }
   .legal-section p, .legal-section li { max-width: 75ch; }
   .legal-section ul { padding-left: 1.2rem; }
-  .legal-stand { font-size: 0.85rem; color: #555; }
+  .legal-stand { font-size: 0.85rem; color: var(--muted, #555); }
 </style>
 
 <h1>Rechtliche Hinweise</h1>
@@ -37,8 +37,7 @@
 
   <p><strong>Vertreten durch:</strong><br>
   Der Verein wird vertreten durch den Vorstand gemäß § 26 BGB.<br>
-  <!-- TODO: Namen der vertretungsberechtigten Vorstandsmitglieder eintragen -->
-  Vertretungsberechtigt: [Name 1. Vorsitzende/r]
+  Vertretungsberechtigt: Andreas Schwarz (1. Vorsitzender)
   </p>
 
   <p><strong>Kontakt:</strong><br>
@@ -49,13 +48,11 @@
   <p><strong>Registereintrag:</strong><br>
   Eintragung im Vereinsregister.<br>
   Registergericht: Amtsgericht München<br>
-  <!-- TODO: Registernummer eintragen -->
-  Registernummer: VR [Eure Nummer eintragen]
+  Registernummer: VR 205610
   </p>
 
   <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</strong><br>
-  <!-- TODO: Name und Anschrift einer verantwortlichen Person (z. B. Webmaster oder Vorstand) -->
-  [Vorname Nachname], Heimstettner Str. 20, 85551 Kirchheim bei München
+  Korbinian Ruff, Heimstettner Str. 20, 85551 Kirchheim bei München
   </p>
 </section>
 
