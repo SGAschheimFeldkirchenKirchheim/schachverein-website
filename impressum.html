@@ -49,7 +49,7 @@
       .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
       .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
 
-      @media (max-width: 1180px) {
+      @media (max-width: 1260px) {
         header { gap: 0.3rem 1rem; }
         header .brand { font-size: 1rem; }
         .nav-burger { display: block; }
@@ -71,6 +71,12 @@
       .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
 
       .nav-auf { display: none; }
+      /* Mittlere Bildschirme mit Burger-Menü: vollen Namen zeigen, Burger ganz rechts (design.css blendet den Namen hier sonst aus) */
+      @media (min-width: 961px) and (max-width: 1260px) {
+        header .brand span { display: inline !important; }
+        header .brand { margin-right: auto !important; }
+        header .nav-burger { order: 4; margin-left: 0 !important; }
+      }
 
       /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
       @media (max-width: 560px) {
@@ -78,7 +84,7 @@
         header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
       }
 
-      @media (max-width: 1180px) {
+      @media (max-width: 1260px) {
         .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
         .nav-gruppe > a { display: block; border-top: none; }
         .nav-gruppe > a::after { display: none; }
@@ -106,7 +112,7 @@
       });
     </script><style>
   .legal-section {
-    background: #fff;
+    background: var(--surface, #fff);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 1.8rem;
@@ -115,14 +121,14 @@
   }
   .legal-section h2 {
     margin-top: 0;
-    color: var(--navy);
+    color: var(--text, var(--navy));
     border-bottom: 2px solid var(--link);
     padding-bottom: 0.5rem;
   }
-  .legal-section h3 { color: var(--navy); margin: 1.6rem 0 0.4rem; font-size: 1.1rem; }
+  .legal-section h3 { color: var(--text, var(--navy)); margin: 1.6rem 0 0.4rem; font-size: 1.1rem; }
   .legal-section p, .legal-section li { max-width: 75ch; }
   .legal-section ul { padding-left: 1.2rem; }
-  .legal-stand { font-size: 0.85rem; color: #555; }
+  .legal-stand { font-size: 0.85rem; color: var(--muted, #555); }
 </style>
   <link rel="stylesheet" href="design.css">
   <meta property="og:title" content="Impressum &amp; Datenschutz | SG AFK">
@@ -148,7 +154,7 @@
     <nav aria-label="Hauptmenü">
       <a href="index.html">Start</a>
       <div class="nav-gruppe"><a href="ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a><a href="geschichte.html">Vereinsgeschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
-      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="mannschaftshistorie.html">Historie</a></div></div>
+      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a></div></div>
       <a href="jugend.html">Jugend</a>
       <a href="termine.html">Termine</a>
       <a href="berichte.html">Berichte</a>
@@ -177,8 +183,7 @@
 
   <p><strong>Vertreten durch:</strong><br>
   Der Verein wird vertreten durch den Vorstand gemäß § 26 BGB.<br>
-  <!-- TODO: Namen der vertretungsberechtigten Vorstandsmitglieder eintragen -->
-  Vertretungsberechtigt: [Name 1. Vorsitzende/r]
+  Vertretungsberechtigt: Andreas Schwarz (1. Vorsitzender)
   </p>
 
   <p><strong>Kontakt:</strong><br>
@@ -189,13 +194,11 @@
   <p><strong>Registereintrag:</strong><br>
   Eintragung im Vereinsregister.<br>
   Registergericht: Amtsgericht München<br>
-  <!-- TODO: Registernummer eintragen -->
-  Registernummer: VR [Eure Nummer eintragen]
+  Registernummer: VR 205610
   </p>
 
   <p><strong>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV:</strong><br>
-  <!-- TODO: Name und Anschrift einer verantwortlichen Person (z. B. Webmaster oder Vorstand) -->
-  [Vorname Nachname], Heimstettner Str. 20, 85551 Kirchheim bei München
+  Korbinian Ruff, Heimstettner Str. 20, 85551 Kirchheim bei München
   </p>
 </section>
 
@@ -280,7 +283,7 @@
         <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
       </div>
     </div>
-    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 15.11.2026</p>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 16.11.2026</p>
   </footer>
 
   <script>

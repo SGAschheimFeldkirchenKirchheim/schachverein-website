@@ -49,7 +49,7 @@
       .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
       .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
 
-      @media (max-width: 1180px) {
+      @media (max-width: 1260px) {
         header { gap: 0.3rem 1rem; }
         header .brand { font-size: 1rem; }
         .nav-burger { display: block; }
@@ -71,6 +71,12 @@
       .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
 
       .nav-auf { display: none; }
+      /* Mittlere Bildschirme mit Burger-Menü: vollen Namen zeigen, Burger ganz rechts (design.css blendet den Namen hier sonst aus) */
+      @media (min-width: 961px) and (max-width: 1260px) {
+        header .brand span { display: inline !important; }
+        header .brand { margin-right: auto !important; }
+        header .nav-burger { order: 4; margin-left: 0 !important; }
+      }
 
       /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
       @media (max-width: 560px) {
@@ -78,7 +84,7 @@
         header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
       }
 
-      @media (max-width: 1180px) {
+      @media (max-width: 1260px) {
         .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
         .nav-gruppe > a { display: block; border-top: none; }
         .nav-gruppe > a::after { display: none; }
@@ -153,7 +159,7 @@
     <nav aria-label="Hauptmenü">
       <a href="../index.html">Start</a>
       <div class="nav-gruppe"><a href="../ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="../neu-hier.html">Neu hier?</a><a href="../geschichte.html">Vereinsgeschichte</a><a href="../dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
-      <div class="nav-gruppe"><a href="../mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="../afk-1.html">AFK 1</a><a href="../afk-2.html">AFK 2</a><a href="../afk-3.html">AFK 3</a><a href="../afk-4.html">AFK 4</a><a href="../afk-5.html">AFK 5</a><a href="../afk-6.html">AFK 6</a><a href="../senioren.html">Senioren</a><a href="../mannschaftshistorie.html">Historie</a></div></div>
+      <div class="nav-gruppe"><a href="../mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="../afk-1.html">AFK 1</a><a href="../afk-2.html">AFK 2</a><a href="../afk-3.html">AFK 3</a><a href="../afk-4.html">AFK 4</a><a href="../afk-5.html">AFK 5</a><a href="../afk-6.html">AFK 6</a><a href="../senioren.html">Senioren</a></div></div>
       <a href="../jugend.html">Jugend</a>
       <a href="../termine.html">Termine</a>
       <a href="../berichte.html" aria-current="page">Berichte</a>
@@ -201,7 +207,7 @@
         <p><a href="../impressum.html">Impressum &amp; Datenschutz</a></p>
       </div>
     </div>
-    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 15.11.2026</p>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 16.11.2026</p>
   </footer>
 
   <script>
