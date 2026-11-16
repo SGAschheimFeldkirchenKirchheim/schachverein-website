@@ -24,11 +24,11 @@ DANKE = "Danke! Dein Bericht ist angekommen und erscheint, sobald er durchgesehe
 
 
 CSS = """
-      .einreichen { margin: 0 0 1.6rem; padding: 0; border-left: 4px solid var(--accent); }
+      .einreichen { margin: 2.5rem 0 0; padding: 0; }
       .einreichen > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex;
         align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
       .einreichen > summary::-webkit-details-marker { display: none; }
-      .einreichen > summary strong { font-size: 1.1rem; }
+      .einreichen > summary strong { font-size: 1rem; }
       .einreichen > summary .btn { white-space: nowrap; }
       .einreichen[open] > summary .btn { opacity: 0.6; }
       .einreichen form { display: grid; gap: 0.8rem; padding: 0 1.2rem 1.2rem; }
@@ -48,13 +48,13 @@ CSS = """
 
 
 def block():
-    """HTML-Block fürs Berichte-Übersicht (leer, wenn SKRIPT_URL fehlt)."""
+    """HTML-Block unten auf der Berichte-Übersicht (leer, wenn SKRIPT_URL fehlt)."""
     if not SKRIPT_URL:
         return ""
     heute = datetime.date.today().isoformat()
     return f"""
       <details class="card einreichen" id="einreichen">
-        <summary><span><strong>✍️ Selbst etwas erlebt?</strong><br><span class="ein-klein">{html.escape(INTRO)}</span></span>
+        <summary><span><strong>Selbst etwas erlebt?</strong><br><span class="ein-klein">{html.escape(INTRO)}</span></span>
           <span class="btn">{TITEL}</span></summary>
         <form id="ein-form" autocomplete="on">
           <div class="ein-reihe">
@@ -69,7 +69,7 @@ def block():
             <input name="mail" type="email" maxlength="120" autocomplete="email">
           </label>
           <label class="ein-falle" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-          <p class="ein-klein">📷 {html.escape(FOTO_HINWEIS)}</p>
+          <p class="ein-klein">{html.escape(FOTO_HINWEIS)}</p>
           <div><button class="btn" type="submit">Absenden</button></div>
           <p class="ein-meldung" role="status"></p>
         </form>

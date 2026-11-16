@@ -2178,7 +2178,7 @@ def build_berichte():
             parts.append(f"<details class='vergangene-jahre'><summary>Vergangene Jahre</summary>{inner}</details>")
 
     body = "\n".join(parts) if parts else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
-    overview_content = "<h1>Aktuelle Berichte &amp; News</h1>" + einreichen.block() + body
+    overview_content = "<h1>Aktuelle Berichte &amp; News</h1>" + body + einreichen.block()
     render_page("Berichte & News", overview_content, "berichte.html",
                 extra_styles="<style>" + NEWS_CSS + einreichen.CSS + "</style>")
 
