@@ -127,11 +127,11 @@
       .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
       .news-card:hover h3 { text-decoration: underline; }
 
-      .einreichen { margin: 0 0 1.6rem; padding: 0; border-left: 4px solid var(--accent); }
+      .einreichen { margin: 2.5rem 0 0; padding: 0; }
       .einreichen > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex;
         align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
       .einreichen > summary::-webkit-details-marker { display: none; }
-      .einreichen > summary strong { font-size: 1.1rem; }
+      .einreichen > summary strong { font-size: 1rem; }
       .einreichen > summary .btn { white-space: nowrap; }
       .einreichen[open] > summary .btn { opacity: 0.6; }
       .einreichen form { display: grid; gap: 0.8rem; padding: 0 1.2rem 1.2rem; }
@@ -183,65 +183,7 @@
   </header>
 
   <main id="main" class="container">
-    <h1>Aktuelle Berichte &amp; News</h1>
-      <details class="card einreichen" id="einreichen">
-        <summary><span><strong>✍️ Selbst etwas erlebt?</strong><br><span class="ein-klein">Turnier gespielt, Mannschaftskampf erlebt, etwas Lustiges passiert? Schreib es auf. Wir schauen kurz drüber und stellen es online.</span></span>
-          <span class="btn">Bericht einreichen</span></summary>
-        <form id="ein-form" autocomplete="on">
-          <div class="ein-reihe">
-            <label>Titel <input name="titel" required maxlength="120" placeholder="z. B. AFK 2 gewinnt das Derby"></label>
-            <label>Autor/in <input name="autor" required maxlength="80" autocomplete="name" placeholder="Vor- und Nachname"></label>
-            <label>Datum <input name="datum" type="date" required value="2026-11-16"></label>
-          </div>
-          <label>Text
-            <textarea name="text" required maxlength="20000" placeholder="Leere Zeile = neuer Absatz"></textarea>
-          </label>
-          <label>E-Mail für Rückfragen (optional, wird nicht veröffentlicht)
-            <input name="mail" type="email" maxlength="120" autocomplete="email">
-          </label>
-          <label class="ein-falle" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
-          <p class="ein-klein">📷 Fotos bitte per WhatsApp oder E-Mail an den Webmaster schicken. Die bauen wir dann ein.</p>
-          <div><button class="btn" type="submit">Absenden</button></div>
-          <p class="ein-meldung" role="status"></p>
-        </form>
-      </details>
-      <script>
-      (function () {
-        var f = document.getElementById("ein-form"), d = document.getElementById("einreichen");
-        if (location.hash === "#einreichen") d.open = true;
-        var felder = ["titel", "autor", "text", "mail"], SPEICHER = "afk-bericht-entwurf";
-        // Entwurf im Browser merken, damit nichts verloren geht
-        try {
-          var alt = JSON.parse(localStorage.getItem(SPEICHER) || "{}");
-          felder.forEach(function (n) { if (alt[n]) f.elements[n].value = alt[n]; });
-        } catch (e) {}
-        f.addEventListener("input", function () {
-          try {
-            var w = {}; felder.forEach(function (n) { w[n] = f.elements[n].value; });
-            localStorage.setItem(SPEICHER, JSON.stringify(w));
-          } catch (e) {}
-        });
-        f.addEventListener("submit", function (ev) {
-          ev.preventDefault();
-          var knopf = f.querySelector("button"), meldung = f.querySelector(".ein-meldung");
-          var daten = {}; ["titel", "autor", "datum", "text", "mail", "website"].forEach(function (n) { daten[n] = f.elements[n].value.trim(); });
-          knopf.disabled = true; meldung.className = "ein-meldung"; meldung.textContent = "Wird gesendet …";
-          fetch('https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec', { method: "POST", body: JSON.stringify(daten) })
-            .then(function (r) { return r.json(); })
-            .then(function (a) {
-              if (!a.ok) throw new Error(a.fehler || "Unbekannter Fehler");
-              meldung.className = "ein-meldung ok"; meldung.textContent = 'Danke! Dein Bericht ist angekommen und erscheint, sobald er durchgesehen ist.';
-              f.reset(); f.elements.datum.value = '2026-11-16';
-              try { localStorage.removeItem(SPEICHER); } catch (e) {}
-            })
-            .catch(function (e) {
-              meldung.className = "ein-meldung fehler";
-              meldung.textContent = "Das hat nicht geklappt (" + e.message + "). Dein Text bleibt gespeichert – bitte später nochmal versuchen.";
-            })
-            .finally(function () { knopf.disabled = false; });
-        });
-      })();
-      </script><h2 class='jahr-titel'>2026</h2><div class='grid' style='grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));'>
+    <h1>Aktuelle Berichte &amp; News</h1><h2 class='jahr-titel'>2026</h2><div class='grid' style='grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));'>
         <div class="card news-card">
           <img class="news-thumb" src="berichte/bilder/2026-kooperationsturnier-ebe/siegerfoto.jpg" alt="" loading="lazy">
           <h3>Schnellschach-Vereinsmeisterschaft 2026</h3>
@@ -1680,6 +1622,64 @@
           <a href="berichte/2015-archiv-schach-gemeinschaft-afk-gewinnt-freundschaftsturni.html" class="btn">Bericht lesen →</a>
         </div>
         </div></details></details>
+      <details class="card einreichen" id="einreichen">
+        <summary><span><strong>Selbst etwas erlebt?</strong><br><span class="ein-klein">Turnier gespielt, Mannschaftskampf erlebt, etwas Lustiges passiert? Schreib es auf. Wir schauen kurz drüber und stellen es online.</span></span>
+          <span class="btn">Bericht einreichen</span></summary>
+        <form id="ein-form" autocomplete="on">
+          <div class="ein-reihe">
+            <label>Titel <input name="titel" required maxlength="120" placeholder="z. B. AFK 2 gewinnt das Derby"></label>
+            <label>Autor/in <input name="autor" required maxlength="80" autocomplete="name" placeholder="Vor- und Nachname"></label>
+            <label>Datum <input name="datum" type="date" required value="2026-11-16"></label>
+          </div>
+          <label>Text
+            <textarea name="text" required maxlength="20000" placeholder="Leere Zeile = neuer Absatz"></textarea>
+          </label>
+          <label>E-Mail für Rückfragen (optional, wird nicht veröffentlicht)
+            <input name="mail" type="email" maxlength="120" autocomplete="email">
+          </label>
+          <label class="ein-falle" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+          <p class="ein-klein">Fotos bitte per WhatsApp oder E-Mail an den Webmaster schicken. Die bauen wir dann ein.</p>
+          <div><button class="btn" type="submit">Absenden</button></div>
+          <p class="ein-meldung" role="status"></p>
+        </form>
+      </details>
+      <script>
+      (function () {
+        var f = document.getElementById("ein-form"), d = document.getElementById("einreichen");
+        if (location.hash === "#einreichen") d.open = true;
+        var felder = ["titel", "autor", "text", "mail"], SPEICHER = "afk-bericht-entwurf";
+        // Entwurf im Browser merken, damit nichts verloren geht
+        try {
+          var alt = JSON.parse(localStorage.getItem(SPEICHER) || "{}");
+          felder.forEach(function (n) { if (alt[n]) f.elements[n].value = alt[n]; });
+        } catch (e) {}
+        f.addEventListener("input", function () {
+          try {
+            var w = {}; felder.forEach(function (n) { w[n] = f.elements[n].value; });
+            localStorage.setItem(SPEICHER, JSON.stringify(w));
+          } catch (e) {}
+        });
+        f.addEventListener("submit", function (ev) {
+          ev.preventDefault();
+          var knopf = f.querySelector("button"), meldung = f.querySelector(".ein-meldung");
+          var daten = {}; ["titel", "autor", "datum", "text", "mail", "website"].forEach(function (n) { daten[n] = f.elements[n].value.trim(); });
+          knopf.disabled = true; meldung.className = "ein-meldung"; meldung.textContent = "Wird gesendet …";
+          fetch('https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec', { method: "POST", body: JSON.stringify(daten) })
+            .then(function (r) { return r.json(); })
+            .then(function (a) {
+              if (!a.ok) throw new Error(a.fehler || "Unbekannter Fehler");
+              meldung.className = "ein-meldung ok"; meldung.textContent = 'Danke! Dein Bericht ist angekommen und erscheint, sobald er durchgesehen ist.';
+              f.reset(); f.elements.datum.value = '2026-11-16';
+              try { localStorage.removeItem(SPEICHER); } catch (e) {}
+            })
+            .catch(function (e) {
+              meldung.className = "ein-meldung fehler";
+              meldung.textContent = "Das hat nicht geklappt (" + e.message + "). Dein Text bleibt gespeichert – bitte später nochmal versuchen.";
+            })
+            .finally(function () { knopf.disabled = false; });
+        });
+      })();
+      </script>
   </main>
 
   <footer>
