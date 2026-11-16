@@ -352,7 +352,15 @@ def liga_grafik(daten, bereich):
                          f'stroke="var(--surface, #fff)" stroke-width="1.5"/>{zeichen}</g>')
     teile.append("</svg>")
     legende = "".join(f'<span><i style="background:{farbe(t, bereich, daten)}"></i>{esc(t)}</span>' for t in teams)
-    return f'<div class="hist-legende">{legende}</div><div class="hist-scroll">{"".join(teile)}</div>'
+    # Handy: Ligabeschriftung bleibt beim Wischen links stehen (zweites, schmales SVG über der Grafik)
+    achse = [f'<svg class="hist-achse" width="{links}" height="{hoehe}" viewBox="0 0 {links} {hoehe}" aria-hidden="true">'
+             f'<rect width="{links}" height="{hoehe - unten + 4}" fill="var(--bg, #fff)"/>']
+    for k, (_, name) in enumerate(st):
+        achse.append(f'<text class="hy" x="{links - 12}" y="{y(k) + 4}" text-anchor="end">{esc(name)}</text>')
+    achse.append("</svg>")
+    return (f'<div class="hist-legende">{legende}</div>'
+            f'<div class="hist-wrap"><div class="hist-scroll">{"".join(teile)}</div>{"".join(achse)}</div>'
+            '<p class="hist-wischen">← seitlich wischen für ältere Saisons</p>')
 
 
 def steckbrief(team, eintraege, roh, bereich):
@@ -447,6 +455,10 @@ def seite(aktuell, teams, archiv, seiten_pfad):
         ▲ Aufstieg, ▼ Abstieg, ★ Meister/Titel, gestrichelt = Saisons dazwischen fehlen.
         {HINWEIS_NUMMERN}</p>
       {"".join(bereich_block(daten, roh, b) for b in BEREICHE)}
+      <script>
+        // Breite Grafiken (Handy): beim Laden ganz nach rechts wischen, damit die neuesten Saisons zu sehen sind
+        document.querySelectorAll(".hist-scroll").forEach(function (el) {{ el.scrollLeft = el.scrollWidth; }});
+      </script>
     """
     return content, liga.STYLES + "<style>" + CSS + "</style>"
 
@@ -454,7 +466,14 @@ def seite(aktuell, teams, archiv, seiten_pfad):
 def karte():
     """Karte für die Mannschaften-Übersicht."""
     return f"""
-      <a class="card team-karte" href="{SEITE}">
+      <style>
+        /* Breite Ansicht (eine Zeile pro Team): der lange Titel bekommt die ersten beiden Spalten, der Text die Mitte */
+        @media (min-width: 901px) {{
+          .team-grid > .team-historie h3 {{ grid-column: 1 / 3; }}
+          .team-grid > .team-historie p {{ grid-column: 3 / -2; }}
+        }}
+      </style>
+      <a class="card team-karte team-historie" href="{SEITE}">
         <h3>{TITEL}</h3>
         <p>Wie der Verein an Mannschaften gewachsen ist und wer wann in welcher Liga spielte – Erwachsene, Senioren und Jugend.</p>
         <span class="k-mehr">Zur Historie →</span>
@@ -464,6 +483,14 @@ def karte():
 CSS = """
       .hist-scroll { overflow-x: auto; margin: 0.4rem 0; }
       .hist-svg { display: block; max-width: none; font-family: inherit; }
+      /* PC/Tablet: Grafik passt sich der Breite an (nur verkleinern). Handy: Originalgröße, seitlich wischen */
+      @media (min-width: 701px) { .hist-svg { max-width: 100%; height: auto; } }
+      .hist-wischen { display: none; font-size: 0.8rem; color: var(--muted, #888); margin: 0.2rem 0 0; }
+      @media (max-width: 700px) { .hist-wischen { display: block; } }
+      .hist-wrap { position: relative; }
+      .hist-achse { display: none; position: absolute; left: 0; top: 0; pointer-events: none; font-family: inherit; }
+      .hist-achse .hy { font-size: 12px; fill: currentColor; font-weight: 600; }
+      @media (max-width: 700px) { .hist-achse { display: block; } }
       .hist-svg .hl { stroke: var(--border, #e3e6ea); stroke-width: 1; }
       .hist-svg .hy { font-size: 12px; fill: currentColor; font-weight: 600; }
       .hist-svg .hx { font-size: 11px; fill: #888; }
