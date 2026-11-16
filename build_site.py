@@ -1084,6 +1084,8 @@ def build_neu_hier():
 # 3. OBERLANDQUARTETT PARSER
 # ==========================================
 OQ_NEUESTE_OBEN = True     # True = neuestes Turnier oben
+OQ_VORSCHAU_JAHRE = 4      # so viele kommende Jahre mit Ausrichter anzeigen (0 = aus)
+OQ_AUSRICHTER_FEST = {}    # Abweichungen von der Reihum-Folge, z.B. {2028: "Holzkirchen"}
 # Fotos unter der Übersicht: (Datei, Bildunterschrift); fehlt eine Datei, wird sie einfach weggelassen
 OQ_FOTOS = [
     ("turniere/oberlandquartett/sieger-2015.jpg", "Unsere Siegermannschaft beim Oberlandquartett 2015"),
@@ -1137,6 +1139,26 @@ def _oq_daten(code):
     return daten
 
 
+def _oq_vorschau(zeilen, anzahl):
+    """[(jahr, ausrichter)] für die kommenden Jahre. Die Ausrichter wechseln reihum
+    (Folge = die letzten verschiedenen Ausrichter); ausgefallene Jahre zählen nicht."""
+    gespielt = [(j, a.strip()) for j, _, a, _, _ in zeilen if j and a.strip("-? ")]
+    if not anzahl or not gespielt:
+        return []
+    folge = []
+    for _, a in reversed(gespielt):
+        if a in folge:
+            break
+        folge.insert(0, a)
+    letztes_jahr = max(j for j, *_ in zeilen if j)
+    k = len(folge) - 1   # Position des letzten Ausrichters in der Folge
+    vorschau = []
+    for jahr in range(letztes_jahr + 1, letztes_jahr + 1 + anzahl):
+        k = (k + 1) % len(folge)
+        vorschau.append((jahr, OQ_AUSRICHTER_FEST.get(jahr, folge[k])))
+    return vorschau
+
+
 def build_oberlandquartett():
     path = os.path.join("turniere", "oberlandquartett", "main.typ")
     if not os.path.exists(path):
@@ -1179,7 +1201,10 @@ def build_oberlandquartett():
                 for d, t in fotos) + '</div>')
 
         kopf = "".join(f"<th>{esc(t)}</th>" for t in teams)
-        reihen = []
+        reihen, kommend = [], []
+        for jahr, ort in sorted(_oq_vorschau(zeilen, OQ_VORSCHAU_JAHRE), reverse=OQ_NEUESTE_OBEN):
+            kommend.append(f'<tr class="oq-kommend"><td class="oq-jahr">{jahr}</td><td class="oq-ort">{esc(ort)}</td>'
+                          f'<td class="oq-plan" colspan="{n}"><span class="oq-plan-ort">Ausrichter: {esc(ort)}</span></td></tr>')
         reihenfolge = list(enumerate(zeilen))
         if OQ_NEUESTE_OBEN:
             reihenfolge.reverse()
@@ -1205,6 +1230,7 @@ def build_oberlandquartett():
                     else:
                         zellen.append('<td class="oq-leer">–</td>')
             reihen.append(f'<tr{" class=oq-ausfall" if ausgefallen else ""}>{"".join(zellen)}</tr>')
+        reihen = kommend + reihen if OQ_NEUESTE_OBEN else reihen + kommend   # kommende Jahre vor/nach den Ergebnissen
 
         html.append(f'<div class="oq-scroll"><table class="oq-tab"><thead><tr><th class="oq-jahr">Jahr</th>'
                     f'<th class="oq-ort">Ausrichter</th>{kopf}</tr></thead><tbody>{"".join(reihen)}</tbody></table></div>')
@@ -1241,11 +1267,17 @@ def build_oberlandquartett():
       .oq-tab .oq-ersatz { font-size: 0.82rem; font-style: italic; color: color-mix(in srgb, var(--text, #000) 60%, transparent); }
       .oq-tab td.oq-aus { font-style: italic; color: color-mix(in srgb, var(--text, #000) 50%, transparent);
                           background-image: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--text, #000) 6%, transparent) 6px 12px); }
+      .oq-tab tr.oq-kommend > * { color: color-mix(in srgb, var(--text, #000) 55%, transparent); font-style: italic; }
+      .oq-tab tr.oq-kommend td.oq-jahr { font-weight: 600; }
+      .oq-tab tr.oq-kommend + tr:not(.oq-kommend) > *, .oq-tab tr:not(.oq-kommend) + tr.oq-kommend > * { border-top: 2px solid var(--line, #d6dbe4); }
+      .oq-tab td.oq-plan { font-size: 0.85rem; }
+      .oq-tab .oq-plan-ort { display: none; }
       .oq-legende2 { font-size: 0.85rem; margin-top: 0.8rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
       .oq-legende2 .oq-platz.oq-pokal { margin-left: 1rem; }
       @media (max-width: 700px) {
         .oq-tab { font-size: 0.85rem; } .oq-tab th, .oq-tab td { padding: 0.4rem 0.4rem; }
         .oq-tab td.oq-jahr small, .oq-tab .oq-ort { display: none; }
+        .oq-tab .oq-plan-ort { display: inline; }
       }
     </style>"""
 
