@@ -16,6 +16,7 @@ import jugend  # Jugend-Seite (Einstellungen in jugend.py)
 import senioren  # Senioren-Seite (Einstellungen in senioren.py)
 import faq     # FAQ-Seite (Fragen in faq.py)
 import chessresults  # Vereinsturniere von chess-results.com (turniere/chessresults.json)
+import turnierkalender  # externe Turniere: FIDE + chess-results (turniere/turnierkalender.json)
 import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
@@ -87,7 +88,8 @@ PAGE_DESCRIPTIONS = {
     "jugend.html": "Schach für Kinder und Jugendliche bei der SG AFK: Jugendtraining jeden Freitag, Jugendmannschaften, Termine und Ansprechpartner.",
     "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
     "kontakt.html": "Kontakt und Anfahrt zur SG Aschheim/Feldkirchen/Kirchheim im Gymnasium Kirchheim.",
-    "ausschreibungen.html": "Alle Turnierausschreibungen der SG AFK als PDF zum Ansehen und Herunterladen.",
+    "ausschreibungen.html": "Ausschreibungen der SG AFK als PDF und der Turnierkalender mit Opens in Bayern, Deutschland und Europa.",
+    turnierkalender.SEITE: "Turnierkalender: Opens in Bayern, Deutschland und Europa mit Filtern nach Zeitraum, Entfernung und Bedenkzeit.",
     "oberlandquartett.html": "Ergebnisse und Pokalstand des Oberlandquartetts.",
     "blitzjahreswertung.html": "Gesamtwertung der Blitzjahreswertung der SG AFK.",
     "vereinsintern.html": "Vereinsmeister und Sieger der vereinsinternen Turniere: die Hall of Fame der SG AFK.",
@@ -137,12 +139,14 @@ SUBNAV = {
         ("blitzjahreswertung.html", "Blitzjahreswertung"),
         ("vereinsintern.html", "Hall of Fame"),
         ("ausschreibungen.html", "Ausschreibungen"),
+        (turnierkalender.SEITE, "Turnierkalender"),
     ],
 }
 
 # Unterseiten, bei denen im Menü der übergeordnete Reiter markiert wird
 ACTIVE_PARENT = {
     "ausschreibungen.html": "turniere.html",
+    turnierkalender.SEITE: "turniere.html",
     "oberlandquartett.html": "turniere.html",
     "blitzjahreswertung.html": "turniere.html",
     "vereinsintern.html": "turniere.html",
@@ -818,8 +822,8 @@ def build_turniere_overview():
 
     <section class="ausschreibungen-block">
       <h2>Ausschreibungen</h2>
-      <p>Hier findest du die Ausschreibungen zu den kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
-      {pdf_liste_html(ausschreibungen_eintraege())}
+      <p>Unsere eigenen Turniere als PDF oder Opens in ganz Europa im Turnierkalender.</p>
+      {ausschreibungen_wahl_html("ausschreibungen.html#intern")}
     </section>
     """
     render_page("Turniere & Ergebnisse", content, "turniere.html")
@@ -996,11 +1000,29 @@ def pdf_liste_html(entries):
     return f'<div class="pdf-grid">{items}</div>'
 
 
+def ausschreibungen_wahl_html(intern_link):
+    """Zwei Karten: Intern (eigene PDFs) / Extern (Turnierkalender)."""
+    n = len(ausschreibungen_eintraege())
+    m = turnierkalender.ANZAHL
+    return f"""<div class="pdf-grid">
+            <a class="pdf-card" href="{intern_link}">
+              <span class="pdf-icon" aria-hidden="true" style="background:var(--hell);color:#0e1524">AFK</span>
+              <span class="pdf-text"><strong>Intern</strong><br><small>Unsere Turniere · {n} {"Ausschreibung" if n == 1 else "Ausschreibungen"} als PDF</small></span>
+            </a>
+            <a class="pdf-card" href="{turnierkalender.SEITE}">
+              <span class="pdf-icon" aria-hidden="true" style="background:var(--hell);color:#0e1524">EU</span>
+              <span class="pdf-text"><strong>Extern</strong><br><small>Turnierkalender · Opens in Bayern, Deutschland und Europa{f" · {m} Turniere" if m else ""}</small></span>
+            </a>
+          </div>"""
+
+
 def build_ausschreibungen():
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">Ausschreibungen</h1>
-    <p>Hier findest du die Ausschreibungen zu den kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
+    {ausschreibungen_wahl_html("#intern")}
+    <h2 id="intern" style="margin-top:2rem;">Intern – unsere Turniere</h2>
+    <p>Hier findest du die Ausschreibungen zu unseren kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
     {pdf_liste_html(ausschreibungen_eintraege())}
     """
     render_page("Ausschreibungen", content, "ausschreibungen.html")
@@ -3081,6 +3103,7 @@ if __name__ == "__main__":
     build_oberlandquartett()
     build_blitzjahreswertung()
     build_hall_of_fame()
+    turnierkalender.bauen(render_page)   # vor den Übersichten: die Karte "Extern" zeigt die Anzahl
     build_turniere_overview()
     build_ausschreibungen()
     build_neu_hier()

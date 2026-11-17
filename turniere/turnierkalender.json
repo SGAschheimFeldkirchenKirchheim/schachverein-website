@@ -1,0 +1,19 @@
+{
+  "_hinweis": [
+    "Einstellungen für den Turnierkalender (turnierkalender.html). Die Turniere kommen automatisch",
+    "aus dem FIDE-Kalender und von chess-results.com; hier kannst du eigene ergänzen, empfehlen oder ausblenden.",
+    "empfohlen / ausblenden: Teil des Turniernamens (Groß-/Kleinschreibung egal), z. B. \"Tegernsee\".",
+    "eigene: von/bis als JJJJ-MM-TT; bedenkzeit = klassisch | schnell | blitz; lat/lon optional (für die Entfernung)."
+  ],
+  "heimat": {"name": "Kirchheim", "lat": 48.1766, "lon": 11.7553},
+  "quellen": {"fide": false, "chessresults": true},
+  "chessresults_laender": ["GER", "AUT", "SUI", "ITA", "CZE", "SLO", "CRO", "HUN", "FRA", "NED", "ESP", "POL"],
+  "nur_europa": true,
+  "tage_voraus": 400,
+  "max_abrufe_pro_lauf": 250,
+  "afk_abgleich_km": 400,
+  "standard_filter": {"km": 200, "monate": 6},
+  "empfohlen": [],
+  "ausblenden": [],
+  "eigene": []
+}

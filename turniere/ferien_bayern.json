@@ -1,0 +1,29 @@
+{
+  "_hinweis": [
+    "Ferien für den Turnierkalender. Schulferien Bayern: erster und letzter Ferientag (Quelle: Kultusministerium/KMK).",
+    "Semesterferien = Zeit zwischen den Vorlesungszeiten der bayerischen Universitäten; trag einfach die",
+    "Vorlesungszeiten ein (Beginn, Ende). Neue Schulferien werden beim Build automatisch ergänzt, wenn",
+    "openholidaysapi.org erreichbar ist."
+  ],
+  "schulferien": [
+    ["2026-11-02", "2026-11-06", "Herbstferien"],
+    ["2026-11-18", "2026-11-18", "Buß- und Bettag"],
+    ["2026-12-24", "2027-01-08", "Weihnachtsferien"],
+    ["2027-02-08", "2027-02-12", "Frühjahrsferien"],
+    ["2027-03-22", "2027-04-02", "Osterferien"],
+    ["2027-05-18", "2027-05-28", "Pfingstferien"],
+    ["2027-08-02", "2027-09-13", "Sommerferien"],
+    ["2027-11-02", "2027-11-05", "Herbstferien"],
+    ["2027-11-17", "2027-11-17", "Buß- und Bettag"],
+    ["2027-12-24", "2028-01-07", "Weihnachtsferien"],
+    ["2028-02-28", "2028-03-03", "Frühjahrsferien"],
+    ["2028-04-10", "2028-04-21", "Osterferien"],
+    ["2028-06-06", "2028-06-16", "Pfingstferien"],
+    ["2028-07-31", "2028-09-11", "Sommerferien"]
+  ],
+  "vorlesungszeiten": [
+    ["2026-10-12", "2027-02-05", "Wintersemester 2026/27"],
+    ["2027-04-12", "2027-07-16", "Sommersemester 2027"],
+    ["2027-10-18", "2028-02-11", "Wintersemester 2027/28"]
+  ]
+}
