@@ -168,85 +168,13 @@ STATIC_PAGES = [
     ("impressum", "Impressum &amp; Datenschutz"),
 ]
 
-# Header: Schriftzug links, Menü rechts, auf dem Handy Hamburger-Menü (ohne JavaScript)
+# Seitenweite Kleinigkeiten (Skip-Link, Untermenü-Skript). Header-Design: design.css
 GLOBAL_CSS = """<style>
-      :root {
-        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
-        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
-      }
-
       /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
       .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
       .skip-link:focus { left: 0; }
 
-      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
-      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
-
-      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
-      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
-      header nav a:hover { color: var(--nav-accent); }
-      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
-
-      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
-      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
-      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
-      .nav-burger span::before { position: absolute; top: -8px; }
-      .nav-burger span::after { position: absolute; top: 8px; }
-      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
-      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
-      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
-      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
-
-      @media (max-width: 1260px) {
-        header { gap: 0.3rem 1rem; }
-        header .brand { font-size: 1rem; }
-        .nav-burger { display: block; }
-        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
-        .nav-toggle:checked ~ nav { display: flex; }
-        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
-        nav a[aria-current="page"] { text-underline-offset: 5px; }
-      }
-
-      /* Untermenüs (Inhalt siehe SUBNAV) */
-      .nav-gruppe { position: relative; display: flex; align-items: center; }
-      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
-      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
-      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
-      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
-      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
-      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
-      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
-      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
-
-      .nav-auf { display: none; }
-      /* Mittlere Bildschirme mit Burger-Menü: vollen Namen zeigen, Burger ganz rechts (design.css blendet den Namen hier sonst aus) */
-      @media (min-width: 961px) and (max-width: 1260px) {
-        header .brand span { display: inline !important; }
-        header .brand { margin-right: auto !important; }
-        header .nav-burger { order: 4; margin-left: 0 !important; }
-      }
-
-      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
-      @media (max-width: 560px) {
-        header .brand span { font-size: 0; }
-        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
-      }
-
-      @media (max-width: 1260px) {
-        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
-        .nav-gruppe > a { display: block; border-top: none; }
-        .nav-gruppe > a::after { display: none; }
-        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
-        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
-        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
-        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
-        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
-        .nav-gruppe.offen .nav-unter { display: flex; }
-        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
-        .nav-unter::before { display: none; }
-        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
-        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
-      }
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
 
       .footer-link { color: #aaa; }
     </style>
@@ -3426,4 +3354,4 @@ if __name__ == "__main__":
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams, saisons) else set())
     suche.bauen(render_page)   # nach allen Seiten (Suchindex)
     build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
-    print("Build erfolgreich abgeschlossen!")
+    print("Build erfolgreich abgeschlossen!")

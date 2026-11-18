@@ -53,16 +53,7 @@ textarea:focus-visible {
   display: none !important;
 }
 
-/* Header: Farbe hier, Aufbau und Menü stehen in build_site.py (GLOBAL_CSS) */
-header {
-  background: var(--navy);
-  color: white;
-}
-
-.brand-logo {
-  height: 48px;
-  width: auto;
-}
+/* Header: komplett in design.css */
 
 .hero {
   background: var(--soft);

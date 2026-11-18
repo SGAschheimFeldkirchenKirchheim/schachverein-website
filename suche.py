@@ -54,31 +54,18 @@ def merken(titel, inhalt, dateiname, beschreibung=""):
                     "x": _text(inhalt)[:laenge], "w": 1 if url in WICHTIG else 0}
 
 
-KNOPF = ('<a class="such-knopf" href="{nav_path}suche.html" aria-label="Suche" title="Suche">'
-         '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" '
-         'fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" '
+KNOPF = ('<a class="kopf-knopf such-knopf" href="{nav_path}suche.html" aria-label="Suche" title="Suche">'
+         '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" '
+         'stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" '
          'stroke-width="2.4" stroke-linecap="round"/></svg></a>')
 
-KNOPF_CSS = """<style>
-  .such-knopf { order: 3; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1.75rem; height: 1.75rem;
-    border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); color: #fff !important; text-decoration: none; }
-  .such-knopf:hover { border-color: var(--hell, #6f9fd8); }
-  .such-knopf svg { width: 15px; height: 15px; }
-  @media (min-width: 961px) { body header { gap: 0.5rem 0.75rem !important; } .such-knopf { margin-left: 0.2rem; } }
-  @media (min-width: 1181px) and (max-width: 1400px) { body header a.brand { font-size: 0.88rem !important; }
-    body header nav { gap: 0.2rem 0.7rem !important; } body header nav a { font-size: 0.82rem; } }
-  @media (max-width: 960px) { .such-knopf { order: 2; margin-left: auto; } body header .theme-schalter { margin-left: 0.35rem; }
-    body header a.brand { flex: 1 0 auto; } body header a.brand span { white-space: nowrap; } }
-  @media (max-width: 420px) { body header a.brand { gap: 0.5rem; } body header .brand-logo { height: 36px; }
-    body header a.brand span::after { font-size: 1.02rem; } .such-knopf { width: 1.6rem; height: 1.6rem; }
-    body header .theme-schalter { padding: 0.15rem 0.45rem; } body header .nav-burger { margin-left: 0.15rem !important; } }
-</style>"""
+KNOPF_CSS = ""   # Aussehen des Such-Knopfs: design.css (Abschnitt Header)
 
 
 def knopf_einbauen(seite_html, nav_path):
     """Setzt den Such-Knopf vor den Hell/Dunkel-Schalter im Kopf."""
-    marke = '<button type="button" class="theme-schalter"'
-    if marke not in seite_html or 'class="such-knopf"' in seite_html:
+    marke = '<button type="button" class="kopf-knopf theme-schalter"'
+    if marke not in seite_html or 'such-knopf"' in seite_html:
         return seite_html
     return seite_html.replace(marke, KNOPF.format(nav_path=nav_path) + "\n    " + marke, 1)
 
