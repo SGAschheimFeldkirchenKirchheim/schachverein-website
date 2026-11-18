@@ -62,7 +62,7 @@ FERIEN_API = ("https://openholidaysapi.org/SchoolHolidays?countryIsoCode=DE&subd
 GEOCODER = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q={q}"
 
 PAUSE = 0.8                       # Sekunden zwischen zwei Abrufen derselben Seite (Server schonen)
-GEO_PRO_LAUF = 40                 # höchstens so viele Orte pro Lauf nachschlagen
+GEO_PRO_LAUF = 300                # höchstens so viele Orte pro Lauf nachschlagen (OpenStreetMap: max. 1 pro Sekunde)
 AFK_ALLE_TAGE = 2                 # Teilnehmerlisten höchstens alle 2 Tage neu prüfen
 VEREIN_MUSTER = re.compile(r"Aschheim|Feldkirchen|Kirchheim|\bAFK\b", re.I)
 LIGA_MUSTER = re.compile(r"\bliga\b|bundesliga|league|mannschaft|\bteam|vereinspokal|schulschach|"
@@ -144,7 +144,7 @@ _sitzung = requests.Session() if requests else None
 def _hole(url, roh=False, daten=None):
     """Seite laden (mit Pause je Server); daten = Formularfelder für POST. None bei Fehler oder 404."""
     host = urllib.parse.urlparse(url).netloc
-    warte = PAUSE - (time.time() - _letzter_abruf.get(host, 0))
+    warte = (1.1 if "nominatim" in host else PAUSE) - (time.time() - _letzter_abruf.get(host, 0))
     if warte > 0:
         time.sleep(warte)
     _letzter_abruf[host] = time.time()
