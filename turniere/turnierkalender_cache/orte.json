@@ -1,8 +1,59 @@
 {
  "orte": {
+  "05-120 Legionowo ul.Bolesława Chrobrego 50B, Polen": null,
+  "1123 Bp. Alkostás utca 48. Magyar Testnevelési és Sporttudományi Egyetem, Ungarn": null,
+  "1123 Budapest, Alkotás utca 48. Magyar Testnevelési és Sporttudományi Egyetem, Ungarn": [
+   47.4934272,
+   19.0249292
+  ],
+  "2500 Esztergom, Kossuth Lajos utca 27-31., Ungarn": [
+   47.768971,
+   18.7710919
+  ],
+  "3104 Salgótarján, Gorkij krt. 1., Ungarn": [
+   48.0653409,
+   19.7738833
+  ],
+  "4200 Hajdúszoboszló, Ungarn": [
+   47.457894,
+   21.3333937
+  ],
+  "6800 Hódmezővásárhely, Dr. Rapcsák András utca 1, Ungarn": [
+   46.4147457,
+   20.3745636
+  ],
+  "9178 Hédervár, Fő utca 42., Ungarn": [
+   47.8228601,
+   17.4658972
+  ],
+  "9710 Feistritz Drau, Österreich": [
+   46.7037803,
+   13.661408
+  ],
+  "A-9710 Feistritz Drau, Österreich": [
+   46.7037803,
+   13.661408
+  ],
+  "AGRIGENTO, Italien": [
+   37.3122991,
+   13.57465
+  ],
+  "Agrigento, Italien": [
+   37.3122991,
+   13.57465
+  ],
+  "Albergo Ristorante Svizzero - Via Famiglia Avv. Scacchi 13 - CH-6825 Capolago, Schweiz": [
+   45.9054468,
+   8.9812298
+  ],
   "Ascona, Schweiz": [
    46.1554222,
    8.7707865
+  ],
+  "Auditorio Pepe Marchena - C/ Virgen Guadalupe, 17 - 41620 Marchena (Sevilla), Spanien": null,
+  "Bacoli, Italien": [
+   40.7965939,
+   14.0777733
   ],
   "Bad Koenigshofen, Deutschland": [
    50.2993334,
@@ -20,6 +71,10 @@
    48.757452,
    8.2437384
   ],
+  "Basel, Schweiz": [
+   47.5581077,
+   7.5878261
+  ],
   "Bayreuth, Deutschland": [
    49.9446345,
    11.5743543
@@ -27,6 +82,23 @@
   "Berlin, Deutschland": [
    52.5173885,
    13.3951309
+  ],
+  "Bern, Schweiz": [
+   46.9484742,
+   7.4521749
+  ],
+  "Bezměrov, Tschechien": [
+   49.3298197,
+   17.3348198
+  ],
+  "Białystok, Polen": [
+   53.127505,
+   23.1470509
+  ],
+  "Biblioteca Felipe González Márquez C/ TORNEO S/N SEVILLA, Spanien": null,
+  "Bieruń, Polen": [
+   50.0931922,
+   19.0918262
   ],
   "Billerbeck, Deutschland": [
    51.9773625,
@@ -40,13 +112,55 @@
    46.3684202,
    14.1100595
   ],
+  "Bowling Brno, Tschechien": [
+   49.1966717,
+   16.6637622
+  ],
+  "Bowling centrum Brno s.r.o., Líšeňská 4515/80, 615 00 Brno-Židenice, Tschechien": [
+   49.1988301,
+   16.6414607
+  ],
+  "Bpest, XI. kerület, Törökugrató u. 9. - Gazdagréti Közösségi Ház, Ungarn": null,
+  "Brankovice, Tschechien": [
+   49.1546678,
+   17.1380163
+  ],
+  "Breda, Niederlande": [
+   51.5887845,
+   4.7760237
+  ],
   "Bremen, Deutschland": [
    53.0758196,
    8.8071646
   ],
+  "Briga Novarese, Italien": [
+   45.7314994,
+   8.4560971
+  ],
+  "Brno - Obřany, Hlaváčova 404/20, Tschechien": [
+   49.2299689,
+   16.6455573
+  ],
   "Brühl, Deutschland": [
    50.8291313,
    6.9037057
+  ],
+  "Budapest, Falk Miksa utca 10., Ungarn": [
+   47.5096538,
+   19.0476241
+  ],
+  "Budapest, FalkM u.10, Ungarn": null,
+  "Budapest, Ungarn": [
+   47.4978789,
+   19.0402383
+  ],
+  "Budapest, Váci út 116-118., Ungarn": [
+   47.53233,
+   19.0650866
+  ],
+  "Budova Obchodní akademie, Přemyslovců 4, Znojmo, Tschechien": [
+   48.8554341,
+   16.0489457
   ],
   "Burgdorf, Schweiz": [
    47.0571316,
@@ -60,37 +174,203 @@
    48.684969,
    9.0113444
   ],
+  "Břeclav, Tschechien": [
+   48.7594008,
+   16.8813137
+  ],
+  "C/ NERVA 2, BOLLULLOS DEL CONDADO, Spanien": [
+   37.3398389,
+   -6.5335774
+  ],
+  "CEIP BLAS INFANTE, Spanien": [
+   37.4113915,
+   -5.9781059
+  ],
+  "Calle Téllez 31 Distrito Retiro, Spanien": null,
+  "Cartagena, Spanien": [
+   37.6155018,
+   -0.987511
+  ],
+  "Caseta Municipal, Alameda del Rio, Lora del Rio (Sevilla), Spanien": [
+   37.6574267,
+   -5.5275818
+  ],
+  "Cassis, Frankreich": [
+   43.2140359,
+   5.5396318
+  ],
+  "Castelnuovo del Garda, Italien": [
+   45.4397416,
+   10.7615812
+  ],
+  "Centro Carmen Jiménez - La Zubia, Spanien": [
+   37.1137847,
+   -3.5912392
+  ],
+  "Centro Cívico Palmera-Montero Gunea, Leandro Aguirretxe, 1  https://www.google.c, Spanien": null,
+  "Centro del Agua y la Salud de Albox, Spanien": null,
+  "Centro diurno Fondazione Vita Serena, Schweiz": null,
+  "Chappelenhof, Kapellstrasse 4, 5610 Wohlen, Schweiz": [
+   47.3501814,
+   8.2788943
+  ],
+  "ChessProjectClub c/o CNP Vita Assicura, via Arbe 49, Milano (Italy), Italien": [
+   45.4962212,
+   9.1759471
+  ],
+  "Chur, Schweiz": [
+   46.854747,
+   9.5264904
+  ],
+  "City Hotel Miskolc - 3525 Miskolc, Csabai kapu 6., Ungarn": [
+   48.115459,
+   20.7655412
+  ],
+  "Club Ajedrez Fundación La Caja. Calle Joaquín Blume, 13. Las Palmas de G.C., Spanien": null,
+  "Club Ajedrez Monteolivete - C/ Escultor José Capuz, 44 46006 Valencia, Spanien": [
+   39.4607681,
+   -0.3737301
+  ],
+  "Club de ajedrez Martintxo, Spanien": null,
   "College Garden Hotel, 2540 Bad Vöslau, Johann Strauß-Str. 2, Österreich": [
    47.9727366,
    16.166954
+  ],
+  "Col·legi Públic Rico Sapena, Calle Dr. Fleming nº 52, 03420 Castalla., Spanien": [
+   38.5664067,
+   -0.6374064
   ],
   "Continental hotel, Marianske Lazne, Tschechien": [
    49.9673167,
    12.7013542
   ],
+  "Cremona, Italien": [
+   45.2208641,
+   10.037038
+  ],
+  "Czeladź, Polen": [
+   50.3191419,
+   19.0784201
+  ],
+  "DDM Varnsdorf, Otáhalova 1260, Tschechien": [
+   50.9100513,
+   14.6256388
+  ],
+  "DVD Gračec, Zagrebačka ulica 29, Kroatien": [
+   43.5077049,
+   16.4426256
+  ],
+  "Debrecen MÁV állomás, Ungarn": null,
+  "Dobczyce, Polen": [
+   49.8803432,
+   20.0905415
+  ],
+  "Dolní Lutyně 735 53, Tschechien": [
+   49.8988168,
+   18.4281743
+  ],
   "Dom HVIDRE, ul. Stjepana Marjanovića 2, Sl.Brod, Kroatien": [
    45.1785678,
    18.0661156
+  ],
+  "Dom kulture, Toljani 1, Drenovci, Kroatien": [
+   44.9194975,
+   18.9109364
+  ],
+  "Don Bosco Sportközpont, Kazincbarcika, Szent Erzsebet setany 2., Ungarn": [
+   48.2548391,
+   20.6221945
+  ],
+  "Don Giovanni Hotel, Praha, Tschechien": [
+   50.0786858,
+   14.4755307
   ],
   "Dubrovnik, Valamar Lacroma Dubrovnik Hotel, Iva Dulčića 34, Kroatien": [
    42.9792351,
    17.1909547
   ],
+  "Duna Wellness Hotel, Baja, Szentháromság tér 6., Ungarn": [
+   46.1767211,
+   18.9502591
+  ],
   "Dürnstein, Österreich": [
    48.3953879,
    15.5203111
+  ],
+  "Dąbrowa Chełmińska, Polen": [
+   53.1760827,
+   18.3025087
+  ],
+  "EA Hotel Populus, U Staré Cihelny 2182/11, 130 00 Praha 3 – Žižkov, Česko, Tschechien": [
+   48.9730176,
+   14.5043262
+  ],
+  "ESTEPONA, Spanien": [
+   36.4268068,
+   -5.1468484
+  ],
+  "Edificio Carmen Jiménez, La Zubia  (entrada por la Calle Rosa), Spanien": null,
+  "Espai Na Camel·la, Manacor, Spanien": [
+   39.5696458,
+   3.2106461
+  ],
+  "Esplanada Edifici Mateu Orfila, UIB, Spanien": [
+   39.6346089,
+   2.6480014
+  ],
+  "Esztergom, Őrtorony u. 49, 2500, Ungarn": [
+   47.768971,
+   18.7710919
+  ],
+  "Ex Amici Via delle Scuole 20, CH-6900 Lugano-Paradiso, Schweiz": [
+   45.9907746,
+   8.9453608
+  ],
+  "FIBES Palacio de Congresos. Avda Alcalde Luis Uruñuela, 1 41020-Sevilla, Spanien": null,
+  "FRI, Slowenien": [
+   46.0499889,
+   14.4690038
   ],
   "Frankenthal, Deutschland": [
    49.5353466,
    8.3541391
   ],
+  "Freiburg im Breisgau, Deutschland": [
+   47.9960901,
+   7.8494005
+  ],
+  "Freizeitzentrum Feffernitz, Mühlenweg 32, Österreich": [
+   47.1286628,
+   15.4285058
+  ],
+  "Frenštát p.R., Tschechien": [
+   49.5471535,
+   18.2130148
+  ],
+  "Gasthof Trappitsch, 9113 Ruden 14, Österreich": null,
+  "Gasthof Veigl, Linzer Straße 2, 3382 Loosdorf, Österreich": [
+   48.2005945,
+   15.4032066
+  ],
   "Gelsenkirchen, Deutschland": [
    51.5110321,
    7.0960124
   ],
+  "Gemeindehaus Riehen, Wettsteinstrasse 1, Riehen, Schweiz": [
+   47.5816927,
+   7.6479737
+  ],
+  "Gemeinschaftszentrum Loogarten, Salzweg 1, 8048 Zürich, Schweiz": [
+   47.3878307,
+   8.4869359
+  ],
   "Genussquelle Rosalia, Schulstraße 14, 7202 Bad Sauerbrunn, Österreich": [
    47.7752135,
    16.3258026
+  ],
+  "Genève, Schweiz": [
+   46.2017559,
+   6.1466014
   ],
   "Gerolzhofen, Deutschland": [
    49.9023278,
@@ -100,6 +380,11 @@
    46.6334295,
    14.3219876
   ],
+  "Gliwice, Polen": [
+   50.294113,
+   18.6657306
+  ],
+  "Gran Hotel Bali (Benidorm), Salón Terraza de Cristal, floor/planta +1, Spanien": null,
   "Grandhotel Novy Bor, Tschechien": null,
   "Graz - Nova Park Hotel, Österreich": null,
   "Graz - Novapark Hotel, Österreich": [
@@ -110,13 +395,45 @@
    54.095791,
    13.3815238
   ],
+  "Gressoney-Saint-Jean, Italien": [
+   45.7827926,
+   7.8314544
+  ],
+  "Groningen, Niederlande": [
+   53.2190652,
+   6.5680077
+  ],
   "Großer Minoritensaal, Mariahilferplatz 3, 8020 Graz, Österreich": [
    47.068558,
    15.4137281
   ],
+  "Grudziądz, Polen": [
+   53.4876477,
+   18.7557746
+  ],
+  "Grzywna, Polen": [
+   53.15486,
+   18.61252
+  ],
   "Gyula, Hotel Hőforrás, Ungarn": [
    47.452953,
    21.4058154
+  ],
+  "Góra Św. Anny, Polen": [
+   50.4558474,
+   18.1696309
+  ],
+  "HOTEL PARMA&CONGRESSI - Via Emilia Ovest, 281 / A, 43126 Parma, Italia, Italien": [
+   44.8090591,
+   10.2698808
+  ],
+  "HTL Wien West Bibliothek 2. OG, 1160 Wien, Thaliastraße 125, Österreich": [
+   48.2154008,
+   16.2995991
+  ],
+  "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3., Ungarn": [
+   47.2208931,
+   16.623117
   ],
   "Hamburg, Deutschland": [
    53.5501721,
@@ -126,9 +443,21 @@
    46.8281235,
    12.750561
   ],
+  "Harkany, Ungarn": [
+   45.8477907,
+   18.2359978
+  ],
+  "Hauenstein, Deutschland": [
+   49.1922047,
+   7.8529006
+  ],
   "Hauptstraße 43, 2171 Herrnbaumgarten, Österreich": [
    48.6963955,
    16.693035
+  ],
+  "Haus des Schachsports, Spielmannplatz 1, 1020 Wien, Österreich": [
+   48.2036379,
+   16.4232516
   ],
   "Haus des Schachsports, Österreich": [
    48.2079638,
@@ -138,6 +467,10 @@
    51.731342,
    8.7356258
   ],
+  "Hengelo Ov, Niederlande": [
+   52.2658726,
+   6.7924049
+  ],
   "Heuchelheim-Kinzenbach, Deutschland": [
    50.5737476,
    8.6029127
@@ -146,10 +479,40 @@
    49.7816986,
    9.6796728
   ],
+  "Horváth Mihály Gimnázium 6600 Szentes, Szent Imre Herceg utca 2., Ungarn": [
+   46.690443,
+   20.3402581
+  ],
+  "Horw, Rest. Eule, Schweiz": null,
+  "Hotel Ador, Laupenstrasse 15, 3001 Bern, Schweiz": [
+   46.945924,
+   7.4386475
+  ],
+  "Hotel Bahía Serena, Roquetas de Mar, Almeria, Spanien": [
+   36.7227077,
+   -2.6273264
+  ],
+  "Hotel Bali - Benidorm (Alicante - SPAIN), Spanien": null,
   "Hotel Coronado, Via Francesco Borromini 10 – 6850 Mendrisio; Tel. 091 630 30 30, Schweiz": null,
+  "Hotel Don Giovanni Prague, Tschechien": [
+   50.0786858,
+   14.4755307
+  ],
+  "Hotel Gstaaderhof, Lauenenstrasse 19, 3780 Gstaad, 033 748 63 63, Schweiz": [
+   46.4721619,
+   7.288748
+  ],
   "Hotel Hari im Schlegeli, Gartenweg 5, 3715 Adelboden, 033 673 60 60, Schweiz": [
    46.4899282,
    7.5615034
+  ],
+  "Hotel Imperial, Vodice, Kroatien": [
+   43.7588065,
+   15.7769182
+  ],
+  "Hotel Kraljevica, Strossmayerova 33, Kraljevica, Kroatien": [
+   45.2741319,
+   14.5688736
   ],
   "Hotel Kronenhof, Kirchhofplatz 7 - CH-8200 Schaffhausen, Schweiz": [
    47.7040859,
@@ -171,19 +534,45 @@
    47.2003055,
    8.7780752
   ],
+  "Hotel Sunway Playa Golf & Spa, Sitges (Barcelona), Spanien": [
+   41.2244891,
+   1.7836178
+  ],
   "Hotel Tolero, Obala kralja Petra Krešimira IV. 1, Ploče, Kroatien": [
    43.0524293,
    17.4360676
   ],
+  "Hvar, Arsenal Hvar, Kroatien": [
+   43.1720952,
+   16.4417156
+  ],
   "Hôtel Alpha Palmiers, Rue du Petit-Chêne 34 · 1003 Lausanne +41 21 55 55 999, Schweiz": null,
+  "IES JOAQUIN TURINA  c/ Donante de Órganos, 2, 41007 Sevilla, Spanien": [
+   37.3924401,
+   -5.9616893
+  ],
+  "IV. osnovna škola Varaždin, Kroatien": [
+   46.3162107,
+   16.3255163
+  ],
+  "Ipolyi Közművelődési Központ - Törökszentmiklós, Pánthy Endre út 2-6, 5200, Ungarn": [
+   47.179034,
+   20.4430418
+  ],
   "Jeremenkova 1835/106, Praha 4 - Krč, Tschechien": [
    50.0438786,
    14.4350453
   ],
+  "Jídelna ZŠ Kollárova 2596/4 Prostějov, Tschechien": null,
   "Kantonschule, Hubstrasse 75, 9500 Wil, Schweiz": [
    47.4652508,
    9.047905
   ],
+  "Kasyno Oficerskie, ul.Generała Ignacego Ledóchowskiego 160, 05-160 Nowy Dwór Maz, Polen": [
+   52.4373525,
+   20.6698439
+  ],
+  "Kecskemét (HUN), Neumann János Egyetem, GAMF kar, Deák terem, Ungarn": null,
   "Kelheim, Deutschland": [
    48.91849,
    11.8722777
@@ -196,13 +585,43 @@
    50.1515445,
    11.9502926
   ],
+  "Kirchgemeindehaus Johannes, Wylerstrasse 5, 3014 Bern, Schweiz": [
+   46.9635562,
+   7.45946
+  ],
+  "Knihovna Slavoj, Tylova 506, 544 01 Dvůr Králové n. L., Tschechien": null,
   "Kongress- und Theaterhaus Bad Ischl, Österreich": [
    47.7113628,
    13.6188148
   ],
+  "Kotnikova ulica 5, 1000, Ljubljana., Slowenien": [
+   46.0542519,
+   14.5120853
+  ],
+  "Kouty nad Desnou, Tschechien": [
+   50.120079,
+   17.1324077
+  ],
+  "Križevci, Restoran & catering \"Chill Out\", Trg Svetog Florijana 17, Kroatien": [
+   46.3374829,
+   16.6211209
+  ],
+  "Kufstein, Festungsarena, Österreich": [
+   47.5797783,
+   12.1678915
+  ],
+  "Kufstein, Stadtsaal, Georg-Pirmoster-Str. 8, Österreich": null,
+  "Kulturní dům v Práčích, okres Znojmo, Tschechien": [
+   48.9135873,
+   15.9779178
+  ],
   "Közösségi Ház (Bányász Klub), Edelény, Kenderföldi út 12/A., Ungarn": [
    47.631067,
    17.5772069
+  ],
+  "Kłaj, Polen": [
+   49.9925308,
+   20.3154849
   ],
   "LINDE OBERSTRASS, Universitätstrasse 91, 8006 Zürich, Schweiz": [
    47.3860559,
@@ -212,14 +631,59 @@
    51.9914084,
    8.7919583
   ],
+  "Landau in der Pfalz, Deutschland": [
+   49.1982825,
+   8.1123441
+  ],
   "Landesmusikschule Scharnstein, Kirchenplatz 6, 4644 Scharnstein, Österreich": [
    47.8991308,
    13.9418539
+  ],
+  "Litoměřice, Tschechien": [
+   50.5340795,
+   14.1317985
+  ],
+  "Lubartow, Polen": [
+   51.4660473,
+   22.6052895
+  ],
+  "Lubartów, Polen": [
+   51.4585242,
+   22.6119973
   ],
   "Lucija, Slowenien": [
    45.50708,
    13.6046378
   ],
+  "MTK Sportpark 1087 Budapest, Kerepesi út 17., Ungarn": [
+   47.4941643,
+   19.0970914
+  ],
+  "Madrid, Spanien": [
+   40.416782,
+   -3.703507
+  ],
+  "Magyar Sakkszövetség, 1055 Budapest, Falk Miksa utca 10., 2. emelet, Ungarn": [
+   47.5096402,
+   19.0472596
+  ],
+  "Maraco Perú. Avenida de Andalucía, 11. Sevilla., Spanien": [
+   37.3952072,
+   -5.9905699
+  ],
+  "Marija Bistrica, Kroatien": [
+   46.0046314,
+   16.1192091
+  ],
+  "Mehrzweckhalle, Kirchenplatz 1, A-7041 Wulkaprodersdorf, Österreich": [
+   47.7979136,
+   16.4928377
+  ],
+  "Mendizorroza, Frontones Beti Jai, Spanien": [
+   42.8370642,
+   -2.6862439
+  ],
+  "Museo Mercantile - Via dei Portici 6 - Bolzano - Italia, Italien": null,
   "Mövenpick Hotel - Aeschengraben 25 - CH-4051 Basel, Schweiz": [
    47.5549807,
    7.5857978
@@ -227,6 +691,10 @@
   "München, Deutschland": [
    48.1371079,
    11.5753822
+  ],
+  "Napoli, Italien": [
+   40.8358846,
+   14.2487679
   ],
   "Neumuenster, Deutschland": [
    54.0703296,
@@ -252,22 +720,62 @@
    50.0983807,
    14.4682818
   ],
+  "Ostromecko, Polen": [
+   53.1454846,
+   18.2101367
+  ],
   "Ostseebad Heringsdorf (Usedom), Deutschland": null,
   "Paderborn, Deutschland": [
    51.7177044,
    8.752653
   ],
+  "Palacio de Ferias y Congresos Alcalde Francisco Jódar Alonso. Lorca, Murcia, Spanien": [
+   37.9347521,
+   -1.1131029
+  ],
   "Palmanova, Italien": [
    45.9054635,
    13.3099318
+  ],
+  "Palác Pardubice, Tschechien": [
+   50.0370478,
+   15.7688464
+  ],
+  "Parc des Sports, rue de Gembloux, 54500 Vandoeuvre-lès-Nancy, Frankreich": [
+   48.6575865,
+   6.1646423
   ],
   "Parkhotel Plzen ****, Plzen, Tschechien": [
    49.7209213,
    13.3704677
   ],
+  "Payerne, Schweiz": [
+   46.8208047,
+   6.939126
+  ],
+  "Petrčane, hotel \"Pinija\", Kroatien": [
+   44.1799178,
+   15.1589061
+  ],
+  "Petrčane, hotel Pinija, Kroatien": [
+   44.1799178,
+   15.1589061
+  ],
+  "Peña Ajedrecística Oromana - Parque Centro S/N, Alcalá de Guadaíra (Sevilla), Spanien": [
+   37.3397709,
+   -5.8408396
+  ],
   "Pforzheim, Deutschland": [
    48.890934,
    8.7025509
+  ],
+  "Piazza Chanoux 1, Italien": [
+   45.7374874,
+   7.3200286
+  ],
+  "Pirching 80, 8200 Hofstätten an der Raab, Volksschule, Österreich": [
+   47.0752214,
+   15.7479752
   ],
   "Pirmasens, Deutschland": [
    49.1996961,
@@ -277,9 +785,26 @@
    51.0073675,
    6.9070394
   ],
+  "PlusCity, Pasching/Linz, Österreich": [
+   48.2432356,
+   14.2362907
+  ],
+  "Polideportivo Benimaclet: Carrer de Daniel Balaciart, s/n, Benimaclet, 46020, Spanien": [
+   39.4862486,
+   -0.3596966
+  ],
+  "Prague, Londynska 41 (UNYP main campus), Tschechien": null,
+  "Prague, Tschechien": [
+   50.0874654,
+   14.4212535
+  ],
   "Praha, Tschechien": [
    50.0874654,
    14.4212535
+  ],
+  "Praha, ZŠ Dolní Chabry, místnost A306, Tschechien": [
+   50.0290669,
+   15.7861246
   ],
   "ROMA, Italien": [
    41.8933203,
@@ -289,6 +814,14 @@
    48.2351825,
    13.0148774
   ],
+  "Rapperswil-Jona, Schweiz": [
+   47.229817,
+   8.8597003
+  ],
+  "Rathausplatz 1, 9400 Wolfsberg, Österreich": [
+   46.8524299,
+   14.8380721
+  ],
   "Rebstock Wil GmbH, Toggenburgerstrasse 54, 9500 Wil, Schweiz": [
    47.4652644,
    9.0478868
@@ -297,6 +830,11 @@
   "Resort Sepetná, Ostravice, Tschechien": [
    49.5381161,
    18.3931771
+  ],
+  "Restaurace ALADDIN, Masarykova tř. 159/72, 415 01 Teplice (salónek), Tschechien": null,
+  "Restaurant Leo, Kapellstrasse 4, Wohlen, Schweiz": [
+   47.3504945,
+   8.2786906
   ],
   "Restoran \"Štefova klet\", Gornja Dubrava 21, Kroatien": [
    46.4293881,
@@ -310,7 +848,55 @@
    45.5201113,
    8.7692822
   ],
+  "Rokohof, Villacher Straße 135, 9020 Klagenfurt am Wörthersee, Österreich": [
+   46.6334295,
+   14.3219876
+  ],
+  "Roma, Italien": [
+   41.8933203,
+   12.4829321
+  ],
+  "Rudolfa Fizira 6, Velika Gorica, Kroatien": [
+   45.7337005,
+   16.0708403
+  ],
+  "Rymanow, Polen": [
+   49.576131,
+   21.8676433
+  ],
+  "Rymanów, Polen": [
+   49.576131,
+   21.8676433
+  ],
+  "SK OAZA, Jeremenkova 106, Praha 4-Krč, bus zastávka Na Strži, Tschechien": null,
   "SK OAZA, Jeremenkova 1835/106, Praha 4-Krč, stanice autobusu Na Strži, Tschechien": null,
+  "Sala konferencyjna Arena Legionowo, Polen": null,
+  "Salle Barande - 3 Esplanade Edouard le Roy 66000 Perpignan, Frankreich": [
+   42.6983516,
+   2.8916038
+  ],
+  "Salle Polyvalente Mairie Quartier Nord 210 avenue du Languedoc 66000 Perpignan, Frankreich": [
+   42.6983516,
+   2.8916038
+  ],
+  "Salle d'Animation, 166 B route du Chablais, 74140 Veigy-Foncenex., Frankreich": null,
+  "Salle de la Palette - 11 rue Grand-Pré, Genève, Schweiz": [
+   46.2017559,
+   6.1466014
+  ],
+  "Salón Bajo Plaza - Zahara 11688 (Cádiz), Spanien": null,
+  "San Juan Arria Plaza, S/N, 20304 Irun, Spanien": [
+   43.3368061,
+   -1.7841604
+  ],
+  "Sant Boi de Llobregat, Can Massallera, Carrer Mallorca 30 Sant Boi de Llobregat, Spanien": [
+   41.3420587,
+   2.0430337
+  ],
+  "Sant Boi de Llobregat, Spanien": [
+   41.3241016,
+   2.0511278
+  ],
   "Schloss Rosenstein, Rosenstein 14, Stuttgart, Deutschland": [
    48.7784485,
    9.1800132
@@ -319,6 +905,20 @@
    48.7999036,
    9.7977584
   ],
+  "Siedlce, Polen": [
+   52.1615938,
+   22.2812533
+  ],
+  "Solkan, Slowenien": [
+   45.9715126,
+   13.6470329
+  ],
+  "Sonnenbergsaal Nüziders, Schulgasse 12, 6714 Nüziderrs, Österreich": null,
+  "Spilimbergo, Italien": [
+   46.1113355,
+   12.9016287
+  ],
+  "Splimbergo, Italien": null,
   "Sporthalle Kaserne, Nonnenbodenweg 5, 4410 Liestal, Schweiz": [
    47.4843133,
    7.7336032
@@ -331,6 +931,11 @@
    48.9851193,
    17.5266975
   ],
+  "Srednja gradbena šola Maribor, Slowenien": [
+   46.5596464,
+   15.6367662
+  ],
+  "Srednja gradbena šola in gimnazija Maribor, Slowenien": null,
   "Stadtsäle Traiskirchen (Hauptplatz 18, 2514 Traiskirchen), Österreich": [
    48.0136418,
    16.2941055
@@ -339,34 +944,208 @@
    47.6653429,
    8.9815246
   ],
+  "Stralsund, Deutschland": [
+   54.3096314,
+   13.0820846
+  ],
+  "Studenski dom Stjepan radić, Restoran 2, Kroatien": [
+   45.784963,
+   15.9468221
+  ],
+  "Studentski centar Dubrovnik, Ulica Marka Marojice 2B, Dubrovnik, Kroatien": [
+   42.6491029,
+   18.0939501
+  ],
+  "Suwałki, Polen": [
+   54.0990636,
+   22.9279363
+  ],
+  "Szeged, Ungarn": [
+   46.2546312,
+   20.1486016
+  ],
+  "Szepes Gyula Művelődési Központ, 2030 Érd, Alsó u. 9., Ungarn": [
+   46.028738,
+   18.2143855
+  ],
+  "Szubin, Polen": [
+   53.0117503,
+   17.7439402
+  ],
+  "TEPLICE CHESS CLUB, Masarykova 1233/82, 415 01 Teplice, Tschechien": [
+   50.6344149,
+   13.8421305
+  ],
+  "TJ Kobylisy, U Školské zahrady 9, Praha 8, Tschechien": [
+   50.1234181,
+   14.4604945
+  ],
   "TSV Steppach, Neusäß, Deutschland": [
    48.3710252,
    10.8140456
+  ],
+  "Tamási Áron Művelődési Központ, Tapolca, Kisfaludy Sándor utca 2-6., Ungarn": [
+   46.883321,
+   17.4426062
+  ],
+  "Tennis Golf Hotel Höllrigl 2542 Kottingbrunn, Hauptstraße 29, Österreich": [
+   47.9536048,
+   16.240048
+  ],
+  "Tivoli (Rome), Italien": [
+   41.960922,
+   12.798884
   ],
   "Trebbin, Deutschland": [
    52.2150361,
    13.2140282
   ],
+  "Trento, Viale Olivetti 27, Italien": [
+   46.0608516,
+   11.1154805
+  ],
+  "Tresoar, Leeuwarden, Niederlande": [
+   53.2036426,
+   5.7897202
+  ],
+  "Tribuswinkel Fuhrmannsaal, Kirchenplatz 8, Österreich": [
+   46.6130191,
+   13.8448586
+  ],
+  "Tribuswinkel, Fuhrmannsaal, Kirchenplatz 8, Österreich": [
+   46.6130191,
+   13.8448586
+  ],
+  "Trieste - I.T.I.S. hall via Pascoli 31, Italien": null,
+  "Ugoszcz (kujawsko-pomorskie), Polen": [
+   53.04156,
+   19.23019
+  ],
   "Undeloh, Deutschland": [
    53.197032,
    9.9764964
+  ],
+  "Valpovo, hotel \"Villa Valpovo\", Kroatien": [
+   45.6551036,
+   18.4265323
+  ],
+  "Vandoeuvre, Frankreich": [
+   48.6599676,
+   6.1724618
+  ],
+  "Varaždin, Kroatien": [
+   46.3079645,
+   16.3378198
+  ],
+  "Varaždinske Toplice, Kroatien": [
+   46.2092637,
+   16.4211576
+  ],
+  "Vatrogasni dom, Zagrebačka 1, Krapina, Kroatien": [
+   46.1640284,
+   15.8700586
   ],
   "Veranstaltungshalle Ratten, Kirchenviertel 156, 8673 Ratten, Österreich": [
    47.4978118,
    15.7300246
   ],
+  "Via Pallio, 28 14100 Asti, Italien": [
+   44.9019258,
+   8.2041542
+  ],
+  "Via San Faustino 5, Milano, Italien": [
+   45.4717873,
+   9.2416377
+  ],
   "Vienna Chess School, Karlsgasse 20/1, 1040 Wien, Österreich": [
    48.1925682,
    16.3703749
+  ],
+  "Villa le Plonjon, Chemin le Plonjon 4, 1207 Genève, Schweiz": [
+   46.2022457,
+   6.1591789
+  ],
+  "Villablanca (Huelva), Spanien": [
+   37.3028005,
+   -7.3423138
+  ],
+  "Vitoria - Gasteiz, Spanien": [
+   42.8505845,
+   -2.66145
+  ],
+  "Vodice, Hotel „Imperial Park“, Kroatien": null,
+  "Vodárenská Věž Letná, Na Výšinách 1000/1 Praha 7, Tschechien": [
+   50.1002742,
+   14.419699
   ],
   "Waldhotel**** Buolstrasse 3, CH-7270 Davos Platz, Schweiz": [
    46.7933845,
    9.8206999
   ],
+  "Warsaw, Polen": [
+   52.2333742,
+   21.0711489
+  ],
+  "Warszawa, Polen": [
+   52.2333742,
+   21.0711489
+  ],
   "Wesel, Deutschland": [
    51.6576909,
    6.617087
   ],
-  "Zagreb, MO Janko Matko, Kroatien": null
+  "Wieliczka, Polen": [
+   49.9823773,
+   20.0602114
+  ],
+  "Wolhusen, Schweiz": [
+   47.0580138,
+   8.0725617
+  ],
+  "Wrocław, Polen": [
+   51.1089776,
+   17.0326689
+  ],
+  "ZARAGOZA.  ZARAGOZA CAMPING OCÉANO ATLÁNTICO, Spanien": null,
+  "Zabrze, Polen": [
+   50.3142806,
+   18.7815763
+  ],
+  "Zadar, Centar za mlade Zadar, Stjepana Radića 11c, Kroatien": [
+   44.11876,
+   15.2331409
+  ],
+  "Zagreb Kelekova 2, Kroatien": null,
+  "Zagreb, Kroatien": [
+   45.8130967,
+   15.9772795
+  ],
+  "Zagreb, MO Janko Matko, Kroatien": null,
+  "Zagreb, hotel Sheraton, Kneza Borne 2, Kroatien": [
+   45.8072339,
+   15.9845613
+  ],
+  "Základní škola, Metelkovo nám. 968, Teplice, Tschechien": [
+   50.6406644,
+   13.8244461
+  ],
+  "Zürich, Schweiz": [
+   47.3744489,
+   8.5410422
+  ],
+  "ZŠ Hrabišín, Tschechien": [
+   49.9140046,
+   17.0360593
+  ],
+  "ZŠ Zlín-Malenovice, Komenského 78, Tschechien": [
+   48.9685014,
+   14.4728527
+  ],
+  "https://maps.app.goo.gl/b7H2h4oNMgcW7MSi6, Spanien": null,
+  "ÚMČ Praha 5, Štefánikova 13, zasedací místnost 6. patro, Tschechien": null,
+  "Żelków-Kolonia (Siedlce), Polen": [
+   52.1408441,
+   22.2073273
+  ]
  }
 }
