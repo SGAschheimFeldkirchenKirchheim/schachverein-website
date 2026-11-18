@@ -47,7 +47,10 @@ def ort_suchen(text):
         if treffer:
             a = treffer[0].get("address", {})
             stadt = a.get("city") or a.get("town") or a.get("village") or a.get("municipality") or a.get("county") or v
-            return {"stadt": stadt, "land": a.get("country", ""), "region": a.get("state", ""),
+            region = a.get("state", "")
+            if not region and a.get("ISO3166-2-lvl4"):     # Stadtstaaten (Berlin, Hamburg …): Stadt = Bundesland
+                region = a.get("city") or a.get("town") or stadt
+            return {"stadt": stadt, "land": a.get("country", ""), "region": region,
                     "lat": float(treffer[0]["lat"]), "lon": float(treffer[0]["lon"])}
     return None
 

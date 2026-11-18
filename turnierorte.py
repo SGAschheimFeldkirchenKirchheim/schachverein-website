@@ -179,9 +179,7 @@ CSS = """
   .leaflet-popup-content-wrapper { border: 1px solid var(--line, #ddd); border-radius: 10px; }
   .leaflet-popup-content a { color: var(--link-c, #2c5d99); }
   .leaflet-container a.leaflet-popup-close-button { color: var(--muted, #888); }
-  .leaflet-container { background: var(--soft, #e9eef3); font-family: inherit; }
-  #tour-karte .leaflet-tile-pane { filter: grayscale(0.9) brightness(1.03) contrast(0.92); }
-  [data-theme="dark"] #tour-karte .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) grayscale(0.9) brightness(0.8) contrast(0.95); }
+  .leaflet-container { font-family: inherit; }
   .leaflet-control-zoom a { background: var(--surface, #fff); color: var(--text, #222); border-color: var(--line, #ccc); }
   .leaflet-control-attribution { background: rgba(0,0,0,.35) !important; color: #ccc; }
   .leaflet-control-attribution a { color: #ddd; }
@@ -226,6 +224,37 @@ CSS = """
   .abz .balken { height: 6px; border-radius: 3px; background: var(--soft); margin-top: 0.4rem; overflow: hidden; }
   .abz .balken span { display: block; height: 100%; background: var(--hell, #6f9fd8); }
   .abz .selten { position: absolute; right: 0.6rem; bottom: 0.45rem; font-size: 0.7rem; font-weight: 700; color: #c0392b; }
+  .rl-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.6rem; }
+  .rl-tabs button { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--line);
+    background: transparent; color: var(--text); cursor: pointer; }
+  .rl-tabs button.an { background: var(--hell, #6f9fd8); color: #0e1524; border-color: transparent; font-weight: 700; }
+  .tour-tab.rl th[data-nach] { cursor: pointer; }
+  .tour-tab.rl th.an, .tour-tab.rl td.an { color: var(--text); font-weight: 700; }
+  .tour-tab.rl tr td.pl { font-weight: 800; width: 2.5rem; }
+  .tour-tab.rl tr.platz1 td.pl { color: #d4a017; } .tour-tab.rl tr.platz2 td.pl { color: #9aa6b2; }
+  .tour-tab.rl tr.platz3 td.pl { color: #b87333; }
+  .tour-tab.rl tr.platz1 { box-shadow: inset 4px 0 0 #d4a017; } .tour-tab.rl tr.platz2 { box-shadow: inset 4px 0 0 #9aa6b2; }
+  .tour-tab.rl tr.platz3 { box-shadow: inset 4px 0 0 #b87333; }
+  .rl-mehr { text-align: center; margin: 0.8rem 0 0; }
+  .rl-mehr button { font: inherit; font-weight: 600; padding: 0.45rem 1.1rem; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--text); cursor: pointer; }
+  @media (max-width: 700px) {
+    .tour-tab.rl thead { display: none; }
+    .tour-tab.rl, .tour-tab.rl tbody { display: block; }
+    .tour-tab.rl tr { display: grid; grid-template-columns: 2.2rem repeat(3, minmax(0, 1fr)); gap: 0.15rem 0.5rem; padding: 0.6rem 0.4rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--line); }
+    .tour-tab.rl td { border: 0; padding: 0; text-align: left !important; }
+    .tour-tab.rl td.sp { grid-column: 2 / -1; font-weight: 700; }
+    .tour-tab.rl td.pl { grid-row: span 3; }
+    .tour-tab.rl td[data-l]::before { content: attr(data-l) ": "; color: var(--muted); font-size: 0.78rem; }
+    .tour-tab.rl td.st-zelle { grid-column: 2 / -1; }
+  }
+  .tour-weiter { margin: 0.9rem 0 0; font-weight: 600; }
+  .tour-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+  .tour-liste { padding-left: 1.1rem; }
+  .tour-liste li { margin-bottom: 0.45rem; }
+  .tour-liste li small { color: var(--muted); }
   .tour-leer { padding: 1.4rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
   .tour-antrag { margin-top: 2.5rem; }
   .tour-antrag > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between;
@@ -249,22 +278,54 @@ FLAGGE = ('<svg width="34" height="40" viewBox="0 0 34 40"><line x1="3" y1="2" x
           '<path d="M4 3 H31 L26 11 L31 19 H4 Z" fill="{farbe}" stroke="#fff" stroke-width="1.2"/>'
           '<text x="15.5" y="15" font-size="11" font-weight="700" text-anchor="middle" fill="#fff" font-family="sans-serif">{n}</text></svg>')
 
-JS = r"""
+LAENDER_ISO = {  # deutscher Ländername -> Nummer in den Ländergrenzen (ISO 3166 numerisch); Kosovo hat keine
+    "Deutschland": "276", "Österreich": "040", "Schweiz": "756", "Italien": "380", "Frankreich": "250", "Spanien": "724",
+    "Portugal": "620", "Niederlande": "528", "Belgien": "056", "Luxemburg": "442", "Dänemark": "208", "Polen": "616",
+    "Tschechien": "203", "Slowakei": "703", "Ungarn": "348", "Slowenien": "705", "Kroatien": "191",
+    "Bosnien und Herzegowina": "070", "Serbien": "688", "Montenegro": "499", "Nordmazedonien": "807", "Albanien": "008",
+    "Griechenland": "300", "Bulgarien": "100", "Rumänien": "642", "Moldau": "498", "Republik Moldau": "498", "Ukraine": "804",
+    "Belarus": "112", "Russland": "643", "Litauen": "440", "Lettland": "428", "Estland": "233", "Finnland": "246",
+    "Schweden": "752", "Norwegen": "578", "Island": "352", "Irland": "372", "Vereinigtes Königreich": "826",
+    "Großbritannien": "826", "Malta": "470", "Zypern": "196", "Türkei": "792", "Liechtenstein": "438", "Monaco": "492",
+    "Andorra": "020", "San Marino": "674", "Georgien": "268", "Armenien": "051", "Aserbaidschan": "031", "Israel": "376",
+    "Vereinigte Staaten": "840", "Kanada": "124", "China": "156", "Indien": "356", "Japan": "392", "Australien": "036",
+    "Brasilien": "076", "Argentinien": "032", "Mexiko": "484", "Südafrika": "710", "Ägypten": "818", "Marokko": "504",
+    "Tunesien": "788", "Vereinigte Arabische Emirate": "784", "Katar": "634", "Singapur": "702", "Thailand": "764",
+}
+KARTE_FARBEN = {
+    "dunkel": {"meer": "#0e1524", "land": "#1d2b47", "besucht": "#2f5d9a", "rand": "#3c5070"},
+    "hell": {"meer": "#dfe8f2", "land": "#f7f8fa", "besucht": "#b9d0ea", "rand": "#a8b6c7"},
+}
+GRENZEN_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"
+LIBS = ('<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">'
+        '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>'
+        '<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>')
+
+JS_KARTE = r"""
 (function () {
-  var D = JSON.parse(document.getElementById("tour-daten").textContent);
-  if (!window.L || !document.getElementById("tour-karte")) return;
-  var karte = L.map("tour-karte", {scrollWheelZoom: false}).setView([48.2, 11.6], 5);
-  // OpenStreetMap-Kacheln; per CSS-Filter entsättigt (hell) bzw. abgedunkelt (dunkel), damit sie zum Design passen
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende'}).addTo(karte);
-  var ebene = L.layerGroup().addTo(karte), sel = document.getElementById("tour-wer");
+  var D = JSON.parse(document.getElementById("tour-daten").textContent), el = document.getElementById("tour-karte");
+  if (!el || !window.L) return;
+  var F = D.karte, sel = document.getElementById("tour-wer");
+  function thema() { return document.documentElement.getAttribute("data-theme") === "dark" ? "dunkel" : "hell"; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  var karte = L.map(el, {scrollWheelZoom: false, zoomSnap: 0.25}).setView([48.5, 11], 5);
+  karte.attributionControl.addAttribution('Grenzen &copy; <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
+  var grenzen = null, marker = L.layerGroup().addTo(karte), besucht = {};
+  function stil() {
+    var f = F[thema()];
+    el.style.background = f.meer;
+    if (grenzen) grenzen.setStyle(function (ft) {
+      var b = besucht[ft.id] || besucht["name:" + ft.properties.name];
+      return {color: f.rand, weight: 0.8, fillColor: b ? f.besucht : f.land, fillOpacity: 1};
+    });
+  }
   function zeichne() {
-    ebene.clearLayers();
-    var wer = sel.value, punkte = [];
+    var wer = sel ? sel.value : D.fest, punkte = [];
+    marker.clearLayers(); besucht = {};
     D.orte.forEach(function (o) {
       var b = o.besuche.filter(function (x) { return !wer || x.id === wer; });
       if (!b.length || o.lat == null) return;
+      if (o.iso) besucht[o.iso] = 1;
       var leute = {}; b.forEach(function (x) { leute[x.id] = 1; });
       var n = wer ? b.length : Object.keys(leute).length;
       var icon = L.divIcon({className: "tour-flagge", iconSize: [34, 40], iconAnchor: [3, 39], popupAnchor: [13, -36],
@@ -272,33 +333,87 @@ JS = r"""
       var html = "<h4>" + esc(o.ort) + (o.land ? " <small>(" + esc(o.land) + ")</small>" : "") + "</h4><ul>" +
         b.map(function (x) {
           var t = x.link ? '<a href="' + esc(x.link) + '" target="_blank" rel="noopener">' + esc(x.turnier || "Turnier") + "</a>" : esc(x.turnier || "");
-          return "<li>" + esc(x.monat) + " · <b>" + esc(x.name) + "</b>" + (t ? " · " + t : "") + "</li>";
+          return "<li>" + esc(x.monat) + (wer ? "" : " · <b>" + esc(x.name) + "</b>") + (t ? " · " + t : "") + "</li>";
         }).join("") + "</ul>";
-      L.marker([o.lat, o.lon], {icon: icon}).bindPopup(html).addTo(ebene);
+      L.marker([o.lat, o.lon], {icon: icon}).bindPopup(html).addTo(marker);
       punkte.push([o.lat, o.lon]);
     });
-    if (punkte.length > 1) karte.fitBounds(punkte, {padding: [30, 30], maxZoom: 9});
-    else if (punkte.length === 1) karte.setView(punkte[0], 8);
+    stil();
+    if (punkte.length > 1) karte.fitBounds(punkte, {padding: [40, 40], maxZoom: 7});
+    else if (punkte.length === 1) karte.setView(punkte[0], 6);
   }
-  sel.addEventListener("change", zeichne);
+  fetch(D.grenzen).then(function (r) { return r.json(); }).then(function (topo) {
+    grenzen = L.geoJSON(topojson.feature(topo, topo.objects.countries), {interactive: false}).addTo(karte);
+    grenzen.bringToBack(); stil();
+  }).catch(function () {});
+  new MutationObserver(stil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  if (sel) sel.addEventListener("change", zeichne);
   zeichne();
 })();
+"""
+
+JS_RANGLISTE = r"""
+(function () {
+  var D = JSON.parse(document.getElementById("tour-daten").textContent), out = document.getElementById("rangliste");
+  if (!out || !D.rangliste) return;
+  var SP = [["orte", "Orte"], ["laender", "Länder"], ["turniere", "Turniere"], ["km", "Weiteste Reise"], ["punkte", "Punkte"]];
+  var KURZ = {orte: "Orte", laender: "Länder", turniere: "Turniere", km: "Weiteste", punkte: "Punkte"};
+  var nach = "orte", alle = false, TOP = 10;
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function zeichne() {
+    var reihen = D.rangliste.slice().sort(function (a, b) {
+      return b[nach] - a[nach] || b.orte - a.orte || b.punkte - a.punkte || a.name.localeCompare(b.name, "de");
+    });
+    // Gleicher Platz nur bei echtem Gleichstand (Sortierwert, Orte und Punkte gleich)
+    var platz = 0, vorher = null;
+    reihen.forEach(function (r, i) {
+      var k = [r[nach], r.orte, r.punkte].join("|");
+      if (k !== vorher) platz = i + 1; r._platz = platz; vorher = k;
+    });
+    var zeigen = alle ? reihen : reihen.slice(0, TOP);
+    var kopf = '<div class="rl-tabs">' + SP.map(function (s) {
+      return '<button type="button" data-nach="' + s[0] + '"' + (s[0] === nach ? ' class="an"' : "") + ">" + s[1] + "</button>"; }).join("") + "</div>";
+    var tab = '<table class="tour-tab rl"><thead><tr><th>#</th><th>Spieler</th>' + SP.map(function (s) {
+      return '<th class="z' + (s[0] === nach ? " an" : "") + '" data-nach="' + s[0] + '">' + s[1] + "</th>"; }).join("") +
+      "<th>Abzeichen</th></tr></thead><tbody>" + zeigen.map(function (r) {
+        var m = r._platz <= 3 ? ' class="platz' + r._platz + '"' : "";
+        return "<tr" + m + '><td class="pl">' + r._platz + '.</td><td class="sp"><a href="' + esc(r.seite) + '">' + esc(r.name) + "</a></td>" +
+          SP.map(function (s) { return '<td class="z' + (s[0] === nach ? " an" : "") + '" data-l="' + KURZ[s[0]] + '">' +
+            (s[0] === "km" ? r.km + " km" : r[s[0]]) + "</td>"; }).join("") +
+          '<td class="st-zelle" data-l="Abzeichen">' + r.stufen + "</td></tr>";
+      }).join("") + "</tbody></table>";
+    var mehr = reihen.length > TOP ? '<p class="rl-mehr"><button type="button">' + (alle ? "Nur Top " + TOP : "Alle anzeigen (" + reihen.length + ")") + "</button></p>" : "";
+    out.innerHTML = kopf + tab + mehr;
+  }
+  out.addEventListener("click", function (ev) {
+    var n = ev.target.closest("[data-nach]");
+    if (n) { nach = n.getAttribute("data-nach"); zeichne(); return; }
+    if (ev.target.closest(".rl-mehr button")) { alle = !alle; zeichne(); }
+  });
+  zeichne();
+})();
+"""
+
+JS_ABZEICHEN = r"""
 (function () {
   var D = JSON.parse(document.getElementById("tour-daten").textContent), out = document.getElementById("abz-liste");
   if (!out) return;
   var wer = document.getElementById("abz-wer"), zeige = document.getElementById("abz-zeige"),
       sort = document.getElementById("abz-sort"), stufe = document.getElementById("abz-stufe");
+  var vorgabe = new URLSearchParams(location.search).get("wer");
+  if (vorgabe && D.spieler[vorgabe]) wer.value = vorgabe;
   var RANG = {legendaer: 0, gold: 1, silber: 2, bronze: 3};
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   function karte(a, sp) {
     var hat = sp && sp.erreicht.indexOf(a.id) >= 0, fs = sp && sp.fortschritt[a.id];
     var klasse = "abz st-" + a.stufe + (sp ? (hat ? " erreicht" : " offen") : "");
-    var wer = a.wer.length ? a.wer.length + " von " + D.anzahl_spieler + " (" + a.anteil + " %): " + a.wer.join(", ") : "noch niemand";
+    var namen = a.wer.slice(0, 5).join(", ") + (a.wer.length > 5 ? " + " + (a.wer.length - 5) + " weitere" : "");
+    var w = a.wer.length ? a.wer.length + " von " + D.anzahl_spieler + " (" + a.anteil + " %): " + namen : "noch niemand";
     return '<div class="' + klasse + '"><h4>' + esc(a.name) + "<small>" + a.stufe_name + " · " + a.punkte + "</small></h4>" +
       "<p>" + esc(a.text) + "</p>" +
       (fs ? '<div class="balken" title="' + fs[0] + " von " + fs[1] + '"><span style="width:' + Math.round(100 * fs[0] / fs[1]) + '%"></span></div>' +
             '<p class="wer">' + fs[0] + " / " + fs[1] + "</p>" : "") +
-      '<p class="wer">' + esc(wer) + "</p>" +
+      '<p class="wer">' + esc(w) + "</p>" +
       (a.wer.length && a.anteil <= 15 ? '<span class="selten">selten</span>' : "") + "</div>";
   }
   function zeichne() {
@@ -331,6 +446,9 @@ JS = r"""
   [wer, zeige, sort, stufe].forEach(function (e) { e.addEventListener("change", zeichne); });
   zeichne();
 })();
+"""
+
+JS_ANTRAG = r"""
 (function () {
   var f = document.getElementById("tour-form"); if (!f) return;
   if (location.hash === "#beantragen") document.getElementById("beantragen").open = true;
@@ -385,72 +503,105 @@ def antrag_html(skript_url):
     </details>"""
 
 
-def bauen(render_page, skript_url=""):
+SEITE_ABZEICHEN = "turnierorte-abzeichen.html"
+
+
+def spieler_seite(sid):
+    """Dateiname der Spielerseite, z. B. tour-KorbinianR.html"""
+    t = unicodedata.normalize("NFKD", sid).encode("ascii", "ignore").decode()
+    return "tour-" + (re.sub(r"[^A-Za-z0-9_-]", "", t) or "spieler") + ".html"
+
+
+def _orte_daten(orte, namen, nur=None):
+    """Orte für die Karte (optional nur ein Spieler)."""
+    out = []
+    for o in sorted(orte.values(), key=lambda o: o["ort"]):
+        bs = [b for b in o["besuche"] if b.get("spieler") in namen and (nur is None or b["spieler"] == nur)]
+        if not bs:
+            continue
+        land = o.get("land", "")
+        out.append({"ort": o["ort"], "land": land, "lat": o.get("lat"), "lon": o.get("lon"),
+                    "iso": LAENDER_ISO.get(land) or ("name:" + land if land == "Kosovo" else ""),
+                    "besuche": [{"id": b["spieler"], "name": namen[b["spieler"]], "monat": _monat(b.get("von", "")),
+                                 "turnier": b.get("turnier", ""), "link": b.get("link", "")}
+                                for b in sorted(bs, key=lambda b: b.get("von", ""), reverse=True)]})
+    return out
+
+
+def _abz_karte(a, fs=None):
+    """Statische Abzeichen-Karte (für Vorschau und Spielerseite)."""
+    balken = (f'<div class="balken"><span style="width:{round(100 * fs[0] / fs[1])}%"></span></div>'
+              f'<p class="wer">{fs[0]} / {fs[1]}</p>') if fs else ""
+    wer = f'{len(a["wer"])} im Verein ({a["anteil"]} %)' if a["wer"] else "noch niemand"
+    selten = '<span class="selten">selten</span>' if a["wer"] and a["anteil"] <= 15 else ""
+    return (f'<div class="abz st-{a["stufe"]}"><h4>{html.escape(a["name"])}<small>{a["stufe_name"]} · {a["punkte"]}</small></h4>'
+            f'<p>{html.escape(a["text"])}</p>{balken}<p class="wer">{wer}</p>{selten}</div>')
+
+
+def _seite(render_page, aktiv, titel, inhalt, seite, daten, js):
+    if aktiv is not None:
+        aktiv[seite] = "turniere.html"
+    js_daten = json.dumps(daten, ensure_ascii=False).replace("</", "<\\/")
+    render_page(titel, inhalt + f'<script type="application/json" id="tour-daten">{js_daten}</script><script>{js}</script>',
+                seite, extra_styles="<style>" + CSS + "</style>")
+
+
+def bauen(render_page, skript_url="", aktiv=None):
+    """Baut turnierorte.html, die Abzeichen-Seite und eine Seite pro Spieler.
+    aktiv = ACTIVE_PARENT aus build_site.py (damit im Menü "Turniere" markiert ist)."""
     konf = einstellungen()
     spieler = spieler_laden()
     tabelle, orte, infos = auswerten(spieler, besuche_laden(), konf)
-    alle_orte = [o for o in orte.values() if any(b.get("spieler") in spieler for b in o["besuche"])]
-    laender = {o["land"] for o in alle_orte if o.get("land")}
-    turniere = {(b.get("turnier", ""), b.get("von", "")[:7], o["ort"]) for o in alle_orte for b in o["besuche"]}
     namen = {t["id"]: t["name"] for t in tabelle}
-    daten = {
-        "farbe": konf.get("flaggenfarbe", "#c0392b"), "flagge": FLAGGE,
-        "abzeichen": [dict(a, wer=[namen.get(w, w) for w in a["wer"]], wer_ids=a["wer"]) for a in infos],
-        "spieler": {t["id"]: {"name": t["name"], "erreicht": t["erreicht"], "fortschritt": t["fortschritt"]} for t in tabelle},
-        "anzahl_spieler": len(tabelle),
-        "orte": [{"ort": o["ort"], "land": o.get("land", ""), "lat": o.get("lat"), "lon": o.get("lon"),
-                  "besuche": [{"id": b["spieler"], "name": namen.get(b["spieler"], b["spieler"]), "monat": _monat(b.get("von", "")),
-                               "turnier": b.get("turnier", ""), "link": b.get("link", "")}
-                              for b in sorted(o["besuche"], key=lambda b: b.get("von", ""), reverse=True)]}
-                 for o in sorted(alle_orte, key=lambda o: o["ort"])],
-    }
-    zahlen = "".join(f'<div class="tour-zahl"><strong>{w}</strong><span>{t}</span></div>' for w, t in (
-        (len(alle_orte), "Orte"), (len(laender), "Länder"), (len(turniere), "Turniere"), (len(tabelle), "Spieler auf Tour")))
+    laender = {o["land"] for o in orte.values() if o.get("land") and any(b["spieler"] in namen for b in o["besuche"])}
+    turniere = {(b.get("turnier", ""), b.get("von", "")[:7], o["ort"]) for o in orte.values() for b in o["besuche"] if b["spieler"] in namen}
+    orte_mit = [o for o in orte.values() if any(b["spieler"] in namen for b in o["besuche"])]
+    basis = {"farbe": konf.get("flaggenfarbe", "#c0392b"), "flagge": FLAGGE, "karte": KARTE_FARBEN, "grenzen": GRENZEN_URL}
+    abz_daten = [dict(a, wer=[namen.get(w, w) for w in a["wer"]]) for a in infos]
+    auswahl = "".join(f'<option value="{html.escape(t["id"])}">{html.escape(t["name"])}</option>' for t in tabelle)
+    zurueck = '<a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>'
+
+    # ---------- Hauptseite ----------
+    zahlen = _zahlen([(len(orte_mit), "Orte"), (len(laender), "Länder"), (len(turniere), "Turniere"), (len(tabelle), "Spieler auf Tour")])
     if tabelle:
-        zeilen = "".join(
-            f'<tr><td>{i}.</td><td><a href="#p-{html.escape(t["id"])}">{html.escape(t["name"])}</a></td>'
-            f'<td class="z">{t["werte"]["orte"]}</td><td class="z">{t["werte"]["laender"]}</td><td class="z">{t["werte"]["turniere"]}</td>'
-            f'<td class="z">{t["werte"]["weiteste"]} km</td>'
-            f'<td class="z">{len(t["erreicht"])}</td></tr>'
-            for i, t in enumerate(tabelle, 1))
-        rangliste = (f'<div style="overflow-x:auto"><table class="tour-tab"><thead><tr><th>#</th><th>Spieler</th><th>Orte</th><th>Länder</th>'
-                     f'<th>Turniere</th><th>Weiteste Reise</th><th>Abzeichen</th></tr></thead><tbody>{zeilen}</tbody></table></div>')
-        abz_tab = sorted(tabelle, key=lambda t: (-t["punkte"], -len(t["erreicht"]), t["name"]))
-        abz_zeilen = "".join(
-            f'<tr><td>{i}.</td><td><a href="#p-{html.escape(t["id"])}">{html.escape(t["name"])}</a></td>'
-            f'<td class="z"><b>{t["punkte"]}</b></td><td class="z">{len(t["erreicht"])}</td><td>{_stufen_html(t, infos)}</td>'
-            f'<td>{_seltenste_html(t, infos, 3)}</td></tr>' for i, t in enumerate(abz_tab, 1))
-        abz_rangliste = (f'<div style="overflow-x:auto"><table class="tour-tab"><thead><tr><th>#</th><th>Spieler</th><th>Punkte</th>'
-                         f'<th>Abzeichen</th><th>Stufen</th><th>Seltenste</th></tr></thead><tbody>{abz_zeilen}</tbody></table></div>')
-        profile = "".join(
-            f'<article class="tour-profil" id="p-{html.escape(t["id"])}"><h3>{html.escape(t["name"])}</h3>'
-            f'<p class="k">{_anz(t["werte"]["orte"], "Ort", "Orte")} · {_anz(t["werte"]["laender"], "Land", "Länder")} · '
-            f'{_anz(t["werte"]["turniere"], "Turnier", "Turniere")}</p>'
-            f'<p class="k">{t["punkte"]} Punkte · {_anz(len(t["erreicht"]), "Abzeichen", "Abzeichen")} {_stufen_html(t, infos)}</p>'
-            f'{_seltenste_html(t, infos)}'
-            f'<ul>{_profil_orte(t["liste"])}</ul></article>'
-            for t in tabelle)
-        auswahl = "".join(f'<option value="{html.escape(t["id"])}">{html.escape(t["name"])}</option>' for t in tabelle)
+        rangliste = '<div id="rangliste"></div>'
+        selten = sorted((a for a in abz_daten if a["wer"]), key=lambda a: (a["anteil"], -a["punkte"]))[:4]
+        vorschau = (f'<h2 style="margin-top:2rem;">Abzeichen</h2><p class="tour-hinweis">Die seltensten Abzeichen, die schon jemand geholt hat:</p>'
+                    f'<div class="abz-grid">{"".join(_abz_karte(a) for a in selten)}</div>'
+                    f'<p class="tour-weiter"><a href="{SEITE_ABZEICHEN}">Alle {len(infos)} Abzeichen ansehen →</a></p>')
     else:
         rangliste = '<p class="tour-leer">Noch niemand auf Tour. Sei der Erste und beantrage unten deinen ersten Ort!</p>'
-        profile, auswahl, abz_rangliste = "", "", ""
-    js_daten = json.dumps(daten, ensure_ascii=False).replace("</", "<\\/")
+        vorschau = f'<p class="tour-weiter"><a href="{SEITE_ABZEICHEN}">Alle {len(infos)} Abzeichen ansehen →</a></p>'
+    daten = dict(basis, orte=_orte_daten(orte, namen),
+                 rangliste=[{"id": t["id"], "name": t["name"], "seite": spieler_seite(t["id"]), "orte": t["werte"]["orte"],
+                             "laender": t["werte"]["laender"], "turniere": t["werte"]["turniere"], "km": t["werte"]["weiteste"],
+                             "punkte": t["punkte"], "stufen": _stufen_html(t, infos) or "–"} for t in tabelle])
     inhalt = f"""
-    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+    {zurueck}
     <h1 style="margin-top:1rem;">{TITEL}</h1>
     <p>Wo hat die SG AFK schon überall Turniere gespielt? Jede Stadt zählt pro Spieler einmal – egal wie oft man dort war.
       Gezählt werden klassische Einzelturniere.</p>
-    <div class="tour-zahlen">{zahlen}</div>
+    {zahlen}
     <div class="tour-kartenkopf"><h2>Wo SG AFK schon war</h2>
       <label>Zeige <select id="tour-wer"><option value="">alle Spieler</option>{auswahl}</select></label></div>
     <div id="tour-karte" role="img" aria-label="Karte der Turnierorte"></div>
     <h2 style="margin-top:2rem;">Rangliste</h2>
     {rangliste}
-    <h2 style="margin-top:2rem;">Abzeichen</h2>
+    {vorschau}
+    {antrag_html(skript_url)}
+    {LIBS}"""
+    _seite(render_page, aktiv, TITEL, inhalt, SEITE, daten, JS_KARTE + JS_RANGLISTE + JS_ANTRAG)
+
+    # ---------- Abzeichen-Seite ----------
+    daten = dict(basis, abzeichen=abz_daten, anzahl_spieler=len(tabelle),
+                 spieler={t["id"]: {"name": t["name"], "erreicht": t["erreicht"], "fortschritt": t["fortschritt"]} for t in tabelle})
+    inhalt = f"""
+    <a href="{SEITE}" style="text-decoration:none;">← Zurück zu {TITEL}</a>
+    <h1 style="margin-top:1rem;">Abzeichen</h1>
     <p class="tour-hinweis">{len(infos)} Abzeichen in vier Stufen:
       <span class="tour-abz st-bronze">Bronze 10</span> <span class="tour-abz st-silber">Silber 25</span>
-      <span class="tour-abz st-gold">Gold 50</span> <span class="tour-abz st-legendaer">Legendär 100</span> Punkte.</p>
-    {abz_rangliste}
+      <span class="tour-abz st-gold">Gold 50</span> <span class="tour-abz st-legendaer">Legendär 100</span> Punkte.
+      Wähle einen Spieler, um seine erreichten und offenen Abzeichen zu sehen.</p>
     <div class="abz-kopf">
       <label>Spieler <select id="abz-wer"><option value="">alle</option>{auswahl}</select></label>
       <label>Zeige <select id="abz-zeige"><option value="alle">alle Abzeichen</option><option value="erreicht">nur erreichte</option>
@@ -460,16 +611,36 @@ def bauen(render_page, skript_url=""):
       <label>Stufe <select id="abz-stufe"><option value="">alle</option><option value="bronze">Bronze</option><option value="silber">Silber</option>
         <option value="gold">Gold</option><option value="legendaer">Legendär</option></select></label>
     </div>
-    <div id="abz-liste"></div>
-    {('<h2 style="margin-top:2rem;">Profile</h2><div class="tour-profile">' + profile + '</div>') if profile else ''}
-    {antrag_html(skript_url)}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script type="application/json" id="tour-daten">{js_daten}</script>
-    <script>{JS}</script>
-    """
-    render_page(TITEL, inhalt, SEITE, extra_styles="<style>" + CSS + "</style>")
+    <div id="abz-liste"></div>"""
+    _seite(render_page, aktiv, "Abzeichen – " + TITEL, inhalt, SEITE_ABZEICHEN, daten, JS_ABZEICHEN)
+
+    # ---------- Spielerseiten ----------
+    for platz, t in enumerate(tabelle, 1):
+        erreicht = sorted((a for a in abz_daten if a["id"] in t["erreicht"]), key=lambda a: (a["anteil"], -a["punkte"]))
+        naechste = sorted(((a, t["fortschritt"][a["id"]]) for a in abz_daten if a["id"] in t["fortschritt"]),
+                          key=lambda x: (-x[1][0] / x[1][1], x[0]["punkte"]))[:4]
+        zahlen = _zahlen([(t["werte"]["orte"], "Orte"), (t["werte"]["laender"], "Länder"), (t["werte"]["turniere"], "Turniere"),
+                          (f'{t["werte"]["weiteste"]} km', "weiteste Reise"), (t["punkte"], "Punkte")])
+        inhalt = f"""
+    <a href="{SEITE}" style="text-decoration:none;">← Zurück zu {TITEL}</a>
+    <h1 style="margin-top:1rem;">{html.escape(t["name"])}</h1>
+    <p class="tour-hinweis">Platz {platz} von {len(tabelle)} nach Orten · {_anz(len(t["erreicht"]), "Abzeichen", "Abzeichen")} {_stufen_html(t, infos)}</p>
+    {zahlen}
+    <div id="tour-karte" role="img" aria-label="Karte der Turnierorte von {html.escape(t["name"])}"></div>
+    <h2 style="margin-top:2rem;">Abzeichen</h2>
+    <div class="tour-chips">{"".join(f'<span class="tour-abz st-{a["stufe"]}" title="{html.escape(a["text"])} – {a["anteil"]} % im Verein">{html.escape(a["name"])}</span>' for a in erreicht) or '<span class="tour-hinweis">noch keine</span>'}</div>
+    {('<h3 style="margin-top:1.4rem;">Als Nächstes erreichbar</h3><div class="abz-grid">' + "".join(_abz_karte(a, fs) for a, fs in naechste) + '</div>') if naechste else ''}
+    <p class="tour-weiter"><a href="{SEITE_ABZEICHEN}?wer={html.escape(t["id"])}">Alle Abzeichen von {html.escape(t["name"])} →</a></p>
+    <h2 style="margin-top:2rem;">Turniere</h2>
+    <ul class="tour-liste">{_profil_orte(t["liste"])}</ul>
+    {LIBS}"""
+        daten = dict(basis, orte=_orte_daten(orte, namen, nur=t["id"]), fest=t["id"])
+        _seite(render_page, aktiv, f'{t["name"]} – {TITEL}', inhalt, spieler_seite(t["id"]), daten, JS_KARTE)
     return SEITE
+
+
+def _zahlen(paare):
+    return '<div class="tour-zahlen">' + "".join(f'<div class="tour-zahl"><strong>{w}</strong><span>{t}</span></div>' for w, t in paare) + "</div>"
 
 
 def _anz(n, eins, mehr):

@@ -3212,7 +3212,7 @@ if __name__ == "__main__":
     build_blitzjahreswertung()
     build_hall_of_fame()
     turnierkalender.bauen(render_page)   # vor den Übersichten: die Karte "Extern" zeigt die Anzahl
-    turnierorte.bauen(render_page, einreichen.SKRIPT_URL)
+    turnierorte.bauen(render_page, einreichen.SKRIPT_URL, ACTIVE_PARENT)
     build_turniere_overview()
     build_ausschreibungen()
     build_neu_hier()

@@ -315,7 +315,8 @@ def ort_neu(b, text):
 
 def regionen_nachholen(d):
     """Ältere Einträge ohne Bundesland/Region (für Abzeichen wie Bayern-Kenner) einmal nachschlagen."""
-    fehlt = [b for b in d.besuche if "region" not in b and b.get("stadt")]
+    # ohne Region, oder in Deutschland mit leerer Region (z. B. Berlin vor dem Stadtstaaten-Fix)
+    fehlt = [b for b in d.besuche if b.get("stadt") and ("region" not in b or (not b["region"] and b.get("land") == "Deutschland"))]
     if not fehlt or not ja(f"{len(fehlt)} Einträge haben noch kein Bundesland/Region (für Abzeichen). Jetzt nachschlagen"):
         return
     for b in fehlt:
