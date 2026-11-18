@@ -128,9 +128,7 @@
   .leaflet-popup-content-wrapper { border: 1px solid var(--line, #ddd); border-radius: 10px; }
   .leaflet-popup-content a { color: var(--link-c, #2c5d99); }
   .leaflet-container a.leaflet-popup-close-button { color: var(--muted, #888); }
-  .leaflet-container { background: var(--soft, #e9eef3); font-family: inherit; }
-  #tour-karte .leaflet-tile-pane { filter: grayscale(0.9) brightness(1.03) contrast(0.92); }
-  [data-theme="dark"] #tour-karte .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) grayscale(0.9) brightness(0.8) contrast(0.95); }
+  .leaflet-container { font-family: inherit; }
   .leaflet-control-zoom a { background: var(--surface, #fff); color: var(--text, #222); border-color: var(--line, #ccc); }
   .leaflet-control-attribution { background: rgba(0,0,0,.35) !important; color: #ccc; }
   .leaflet-control-attribution a { color: #ddd; }
@@ -175,6 +173,37 @@
   .abz .balken { height: 6px; border-radius: 3px; background: var(--soft); margin-top: 0.4rem; overflow: hidden; }
   .abz .balken span { display: block; height: 100%; background: var(--hell, #6f9fd8); }
   .abz .selten { position: absolute; right: 0.6rem; bottom: 0.45rem; font-size: 0.7rem; font-weight: 700; color: #c0392b; }
+  .rl-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.6rem; }
+  .rl-tabs button { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--line);
+    background: transparent; color: var(--text); cursor: pointer; }
+  .rl-tabs button.an { background: var(--hell, #6f9fd8); color: #0e1524; border-color: transparent; font-weight: 700; }
+  .tour-tab.rl th[data-nach] { cursor: pointer; }
+  .tour-tab.rl th.an, .tour-tab.rl td.an { color: var(--text); font-weight: 700; }
+  .tour-tab.rl tr td.pl { font-weight: 800; width: 2.5rem; }
+  .tour-tab.rl tr.platz1 td.pl { color: #d4a017; } .tour-tab.rl tr.platz2 td.pl { color: #9aa6b2; }
+  .tour-tab.rl tr.platz3 td.pl { color: #b87333; }
+  .tour-tab.rl tr.platz1 { box-shadow: inset 4px 0 0 #d4a017; } .tour-tab.rl tr.platz2 { box-shadow: inset 4px 0 0 #9aa6b2; }
+  .tour-tab.rl tr.platz3 { box-shadow: inset 4px 0 0 #b87333; }
+  .rl-mehr { text-align: center; margin: 0.8rem 0 0; }
+  .rl-mehr button { font: inherit; font-weight: 600; padding: 0.45rem 1.1rem; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--text); cursor: pointer; }
+  @media (max-width: 700px) {
+    .tour-tab.rl thead { display: none; }
+    .tour-tab.rl, .tour-tab.rl tbody { display: block; }
+    .tour-tab.rl tr { display: grid; grid-template-columns: 2.2rem repeat(3, minmax(0, 1fr)); gap: 0.15rem 0.5rem; padding: 0.6rem 0.4rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--line); }
+    .tour-tab.rl td { border: 0; padding: 0; text-align: left !important; }
+    .tour-tab.rl td.sp { grid-column: 2 / -1; font-weight: 700; }
+    .tour-tab.rl td.pl { grid-row: span 3; }
+    .tour-tab.rl td[data-l]::before { content: attr(data-l) ": "; color: var(--muted); font-size: 0.78rem; }
+    .tour-tab.rl td.st-zelle { grid-column: 2 / -1; }
+  }
+  .tour-weiter { margin: 0.9rem 0 0; font-weight: 600; }
+  .tour-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+  .tour-liste { padding-left: 1.1rem; }
+  .tour-liste li { margin-bottom: 0.45rem; }
+  .tour-liste li small { color: var(--muted); }
   .tour-leer { padding: 1.4rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
   .tour-antrag { margin-top: 2.5rem; }
   .tour-antrag > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between;
@@ -238,23 +267,8 @@
       <label>Zeige <select id="tour-wer"><option value="">alle Spieler</option><option value="KorbinianR">Korbinian R.</option></select></label></div>
     <div id="tour-karte" role="img" aria-label="Karte der Turnierorte"></div>
     <h2 style="margin-top:2rem;">Rangliste</h2>
-    <div style="overflow-x:auto"><table class="tour-tab"><thead><tr><th>#</th><th>Spieler</th><th>Orte</th><th>Länder</th><th>Turniere</th><th>Weiteste Reise</th><th>Abzeichen</th></tr></thead><tbody><tr><td>1.</td><td><a href="#p-KorbinianR">Korbinian R.</a></td><td class="z">6</td><td class="z">2</td><td class="z">8</td><td class="z">496 km</td><td class="z">12</td></tr></tbody></table></div>
-    <h2 style="margin-top:2rem;">Abzeichen</h2>
-    <p class="tour-hinweis">56 Abzeichen in vier Stufen:
-      <span class="tour-abz st-bronze">Bronze 10</span> <span class="tour-abz st-silber">Silber 25</span>
-      <span class="tour-abz st-gold">Gold 50</span> <span class="tour-abz st-legendaer">Legendär 100</span> Punkte.</p>
-    <div style="overflow-x:auto"><table class="tour-tab"><thead><tr><th>#</th><th>Spieler</th><th>Punkte</th><th>Abzeichen</th><th>Stufen</th><th>Seltenste</th></tr></thead><tbody><tr><td>1.</td><td><a href="#p-KorbinianR">Korbinian R.</a></td><td class="z"><b>205</b></td><td class="z">12</td><td><span class="st st-gold" title="Gold">1</span> <span class="st st-silber" title="Silber">3</span> <span class="st st-bronze" title="Bronze">8</span></td><td><span class="tour-abz st-gold" title="Als erster AFKler in einem Land – 100 % im Verein">Entdecker</span><span class="tour-abz st-silber" title="Als erster AFKler in einer Stadt – 100 % im Verein">Pionier</span><span class="tour-abz st-silber" title="3 Orte, an denen sonst noch kein AFKler war – 100 % im Verein">Fremdenführer</span></td></tr></tbody></table></div>
-    <div class="abz-kopf">
-      <label>Spieler <select id="abz-wer"><option value="">alle</option><option value="KorbinianR">Korbinian R.</option></select></label>
-      <label>Zeige <select id="abz-zeige"><option value="alle">alle Abzeichen</option><option value="erreicht">nur erreichte</option>
-        <option value="offen">nur offene</option></select></label>
-      <label>Sortierung <select id="abz-sort"><option value="kat">nach Kategorie</option><option value="selten">seltenste zuerst</option>
-        <option value="stufe">nach Stufe</option></select></label>
-      <label>Stufe <select id="abz-stufe"><option value="">alle</option><option value="bronze">Bronze</option><option value="silber">Silber</option>
-        <option value="gold">Gold</option><option value="legendaer">Legendär</option></select></label>
-    </div>
-    <div id="abz-liste"></div>
-    <h2 style="margin-top:2rem;">Profile</h2><div class="tour-profile"><article class="tour-profil" id="p-KorbinianR"><h3>Korbinian R.</h3><p class="k">6 Orte · 2 Länder · 8 Turniere</p><p class="k">205 Punkte · 12 Abzeichen <span class="st st-gold" title="Gold">1</span> <span class="st st-silber" title="Silber">3</span> <span class="st st-bronze" title="Bronze">8</span></p><span class="tour-abz st-gold" title="Als erster AFKler in einem Land – 100 % im Verein">Entdecker</span><span class="tour-abz st-silber" title="Als erster AFKler in einer Stadt – 100 % im Verein">Pionier</span><span class="tour-abz st-silber" title="3 Orte, an denen sonst noch kein AFKler war – 100 % im Verein">Fremdenführer</span><span class="tour-abz st-silber" title="Grenke Open in Karlsruhe – 100 % im Verein">Grenke-Pilger</span><ul><li><b>Berlin</b> <small>2×</small><br><a href="https://chess-results.com/tnr1496981.aspx?lan=0" target="_blank" rel="noopener">Deutsche Uni-Meisterschaft 2026</a> <small>Nov 2026 (Ausnahme)</small>; <a href="https://chess-results.com/tnr1534478.aspx?lan=0" target="_blank" rel="noopener">Deutsche Uni-Meisterschaft 2026</a> <small>Nov 2026</small></li><li><b>Karlsruhe</b> <small>2×</small><br><a href="https://chess-results.com/tnr1049709.aspx?lan=0" target="_blank" rel="noopener">Grenke B-Open</a> <small>Apr 2026</small>; <a href="https://chess-results.com/tnr1384883.aspx?lan=0" target="_blank" rel="noopener">Grenke B-Open</a> <small>Apr 2023</small></li><li><b>Bad Wörishofen</b><br><a href="https://chess-results.com/tnr1371811.aspx?lan=0" target="_blank" rel="noopener">ChessOrg Schachfestival 2026 Bad Wörishofen</a> <small>März 2026</small></li><li><b>Tegernsee</b><br><a href="https://chess-results.com/tnr1049709.aspx?lan=0" target="_blank" rel="noopener">4.Tegernsee Open 2025</a> <small>Apr 2025</small></li><li><b>Feffernitz</b> <small>(Österreich)</small><br><a href="https://chess-results.com/tnr585243.aspx?lan=0" target="_blank" rel="noopener">31. Int. Open Feffernitz 2022</a> <small>Aug 2022</small></li><li><b>Innsbruck</b> <small>(Österreich)</small><br><a href="https://chess-results.com/tnr534227.aspx?lan=0" target="_blank" rel="noopener">5. Internationales Chess Festival Innsbruck C Open</a> <small>Aug 2021</small></li></ul></article></div>
+    <div id="rangliste"></div>
+    <h2 style="margin-top:2rem;">Abzeichen</h2><p class="tour-hinweis">Die seltensten Abzeichen, die schon jemand geholt hat:</p><div class="abz-grid"><div class="abz st-gold"><h4>Entdecker<small>Gold · 50</small></h4><p>Als erster AFKler in einem Land</p><p class="wer">1 im Verein (100 %)</p></div><div class="abz st-silber"><h4>Pionier<small>Silber · 25</small></h4><p>Als erster AFKler in einer Stadt</p><p class="wer">1 im Verein (100 %)</p></div><div class="abz st-silber"><h4>Fremdenführer<small>Silber · 25</small></h4><p>3 Orte, an denen sonst noch kein AFKler war</p><p class="wer">1 im Verein (100 %)</p></div><div class="abz st-silber"><h4>Grenke-Pilger<small>Silber · 25</small></h4><p>Grenke Open in Karlsruhe</p><p class="wer">1 im Verein (100 %)</p></div></div><p class="tour-weiter"><a href="turnierorte-abzeichen.html">Alle 56 Abzeichen ansehen →</a></p>
     
     <details class="card tour-antrag" id="beantragen">
       <summary><span><strong>Ort beantragen</strong><br><span class="klein">Du hast in einer neuen Stadt ein Turnier gespielt – auch früher? Trag es ein, wir prüfen und vergeben den Punkt.</span></span>
@@ -280,25 +294,31 @@
         <p class="meldung" role="status"></p>
       </form>
     </details>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script type="application/json" id="tour-daten">{"farbe": "#c0392b", "flagge": "<svg width=\"34\" height=\"40\" viewBox=\"0 0 34 40\"><line x1=\"3\" y1=\"2\" x2=\"3\" y2=\"39\" stroke=\"#333\" stroke-width=\"2.6\"/><path d=\"M4 3 H31 L26 11 L31 19 H4 Z\" fill=\"{farbe}\" stroke=\"#fff\" stroke-width=\"1.2\"/><text x=\"15.5\" y=\"15\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#fff\" font-family=\"sans-serif\">{n}<\/text><\/svg>", "abzeichen": [{"id": "erste-reise", "name": "Erste Reise", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Einstieg", "text": "Dein erstes Turnier auf Tour", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "grenzgaenger", "name": "Grenzgänger", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Einstieg", "text": "Erstes Open im Ausland", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "heimspiel", "name": "Heimspiel", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Einstieg", "text": "Turnier im Umkreis von 50 km um Kirchheim", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "ehrenrunde", "name": "Ehrenrunde", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Einstieg", "text": "Ein besonderes Turnier (Ausnahme), z. B. Hochschulmeisterschaft", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "ausflug", "name": "Ausflug", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Einstieg", "text": "Erstes Turnier außerhalb Bayerns", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "orte-5", "name": "5 Orte", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Orte sammeln", "text": "In 5 verschiedenen Orten gespielt", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "orte-10", "name": "10 Orte", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Orte sammeln", "text": "In 10 verschiedenen Orten gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "orte-25", "name": "25 Orte", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Orte sammeln", "text": "In 25 verschiedenen Orten gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "orte-50", "name": "50 Orte", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Orte sammeln", "text": "In 50 verschiedenen Orten gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "abc", "name": "ABC-Schütze", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Orte sammeln", "text": "Orte mit 10 verschiedenen Anfangsbuchstaben", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "alphabet", "name": "Alphabet", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Orte sammeln", "text": "Orte von A bis Z (ohne Q, X, Y – 23 Buchstaben)", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "laender-3", "name": "3 Länder", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Länder & Regionen", "text": "In 3 Ländern gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "laender-5", "name": "5 Länder", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Länder & Regionen", "text": "In 5 Ländern gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "laender-10", "name": "10 Länder", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Länder & Regionen", "text": "In 10 Ländern gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "laender-20", "name": "20 Länder", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Länder & Regionen", "text": "In 20 Ländern gespielt", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "dach", "name": "DACH", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Länder & Regionen", "text": "Deutschland, Österreich und Schweiz", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "benelux", "name": "Benelux", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Länder & Regionen", "text": "Belgien, Niederlande und Luxemburg", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "alpen", "name": "Alpenkönig", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Länder & Regionen", "text": "4 Alpenländer (ohne Deutschland)", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "nachbarn", "name": "Rund um Deutschland", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Länder & Regionen", "text": "Alle 9 Nachbarländer Deutschlands", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "balkan", "name": "Balkan-Tour", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Länder & Regionen", "text": "3 Balkanländer", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "wikinger", "name": "Wikinger", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Länder & Regionen", "text": "Dänemark, Schweden und Norwegen", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "iberer", "name": "Iberer", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Länder & Regionen", "text": "Turnier in Spanien oder Portugal", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "insulaner", "name": "Insulaner", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Länder & Regionen", "text": "Turnier auf einer Insel (Malta, Zypern, Mallorca, Großbritannien …)", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "hauptstadt-3", "name": "Hauptstädter", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Länder & Regionen", "text": "3 europäische Hauptstädte", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "hauptstadt-10", "name": "Hauptstadt-Sammler", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Länder & Regionen", "text": "10 europäische Hauptstädte", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "bayern", "name": "Bayern-Kenner", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Länder & Regionen", "text": "5 Orte in Bayern", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "bundeslaender-5", "name": "Bundesländer", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Länder & Regionen", "text": "5 verschiedene Bundesländer", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "bundeslaender-16", "name": "Deutschland komplett", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Länder & Regionen", "text": "Alle 16 Bundesländer", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "weltenbummler", "name": "Weltenbummler", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Kontinente", "text": "Turnier außerhalb Europas", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "globetrotter", "name": "Globetrotter", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Kontinente", "text": "Turniere auf 3 Kontinenten", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "alle-kontinente", "name": "Zu Hause auf jedem Kontinent", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Kontinente", "text": "Alle 6 bewohnten Kontinente", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "km-300", "name": "300 km", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Entfernung", "text": "Turnier mindestens 300 km von Kirchheim", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "km-1000", "name": "1000 km", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Entfernung", "text": "Turnier mindestens 1000 km von Kirchheim", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "km-2500", "name": "2500 km", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Entfernung", "text": "Turnier mindestens 2500 km von Kirchheim", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "km-8000", "name": "8000 km", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Entfernung", "text": "Turnier mindestens 8000 km von Kirchheim", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "kompass", "name": "Kompass", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Entfernung", "text": "Je ein Turnier im Norden, Osten, Süden und Westen (jeweils über 300 km)", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "nordlicht", "name": "Nordlicht", "stufe": "legendaer", "stufe_name": "Legendär", "punkte": 100, "kat": "Entfernung", "text": "Turnier nördlich des Polarkreises", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "stammgast", "name": "Stammgast", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Treue", "text": "3-mal am selben Ort", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "inventar", "name": "Inventar", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Treue", "text": "10-mal am selben Ort", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "tradition", "name": "Tradition", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Treue", "text": "Dasselbe Turnier 5 Jahre in Folge", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "dauerbrenner", "name": "Dauerbrenner", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Treue", "text": "In 10 verschiedenen Jahren auf Tour", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "veteran", "name": "Veteran", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Treue", "text": "Ein Turnier vor dem Jahr 2000", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "silvester", "name": "Silvester am Brett", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Kalender", "text": "Turnier über den Jahreswechsel", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "sommerfrische", "name": "Sommerfrische", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Kalender", "text": "Turnier im Juli oder August", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "jahreszeiten", "name": "Vier Jahreszeiten", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Kalender", "text": "Turniere im Frühling, Sommer, Herbst und Winter", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "ganzjaehrig", "name": "Ganzjährig", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Kalender", "text": "In allen 12 Monaten gespielt (über alle Jahre)", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "turnierjahr", "name": "Turnierjahr", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Kalender", "text": "5 Turniere in einem Kalenderjahr", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "doppelschlag", "name": "Doppelschlag", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Kalender", "text": "Zwei Turniere in zwei Ländern im selben Monat", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "marathon", "name": "Marathon", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Kalender", "text": "Ein Turnier über 9 oder mehr Tage", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "reisegruppe", "name": "Reisegruppe", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Mit dem Verein", "text": "Mit mindestens 2 weiteren AFKlern beim selben Turnier", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "mannschaftsausflug", "name": "Mannschaftsausflug", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Mit dem Verein", "text": "Mit 5 oder mehr AFKlern beim selben Turnier", "wer": [], "anteil": 0, "wer_ids": []}, {"id": "pionier", "name": "Pionier", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Mit dem Verein", "text": "Als erster AFKler in einer Stadt", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "entdecker", "name": "Entdecker", "stufe": "gold", "stufe_name": "Gold", "punkte": 50, "kat": "Mit dem Verein", "text": "Als erster AFKler in einem Land", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "fremdenfuehrer", "name": "Fremdenführer", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Mit dem Verein", "text": "3 Orte, an denen sonst noch kein AFKler war", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "klassiker-0", "name": "Grenke-Pilger", "stufe": "silber", "stufe_name": "Silber", "punkte": 25, "kat": "Klassiker", "text": "Grenke Open in Karlsruhe", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}, {"id": "klassiker-1", "name": "Tegernseer", "stufe": "bronze", "stufe_name": "Bronze", "punkte": 10, "kat": "Klassiker", "text": "Ein Turnier am Tegernsee", "wer": ["Korbinian R."], "anteil": 100, "wer_ids": ["KorbinianR"]}], "spieler": {"KorbinianR": {"name": "Korbinian R.", "erreicht": ["erste-reise", "grenzgaenger", "ehrenrunde", "ausflug", "orte-5", "km-300", "sommerfrische", "pionier", "entdecker", "fremdenfuehrer", "klassiker-0", "klassiker-1"], "fortschritt": {"orte-10": [6, 10], "orte-25": [6, 25], "orte-50": [6, 50], "abc": [5, 10], "alphabet": [5, 23], "laender-3": [2, 3], "laender-5": [2, 5], "laender-10": [2, 10], "laender-20": [2, 20], "dach": [2, 3], "benelux": [0, 3], "alpen": [1, 4], "nachbarn": [1, 9], "balkan": [0, 3], "wikinger": [0, 3], "hauptstadt-3": [1, 3], "hauptstadt-10": [1, 10], "bayern": [2, 5], "bundeslaender-5": [2, 5], "bundeslaender-16": [2, 16], "globetrotter": [1, 3], "alle-kontinente": [1, 6], "km-1000": [496, 1000], "km-2500": [496, 2500], "km-8000": [496, 8000], "kompass": [1, 4], "stammgast": [2, 3], "inventar": [2, 10], "tradition": [1, 5], "dauerbrenner": [5, 10], "jahreszeiten": [3, 4], "ganzjaehrig": [4, 12], "turnierjahr": [4, 5], "marathon": [0, 9], "reisegruppe": [1, 3], "mannschaftsausflug": [1, 5]}}}, "anzahl_spieler": 1, "orte": [{"ort": "Bad Wörishofen", "land": "Deutschland", "lat": 48.00482, "lon": 10.59264, "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "März 2026", "turnier": "ChessOrg Schachfestival 2026 Bad Wörishofen", "link": "https://chess-results.com/tnr1371811.aspx?lan=0"}]}, {"ort": "Berlin", "land": "Deutschland", "lat": 52.51739, "lon": 13.39513, "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Nov 2026", "turnier": "Deutsche Uni-Meisterschaft 2026", "link": "https://chess-results.com/tnr1496981.aspx?lan=0"}, {"id": "KorbinianR", "name": "Korbinian R.", "monat": "Nov 2026", "turnier": "Deutsche Uni-Meisterschaft 2026", "link": "https://chess-results.com/tnr1534478.aspx?lan=0"}]}, {"ort": "Feffernitz", "land": "Österreich", "lat": 46.69275, "lon": 13.68759, "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Aug 2022", "turnier": "31. Int. Open Feffernitz 2022", "link": "https://chess-results.com/tnr585243.aspx?lan=0"}]}, {"ort": "Innsbruck", "land": "Österreich", "lat": 47.26543, "lon": 11.39277, "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Aug 2021", "turnier": "5. Internationales Chess Festival Innsbruck C Open", "link": "https://chess-results.com/tnr534227.aspx?lan=0"}]}, {"ort": "Karlsruhe", "land": "Deutschland", "lat": 49.00687, "lon": 8.40342, "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2026", "turnier": "Grenke B-Open", "link": "https://chess-results.com/tnr1049709.aspx?lan=0"}, {"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2023", "turnier": "Grenke B-Open", "link": "https://chess-results.com/tnr1384883.aspx?lan=0"}]}, {"ort": "Tegernsee", "land": "Deutschland", "lat": 47.70992, "lon": 11.75433, "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2025", "turnier": "4.Tegernsee Open 2025", "link": "https://chess-results.com/tnr1049709.aspx?lan=0"}]}]}</script>
-    <script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script><script type="application/json" id="tour-daten">{"farbe": "#c0392b", "flagge": "<svg width=\"34\" height=\"40\" viewBox=\"0 0 34 40\"><line x1=\"3\" y1=\"2\" x2=\"3\" y2=\"39\" stroke=\"#333\" stroke-width=\"2.6\"/><path d=\"M4 3 H31 L26 11 L31 19 H4 Z\" fill=\"{farbe}\" stroke=\"#fff\" stroke-width=\"1.2\"/><text x=\"15.5\" y=\"15\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#fff\" font-family=\"sans-serif\">{n}<\/text><\/svg>", "karte": {"dunkel": {"meer": "#0e1524", "land": "#1d2b47", "besucht": "#2f5d9a", "rand": "#3c5070"}, "hell": {"meer": "#dfe8f2", "land": "#f7f8fa", "besucht": "#b9d0ea", "rand": "#a8b6c7"}}, "grenzen": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json", "orte": [{"ort": "Bad Wörishofen", "land": "Deutschland", "lat": 48.00482, "lon": 10.59264, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "März 2026", "turnier": "ChessOrg Schachfestival 2026 Bad Wörishofen", "link": "https://chess-results.com/tnr1371811.aspx?lan=0"}]}, {"ort": "Berlin", "land": "Deutschland", "lat": 52.51739, "lon": 13.39513, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Nov 2026", "turnier": "Deutsche Uni-Meisterschaft 2026", "link": "https://chess-results.com/tnr1496981.aspx?lan=0"}, {"id": "KorbinianR", "name": "Korbinian R.", "monat": "Nov 2026", "turnier": "Deutsche Uni-Meisterschaft 2026", "link": "https://chess-results.com/tnr1534478.aspx?lan=0"}]}, {"ort": "Feffernitz", "land": "Österreich", "lat": 46.69275, "lon": 13.68759, "iso": "040", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Aug 2022", "turnier": "31. Int. Open Feffernitz 2022", "link": "https://chess-results.com/tnr585243.aspx?lan=0"}]}, {"ort": "Innsbruck", "land": "Österreich", "lat": 47.26543, "lon": 11.39277, "iso": "040", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Aug 2021", "turnier": "5. Internationales Chess Festival Innsbruck C Open", "link": "https://chess-results.com/tnr534227.aspx?lan=0"}]}, {"ort": "Karlsruhe", "land": "Deutschland", "lat": 49.00687, "lon": 8.40342, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2026", "turnier": "Grenke B-Open", "link": "https://chess-results.com/tnr1049709.aspx?lan=0"}, {"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2023", "turnier": "Grenke B-Open", "link": "https://chess-results.com/tnr1384883.aspx?lan=0"}]}, {"ort": "Tegernsee", "land": "Deutschland", "lat": 47.70992, "lon": 11.75433, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2025", "turnier": "4.Tegernsee Open 2025", "link": "https://chess-results.com/tnr1049709.aspx?lan=0"}]}], "rangliste": [{"id": "KorbinianR", "name": "Korbinian R.", "seite": "tour-KorbinianR.html", "orte": 6, "laender": 2, "turniere": 8, "km": 496, "punkte": 205, "stufen": "<span class=\"st st-gold\" title=\"Gold\">1<\/span> <span class=\"st st-silber\" title=\"Silber\">3<\/span> <span class=\"st st-bronze\" title=\"Bronze\">8<\/span>"}]}</script><script>
 (function () {
-  var D = JSON.parse(document.getElementById("tour-daten").textContent);
-  if (!window.L || !document.getElementById("tour-karte")) return;
-  var karte = L.map("tour-karte", {scrollWheelZoom: false}).setView([48.2, 11.6], 5);
-  // OpenStreetMap-Kacheln; per CSS-Filter entsättigt (hell) bzw. abgedunkelt (dunkel), damit sie zum Design passen
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende'}).addTo(karte);
-  var ebene = L.layerGroup().addTo(karte), sel = document.getElementById("tour-wer");
+  var D = JSON.parse(document.getElementById("tour-daten").textContent), el = document.getElementById("tour-karte");
+  if (!el || !window.L) return;
+  var F = D.karte, sel = document.getElementById("tour-wer");
+  function thema() { return document.documentElement.getAttribute("data-theme") === "dark" ? "dunkel" : "hell"; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  var karte = L.map(el, {scrollWheelZoom: false, zoomSnap: 0.25}).setView([48.5, 11], 5);
+  karte.attributionControl.addAttribution('Grenzen &copy; <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
+  var grenzen = null, marker = L.layerGroup().addTo(karte), besucht = {};
+  function stil() {
+    var f = F[thema()];
+    el.style.background = f.meer;
+    if (grenzen) grenzen.setStyle(function (ft) {
+      var b = besucht[ft.id] || besucht["name:" + ft.properties.name];
+      return {color: f.rand, weight: 0.8, fillColor: b ? f.besucht : f.land, fillOpacity: 1};
+    });
+  }
   function zeichne() {
-    ebene.clearLayers();
-    var wer = sel.value, punkte = [];
+    var wer = sel ? sel.value : D.fest, punkte = [];
+    marker.clearLayers(); besucht = {};
     D.orte.forEach(function (o) {
       var b = o.besuche.filter(function (x) { return !wer || x.id === wer; });
       if (!b.length || o.lat == null) return;
+      if (o.iso) besucht[o.iso] = 1;
       var leute = {}; b.forEach(function (x) { leute[x.id] = 1; });
       var n = wer ? b.length : Object.keys(leute).length;
       var icon = L.divIcon({className: "tour-flagge", iconSize: [34, 40], iconAnchor: [3, 39], popupAnchor: [13, -36],
@@ -306,65 +326,64 @@
       var html = "<h4>" + esc(o.ort) + (o.land ? " <small>(" + esc(o.land) + ")</small>" : "") + "</h4><ul>" +
         b.map(function (x) {
           var t = x.link ? '<a href="' + esc(x.link) + '" target="_blank" rel="noopener">' + esc(x.turnier || "Turnier") + "</a>" : esc(x.turnier || "");
-          return "<li>" + esc(x.monat) + " · <b>" + esc(x.name) + "</b>" + (t ? " · " + t : "") + "</li>";
+          return "<li>" + esc(x.monat) + (wer ? "" : " · <b>" + esc(x.name) + "</b>") + (t ? " · " + t : "") + "</li>";
         }).join("") + "</ul>";
-      L.marker([o.lat, o.lon], {icon: icon}).bindPopup(html).addTo(ebene);
+      L.marker([o.lat, o.lon], {icon: icon}).bindPopup(html).addTo(marker);
       punkte.push([o.lat, o.lon]);
     });
-    if (punkte.length > 1) karte.fitBounds(punkte, {padding: [30, 30], maxZoom: 9});
-    else if (punkte.length === 1) karte.setView(punkte[0], 8);
+    stil();
+    if (punkte.length > 1) karte.fitBounds(punkte, {padding: [40, 40], maxZoom: 7});
+    else if (punkte.length === 1) karte.setView(punkte[0], 6);
   }
-  sel.addEventListener("change", zeichne);
+  fetch(D.grenzen).then(function (r) { return r.json(); }).then(function (topo) {
+    grenzen = L.geoJSON(topojson.feature(topo, topo.objects.countries), {interactive: false}).addTo(karte);
+    grenzen.bringToBack(); stil();
+  }).catch(function () {});
+  new MutationObserver(stil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  if (sel) sel.addEventListener("change", zeichne);
   zeichne();
 })();
+
 (function () {
-  var D = JSON.parse(document.getElementById("tour-daten").textContent), out = document.getElementById("abz-liste");
-  if (!out) return;
-  var wer = document.getElementById("abz-wer"), zeige = document.getElementById("abz-zeige"),
-      sort = document.getElementById("abz-sort"), stufe = document.getElementById("abz-stufe");
-  var RANG = {legendaer: 0, gold: 1, silber: 2, bronze: 3};
+  var D = JSON.parse(document.getElementById("tour-daten").textContent), out = document.getElementById("rangliste");
+  if (!out || !D.rangliste) return;
+  var SP = [["orte", "Orte"], ["laender", "Länder"], ["turniere", "Turniere"], ["km", "Weiteste Reise"], ["punkte", "Punkte"]];
+  var KURZ = {orte: "Orte", laender: "Länder", turniere: "Turniere", km: "Weiteste", punkte: "Punkte"};
+  var nach = "orte", alle = false, TOP = 10;
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
-  function karte(a, sp) {
-    var hat = sp && sp.erreicht.indexOf(a.id) >= 0, fs = sp && sp.fortschritt[a.id];
-    var klasse = "abz st-" + a.stufe + (sp ? (hat ? " erreicht" : " offen") : "");
-    var wer = a.wer.length ? a.wer.length + " von " + D.anzahl_spieler + " (" + a.anteil + " %): " + a.wer.join(", ") : "noch niemand";
-    return '<div class="' + klasse + '"><h4>' + esc(a.name) + "<small>" + a.stufe_name + " · " + a.punkte + "</small></h4>" +
-      "<p>" + esc(a.text) + "</p>" +
-      (fs ? '<div class="balken" title="' + fs[0] + " von " + fs[1] + '"><span style="width:' + Math.round(100 * fs[0] / fs[1]) + '%"></span></div>' +
-            '<p class="wer">' + fs[0] + " / " + fs[1] + "</p>" : "") +
-      '<p class="wer">' + esc(wer) + "</p>" +
-      (a.wer.length && a.anteil <= 15 ? '<span class="selten">selten</span>' : "") + "</div>";
-  }
   function zeichne() {
-    var sp = D.spieler[wer.value], z = zeige.value;
-    zeige.disabled = !sp; if (!sp) z = "alle";
-    var liste = D.abzeichen.filter(function (a) {
-      if (stufe.value && a.stufe !== stufe.value) return false;
-      if (z === "erreicht") return sp.erreicht.indexOf(a.id) >= 0;
-      if (z === "offen") return sp.erreicht.indexOf(a.id) < 0;
-      return true;
+    var reihen = D.rangliste.slice().sort(function (a, b) {
+      return b[nach] - a[nach] || b.orte - a.orte || b.punkte - a.punkte || a.name.localeCompare(b.name, "de");
     });
-    if (!liste.length) { out.innerHTML = '<p class="tour-leer">Keine Abzeichen für diese Auswahl.</p>'; return; }
-    if (sort.value === "kat") {
-      var kats = [], html = "";
-      liste.forEach(function (a) { if (kats.indexOf(a.kat) < 0) kats.push(a.kat); });
-      kats.forEach(function (k) {
-        var teil = liste.filter(function (a) { return a.kat === k; });
-        var n = sp ? teil.filter(function (a) { return sp.erreicht.indexOf(a.id) >= 0; }).length : 0;
-        html += '<h3 class="abz-kat">' + esc(k) + (sp ? " <small>(" + n + "/" + teil.length + ")</small>" : "") + '</h3><div class="abz-grid">' +
-          teil.map(function (a) { return karte(a, sp); }).join("") + "</div>";
-      });
-      out.innerHTML = html;
-    } else {
-      liste = liste.slice().sort(sort.value === "selten"
-        ? function (a, b) { return (a.wer.length ? a.anteil : 101) - (b.wer.length ? b.anteil : 101) || RANG[a.stufe] - RANG[b.stufe]; }
-        : function (a, b) { return RANG[a.stufe] - RANG[b.stufe] || a.anteil - b.anteil; });
-      out.innerHTML = '<div class="abz-grid">' + liste.map(function (a) { return karte(a, sp); }).join("") + "</div>";
-    }
+    // Gleicher Platz nur bei echtem Gleichstand (Sortierwert, Orte und Punkte gleich)
+    var platz = 0, vorher = null;
+    reihen.forEach(function (r, i) {
+      var k = [r[nach], r.orte, r.punkte].join("|");
+      if (k !== vorher) platz = i + 1; r._platz = platz; vorher = k;
+    });
+    var zeigen = alle ? reihen : reihen.slice(0, TOP);
+    var kopf = '<div class="rl-tabs">' + SP.map(function (s) {
+      return '<button type="button" data-nach="' + s[0] + '"' + (s[0] === nach ? ' class="an"' : "") + ">" + s[1] + "</button>"; }).join("") + "</div>";
+    var tab = '<table class="tour-tab rl"><thead><tr><th>#</th><th>Spieler</th>' + SP.map(function (s) {
+      return '<th class="z' + (s[0] === nach ? " an" : "") + '" data-nach="' + s[0] + '">' + s[1] + "</th>"; }).join("") +
+      "<th>Abzeichen</th></tr></thead><tbody>" + zeigen.map(function (r) {
+        var m = r._platz <= 3 ? ' class="platz' + r._platz + '"' : "";
+        return "<tr" + m + '><td class="pl">' + r._platz + '.</td><td class="sp"><a href="' + esc(r.seite) + '">' + esc(r.name) + "</a></td>" +
+          SP.map(function (s) { return '<td class="z' + (s[0] === nach ? " an" : "") + '" data-l="' + KURZ[s[0]] + '">' +
+            (s[0] === "km" ? r.km + " km" : r[s[0]]) + "</td>"; }).join("") +
+          '<td class="st-zelle" data-l="Abzeichen">' + r.stufen + "</td></tr>";
+      }).join("") + "</tbody></table>";
+    var mehr = reihen.length > TOP ? '<p class="rl-mehr"><button type="button">' + (alle ? "Nur Top " + TOP : "Alle anzeigen (" + reihen.length + ")") + "</button></p>" : "";
+    out.innerHTML = kopf + tab + mehr;
   }
-  [wer, zeige, sort, stufe].forEach(function (e) { e.addEventListener("change", zeichne); });
+  out.addEventListener("click", function (ev) {
+    var n = ev.target.closest("[data-nach]");
+    if (n) { nach = n.getAttribute("data-nach"); zeichne(); return; }
+    if (ev.target.closest(".rl-mehr button")) { alle = !alle; zeichne(); }
+  });
   zeichne();
 })();
+
 (function () {
   var f = document.getElementById("tour-form"); if (!f) return;
   if (location.hash === "#beantragen") document.getElementById("beantragen").open = true;
@@ -387,7 +406,6 @@
   });
 })();
 </script>
-    
   </main>
 
   <footer>
