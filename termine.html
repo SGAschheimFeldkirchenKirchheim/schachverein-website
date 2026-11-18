@@ -153,7 +153,10 @@
       .termine-filter label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
       .termine-filter select, .termine-filter button { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px;
         border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
-      .termine-filter button { cursor: pointer; }
+      .termine-filter button, .termine-filter .tf-knopf { cursor: pointer; }
+      .termine-filter .tf-knopf { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px; text-decoration: none;
+        border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
+      .termine-filter .tf-knopf.aus { opacity: 0.45; pointer-events: none; }
       .termine-filter .tf-haupt { font-weight: 700; }
       .termine-filter button[disabled] { opacity: 0.45; cursor: not-allowed; }
       .custom-tabelle tr.tf-aus { display: none; }
@@ -227,8 +230,8 @@
       <label>Von <select id="tf-von"></select></label>
       <label>Bis <select id="tf-bis"></select></label>
       <button type="button" id="tf-alle">Alle</button>
-      <button type="button" id="tf-druck" class="tf-haupt">Auswahl als PDF</button>
-    </div>
+      <a id="tf-druck" class="tf-haupt tf-knopf" href="#" download>Auswahl als PDF</a>
+    </div><script type="application/json" id="termine-pdfs">{"2026-11|2026-11": "termine/auswahl/2026-11_2026-11.pdf", "2026-11|2026-12": "termine/auswahl/2026-11_2026-12.pdf", "2026-11|2027-01": "termine/auswahl/2026-11_2027-01.pdf", "2026-11|2027-02": "termine/auswahl/2026-11_2027-02.pdf", "2026-11|2027-03": "termine/auswahl/2026-11_2027-03.pdf", "2026-11|2027-04": "termine/auswahl/2026-11_2027-04.pdf", "2026-11|2027-05": "termine/auswahl/2026-11_2027-05.pdf", "2026-12|2026-12": "termine/auswahl/2026-12_2026-12.pdf", "2026-12|2027-01": "termine/auswahl/2026-12_2027-01.pdf", "2026-12|2027-02": "termine/auswahl/2026-12_2027-02.pdf", "2026-12|2027-03": "termine/auswahl/2026-12_2027-03.pdf", "2026-12|2027-04": "termine/auswahl/2026-12_2027-04.pdf", "2026-12|2027-05": "termine/auswahl/2026-12_2027-05.pdf", "2027-01|2027-01": "termine/auswahl/2027-01_2027-01.pdf", "2027-01|2027-02": "termine/auswahl/2027-01_2027-02.pdf", "2027-01|2027-03": "termine/auswahl/2027-01_2027-03.pdf", "2027-01|2027-04": "termine/auswahl/2027-01_2027-04.pdf", "2027-01|2027-05": "termine/auswahl/2027-01_2027-05.pdf", "2027-02|2027-02": "termine/auswahl/2027-02_2027-02.pdf", "2027-02|2027-03": "termine/auswahl/2027-02_2027-03.pdf", "2027-02|2027-04": "termine/auswahl/2027-02_2027-04.pdf", "2027-02|2027-05": "termine/auswahl/2027-02_2027-05.pdf", "2027-03|2027-03": "termine/auswahl/2027-03_2027-03.pdf", "2027-03|2027-04": "termine/auswahl/2027-03_2027-04.pdf", "2027-03|2027-05": "termine/auswahl/2027-03_2027-05.pdf", "2027-04|2027-04": "termine/auswahl/2027-04_2027-04.pdf", "2027-04|2027-05": "termine/auswahl/2027-04_2027-05.pdf", "2027-05|2027-05": "termine/auswahl/2027-05_2027-05.pdf"}</script>
     <div class="full-bleed" id="termine-druck">
       <h2 class="druck-titel">SG Aschheim / Feldkirchen / Kirchheim – Termine <span id="druck-zeitraum"></span></h2>
       <div class="table-responsive">
@@ -297,6 +300,7 @@
   monate.sort();
   if (!monate.length) { document.getElementById("termine-filter").hidden = true; return; }
   var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter";
+  var PDFS = {}; try { PDFS = JSON.parse(document.getElementById("termine-pdfs").textContent); } catch (e) {}
   function name(m) { return MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
   monate.forEach(function (m) { [von, bis].forEach(function (s) { var o = document.createElement("option"); o.value = m; o.textContent = name(m); s.appendChild(o); }); });
   // Standard: aktueller Monat (oder der nächste mit Terminen) bis Saisonende
@@ -322,7 +326,11 @@
     });
     tab.style.display = sichtbar ? "" : "none";
     document.getElementById("termine-leer").hidden = !!sichtbar;
-    document.getElementById("tf-druck").disabled = !sichtbar;
+    // Fertige PDF für genau diesen Zeitraum (beim Build mit Typst erzeugt); ohne PDF: Drucken als Notlösung
+    var pdf = PDFS[a + "|" + b], knopf = document.getElementById("tf-druck");
+    knopf.classList.toggle("aus", !sichtbar);
+    if (pdf) { knopf.href = pdf; knopf.setAttribute("download", "Termine_" + a + "_bis_" + b + ".pdf"); knopf.dataset.drucken = ""; }
+    else { knopf.href = "#"; knopf.removeAttribute("download"); knopf.dataset.drucken = "1"; }
     document.getElementById("druck-zeitraum").textContent = a === b ? name(a) : name(a) + " – " + name(b);
     try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b})); } catch (e) {}
   }
@@ -332,7 +340,9 @@
   var thema = null;
   window.addEventListener("beforeprint", function () { thema = document.documentElement.getAttribute("data-theme"); document.documentElement.setAttribute("data-theme", "light"); });
   window.addEventListener("afterprint", function () { if (thema) document.documentElement.setAttribute("data-theme", thema); });
-  document.getElementById("tf-druck").addEventListener("click", function () { window.print(); });
+  document.getElementById("tf-druck").addEventListener("click", function (ev) {
+    if (this.dataset.drucken) { ev.preventDefault(); window.print(); }
+  });
   anwenden();
 })();
 </script>
