@@ -19,7 +19,8 @@ FOTO UND GEBURTSTAG:
           "Gast Spieler": {"geburtstag": "14.03."}
         }
     false = Geburtstag nicht zeigen, "TT.MM." = selbst eingetragen (z. B. wenn nicht in der Liste),
-    "alter": true/false = Alter zeigen oder nicht (Standard: GEBURTSTAG_ALTER).
+    "alter": true/false = Alter zeigen oder nicht (Standard: GEBURTSTAG_ALTER),
+    "jahr": true/false = Geburtsjahr zeigen oder nicht (Standard: GEBURTSTAG_JAHR).
 
 build_site.py: erst sammeln(teams, dsb) -> liga.SPIELER_SEITEN, dann bauen(...).
 Das Geburtsjahr von der DSB-Liste wird nur für den Entwicklungskoeffizienten benutzt,
@@ -51,6 +52,7 @@ FOTO_ORDNER = os.path.join(ORDNER, "fotos")          # spieler/fotos/<slug>.jpg
 PROFILE = os.path.join(ORDNER, "profile.json")       # Ausnahmen (Geburtstag aus/selbst, Alter)
 FOTO_PLATZHALTER = True             # für jeden Spieler einen Platzhalter "Hier Bild einfügen" anlegen
 GEBURTSTAG_AUTO = True              # Geburtstag aus der Geburtstagsliste zeigen (False = nur über profile.json)
+GEBURTSTAG_JAHR = True              # Geburtsjahr mit anzeigen ("9. Dezember 2003")
 GEBURTSTAG_ALTER = False            # Alter dazu zeigen (pro Spieler änderbar mit "alter" in profile.json)
 MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September",
           "Oktober", "November", "Dezember"]
@@ -149,9 +151,12 @@ def geburtstag_text(name, profil, geburtstage, heute):
     wert = profil.get("geburtstag", GEBURTSTAG_AUTO)
     if not wert:
         return ""
-    if isinstance(wert, str):                      # selbst eingetragen: "14.03." oder "14.03"
-        m = re.match(r"^\s*(\d{1,2})\.(\d{1,2})\.?", wert)
-        return f"{int(m.group(1))}. {MONATE[int(m.group(2)) - 1]}" if m and 1 <= int(m.group(2)) <= 12 else ""
+    if isinstance(wert, str):                      # selbst eingetragen: "14.03." oder "14.03.2001"
+        m = re.match(r"^\s*(\d{1,2})\.(\d{1,2})\.?(\d{4})?", wert)
+        if not m or not 1 <= int(m.group(2)) <= 12:
+            return ""
+        jahr = f" {m.group(3)}" if m.group(3) and profil.get("jahr", GEBURTSTAG_JAHR) else ""
+        return f"{int(m.group(1))}. {MONATE[int(m.group(2)) - 1]}{jahr}"
     for g in geburtstage or ():                    # aus der Geburtstagsliste (gleicher Name)
         if slug(f"{g.get('vorname', '')} {g.get('nachname', '')}") != slug(name):
             continue
@@ -159,7 +164,7 @@ def geburtstag_text(name, profil, geburtstage, heute):
             tag, monat, jahr = (int(x) for x in str(g.get("geburtstag", "")).split("."))
         except ValueError:
             return ""
-        text = f"{tag}. {MONATE[monat - 1]}"
+        text = f"{tag}. {MONATE[monat - 1]}" + (f" {jahr}" if profil.get("jahr", GEBURTSTAG_JAHR) else "")
         if profil.get("alter", GEBURTSTAG_ALTER):
             alter = heute.year - jahr - ((heute.month, heute.day) < (monat, tag))
             text += f" · {alter} Jahre"
@@ -502,8 +507,7 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", g
     return f"""
     <p class="zurueck"><a href="../{esc(zurueck)}">← {esc(zurueck_text)}</a></p>
     <div class="sp-oben">
-    {f'<img class="sp-foto" src="../{esc(bild)}" alt="{esc(p["name"])}">' if bild else ""}
-    <div>
+    <div class="sp-links">
     <h1 class="sp-name">{esc(p["name"])}</h1>
     <div class="sp-kopf">
       <dl>
@@ -515,10 +519,11 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", g
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
     </div>
-    </div>
-    </div>
     {bezirk}
     {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour else ""}
+    </div>
+    {f'<img class="sp-foto" src="../{esc(bild)}" alt="{esc(p["name"])}">' if bild else ""}
+    </div>
     {verlauf_html(list(verlauf))}
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
     {partien_html(p, saison_jahr)}
@@ -529,10 +534,11 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", g
 
 STYLES = """<style>
       .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
-      .sp-oben { display: flex; gap: 2rem; align-items: flex-start; }
-      .sp-foto { width: 170px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; flex: 0 0 auto;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); }
-      @media (max-width: 600px) { .sp-oben { flex-direction: column; gap: 1rem; } .sp-foto { width: 140px; } }
+      .sp-oben { display: flex; gap: 2.5rem; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+      .sp-links { flex: 1 1 auto; min-width: 0; }
+      .sp-foto { width: clamp(240px, 26vw, 380px); height: auto; max-height: 480px; object-fit: contain; border-radius: 12px;
+        flex: 0 0 auto; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); }
+      @media (max-width: 800px) { .sp-oben { flex-direction: column-reverse; gap: 1.2rem; } .sp-foto { width: min(100%, 320px); } }
       .sp-kopf { display: flex; flex-wrap: wrap; gap: 0.8rem 3rem; align-items: flex-start; margin-bottom: 0.5rem; }
       .sp-kopf dl { display: grid; grid-template-columns: auto auto; gap: 0.2rem 1rem; margin: 0; }
       .sp-kopf dt { font-weight: bold; color: var(--navy); }
