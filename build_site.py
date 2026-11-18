@@ -557,12 +557,24 @@ def render_table_inner_html(parsed, today=TODAY):
         out.append('<thead><tr>' + ''.join(
             f'<th class="{k}">{h}</th>' if k else f'<th>{h}</th>' for h, k in zip(header, spalten_klasse)) + '</tr></thead>')
     out.append('<tbody>')
-    for r in parsed['rows']:
+    # Monat (JJJJ-MM) je Zeile für den Monatsfilter: Monatsüberschrift = Monat des nächsten Termins darunter,
+    # Zeilen ohne erkennbares Datum gehören zum Monat davor
+    rows = parsed['rows']
+    monate, letzter = [], ""
+    for i, r in enumerate(rows):
         if r['kind'] == 'month':
-            out.append(f'<tr class="monat-row"><td colspan="{r["colspan"]}" class="monat-header">{r["text"]}</td></tr>')
+            naechster = next((x['date'] for x in rows[i + 1:] if x['kind'] != 'month' and x.get('date')), None)
+            letzter = naechster.strftime("%Y-%m") if naechster else letzter
+        elif r.get('date'):
+            letzter = r['date'].strftime("%Y-%m")
+        monate.append(letzter)
+    for r, monat in zip(rows, monate):
+        dm = f' data-monat="{monat}"' if monat else ''
+        if r['kind'] == 'month':
+            out.append(f'<tr class="monat-row"{dm}><td colspan="{r["colspan"]}" class="monat-header">{r["text"]}</td></tr>')
             continue
         past = r.get('date') is not None and r['date'] < today
-        tr_cls = ' class="past"' if past else ''
+        tr_cls = (' class="past"' if past else '') + dm
         tds, spalte = [], 0
         for c in r['cells']:
             klassen = []
@@ -864,6 +876,93 @@ def farben_css():
 TERMINE_PDF = "termine.pdf"   # PDF zum Herunterladen/Mailen (liegt im Website-Root)
 
 
+# ---- Monatsfilter + "Auswahl als PDF" (Drucken) auf termine.html ----
+TERMINE_FILTER_HTML = """
+    <div class="termine-filter" id="termine-filter">
+      <label>Von <select id="tf-von"></select></label>
+      <label>Bis <select id="tf-bis"></select></label>
+      <button type="button" id="tf-alle">Alle</button>
+      <button type="button" id="tf-druck" class="tf-haupt">Auswahl als PDF</button>
+    </div>"""
+
+TERMINE_FILTER_CSS = """<style>
+      .termine-filter { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: end; margin: 1rem 0 0; }
+      .termine-filter label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
+      .termine-filter select, .termine-filter button { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px;
+        border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
+      .termine-filter button { cursor: pointer; }
+      .termine-filter .tf-haupt { font-weight: 700; }
+      .termine-filter button[disabled] { opacity: 0.45; cursor: not-allowed; }
+      .custom-tabelle tr.tf-aus { display: none; }
+      .termine-leer { text-align: center; padding: 1.5rem; color: var(--muted, #777); }
+      .druck-titel { display: none; }
+      @media print {
+        @page { size: A4 landscape; margin: 10mm; }
+        body * { visibility: hidden !important; }
+        #termine-druck, #termine-druck * { visibility: visible !important; }
+        #termine-druck { position: absolute !important; left: 0 !important; top: 0; width: 100% !important; transform: none !important;
+          margin: 0 !important; padding: 0 !important; }
+        .custom-tabelle { width: 100% !important; }
+        .druck-titel { display: block; font-size: 14pt; margin: 0 0 6pt; color: #000; }
+        .table-responsive { overflow: visible !important; margin: 0 !important; }
+        .custom-tabelle { font-size: 8pt; }
+        .custom-tabelle th, .custom-tabelle td { padding: 3px 4px !important; }
+        .custom-tabelle tr { break-inside: avoid; }
+        .custom-tabelle .past td { opacity: 1; }
+        * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+    </style>"""
+
+TERMINE_FILTER_JS = """<script>
+(function () {
+  var tab = document.querySelector(".custom-tabelle"); if (!tab) return;
+  var zeilen = [].slice.call(tab.querySelectorAll("tbody tr[data-monat]"));
+  var MON = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+  var monate = []; zeilen.forEach(function (z) { var m = z.getAttribute("data-monat"); if (monate.indexOf(m) < 0) monate.push(m); });
+  monate.sort();
+  if (!monate.length) { document.getElementById("termine-filter").hidden = true; return; }
+  var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter";
+  function name(m) { return MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
+  monate.forEach(function (m) { [von, bis].forEach(function (s) { var o = document.createElement("option"); o.value = m; o.textContent = name(m); s.appendChild(o); }); });
+  // Standard: aktueller Monat (oder der nächste mit Terminen) bis Saisonende
+  var h = new Date(), jetzt = h.getFullYear() + "-" + ("0" + (h.getMonth() + 1)).slice(-2);
+  var start = monate.filter(function (m) { return m >= jetzt; })[0] || monate[0];
+  var w = null; try { w = JSON.parse(localStorage.getItem(SPEICHER) || "null"); } catch (e) {}
+  von.value = w && monate.indexOf(w.von) >= 0 ? w.von : start;
+  bis.value = w && monate.indexOf(w.bis) >= 0 ? w.bis : monate[monate.length - 1];
+  function anwenden(geaendert) {
+    // Bis vor Von: tauschen (z. B. "April bis März" -> "März bis April")
+    if (bis.value < von.value) { var t = von.value; von.value = bis.value; bis.value = t; }
+    var a = von.value, b = bis.value, sichtbar = 0;
+    zeilen.forEach(function (z) {
+      var m = z.getAttribute("data-monat"), an = m >= a && m <= b;
+      z.classList.toggle("tf-aus", !an);
+      if (an && !z.classList.contains("monat-row")) sichtbar++;
+    });
+    // Monatsüberschriften ohne sichtbare Termine darunter ausblenden
+    zeilen.forEach(function (z, i) {
+      if (!z.classList.contains("monat-row") || z.classList.contains("tf-aus")) return;
+      var n = zeilen[i + 1];
+      if (!n || n.classList.contains("monat-row") || n.classList.contains("tf-aus")) z.classList.add("tf-aus");
+    });
+    tab.style.display = sichtbar ? "" : "none";
+    document.getElementById("termine-leer").hidden = !!sichtbar;
+    document.getElementById("tf-druck").disabled = !sichtbar;
+    document.getElementById("druck-zeitraum").textContent = a === b ? name(a) : name(a) + " – " + name(b);
+    try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b})); } catch (e) {}
+  }
+  von.addEventListener("change", anwenden); bis.addEventListener("change", anwenden);
+  document.getElementById("tf-alle").addEventListener("click", function () { von.value = monate[0]; bis.value = monate[monate.length - 1]; anwenden(); });
+  // Drucken/PDF immer im hellen Design
+  var thema = null;
+  window.addEventListener("beforeprint", function () { thema = document.documentElement.getAttribute("data-theme"); document.documentElement.setAttribute("data-theme", "light"); });
+  window.addEventListener("afterprint", function () { if (thema) document.documentElement.setAttribute("data-theme", thema); });
+  document.getElementById("tf-druck").addEventListener("click", function () { window.print(); });
+  anwenden();
+})();
+</script>"""
+
+
 def build_termine():
     folder_path = "termine"
     main_typ = os.path.join(folder_path, "termine.typ")
@@ -909,15 +1008,20 @@ def build_termine():
     pdf_link = (f'<p><a href="{TERMINE_PDF}" download>Termine als PDF herunterladen</a></p>'
                 if os.path.exists(TERMINE_PDF) else "")
 
+    filter_html = TERMINE_FILTER_HTML if (parsed and parsed['rows'] and not USE_SVG_FOR_TERMINE) else ""
     content = f"""{read_hinweis()}
     <h1>Termine & Spielplan</h1>
     {pdf_link}
     {calendar_html}
-    <div class="full-bleed">
+    {filter_html}
+    <div class="full-bleed" id="termine-druck">
+      <h2 class="druck-titel">SG Aschheim / Feldkirchen / Kirchheim – Termine <span id="druck-zeitraum"></span></h2>
       <div class="table-responsive">
         {table_html}
       </div>
-    </div>"""
+      <p class="termine-leer" id="termine-leer" hidden>Keine Termine in diesem Zeitraum.</p>
+    </div>
+    {TERMINE_FILTER_JS if filter_html else ""}"""
 
     styles = """<style>""" + FULL_BLEED_CSS + HINWEIS_CSS + """
       .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
@@ -937,9 +1041,9 @@ def build_termine():
       .kalender-box summary { cursor: pointer; font-weight: bold; }
       .kalender-box ul { list-style: none; padding: 0; margin: 0.6rem 0 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.4rem 1.5rem; }
       .kalender-box li a { margin-left: 0.6rem; color: #3498db; text-decoration: none; font-weight: bold; }
-    </style>"""
+    </style>""" + TERMINE_FILTER_CSS
 
-    styles = styles.replace("</style>", farben_css() + "</style>")
+    styles = styles.replace("</style>", farben_css() + "</style>", 1)
     render_page("Termine & Spielplan", content, "termine.html", extra_styles=styles)
     return upcoming_events
 

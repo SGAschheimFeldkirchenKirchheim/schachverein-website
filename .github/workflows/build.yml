@@ -85,5 +85,12 @@ jobs:
             echo "Keine Änderungen zum Committen vorhanden."
           else
             git commit -m "Auto-generate HTML and SVG files"
-            git push
+            # Falls inzwischen jemand anders gepusht hat (Bericht/Antrag eingereicht, zweiter Build):
+            # neuesten Stand holen, unsere frisch gebauten Dateien behalten, bis zu 3 Versuche
+            for versuch in 1 2 3; do
+              if git push; then break; fi
+              echo "Push abgelehnt – hole neuen Stand (Versuch $versuch)"
+              git pull --rebase -X theirs origin main || { git rebase --abort; exit 1; }
+            done
+            git push   # schlägt fehl (= roter Build), falls es nach 3 Versuchen immer noch nicht ging
           fi  
