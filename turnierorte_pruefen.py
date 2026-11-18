@@ -3,6 +3,7 @@ AFK on Tour – Anträge prüfen und Turniere eintragen.
 
   py turnierorte_pruefen.py          offene Anträge aus turnierorte/antraege/ abarbeiten
   py turnierorte_pruefen.py --neu    selbst ein Turnier eintragen (z. B. eigene alte Opens)
+  py turnierorte_pruefen.py --verwalten   Einträge eines Spielers löschen, ausblenden oder korrigieren
 
 Vorher und nachher "Alles aktualisieren" drücken.
 Bei einem chess-results-Link holt das Skript Turniername, Datum, Ort und Bedenkzeit selbst
@@ -138,13 +139,96 @@ def antrag_pruefen(a, spieler, besuche, konf):
         return w
 
 
+def verwalten(spieler, besuche, konf):
+    """Einträge eines Spielers anzeigen und löschen / aus- und einblenden / Link, Ort oder Datum ändern."""
+    geaendert = False
+    while True:
+        ids = sorted(spieler, key=lambda k: spieler[k].get("name", k).lower())
+        if not ids:
+            print("Noch keine Profile.")
+            return geaendert
+        print("\nProfile:")
+        for i, sid in enumerate(ids, 1):
+            n = sum(1 for b in besuche if b["spieler"] == sid)
+            print(f"  {i:2d}  {spieler[sid].get('name', sid)}  ({n} {'Eintrag' if n == 1 else 'Einträge'})")
+        w = input("Nummer des Spielers (leer = fertig): ").strip()
+        if not w:
+            return geaendert
+        if not w.isdigit() or not 1 <= int(w) <= len(ids):
+            continue
+        sid = ids[int(w) - 1]
+        while True:
+            eigene = [b for b in besuche if b["spieler"] == sid]
+            eigene.sort(key=lambda b: b.get("von", ""), reverse=True)
+            print(f"\n{spieler[sid].get('name', sid)}:")
+            for i, b in enumerate(eigene, 1):
+                aus = "  [AUSGEBLENDET]" if b.get("ausgeblendet") else ""
+                print(f"  {i:2d}  {b.get('von', '')[:7]}  {b.get('stadt', '')}  –  {b.get('turnier', '') or '-'}{aus}")
+                if b.get("link"):
+                    print(f"        {b['link']}")
+            print("  Befehle: l3 = Nr. 3 löschen · a3 = aus-/einblenden · k3 = Link ändern · o3 = Ort ändern · "
+                  "d3 = Datum ändern · p = ganzes Profil löschen · leer = zurück")
+            befehl = input("  > ").strip().lower()
+            if not befehl:
+                break
+            if befehl == "p":
+                if input(f"  Profil {spieler[sid].get('name', sid)} mit allen Einträgen löschen? (ja/nein) ").strip().lower() == "ja":
+                    besuche[:] = [b for b in besuche if b["spieler"] != sid]
+                    spieler.pop(sid, None)
+                    geaendert = True
+                    print("  -> Profil gelöscht")
+                    break
+                continue
+            m = re.fullmatch(r"([lakod])\s*(\d+)", befehl)
+            if not m or not 1 <= int(m.group(2)) <= len(eigene):
+                print("  ?")
+                continue
+            b = eigene[int(m.group(2)) - 1]
+            art = m.group(1)
+            if art == "l":
+                if input(f"  '{b.get('turnier') or b.get('stadt')}' wirklich löschen? (j/n) ").strip().lower() == "j":
+                    besuche.remove(b)
+                    geaendert = True
+            elif art == "a":
+                b["ausgeblendet"] = not b.get("ausgeblendet")
+                if not b["ausgeblendet"]:
+                    b.pop("ausgeblendet")
+                geaendert = True
+            elif art == "k":
+                link = input("  Neuer chess-results-Link (leer = Link entfernen): ").strip()
+                tnr = re.search(r"tnr(\d{5,8})", link)
+                b["link"] = tk.CR_LINK.format(tnr=tnr.group(1)) if tnr else link
+                if tnr and input("  Turniername/Datum von chess-results übernehmen? (j/n) ").strip().lower() == "j":
+                    seite = tk._hole(tk.CR_DETAIL.format(tnr=tnr.group(1)))
+                    d = tk.cr_details(tnr.group(1), seite) if seite else {}
+                    if d.get("name"):
+                        b["turnier"], b["von"], b["bis"] = d["name"], d.get("von") or b.get("von", ""), d.get("bis") or b.get("bis", "")
+                        print(f"  -> {b['turnier']}, {b['von']}")
+                    else:
+                        print("  chess-results nicht erreichbar – nur der Link wurde geändert")
+                geaendert = True
+            elif art == "o":
+                ort = ort_suchen(input("  Stadt, Land: ").strip())
+                if ort:
+                    b.update(stadt=ort["stadt"], land=ort["land"], lat=round(ort["lat"], 5), lon=round(ort["lon"], 5))
+                    print(f"  -> {ort['stadt']}, {ort['land']}")
+                    geaendert = True
+                else:
+                    print("  Ort nicht gefunden")
+            elif art == "d":
+                b["von"] = b["bis"] = input("  Datum (JJJJ-MM oder JJJJ-MM-TT): ").strip()
+                geaendert = True
+
+
 def main():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     konf = to.einstellungen()
     spieler = to.spieler_laden()
     besuche = to.besuche_laden()
     geaendert = False
-    if "--neu" in sys.argv:
+    if "--verwalten" in sys.argv:
+        geaendert = verwalten(spieler, besuche, konf)
+    elif "--neu" in sys.argv:
         while True:
             print("\nNeues Turnier eintragen (leer lassen = fertig)")
             name = input("  Name (Vor- und Nachname): ").strip()

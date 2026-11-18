@@ -10,6 +10,7 @@ Ablauf:
   2. Webmaster: "Alles aktualisieren", dann  py turnierorte_pruefen.py  (prüft mit chess-results,
      sucht den Ort, fragt j/n) -> landet in turnierorte/besuche.json. Nochmal "Alles aktualisieren".
   Eigene alte Turniere direkt eintragen:  py turnierorte_pruefen.py --neu
+  Fehler korrigieren (löschen, ausblenden, Link/Ort/Datum ändern):  py turnierorte_pruefen.py --verwalten
 
 Dateien (alle in turnierorte/):
   spieler.json        Profile: {"KorbinianR": {"name": "Korbinian Ruff", "anzeige": "Korbinian R."}}
@@ -109,7 +110,7 @@ def auswerten(spieler, besuche, konf):
     orte = {}                    # Ort -> {lat, lon, land, besuche: [...]}
     pro = {sid: [] for sid in spieler}
     for b in besuche:
-        if b.get("spieler") not in spieler:
+        if b.get("spieler") not in spieler or b.get("ausgeblendet"):
             continue
         ort = ort_gruppe(b.get("stadt", ""), gruppen)
         if not ort:
