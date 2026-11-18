@@ -208,10 +208,11 @@
       @media (max-width: 600px) { .rechner .r-spiel { grid-template-columns: 1fr; } .rechner .r-spiel span:last-child { text-align: left; } }
 
       .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
-      .sp-oben { display: flex; gap: 2rem; align-items: flex-start; }
-      .sp-foto { width: 170px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; flex: 0 0 auto;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); }
-      @media (max-width: 600px) { .sp-oben { flex-direction: column; gap: 1rem; } .sp-foto { width: 140px; } }
+      .sp-oben { display: flex; gap: 2.5rem; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+      .sp-links { flex: 1 1 auto; min-width: 0; }
+      .sp-foto { width: clamp(240px, 26vw, 380px); height: auto; max-height: 480px; object-fit: contain; border-radius: 12px;
+        flex: 0 0 auto; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); }
+      @media (max-width: 800px) { .sp-oben { flex-direction: column-reverse; gap: 1.2rem; } .sp-foto { width: min(100%, 320px); } }
       .sp-kopf { display: flex; flex-wrap: wrap; gap: 0.8rem 3rem; align-items: flex-start; margin-bottom: 0.5rem; }
       .sp-kopf dl { display: grid; grid-template-columns: auto auto; gap: 0.2rem 1rem; margin: 0; }
       .sp-kopf dt { font-weight: bold; color: var(--navy); }
@@ -280,8 +281,7 @@
     
     <p class="zurueck"><a href="../afk-3.html">← AFK 3</a></p>
     <div class="sp-oben">
-    
-    <div>
+    <div class="sp-links">
     <h1 class="sp-name">Lothar Egersdörfer</h1>
     <div class="sp-kopf">
       <dl>
@@ -289,14 +289,15 @@
         
         <dt>Bilanz</dt><dd>6½ / 10 (65 %) seit 2025/26</dd>
         <dt>Partien</dt><dd>Heim 6 · Auswärts 4</dd>
-        <dt>Geburtstag</dt><dd>31. August</dd>
+        <dt>Geburtstag</dt><dd>31. August 1970</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-3.html">AFK 3</a> <span class="klein">B-Klasse · Nr. 12</span></li><li><a href="../afk-4.html">AFK 4</a> <span class="klein">C-Klasse · Nr. 6</span></li></ul></div>
     </div>
-    </div>
-    </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1118&amp;PKZ=NU4385023&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     
+    </div>
+    
+    </div>
     
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
     <details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">½ / 2</span></h3></summary>
