@@ -114,7 +114,11 @@ EUROPA = {  # Ländernamen, wie sie in FIDE/chess-results vorkommen (englisch/de
     "lithuania": "Litauen", "ltu": "Litauen", "kosovo": "Kosovo", "kos": "Kosovo",
     "moldova": "Moldau", "mda": "Moldau", "ukraine": "Ukraine", "ukr": "Ukraine",
     "turkey": "Türkei", "türkiye": "Türkei", "tur": "Türkei", "georgia": "Georgien", "geo": "Georgien",
-    "armenia": "Armenien", "arm": "Armenien", "faroe islands": "Färöer", "far": "Färöer",
+    "armenia": "Armenien", "arm": "Armenien", "faroe islands": "Färöer", "far": "Färöer", "fai": "Färöer",
+    "azerbaijan": "Aserbaidschan", "aze": "Aserbaidschan", "israel": "Israel", "isr": "Israel",
+    "belarus": "Belarus", "blr": "Belarus", "russia": "Russland", "rus": "Russland",
+    "isle of man": "Isle of Man", "iom": "Isle of Man", "jersey": "Jersey", "jci": "Jersey",
+    "guernsey": "Guernsey", "gci": "Guernsey", "sco": "Schottland", "wls": "Wales",
 }
 
 
