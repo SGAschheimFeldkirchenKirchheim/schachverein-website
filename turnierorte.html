@@ -123,6 +123,15 @@
   .tour-flagge { background: none; border: 0; }
   .tour-flagge svg { overflow: visible; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
   .leaflet-popup-content { font-size: 0.85rem; line-height: 1.35; }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--surface, #fff); color: var(--text, #222);
+    box-shadow: 0 4px 16px rgba(0,0,0,.35); }
+  .leaflet-popup-content-wrapper { border: 1px solid var(--line, #ddd); border-radius: 10px; }
+  .leaflet-popup-content a { color: var(--link-c, #2c5d99); }
+  .leaflet-container a.leaflet-popup-close-button { color: var(--muted, #888); }
+  .leaflet-container { background: var(--soft, #e9eef3); font-family: inherit; }
+  .leaflet-control-zoom a { background: var(--surface, #fff); color: var(--text, #222); border-color: var(--line, #ccc); }
+  .leaflet-control-attribution { background: rgba(0,0,0,.35) !important; color: #ccc; }
+  .leaflet-control-attribution a { color: #ddd; }
   .leaflet-popup-content h4 { margin: 0 0 0.3rem; font-size: 1rem; }
   .leaflet-popup-content ul { margin: 0; padding-left: 1rem; }
   .tour-tab { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
@@ -236,8 +245,18 @@
   var D = JSON.parse(document.getElementById("tour-daten").textContent);
   if (!window.L || !document.getElementById("tour-karte")) return;
   var karte = L.map("tour-karte", {scrollWheelZoom: false}).setView([48.2, 11.6], 5);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(karte);
+  // Dezente Karte passend zum Design: hell (Positron) bzw. dunkel (Dark Matter), wechselt mit dem Hell/Dunkel-Knopf
+  var ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende &copy; <a href="https://carto.com/attributions">CARTO</a>';
+  var KACHEL = {hell: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                dunkel: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"};
+  var kacheln = null;
+  function thema() { return document.documentElement.getAttribute("data-theme") === "dark" ? "dunkel" : "hell"; }
+  function kartenstil() {
+    if (kacheln) karte.removeLayer(kacheln);
+    kacheln = L.tileLayer(KACHEL[thema()], {maxZoom: 18, subdomains: "abcd", attribution: ATTR}).addTo(karte);
+  }
+  kartenstil();
+  new MutationObserver(kartenstil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
   var ebene = L.layerGroup().addTo(karte), sel = document.getElementById("tour-wer");
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   function zeichne() {
