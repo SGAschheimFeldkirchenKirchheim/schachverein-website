@@ -149,6 +149,10 @@
   .tk-int button.dabei { background: var(--hell, #6f9fd8); color: #0e1524; }
   .tk-int.laedt { opacity: 0.5; }
   .tk-int-wer { color: var(--muted); }
+  .tk-int button.tk-int-als { border: 0; background: none; padding: 0; font-weight: 400; font-size: 0.78rem; color: var(--muted);
+    text-decoration: underline dotted; }
+  .tk-links .tk-int button.tk-int-als { color: var(--muted); }
+  .tk-int-hinweis { color: var(--muted); font-size: 0.78rem; flex: 1 1 100%; }
   .tk-int-name { display: flex; gap: 0.3rem; flex: 1 1 100%; }
   .tk-int-name input { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.5rem; border-radius: 6px; border: 1px solid var(--line);
     background: var(--soft); color: var(--text); flex: 1; min-width: 0; }
@@ -479,46 +483,95 @@
   }
 
   // ---------- Wer fährt mit? ----------
-  var INTERESSE = {}, NAME = "";
-  try { NAME = localStorage.getItem("afk-name") || ""; } catch (e) {}
-  function kurz(n) { var t = n.trim().split(/\s+/); return t.length > 1 ? t.slice(0, -1).join(" ") + " " + t[t.length - 1].charAt(0).toUpperCase() + "." : n; }
+  // Ein Name = ein Konto mit einem oder mehreren Geräten. Das Gerät hat eine zufällige Kennung
+  // (afk-geraet im Browser); der Server entscheidet, welcher Name dazu gehört und ob er freigegeben ist.
+  var INTERESSE = {}, MEINE = {}, ICH = null, GERAET = "";
+  try {
+    localStorage.removeItem("afk-name");                         // alte Version: Namen nur im Browser
+    GERAET = localStorage.getItem("afk-geraet") || "";
+    if (!/^[a-f0-9]{32}$/.test(GERAET)) {
+      var z = new Uint8Array(16); crypto.getRandomValues(z);
+      GERAET = Array.prototype.map.call(z, function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+      localStorage.setItem("afk-geraet", GERAET);
+    }
+  } catch (e) {}
   function interesseHtml(e) {
-    if (!D.skript) return "";
-    var leute = INTERESSE[e.key] || [], ich = NAME && leute.indexOf(kurz(NAME)) >= 0;
+    if (!D.skript || !GERAET) return "";
+    var leute = INTERESSE[e.key] || [], ich = !!MEINE[e.key], wartet = ICH && ICH.status === "wartet";
     return '<div class="tk-int" data-key="' + esc(e.key) + '">' +
-      '<button type="button" data-int="' + esc(e.key) + '" class="' + (ich ? "dabei" : "") + '">' + (ich ? "✓ Ich will hin" : "Ich will hin") + "</button>" +
+      '<button type="button" data-int="' + esc(e.key) + '" class="' + (ich ? "dabei" : "") + '"' +
+      (wartet ? ' title="„' + esc(ICH.name) + '“ wartet noch auf Freigabe"' : "") + ">" + (ich ? "✓ Ich will hin" : "Ich will hin") + "</button>" +
       (leute.length ? '<span class="tk-int-wer">' + (leute.length === 1 ? "Interesse: " : leute.length + " wollen hin: ") +
-        esc(leute.join(", ")) + "</span>" : "") + "</div>";
+        esc(leute.join(", ")) + "</span>" : "") +
+      (ich && ICH && ICH.status === "ok" ? (ICH.antrag ? '<span class="tk-int-hinweis">Änderung zu „' + esc(ICH.antrag) + '“ beantragt</span>'
+        : '<button type="button" class="tk-int-als" data-int-umbenennen="' + esc(e.key) + '">Name falsch?</button>') : "") + "</div>";
+  }
+  function hinweis(box, text) {
+    var alt = box.querySelector(".tk-int-hinweis.neu"); if (alt) alt.remove();
+    var s = document.createElement("span"); s.className = "tk-int-hinweis neu"; s.textContent = text; box.appendChild(s);
+  }
+  function post(daten, box, fertig) {
+    box.classList.add("laedt");
+    daten.geraet = GERAET; daten.website = "";
+    fetch(D.skript, {method: "POST", body: JSON.stringify(daten)})
+      .then(function (r) { return r.json(); })
+      .then(function (a) {
+        box.classList.remove("laedt");
+        if (a.ich !== undefined) ICH = a.ich;
+        if (!a.ok) { alert(a.fehler || "Das hat nicht geklappt."); return; }
+        fertig(a);
+      })
+      .catch(function (e) { box.classList.remove("laedt"); alert("Das hat nicht geklappt: " + e.message); });
+  }
+  function nameFormular(box, text, senden) {
+    if (box.querySelector("form")) return;
+    var fm = document.createElement("form");
+    fm.className = "tk-int-name";
+    fm.innerHTML = '<input name="n" placeholder="' + text + '" maxlength="60" required><button>OK</button>';
+    fm.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var n = fm.elements.n.value.trim().replace(/\s+/g, " ");
+      if (n.split(" ").length < 2) { fm.elements.n.setCustomValidity("Bitte Vor- und Nachname"); fm.reportValidity(); return; }
+      senden(n);
+    });
+    fm.elements.n.addEventListener("input", function () { fm.elements.n.setCustomValidity(""); });
+    box.appendChild(fm); fm.elements.n.focus();
+  }
+  function umschalten(key, box) {
+    post({typ: "interesse", key: key}, box, function (a) {
+      INTERESSE[key] = a.leute || [];
+      if (a.dabei) MEINE[key] = true; else delete MEINE[key];
+      zeige();
+    });
   }
   function interesseKlick(knopf) {
     var key = knopf.getAttribute("data-int"), box = knopf.parentNode;
-    if (!NAME) {
-      if (box.querySelector("form")) return;
-      var fm = document.createElement("form");
-      fm.className = "tk-int-name";
-      fm.innerHTML = '<input name="n" placeholder="Dein Name (Vor- und Nachname)" maxlength="60" required><button>OK</button>';
-      fm.addEventListener("submit", function (ev) {
-        ev.preventDefault();
-        NAME = fm.elements.n.value.trim().replace(/\s+/g, " ");
-        if (NAME.split(" ").length < 2) { fm.elements.n.setCustomValidity("Bitte Vor- und Nachname"); fm.reportValidity(); NAME = ""; return; }
-        try { localStorage.setItem("afk-name", NAME); } catch (e) {}
-        senden(key, box);
+    if (ICH && ICH.status === "ok") return umschalten(key, box);
+    if (ICH && ICH.status === "wartet")
+      return hinweis(box, "„" + ICH.name + "“ wird für dieses Gerät erst nach Freigabe aktiv – das kann etwas dauern.");
+    nameFormular(box, "Dein Name (Vor- und Nachname)", function (n) {
+      post({typ: "anmelden", name: n}, box, function () {
+        if (ICH && ICH.status === "ok") return umschalten(key, box);
+        zeige();
+        hinweis(document.querySelector('.tk-int[data-key="' + key + '"]') || box,
+          "Den Namen „" + n + "“ gibt es schon. Damit niemand in fremdem Namen eingetragen wird, muss dieses Gerät erst freigegeben werden – das kann etwas dauern.");
       });
-      box.appendChild(fm); fm.elements.n.focus();
-      return;
-    }
-    senden(key, box);
+    });
   }
-  function senden(key, box) {
-    box.classList.add("laedt");
-    fetch(D.skript, {method: "POST", body: JSON.stringify({typ: "interesse", key: key, name: NAME, website: ""})})
-      .then(function (r) { return r.json(); })
-      .then(function (a) { if (!a.ok) throw new Error(a.fehler || "Fehler"); INTERESSE[key] = a.leute || []; zeige(); })
-      .catch(function (e) { box.classList.remove("laedt"); alert("Das hat nicht geklappt: " + e.message); });
+  function umbenennenKlick(knopf) {
+    var box = knopf.parentNode;
+    nameFormular(box, "Richtiger Name (Vor- und Nachname)", function (n) {
+      post({typ: "umbenennen", name: n}, box, function () { zeige(); });
+    });
   }
-  if (D.skript) {
-    fetch(D.skript + "?aktion=interesse").then(function (r) { return r.json(); })
-      .then(function (a) { if (a && a.interesse) { INTERESSE = a.interesse; zeige(); } }).catch(function () {});
+  if (D.skript && GERAET) {
+    fetch(D.skript + "?aktion=interesse&geraet=" + GERAET).then(function (r) { return r.json(); })
+      .then(function (a) {
+        if (!a || !a.interesse) return;
+        INTERESSE = a.interesse; ICH = a.ich || null; MEINE = {};
+        (a.meine || []).forEach(function (k) { MEINE[k] = true; });
+        zeige();
+      }).catch(function () {});
   }
 
   function passendeTeile(e, w) {
@@ -622,6 +675,8 @@
     if (mv) { monatVersatz += +mv.getAttribute("data-monat-nav"); zeige(); return; }
     var ib = ev.target.closest("[data-int]");
     if (ib) { interesseKlick(ib); return; }
+    var ub = ev.target.closest("[data-int-umbenennen]");
+    if (ub) { umbenennenKlick(ub); return; }
     var k = ev.target.closest("[data-ics]"); if (k) ics(D.events[+k.getAttribute("data-ics")]);
   });
   f.addEventListener("input", zeige); f.addEventListener("change", zeige);
