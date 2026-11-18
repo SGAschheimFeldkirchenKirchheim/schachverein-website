@@ -36,6 +36,10 @@
    49.9819529,
    11.6134138
   ],
+  "Bled, Slowenien": [
+   46.3684202,
+   14.1100595
+  ],
   "Bremen, Deutschland": [
    53.0758196,
    8.8071646
@@ -56,6 +60,22 @@
    48.684969,
    9.0113444
   ],
+  "College Garden Hotel, 2540 Bad Vöslau, Johann Strauß-Str. 2, Österreich": [
+   47.9727366,
+   16.166954
+  ],
+  "Continental hotel, Marianske Lazne, Tschechien": [
+   49.9673167,
+   12.7013542
+  ],
+  "Dom HVIDRE, ul. Stjepana Marjanovića 2, Sl.Brod, Kroatien": [
+   45.1785678,
+   18.0661156
+  ],
+  "Dubrovnik, Valamar Lacroma Dubrovnik Hotel, Iva Dulčića 34, Kroatien": [
+   42.9792351,
+   17.1909547
+  ],
   "Dürnstein, Österreich": [
    48.3953879,
    15.5203111
@@ -63,6 +83,10 @@
   "Frankenthal, Deutschland": [
    49.5353466,
    8.3541391
+  ],
+  "Gelsenkirchen, Deutschland": [
+   51.5110321,
+   7.0960124
   ],
   "Genussquelle Rosalia, Schulstraße 14, 7202 Bad Sauerbrunn, Österreich": [
    47.7752135,
@@ -76,6 +100,7 @@
    46.6334295,
    14.3219876
   ],
+  "Grandhotel Novy Bor, Tschechien": null,
   "Graz - Nova Park Hotel, Österreich": null,
   "Graz - Novapark Hotel, Österreich": [
    47.0957212,
@@ -84,6 +109,14 @@
   "Greifswald, Deutschland": [
    54.095791,
    13.3815238
+  ],
+  "Großer Minoritensaal, Mariahilferplatz 3, 8020 Graz, Österreich": [
+   47.068558,
+   15.4137281
+  ],
+  "Gyula, Hotel Hőforrás, Ungarn": [
+   47.452953,
+   21.4058154
   ],
   "Hamburg, Deutschland": [
    53.5501721,
@@ -126,6 +159,10 @@
    46.8266699,
    9.2554863
   ],
+  "Hotel Marina Selce, Emila Antića 73, 51266 Selce, Kroatien": [
+   45.157389,
+   14.7200531
+  ],
   "Hotel Schloss Ragaz, Schlossstrasse 1, 7310 Bad Ragaz, 081 303 77 77, Schweiz": [
    47.0052352,
    9.5021527
@@ -134,10 +171,26 @@
    47.2003055,
    8.7780752
   ],
+  "Hotel Tolero, Obala kralja Petra Krešimira IV. 1, Ploče, Kroatien": [
+   43.0524293,
+   17.4360676
+  ],
   "Hôtel Alpha Palmiers, Rue du Petit-Chêne 34 · 1003 Lausanne +41 21 55 55 999, Schweiz": null,
+  "Jeremenkova 1835/106, Praha 4 - Krč, Tschechien": [
+   50.0438786,
+   14.4350453
+  ],
+  "Kantonschule, Hubstrasse 75, 9500 Wil, Schweiz": [
+   47.4652508,
+   9.047905
+  ],
   "Kelheim, Deutschland": [
    48.91849,
    11.8722777
+  ],
+  "Kino dvorana dom kulture, Bošnjaci, Kroatien": [
+   45.050207,
+   18.7552586
   ],
   "Kirchenlamitz, Deutschland": [
    50.1515445,
@@ -146,6 +199,10 @@
   "Kongress- und Theaterhaus Bad Ischl, Österreich": [
    47.7113628,
    13.6188148
+  ],
+  "Közösségi Ház (Bányász Klub), Edelény, Kenderföldi út 12/A., Ungarn": [
+   47.631067,
+   17.5772069
   ],
   "LINDE OBERSTRASS, Universitätstrasse 91, 8006 Zürich, Schweiz": [
    47.3860559,
@@ -158,6 +215,10 @@
   "Landesmusikschule Scharnstein, Kirchenplatz 6, 4644 Scharnstein, Österreich": [
    47.8991308,
    13.9418539
+  ],
+  "Lucija, Slowenien": [
+   45.50708,
+   13.6046378
   ],
   "Mövenpick Hotel - Aeschengraben 25 - CH-4051 Basel, Schweiz": [
    47.5549807,
@@ -175,9 +236,21 @@
    49.8273187,
    11.8250928
   ],
+  "Náměstí B. Hrozného 1737/31, Lysá nad Labem, Tschechien": [
+   50.202682,
+   14.8403844
+  ],
+  "OAHŠ Turnov, Zborovská ulice, Turnov, Tschechien": [
+   50.5874068,
+   15.1574182
+  ],
   "Ohlsbach, Deutschland": [
    48.4316699,
    7.9939024
+  ],
+  "Olympik hotel, Prague, Tschechien": [
+   50.0983807,
+   14.4682818
   ],
   "Ostseebad Heringsdorf (Usedom), Deutschland": null,
   "Paderborn, Deutschland": [
@@ -187,6 +260,10 @@
   "Palmanova, Italien": [
    45.9054635,
    13.3099318
+  ],
+  "Parkhotel Plzen ****, Plzen, Tschechien": [
+   49.7209213,
+   13.3704677
   ],
   "Pforzheim, Deutschland": [
    48.890934,
@@ -217,6 +294,14 @@
    9.0478868
   ],
   "Reichenbach, Goethe-Gymnasium (Schulteil Friedensschule), F.-Engels-Platz 7, Deutschland": null,
+  "Resort Sepetná, Ostravice, Tschechien": [
+   49.5381161,
+   18.3931771
+  ],
+  "Restoran \"Štefova klet\", Gornja Dubrava 21, Kroatien": [
+   46.4293881,
+   16.3002043
+  ],
   "Rifer Hauptstraße 37 5400 Hallein (RIF), Österreich": [
    47.7267494,
    13.0718723
@@ -225,6 +310,7 @@
    45.5201113,
    8.7692822
   ],
+  "SK OAZA, Jeremenkova 1835/106, Praha 4-Krč, stanice autobusu Na Strži, Tschechien": null,
   "Schloss Rosenstein, Rosenstein 14, Stuttgart, Deutschland": [
    48.7784485,
    9.1800132
@@ -240,6 +326,14 @@
   "Sporthotel Pontresina, Via Maistra 145, 7504 Pontresina, 081 838 94 00, Schweiz": [
    46.4868659,
    9.906546
+  ],
+  "Sportovní hala, Boršická 1313, 687 25 Hluk, Tschechien": [
+   48.9851193,
+   17.5266975
+  ],
+  "Stadtsäle Traiskirchen (Hauptplatz 18, 2514 Traiskirchen), Österreich": [
+   48.0136418,
+   16.2941055
   ],
   "Steckborn, Schweiz": [
    47.6653429,
@@ -261,6 +355,10 @@
    47.4978118,
    15.7300246
   ],
+  "Vienna Chess School, Karlsgasse 20/1, 1040 Wien, Österreich": [
+   48.1925682,
+   16.3703749
+  ],
   "Waldhotel**** Buolstrasse 3, CH-7270 Davos Platz, Schweiz": [
    46.7933845,
    9.8206999
@@ -268,6 +366,7 @@
   "Wesel, Deutschland": [
    51.6576909,
    6.617087
-  ]
+  ],
+  "Zagreb, MO Janko Matko, Kroatien": null
  }
 }
