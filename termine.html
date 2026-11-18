@@ -148,7 +148,33 @@
       .custom-tabelle td.bg-orangered { background: #ff4500; }
       .custom-tabelle td.bg-deepskyblue { background: #00bfff; }
       .custom-tabelle td.bg-darkslategray { background: #528b8b; color: white; }
-</style>
+</style><style>
+      .termine-filter { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: end; margin: 1rem 0 0; }
+      .termine-filter label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
+      .termine-filter select, .termine-filter button { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px;
+        border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
+      .termine-filter button { cursor: pointer; }
+      .termine-filter .tf-haupt { font-weight: 700; }
+      .termine-filter button[disabled] { opacity: 0.45; cursor: not-allowed; }
+      .custom-tabelle tr.tf-aus { display: none; }
+      .termine-leer { text-align: center; padding: 1.5rem; color: var(--muted, #777); }
+      .druck-titel { display: none; }
+      @media print {
+        @page { size: A4 landscape; margin: 10mm; }
+        body * { visibility: hidden !important; }
+        #termine-druck, #termine-druck * { visibility: visible !important; }
+        #termine-druck { position: absolute !important; left: 0 !important; top: 0; width: 100% !important; transform: none !important;
+          margin: 0 !important; padding: 0 !important; }
+        .custom-tabelle { width: 100% !important; }
+        .druck-titel { display: block; font-size: 14pt; margin: 0 0 6pt; color: #000; }
+        .table-responsive { overflow: visible !important; margin: 0 !important; }
+        .custom-tabelle { font-size: 8pt; }
+        .custom-tabelle th, .custom-tabelle td { padding: 3px 4px !important; }
+        .custom-tabelle tr { break-inside: avoid; }
+        .custom-tabelle .past td { opacity: 1; }
+        * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+    </style>
   <link rel="stylesheet" href="design.css">
   <meta property="og:title" content="Termine & Spielplan | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
@@ -196,63 +222,120 @@
       <ul><li><strong>Alle Termine</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>AFK 1</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>AFK 2</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>AFK 3</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>AFK 4</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>AFK 5</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>AFK 6</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>Senioren</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li><li><strong>Jugend</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics">Abonnieren</a> <a href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Link kopieren</a></li></ul>
     </details>
     
-    <div class="full-bleed">
+    
+    <div class="termine-filter" id="termine-filter">
+      <label>Von <select id="tf-von"></select></label>
+      <label>Bis <select id="tf-bis"></select></label>
+      <button type="button" id="tf-alle">Alle</button>
+      <button type="button" id="tf-druck" class="tf-haupt">Auswahl als PDF</button>
+    </div>
+    <div class="full-bleed" id="termine-druck">
+      <h2 class="druck-titel">SG Aschheim / Feldkirchen / Kirchheim – Termine <span id="druck-zeitraum"></span></h2>
       <div class="table-responsive">
         <table class="custom-tabelle"><thead><tr><th>Termin</th><th>Verein</th><th class="team-afk-1">AFK 1</th><th class="team-afk-2">AFK 2</th><th class="team-afk-3">AFK 3</th><th class="team-afk-4">AFK 4</th><th class="team-afk-5">AFK 5</th><th class="team-afk-6">AFK 6</th><th class="team-senioren">Senioren</th><th class="team-jugend">Jugend</th></tr></thead>
 <tbody>
-<tr class="monat-row"><td colspan="10" class="monat-header">November</td></tr>
-<tr><td class="bg-darkslategray">20.11. Fr</td><td class="bg-yellow"><a href="https://www.mathenacht.de/" target="_blank" rel="noopener">Nacht der Mathematik</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>21.11. Sa, 14:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 1</td></tr>
-<tr><td>22.11. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 1</td></tr>
-<tr><td>22.11. So, 11:00 Uhr</td><td>Münchner Blitz-EM</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>26.11. Do, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">27.11. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 2</td><td></td><td></td></tr>
-<tr><td>29.11. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-blueviolet team-zelle team-jugend">U14/U16 MMM Runde 1-3</td></tr>
-<tr><td>29.11. So, 11:00 Uhr</td><td>Mannschafts-und Ligapokal</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr class="monat-row"><td colspan="10" class="monat-header">Dezember</td></tr>
-<tr><td>05.12. Sa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Schulschach EM</td></tr>
-<tr><td>05.12. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 2+3</td></tr>
-<tr><td>06.12. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 2+3</td></tr>
-<tr><td>08.12. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 3</td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">11.12. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 4</td><td class="bg-green team-zelle team-afk-2">MMM Runde 4</td><td class="bg-green team-zelle team-afk-3">MMM Runde 4</td><td class="bg-green team-zelle team-afk-4">MMM Runde 4</td><td class="bg-green team-zelle team-afk-5">MMM Runde 4</td><td></td><td></td><td></td></tr>
-<tr><td>12.12. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-blueviolet team-zelle team-jugend">U14/U16 MMM Runde 4+5</td></tr>
-<tr><td>14.12. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Spielfrei</td><td></td></tr>
-<tr><td class="bg-darkslategray">18.12. Fr</td><td class="bg-orange">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr class="monat-row"><td colspan="10" class="monat-header">Januar</td></tr>
-<tr><td>06.01. Mi</td><td>Dreikönigsturnier</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">22.01. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 3</td><td></td></tr>
-<tr><td>23.01. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 4+5</td></tr>
-<tr><td>24.01. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 4+5</td></tr>
-<tr><td>25.01. Mo, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 4</td><td></td><td></td></tr>
-<tr><td>28.01. Do, 19:30 Uhr</td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-3">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">29.01. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">29.01. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 5</td><td></td><td></td><td class="bg-green team-zelle team-afk-4">MMM Runde 5</td><td class="bg-green team-zelle team-afk-5">MMM Runde 5</td><td></td><td></td><td></td></tr>
-<tr><td>30.01. Sa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Schulschach MMM</td></tr>
-<tr class="monat-row"><td colspan="10" class="monat-header">Februar</td></tr>
-<tr><td>18.02. Do, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-4">MMM Runde 6</td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">19.02. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 6</td><td class="bg-green team-zelle team-afk-2">MMM Runde 6</td><td class="bg-green team-zelle team-afk-3">MMM Runde 6</td><td></td><td class="bg-green team-zelle team-afk-5">MMM Runde 6</td><td class="bg-green team-zelle team-afk-6">MMM Runde 5</td><td></td><td></td></tr>
-<tr><td>20.02. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 6+7</td></tr>
-<tr><td>21.02. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 6+7</td></tr>
-<tr><td>24.02. Mi, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 4</td><td></td></tr>
-<tr class="monat-row"><td colspan="10" class="monat-header">März</td></tr>
-<tr><td>09.03. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 6</td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">12.03. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 7</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">12.03. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 7</td><td></td><td class="bg-green team-zelle team-afk-3">MMM Runde 7</td><td class="bg-green team-zelle team-afk-4">MMM Runde 7</td><td class="bg-green team-zelle team-afk-5">MMM Runde 7</td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">19.03. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 5</td><td></td></tr>
-<tr class="monat-row"><td colspan="10" class="monat-header">April</td></tr>
-<tr><td>06.04. Di, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>08.04. Do, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-4">MMM Runde 8</td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">09.04. Fr, 19:30 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 8</td><td class="bg-green team-zelle team-afk-3">MMM Runde 8</td><td></td><td class="bg-green team-zelle team-afk-5">MMM Runde 8</td><td class="bg-green team-zelle team-afk-6">MMM Runde 7</td><td></td><td></td></tr>
-<tr><td>13.04. Di, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 6</td><td></td></tr>
-<tr><td>17.04. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, Ab 2.Liga Runde 1-3</td></tr>
-<tr><td>18.04. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, Ab 2.Liga Runde 4+5</td></tr>
-<tr><td>27.04. Di, 19:30 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 9</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td class="bg-darkslategray">30.04. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 9</td><td></td><td class="bg-green team-zelle team-afk-3">MMM Runde 9</td><td class="bg-green team-zelle team-afk-4">MMM Runde 9</td><td class="bg-green team-zelle team-afk-5">MMM Runde 9</td><td></td><td></td><td></td></tr>
-<tr class="monat-row"><td colspan="10" class="monat-header">Mai</td></tr>
-<tr><td class="bg-darkslategray">14.05. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 7</td><td></td></tr>
+<tr class="monat-row" data-monat="2026-11"><td colspan="10" class="monat-header">November</td></tr>
+<tr data-monat="2026-11"><td class="bg-darkslategray">20.11. Fr</td><td class="bg-yellow"><a href="https://www.mathenacht.de/" target="_blank" rel="noopener">Nacht der Mathematik</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2026-11"><td>21.11. Sa, 14:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 1</td></tr>
+<tr data-monat="2026-11"><td>22.11. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 1</td></tr>
+<tr data-monat="2026-11"><td>22.11. So, 11:00 Uhr</td><td>Münchner Blitz-EM</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2026-11"><td>26.11. Do, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2026-11"><td class="bg-darkslategray">27.11. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 2</td><td></td><td></td></tr>
+<tr data-monat="2026-11"><td>29.11. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-blueviolet team-zelle team-jugend">U14/U16 MMM Runde 1-3</td></tr>
+<tr data-monat="2026-11"><td>29.11. So, 11:00 Uhr</td><td>Mannschafts-und Ligapokal</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="monat-row" data-monat="2026-12"><td colspan="10" class="monat-header">Dezember</td></tr>
+<tr data-monat="2026-12"><td>05.12. Sa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Schulschach EM</td></tr>
+<tr data-monat="2026-12"><td>05.12. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 2+3</td></tr>
+<tr data-monat="2026-12"><td>06.12. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 2+3</td></tr>
+<tr data-monat="2026-12"><td>08.12. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 3</td><td></td><td></td></tr>
+<tr data-monat="2026-12"><td class="bg-darkslategray">11.12. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 4</td><td class="bg-green team-zelle team-afk-2">MMM Runde 4</td><td class="bg-green team-zelle team-afk-3">MMM Runde 4</td><td class="bg-green team-zelle team-afk-4">MMM Runde 4</td><td class="bg-green team-zelle team-afk-5">MMM Runde 4</td><td></td><td></td><td></td></tr>
+<tr data-monat="2026-12"><td>12.12. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-blueviolet team-zelle team-jugend">U14/U16 MMM Runde 4+5</td></tr>
+<tr data-monat="2026-12"><td>14.12. Mo</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Spielfrei</td><td></td></tr>
+<tr data-monat="2026-12"><td class="bg-darkslategray">18.12. Fr</td><td class="bg-orange">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="monat-row" data-monat="2027-01"><td colspan="10" class="monat-header">Januar</td></tr>
+<tr data-monat="2027-01"><td>06.01. Mi</td><td>Dreikönigsturnier</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td class="bg-darkslategray">22.01. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 3</td><td></td></tr>
+<tr data-monat="2027-01"><td>23.01. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 4+5</td></tr>
+<tr data-monat="2027-01"><td>24.01. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 4+5</td></tr>
+<tr data-monat="2027-01"><td>25.01. Mo, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 4</td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td>28.01. Do, 19:30 Uhr</td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-3">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td class="bg-darkslategray">29.01. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td class="bg-darkslategray">29.01. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 5</td><td></td><td></td><td class="bg-green team-zelle team-afk-4">MMM Runde 5</td><td class="bg-green team-zelle team-afk-5">MMM Runde 5</td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td>30.01. Sa</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Schulschach MMM</td></tr>
+<tr class="monat-row" data-monat="2027-02"><td colspan="10" class="monat-header">Februar</td></tr>
+<tr data-monat="2027-02"><td>18.02. Do, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-4">MMM Runde 6</td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-02"><td class="bg-darkslategray">19.02. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 6</td><td class="bg-green team-zelle team-afk-2">MMM Runde 6</td><td class="bg-green team-zelle team-afk-3">MMM Runde 6</td><td></td><td class="bg-green team-zelle team-afk-5">MMM Runde 6</td><td class="bg-green team-zelle team-afk-6">MMM Runde 5</td><td></td><td></td></tr>
+<tr data-monat="2027-02"><td>20.02. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 6+7</td></tr>
+<tr data-monat="2027-02"><td>21.02. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, 1.Liga Runde 6+7</td></tr>
+<tr data-monat="2027-02"><td>24.02. Mi, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 4</td><td></td></tr>
+<tr class="monat-row" data-monat="2027-03"><td colspan="10" class="monat-header">März</td></tr>
+<tr data-monat="2027-03"><td>09.03. Di, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-6">MMM Runde 6</td><td></td><td></td></tr>
+<tr data-monat="2027-03"><td class="bg-darkslategray">12.03. Fr, 19:00 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 7</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-03"><td class="bg-darkslategray">12.03. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 7</td><td></td><td class="bg-green team-zelle team-afk-3">MMM Runde 7</td><td class="bg-green team-zelle team-afk-4">MMM Runde 7</td><td class="bg-green team-zelle team-afk-5">MMM Runde 7</td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-03"><td class="bg-darkslategray">19.03. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 5</td><td></td></tr>
+<tr class="monat-row" data-monat="2027-04"><td colspan="10" class="monat-header">April</td></tr>
+<tr data-monat="2027-04"><td>06.04. Di, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td>08.04. Do, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-afk-4">MMM Runde 8</td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td class="bg-darkslategray">09.04. Fr, 19:30 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 8</td><td class="bg-green team-zelle team-afk-3">MMM Runde 8</td><td></td><td class="bg-green team-zelle team-afk-5">MMM Runde 8</td><td class="bg-green team-zelle team-afk-6">MMM Runde 7</td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td>13.04. Di, 19:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 6</td><td></td></tr>
+<tr data-monat="2027-04"><td>17.04. Sa, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, Ab 2.Liga Runde 1-3</td></tr>
+<tr data-monat="2027-04"><td>18.04. So, 10:00 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-red team-zelle team-jugend">U20 MMM, Ab 2.Liga Runde 4+5</td></tr>
+<tr data-monat="2027-04"><td>27.04. Di, 19:30 Uhr</td><td></td><td></td><td class="bg-green team-zelle team-afk-2">MMM Runde 9</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td class="bg-darkslategray">30.04. Fr, 19:30 Uhr</td><td></td><td class="bg-green team-zelle team-afk-1">MMM Runde 9</td><td></td><td class="bg-green team-zelle team-afk-3">MMM Runde 9</td><td class="bg-green team-zelle team-afk-4">MMM Runde 9</td><td class="bg-green team-zelle team-afk-5">MMM Runde 9</td><td></td><td></td><td></td></tr>
+<tr class="monat-row" data-monat="2027-05"><td colspan="10" class="monat-header">Mai</td></tr>
+<tr data-monat="2027-05"><td class="bg-darkslategray">14.05. Fr, 19:30 Uhr</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="bg-green team-zelle team-senioren">MSMM Runde 7</td><td></td></tr>
 </tbody></table>
       </div>
+      <p class="termine-leer" id="termine-leer" hidden>Keine Termine in diesem Zeitraum.</p>
     </div>
+    <script>
+(function () {
+  var tab = document.querySelector(".custom-tabelle"); if (!tab) return;
+  var zeilen = [].slice.call(tab.querySelectorAll("tbody tr[data-monat]"));
+  var MON = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+  var monate = []; zeilen.forEach(function (z) { var m = z.getAttribute("data-monat"); if (monate.indexOf(m) < 0) monate.push(m); });
+  monate.sort();
+  if (!monate.length) { document.getElementById("termine-filter").hidden = true; return; }
+  var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter";
+  function name(m) { return MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
+  monate.forEach(function (m) { [von, bis].forEach(function (s) { var o = document.createElement("option"); o.value = m; o.textContent = name(m); s.appendChild(o); }); });
+  // Standard: aktueller Monat (oder der nächste mit Terminen) bis Saisonende
+  var h = new Date(), jetzt = h.getFullYear() + "-" + ("0" + (h.getMonth() + 1)).slice(-2);
+  var start = monate.filter(function (m) { return m >= jetzt; })[0] || monate[0];
+  var w = null; try { w = JSON.parse(localStorage.getItem(SPEICHER) || "null"); } catch (e) {}
+  von.value = w && monate.indexOf(w.von) >= 0 ? w.von : start;
+  bis.value = w && monate.indexOf(w.bis) >= 0 ? w.bis : monate[monate.length - 1];
+  function anwenden(geaendert) {
+    // Bis vor Von: tauschen (z. B. "April bis März" -> "März bis April")
+    if (bis.value < von.value) { var t = von.value; von.value = bis.value; bis.value = t; }
+    var a = von.value, b = bis.value, sichtbar = 0;
+    zeilen.forEach(function (z) {
+      var m = z.getAttribute("data-monat"), an = m >= a && m <= b;
+      z.classList.toggle("tf-aus", !an);
+      if (an && !z.classList.contains("monat-row")) sichtbar++;
+    });
+    // Monatsüberschriften ohne sichtbare Termine darunter ausblenden
+    zeilen.forEach(function (z, i) {
+      if (!z.classList.contains("monat-row") || z.classList.contains("tf-aus")) return;
+      var n = zeilen[i + 1];
+      if (!n || n.classList.contains("monat-row") || n.classList.contains("tf-aus")) z.classList.add("tf-aus");
+    });
+    tab.style.display = sichtbar ? "" : "none";
+    document.getElementById("termine-leer").hidden = !!sichtbar;
+    document.getElementById("tf-druck").disabled = !sichtbar;
+    document.getElementById("druck-zeitraum").textContent = a === b ? name(a) : name(a) + " – " + name(b);
+    try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b})); } catch (e) {}
+  }
+  von.addEventListener("change", anwenden); bis.addEventListener("change", anwenden);
+  document.getElementById("tf-alle").addEventListener("click", function () { von.value = monate[0]; bis.value = monate[monate.length - 1]; anwenden(); });
+  // Drucken/PDF immer im hellen Design
+  var thema = null;
+  window.addEventListener("beforeprint", function () { thema = document.documentElement.getAttribute("data-theme"); document.documentElement.setAttribute("data-theme", "light"); });
+  window.addEventListener("afterprint", function () { if (thema) document.documentElement.setAttribute("data-theme", thema); });
+  document.getElementById("tf-druck").addEventListener("click", function () { window.print(); });
+  anwenden();
+})();
+</script>
   </main>
 
   <footer>
