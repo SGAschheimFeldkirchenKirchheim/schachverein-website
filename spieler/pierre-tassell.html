@@ -208,6 +208,10 @@
       @media (max-width: 600px) { .rechner .r-spiel { grid-template-columns: 1fr; } .rechner .r-spiel span:last-child { text-align: left; } }
 
       .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
+      .sp-oben { display: flex; gap: 2rem; align-items: flex-start; }
+      .sp-foto { width: 170px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; flex: 0 0 auto;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); }
+      @media (max-width: 600px) { .sp-oben { flex-direction: column; gap: 1rem; } .sp-foto { width: 140px; } }
       .sp-kopf { display: flex; flex-wrap: wrap; gap: 0.8rem 3rem; align-items: flex-start; margin-bottom: 0.5rem; }
       .sp-kopf dl { display: grid; grid-template-columns: auto auto; gap: 0.2rem 1rem; margin: 0; }
       .sp-kopf dt { font-weight: bold; color: var(--navy); }
@@ -228,6 +232,7 @@
       .dwz-verlauf polyline { fill: none; stroke: var(--hell, #2c5d99); stroke-width: 2.5; stroke-linejoin: round; }
       .dwz-verlauf circle { fill: var(--hell, #2c5d99); }
       .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
+      .sp-mehr summary { cursor: pointer; color: var(--accent, #7fb2ff); font-size: .95rem; margin-bottom: .4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Pierre Tassell | SG AFK">
@@ -274,6 +279,9 @@
   <main id="main" class="container">
     
     <p class="zurueck"><a href="../afk-1.html">← AFK 1</a></p>
+    <div class="sp-oben">
+    
+    <div>
     <h1 class="sp-name">Pierre Tassell</h1>
     <div class="sp-kopf">
       <dl>
@@ -281,8 +289,11 @@
         <dt>ELO</dt><dd>2003</dd>
         <dt>Bilanz</dt><dd>24 / 35 (69 %) seit 2022/23</dd>
         <dt>Partien</dt><dd>Heim 17 · Auswärts 18</dd>
+        <dt>Geburtstag</dt><dd>26. September</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-1.html">AFK 1</a> <span class="klein">Bezirksliga · Nr. 7 · Stamm</span></li></ul></div>
+    </div>
+    </div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1060&amp;PKZ=NU4317640&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     
@@ -338,7 +349,7 @@
         Offiziell ausgewertet wird die Saison erst am Ende.</p>
     
     <h2 class="panel-titel sp-titel">In den Berichten</h2>
-    <ul class="sp-berichte"><li><a href="../berichte/2026-blitzjahreswertung-2026-zwischenstand.html">Blitzjahreswertung 2026 (Zwischenstand)</a> <span class="klein">30.08.2026</span></li><li><a href="../berichte/2026-oberlandquartett-2026-5-sieg-in-folge.html">Oberlandquartett 2026: 5. Sieg in Folge!</a> <span class="klein">06.07.2026</span></li><li><a href="../berichte/2026-saison-25-26-erfolgreich-beendet.html">Saison 25/26 erfolgreich beendet!</a> <span class="klein">07.06.2026</span></li><li><a href="../berichte/2025-siegesrausch-bei-den-mmm.html">Siegesrausch bei den MMM</a> <span class="klein">19.01.2025</span></li><li><a href="../berichte/2024-eine-superwoche-fur-die-annalen.html">Eine Superwoche für die Annalen...</a> <span class="klein">08.12.2024</span></li><li><a href="../berichte/2024-neues-von-den-mannschaftsmeisterschaften.html">Neues von den Mannschaftsmeisterschaften</a> <span class="klein">21.11.2024</span></li><li><a href="../berichte/2024-mmm-2025-ein-perfekter-start.html">MMM 2025: Ein perfekter Start</a> <span class="klein">13.10.2024</span></li><li><a href="../berichte/2024-schnellschach-vereinsmeisterschaft-2024.html">Schnellschach Vereinsmeisterschaft 2024</a> <span class="klein">29.09.2024</span></li><li><a href="../berichte/2024-vereinspokal-2024.html">Vereinspokal 2024</a> <span class="klein">16.06.2024</span></li><li><a href="../berichte/2024-mannschaftssaison-2023-24.html">Mannschaftssaison 2023/24</a> <span class="klein">03.06.2024</span></li><li><a href="../berichte/2024-archiv-munchner-mannschaftsmeisterschaften-2024.html">Münchner Mannschaftsmeisterschaften 2024</a> <span class="klein">26.02.2024</span></li><li><a href="../berichte/2024-archiv-3-mannschaftskampfe-3-ligen-und-3-siege.html">3 Mannschaftskämpfe,3 Ligen und 3 Siege!</a> <span class="klein">19.02.2024</span></li></ul><p class="klein">… und 11 weitere.</p>
+    <ul class="sp-berichte"><li><a href="../berichte/2026-blitzjahreswertung-2026-zwischenstand.html">Blitzjahreswertung 2026 (Zwischenstand)</a> <span class="klein">30.08.2026</span></li><li><a href="../berichte/2026-oberlandquartett-2026-5-sieg-in-folge.html">Oberlandquartett 2026: 5. Sieg in Folge!</a> <span class="klein">06.07.2026</span></li><li><a href="../berichte/2026-saison-25-26-erfolgreich-beendet.html">Saison 25/26 erfolgreich beendet!</a> <span class="klein">07.06.2026</span></li><li><a href="../berichte/2025-siegesrausch-bei-den-mmm.html">Siegesrausch bei den MMM</a> <span class="klein">19.01.2025</span></li><li><a href="../berichte/2024-eine-superwoche-fur-die-annalen.html">Eine Superwoche für die Annalen...</a> <span class="klein">08.12.2024</span></li><li><a href="../berichte/2024-neues-von-den-mannschaftsmeisterschaften.html">Neues von den Mannschaftsmeisterschaften</a> <span class="klein">21.11.2024</span></li><li><a href="../berichte/2024-mmm-2025-ein-perfekter-start.html">MMM 2025: Ein perfekter Start</a> <span class="klein">13.10.2024</span></li><li><a href="../berichte/2024-schnellschach-vereinsmeisterschaft-2024.html">Schnellschach Vereinsmeisterschaft 2024</a> <span class="klein">29.09.2024</span></li><li><a href="../berichte/2024-vereinspokal-2024.html">Vereinspokal 2024</a> <span class="klein">16.06.2024</span></li><li><a href="../berichte/2024-mannschaftssaison-2023-24.html">Mannschaftssaison 2023/24</a> <span class="klein">03.06.2024</span></li><li><a href="../berichte/2024-archiv-munchner-mannschaftsmeisterschaften-2024.html">Münchner Mannschaftsmeisterschaften 2024</a> <span class="klein">26.02.2024</span></li><li><a href="../berichte/2024-archiv-3-mannschaftskampfe-3-ligen-und-3-siege.html">3 Mannschaftskämpfe,3 Ligen und 3 Siege!</a> <span class="klein">19.02.2024</span></li></ul><details class="sp-mehr"><summary>… und 11 weitere anzeigen</summary><ul class="sp-berichte"><li><a href="../berichte/2023-archiv-osterblitz-2023.html">Osterblitz 2023</a> <span class="klein">29.05.2023</span></li><li><a href="../berichte/2022-archiv-mitgliederversammlung-und-sommerblitz.html">Mitgliederversammlung und Sommerblitz</a> <span class="klein">15.07.2022</span></li><li><a href="../berichte/2020-archiv-weihnachtsblitz-2020.html">Weihnachtsblitz 2020</a> <span class="klein">31.12.2020</span></li><li><a href="../berichte/2020-archiv-gyki-mit-hilfe-der-sg-afk-zur-deutschen-schachschu.html">GyKi mit Hilfe der SG-AFK zur Deutschen Schachschule gekürt...</a> <span class="klein">25.09.2020</span></li><li><a href="../berichte/2020-archiv-die-schachgemeinschaft-wahlt-neuen-vorstand.html">Die Schachgemeinschaft wählt neuen Vorstand</a> <span class="klein">10.07.2020</span></li><li><a href="../berichte/2020-archiv-1-sg-afk-online-blitzserie-2020.html">1. SG AFK Online-Blitzserie 2020</a> <span class="klein">03.04.2020</span></li><li><a href="../berichte/2019-archiv-david-mehlhorn-verteidigt-den-vereinsjugend-pokal.html">David MEHLHORN verteidigt den Vereinsjugend-Pokal // Finale des Vereins-Pokals am 29. November</a> <span class="klein">08.11.2019</span></li><li><a href="../berichte/2019-archiv-oberland-quartett-2019.html">Oberland-Quartett 2019</a> <span class="klein">30.06.2019</span></li><li><a href="../berichte/2019-archiv-erfolgreiche-saison-fur-alle-mannschaften.html">Erfolgreiche Saison für alle Mannschaften</a> <span class="klein">10.05.2019</span></li><li><a href="../berichte/2018-archiv-simultan-mit-im-frank-zeller.html">Simultan mit IM Frank Zeller</a> <span class="klein">30.09.2018</span></li><li><a href="../berichte/2018-archiv-vereins-pokal-2018-sieger-pierre-tassell.html">Vereins-Pokal 2018 : Sieger Pierre Tassell</a> <span class="klein">06.07.2018</span></li></ul></details>
     
   </main>
 

@@ -208,6 +208,10 @@
       @media (max-width: 600px) { .rechner .r-spiel { grid-template-columns: 1fr; } .rechner .r-spiel span:last-child { text-align: left; } }
 
       .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
+      .sp-oben { display: flex; gap: 2rem; align-items: flex-start; }
+      .sp-foto { width: 170px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; flex: 0 0 auto;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); }
+      @media (max-width: 600px) { .sp-oben { flex-direction: column; gap: 1rem; } .sp-foto { width: 140px; } }
       .sp-kopf { display: flex; flex-wrap: wrap; gap: 0.8rem 3rem; align-items: flex-start; margin-bottom: 0.5rem; }
       .sp-kopf dl { display: grid; grid-template-columns: auto auto; gap: 0.2rem 1rem; margin: 0; }
       .sp-kopf dt { font-weight: bold; color: var(--navy); }
@@ -228,6 +232,7 @@
       .dwz-verlauf polyline { fill: none; stroke: var(--hell, #2c5d99); stroke-width: 2.5; stroke-linejoin: round; }
       .dwz-verlauf circle { fill: var(--hell, #2c5d99); }
       .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
+      .sp-mehr summary { cursor: pointer; color: var(--accent, #7fb2ff); font-size: .95rem; margin-bottom: .4rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Hanspeter Hecht | SG AFK">
@@ -274,6 +279,9 @@
   <main id="main" class="container">
     
     <p class="zurueck"><a href="../afk-4.html">← AFK 4</a></p>
+    <div class="sp-oben">
+    
+    <div>
     <h1 class="sp-name">Hanspeter Hecht</h1>
     <div class="sp-kopf">
       <dl>
@@ -281,8 +289,11 @@
         <dt>ELO</dt><dd>1869</dd>
         <dt>Bilanz</dt><dd>20 / 32 (62 %) seit 2022/23</dd>
         <dt>Partien</dt><dd>Heim 17 · Auswärts 17</dd>
+        <dt>Geburtstag</dt><dd>23. November</dd>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-4.html">AFK 4</a> <span class="klein">C-Klasse · Nr. 2 · Stamm</span></li><li><a href="../senioren.html">Senioren</a> <span class="klein">2. Seniorenliga · Nr. 5</span></li></ul></div>
+    </div>
+    </div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1007&amp;PKZ=NU4056774&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     
@@ -366,7 +377,7 @@
         Offiziell ausgewertet wird die Saison erst am Ende.</p>
     
     <h2 class="panel-titel sp-titel">In den Berichten</h2>
-    <ul class="sp-berichte"><li><a href="../berichte/2026-saison-25-26-erfolgreich-beendet.html">Saison 25/26 erfolgreich beendet!</a> <span class="klein">07.06.2026</span></li><li><a href="../berichte/2024-mmm-2025-ein-perfekter-start.html">MMM 2025: Ein perfekter Start</a> <span class="klein">13.10.2024</span></li><li><a href="../berichte/2024-mannschaftssaison-2023-24.html">Mannschaftssaison 2023/24</a> <span class="klein">03.06.2024</span></li><li><a href="../berichte/2024-archiv-3-mannschaftskampfe-3-ligen-und-3-siege.html">3 Mannschaftskämpfe,3 Ligen und 3 Siege!</a> <span class="klein">19.02.2024</span></li><li><a href="../berichte/2023-archiv-niederlage-gegen-roter-turm-in-der-seniorenliga.html">Niederlage gegen Roter Turm in der Seniorenliga</a> <span class="klein">29.05.2023</span></li><li><a href="../berichte/2023-archiv-senioren-unentschieden-gegen-fc-bayern-1.html">Senioren: Unentschieden gegen FC Bayern 1</a> <span class="klein">22.03.2023</span></li><li><a href="../berichte/2023-archiv-seniorenkampf-gegen-deisenhofen-eine-wurdevolle-ni.html">Seniorenkampf gegen Deisenhofen: Eine würdevolle Niederlage</a> <span class="klein">31.01.2023</span></li><li><a href="../berichte/2022-archiv-aufstieg-der-seniorenmannschaft.html">Aufstieg der Seniorenmannschaft</a> <span class="klein">18.08.2022</span></li><li><a href="../berichte/2019-archiv-ermutigender-start-in-die-neue-saison-der-munchner.html">Ermutigender Start in die neue Saison der Münchner Mannschaftsmeisterschaften</a> <span class="klein">14.12.2019</span></li><li><a href="../berichte/2019-archiv-vereinsturnier-2019-sieger-arthur-krumm.html">Vereinsturnier 2019 - Sieger : Arthur KRUMM</a> <span class="klein">19.07.2019</span></li><li><a href="../berichte/2019-archiv-oberland-quartett-2019.html">Oberland-Quartett 2019</a> <span class="klein">30.06.2019</span></li><li><a href="../berichte/2019-archiv-erfolgreiche-saison-fur-alle-mannschaften.html">Erfolgreiche Saison für alle Mannschaften</a> <span class="klein">10.05.2019</span></li></ul><p class="klein">… und 9 weitere.</p>
+    <ul class="sp-berichte"><li><a href="../berichte/2026-saison-25-26-erfolgreich-beendet.html">Saison 25/26 erfolgreich beendet!</a> <span class="klein">07.06.2026</span></li><li><a href="../berichte/2024-mmm-2025-ein-perfekter-start.html">MMM 2025: Ein perfekter Start</a> <span class="klein">13.10.2024</span></li><li><a href="../berichte/2024-mannschaftssaison-2023-24.html">Mannschaftssaison 2023/24</a> <span class="klein">03.06.2024</span></li><li><a href="../berichte/2024-archiv-3-mannschaftskampfe-3-ligen-und-3-siege.html">3 Mannschaftskämpfe,3 Ligen und 3 Siege!</a> <span class="klein">19.02.2024</span></li><li><a href="../berichte/2023-archiv-niederlage-gegen-roter-turm-in-der-seniorenliga.html">Niederlage gegen Roter Turm in der Seniorenliga</a> <span class="klein">29.05.2023</span></li><li><a href="../berichte/2023-archiv-senioren-unentschieden-gegen-fc-bayern-1.html">Senioren: Unentschieden gegen FC Bayern 1</a> <span class="klein">22.03.2023</span></li><li><a href="../berichte/2023-archiv-seniorenkampf-gegen-deisenhofen-eine-wurdevolle-ni.html">Seniorenkampf gegen Deisenhofen: Eine würdevolle Niederlage</a> <span class="klein">31.01.2023</span></li><li><a href="../berichte/2022-archiv-aufstieg-der-seniorenmannschaft.html">Aufstieg der Seniorenmannschaft</a> <span class="klein">18.08.2022</span></li><li><a href="../berichte/2019-archiv-ermutigender-start-in-die-neue-saison-der-munchner.html">Ermutigender Start in die neue Saison der Münchner Mannschaftsmeisterschaften</a> <span class="klein">14.12.2019</span></li><li><a href="../berichte/2019-archiv-vereinsturnier-2019-sieger-arthur-krumm.html">Vereinsturnier 2019 - Sieger : Arthur KRUMM</a> <span class="klein">19.07.2019</span></li><li><a href="../berichte/2019-archiv-oberland-quartett-2019.html">Oberland-Quartett 2019</a> <span class="klein">30.06.2019</span></li><li><a href="../berichte/2019-archiv-erfolgreiche-saison-fur-alle-mannschaften.html">Erfolgreiche Saison für alle Mannschaften</a> <span class="klein">10.05.2019</span></li></ul><details class="sp-mehr"><summary>… und 9 weitere anzeigen</summary><ul class="sp-berichte"><li><a href="../berichte/2019-archiv-aufstieg-in-die-1-munchner-seniorenliga.html">Aufstieg in die 1. Münchner Seniorenliga</a> <span class="klein">01.02.2019</span></li><li><a href="../berichte/2016-archiv-1-mannschaft-erreicht-in-den-munchner-mannschafts.html">1. Mannschaft erreicht in den Münchner Mannschafts-Meisterschaften 2016 in der B-Klasse einen 2. Platz</a> <span class="klein">31.12.2016</span></li><li><a href="../berichte/2016-archiv-gruppensieg-bei-den-munchner-senioren-mannschaftsm.html">Gruppensieg bei den Münchner Senioren-Mannschaftsmeisterschaften 2016/17</a> <span class="klein">09.12.2016</span></li><li><a href="../berichte/2016-archiv-vereinsturnier-2016-ergebnisse-4-runde-spielpaarun.html">Vereinsturnier 2016 - Ergebnisse 4. Runde / Spielpaarungen 5. Runde</a> <span class="klein">21.10.2016</span></li><li><a href="../berichte/2016-archiv-schach-gemeinschaft-afk-kann-vorjahres-sieg-im-obe.html">Schach-Gemeinschaft AFK kann Vorjahres-Sieg im &quot;Oberlandquartett&quot; nicht wiederholen</a> <span class="klein">08.07.2016</span></li><li><a href="../berichte/2015-archiv-vereinsturnier-2015-hanspeter-hecht-erneut-vereins.html">Vereinsturnier 2015 - Hanspeter Hecht erneut Vereinsmeister</a> <span class="klein">31.12.2015</span></li><li><a href="../berichte/2015-archiv-munchner-mannschaftsmeisterschaften-2015.html">Münchner Mannschaftsmeisterschaften 2015</a> <span class="klein">18.12.2015</span></li><li><a href="../berichte/2015-archiv-blitzschach-meisterschaft-2015.html">Blitzschach-Meisterschaft 2015</a> <span class="klein">04.09.2015</span></li><li><a href="../berichte/2015-archiv-schach-gemeinschaft-afk-gewinnt-freundschaftsturni.html">Schach-Gemeinschaft AFK gewinnt Freundschaftsturnier &quot;Oberlandquartett&quot; 2015</a> <span class="klein">17.07.2015</span></li></ul></details>
     
   </main>
 

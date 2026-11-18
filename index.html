@@ -91,6 +91,12 @@
     color: inherit; text-decoration: none; transition: transform .3s; }
   .st-bkarte:hover { transform: translateY(-5px); }
   .st-bkarte img { display: block; width: 100%; height: auto; max-height: 340px; object-fit: contain; background: var(--surface); }
+  .st-spur { align-items: stretch; }
+  .st-bkarte.ohne-bild { display: flex; border-top: 4px solid var(--hell); }
+  .st-bkarte.ohne-bild .st-btext { display: flex; flex-direction: column; padding: 1.6rem 1.5rem; }
+  .st-bkarte.ohne-bild b { font-size: 1.6rem; line-height: 1.2; margin: .5rem 0 1rem; }
+  .st-auszug { color: var(--muted); display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+  .st-weiter { margin-top: auto; padding-top: 1rem; color: var(--hell); font-weight: 600; }
   .st-btext { display: block; padding: 1rem 1.2rem 1.3rem; } .st-btext b { display: block; font-family: var(--font-head); font-size: 1.25rem; color: var(--head); margin-top: .3rem; }
   .st-steuer { display: flex; align-items: center; gap: .9rem; margin-top: 1.2rem; }
   .st-steuer button { width: 2.8rem; height: 2.8rem; border-radius: 50%; border: 1.5px solid var(--line); background: none; color: var(--head); font-size: 1.15rem; cursor: pointer; }
@@ -108,6 +114,8 @@
   .st-wechsel { position: relative; width: 100%; overflow: hidden; }
   .st-wechsel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.6s ease; }
   .st-wechsel img.an { opacity: 1; }
+  .st-wechsel.frei { display: grid; align-items: center; overflow: visible; }
+  .st-wechsel.frei img { position: static; grid-area: 1 / 1; height: auto; object-fit: initial; }
 
   .st-erg { width: 100%; border-collapse: collapse; font-size: 1.05rem; background: none !important; }
   .st-erg td { padding: .6rem .4rem; border-bottom: 1px solid var(--line); }
@@ -231,23 +239,32 @@
       <div class="st-slider" data-sek="9">
         <div class="st-fenster"><div class="st-spur">
         <a class="st-bkarte" href="berichte/2026-kooperationsturnier-ebe.html"><img src="berichte/bilder/2026-kooperationsturnier-ebe/siegerfoto.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">24.10.2026 · von Pierre Tassell</span><b>Schnellschach-Vereinsmeisterschaft 2026</b></span></a>
+          <span class="st-btext"><span class="st-meta">24.10.2026 · von Pierre Tassell</span><b>Schnellschach-Vereinsmeisterschaft 2026</b>
+          </span></a>
         <a class="st-bkarte" href="berichte/2026-kooperationsturnier-gyki-feat-sg-afk-2026.html"><img src="berichte/bilder/2026-kooperationsturnier-gyki-feat-sg-afk-2026/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">13.10.2026 · von Pierre Tassell</span><b>Kooperationsturnier GyKi feat. SG AFK 2026</b></span></a>
-        <a class="st-bkarte" href="berichte/2026-herbstblitz.html">
-          <span class="st-btext"><span class="st-meta">29.09.2026 · von Pierre Tassell</span><b>Herbstblitz 2026</b></span></a>
+          <span class="st-btext"><span class="st-meta">13.10.2026 · von Pierre Tassell</span><b>Kooperationsturnier GyKi feat. SG AFK 2026</b>
+          </span></a>
+        <a class="st-bkarte ohne-bild" href="berichte/2026-herbstblitz.html">
+          <span class="st-btext"><span class="st-meta">29.09.2026 · von Pierre Tassell</span><b>Herbstblitz 2026</b><span class="st-auszug">Das Herbstblitz war mit 25 Teilnehmern gut besucht! Wir spielten (leicht) wahnsinnige 13 Runden Blitz bei 3 min Bedenkzeit.</span>
+          <span class="st-weiter">Bericht lesen →</span></span></a>
         <a class="st-bkarte" href="berichte/2026-duke-blitz-runde-2.html"><img src="berichte/bilder/2026-duke-blitz-runde-2/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">22.09.2026 · von Pierre Tassell</span><b>Duke Blitz - Runde 2</b></span></a>
+          <span class="st-btext"><span class="st-meta">22.09.2026 · von Pierre Tassell</span><b>Duke Blitz - Runde 2</b>
+          </span></a>
         <a class="st-bkarte" href="berichte/2026-ois-2026-dominik-gewinnt-c-turnier.html"><img src="berichte/bilder/2026-ois-2026-dominik-gewinnt-c-turnier/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">18.09.2026 · von Pierre Tassell</span><b>OIS 2026 - Dominik gewinnt C-Turnier!</b></span></a>
-        <a class="st-bkarte" href="berichte/2026-blitzjahreswertung-2026-zwischenstand.html">
-          <span class="st-btext"><span class="st-meta">30.08.2026 · von Pierre Tassell</span><b>Blitzjahreswertung 2026 (Zwischenstand)</b></span></a>
+          <span class="st-btext"><span class="st-meta">18.09.2026 · von Pierre Tassell</span><b>OIS 2026 - Dominik gewinnt C-Turnier!</b>
+          </span></a>
+        <a class="st-bkarte ohne-bild" href="berichte/2026-blitzjahreswertung-2026-zwischenstand.html">
+          <span class="st-btext"><span class="st-meta">30.08.2026 · von Pierre Tassell</span><b>Blitzjahreswertung 2026 (Zwischenstand)</b><span class="st-auszug">Nach drei von fünf Turnieren ist Vorjahressieger Fabian Müller mit zwei Punkten in Führung vor Pierre Tassell.</span>
+          <span class="st-weiter">Bericht lesen →</span></span></a>
         <a class="st-bkarte" href="berichte/2026-oberlandquartett-2026-5-sieg-in-folge.html"><img src="berichte/bilder/2026-oberlandquartett-2026-5-sieg-in-folge/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">06.07.2026 · von Pierre Tassell</span><b>Oberlandquartett 2026: 5. Sieg in Folge!</b></span></a>
-        <a class="st-bkarte" href="berichte/2026-saison-25-26-erfolgreich-beendet.html">
-          <span class="st-btext"><span class="st-meta">07.06.2026 · von Pierre Tassell</span><b>Saison 25/26 erfolgreich beendet!</b></span></a>
-        <a class="st-bkarte" href="berichte/2026-u20-landesliga-sud-klassenerhalt-geschafft.html">
-          <span class="st-btext"><span class="st-meta">11.03.2026 · von Pierre Tassell</span><b>U20-Landesliga Süd: Klassenerhalt geschafft!</b></span></a></div></div>
+          <span class="st-btext"><span class="st-meta">06.07.2026 · von Pierre Tassell</span><b>Oberlandquartett 2026: 5. Sieg in Folge!</b>
+          </span></a>
+        <a class="st-bkarte ohne-bild" href="berichte/2026-saison-25-26-erfolgreich-beendet.html">
+          <span class="st-btext"><span class="st-meta">07.06.2026 · von Pierre Tassell</span><b>Saison 25/26 erfolgreich beendet!</b><span class="st-auszug">Bezirksliga</span>
+          <span class="st-weiter">Bericht lesen →</span></span></a>
+        <a class="st-bkarte ohne-bild" href="berichte/2026-u20-landesliga-sud-klassenerhalt-geschafft.html">
+          <span class="st-btext"><span class="st-meta">11.03.2026 · von Pierre Tassell</span><b>U20-Landesliga Süd: Klassenerhalt geschafft!</b><span class="st-auszug">Am Samstag haben Alex Wittko, Gaurav Mudan, Konrad Keblat und Alex Meißner den Klassenerhalt gesichert und sich den 5. Platz von 8 in der U20-Landesliga Süd erkämpft!</span>
+          <span class="st-weiter">Bericht lesen →</span></span></a></div></div>
         <div class="st-steuer"><button type="button" class="st-zurueck" aria-label="Zurück">←</button>
           <button type="button" class="st-vor" aria-label="Weiter">→</button><span class="st-punkte"></span></div>
       </div>
@@ -263,7 +280,7 @@
     </section>
     
     <section class="st-split st-voll um">
-      <div class="st-bild"><div class="st-stapel"><figure class="st-pol" style="--r:-4deg;z-index:5"><img src="startseite/historie/01-oberlandquartett-2015.jpg" alt=""><figcaption>Oberlandquartett 2015</figcaption></figure><figure class="st-pol" style="--r:3deg;z-index:4"><img src="startseite/historie/02-spielabend.jpg" alt=""><figcaption>Spielabend</figcaption></figure><figure class="st-pol" style="--r:-1.5deg;z-index:3"><img src="startseite/historie/03-spielabend.jpg" alt=""><figcaption>Spielabend</figcaption></figure><figure class="st-pol" style="--r:5deg;z-index:2"><img src="startseite/historie/04-spielabend.jpg" alt=""><figcaption>Spielabend</figcaption></figure><figure class="st-pol" style="--r:-3deg;z-index:1"><img src="startseite/historie/05-spielabend.jpg" alt=""><figcaption>Spielabend</figcaption></figure></div></div>
+      <div class="st-bild"><div class="st-wechsel frei"><img src="startseite/historie/01-oberlandquartett-2015.jpg" alt="" class=an><img src="startseite/historie/02-spielabend.jpg" alt=""><img src="startseite/historie/03-spielabend.jpg" alt=""><img src="startseite/historie/04-spielabend.jpg" alt=""><img src="startseite/historie/05-spielabend.jpg" alt=""></div></div>
       <div class="st-inhalt">
       <div class="st-kl">Geschichte</div>
       <h2>Seit 1952 am Brett</h2>
