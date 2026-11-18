@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFK on Tour | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="Logo.png">
+  <script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 1260px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      .nav-auf { display: none; }
+      /* Mittlere Bildschirme mit Burger-Menü: vollen Namen zeigen, Burger ganz rechts (design.css blendet den Namen hier sonst aus) */
+      @media (min-width: 961px) and (max-width: 1260px) {
+        header .brand span { display: inline !important; }
+        header .brand { margin-right: auto !important; }
+        header .nav-burger { order: 4; margin-left: 0 !important; }
+      }
+
+      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
+      @media (max-width: 560px) {
+        header .brand span { font-size: 0; }
+        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
+      }
+
+      @media (max-width: 1260px) {
+        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
+        .nav-gruppe > a { display: block; border-top: none; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
+        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
+        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
+        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
+        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
+        .nav-gruppe.offen .nav-unter { display: flex; }
+        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style>
+    <script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+  .tour-zahlen { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1rem 0 1.4rem; }
+  .tour-zahl { flex: 1 1 8rem; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  .tour-zahl strong { display: block; font-size: 1.8rem; line-height: 1.1; }
+  .tour-zahl span { font-size: 0.85rem; color: var(--muted); }
+  .tour-kartenkopf { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; margin: 1.6rem 0 0.6rem; }
+  .tour-kartenkopf h2 { margin: 0; }
+  .tour-kartenkopf select { font: inherit; padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--text); }
+  #tour-karte { height: 480px; border-radius: 10px; border: 1px solid var(--line); z-index: 0; }
+  @media (max-width: 600px) { #tour-karte { height: 360px; } }
+  .tour-flagge { background: none; border: 0; }
+  .tour-flagge svg { overflow: visible; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+  .leaflet-popup-content { font-size: 0.85rem; line-height: 1.35; }
+  .leaflet-popup-content h4 { margin: 0 0 0.3rem; font-size: 1rem; }
+  .leaflet-popup-content ul { margin: 0; padding-left: 1rem; }
+  .tour-tab { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .tour-tab th, .tour-tab td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .tour-tab th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+  .tour-tab td.z { text-align: right; font-variant-numeric: tabular-nums; }
+  .tour-tab tr:first-child td:first-child { font-weight: 800; }
+  .tour-abz { display: inline-block; font-size: 0.72rem; padding: 0.05rem 0.45rem; margin: 0.1rem 0.15rem 0.1rem 0; border-radius: 999px;
+    background: var(--hell, #6f9fd8); color: #0e1524; white-space: nowrap; }
+  .tour-profile { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+  .tour-profil { padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); scroll-margin-top: 90px; }
+  .tour-profil h3 { margin: 0 0 0.2rem; }
+  .tour-profil .k { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.4rem; }
+  .tour-profil ul { margin: 0.5rem 0 0; padding-left: 1.1rem; font-size: 0.88rem; }
+  .tour-profil li small { color: var(--muted); }
+  .tour-leer { padding: 1.4rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
+  .tour-antrag { margin-top: 2.5rem; }
+  .tour-antrag > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between;
+    align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .tour-antrag > summary::-webkit-details-marker { display: none; }
+  .tour-antrag form { display: grid; gap: 0.8rem; padding: 0 1.2rem 1.2rem; }
+  .tour-reihe { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.8rem; }
+  .tour-antrag label { display: grid; gap: 0.25rem; font-weight: 600; font-size: 0.9rem; }
+  .tour-antrag label.inline { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; }
+  .tour-antrag input, .tour-antrag select, .tour-antrag textarea { font: inherit; font-weight: normal; padding: 0.5rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--text); width: 100%; box-sizing: border-box; }
+  .tour-antrag label.inline input { width: auto; }
+  .tour-antrag .klein { font-size: 0.85rem; color: var(--muted); margin: 0; font-weight: normal; }
+  .tour-antrag .falle { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .tour-antrag .meldung { margin: 0; font-weight: 600; }
+  .tour-antrag .meldung.ok { color: #2e8b57; }
+  .tour-antrag .meldung.fehler { color: #c0392b; }
+</style>
+  <link rel="stylesheet" href="design.css">
+  <meta property="og:title" content="AFK on Tour | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <img src="Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
+    <nav aria-label="Hauptmenü">
+      <a href="index.html">Start</a>
+      <div class="nav-gruppe"><a href="ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a><a href="geschichte.html">Vereinsgeschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="mannschaftshistorie.html">Historie</a></div></div>
+      <a href="jugend.html">Jugend</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <div class="nav-gruppe offen"><a href="turniere.html" aria-current="page">Turniere</a><button type="button" class="nav-auf" aria-expanded="true" aria-label="Turniere aufklappen"></button><div class="nav-unter"><a href="oberlandquartett.html">Oberlandquartett</a><a href="blitzjahreswertung.html">Blitzjahreswertung</a><a href="vereinsintern.html">Hall of Fame</a><a href="ausschreibungen.html">Ausschreibungen</a><a href="turnierkalender.html">Turnierkalender</a><a href="turnierorte.html" aria-current="page">AFK on Tour</a></div></div>
+      <a href="faq.html">FAQ</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+    <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
+    <h1 style="margin-top:1rem;">AFK on Tour</h1>
+    <p>Wo hat die SG AFK schon überall Turniere gespielt? Jede Stadt zählt pro Spieler einmal – egal wie oft man dort war.
+      Gezählt werden klassische Einzelturniere.</p>
+    <div class="tour-zahlen"><div class="tour-zahl"><strong>0</strong><span>Orte</span></div><div class="tour-zahl"><strong>0</strong><span>Länder</span></div><div class="tour-zahl"><strong>0</strong><span>Turniere</span></div><div class="tour-zahl"><strong>0</strong><span>Spieler auf Tour</span></div></div>
+    <div class="tour-kartenkopf"><h2>Wo SG AFK schon war</h2>
+      <label>Zeige <select id="tour-wer"><option value="">alle Spieler</option></select></label></div>
+    <div id="tour-karte" role="img" aria-label="Karte der Turnierorte"></div>
+    <h2 style="margin-top:2rem;">Rangliste</h2>
+    <p class="tour-leer">Noch niemand auf Tour. Sei der Erste und beantrage unten deinen ersten Ort!</p>
+    
+    
+    <details class="card tour-antrag" id="beantragen">
+      <summary><span><strong>Ort beantragen</strong><br><span class="klein">Du hast in einer neuen Stadt ein Turnier gespielt – auch früher? Trag es ein, wir prüfen und vergeben den Punkt.</span></span>
+        <span class="btn">Beantragen</span></summary>
+      <form id="tour-form" data-url="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec">
+        <div class="tour-reihe">
+          <label>Dein Name <input name="name" required maxlength="80" autocomplete="name" placeholder="Vor- und Nachname"></label>
+          <label>chess-results-Link <input name="link" type="url" maxlength="300" placeholder="https://chess-results.com/tnr…"></label>
+        </div>
+        <p class="klein">Mit chess-results-Link geht die Prüfung am schnellsten. Ohne Link bitte die Felder darunter ausfüllen.</p>
+        <div class="tour-reihe">
+          <label>Turnier <input name="turnier" maxlength="150" placeholder="z. B. Grenke Open"></label>
+          <label>Stadt <input name="stadt" maxlength="80" placeholder="z. B. Karlsruhe"></label>
+          <label>Land <input name="land" maxlength="60" value="Deutschland"></label>
+          <label>Monat <input name="monat" type="month"></label>
+          <label>Bedenkzeit <select name="bedenkzeit"><option value="klassisch">Klassisch</option><option value="schnell">Schnellschach</option><option value="blitz">Blitz</option></select></label>
+        </div>
+        <label class="inline"><input type="checkbox" name="ausnahme"> Besonderes Turnier (Ausnahme, z. B. Meisterschaft mit anderer Bedenkzeit)</label>
+        <label>Begründung (nur bei Ausnahme) <input name="begruendung" maxlength="300"></label>
+        <label class="falle" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+        <p class="klein">Es zählen klassische Einzelturniere, keine Ligaspiele. Jede Stadt zählt einmal.</p>
+        <div><button class="btn" type="submit">Absenden</button></div>
+        <p class="meldung" role="status"></p>
+      </form>
+    </details>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="application/json" id="tour-daten">{"farbe": "#c0392b", "flagge": "<svg width=\"34\" height=\"40\" viewBox=\"0 0 34 40\"><line x1=\"3\" y1=\"2\" x2=\"3\" y2=\"39\" stroke=\"#333\" stroke-width=\"2.6\"/><path d=\"M4 3 H31 L26 11 L31 19 H4 Z\" fill=\"{farbe}\" stroke=\"#fff\" stroke-width=\"1.2\"/><text x=\"15.5\" y=\"15\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#fff\" font-family=\"sans-serif\">{n}<\/text><\/svg>", "orte": []}</script>
+    <script>
+(function () {
+  var D = JSON.parse(document.getElementById("tour-daten").textContent);
+  if (!window.L || !document.getElementById("tour-karte")) return;
+  var karte = L.map("tour-karte", {scrollWheelZoom: false}).setView([48.2, 11.6], 5);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(karte);
+  var ebene = L.layerGroup().addTo(karte), sel = document.getElementById("tour-wer");
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function zeichne() {
+    ebene.clearLayers();
+    var wer = sel.value, punkte = [];
+    D.orte.forEach(function (o) {
+      var b = o.besuche.filter(function (x) { return !wer || x.id === wer; });
+      if (!b.length || o.lat == null) return;
+      var leute = {}; b.forEach(function (x) { leute[x.id] = 1; });
+      var n = wer ? b.length : Object.keys(leute).length;
+      var icon = L.divIcon({className: "tour-flagge", iconSize: [34, 40], iconAnchor: [3, 39], popupAnchor: [13, -36],
+        html: D.flagge.replace("{farbe}", D.farbe).replace("{n}", n)});
+      var html = "<h4>" + esc(o.ort) + (o.land ? " <small>(" + esc(o.land) + ")</small>" : "") + "</h4><ul>" +
+        b.map(function (x) {
+          var t = x.link ? '<a href="' + esc(x.link) + '" target="_blank" rel="noopener">' + esc(x.turnier || "Turnier") + "</a>" : esc(x.turnier || "");
+          return "<li>" + esc(x.monat) + " · <b>" + esc(x.name) + "</b>" + (t ? " · " + t : "") + "</li>";
+        }).join("") + "</ul>";
+      L.marker([o.lat, o.lon], {icon: icon}).bindPopup(html).addTo(ebene);
+      punkte.push([o.lat, o.lon]);
+    });
+    if (punkte.length > 1) karte.fitBounds(punkte, {padding: [30, 30], maxZoom: 9});
+    else if (punkte.length === 1) karte.setView(punkte[0], 8);
+  }
+  sel.addEventListener("change", zeichne);
+  zeichne();
+})();
+(function () {
+  var f = document.getElementById("tour-form"); if (!f) return;
+  if (location.hash === "#beantragen") document.getElementById("beantragen").open = true;
+  f.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var knopf = f.querySelector("button"), m = f.querySelector(".meldung"), d = {typ: "turnierort"};
+    ["name", "link", "turnier", "stadt", "land", "monat", "bedenkzeit", "begruendung", "website"].forEach(function (n) { d[n] = (f.elements[n].value || "").trim(); });
+    d.ausnahme = f.elements.ausnahme.checked;
+    if (!d.link && !(d.stadt && d.monat)) { m.className = "meldung fehler"; m.textContent = "Bitte chess-results-Link angeben oder Stadt und Monat ausfüllen."; return; }
+    knopf.disabled = true; m.className = "meldung"; m.textContent = "Wird gesendet …";
+    fetch(f.getAttribute("data-url"), {method: "POST", body: JSON.stringify(d)})
+      .then(function (r) { return r.json(); })
+      .then(function (a) {
+        if (!a.ok) throw new Error(a.fehler || "Unbekannter Fehler");
+        m.className = "meldung ok"; m.textContent = "Danke! Dein Antrag ist angekommen und wird geprüft.";
+        var name = f.elements.name.value; f.reset(); f.elements.name.value = name;
+      })
+      .catch(function (e) { m.className = "meldung fehler"; m.textContent = "Das hat nicht geklappt (" + e.message + "). Bitte später nochmal versuchen."; })
+      .finally(function () { knopf.disabled = false; });
+  });
+})();
+</script>
+    
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+        <p><a href="kontakt.html">Kontaktformular</a></p>
+        <p><a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="ueber-uns.html">Über uns</a></p>
+        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="faq.html">Häufige Fragen</a></p>
+        <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 18.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+</body>
+</html>
