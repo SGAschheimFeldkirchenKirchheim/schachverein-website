@@ -145,11 +145,14 @@ def _speichere_json(pfad, daten):
 
 
 _letzter_abruf = {}
+_nur_cache = False                # True = nichts aus dem Netz laden, nur den gespeicherten Stand anzeigen
 _sitzung = requests.Session() if requests else None
 
 
 def _hole(url, roh=False, daten=None):
     """Seite laden (mit Pause je Server); daten = Formularfelder für POST. None bei Fehler oder 404."""
+    if _nur_cache:
+        return None
     host = urllib.parse.urlparse(url).netloc
     warte = (1.1 if "nominatim" in host else PAUSE) - (time.time() - _letzter_abruf.get(host, 0))
     if warte > 0:
@@ -738,6 +741,12 @@ def eigene(konfig):
 def aktualisieren(heute=None):
     """Quellen abfragen, Cache pflegen -> (events, schulferien, semesterferien, stand)."""
     heute = heute or datetime.date.today()
+    global _nur_cache
+    # Im GitHub-Build: Turniere nur nachts (und beim manuellen Start) neu abrufen. Bei normalen Uploads
+    # (Alles aktualisieren, eingereichte Berichte) wird der gespeicherte Stand genommen -> Build in wenigen Minuten.
+    _nur_cache = os.environ.get("KALENDER_ABRUF", "true").strip().lower() in ("false", "0", "nein", "no")
+    if _nur_cache:
+        print("  Turnierkalender: nur gespeicherter Stand (Abruf läuft nachts)")
     konfig = _lade_json(KONFIG, {})
     quellen = konfig.get("quellen", {})
     budget = [int(konfig.get("max_abrufe_pro_lauf", 250))]
@@ -799,6 +808,8 @@ CSS = """
   .tk-land-pop label { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; padding: 0.2rem 0.3rem; border-radius: 4px; cursor: pointer; }
   .tk-land-pop label:hover { background: var(--soft); }
   .tk-land-pop input { accent-color: var(--accent); margin: 0; }
+  .tk-land-pop input[type=search] { width: 100%; box-sizing: border-box; margin-bottom: 0.3rem; font: inherit; font-weight: normal;
+    padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--text); }
   .tk-land-pop button { width: 100%; margin-bottom: 0.3rem; font: inherit; font-size: 0.85rem; padding: 0.3rem; border-radius: 6px;
     border: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; }
   .tk-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
@@ -882,6 +893,20 @@ JS = r"""
     var l = landListe();
     landText.textContent = !l.length ? "alle Länder" : l.length <= 3 ? l.join(", ") : l.slice(0, 2).join(", ") + " + " + (l.length - 2) + " weitere";
   }
+  // Land suchen: Liste beim Tippen filtern, Enter hakt den ersten Treffer an
+  var landSuche = document.getElementById("tk-land-suche");
+  function landFiltern() {
+    var q = landSuche.value.trim().toLowerCase();
+    [].forEach.call(landBox.children, function (lab) { lab.style.display = !q || lab.textContent.toLowerCase().indexOf(q) >= 0 ? "" : "none"; });
+  }
+  landSuche.addEventListener("input", function (ev) { ev.stopPropagation(); landFiltern(); });
+  landSuche.addEventListener("keydown", function (ev) {
+    if (ev.key !== "Enter") return;
+    ev.preventDefault();
+    var erstes = [].filter.call(landBox.children, function (l) { return l.style.display !== "none"; })[0];
+    if (erstes) { var c = erstes.querySelector("input"); c.checked = !c.checked; landSuche.value = ""; landFiltern(); zeige(); }
+  });
+  document.querySelector(".tk-land-dd").addEventListener("toggle", function () { if (this.open) { landSuche.value = ""; landFiltern(); landSuche.focus(); } });
   document.getElementById("tk-land-alle").addEventListener("click", function () {
     [].forEach.call(f.querySelectorAll("[name=land]"), function (c) { c.checked = false; }); zeige();
   });
@@ -1064,7 +1089,8 @@ def seite_html(events, schule, semester, konfig, stand):
       <label>Entfernung <select name="km">{km_optionen}<option value="alle">ganz Europa</option></select></label>
       <div class="tk-land"><span class="tk-land-titel">Länder</span>
         <details class="tk-land-dd"><summary id="tk-land-text">alle Länder</summary>
-          <div class="tk-land-pop"><button type="button" id="tk-land-alle">alle Länder</button><div id="tk-laender"></div></div>
+          <div class="tk-land-pop"><input type="search" id="tk-land-suche" placeholder="Land suchen …" autocomplete="off">
+            <button type="button" id="tk-land-alle">alle Länder</button><div id="tk-laender"></div></div>
         </details></div>
       <fieldset><legend>Bedenkzeit</legend><div class="tk-chips">
         <label><input type="checkbox" name="bz" value="klassisch"> Klassisch</label>

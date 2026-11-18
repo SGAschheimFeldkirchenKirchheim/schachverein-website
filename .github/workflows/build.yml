@@ -69,6 +69,9 @@ jobs:
       - name: Run Build Script
         run: python build_site.py
         env:
+          # Turnierkalender nur beim nächtlichen bzw. manuellen Build neu abrufen (dauert lange),
+          # sonst den gespeicherten Stand nehmen -> normale Builds sind in wenigen Minuten fertig
+          KALENDER_ABRUF: ${{ github.event_name != 'push' }}
           # aktuelle DWZ/Mitgliederzahl von der DSB-Vereinsliste (GitHub: Settings -> Secrets -> Actions)
           DSB_TOKEN: ${{ secrets.DSB_TOKEN }}
           DSB_VKZ: ${{ secrets.DSB_VKZ }}
