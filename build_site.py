@@ -548,6 +548,87 @@ def assign_dates(rows, today=TODAY):
 TEAM_SPALTEN = r"AFK \d+|Senioren|Jugend"   # Spaltenköpfe, die eine Mannschaftsfarbe bekommen
 
 
+def monats_schluessel(rows):
+    """Monat (JJJJ-MM) je Tabellenzeile für den Monatsfilter: Monatsüberschrift = Monat des nächsten Termins darunter,
+    Zeilen ohne erkennbares Datum gehören zum Monat davor."""
+    monate, letzter = [], ""
+    for i, r in enumerate(rows):
+        if r['kind'] == 'month':
+            naechster = next((x['date'] for x in rows[i + 1:] if x['kind'] != 'month' and x.get('date')), None)
+            letzter = naechster.strftime("%Y-%m") if naechster else letzter
+        elif r.get('date'):
+            letzter = r['date'].strftime("%Y-%m")
+        monate.append(letzter)
+    return monate
+
+
+TERMINE_AUSWAHL = "termine/auswahl"   # vorgebaute PDFs je Zeitraum Von–Bis (gleicher Typst-Stil wie termine.pdf)
+MONAT_ZEILE = re.compile(r'table\.cell\(\s*colspan:.*strong\("')
+
+
+def termine_auswahl_pdfs(rows):
+    """Baut für jeden Zeitraum Von–Bis eine eigene PDF aus termine/termine.typ (nur die Monate dazwischen).
+    Wird nur neu gebaut, wenn sich termine.typ oder template.typ geändert hat. -> {"JJJJ-MM|JJJJ-MM": Pfad}"""
+    import hashlib
+    quelle, vorlage = os.path.join("termine", "termine.typ"), os.path.join("termine", "template.typ")
+    if not os.path.exists(quelle):
+        return {}
+    text = open(quelle, encoding="utf-8").read()
+    zeilen = text.split("\n")
+    kopf_ende = next((i for i, z in enumerate(zeilen) if MONAT_ZEILE.search(z)), None)
+    ende = max((i for i, z in enumerate(zeilen) if z.strip() == ")"), default=None)
+    if kopf_ende is None or ende is None or ende < kopf_ende:
+        return {}
+    bloecke, aktuell = [], None
+    for z in zeilen[kopf_ende:ende]:
+        if MONAT_ZEILE.search(z):
+            aktuell = [z]
+            bloecke.append(aktuell)
+        elif aktuell is not None:
+            aktuell.append(z)
+    schluessel = [m for r, m in zip(rows, monats_schluessel(rows)) if r['kind'] == 'month']
+    if len(schluessel) != len(bloecke) or not all(schluessel) or len(set(schluessel)) != len(schluessel):
+        print(f"Hinweis: Auswahl-PDFs übersprungen ({len(bloecke)} Monate in termine.typ, {len(schluessel)} erkannt)")
+        return {}
+    n = len(bloecke)
+    dateien = {f"{schluessel[i]}|{schluessel[j]}": f"{TERMINE_AUSWAHL}/{schluessel[i]}_{schluessel[j]}.pdf"
+               for i in range(n) for j in range(i, n)}
+    stand = hashlib.sha1((text + (open(vorlage, encoding="utf-8").read() if os.path.exists(vorlage) else "")).encode()).hexdigest()
+    stand_datei = os.path.join(TERMINE_AUSWAHL, "stand.txt")
+    alt = open(stand_datei, encoding="utf-8").read().strip() if os.path.exists(stand_datei) else ""
+    if alt == stand and all(os.path.exists(d) for d in dateien.values()):
+        return dateien
+    os.makedirs(TERMINE_AUSWAHL, exist_ok=True)
+    for f in os.listdir(TERMINE_AUSWAHL):
+        if f.endswith(".pdf"):
+            os.remove(os.path.join(TERMINE_AUSWAHL, f))
+    tmp_tab, tmp_main = os.path.join("termine", "_auswahl_termine.typ"), os.path.join("termine", "_auswahl.typ")
+    with open(tmp_main, "w", encoding="utf-8") as f:
+        f.write('#import "template.typ": *\n#show: template\n\n#include "_auswahl_termine.typ"\n')
+    fertig = {}
+    try:
+        for i in range(n):
+            for j in range(i, n):
+                teil = zeilen[:kopf_ende] + [z for b in bloecke[i:j + 1] for z in b] + zeilen[ende:]
+                with open(tmp_tab, "w", encoding="utf-8") as f:
+                    f.write("\n".join(teil))
+                ziel = dateien[f"{schluessel[i]}|{schluessel[j]}"]
+                try:
+                    subprocess.run(["typst", "compile", tmp_main, ziel], check=True, capture_output=True)
+                    fertig[f"{schluessel[i]}|{schluessel[j]}"] = ziel
+                except Exception as e:
+                    print(f"Hinweis: Auswahl-PDF {ziel} nicht gebaut ({e})")
+    finally:
+        for t in (tmp_tab, tmp_main):
+            if os.path.exists(t):
+                os.remove(t)
+    if len(fertig) == len(dateien):
+        with open(stand_datei, "w", encoding="utf-8") as f:
+            f.write(stand)
+    print(f"Termine: {len(fertig)} Auswahl-PDFs gebaut")
+    return fertig
+
+
 def render_table_inner_html(parsed, today=TODAY):
     out = []
     # Spalten der Mannschaften (AFK 1 ..., Senioren, Jugend) bekommen ihre Mannschaftsfarbe (design.css)
@@ -557,18 +638,8 @@ def render_table_inner_html(parsed, today=TODAY):
         out.append('<thead><tr>' + ''.join(
             f'<th class="{k}">{h}</th>' if k else f'<th>{h}</th>' for h, k in zip(header, spalten_klasse)) + '</tr></thead>')
     out.append('<tbody>')
-    # Monat (JJJJ-MM) je Zeile für den Monatsfilter: Monatsüberschrift = Monat des nächsten Termins darunter,
-    # Zeilen ohne erkennbares Datum gehören zum Monat davor
     rows = parsed['rows']
-    monate, letzter = [], ""
-    for i, r in enumerate(rows):
-        if r['kind'] == 'month':
-            naechster = next((x['date'] for x in rows[i + 1:] if x['kind'] != 'month' and x.get('date')), None)
-            letzter = naechster.strftime("%Y-%m") if naechster else letzter
-        elif r.get('date'):
-            letzter = r['date'].strftime("%Y-%m")
-        monate.append(letzter)
-    for r, monat in zip(rows, monate):
+    for r, monat in zip(rows, monats_schluessel(rows)):
         dm = f' data-monat="{monat}"' if monat else ''
         if r['kind'] == 'month':
             out.append(f'<tr class="monat-row"{dm}><td colspan="{r["colspan"]}" class="monat-header">{r["text"]}</td></tr>')
@@ -882,7 +953,7 @@ TERMINE_FILTER_HTML = """
       <label>Von <select id="tf-von"></select></label>
       <label>Bis <select id="tf-bis"></select></label>
       <button type="button" id="tf-alle">Alle</button>
-      <button type="button" id="tf-druck" class="tf-haupt">Auswahl als PDF</button>
+      <a id="tf-druck" class="tf-haupt tf-knopf" href="#" download>Auswahl als PDF</a>
     </div>"""
 
 TERMINE_FILTER_CSS = """<style>
@@ -890,7 +961,10 @@ TERMINE_FILTER_CSS = """<style>
       .termine-filter label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
       .termine-filter select, .termine-filter button { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px;
         border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
-      .termine-filter button { cursor: pointer; }
+      .termine-filter button, .termine-filter .tf-knopf { cursor: pointer; }
+      .termine-filter .tf-knopf { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px; text-decoration: none;
+        border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
+      .termine-filter .tf-knopf.aus { opacity: 0.45; pointer-events: none; }
       .termine-filter .tf-haupt { font-weight: 700; }
       .termine-filter button[disabled] { opacity: 0.45; cursor: not-allowed; }
       .custom-tabelle tr.tf-aus { display: none; }
@@ -922,6 +996,7 @@ TERMINE_FILTER_JS = """<script>
   monate.sort();
   if (!monate.length) { document.getElementById("termine-filter").hidden = true; return; }
   var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter";
+  var PDFS = {}; try { PDFS = JSON.parse(document.getElementById("termine-pdfs").textContent); } catch (e) {}
   function name(m) { return MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
   monate.forEach(function (m) { [von, bis].forEach(function (s) { var o = document.createElement("option"); o.value = m; o.textContent = name(m); s.appendChild(o); }); });
   // Standard: aktueller Monat (oder der nächste mit Terminen) bis Saisonende
@@ -947,7 +1022,11 @@ TERMINE_FILTER_JS = """<script>
     });
     tab.style.display = sichtbar ? "" : "none";
     document.getElementById("termine-leer").hidden = !!sichtbar;
-    document.getElementById("tf-druck").disabled = !sichtbar;
+    // Fertige PDF für genau diesen Zeitraum (beim Build mit Typst erzeugt); ohne PDF: Drucken als Notlösung
+    var pdf = PDFS[a + "|" + b], knopf = document.getElementById("tf-druck");
+    knopf.classList.toggle("aus", !sichtbar);
+    if (pdf) { knopf.href = pdf; knopf.setAttribute("download", "Termine_" + a + "_bis_" + b + ".pdf"); knopf.dataset.drucken = ""; }
+    else { knopf.href = "#"; knopf.removeAttribute("download"); knopf.dataset.drucken = "1"; }
     document.getElementById("druck-zeitraum").textContent = a === b ? name(a) : name(a) + " – " + name(b);
     try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b})); } catch (e) {}
   }
@@ -957,7 +1036,9 @@ TERMINE_FILTER_JS = """<script>
   var thema = null;
   window.addEventListener("beforeprint", function () { thema = document.documentElement.getAttribute("data-theme"); document.documentElement.setAttribute("data-theme", "light"); });
   window.addEventListener("afterprint", function () { if (thema) document.documentElement.setAttribute("data-theme", thema); });
-  document.getElementById("tf-druck").addEventListener("click", function () { window.print(); });
+  document.getElementById("tf-druck").addEventListener("click", function (ev) {
+    if (this.dataset.drucken) { ev.preventDefault(); window.print(); }
+  });
   anwenden();
 })();
 </script>"""
@@ -1009,6 +1090,10 @@ def build_termine():
                 if os.path.exists(TERMINE_PDF) else "")
 
     filter_html = TERMINE_FILTER_HTML if (parsed and parsed['rows'] and not USE_SVG_FOR_TERMINE) else ""
+    if filter_html:
+        auswahl = termine_auswahl_pdfs(parsed['rows'])
+        filter_html += ('<script type="application/json" id="termine-pdfs">'
+                        + json.dumps(auswahl).replace("</", "<\\/") + '</script>')
     content = f"""{read_hinweis()}
     <h1>Termine & Spielplan</h1>
     {pdf_link}

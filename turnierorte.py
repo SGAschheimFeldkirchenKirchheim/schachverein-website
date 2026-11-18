@@ -229,6 +229,7 @@ CSS = """
     background: transparent; color: var(--text); cursor: pointer; }
   .rl-tabs button.an { background: var(--hell, #6f9fd8); color: #0e1524; border-color: transparent; font-weight: 700; }
   .tour-tab.rl th[data-nach] { cursor: pointer; }
+  .tour-tab.rl th.z, .tour-tab.rl td.z { text-align: center; }
   .tour-tab.rl th.an, .tour-tab.rl td.an { color: var(--text); font-weight: 700; }
   .tour-tab.rl tr td.pl { font-weight: 800; width: 2.5rem; }
   .tour-tab.rl tr.platz1 td.pl { color: #d4a017; } .tour-tab.rl tr.platz2 td.pl { color: #9aa6b2; }
