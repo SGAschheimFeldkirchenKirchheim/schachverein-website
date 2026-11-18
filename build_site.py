@@ -1213,8 +1213,7 @@ def build_ausschreibungen():
     content = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">Ausschreibungen</h1>
-    {ausschreibungen_wahl_html("#intern")}
-    <h2 id="intern" style="margin-top:2rem;">Intern – unsere Turniere</h2>
+    {turnierkalender.AUSSCHREIBUNG_TABS.format(intern=' class="an" aria-current="page"', extern="", anzahl=turnierkalender.ANZAHL)}
     <p>Hier findest du die Ausschreibungen zu unseren kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
     {pdf_liste_html(ausschreibungen_eintraege())}
     """

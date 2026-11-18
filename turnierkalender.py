@@ -1063,6 +1063,23 @@ JS = r"""
 """
 
 
+# Umschalter oben auf "Ausschreibungen" und im Turnierkalender: Intern | Extern
+AUSSCHREIBUNG_TABS = """
+    <style>
+      .as-tabs {{ display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0 1.4rem; }}
+      .as-tabs a {{ display: inline-flex; align-items: baseline; gap: 0.45rem; padding: 0.55rem 1.1rem; border-radius: 999px;
+        border: 1px solid var(--line, #ccc); text-decoration: none; color: var(--text, #222); font-weight: 700; }}
+      .as-tabs a small {{ font-weight: normal; color: var(--muted, #777); }}
+      .as-tabs a.an {{ background: var(--hell, #6f9fd8); border-color: transparent; color: #0e1524; pointer-events: none; }}
+      .as-tabs a.an small {{ color: #24324d; }}
+      .as-tabs a:not(.an):hover {{ border-color: var(--hell, #6f9fd8); }}
+    </style>
+    <nav class="as-tabs" aria-label="Ausschreibungen">
+      <a href="ausschreibungen.html"{intern}>Intern <small>unsere Turniere</small></a>
+      <a href="turnierkalender.html"{extern}>Extern <small>Turnierkalender · {anzahl} Turniere</small></a>
+    </nav>"""
+
+
 def seite_html(events, schule, semester, konfig, stand):
     std = konfig.get("standard_filter", {})
     daten = {"events": events, "schule": schule, "semester": semester,
@@ -1076,12 +1093,14 @@ def seite_html(events, schule, semester, konfig, stand):
     quellen_links = ('<a href="https://fide.com/calendar" target="_blank" rel="noopener">FIDE-Kalender</a>, ' if fide_an else "") + \
         '<a href="https://chess-results.com" target="_blank" rel="noopener">chess-results.com</a>'
     js_daten = json.dumps(daten, ensure_ascii=False).replace("</", "<\\/")
+    tabs = AUSSCHREIBUNG_TABS.format(intern="", extern=' class="an" aria-current="page"', anzahl=len(events))
     return f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">{TITEL}</h1>
+    {tabs}
     <p class="tk-intro">Opens und Turniere in Bayern, Deutschland und Europa – automatisch gesammelt {quellen_text},
       jede Nacht aktualisiert. Die Entfernung wird ab {heimat} gerechnet.
-      Unsere eigenen Turniere findest du unter <a href="ausschreibungen.html">Ausschreibungen (intern)</a>.</p>
+      </p>
     <details class="tk-box" id="tk-box"><summary>Filter anzeigen</summary>
     <form id="tk-filter" class="tk-filter" onsubmit="return false">
       <label>Von <input type="month" name="von"></label>
