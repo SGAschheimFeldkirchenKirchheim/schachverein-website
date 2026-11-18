@@ -17,6 +17,7 @@ import senioren  # Senioren-Seite (Einstellungen in senioren.py)
 import faq     # FAQ-Seite (Fragen in faq.py)
 import chessresults  # Vereinsturniere von chess-results.com (turniere/chessresults.json)
 import turnierkalender  # externe Turniere: FIDE + chess-results (turniere/turnierkalender.json)
+import turnierorte  # "AFK on Tour": Turnierorte sammeln (Daten in turnierorte/)
 import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
@@ -89,6 +90,7 @@ PAGE_DESCRIPTIONS = {
     "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
     "kontakt.html": "Kontakt und Anfahrt zur SG Aschheim/Feldkirchen/Kirchheim im Gymnasium Kirchheim.",
     "ausschreibungen.html": "Ausschreibungen der SG AFK als PDF und der Turnierkalender mit Opens in Bayern, Deutschland und Europa.",
+    turnierorte.SEITE: "AFK on Tour: In welchen Städten und Ländern Spieler der SG AFK schon Turniere gespielt haben – mit Karte und Rangliste.",
     turnierkalender.SEITE: "Turnierkalender: Opens in Bayern, Deutschland und Europa mit Filtern nach Zeitraum, Entfernung und Bedenkzeit.",
     "oberlandquartett.html": "Ergebnisse und Pokalstand des Oberlandquartetts.",
     "blitzjahreswertung.html": "Gesamtwertung der Blitzjahreswertung der SG AFK.",
@@ -140,6 +142,7 @@ SUBNAV = {
         ("vereinsintern.html", "Hall of Fame"),
         ("ausschreibungen.html", "Ausschreibungen"),
         (turnierkalender.SEITE, "Turnierkalender"),
+        (turnierorte.SEITE, turnierorte.TITEL),
     ],
 }
 
@@ -147,6 +150,7 @@ SUBNAV = {
 ACTIVE_PARENT = {
     "ausschreibungen.html": "turniere.html",
     turnierkalender.SEITE: "turniere.html",
+    turnierorte.SEITE: "turniere.html",
     "oberlandquartett.html": "turniere.html",
     "blitzjahreswertung.html": "turniere.html",
     "vereinsintern.html": "turniere.html",
@@ -3104,6 +3108,7 @@ if __name__ == "__main__":
     build_blitzjahreswertung()
     build_hall_of_fame()
     turnierkalender.bauen(render_page)   # vor den Übersichten: die Karte "Extern" zeigt die Anzahl
+    turnierorte.bauen(render_page, einreichen.SKRIPT_URL)
     build_turniere_overview()
     build_ausschreibungen()
     build_neu_hier()

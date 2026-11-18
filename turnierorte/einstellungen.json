@@ -1,0 +1,13 @@
+{
+  "_hinweis": [
+    "Einstellungen für AFK on Tour (turnierorte.html).",
+    "ort_gruppen: mehrere Gemeinden zählen als ein Ort (z. B. alle Tegernsee-Opens = Tegernsee).",
+    "heimat: von hier wird die weiteste Reise gerechnet.",
+    "flaggenfarbe: Farbe der Flaggen auf der Karte."
+  ],
+  "ort_gruppen": {
+    "Tegernsee": ["Gmund am Tegernsee", "Bad Wiessee", "Rottach-Egern", "Tegernsee", "Kreuth"]
+  },
+  "heimat": {"name": "Kirchheim", "lat": 48.1766, "lon": 11.7553},
+  "flaggenfarbe": "#c0392b"
+}
