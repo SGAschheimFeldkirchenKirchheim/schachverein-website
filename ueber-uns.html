@@ -70,7 +70,13 @@
   .beitritt-box h3 { margin-top: 0; color: var(--navy); }
   .beitritt-box p { max-width: 650px; margin: 0.5rem auto 1.2rem; color: #34495e; font-size: 0.95rem; }
   .beitritt-box .btn { margin-top: 0; padding: 0.75rem 1.6rem; font-size: 1rem; }
-</style>
+</style><style>
+      .neu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+      .neu-card { background: #f8f9fa; border-top: 4px solid #27ae60; border-radius: 6px; padding: 1.2rem 1.4rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+      .neu-card h3 { margin-top: 0; }
+      .neu-card ul { padding-left: 1.2rem; }
+      .neu-card a { color: #3498db; font-weight: bold; text-decoration: none; }
+    </style>
   <link rel="stylesheet" href="design.css">
   <meta property="og:title" content="Über uns | SG AFK">
   <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
@@ -102,8 +108,8 @@
     </div>
     <nav aria-label="Hauptmenü">
       <a href="index.html">Start</a>
-      <div class="nav-gruppe offen"><a href="ueber-uns.html" aria-current="page">Über uns</a><button type="button" class="nav-auf" aria-expanded="true" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a><a href="geschichte.html">Vereinsgeschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
-      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="mannschaftshistorie.html">Historie</a></div></div>
+      <div class="nav-gruppe offen"><a href="ueber-uns.html" aria-current="page">Über uns</a><button type="button" class="nav-auf" aria-expanded="true" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="geschichte.html">Geschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="geschichte.html#wachstum">Historie</a></div></div>
       <a href="jugend.html">Jugend</a>
       <a href="termine.html">Termine</a>
       <a href="berichte.html">Berichte</a>
@@ -119,7 +125,60 @@
 <p class="lead">
   Wir sind der Schachverein für das östliche Umland von München. Mit rund 100 Mitgliedern – vom Einsteiger bis zum routinierten Turnierspieler (DWZ 800 bis über 2200) – bieten wir Schachenthusiasten aus Kirchheim, Aschheim, Feldkirchen und Umgebung eine sportliche und gesellige Heimat.
 </p>
-<p><a href="neu-hier.html" class="card-link">Neu hier? So kommst du vorbei →</a></p>
+
+    <h2 id="neu-hier">Neu hier? So kommst du vorbei</h2>
+    <p>Egal ob Einsteiger, Jugendlicher oder Turnierspieler: Komm einfach an einem Freitag bei uns vorbei.</p>
+
+    <div class="neu-grid">
+      <div class="neu-card">
+        <h3>Wann?</h3>
+        <p><strong>Jeden Freitag.</strong> Das Gebäude ist ab 18:00 Uhr geöffnet.</p>
+        <ul>
+          <li><strong>Jugendtraining:</strong> 18:00 – 19:30 Uhr</li>
+          <li><strong>Erwachsene &amp; Spielabend:</strong> ab 19:30 Uhr (Open End)</li>
+        </ul>
+        <p>Die Zeiten sind flexibel: Erwachsene dürfen schon ab 18:00 Uhr kommen, Jugendliche müssen um 19:30 Uhr nicht gehen.</p>
+      </div>
+
+      <div class="neu-card">
+        <h3>Wo?</h3>
+           <p><strong>Gymnasium Kirchheim</strong><br>Heimstettner Str. 20<br>85551 Kirchheim</p>
+           <p>Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+        <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener" class="btn btn-outline">Auf Google Maps öffnen</a>
+      </div>
+
+      <div class="neu-card">
+        <h3>Wer kann kommen?</h3>
+        <ul>
+          <li><strong>Alle sind willkommen – egal wie alt.</strong> Die Regeln musst du noch nicht kennen.</li>
+          <li><strong>Schnuppern ist kostenlos und unverbindlich</strong>, so oft du willst.</li>
+          <li><strong>Anmelden?</strong> Nicht nötig, einfach vorbeischauen. Wer mag, <a href="kontakt.html">meldet sich vorher kurz</a>.</li>
+        </ul>
+      </div>
+
+      <div class="neu-card">
+        <h3>Was erwartet dich?</h3>
+        <ul>
+          <li><strong>Hobbyspieler &amp; Einsteiger:</strong> zwanglos freie Partien, ohne Turnierdruck</li>
+          <li><strong>Kinder &amp; Jugendliche:</strong> strukturiertes Jugendtraining für alle Alters- und Spielklassen (<a href="jugend.html">mehr zur Jugend</a>)</li>
+          <li><strong>Mannschaftsschach:</strong> Teams von der E-Klasse bis zur Bezirksliga, für jedes Spielniveau</li>
+        </ul>
+        <a href="mannschaften.html">Unsere Teams →</a>
+      </div>
+
+      <div class="neu-card">
+        <h3>Was kostet es?</h3>
+        <ul><li><strong>Kinder, Schüler &amp; Studenten:</strong> 24 € im Jahr</li><li><strong>Erwachsene:</strong> 75 € im Jahr</li></ul>
+        <p>Schnuppern kostet nichts.</p>
+      </div>
+
+      <div class="neu-card">
+        <h3>Mitglied werden</h3>
+        <p>Gefällt es dir bei uns? <a href="#mitglied">Mitgliedsantrag weiter unten →</a></p>
+        <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
+      </div>
+    </div>
+    
 
 <hr class="trenner">
 
@@ -161,7 +220,7 @@
   </div>
 </div>
 
-<div class="beitritt-box">
+<div class="beitritt-box" id="mitglied">
   <h3>Du möchtest Mitglied werden?</h3>
   <p>Lade einfach unseren Mitgliedsantrag herunter, fülle ihn aus und gib ihn freitags beim Spielabend ab oder sende ihn per E-Mail an uns.</p>
   <a href="mitgliederantrag.pdf" download class="btn">Mitgliedsantrag herunterladen (PDF)</a>
@@ -186,7 +245,7 @@
       <div>
         <h2>Verein</h2>
         <p><a href="ueber-uns.html">Über uns</a></p>
-        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="ueber-uns.html#neu-hier">Neu hier?</a></p>
         <p><a href="faq.html">Häufige Fragen</a></p>
         <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
       </div>
