@@ -272,8 +272,8 @@
     <h2 style="margin-top:2rem;">Abzeichen</h2><p class="tour-hinweis">Die seltensten Abzeichen, die schon jemand geholt hat:</p><div class="abz-grid"><div class="abz st-gold"><h4>Entdecker<small>Gold · 50</small></h4><p>Als erster AFKler in einem Land</p><p class="wer">1 im Verein (100 %)</p></div><div class="abz st-silber"><h4>Pionier<small>Silber · 25</small></h4><p>Als erster AFKler in einer Stadt</p><p class="wer">1 im Verein (100 %)</p></div><div class="abz st-silber"><h4>Fremdenführer<small>Silber · 25</small></h4><p>3 Orte, an denen sonst noch kein AFKler war</p><p class="wer">1 im Verein (100 %)</p></div><div class="abz st-silber"><h4>Grenke-Pilger<small>Silber · 25</small></h4><p>Grenke Open in Karlsruhe</p><p class="wer">1 im Verein (100 %)</p></div></div><p class="tour-weiter"><a href="turnierorte-abzeichen.html">Alle 56 Abzeichen ansehen →</a></p>
     
     <details class="card tour-antrag" id="beantragen">
-      <summary><span><strong>Ort beantragen</strong><br><span class="klein">Du hast in einer neuen Stadt ein Turnier gespielt – auch früher? Trag es ein, wir prüfen und vergeben den Punkt.</span></span>
-        <span class="btn">Beantragen</span></summary>
+      <summary><span><strong>Turnier einreichen</strong><br><span class="klein">Du hast ein Turnier gespielt – auch früher? Reich es ein, wir prüfen es und tragen es bei dir ein.</span></span>
+        <span class="btn">Einreichen</span></summary>
       <form id="tour-form" data-url="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec">
         <div class="tour-reihe">
           <label>Dein Name <input name="name" required maxlength="80" autocomplete="name" placeholder="Vor- und Nachname"></label>
@@ -399,7 +399,7 @@
       .then(function (r) { return r.json(); })
       .then(function (a) {
         if (!a.ok) throw new Error(a.fehler || "Unbekannter Fehler");
-        m.className = "meldung ok"; m.textContent = "Danke! Dein Antrag ist angekommen und wird geprüft.";
+        m.className = "meldung ok"; m.textContent = "Danke! Dein Turnier ist angekommen und wird geprüft.";
         var name = f.elements.name.value; f.reset(); f.elements.name.value = name;
       })
       .catch(function (e) { m.className = "meldung fehler"; m.textContent = "Das hat nicht geklappt (" + e.message + "). Bitte später nochmal versuchen."; })
