@@ -149,17 +149,20 @@
     
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">Ausschreibungen</h1>
-    <div class="pdf-grid">
-            <a class="pdf-card" href="#intern">
-              <span class="pdf-icon" aria-hidden="true" style="background:var(--hell);color:#0e1524">AFK</span>
-              <span class="pdf-text"><strong>Intern</strong><br><small>Unsere Turniere · 3 Ausschreibungen als PDF</small></span>
-            </a>
-            <a class="pdf-card" href="turnierkalender.html">
-              <span class="pdf-icon" aria-hidden="true" style="background:var(--hell);color:#0e1524">EU</span>
-              <span class="pdf-text"><strong>Extern</strong><br><small>Turnierkalender · Opens in Bayern, Deutschland und Europa · 938 Turniere</small></span>
-            </a>
-          </div>
-    <h2 id="intern" style="margin-top:2rem;">Intern – unsere Turniere</h2>
+    
+    <style>
+      .as-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0 1.4rem; }
+      .as-tabs a { display: inline-flex; align-items: baseline; gap: 0.45rem; padding: 0.55rem 1.1rem; border-radius: 999px;
+        border: 1px solid var(--line, #ccc); text-decoration: none; color: var(--text, #222); font-weight: 700; }
+      .as-tabs a small { font-weight: normal; color: var(--muted, #777); }
+      .as-tabs a.an { background: var(--hell, #6f9fd8); border-color: transparent; color: #0e1524; pointer-events: none; }
+      .as-tabs a.an small { color: #24324d; }
+      .as-tabs a:not(.an):hover { border-color: var(--hell, #6f9fd8); }
+    </style>
+    <nav class="as-tabs" aria-label="Ausschreibungen">
+      <a href="ausschreibungen.html" class="an" aria-current="page">Intern <small>unsere Turniere</small></a>
+      <a href="turnierkalender.html">Extern <small>Turnierkalender · 938 Turniere</small></a>
+    </nav>
     <p>Hier findest du die Ausschreibungen zu unseren kommenden Turnieren. Ein Klick öffnet die PDF direkt.</p>
     <div class="pdf-grid">
             <a class="pdf-card" href="Ausschreibungen/Ligapokalturnier%202026_27.pdf" target="_blank" rel="noopener">
