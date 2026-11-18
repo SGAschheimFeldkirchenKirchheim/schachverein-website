@@ -200,6 +200,10 @@
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
+  "1533354": {
+   "anzahl": 0,
+   "geprueft": "2026-11-18"
+  },
   "1533402": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
@@ -392,10 +396,6 @@
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
-  "1539210": {
-   "anzahl": 0,
-   "geprueft": "2026-11-18"
-  },
   "1539224": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
@@ -484,6 +484,10 @@
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
+  "1539949": {
+   "anzahl": 0,
+   "geprueft": "2026-11-18"
+  },
   "1540008": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
@@ -525,10 +529,6 @@
    "geprueft": "2026-11-18"
   },
   "1541123": {
-   "anzahl": 0,
-   "geprueft": "2026-11-18"
-  },
-  "1541415": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
@@ -736,10 +736,6 @@
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
-  "1544110": {
-   "anzahl": 0,
-   "geprueft": "2026-11-18"
-  },
   "1544114": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
@@ -828,11 +824,19 @@
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
+  "1544567": {
+   "anzahl": 0,
+   "geprueft": "2026-11-18"
+  },
   "1544624": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
   "1544633": {
+   "anzahl": 0,
+   "geprueft": "2026-11-18"
+  },
+  "1544668": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
   }
@@ -1885,7 +1889,7 @@
    "v": 2,
    "von": "2026-12-12"
   },
-  "1406257": null,
+  "1406264": null,
   "1409504": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90' / 40 moves + 30' rest + 30'' per move",
@@ -5203,11 +5207,11 @@
    "europa": true,
    "id": "cr:1480703",
    "land": "Rumänien",
-   "lat": 44.4414272,
+   "lat": 44.4474901,
    "links": {
     "chessresults": "https://chess-results.com/tnr1480703.aspx?lan=0"
    },
-   "lon": 26.1121443,
+   "lon": 26.1158212,
    "name": "FESTIVALUL INTERNAȚIONAL DE ȘAH „TROFEUL UNIRII” - Open Slatina · Ediția a III-a -                                    PREMII: 14.400 lei",
    "ort": "Liceul cu Program Sportiv Slatina, Complex Comercial Profi, Str. Toamnei nr. 10",
    "quelle": "chess-results",
@@ -5226,11 +5230,11 @@
    "europa": true,
    "id": "cr:1480718",
    "land": "Rumänien",
-   "lat": 44.4414272,
+   "lat": 44.4474901,
    "links": {
     "chessresults": "https://chess-results.com/tnr1480718.aspx?lan=0"
    },
-   "lon": 26.1121443,
+   "lon": 26.1158212,
    "name": "FESTIVALUL INTERNAȚIONAL DE ȘAH „TROFEUL UNIRII” - U 1600 Slatina · Ediția a III-a -                                    PREMII: 6.200  lei",
    "ort": "Liceul cu Program Sportiv Slatina, Complex Comercial Profi, Str. Toamnei nr. 10",
    "quelle": "chess-results",
@@ -5249,11 +5253,11 @@
    "europa": true,
    "id": "cr:1480728",
    "land": "Rumänien",
-   "lat": 44.4414272,
+   "lat": 44.4474901,
    "links": {
     "chessresults": "https://chess-results.com/tnr1480728.aspx?lan=0"
    },
-   "lon": 26.1121443,
+   "lon": 26.1158212,
    "name": "FESTIVALUL INTERNAȚIONAL DE ȘAH „TROFEUL UNIRII” - Amatori Slatina · Ediția a III-a -                                    PREMII: 3.900  lei",
    "ort": "Liceul cu Program Sportiv Slatina, Complex Comercial Profi, Str. Toamnei nr. 10",
    "quelle": "chess-results",
@@ -5282,7 +5286,7 @@
    "ort": "Reykjavik",
    "quelle": "chess-results",
    "runden": "9",
-   "schnitt": 1852,
+   "schnitt": 1845,
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2027-03-17"
@@ -5297,12 +5301,12 @@
    "europa": true,
    "id": "cr:1482339",
    "land": "Bulgarien",
-   "lat": 43.4120353,
+   "lat": 43.4121894,
    "links": {
     "chessresults": "https://chess-results.com/tnr1482339.aspx?lan=0",
     "website": "https://pleven21.com/"
    },
-   "lon": 24.6267517,
+   "lon": 24.6290719,
    "name": "Детски шахматен турнир \"Купа Плевен XXI\" - до 8 години Плевен, 28-29 ноември 2026",
    "ort": "Плевен, Хотел \"Балкан\"",
    "quelle": "chess-results",
@@ -5321,12 +5325,12 @@
    "europa": true,
    "id": "cr:1482340",
    "land": "Bulgarien",
-   "lat": 43.4120353,
+   "lat": 43.4121894,
    "links": {
     "chessresults": "https://chess-results.com/tnr1482340.aspx?lan=0",
     "website": "https://pleven21.com/"
    },
-   "lon": 24.6267517,
+   "lon": 24.6290719,
    "name": "Детски шахматен турнир \"Купа Плевен XXI\" - до 14 години Плевен, 28-29 ноември 2026",
    "ort": "Плевен, Хотел \"Балкан\"",
    "quelle": "chess-results",
@@ -5436,6 +5440,7 @@
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90+30",
    "bis": "2027-01-31",
+   "bz_label": "bedenkzeit (standard)",
    "elo": true,
    "europa": true,
    "id": "cr:1482682",
@@ -5450,7 +5455,9 @@
    "ort": "The Radisson Blu Hotel & Spa, Ballincar, Rosses Point, Sligo, Ireland F91 XW7Y",
    "quelle": "chess-results",
    "runden": "5",
+   "schnitt": null,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2027-01-29"
   },
   "1482684": {
@@ -8020,12 +8027,12 @@
    "europa": true,
    "id": "cr:1507328",
    "land": "Griechenland",
-   "lat": 37.9363863,
+   "lat": 37.9364371,
    "links": {
     "chessresults": "https://chess-results.com/tnr1507328.aspx?lan=0",
     "website": "https://my-club.sakargonaytis.gr/"
    },
-   "lon": 22.9351524,
+   "lon": 22.9352062,
    "name": "11o Open Tournament KORINTHOS 2026 - Open  27 - 30 Δεκ με 1500€ χρημ έπαθλα",
    "ort": "Κολιάτσου 112 - 20131 Κόρινθος",
    "quelle": "chess-results",
@@ -13819,11 +13826,11 @@
    "europa": true,
    "id": "cr:1528381",
    "land": "Bulgarien",
-   "lat": 42.6832195,
+   "lat": 42.683193,
    "links": {
     "chessresults": "https://chess-results.com/tnr1528381.aspx?lan=0"
    },
-   "lon": 23.360506,
+   "lon": 23.3603131,
    "name": "ШАХМАТНА ЛИГА по КЛАСИЧЕСКИ ШАХМАТ КУПА \"Слатина\" 21-22.11.2026г. София",
    "ort": "гр.София, ж.к. Гео Милев, ул. „Коста Лулчев“, 1111 *",
    "quelle": "chess-results",
@@ -14906,11 +14913,11 @@
    "europa": true,
    "id": "cr:1529634",
    "land": "Ukraine",
-   "lat": 44.553911,
+   "lat": 44.5125026,
    "links": {
     "chessresults": "https://chess-results.com/tnr1529634.aspx?lan=0"
    },
-   "lon": 33.4488008,
+   "lon": 33.4959232,
    "name": "Kiwi Classic Open м.Буча",
    "ort": "м. Буча, вул. Києво-Мироцька, 69",
    "quelle": "chess-results",
@@ -15072,11 +15079,11 @@
    "europa": true,
    "id": "cr:1529885",
    "land": "Serbien",
-   "lat": 44.8698603,
+   "lat": 44.8678629,
    "links": {
     "chessresults": "https://chess-results.com/tnr1529885.aspx?lan=0"
    },
-   "lon": 20.6392001,
+   "lon": 20.6421088,
    "name": "Novogodišnji rapid ŠK Stari grad Kragujevac",
    "ort": "Kragujevac, gradsko udruženje penzionera",
    "quelle": "chess-results",
@@ -15328,11 +15335,11 @@
    "europa": true,
    "id": "cr:1530012",
    "land": "Bulgarien",
-   "lat": 43.8053853,
+   "lat": 43.7992895,
    "links": {
     "chessresults": "https://chess-results.com/tnr1530012.aspx?lan=0"
    },
-   "lon": 25.9857287,
+   "lon": 26.0270427,
    "name": "Sandanski Christmas Open 2026, Prize Fund 2310 EUR * 12.12.2026",
    "ort": "Sandanski BUL, The Sports Hall / GPS: 41.55265, 23.27262",
    "quelle": "chess-results",
@@ -17267,11 +17274,11 @@
    "europa": true,
    "id": "cr:1533265",
    "land": "Ukraine",
-   "lat": 44.553911,
+   "lat": 44.5125026,
    "links": {
     "chessresults": "https://chess-results.com/tnr1533265.aspx?lan=0"
    },
-   "lon": 33.4488008,
+   "lon": 33.4959232,
    "name": "Kiwi Classic Open м.Буча (Нац.Рейт.)",
    "ort": "м. Буча, вул. Києво-Мироцька, 69",
    "quelle": "chess-results",
@@ -22797,16 +22804,16 @@
    "europa": true,
    "id": "cr:1538563",
    "land": "Aserbaidschan",
-   "lat": 40.3836333,
+   "lat": 40.3836597,
    "links": {
     "chessresults": "https://chess-results.com/tnr1538563.aspx?lan=0"
    },
-   "lon": 49.8236961,
+   "lon": 49.8241135,
    "name": "Vüqar Həşimov Statistika filialı - Reytinqli Rapid Turnir U2000 / 10+3 / 21 Noyabr / 15:00 / 050-239-10-39 / Bəsti Bağırova 2",
    "ort": "Bəsti Bağırova 2",
    "quelle": "chess-results",
    "runden": "9",
-   "schnitt": 1645,
+   "schnitt": 1622,
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2026-11-21"
@@ -24831,11 +24838,11 @@
    "europa": true,
    "id": "cr:1539805",
    "land": "Rumänien",
-   "lat": 45.724624,
+   "lat": 45.7259883,
    "links": {
     "chessresults": "https://chess-results.com/tnr1539805.aspx?lan=0"
    },
-   "lon": 21.2017921,
+   "lon": 21.202376,
    "name": "Cupa Mos Nicolae Turneu A Shopping City Timisoara",
    "ort": "Shopping City",
    "quelle": "chess-results",
@@ -24877,11 +24884,11 @@
    "europa": true,
    "id": "cr:1539814",
    "land": "Rumänien",
-   "lat": 45.724624,
+   "lat": 45.7259883,
    "links": {
     "chessresults": "https://chess-results.com/tnr1539814.aspx?lan=0"
    },
-   "lon": 21.2017921,
+   "lon": 21.202376,
    "name": "Cupa Mos Nicolae Turneu B Shopping City Timisoara",
    "ort": "Shopping City",
    "quelle": "chess-results",
@@ -24900,11 +24907,11 @@
    "europa": true,
    "id": "cr:1539820",
    "land": "Rumänien",
-   "lat": 45.724624,
+   "lat": 45.7259883,
    "links": {
     "chessresults": "https://chess-results.com/tnr1539820.aspx?lan=0"
    },
-   "lon": 21.2017921,
+   "lon": 21.202376,
    "name": "Cupa Mos Nicolae Turneu C Shopping City Timisoara",
    "ort": "Shopping City",
    "quelle": "chess-results",
@@ -25112,6 +25119,30 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-02"
+  },
+  "1539949": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes + 30 seconds increment per move",
+   "bis": "2026-11-20",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539949",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539949.aspx?lan=0",
+    "website": "http://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "2. INT GORULMEYEN GAZETE BLIND AND VISUALLY IMPAIRED CHESS TOURNAMENT",
+   "ort": "ISTANBUL METROPOLITAN MUNICIPALITY SILE SOCIAL FACILITIES - SILE - ISTANBUL",
+   "quelle": "chess-results",
+   "runden": "8",
+   "schnitt": 1495,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-16"
   },
   "1539970": {
    "bedenkzeit": "klassisch",
@@ -26182,11 +26213,11 @@
    "europa": true,
    "id": "cr:1540780",
    "land": "Griechenland",
-   "lat": 37.9719849,
+   "lat": 37.9665321,
    "links": {
     "chessresults": "https://chess-results.com/tnr1540780.aspx?lan=0"
    },
-   "lon": 23.6747497,
+   "lon": 23.6784937,
    "name": "ΠΑΝΕΛΛΗΝΙΟ ΑΝΟΙΚΤΟ ΑΤΟΜΙΚΟ ΠΡΩΤΑΘΛΗΜΑ ΒΕΤΕΡΑΝΩΝ +50 (ΟΠΕΝ-ΓΥΝΑΙΚΩΝ) 2026 14-20 ΔΕΚΕΜΒΡΙΟΥ 2026",
    "ort": "ΑΙΘΟΥΣΑ ΠΝΕΥΜΑΤΙΚΟΥ ΚΕΝΤΡΟΥ ΑΓ. ΙΩΑΝΝΗ ΡΕΝΤΗ (ΜΠΙΧΑΚΗ 8, ΑΓ.ΙΩΑΝΝΗΣ ΡΕΝΤΗΣ 18233",
    "quelle": "chess-results",
@@ -32943,6 +32974,29 @@
    "v": 2,
    "von": "2026-11-18"
   },
+  "1544618": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-18",
+   "bz_label": "bedenkzeit",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544618",
+   "land": "Deutschland",
+   "lat": 51.6674278,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544618.aspx?lan=0"
+   },
+   "lon": 6.2733294,
+   "name": "Uedemer Schulschach 18.11.2026 WK 1 RT",
+   "ort": "Bürgerhaus Uedem",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-18"
+  },
   "1544624": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "10 min + 5 sec",
@@ -33156,6 +33210,29 @@
   },
   "1544660": null,
   "1544667": null,
+  "1544668": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 10 min - 5 sek/ťah",
+   "bis": "2026-11-23",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544668",
+   "land": "Slowakei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544668.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Školské majstrovstvá Trnavského kraja žiakov ZŠ a študentov SŠ a OGY v šachu",
+   "ort": "Trnava, CVČ V jame",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-23"
+  },
   "177135": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "2 minutes blitz",
