@@ -1,1 +1,16 @@
-[]
+[
+ {
+  "spieler": "Korbinian",
+  "turnier": "5. Internationales Chess Festival Innsbruck C Open",
+  "stadt": "Innsbruck",
+  "land": "Österreich",
+  "lat": 47.26543,
+  "lon": 11.39277,
+  "von": "2021-08",
+  "bis": "2021-08",
+  "link": "https://chess-results.com/tnr534227.aspx?lan=0",
+  "bedenkzeit": "klassisch",
+  "ausnahme": "",
+  "bestaetigt": "2026-11-18"
+ }
+]
