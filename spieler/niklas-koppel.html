@@ -111,6 +111,19 @@
         k.setAttribute("aria-expanded", offen ? "true" : "false");
       });
     </script><style>
+  .such-knopf { order: 3; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1.75rem; height: 1.75rem;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); color: #fff !important; text-decoration: none; }
+  .such-knopf:hover { border-color: var(--hell, #6f9fd8); }
+  .such-knopf svg { width: 15px; height: 15px; }
+  @media (min-width: 961px) { body header { gap: 0.5rem 0.75rem !important; } .such-knopf { margin-left: 0.2rem; } }
+  @media (min-width: 1181px) and (max-width: 1400px) { body header a.brand { font-size: 0.88rem !important; }
+    body header nav { gap: 0.2rem 0.7rem !important; } body header nav a { font-size: 0.82rem; } }
+  @media (max-width: 960px) { .such-knopf { order: 2; margin-left: auto; } body header .theme-schalter { margin-left: 0.35rem; }
+    body header a.brand { flex: 1 0 auto; } body header a.brand span { white-space: nowrap; } }
+  @media (max-width: 420px) { body header a.brand { gap: 0.5rem; } body header .brand-logo { height: 36px; }
+    body header a.brand span::after { font-size: 1.02rem; } .such-knopf { width: 1.6rem; height: 1.6rem; }
+    body header .theme-schalter { padding: 0.15rem 0.45rem; } body header .nav-burger { margin-left: 0.15rem !important; } }
+</style><style>
       .klein { font-size: 0.85rem; color: #555; }
       .team-grid .team-karte { display: flex; flex-direction: column; color: inherit; text-decoration: none; }
       a.team-karte:hover { border-color: var(--link); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
@@ -294,6 +307,12 @@
       .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
       .sp-saison[open] > summary h3::after { content: "▾"; }
       .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
+      .dwz-verlauf { width: 100%; max-width: 680px; height: auto; display: block; margin: 0.3rem 0 1rem; font-size: 11px; }
+      .dwz-verlauf text { fill: var(--muted, #777); }
+      .dwz-verlauf .dv-raster { stroke: var(--border, #e3e7ee); stroke-width: 1; }
+      .dwz-verlauf polyline { fill: none; stroke: var(--hell, #2c5d99); stroke-width: 2.5; stroke-linejoin: round; }
+      .dwz-verlauf circle { fill: var(--hell, #2c5d99); }
+      .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
 </style>
   <link rel="stylesheet" href="../design.css">
   <meta property="og:title" content="Niklas Köppel | SG AFK">
@@ -315,6 +334,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <a class="such-knopf" href="../suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
     <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
     <nav aria-label="Hauptmenü">
       <a href="../index.html">Start</a>
@@ -343,6 +363,8 @@
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-6.html">AFK 6</a> <span class="klein">E-Klasse · Nr. 9 · Stamm</span></li></ul></div>
     </div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1128&amp;PKZ=NU4415433&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
+    
+    
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
     <details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">0 / 1</span></h3></summary>
         <h4><a href="../afk-6.html">AFK 6</a> <span class="team-klasse">E-Klasse</span></h4>
@@ -371,6 +393,9 @@
       </table></div>
       <p class="klein">Gerechnet mit der aktuellen DWZ, nur gespielte Partien gegen Gegner mit DWZ.
         Offiziell ausgewertet wird die Saison erst am Ende.</p>
+    
+    <h2 class="panel-titel sp-titel">In den Berichten</h2>
+    <ul class="sp-berichte"><li><a href="../berichte/2026-kooperationsturnier-gyki-feat-sg-afk-2026.html">Kooperationsturnier GyKi feat. SG AFK 2026</a> <span class="klein">13.10.2026</span></li></ul>
     
   </main>
 

@@ -111,6 +111,19 @@
         k.setAttribute("aria-expanded", offen ? "true" : "false");
       });
     </script><style>
+  .such-knopf { order: 3; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1.75rem; height: 1.75rem;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); color: #fff !important; text-decoration: none; }
+  .such-knopf:hover { border-color: var(--hell, #6f9fd8); }
+  .such-knopf svg { width: 15px; height: 15px; }
+  @media (min-width: 961px) { body header { gap: 0.5rem 0.75rem !important; } .such-knopf { margin-left: 0.2rem; } }
+  @media (min-width: 1181px) and (max-width: 1400px) { body header a.brand { font-size: 0.88rem !important; }
+    body header nav { gap: 0.2rem 0.7rem !important; } body header nav a { font-size: 0.82rem; } }
+  @media (max-width: 960px) { .such-knopf { order: 2; margin-left: auto; } body header .theme-schalter { margin-left: 0.35rem; }
+    body header a.brand { flex: 1 0 auto; } body header a.brand span { white-space: nowrap; } }
+  @media (max-width: 420px) { body header a.brand { gap: 0.5rem; } body header .brand-logo { height: 36px; }
+    body header a.brand span::after { font-size: 1.02rem; } .such-knopf { width: 1.6rem; height: 1.6rem; }
+    body header .theme-schalter { padding: 0.15rem 0.45rem; } body header .nav-burger { margin-left: 0.15rem !important; } }
+</style><style>
       .hinweis-banner { background: #fff3cd; border: 1px solid #ffe08a; color: #664d03; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-weight: bold; }
 
       :root { --hero-logo-h: 200px; --hero-logo-h-mobile: 140px; --next-accent: #27ae60; }
@@ -211,6 +224,17 @@
   .gb-schnipsel { position: fixed; top: -12px; width: 8px; height: 13px; border-radius: 2px; z-index: 9999;
                   pointer-events: none; animation: gb-fall var(--d) cubic-bezier(.3,.6,.5,1) forwards; }
   @keyframes gb-fall { to { transform: translate(var(--x), 105vh) rotate(var(--r)); opacity: 0.2; } }
+</style><style>
+  .diese-woche { margin: 0 0 1.2rem; padding: 0.9rem 1.2rem 1rem; border-radius: 12px; border: 1px solid var(--border, #e3e7ee);
+    background: var(--soft, #f5f7fa); }
+  .diese-woche > h2 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+  .dw-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.6rem 1.6rem; }
+  .dw-spalte h3 { margin: 0 0 0.3rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--text, #000) 60%, transparent); }
+  .dw-spalte ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; font-size: 0.92rem; line-height: 1.35; }
+  .dw-tag { display: inline-block; min-width: 4.6rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dw-km { font-size: 0.8rem; color: color-mix(in srgb, var(--text, #000) 55%, transparent); white-space: nowrap; }
+  .dw-mehr { display: inline-block; margin-top: 0.35rem; font-size: 0.85rem; }
 </style>
   <link rel="stylesheet" href="design.css">
   <meta property="og:title" content="Startseite | SG AFK">
@@ -232,6 +256,7 @@
       <span>SG Aschheim / Feldkirchen / Kirchheim</span>
     </a>
     <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <a class="such-knopf" href="suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
     <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
     <nav aria-label="Hauptmenü">
       <a href="index.html" aria-current="page">Start</a>
@@ -250,6 +275,23 @@
     
     
     
+    <section class="diese-woche" aria-label="Diese Woche">
+      <h2>Diese Woche</h2><div class="dw-raster"><div class="dw-spalte"><h3>Termine</h3><ul><li data-date="2026-11-20"><span class="dw-tag">Fr 20.11.</span> Nacht der Mathematik</li><li data-date="2026-11-21"><span class="dw-tag">Sa 21.11.</span> Landesliga Süd Runde 1</li><li data-date="2026-11-22"><span class="dw-tag">So 22.11.</span> U20 MMM, 1.Liga Runde 1</li><li data-date="2026-11-22"><span class="dw-tag">So 22.11.</span> Münchner Blitz-EM</li></ul><a class="dw-mehr" href="termine.html">Alle Termine →</a></div><div class="dw-spalte"><h3>Geburtstage</h3><ul><li data-date="2026-11-20"><span class="dw-tag">Fr 20.11.</span> Alexis</li><li data-date="2026-11-23"><span class="dw-tag">Mo 23.11.</span> Hanspeter</li></ul></div></div>
+    </section>
+    <script>
+    (function () {  // vergangene Tage ausblenden (die Seite kann bis zu einem Tag alt sein)
+      var h = new Date(), t = h.getFullYear() + "-" + ("0" + (h.getMonth() + 1)).slice(-2) + "-" + ("0" + h.getDate()).slice(-2);
+      [].forEach.call(document.querySelectorAll(".diese-woche li[data-date]"), function (li) {
+        if (li.getAttribute("data-date") < t) li.remove();
+        else if (li.getAttribute("data-date") === t) li.querySelector(".dw-tag").textContent = "heute";
+      });
+      [].forEach.call(document.querySelectorAll(".diese-woche .dw-spalte"), function (s) { if (!s.querySelector("li")) s.remove(); });
+      [].forEach.call(document.querySelectorAll(".diese-woche ul"), function (u) {
+        [].slice.call(u.children, 4).forEach(function (li) { li.remove(); });
+      });
+      var box = document.querySelector(".diese-woche"); if (box && !box.querySelector("li")) box.remove();
+    })();
+    </script>
 
     <section class="hero">
       <div class="diashow" aria-hidden="true"><div class="dia aktiv" style="background-image:url(diashow/01-vereinsmeisterschaft-2026.jpg)"></div><div class="dia" data-bild="diashow/02-spielabend-02.jpg"></div><div class="dia" data-bild="diashow/03-spielabend-03.jpg"></div><div class="dia" data-bild="diashow/04-spielabend-01.jpg"></div><div class="dia" data-bild="diashow/05-oberlandquartett-2015.jpg"></div><div class="dia" data-bild="diashow/06-spielabend-04.jpg"></div></div><div class="dia-punkte"><button type="button" aria-label="Foto 1" aria-current="true"></button><button type="button" aria-label="Foto 2"></button><button type="button" aria-label="Foto 3"></button><button type="button" aria-label="Foto 4"></button><button type="button" aria-label="Foto 5"></button><button type="button" aria-label="Foto 6"></button></div>

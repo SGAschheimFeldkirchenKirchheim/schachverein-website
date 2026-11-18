@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suche | SG AFK</title>
+  <meta name="description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta name="theme-color" content="#1b2a4a">
+  <link rel="icon" href="Logo.png">
+  <script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+      :root {
+        --nav-accent: #f1c40f;   /* Farbe des aktiven Menüpunkts */
+        --nav-unter-bg: #1c2d52; /* Hintergrund der Untermenüs (fest, unabhängig von --navy) */
+      }
+
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      header { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 2rem; padding: 0.7rem max(1.25rem, calc((100% - 1200px) / 2)); text-align: left; }
+      header .brand { display: flex; align-items: center; gap: 0.9rem; color: #fff; text-decoration: none; font-weight: bold; font-size: 1.2rem; line-height: 1.25; margin: 0; flex-shrink: 0; }
+
+      header nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1.3rem; margin: 0; padding: 0; }
+      header nav a { color: #fff; text-decoration: none; font-weight: bold; padding: 0.35rem 0; }
+      header nav a:hover { color: var(--nav-accent); }
+      nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--nav-accent); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+
+      .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+      .nav-burger { display: none; cursor: pointer; padding: 0.6rem; margin-left: auto; }
+      .nav-burger span, .nav-burger span::before, .nav-burger span::after { display: block; width: 26px; height: 3px; background: #fff; border-radius: 2px; position: relative; content: ""; transition: transform 0.2s, background 0.2s; }
+      .nav-burger span::before { position: absolute; top: -8px; }
+      .nav-burger span::after { position: absolute; top: 8px; }
+      .nav-toggle:checked ~ .nav-burger span { background: transparent; }
+      .nav-toggle:checked ~ .nav-burger span::before { transform: translateY(8px) rotate(45deg); }
+      .nav-toggle:checked ~ .nav-burger span::after { transform: translateY(-8px) rotate(-45deg); }
+      .nav-toggle:focus-visible ~ .nav-burger { outline: 2px solid var(--nav-accent); border-radius: 4px; }
+
+      @media (max-width: 1260px) {
+        header { gap: 0.3rem 1rem; }
+        header .brand { font-size: 1rem; }
+        .nav-burger { display: block; }
+        header nav { display: none; width: 100%; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-bottom: 0.5rem; }
+        .nav-toggle:checked ~ nav { display: flex; }
+        header nav a { padding: 0.7rem 0; border-top: 1px solid rgba(255,255,255,0.15); }
+        nav a[aria-current="page"] { text-underline-offset: 5px; }
+      }
+
+      /* Untermenüs (Inhalt siehe SUBNAV) */
+      .nav-gruppe { position: relative; display: flex; align-items: center; }
+      .nav-gruppe > a::after { content: ""; display: inline-block; width: 0.32em; height: 0.32em; margin-left: 0.3em; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.2em) rotate(45deg); opacity: 0.7; }
+      .nav-unter { display: none; position: absolute; top: 100%; left: -0.9rem; min-width: 13rem; padding-top: 0.6rem; z-index: 110; }
+      .nav-unter::before { content: ""; position: absolute; inset: 0.6rem 0 0 0; background: var(--nav-unter-bg); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); z-index: -1; }
+      .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: flex; flex-direction: column; }
+      header nav .nav-unter a { padding: 0.55rem 0.9rem; font-weight: 600; white-space: nowrap; color: #fff; }
+      header nav .nav-unter a:first-child { margin-top: 0.3rem; }
+      header nav .nav-unter a:last-child { margin-bottom: 0.3rem; }
+      .nav-unter a[aria-current="page"] { text-underline-offset: 5px; }
+
+      .nav-auf { display: none; }
+      /* Mittlere Bildschirme mit Burger-Menü: vollen Namen zeigen, Burger ganz rechts (design.css blendet den Namen hier sonst aus) */
+      @media (min-width: 961px) and (max-width: 1260px) {
+        header .brand span { display: inline !important; }
+        header .brand { margin-right: auto !important; }
+        header .nav-burger { order: 4; margin-left: 0 !important; }
+      }
+
+      /* Kurzname im Kopf auf schmalen Handys (der volle Name bricht sonst in drei Zeilen um) */
+      @media (max-width: 560px) {
+        header .brand span { font-size: 0; }
+        header .brand span::after { content: "SG AFK"; font-size: 1.15rem; }
+      }
+
+      @media (max-width: 1260px) {
+        .nav-gruppe { display: grid; grid-template-columns: 1fr auto; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.15); }
+        .nav-gruppe > a { display: block; border-top: none; }
+        .nav-gruppe > a::after { display: none; }
+        .nav-auf { display: block; width: 3rem; background: none; border: 0; border-left: 1px solid rgba(255,255,255,0.12); cursor: pointer; color: #fff; padding: 0; }
+        .nav-auf::before { content: ""; display: inline-block; width: 0.5rem; height: 0.5rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg); transition: transform 0.2s; }
+        .nav-gruppe.offen .nav-auf::before { transform: translateY(0.1rem) rotate(-135deg); }
+        .nav-auf:focus-visible { outline: 2px solid var(--nav-accent); outline-offset: -2px; }
+        .nav-unter, .nav-gruppe:hover .nav-unter, .nav-gruppe:focus-within .nav-unter { display: none; }
+        .nav-gruppe.offen .nav-unter { display: flex; }
+        .nav-unter { grid-column: 1 / -1; flex-direction: column; position: static; min-width: 0; padding: 0 0 0.3rem 1rem; }
+        .nav-unter::before { display: none; }
+        header nav .nav-unter a { padding: 0.5rem 0; font-weight: 500; font-size: 0.95rem; border-top: none; }
+        header nav .nav-unter a:first-child, header nav .nav-unter a:last-child { margin: 0; }
+      }
+
+      .footer-link { color: #aaa; }
+    </style>
+    <script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+  .such-knopf { order: 3; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; width: 1.75rem; height: 1.75rem;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); color: #fff !important; text-decoration: none; }
+  .such-knopf:hover { border-color: var(--hell, #6f9fd8); }
+  .such-knopf svg { width: 15px; height: 15px; }
+  @media (min-width: 961px) { body header { gap: 0.5rem 0.75rem !important; } .such-knopf { margin-left: 0.2rem; } }
+  @media (min-width: 1181px) and (max-width: 1400px) { body header a.brand { font-size: 0.88rem !important; }
+    body header nav { gap: 0.2rem 0.7rem !important; } body header nav a { font-size: 0.82rem; } }
+  @media (max-width: 960px) { .such-knopf { order: 2; margin-left: auto; } body header .theme-schalter { margin-left: 0.35rem; }
+    body header a.brand { flex: 1 0 auto; } body header a.brand span { white-space: nowrap; } }
+  @media (max-width: 420px) { body header a.brand { gap: 0.5rem; } body header .brand-logo { height: 36px; }
+    body header a.brand span::after { font-size: 1.02rem; } .such-knopf { width: 1.6rem; height: 1.6rem; }
+    body header .theme-schalter { padding: 0.15rem 0.45rem; } body header .nav-burger { margin-left: 0.15rem !important; } }
+</style><style>
+  .su-feld { display: flex; gap: 0.5rem; margin: 1rem 0 0.4rem; max-width: 640px; }
+  .su-feld input { flex: 1; font: inherit; font-size: 1.05rem; padding: 0.65rem 0.9rem; border-radius: 10px;
+    border: 1px solid var(--line, #ccc); background: var(--soft, #fff); color: var(--text, #222); }
+  .su-info { color: var(--muted, #777); font-size: 0.9rem; min-height: 1.3em; }
+  .su-liste { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: 0.7rem; max-width: 820px; }
+  .su-liste li { padding: 0.75rem 1rem; border: 1px solid var(--line, #ddd); border-radius: 10px; background: var(--surface, #fff); }
+  .su-liste a { font-weight: 700; font-size: 1.05rem; text-decoration: none; }
+  .su-liste a:hover { text-decoration: underline; }
+  .su-art { display: inline-block; font-size: 0.72rem; padding: 0.05rem 0.5rem; border-radius: 999px; margin-left: 0.5rem;
+    border: 1px solid var(--line, #ccc); color: var(--muted, #777); vertical-align: middle; }
+  .su-text { margin: 0.3rem 0 0; font-size: 0.9rem; line-height: 1.45; color: var(--muted, #666); }
+  .su-text mark { background: #f5d76e; color: #222; border-radius: 2px; padding: 0 1px; }
+  .su-url { font-size: 0.75rem; color: var(--muted, #888); }
+</style>
+  <link rel="stylesheet" href="design.css">
+  <meta property="og:title" content="Suche | SG AFK">
+  <meta property="og:description" content="Schachverein in Aschheim, Feldkirchen &amp; Kirchheim – Spielabend jeden Freitag.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
+  <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
+  <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
+    <a class="brand" href="index.html">
+      <img src="Logo.png" alt="" class="brand-logo">
+      <span>SG Aschheim / Feldkirchen / Kirchheim</span>
+    </a>
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+    <a class="such-knopf" href="suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
+    <button type="button" class="theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">Hell</button>
+    <nav aria-label="Hauptmenü">
+      <a href="index.html">Start</a>
+      <div class="nav-gruppe"><a href="ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="neu-hier.html">Neu hier?</a><a href="geschichte.html">Vereinsgeschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
+      <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="mannschaftshistorie.html">Historie</a></div></div>
+      <a href="jugend.html">Jugend</a>
+      <a href="termine.html">Termine</a>
+      <a href="berichte.html">Berichte</a>
+      <div class="nav-gruppe"><a href="turniere.html">Turniere</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Turniere aufklappen"></button><div class="nav-unter"><a href="oberlandquartett.html">Oberlandquartett</a><a href="blitzjahreswertung.html">Blitzjahreswertung</a><a href="vereinsintern.html">Hall of Fame</a><a href="ausschreibungen.html">Ausschreibungen</a><a href="turnierkalender.html">Turnierkalender</a><a href="turnierorte.html">AFK on Tour</a></div></div>
+      <a href="faq.html">FAQ</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+
+  <main id="main" class="container">
+    
+    <h1>Suche</h1>
+    <form class="su-feld" role="search" onsubmit="return false">
+      <input type="search" id="su-q" placeholder="Name, Turnier, Thema …" autocomplete="off" aria-label="Suchbegriff">
+    </form>
+    <p class="su-info" id="su-info" aria-live="polite"></p>
+    <ol class="su-liste" id="su-liste"></ol>
+    <script>
+(function () {
+  var feld = document.getElementById("su-q"), liste = document.getElementById("su-liste"), info = document.getElementById("su-info");
+  var MAX = 40, DATEN = null;
+  function norm(s) {
+    return String(s || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  // Ausschnitt um den ersten Treffer, Treffer markiert (Positionen im normalisierten Text ~ Original)
+  function ausschnitt(text, woerter) {
+    var n = norm(text), pos = -1;
+    woerter.forEach(function (w) { var p = n.indexOf(w); if (p >= 0 && (pos < 0 || p < pos)) pos = p; });
+    var start = Math.max(0, pos - 80), stueck = text.slice(start, start + 240);
+    var out = esc(stueck);
+    woerter.forEach(function (w) {
+      if (w.length < 2) return;
+      var re = new RegExp("(" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/ae/g, "(?:ae|ä)").replace(/oe/g, "(?:oe|ö)")
+        .replace(/ue/g, "(?:ue|ü)").replace(/ss/g, "(?:ss|ß)") + ")", "gi");
+      out = out.replace(re, "<mark>$1</mark>");
+    });
+    return (start > 0 ? "… " : "") + out + (start + 240 < text.length ? " …" : "");
+  }
+  function suchen() {
+    var q = feld.value.trim(), woerter = norm(q).split(/\s+/).filter(Boolean);
+    try { history.replaceState(null, "", q ? "?q=" + encodeURIComponent(q) : location.pathname); } catch (e) {}
+    if (!woerter.length) { liste.innerHTML = ""; info.textContent = ""; return; }
+    if (!DATEN) { info.textContent = "Lade …"; return; }
+    var treffer = [];
+    DATEN.forEach(function (s) {
+      var t = s._t, x = s._x, punkte = 0;
+      for (var i = 0; i < woerter.length; i++) {
+        var w = woerter[i], inT = t.indexOf(w) >= 0, inX = x.indexOf(w) >= 0;
+        if (!inT && !inX) return;
+        punkte += (inT ? 10 : 0) + (inX ? 1 + Math.min(4, x.split(w).length - 2) : 0);
+        if (t === w || t.indexOf(w) === 0) punkte += 5;
+      }
+      treffer.push([punkte + s.w * 3, s]);
+    });
+    treffer.sort(function (a, b) { return b[0] - a[0]; });
+    info.textContent = treffer.length ? treffer.length + (treffer.length === 1 ? " Treffer" : " Treffer") +
+      (treffer.length > MAX ? ", die besten " + MAX + " werden gezeigt" : "") : "Nichts gefunden. Probier ein anderes Wort.";
+    liste.innerHTML = treffer.slice(0, MAX).map(function (z) {
+      var s = z[1], quelle = s._x && s.x.length ? s.x : s.d;
+      return '<li><a href="' + esc(s.u) + '">' + esc(s.t) + '</a><span class="su-art">' + esc(s.a) + "</span>" +
+        '<p class="su-text">' + (quelle ? ausschnitt(quelle, woerter) : "") + "</p></li>";
+    }).join("");
+  }
+  var warte;
+  feld.addEventListener("input", function () { clearTimeout(warte); warte = setTimeout(suchen, 120); });
+  var start = new URLSearchParams(location.search).get("q");
+  if (start) feld.value = start;
+  fetch("suche.json").then(function (r) { return r.json(); }).then(function (d) {
+    DATEN = d.map(function (s) { s._t = norm(s.t); s._x = norm(s.t + " " + s.d + " " + s.x); return s; });
+    suchen();
+  }).catch(function () { info.textContent = "Der Suchindex konnte nicht geladen werden."; });
+  feld.focus();
+})();
+</script>
+  </main>
+
+  <footer>
+    <div class="footer-spalten">
+      <div>
+        <h2>Spielabend</h2>
+        <p>Jeden Freitag ab 18:00 Uhr</p>
+        <p>Jugend 18:00 – 19:30 Uhr, Erwachsene ab 19:30 Uhr</p>
+        <p>Gymnasium Kirchheim<br>Heimstettner Str. 20, 85551 Kirchheim</p>
+        <p class="spielort-hinweis">Das Gymnasium Kirchheim (GyKi) ist Schachschule und unser Spielort.</p>
+      </div>
+      <div>
+        <h2>Kontakt</h2>
+        <p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+        <p><a href="kontakt.html">Kontaktformular</a></p>
+        <p><a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF)</a></p>
+      </div>
+      <div>
+        <h2>Verein</h2>
+        <p><a href="ueber-uns.html">Über uns</a></p>
+        <p><a href="neu-hier.html">Neu hier?</a></p>
+        <p><a href="faq.html">Häufige Fragen</a></p>
+        <p><a href="impressum.html">Impressum &amp; Datenschutz</a></p>
+      </div>
+    </div>
+    <p class="footer-unten">&copy; 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Zuletzt aktualisiert: 18.11.2026</p>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      var namen = { hell: "\u2600 Hell", dunkel: "\u263E Dunkel" };
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        knopf.textContent = namen[wahl];
+        knopf.title = "Farbmodus: " + (wahl === "dunkel" ? "Dunkel" : "Hell") + " (klicken zum Wechseln)";
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+</body>
+</html>
