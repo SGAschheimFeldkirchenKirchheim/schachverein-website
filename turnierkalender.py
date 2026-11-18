@@ -689,6 +689,18 @@ CSS = """
   .tk-filter legend { padding: 0; margin-bottom: 0.25rem; }
   .tk-filter select, .tk-filter input[type=month], .tk-filter input[type=search] { font: inherit; font-weight: normal; padding: 0.4rem 0.5rem;
     border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--text); width: 100%; box-sizing: border-box; }
+  .tk-land { display: grid; gap: 0.25rem; font-size: 0.85rem; font-weight: 600; position: relative; min-width: 0; }
+  .tk-land-dd > summary { list-style: none; cursor: pointer; font-weight: normal; padding: 0.4rem 0.5rem; border: 1px solid var(--line);
+    border-radius: 6px; background: var(--soft); color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tk-land-dd > summary::-webkit-details-marker { display: none; }
+  .tk-land-dd > summary::after { content: " ▾"; float: right; }
+  .tk-land-pop { position: absolute; z-index: 20; left: 0; right: 0; min-width: 13rem; max-height: 18rem; overflow-y: auto; margin-top: 0.2rem;
+    padding: 0.4rem; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+  .tk-land-pop label { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; padding: 0.2rem 0.3rem; border-radius: 4px; cursor: pointer; }
+  .tk-land-pop label:hover { background: var(--soft); }
+  .tk-land-pop input { accent-color: var(--accent); margin: 0; }
+  .tk-land-pop button { width: 100%; margin-bottom: 0.3rem; font: inherit; font-size: 0.85rem; padding: 0.3rem; border-radius: 6px;
+    border: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; }
   .tk-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
   .tk-chips label { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: normal; padding: 0.2rem 0.55rem;
     border: 1px solid var(--line); border-radius: 999px; cursor: pointer; background: var(--soft); }
@@ -750,25 +762,37 @@ JS = r"""
 
   // Länder-Auswahl füllen
   var laender = {}; D.events.forEach(function (e) { if (e.land) laender[e.land] = 1; });
-  var sel = f.elements.land;
+  var landBox = document.getElementById("tk-laender"), landText = document.getElementById("tk-land-text");
   Object.keys(laender).sort(function (a, b) { return a.localeCompare(b, "de"); }).forEach(function (l) {
-    var o = document.createElement("option"); o.value = l; o.textContent = l; sel.appendChild(o);
+    var lab = document.createElement("label"), c = document.createElement("input");
+    c.type = "checkbox"; c.name = "land"; c.value = l; lab.appendChild(c); lab.appendChild(document.createTextNode(" " + l));
+    landBox.appendChild(lab);
+  });
+  function landListe() { return [].map.call(f.querySelectorAll("[name=land]:checked"), function (c) { return c.value; }); }
+  function landAnzeige() {
+    var l = landListe();
+    landText.textContent = !l.length ? "alle Länder" : l.length <= 3 ? l.join(", ") : l.slice(0, 2).join(", ") + " + " + (l.length - 2) + " weitere";
+  }
+  document.getElementById("tk-land-alle").addEventListener("click", function () {
+    [].forEach.call(f.querySelectorAll("[name=land]"), function (c) { c.checked = false; }); zeige();
   });
 
   // Standardwerte
   var h = new Date(), bis = new Date(h.getFullYear(), h.getMonth() + D.standard.monate, 1);
-  var STANDARD = {von: iso(h).slice(0, 7), bis: iso(bis).slice(0, 7), km: String(D.standard.km), land: "", q: "",
+  var STANDARD = {von: iso(h).slice(0, 7), bis: iso(bis).slice(0, 7), km: String(D.standard.km), land: [], q: "",
     bz: ["klassisch", "schnell", "blitz", "?"], gr: ["offen", "jugend", "senioren", "frauen"],
     elo: false, ferien: false, semester: false, empf: false, afk: false};
   function setze(w) {
     f.elements.von.value = w.von; f.elements.bis.value = w.bis; f.elements.km.value = w.km;
-    f.elements.land.value = w.land; f.elements.q.value = w.q;
+    var wl = Array.isArray(w.land) ? w.land : (w.land ? [w.land] : []);
+    [].forEach.call(f.querySelectorAll("[name=land]"), function (c) { c.checked = wl.indexOf(c.value) >= 0; });
+    f.elements.q.value = w.q;
     [].forEach.call(f.querySelectorAll("[name=bz]"), function (c) { c.checked = w.bz.indexOf(c.value) >= 0; });
     [].forEach.call(f.querySelectorAll("[name=gr]"), function (c) { c.checked = w.gr.indexOf(c.value) >= 0; });
     ["elo", "ferien", "semester", "empf", "afk"].forEach(function (n) { f.elements[n].checked = !!w[n]; });
   }
   function lies() {
-    var w = {von: f.elements.von.value, bis: f.elements.bis.value, km: f.elements.km.value, land: f.elements.land.value,
+    var w = {von: f.elements.von.value, bis: f.elements.bis.value, km: f.elements.km.value, land: landListe(),
       q: f.elements.q.value.trim(), bz: [], gr: []};
     [].forEach.call(f.querySelectorAll("[name=bz]:checked"), function (c) { w.bz.push(c.value); });
     [].forEach.call(f.querySelectorAll("[name=gr]:checked"), function (c) { w.gr.push(c.value); });
@@ -803,12 +827,13 @@ JS = r"""
   }
 
   function zeige() {
+    landAnzeige();
     var w = lies(), km = w.km === "alle" ? Infinity : +w.km, q = w.q.toLowerCase();
     try { localStorage.setItem(SPEICHER, JSON.stringify(w)); } catch (e) {}
     var von = w.von ? w.von + "-01" : "0000", bisM = w.bis ? w.bis + "-31" : "9999";
     var liste = D.events.filter(function (e) {
       if (e.bis < von || e.von > bisM) return false;
-      if (w.land && e.land !== w.land) return false;
+      if (w.land.length && w.land.indexOf(e.land) < 0) return false;
       if (km !== Infinity && !(e.km != null && e.km <= km)) return false;
       if (w.bz.indexOf(e.bedenkzeit || "?") < 0) return false;
       var gr = e.gruppen.length ? e.gruppen : ["offen"];
@@ -865,6 +890,9 @@ JS = r"""
     var k = ev.target.closest("[data-ics]"); if (k) ics(D.events[+k.getAttribute("data-ics")]);
   });
   f.addEventListener("input", zeige); f.addEventListener("change", zeige);
+  document.addEventListener("click", function (ev) {
+    var dd = document.querySelector(".tk-land-dd"); if (dd.open && !dd.contains(ev.target)) dd.open = false;
+  });
   document.getElementById("tk-reset").addEventListener("click", function () { setze(STANDARD); zeige(); });
   zeige();
 })();
@@ -877,19 +905,26 @@ def seite_html(events, schule, semester, konfig, stand):
              "standard": {"km": std.get("km", 200), "monate": std.get("monate", 6)}}
     km_optionen = "".join(f'<option value="{k}">bis {k} km</option>' for k in (50, 100, 200, 400, 800, 1500))
     heimat = html.escape((konfig.get("heimat") or {}).get("name", "uns"))
+    fide_an = (konfig.get("quellen") or {}).get("fide", False)
+    quellen_text = "aus dem FIDE-Kalender und von chess-results.com" if fide_an else "von chess-results.com"
+    quellen_links = ('<a href="https://fide.com/calendar" target="_blank" rel="noopener">FIDE-Kalender</a>, ' if fide_an else "") + \
+        '<a href="https://chess-results.com" target="_blank" rel="noopener">chess-results.com</a>'
     js_daten = json.dumps(daten, ensure_ascii=False).replace("</", "<\\/")
     return f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
     <h1 style="margin-top:1rem;">{TITEL}</h1>
-    <p class="tk-intro">Opens und Turniere in Bayern, Deutschland und Europa – automatisch gesammelt aus dem FIDE-Kalender
-      und von chess-results.com, jede Nacht aktualisiert. Die Entfernung wird ab {heimat} gerechnet.
+    <p class="tk-intro">Opens und Turniere in Bayern, Deutschland und Europa – automatisch gesammelt {quellen_text},
+      jede Nacht aktualisiert. Die Entfernung wird ab {heimat} gerechnet.
       Unsere eigenen Turniere findest du unter <a href="ausschreibungen.html">Ausschreibungen (intern)</a>.</p>
     <details class="tk-box" id="tk-box"><summary>Filter anzeigen</summary>
     <form id="tk-filter" class="tk-filter" onsubmit="return false">
       <label>Von <input type="month" name="von"></label>
       <label>Bis <input type="month" name="bis"></label>
       <label>Entfernung <select name="km">{km_optionen}<option value="alle">ganz Europa</option></select></label>
-      <label>Land <select name="land"><option value="">alle Länder</option></select></label>
+      <div class="tk-land"><span class="tk-land-titel">Länder</span>
+        <details class="tk-land-dd"><summary id="tk-land-text">alle Länder</summary>
+          <div class="tk-land-pop"><button type="button" id="tk-land-alle">alle Länder</button><div id="tk-laender"></div></div>
+        </details></div>
       <fieldset><legend>Bedenkzeit</legend><div class="tk-chips">
         <label><input type="checkbox" name="bz" value="klassisch"> Klassisch</label>
         <label><input type="checkbox" name="bz" value="schnell"> Schnell</label>
@@ -914,8 +949,7 @@ def seite_html(events, schule, semester, konfig, stand):
       <span class="tk-b schule">Schulferien Bayern</span><span class="tk-b semester">Semesterferien (bayer. Unis)</span>
       <span class="tk-b afk">AFK gemeldet</span><span class="tk-b empf">★ Empfehlung</span></div>
     <div id="tk-out" aria-live="polite"></div>
-    <p class="tk-quellen">Quellen: <a href="https://fide.com/calendar" target="_blank" rel="noopener">FIDE-Kalender</a>,
-      <a href="https://chess-results.com" target="_blank" rel="noopener">chess-results.com</a>, eigene Liste. Stand: {stand}.
+    <p class="tk-quellen">Quellen: {quellen_links}, eigene Liste. Stand: {stand}.
       Angaben ohne Gewähr – bitte immer die Ausschreibung prüfen. Noch mehr deutsche Turniere:
       <a href="https://chessdates.com" target="_blank" rel="noopener">chessdates.com</a>.</p>
     <script type="application/json" id="tk-daten">{js_daten}</script>
