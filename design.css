@@ -8,7 +8,7 @@
   /* Schriften */
   --font-text: "Inter", system-ui, sans-serif;
   --font-head: "Fraunces", Georgia, serif;
-  --schrift: 17.5px;        /* Grundgröße, alles andere skaliert mit */
+  --schrift: 18px;          /* Grundgröße, alles andere skaliert mit */
 
   /* Grundfarben (hell) */
   --bg: #f6f8fb;            /* Seitenhintergrund */
@@ -134,13 +134,13 @@ a { color: var(--link-c); }
    Aufbau (templates/base.html): oben Wappen + Name in der Mitte, Suche und Farbmodus rechts,
    darunter das Menü (ebenfalls mittig). Beim Scrollen rutscht die obere Zeile weg,
    die Menüleiste bleibt oben stehen.
-   Bis 960px Breite: eine Zeile (Wappen, Name, Suche, Farbmodus, Burger), Menü klappt darunter auf.
+   Bis 1100px Breite: eine Zeile (Wappen, Name, Suche, Farbmodus, Burger), Menü klappt darunter auf.
    Bis 700px: statt des vollen Namens nur "SG AFK".
    Größen hier oben ändern – der Rest passt sich an. */
 :root {
-  --kopf-oben-h: 88px;      /* Höhe der oberen Zeile (Wappen + Name) */
-  --kopf-logo: 62px;        /* Höhe des Wappens */
-  --kopf-name: 1.65rem;     /* Schriftgröße des Vereinsnamens */
+  --kopf-oben-h: 100px;     /* Höhe der oberen Zeile (Wappen + Name) */
+  --kopf-logo: 72px;        /* Höhe des Wappens */
+  --kopf-name: 1.95rem;     /* Schriftgröße des Vereinsnamens */
   --nav-unter-bg: #1c2d52;  /* Hintergrund der Untermenüs */
 }
 html { scroll-padding-top: 4.5rem; }   /* Sprungmarken nicht unter der Menüleiste verstecken */
@@ -171,7 +171,7 @@ header.kopf { position: sticky; top: calc(-1 * var(--kopf-oben-h)); z-index: 100
 
 /* Menüleiste */
 .kopf nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 1.7rem; margin: 0; padding: 0; }
-.kopf nav a { color: #dfe7f3; text-decoration: none; font-weight: 600; font-size: 0.95rem; padding: 0.55rem 0 0.65rem; white-space: nowrap; }
+.kopf nav a { color: #dfe7f3; text-decoration: none; font-weight: 600; font-size: 1.05rem; padding: 0.55rem 0 0.65rem; white-space: nowrap; }
 .kopf nav a:hover { color: #fff; }
 .kopf nav > a[aria-current="page"], .nav-gruppe > a[aria-current="page"] { color: #fff; box-shadow: inset 0 -3px 0 var(--hell); }
 
@@ -202,7 +202,7 @@ header.kopf { position: sticky; top: calc(-1 * var(--kopf-oben-h)); z-index: 100
 .nav-toggle:focus-visible ~ .kopf-oben .nav-burger { outline: 2px solid var(--hell); border-radius: 4px; }
 
 /* Tablet und Handy: eine Zeile, Menü zum Aufklappen */
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
   :root { --kopf-oben-h: 64px; --kopf-logo: 44px; --kopf-name: 1.15rem; }
   header.kopf { top: 0; padding: 0 0.9rem; }
   .kopf-oben { grid-template-columns: 1fr auto; gap: 0.6rem; }

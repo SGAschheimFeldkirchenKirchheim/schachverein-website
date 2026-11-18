@@ -21,6 +21,7 @@ import turnierorte  # "AFK on Tour": Turnierorte sammeln (Daten in turnierorte/)
 import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
+import startseite  # Startseite: Aufbau, Texte, Bilder-Ordner (startseite/)
 import suche  # seitenweite Suche: suche.html + suche.json (Einstellungen in suche.py)
 
 try:
@@ -88,7 +89,6 @@ PAGE_DESCRIPTIONS = {
     "senioren.html": "Seniorenmannschaft der SG AFK in der Münchner Senioren-Mannschaftsmeisterschaft: Termine, Ansprechpartner und Berichte.",
     "faq.html": "Häufige Fragen zur SG AFK: Schnuppern, Mitgliedschaft, Beiträge, Mannschaften, DWZ und Jugendtraining.",
     "jugend.html": "Schach für Kinder und Jugendliche bei der SG AFK: Jugendtraining jeden Freitag, Jugendmannschaften, Termine und Ansprechpartner.",
-    "neu-hier.html": "Neu im Schachverein? Hier erfährst du, wann und wo wir spielen und wie du bei uns mitmachen kannst.",
     "kontakt.html": "Kontakt und Anfahrt zur SG Aschheim/Feldkirchen/Kirchheim im Gymnasium Kirchheim.",
     "ausschreibungen.html": "Ausschreibungen der SG AFK als PDF und der Turnierkalender mit Opens in Bayern, Deutschland und Europa.",
     turnierorte.SEITE: "AFK on Tour: In welchen Städten und Ländern Spieler der SG AFK schon Turniere gespielt haben – mit Karte und Rangliste.",
@@ -133,8 +133,7 @@ NAV = [
 # "mannschaften.html" wird beim Build automatisch mit den aktuellen Teams gefüllt (siehe MAIN).
 SUBNAV = {
     "ueber-uns.html": [
-        ("neu-hier.html", "Neu hier?"),
-        ("geschichte.html", "Vereinsgeschichte"),
+        ("geschichte.html", "Geschichte"),
         ("dokumente/satzung.pdf", "Satzung (PDF)"),
     ],
     "turniere.html": [
@@ -162,7 +161,6 @@ ACTIVE_PARENT = {
 
 # Handgeschriebene Seiten: Inhalt liegt in seiten/<name>.html
 STATIC_PAGES = [
-    ("ueber-uns", "Über uns"),
     ("mannschaften", "Mannschaften"),
     ("kontakt", "Kontakt &amp; Anfahrt"),
     ("impressum", "Impressum &amp; Datenschutz"),
@@ -1151,17 +1149,18 @@ def build_ausschreibungen():
     render_page("Ausschreibungen", content, "ausschreibungen.html")
 
 
-# Mitgliedsbeiträge pro Jahr (Seite "Neu hier?")
+# Mitgliedsbeiträge pro Jahr (Über uns, Abschnitt "Neu hier?")
 BEITRAEGE = [
     ("Kinder, Schüler &amp; Studenten", "24 €"),
     ("Erwachsene", "75 €"),
 ]
 
 
-def build_neu_hier():
+def neu_hier_html():
+    """Abschnitt „Neu hier?" – steht auf der Über-uns-Seite (früher eigene Seite neu-hier.html)."""
     beitraege = "".join(f"<li><strong>{wer}:</strong> {preis} im Jahr</li>" for wer, preis in BEITRAEGE)
     content = f"""
-    <h1>Neu hier? So kommst du vorbei</h1>
+    <h2 id="neu-hier">Neu hier? So kommst du vorbei</h2>
     <p>Egal ob Einsteiger, Jugendlicher oder Turnierspieler: Komm einfach an einem Freitag bei uns vorbei.</p>
 
     <div class="neu-grid">
@@ -1209,8 +1208,7 @@ def build_neu_hier():
 
       <div class="neu-card">
         <h3>Mitglied werden</h3>
-        <p>Gefällt es dir bei uns? Den Mitgliedsantrag kannst du hier herunterladen:</p>
-        <a href="mitgliederantrag.pdf" download>Mitgliedsantrag (PDF) →</a>
+        <p>Gefällt es dir bei uns? <a href="#mitglied">Mitgliedsantrag weiter unten →</a></p>
         <p style="margin-top:0.8rem;">Fragen vorab? <a href="kontakt.html">Schreib uns über die Kontaktseite →</a></p>
       </div>
     </div>
@@ -1222,7 +1220,23 @@ def build_neu_hier():
       .neu-card ul { padding-left: 1.2rem; }
       .neu-card a { color: #3498db; font-weight: bold; text-decoration: none; }
     </style>"""
-    render_page("Neu hier?", content, "neu-hier.html", extra_styles=styles)
+    return content, styles
+
+
+def build_ueber_uns():
+    """Über uns + Neu hier auf einer Seite. Text aus seiten/ueber-uns.html; an der Stelle <!-- NEU_HIER -->
+    kommt der Abschnitt „Neu hier?". neu-hier.html leitet auf den Abschnitt weiter."""
+    with open(os.path.join("seiten", "ueber-uns.html"), "r", encoding="utf-8") as f:
+        raw = f.read()
+    style_re = r'<style[^>]*>.*?</style>'
+    styles = "".join(re.findall(style_re, raw, re.DOTALL))
+    text = re.sub(style_re, '', raw, flags=re.DOTALL).strip()
+    neu, neu_styles = neu_hier_html()
+    text = text.replace("<!-- NEU_HIER -->", neu) if "<!-- NEU_HIER -->" in text else text + neu
+    render_page("Über uns", text, "ueber-uns.html", extra_styles=styles + neu_styles,
+                description="Über die SG Aschheim/Feldkirchen/Kirchheim: wer wir sind, wann und wo wir spielen, "
+                            "wie du vorbeikommst und Mitglied wirst.")
+    weiterleitung("neu-hier.html", "ueber-uns.html#neu-hier")
 
 
 # ==========================================
@@ -1942,16 +1956,16 @@ def typst_absatz_html(text):
     return htmllib.escape(text, quote=False).replace('\n', '<br>')
 
 
-def build_geschichte():
+def geschichte_chronik():
+    """Chronik aus dokumente/historie.typ als HTML-Abschnitt (steht auf geschichte.html, siehe build_historie)."""
     quelle = os.path.join(DOKUMENTE_ORDNER, "historie.typ")
     if not os.path.exists(quelle):
-        return
+        return ""
     with open(quelle, "r", encoding="utf-8") as f:
         code = f.read()
     jahre = re.findall(r'#jahr\("([^"]+)"\)\[\n(.*?)\n\]', code, re.DOTALL)
-    teile = ['<h1>Vereinsgeschichte</h1>',
-             '<p class="lead">Von den Schachfreunden Feldkirchen 1952 bis heute.</p>',
-             '<p><a class="btn btn-outline" href="dokumente/historie.pdf">Als PDF herunterladen</a></p>',
+    teile = ['<h2 id="chronik">Chronik 1952 bis heute</h2>',
+             '<p><a class="btn btn-outline" href="dokumente/historie.pdf">Chronik als PDF</a></p>',
              '<div class="zeitleiste">']
     for jahr, inhalt in jahre:
         inhalt = re.sub(r'(?m)^\s*//.*\n?', '', inhalt)   # Kommentare (offene Fragen) nicht anzeigen
@@ -1959,8 +1973,7 @@ def build_geschichte():
         anker = htmllib.escape(jahr.replace("/", "-"))
         teile.append(f'<section class="zl-jahr" id="j{anker}"><h2>{htmllib.escape(jahr)}</h2><div>{absaetze}</div></section>')
     teile.append('</div>')
-    render_page("Vereinsgeschichte", "\n".join(teile), "geschichte.html", extra_styles=GESCHICHTE_CSS,
-                description="Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute.")
+    return "\n".join(teile)
 
 
 # ==========================================
@@ -2917,158 +2930,37 @@ GEBURTSTAG_JS = """<script>
 
 
 def build_index(upcoming_events, home_news_snippets, teams=()):
-    news_html = "\n".join(home_news_snippets) if home_news_snippets else "<p>Noch keine Berichte vorhanden.</p>"
-    event_cards = "".join(event_card_html(ev) for ev in upcoming_events) or "<p>Keine anstehenden Termine gefunden.</p>"
-    legend = legend_html(upcoming_events)
+    """Startseite – Aufbau, Texte und Bilder-Ordner: startseite.py"""
     ausfall_json = json.dumps(read_ausfall(), ensure_ascii=False).replace("<", "\\u003c")
     home_js = HOME_JS.replace("__AUSFALL__", ausfall_json)
 
-    logo_file = find_logo()
-    hero_logo = (f'<img src="{logo_file}" alt="Wappen der SG Aschheim / Feldkirchen / Kirchheim" class="hero-logo">'
-                 if logo_file else "")
+    # Termine ab heute (das Skript blendet vergangene aus und zeigt nur die ersten)
+    events = [ev for ev in upcoming_events if ev["date"] >= TODAY][:startseite.TERMINE_ANZAHL + 4]
 
-    index_content = f"""
-    {read_hinweis()}
-    {geburtstag_html()}
-    {diese_woche_html(upcoming_events)}
+    # Letztes Ergebnis je Mannschaft
+    zeilen = []
+    for d in teams:
+        m = liga.letztes_spiel(d)
+        if not m:
+            continue
+        heim, gegner, mein, sein, art = liga.sicht(d, m)
+        datei = liga.seite_datei(d)
+        zeilen.append((d["kurz"], "team-" + datei[:-5], ("vs. " if heim else "bei ") + gegner,
+                       liga.zahl(mein), liga.zahl(sein), art, m["r"], datei))
 
-    <section class="hero">
-      {diashow_html()}
-      {hero_logo}
-      <h1>{HERO_TITLE}</h1>
-      <p>Egal ob Turnierspieler, Jugendlicher oder Einsteiger: Komm einfach an unserem Spielabend vorbei!</p>
+    # Geburtstage der nächsten Tage mit Alter
+    geburtstage = []
+    for i in range(startseite.GEBURTSTAG_TAGE + 1):
+        tag = TODAY + datetime.timedelta(days=i)
+        geburtstage += [(tag, n, a) for n, a in geburtstage_heute(tag)]
+    konfetti = (GEBURTSTAG_JS.replace("__TAG__", TODAY.isoformat())
+                if GEBURTSTAG_KONFETTI and geburtstage_heute() else "")
 
-      <ul class="hero-facts">
-        <li>
-          <strong>Jeden Freitag ab 18:00 Uhr</strong>
-          <span>Für alle offen, Einsteiger und Gäste willkommen</span>
-        </li>
-        <li>
-          <strong>Jugend 18:00 – 19:30 Uhr</strong>
-          <span>Erwachsene ab 19:30 Uhr (gern auch früher), Open End. Jugendliche dürfen gern länger bleiben.<br>
-            <a href="jugend.html">Mehr zur Jugend</a></span>
-        </li>
-        <li>
-          <strong>Gymnasium Kirchheim</strong>
-             <span>Heimstettner Str. 20, 85551 Kirchheim<br>
-            {f'{SPIELORT_HINWEIS_KURZ}<br>' if SPIELORT_HINWEIS_KURZ else ''}
-            <a href="https://maps.app.goo.gl/L8YRrvs52HD5cpDCA" target="_blank" rel="noopener">Auf Google Maps öffnen</a></span>
-        </li>
-      </ul>
-
-      <a href="neu-hier.html" class="btn">Neu hier? So kommst du vorbei →</a>
-    </section>
-
-    {stats_html(teams)}
-
-    <section>
-      <div class="section-head">
-        <h2>Nächste Termine</h2>
-        <a href="termine.html">Termine ansehen →</a>
-      </div>
-      <p class="spielabend" id="spielabend" hidden></p>
-      <div class="events-grid" data-max="{HOME_EVENTS_VISIBLE}">
-        {event_cards}
-      </div>
-      <p class="events-empty" id="events-empty" hidden>Aktuell sind keine anstehenden Termine eingetragen. <a href="termine.html">Zum Spielplan →</a></p>
-      {legend}
-    </section>
-
-    <section>
-      <div class="section-head">
-        <h2>Aktuelle Berichte</h2>
-        <a href="berichte.html">Alle Berichte ansehen →</a>
-      </div>
-      <div class="news-grid">
-        {news_html}
-      </div>
-    </section>
-
-    {liga.ticker_html(teams)}
-
-    <section class="cta-band">
-      <div>
-        <h2>Lust auf eine Partie?</h2>
-        <p>Komm freitags einfach vorbei oder schreib uns, wenn du vorab Fragen hast.</p>
-      </div>
-      <div class="cta-buttons">
-        <a href="kontakt.html" class="btn">Kontakt aufnehmen</a>
-        <a href="mitgliederantrag.pdf" class="btn btn-ghost" download>Mitgliedsantrag (PDF)</a>
-      </div>
-    </section>
-
-    {home_js}
-    {DIASHOW_JS.replace("__SEKUNDEN__", str(DIASHOW_SEKUNDEN)).replace("__IMMER__", "true" if DIASHOW_AUCH_OHNE_ANIMATIONEN else "false")}
-    """
-
-    styles = """<style>""" + HINWEIS_CSS + """
-      :root { --hero-logo-h: 200px; --hero-logo-h-mobile: 140px; --next-accent: #27ae60; }
-
-      .container { max-width: 1200px; }
-      .hero { border-radius: 8px; margin-bottom: 1.5rem; }
-      .hero-logo { display: block; height: var(--hero-logo-h); width: auto; margin: 0 auto 1.2rem; mix-blend-mode: multiply; }
-      @media (max-width: 600px) { .hero-logo { height: var(--hero-logo-h-mobile); } }
-
-      .hero-facts { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; padding: 0; margin: 1.5rem auto 1rem; max-width: 960px; text-align: left; }
-      .hero-facts li { background: #fff; border-radius: 8px; padding: 0.9rem 1.1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 0.2rem; }
-      .hero-facts strong { color: var(--navy); font-size: 1.05rem; }
-      .hero-facts span { color: #555; font-size: 0.95rem; }
-      .hero-note { font-size: 0.95rem; color: #555; margin: 0 0 0.5rem; }
-
-      .stats { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; padding: 0; margin: 0 0 1rem; }
-      .stats li, .stats li a { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.15rem; }
-      .stats li { background: #fff; border: 1px solid #e3e6ea; border-radius: 8px; padding: 1rem 0.8rem; }
-      .stats li a { text-decoration: none; color: inherit; width: 100%; }
-      .stats li:has(a):hover { border-color: var(--link); }
-      .stats strong { font-size: 1.5rem; color: var(--navy); line-height: 1.2; }
-      .stats span { font-size: 0.9rem; color: #555; }
-
-      .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin: 2.5rem 0 1rem; }
-      .section-head h2 { margin: 0; font-size: 1.4rem; color: var(--navy); }
-      .section-head a { font-weight: bold; text-decoration: none; }
-
-      .spielabend { margin: 0 0 1rem; padding: 0.7rem 1.1rem; background: #eaf6ee; border-left: 4px solid var(--next-accent); border-radius: 6px; font-weight: bold; color: #1e5631; }
-      .spielabend[hidden] { display: none; }
-
-      .events-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-      .event-card { background: var(--soft); border-left: 4px solid var(--link); border-radius: 6px; padding: 0.9rem 1.1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-      .event-card.next { border-left-color: var(--next-accent); box-shadow: 0 3px 10px rgba(39,174,96,0.25); }
-      .ev-date { font-size: 0.95rem; font-weight: bold; color: #444; margin-bottom: 0.3rem; }
-      .ev-rel:not(:empty) { display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.55rem; border-radius: 999px; background: #e3e6ea; color: #333; font-size: 0.75rem; }
-      .event-card.next .ev-rel:not(:empty) { background: var(--next-accent); color: #fff; }
-      .ev-title { font-size: 1.1rem; font-weight: bold; color: var(--navy); line-height: 1.35; }
-      .ev-teams { margin-top: 0.4rem; }
-      .pill { display: inline-block; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.1rem 0.7rem; font-size: 0.85rem; font-weight: bold; margin: 0.2rem 0.3rem 0 0; }
-      .ev-legend { font-size: 0.85rem; color: #555; margin: 0.9rem 0 0; }
-      .events-empty { margin: 0.5rem 0 0; }
-      .events-empty[hidden] { display: none; }
-
-      a.event-card { display: block; color: inherit; text-decoration: none; }
-      a.event-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
-      .spielabend-note { display: inline-block; margin-top: 0.2rem; font-weight: normal; font-size: 0.9rem; }
-
-      @media (max-width: 600px) {
-        .stats { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-        .stats li { padding: 0.6rem 0.4rem; }
-        .stats strong { font-size: 1.25rem; }
-        .stats span { font-size: 0.8rem; }
-      }
-
-      .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap: 1rem; align-items: start; }
-      .news-grid .card { margin-bottom: 0 !important; }
-
-      .cta-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin: 3rem 0 1rem; padding: 1.6rem 2rem; background: var(--navy); color: #fff; border-radius: 8px; }
-      .cta-band h2 { margin: 0 0 0.3rem; color: #fff; font-size: 1.4rem; }
-      .cta-band p { margin: 0; color: #dfe6ee; }
-      .cta-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-      .btn-ghost { background: transparent !important; border: 2px solid #fff; color: #fff !important; }
-      .btn-ghost:hover { background: rgba(255,255,255,0.12) !important; }
-      /* Handy: Titel ohne festen Zeilenumbruch und etwas kleiner, sonst steht "in" allein in einer Zeile */
-      @media (max-width: 600px) { .hero h1 br { display: none; } .hero h1 { font-size: clamp(1.6rem, 7.5vw, 2.4rem); } }
-    </style>"""
-
-    render_page("Startseite", index_content, "index.html",
-                extra_styles=styles.replace("</style>", NEWS_CSS + liga.TICKER_CSS + "</style>") + GEBURTSTAG_CSS + DIESE_WOCHE_CSS)
+    content, styles = startseite.seite(
+        events, ALLE_BERICHTE, zeilen, geburtstage, fetch_member_count(), len(teams) or MANNSCHAFTEN_FALLBACK,
+        team_klasse, plain_text, extra_oben=read_hinweis())
+    render_page("Startseite", content + home_js + konfetti, "index.html",
+                extra_styles=styles + "<style>" + HINWEIS_CSS + "</style>" + GEBURTSTAG_CSS)
 
 
 # ==========================================
@@ -3092,7 +2984,7 @@ def build_sitemap():
     urls = []
     for path in pages:
         name = path.replace(os.sep, "/")
-        if name == "404.html":
+        if name == "404.html" or name in WEITERLEITUNGEN:
             continue
         loc = SITE_URL if name == "index.html" else SITE_URL + quote(name)
         last = git_last_date(path)
@@ -3264,9 +3156,25 @@ def spalten_termine(spalte, today=TODAY):
     return events
 
 
+WEITERLEITUNGEN = set()          # alte Adressen, die nur weiterleiten (nicht in die Sitemap)
+
+
+def weiterleitung(alt, neu):
+    """Kleine Seite unter der alten Adresse, die sofort auf die neue weiterleitet (alte Links bleiben gültig)."""
+    WEITERLEITUNGEN.add(alt)
+    with open(alt, "w", encoding="utf-8") as f:
+        f.write(f'<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="robots" content="noindex">'
+                f'<meta http-equiv="refresh" content="0; url={neu}"><link rel="canonical" href="{neu}">'
+                f'<title>Weiterleitung</title></head><body><a href="{neu}">Weiter zu {neu}</a></body></html>')
+
+
 def build_historie(aktuell, teams, archiv):
-    content, styles = historie.seite(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a))
-    render_page(historie.TITEL, content, historie.SEITE, extra_styles=styles)
+    """Eine Seite für alles: Vereinsgeschichte (Chronik) + Mannschaftshistorie."""
+    content, styles = historie.seite(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a), geschichte_chronik())
+    render_page(historie.TITEL, content, historie.SEITE, extra_styles=styles + GESCHICHTE_CSS,
+                description="Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute: Chronik, "
+                            "Meilensteine und welche Mannschaft wann in welcher Liga spielte.")
+    weiterleitung(historie.ALTE_SEITE, f"{historie.SEITE}#wachstum")
 
 
 def build_jugend(termine, liga_seiten=None):
@@ -3312,12 +3220,11 @@ if __name__ == "__main__":
     # Teams zuerst laden: das Untermenü "Mannschaften" steht auf jeder Seite
     aktuell, teams, archiv = saisons_laden()
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
-    SUBNAV["mannschaften.html"].append((historie.SEITE, "Historie"))
+    SUBNAV["mannschaften.html"].append((historie.SEITE + "#wachstum", "Historie"))
     build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
     build_dokumente()
-    build_geschichte()
     upcoming = build_termine()
     build_oberlandquartett()
     build_blitzjahreswertung()
@@ -3327,7 +3234,7 @@ if __name__ == "__main__":
     turnierorte.bauen(render_page, einreichen.SKRIPT_URL, ACTIVE_PARENT)
     build_turniere_overview()
     build_ausschreibungen()
-    build_neu_hier()
+    build_ueber_uns()
     news = build_berichte()
     saisons_verknuepfen(aktuell, teams, archiv)
     # Einsätze früherer Saisons für die Prognose (Gewichtung siehe aufstellung.py)

@@ -260,7 +260,7 @@ def seite(termine, berichte, beitrag="", liga_seiten=None):
         <h3>Jugendtraining</h3>
         <p><strong>{esc(TRAINING["tag"])}, {esc(TRAINING["zeit"])}</strong></p>
         <p>{esc(TRAINING["ort"])}</p>
-        <p><a class="btn" href="neu-hier.html">Zum Schnuppern vorbeikommen →</a></p>
+        <p><a class="btn" href="ueber-uns.html#neu-hier">Zum Schnuppern vorbeikommen →</a></p>
       </div>
       <div class="card jugend-box">
         <h3>Ansprechpartner</h3>

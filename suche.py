@@ -22,7 +22,7 @@ MAX_TREFFER = 40
 AUSLASSEN = {"404.html", SEITE}    # diese Seiten nie finden
 # Seiten, die bei gleichem Treffer weiter oben stehen (Wurzel-Dateinamen)
 WICHTIG = {"index.html", "termine.html", "mannschaften.html", "berichte.html", "jugend.html",
-           "turniere.html", "neu-hier.html", "kontakt.html", "faq.html"}
+           "turniere.html", "kontakt.html", "faq.html"}
 
 _seiten = {}
 

@@ -50,7 +50,7 @@ jobs:
 
       # 2b. Pakete fürs Build-Skript (chess-results-Turnierseiten)
       - name: Install Python packages
-        run: pip install beautifulsoup4 requests
+        run: pip install beautifulsoup4 requests pillow
 
       # 3. Typst Kompilierung zu SVG
       #    Fehler brechen den Build nicht ab, erscheinen aber als gelbe Warnung im Run

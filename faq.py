@@ -27,7 +27,7 @@ FRAGEN = [
         ("Wann und wo spielt ihr?",
          "Jeden Freitag im Gymnasium Kirchheim (GyKi), {spielort}. Die Jugend trainiert von 18:00 bis 19:30 Uhr, "
          "Erwachsene spielen ab 19:30 Uhr mit Open End. Das GyKi ist eine Schachschule und unser Spielort. "
-         '<a href="neu-hier.html">So kommst du vorbei →</a>'),
+         '<a href="ueber-uns.html#neu-hier">So kommst du vorbei →</a>'),
         ("Findet der Spielabend auch in den Ferien statt?",
          'Meistens ja. Fällt ein Abend aus, steht das oben auf der <a href="index.html">Startseite</a>, '
          'direkt über den nächsten Terminen.'),

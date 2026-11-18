@@ -1,5 +1,5 @@
 """
-Mannschaftshistorie (mannschaftshistorie.html): wie der Verein an Mannschaften gewachsen ist,
+Geschichte (geschichte.html, früher mannschaftshistorie.html): Vereinsgeschichte + wie der Verein an Mannschaften gewachsen ist,
 in welcher Liga welche Mannschaft wann gespielt hat (Erwachsene, Senioren, Jugend), Steckbriefe, Meilensteine.
 
 Daten:
@@ -19,8 +19,9 @@ import liga
 # EINSTELLUNGEN
 # ==========================================
 DATEI = "mannschaften_historie.json"
-SEITE = "mannschaftshistorie.html"
-TITEL = "Mannschaftshistorie"
+SEITE = "geschichte.html"          # gemeinsame Seite: Vereinsgeschichte + Mannschaftshistorie
+ALTE_SEITE = "mannschaftshistorie.html"   # leitet auf SEITE weiter (alte Links)
+TITEL = "Geschichte"
 
 # Bereiche: je eine Liga-Grafik. muster = Mannschaftsname; stufen = (Muster im Klassennamen, Beschriftung),
 # von oben nach unten. lueckenlos_ab = ab dieser Saison sind alle Saisons bekannt ("erstmals ..." nur ab da).
@@ -426,8 +427,8 @@ def bereich_block(daten, roh, bereich):
 # ==========================================
 # SEITE
 # ==========================================
-def seite(aktuell, teams, archiv, seiten_pfad):
-    """-> (content, styles)"""
+def seite(aktuell, teams, archiv, seiten_pfad, chronik=""):
+    """-> (content, styles). chronik = HTML der Vereinsgeschichte (dokumente/historie.typ), steht mit auf der Seite."""
     daten, roh = sammeln(aktuell, teams, archiv, seiten_pfad)
     anzahl = anzahl_je_saison(daten, roh, aktuell)
     jetzt = anzahl.get(aktuell, {})
@@ -437,20 +438,26 @@ def seite(aktuell, teams, archiv, seiten_pfad):
     kurz = ", ".join(teile[:-1]) + " und " + teile[-1] if len(teile) > 1 else "".join(teile)
     springen = " · ".join(f'<a href="#{b["key"]}">{esc(b["titel"])}</a>' for b in BEREICHE
                           if teams_im_bereich(daten, b))
+    sprung = " · ".join(f'<a href="#{k}">{t}</a>' for k, t in
+                        [("wachstum", "So sind wir gewachsen"), ("meilensteine", "Meilensteine"),
+                         ("chronik", "Chronik 1952 bis heute"), ("ligen", "Wer spielte wo?")] if k != "chronik" or chronik)
     content = f"""
-      <a href="mannschaften.html" style="text-decoration:none;">← Mannschaften</a>
-      <h1>{TITEL}</h1>
-      <p class="lead">{INTRO}</p>
+      <h1>Unsere Geschichte</h1>
+      <p class="lead">Von den Schachfreunden Feldkirchen 1952 bis zu den Mannschaften von heute – wie der Verein
+        gewachsen ist, was er erlebt hat und wer wann in welcher Liga spielte.</p>
+      <p class="hist-sprung">{sprung}</p>
 
-      <h2>So sind wir gewachsen</h2>
+      <h2 id="wachstum">So sind wir gewachsen</h2>
       {f'<p>In der Saison {saison_text(aktuell)} spielen wir mit <strong>{kurz}</strong>.</p>' if kurz else ''}
       {wachstum_grafik(anzahl, roh)}
       <p class="klein">Balken antippen oder darüberfahren für die Zahlen.</p>
 
-      <h2>Meilensteine</h2>
+      <h2 id="meilensteine">Meilensteine</h2>
       {zeitleiste(erstmals(daten, anzahl, roh))}
 
-      <h2>Wer spielte wo?</h2>
+      {chronik}
+
+      <h2 id="ligen">Wer spielte wo?</h2>
       <p class="klein">Springen zu: {springen}. Punkt antippen für Liga und Platz.
         ▲ Aufstieg, ▼ Abstieg, ★ Meister/Titel, gestrichelt = Saisons dazwischen fehlen.
         {HINWEIS_NUMMERN}</p>
@@ -473,14 +480,17 @@ def karte():
           .team-grid > .team-historie p {{ grid-column: 3 / -2; }}
         }}
       </style>
-      <a class="card team-karte team-historie" href="{SEITE}">
-        <h3>{TITEL}</h3>
+      <a class="card team-karte team-historie" href="{SEITE}#wachstum">
+        <h3>Mannschaftshistorie</h3>
         <p>Wie der Verein an Mannschaften gewachsen ist und wer wann in welcher Liga spielte – Erwachsene, Senioren und Jugend.</p>
-        <span class="k-mehr">Zur Historie →</span>
+        <span class="k-mehr">Zur Geschichte →</span>
       </a>"""
 
 
 CSS = """
+      .hist-sprung { font-size: 0.95rem; }
+      .hist-sprung a { font-weight: 600; }
+      .lead { max-width: 52rem; }
       .hist-scroll { overflow-x: auto; margin: 0.4rem 0; }
       .hist-svg { display: block; max-width: none; font-family: inherit; }
       /* PC/Tablet: Grafik passt sich der Breite an (nur verkleinern). Handy: Originalgröße, seitlich wischen */

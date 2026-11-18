@@ -344,11 +344,12 @@ def runden_gegner(d, tlnr):
     return aus
 
 
-def _prognose(d, tlnr):
-    """-> ({Name: p}, {neue Spieler}) fürs nächste Spiel (Spielort automatisch)."""
+def _prognose(d, tlnr, heim="auto"):
+    """-> ({Name: p}, {neue Spieler}) für ein Spiel. heim = Spielort dieses Spiels aus Sicht von tlnr
+    ("auto" = nächstes Spiel). Spätere Runden nutzen dieselben Daten – nur der Spielort ist ein anderer."""
     verein = auf.andere_teams(VEREIN_INDEX, d, tlnr) if VEREIN_INDEX else None
     return auf.prognose(d, tlnr, d.get("historie_ereignisse") or [], d.get("bretter") or 0,
-                        kader=kader_von(d, tlnr), verein=verein)
+                        naechst_heim=heim, kader=kader_von(d, tlnr), verein=verein)
 
 
 # Kopiert den Namen und zeigt kurz "Name kopiert"; der Link öffnet danach normal die Datenbank
@@ -475,12 +476,16 @@ LEGENDE_GEGNER = ("<strong>Prognose</strong> = geschätzte Wahrscheinlichkeit, d
 VARIANTEN = 3                   # so viele wahrscheinlichste Aufstellungen beim nächsten Gegner
 
 
-def vorschau_html(d, tlnr):
-    """Die wahrscheinlichsten Aufstellungen einer Mannschaft im nächsten Spiel (Brettfolge = Meldereihenfolge)."""
+PROGNOSE_ALLE_SPIELE = True    # True = Prognose bei jedem offenen Spiel, False = nur beim nächsten
+
+
+def vorschau_html(d, tlnr, heim="auto", spaeter=False):
+    """Die wahrscheinlichsten Aufstellungen einer Mannschaft in einem offenen Spiel (Brettfolge = Meldereihenfolge).
+    spaeter = nicht das nächste Spiel (Hinweis, dass bis dahin noch Runden dazwischen liegen)."""
     kader, n = kader_von(d, tlnr), d.get("bretter") or 0
     if not kader or not n or d.get("archiv"):
         return ""
-    p, neu = _prognose(d, tlnr)
+    p, neu = _prognose(d, tlnr, heim)
     varianten = auf.top_aufstellungen(kader, p, n, VARIANTEN)
     if not varianten:
         return ""
@@ -515,7 +520,9 @@ def vorschau_html(d, tlnr):
           </div>""")
     return f"""
       <div class="vorschau">
-        <p><strong>Voraussichtliche Aufstellung {esc(name_von(d, tlnr))}</strong></p>
+        <p><strong>Voraussichtliche Aufstellung {esc(name_von(d, tlnr))}</strong>{
+          ' <span class="klein">(Stand heute – bis zu diesem Spiel kommen noch Runden dazu, die Prognose wird dann genauer)</span>'
+          if spaeter else ""}</p>
         <div class="varianten">{"".join(spalten)}</div>
         <p class="klein">Prozente oben = Wahrscheinlichkeit der ganzen Aufstellung (es gibt sehr viele mögliche,
           deshalb sind die Werte klein); markiert mit ⇄ = spielt in dieser Variante statt des genannten Spielers.
@@ -712,12 +719,15 @@ def reiter_spiele(d):
         kopf = (f'<span class="rd">R{m["r"]}</span><span class="ha">{"H" if heim else "A"}</span>'
                 f'<span class="geg">{esc(gegner)}{info}</span>{ergebnis_badge(art, mein, sein)}')
         details = bretter_html(d, m)
-        if not m["gesp"] and m is naechstes_spiel(d):
-            details = vorschau_html(d, m["g"] if heim else m["h"])
+        if not m["gesp"] and (PROGNOSE_ALLE_SPIELE or m is naechstes_spiel(d)):
+            gegner_nr = m["g"] if heim else m["h"]
+            details = vorschau_html(d, gegner_nr, heim=not heim, spaeter=m is not naechstes_spiel(d))
         teile.append(f'<details class="spiel"><summary>{kopf}</summary>{details}</details>' if details
                      else f'<div class="spiel">{kopf}</div>')
-    return ('<p class="klein">Auf ein gespieltes Spiel tippen, um die Bretter zu sehen – beim nächsten Spiel '
-            'die voraussichtliche Aufstellung des Gegners.</p>' + "".join(teile))
+    hinweis = ("bei offenen Spielen die voraussichtliche Aufstellung des Gegners" if PROGNOSE_ALLE_SPIELE
+               else "beim nächsten Spiel die voraussichtliche Aufstellung des Gegners")
+    return (f'<p class="klein">Auf ein gespieltes Spiel tippen, um die Bretter zu sehen – {hinweis}.</p>'
+            + "".join(teile))
 
 
 def reiter_spieler(d):
