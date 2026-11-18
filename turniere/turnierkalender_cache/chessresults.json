@@ -9,12 +9,12 @@
    "europa": true,
    "id": "cr:1250664",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.7040859,
    "links": {
     "chessresults": "https://chess-results.com/tnr1250664.aspx?lan=0",
     "website": "http://www.swisschesstour.com"
    },
-   "lon": null,
+   "lon": 8.6382793,
    "name": "1st SCHAFFHAUSEN 2Days OPEN - 2026 (Elo max 2399)",
    "ort": "Hotel Kronenhof, Kirchhofplatz 7 - CH-8200 Schaffhausen",
    "quelle": "chess-results",
@@ -30,18 +30,38 @@
    "europa": true,
    "id": "cr:1310287",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.0052352,
    "links": {
     "chessresults": "https://chess-results.com/tnr1310287.aspx?lan=0",
     "website": "http://www.schweizer-schach-senioren.ch"
    },
-   "lon": null,
+   "lon": 9.5021527,
    "name": "SSS - Bad Ragaz, Jahresschlussturnier - 2026",
    "ort": "Hotel Schloss Ragaz, Schlossstrasse 1, 7310 Bad Ragaz, 081 303 77 77",
    "quelle": "chess-results",
    "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-30"
+  },
+  "1312987": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min. + 3 sek.",
+   "bis": "2026-12-09",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1312987",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1312987.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Državno univerzitetno prvenstvo v šahu 2025/2026",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2026-12-09"
   },
   "1317720": {
    "bedenkzeit": "klassisch",
@@ -72,12 +92,12 @@
    "europa": true,
    "id": "cr:1321252",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 46.7933845,
    "links": {
     "chessresults": "https://chess-results.com/tnr1321252.aspx?lan=0",
     "website": "http://www.swisschesstour.com"
    },
-   "lon": null,
+   "lon": 9.8206999,
    "name": "DAVOS - SWISS SKI OPEN - 2026.11",
    "ort": "Waldhotel**** Buolstrasse 3, CH-7270 Davos Platz",
    "quelle": "chess-results",
@@ -93,12 +113,12 @@
    "europa": true,
    "id": "cr:1325360",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.7267494,
    "links": {
     "chessresults": "https://chess-results.com/tnr1325360.aspx?lan=0",
     "website": "https://www.schachklub-hallein.at/"
    },
-   "lon": null,
+   "lon": 13.0718723,
    "name": "5. Halleiner Kreativ Schach Event 2026",
    "ort": "Rifer Hauptstraße 37 5400 Hallein (RIF)",
    "quelle": "chess-results",
@@ -114,12 +134,12 @@
    "europa": true,
    "id": "cr:1329748",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.5549807,
    "links": {
     "chessresults": "https://chess-results.com/tnr1329748.aspx?lan=0",
     "website": "http://www.schachfestivalbasel.com/"
    },
-   "lon": null,
+   "lon": 7.5857978,
    "name": "BASEL XMAS FESTIVAL 2026 - MASTER (min 2000 Elo Fide)",
    "ort": "Mövenpick Hotel - Aeschengraben 25 - CH-4051 Basel",
    "quelle": "chess-results",
@@ -135,12 +155,12 @@
    "europa": true,
    "id": "cr:1329759",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.5549807,
    "links": {
     "chessresults": "https://chess-results.com/tnr1329759.aspx?lan=0",
     "website": "http://www.schachfestivalbasel.com/"
    },
-   "lon": null,
+   "lon": 7.5857978,
    "name": "BASEL XMAS FESTIVAL 2026 - EXPERT (max 2100 Elo Fide)",
    "ort": "Mövenpick Hotel - Aeschengraben 25 - CH-4051 Basel",
    "quelle": "chess-results",
@@ -156,12 +176,12 @@
    "europa": true,
    "id": "cr:1334473",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.3860559,
    "links": {
     "chessresults": "https://chess-results.com/tnr1334473.aspx?lan=0",
     "website": "http://www.schweizer-schach-senioren.ch"
    },
-   "lon": null,
+   "lon": 8.5450958,
    "name": "SSS Zürich 1 2027",
    "ort": "LINDE OBERSTRASS, Universitätstrasse 91, 8006 Zürich",
    "quelle": "chess-results",
@@ -177,12 +197,12 @@
    "europa": true,
    "id": "cr:1339606",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.7040859,
    "links": {
     "chessresults": "https://chess-results.com/tnr1339606.aspx?lan=0",
     "website": "http://www.swisschesstour.com"
    },
-   "lon": null,
+   "lon": 8.6382793,
    "name": "SCHAFFHAUSEN New Year Chess Open - 2027",
    "ort": "Hotel Kronenhof, Kirchhofplatz 7 - CH-8200 Schaffhausen",
    "quelle": "chess-results",
@@ -198,12 +218,12 @@
    "europa": true,
    "id": "cr:1350900",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.4652644,
    "links": {
     "chessresults": "https://chess-results.com/tnr1350900.aspx?lan=0",
     "website": "http://www.swisschesstour.com"
    },
-   "lon": null,
+   "lon": 9.0478868,
    "name": "5. WIL Rebstock 2DAYS - GEN 2027",
    "ort": "Rebstock Wil GmbH, Toggenburgerstrasse 54, 9500 Wil",
    "quelle": "chess-results",
@@ -219,12 +239,12 @@
    "europa": true,
    "id": "cr:1359765",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.3860559,
    "links": {
     "chessresults": "https://chess-results.com/tnr1359765.aspx?lan=0",
     "website": "http://www.schweizer-schach-senioren.ch"
    },
-   "lon": null,
+   "lon": 8.5450958,
    "name": "SSS Zürich 2 2027",
    "ort": "LINDE OBERSTRASS, Universitätstrasse 91, 8006 Zürich",
    "quelle": "chess-results",
@@ -260,17 +280,39 @@
    "europa": true,
    "id": "cr:1383447",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 46.1554222,
    "links": {
     "chessresults": "https://chess-results.com/tnr1383447.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 8.7707865,
    "name": "24. Amateur Standard-Open Ascona 2027",
    "ort": "Ascona",
    "quelle": "chess-results",
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-03-07"
+  },
+  "1404438": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "40 moves in 90 minutes, plus 30 minutes, plus 30 seconds per move from move 1",
+   "bis": "2027-03-14",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1404438",
+   "land": "Österreich",
+   "lat": null,
+   "links": {
+    "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_29_%C3%96SB_2026_2027_1BL_Ausschreibung.pdf",
+    "chessresults": "https://chess-results.com/tnr1404438.aspx?lan=0",
+    "website": "http://www.chess.at"
+   },
+   "lon": null,
+   "name": "1. BUNDESLIGA AUT 2026/2027",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-25"
   },
   "1409504": {
    "bedenkzeit": "klassisch",
@@ -323,12 +365,12 @@
    "europa": true,
    "id": "cr:1423439",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.3953879,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_28_Duernstein_26.pdf",
     "chessresults": "https://chess-results.com/tnr1423439.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 15.5203111,
    "name": "Schach im Turm Dürnstein-Blitzschach A-Turnier",
    "ort": "Dürnstein",
    "quelle": "chess-results",
@@ -344,12 +386,12 @@
    "europa": true,
    "id": "cr:1423444",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.3953879,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_28_Duernstein_26.pdf",
     "chessresults": "https://chess-results.com/tnr1423444.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 15.5203111,
    "name": "Schach im Turm Dürnstein-Blitzschach B-Turnier",
    "ort": "Dürnstein",
    "quelle": "chess-results",
@@ -365,12 +407,12 @@
    "europa": true,
    "id": "cr:1423453",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.3953879,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_29_Duernstein_26.pdf",
     "chessresults": "https://chess-results.com/tnr1423453.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 15.5203111,
    "name": "Schach im Turm Dürnstein-Schnellschach A-Turnier",
    "ort": "Dürnstein",
    "quelle": "chess-results",
@@ -386,18 +428,60 @@
    "europa": true,
    "id": "cr:1423456",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.3953879,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_29_Duernstein_26.pdf",
     "chessresults": "https://chess-results.com/tnr1423456.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 15.5203111,
    "name": "Schach im Turm Dürnstein-Schnellschach B-Turnier",
    "ort": "Dürnstein",
    "quelle": "chess-results",
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-29"
+  },
+  "1432758": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10min + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1432758",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1432758.aspx?lan=0",
+    "website": "https://www.sachyturnov.cz"
+   },
+   "lon": null,
+   "name": "Memoriál Františka Zikudy - 3.ročník (turnaj dvojic)",
+   "ort": "OAHŠ Turnov, Zborovská ulice, Turnov",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1432775": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60 minuta za cijelu partiju s dodatkom 30 sekundi po potezu počevši od prvog poteza (Fischer)",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1432775",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1432775.aspx?lan=0",
+    "website": "http://www.skdubrovnik.hr/"
+   },
+   "lon": null,
+   "name": "4. OTVORENI MEĐUNARODNI ŠAHOVSKI TURNIR DUBROVNIK ADVENT 2026 Dubrovnik, Valamar Lacroma Dubrovnik Hotel, 17.12-20.12.2026.",
+   "ort": "Dubrovnik, Valamar Lacroma Dubrovnik Hotel, Iva Dulčića 34",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-17"
   },
   "1434287": {
    "bedenkzeit": "klassisch",
@@ -407,12 +491,12 @@
    "europa": true,
    "id": "cr:1434287",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.2003055,
    "links": {
     "chessresults": "https://chess-results.com/tnr1434287.aspx?lan=0",
     "website": "http://www.schachfestivalbasel.com/"
    },
-   "lon": null,
+   "lon": 8.7780752,
    "name": "BUNDESTURNIER 2027 - Full Registration List  -",
    "ort": "Hotel Seedamm Plaza, Seedammstrasse 3, 8808 Pfäffikon (SZ)",
    "quelle": "chess-results",
@@ -428,12 +512,12 @@
    "europa": true,
    "id": "cr:1435186",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1435186.aspx?lan=0",
     "website": "https://vesus.org/tournament/UqqJWOVa"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "Open A - ROMA CITTA' APERTA - 7° International Chess Festival 2026",
    "ort": "ROMA",
    "quelle": "chess-results",
@@ -449,12 +533,12 @@
    "europa": true,
    "id": "cr:1435196",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1435196.aspx?lan=0",
     "website": "https://vesus.org/tournament/6vn5U0NQ"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "Open B - ROMA CITTA' APERTA - 7° International Chess Festival 2026",
    "ort": "ROMA",
    "quelle": "chess-results",
@@ -470,12 +554,12 @@
    "europa": true,
    "id": "cr:1435199",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1435199.aspx?lan=0",
     "website": "https://vesus.org/tournament/41HKMTtK"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "Seniores - ROMA CITTA' APERTA - 7° International Chess Festival 2026",
    "ort": "ROMA",
    "quelle": "chess-results",
@@ -491,12 +575,12 @@
    "europa": true,
    "id": "cr:1438001",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.1717258,
    "links": {
     "chessresults": "https://chess-results.com/tnr1438001.aspx?lan=0",
     "website": "http://www.schachclub-sursee.ch"
    },
-   "lon": null,
+   "lon": 8.1069422,
    "name": "9. Soorser Blitzschachmeisterschaft",
    "ort": "Businesspark Sursee, Allee 1A, 6210 Sursee",
    "quelle": "chess-results",
@@ -533,18 +617,166 @@
    "europa": true,
    "id": "cr:1444509",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1444509.aspx?lan=0",
     "website": "https://www.romacittaperta.com/"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "ROMA CITTA' APERTA 2026 TORNEO DI QUALIFICAZIONE AI CIG NAZIONALI",
    "ort": "ROMA",
    "quelle": "chess-results",
    "runden": "6",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-13"
+  },
+  "1446797": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s / move",
+   "bis": "2027-01-15",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1446797",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1446797.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Prague Open 2027 - C FIDE Open 30+ 25th International Chess Festival",
+   "ort": "Olympik hotel, Prague",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-08"
+  },
+  "1446837": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s/move",
+   "bis": "2027-01-23",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1446837",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1446837.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Marienbad Open 2027 - A GM Round Robin 25th International Chess Festival",
+   "ort": "Continental hotel, Marianske Lazne",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-16"
+  },
+  "1446843": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s/move",
+   "bis": "2027-01-23",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1446843",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1446843.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Marienbad Open 2027 - B IM Round Robin 25th International Chess Festival",
+   "ort": "Continental hotel, Marianske Lazne",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-16"
+  },
+  "1446845": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s / move",
+   "bis": "2027-01-23",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1446845",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1446845.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Marienbad Open 2027 - C FIDE Open 25th International Chess Festival",
+   "ort": "Continental hotel, Marianske Lazne",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-16"
+  },
+  "1446848": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s / move",
+   "bis": "2027-01-23",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1446848",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1446848.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Marienbad Open 2027 - D Seniors Open 25th International Chess Festival",
+   "ort": "Continental hotel, Marianske Lazne",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-16"
+  },
+  "1447314": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2 x 1,5h + 30s / move",
+   "bis": "2027-03-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1447314",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "ausschreibung": "https://chess-results.com/Download/Kalender/2027_03_20_novy-bor-en.pdf",
+    "chessresults": "https://chess-results.com/tnr1447314.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Novy Bor Open 2027 - A FIDE Open 5th International Chess Festival",
+   "ort": "Grandhotel Novy Bor",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-03-13"
+  },
+  "1447325": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s/move",
+   "bis": "2027-03-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1447325",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1447325.aspx?lan=0",
+    "website": "https://www.czechtour.net"
+   },
+   "lon": null,
+   "name": "Pilsen Open 2027 - C INGEM FIDE open 15th International Chess Festival",
+   "ort": "Parkhotel Plzen ****, Plzen",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-03-21"
   },
   "1447405": {
    "bedenkzeit": "klassisch",
@@ -554,13 +786,13 @@
    "europa": true,
    "id": "cr:1447405",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.7113628,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_05_17_Folder_2027.pdf",
     "chessresults": "https://chess-results.com/tnr1447405.aspx?lan=0",
     "website": "http://salzkammergutopen.gnx.at"
    },
-   "lon": null,
+   "lon": 13.6188148,
    "name": "19. Salzkammergut Schachopen 2027 (C-Turnier unter 1900 FIDE-Elo)",
    "ort": "Kongress- und Theaterhaus Bad Ischl",
    "quelle": "chess-results",
@@ -576,13 +808,13 @@
    "europa": true,
    "id": "cr:1447406",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.7113628,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_05_17_Folder_2027.pdf",
     "chessresults": "https://chess-results.com/tnr1447406.aspx?lan=0",
     "website": "http://salzkammergutopen.gnx.at"
    },
-   "lon": null,
+   "lon": 13.6188148,
    "name": "19. Salzkammergut Schachopen 2027 (D-Turnier unter 1700 FIDE-Elo)",
    "ort": "Kongress- und Theaterhaus Bad Ischl",
    "quelle": "chess-results",
@@ -598,13 +830,55 @@
    "europa": true,
    "id": "cr:1448641",
    "land": "Italien",
-   "lat": null,
+   "lat": 45.5201113,
    "links": {
     "chessresults": "https://chess-results.com/tnr1448641.aspx?lan=0",
     "website": "https://www.cavalliesegugi.com/cs/bandi/2026/robecchetto.html"
    },
-   "lon": null,
+   "lon": 8.7692822,
    "name": "Magistrale - 38.Festival \"Comune di Robecchetto con Induno\"",
+   "ort": "Robecchetto con Induno",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-27"
+  },
+  "1448643": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90+30",
+   "bis": "2026-12-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1448643",
+   "land": "Italien",
+   "lat": 45.5201113,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1448643.aspx?lan=0",
+    "website": "https://vesus.org/tournament/pcOKLN20"
+   },
+   "lon": 8.7692822,
+   "name": "Open FIDE A - 38.Festival \"Comune di Robecchetto con Induno\"",
+   "ort": "Robecchetto con Induno",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-27"
+  },
+  "1448645": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60+30",
+   "bis": "2026-12-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1448645",
+   "land": "Italien",
+   "lat": 45.5201113,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1448645.aspx?lan=0",
+    "website": "https://vesus.org/tournament/UCGo-AyJ"
+   },
+   "lon": 8.7692822,
+   "name": "Open FIDE B - 38.Festival \"Comune di Robecchetto con Induno\"",
    "ort": "Robecchetto con Induno",
    "quelle": "chess-results",
    "runden": "6",
@@ -619,11 +893,11 @@
    "europa": true,
    "id": "cr:1449732",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.8991308,
    "links": {
     "chessresults": "https://chess-results.com/tnr1449732.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 13.9418539,
    "name": "3. ALMTALER SCHACHOPEN - A-Turnier",
    "ort": "Landesmusikschule Scharnstein, Kirchenplatz 6, 4644 Scharnstein",
    "quelle": "chess-results",
@@ -639,11 +913,11 @@
    "europa": true,
    "id": "cr:1449733",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.8991308,
    "links": {
     "chessresults": "https://chess-results.com/tnr1449733.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 13.9418539,
    "name": "3. ALMTALER SCHACHOPEN - B-Turnier",
    "ort": "Landesmusikschule Scharnstein, Kirchenplatz 6, 4644 Scharnstein",
    "quelle": "chess-results",
@@ -659,12 +933,12 @@
    "europa": true,
    "id": "cr:1450646",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 46.8266699,
    "links": {
     "chessresults": "https://chess-results.com/tnr1450646.aspx?lan=0",
     "website": "http://www.schweizer-schach-senioren.ch"
    },
-   "lon": null,
+   "lon": 9.2554863,
    "name": "SSS - Laax 2027",
    "ort": "Hotel Laaxerhof, Via Murschetg 35, 7032 Laax, 081 920 82 00",
    "quelle": "chess-results",
@@ -680,12 +954,12 @@
    "europa": true,
    "id": "cr:1452322",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.0571316,
    "links": {
     "chessresults": "https://chess-results.com/tnr1452322.aspx?lan=0",
     "website": "http://www.burgdorfopen.com"
    },
-   "lon": null,
+   "lon": 7.6237466,
    "name": "25. Burgdorfer Stadthaus-Open Kat. A",
    "ort": "Burgdorf",
    "quelle": "chess-results",
@@ -701,12 +975,12 @@
    "europa": true,
    "id": "cr:1452326",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.0571316,
    "links": {
     "chessresults": "https://chess-results.com/tnr1452326.aspx?lan=0",
     "website": "http://www.burgdorfopen.com"
    },
-   "lon": null,
+   "lon": 7.6237466,
    "name": "25. Burgdorfer Stadthaus-Open Kat. B",
    "ort": "Burgdorf",
    "quelle": "chess-results",
@@ -765,12 +1039,12 @@
    "europa": true,
    "id": "cr:1457130",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.2351825,
    "links": {
     "chessresults": "https://chess-results.com/tnr1457130.aspx?lan=0",
     "website": "http://ranshofen.blogspot.com"
    },
-   "lon": null,
+   "lon": 13.0148774,
    "name": "Open Braunau 2026 B",
    "ort": "Ranshofen",
    "quelle": "chess-results",
@@ -786,12 +1060,12 @@
    "europa": true,
    "id": "cr:1457131",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.2351825,
    "links": {
     "chessresults": "https://chess-results.com/tnr1457131.aspx?lan=0",
     "website": "http://ranshofen.blogspot.com"
    },
-   "lon": null,
+   "lon": 13.0148774,
    "name": "Open Braunau 2026 C",
    "ort": "Ranshofen",
    "quelle": "chess-results",
@@ -807,12 +1081,12 @@
    "europa": true,
    "id": "cr:1457132",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.2351825,
    "links": {
     "chessresults": "https://chess-results.com/tnr1457132.aspx?lan=0",
     "website": "http://ranshofen.blogspot.com"
    },
-   "lon": null,
+   "lon": 13.0148774,
    "name": "Open Braunau 2026 Jugend",
    "ort": "Ranshofen",
    "quelle": "chess-results",
@@ -840,6 +1114,7 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-02"
   },
+  "1468004": null,
   "1471319": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90min+30s/move",
@@ -920,6 +1195,67 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-30"
   },
+  "1475027": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\" - standard",
+   "bis": "2026-12-16",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1475027",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1475027.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "2. ADVENTSKI ŠAHOVSKI FESTIVAL 2026- CRIKVENICA OPEN A turnir",
+   "ort": "Hotel Marina Selce, Emila Antića 73, 51266 Selce",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-10"
+  },
+  "1475033": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60'+30\" - standard",
+   "bis": "2026-12-16",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1475033",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1475033.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "2. ADVENTSKI ŠAHOVSKI FESTIVAL 2026- CRIKVENICA OPEN B turnir",
+   "ort": "Hotel Marina Selce, Emila Antića 73, 51266 Selce",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-10"
+  },
+  "1475041": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min.",
+   "bis": "2028-08-17",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1475041",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1475041.aspx?lan=0",
+    "website": "http://www.drustvo-sahpiran.si"
+   },
+   "lon": null,
+   "name": "Turnir trojk Šahovskega utripa 2026",
+   "ort": "Lucija",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2028-08-17"
+  },
   "1475076": {
    "bedenkzeit": "",
    "bedenkzeit_text": "90´/40  30/Rest + 30 sec all",
@@ -948,18 +1284,39 @@
    "europa": true,
    "id": "cr:1476222",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.6963955,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_12_05_nikolo2026.pdf",
     "chessresults": "https://chess-results.com/tnr1476222.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 16.693035,
    "name": "Nikoloturnier Weinviertel 2026",
    "ort": "Hauptstraße 43, 2171 Herrnbaumgarten",
    "quelle": "chess-results",
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-05"
+  },
+  "1478274": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x20min",
+   "bis": "2027-01-23",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1478274",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1478274.aspx?lan=0",
+    "website": "https://skoazapraha.cz/aktuality/"
+   },
+   "lon": null,
+   "name": "Memoriál Josefa Maršálka - turnaj rodinných dvojic",
+   "ort": "SK OAZA, Jeremenkova 1835/106, Praha 4-Krč, stanice autobusu Na Strži",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "von": "2027-01-23"
   },
   "1479689": {
    "bedenkzeit": "klassisch",
@@ -969,13 +1326,13 @@
    "europa": true,
    "id": "cr:1479689",
    "land": "Österreich",
-   "lat": null,
+   "lat": 46.8281235,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_02_20_lienz-open-2027-flyer-deutsch.pdf",
     "chessresults": "https://chess-results.com/tnr1479689.aspx?lan=0",
     "website": "https://www.schachklub-lienz.com/"
    },
-   "lon": null,
+   "lon": 12.750561,
    "name": "23. Int. DolomitenBank Lienz Open 2027",
    "ort": "Handelsakademie Lienz, Weidengasse 1, 9900 Lienz",
    "quelle": "chess-results",
@@ -991,12 +1348,12 @@
    "europa": true,
    "id": "cr:1480141",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 46.4899282,
    "links": {
     "chessresults": "https://chess-results.com/tnr1480141.aspx?lan=0",
     "website": "http://www.schweizer-schach-senioren.ch"
    },
-   "lon": null,
+   "lon": 7.5615034,
    "name": "SSS - Adelboden 2027",
    "ort": "Hotel Hari im Schlegeli, Gartenweg 5, 3715 Adelboden, 033 673 60 60",
    "quelle": "chess-results",
@@ -1012,13 +1369,13 @@
    "europa": true,
    "id": "cr:1482880",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.0957212,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_02_20_ChessOpen_Einladung_2027_WEBNeu.pdf",
     "chessresults": "https://chess-results.com/tnr1482880.aspx?lan=0",
     "website": "https://www.chessopengraz.com/en"
    },
-   "lon": null,
+   "lon": 15.4105277,
    "name": "International Chessopen Graz 2027 A",
    "ort": "Graz - Novapark Hotel",
    "quelle": "chess-results",
@@ -1034,13 +1391,13 @@
    "europa": true,
    "id": "cr:1482881",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.0957212,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_02_20_ChessOpen_Einladung_2027_WEBNeu.pdf",
     "chessresults": "https://chess-results.com/tnr1482881.aspx?lan=0",
     "website": "https://www.chessopengraz.com/en"
    },
-   "lon": null,
+   "lon": 15.4105277,
    "name": "International Chessopen Graz 2027 B",
    "ort": "Graz - Novapark Hotel",
    "quelle": "chess-results",
@@ -1056,13 +1413,13 @@
    "europa": true,
    "id": "cr:1482882",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.0957212,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_02_20_ChessOpen_Einladung_2027_WEBNeu.pdf",
     "chessresults": "https://chess-results.com/tnr1482882.aspx?lan=0",
     "website": "https://www.chessopengraz.com/en"
    },
-   "lon": null,
+   "lon": 15.4105277,
    "name": "International Chessopen Graz 2027 C",
    "ort": "Graz - Novapark Hotel",
    "quelle": "chess-results",
@@ -1078,13 +1435,13 @@
    "europa": true,
    "id": "cr:1482884",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.0957212,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_02_20_ChessOpen_Einladung_2027_WEBNeu.pdf",
     "chessresults": "https://chess-results.com/tnr1482884.aspx?lan=0",
     "website": "https://www.chessopengraz.com/en"
    },
-   "lon": null,
+   "lon": 15.4105277,
    "name": "International Chessopen Graz Weekend",
    "ort": "Graz - Novapark Hotel",
    "quelle": "chess-results",
@@ -1100,12 +1457,12 @@
    "europa": true,
    "id": "cr:1484629",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.4843133,
    "links": {
     "chessresults": "https://chess-results.com/tnr1484629.aspx?lan=0",
     "website": "http://www.dieschulschachprofis.ch"
    },
-   "lon": null,
+   "lon": 7.7336032,
    "name": "Schweizer Rapid-Meisterschaft U8 2026 Liestal",
    "ort": "Sporthalle Kaserne, Nonnenbodenweg 5, 4410 Liestal",
    "quelle": "chess-results",
@@ -1121,12 +1478,12 @@
    "europa": true,
    "id": "cr:1485460",
    "land": "Italien",
-   "lat": null,
+   "lat": 45.9054635,
    "links": {
     "chessresults": "https://chess-results.com/tnr1485460.aspx?lan=0",
     "website": "https://vesus.org/tournament/6l88feLH"
    },
-   "lon": null,
+   "lon": 13.3099318,
    "name": "Torneo MASTER - elo  2000 - 15° Festival Città di Palmanova",
    "ort": "Palmanova",
    "quelle": "chess-results",
@@ -1142,12 +1499,12 @@
    "europa": true,
    "id": "cr:1485465",
    "land": "Italien",
-   "lat": null,
+   "lat": 45.9054635,
    "links": {
     "chessresults": "https://chess-results.com/tnr1485465.aspx?lan=0",
     "website": "https://vesus.org/tournament/pf_TUwWa"
    },
-   "lon": null,
+   "lon": 13.3099318,
    "name": "Torneo CHALLENGERS - elo  2100 - 15° Festival Città di Palmanova",
    "ort": "Palmanova",
    "quelle": "chess-results",
@@ -1163,12 +1520,12 @@
    "europa": true,
    "id": "cr:1485468",
    "land": "Italien",
-   "lat": null,
+   "lat": 45.9054635,
    "links": {
     "chessresults": "https://chess-results.com/tnr1485468.aspx?lan=0",
     "website": "https://vesus.org/tournament/1t5DHluB"
    },
-   "lon": null,
+   "lon": 13.3099318,
    "name": "Torneo 5 turni - ESPERTI: elo  1600 - 15° Festival Città di Palmanova",
    "ort": "Palmanova",
    "quelle": "chess-results",
@@ -1184,18 +1541,38 @@
    "europa": true,
    "id": "cr:1485470",
    "land": "Italien",
-   "lat": null,
+   "lat": 45.9054635,
    "links": {
     "chessresults": "https://chess-results.com/tnr1485470.aspx?lan=0",
     "website": "https://vesus.org/tournament/tL4IlUyj"
    },
-   "lon": null,
+   "lon": 13.3099318,
    "name": "Torneo 5 turni - AMATORI: elo  1800 - 15° Festival Città di Palmanova",
    "ort": "Palmanova",
    "quelle": "chess-results",
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-27"
+  },
+  "1485530": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes with 30 seconds cumulative increment for each move starting from first move",
+   "bis": "2027-01-09",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1485530",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1485530.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Međunarodni otvoreni šahovski turnir \"31st Open BOŠNJACI\", 03-09.01.2027",
+   "ort": "Kino dvorana dom kulture, Bošnjaci",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-03"
   },
   "1486720": {
    "bedenkzeit": "schnell",
@@ -1205,13 +1582,13 @@
    "europa": true,
    "id": "cr:1486720",
    "land": "Österreich",
-   "lat": null,
+   "lat": 46.6334295,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_01_31_Ausschreibung_ESGT2027_6-seitig_Ansicht.pdf",
     "chessresults": "https://chess-results.com/tnr1486720.aspx?lan=0",
     "website": "https://www.sc-dieklagenfurter.at/"
    },
-   "lon": null,
+   "lon": 14.3219876,
    "name": "Erich-Schwarz-Gedenkturnier 2027",
    "ort": "Ginzkeygasse 2, 9020 Klagenfurt",
    "quelle": "chess-results",
@@ -1227,12 +1604,12 @@
    "europa": true,
    "id": "cr:1488092",
    "land": "Deutschland",
-   "lat": null,
+   "lat": 54.095791,
    "links": {
     "chessresults": "https://chess-results.com/tnr1488092.aspx?lan=0",
     "website": "https://schachschule-greifswald.de/schach-events/vch-nt/njt-2027/"
    },
-   "lon": null,
+   "lon": 13.3815238,
    "name": "VCH-Neujahrsturnier 2027",
    "ort": "Greifswald",
    "quelle": "chess-results",
@@ -1375,12 +1752,12 @@
    "europa": true,
    "id": "cr:1491905",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.4978118,
    "links": {
     "chessresults": "https://chess-results.com/tnr1491905.aspx?lan=0",
     "website": "http://www.horn-union-ratten.at"
    },
-   "lon": null,
+   "lon": 15.7300246,
    "name": "31. SCHACH OPEN RATTEN - A Turnier",
    "ort": "Veranstaltungshalle Ratten, Kirchenviertel 156, 8673 Ratten",
    "quelle": "chess-results",
@@ -1396,12 +1773,12 @@
    "europa": true,
    "id": "cr:1491906",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.4978118,
    "links": {
     "chessresults": "https://chess-results.com/tnr1491906.aspx?lan=0",
     "website": "http://www.horn-union-ratten.at"
    },
-   "lon": null,
+   "lon": 15.7300246,
    "name": "31. SCHACH OPEN RATTEN - B Turnier",
    "ort": "Veranstaltungshalle Ratten, Kirchenviertel 156, 8673 Ratten",
    "quelle": "chess-results",
@@ -1417,12 +1794,12 @@
    "europa": true,
    "id": "cr:1491908",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.4978118,
    "links": {
     "chessresults": "https://chess-results.com/tnr1491908.aspx?lan=0",
     "website": "http://www.horn-union-ratten.at"
    },
-   "lon": null,
+   "lon": 15.7300246,
    "name": "31. SCHACH OPEN RATTEN - C Turnier",
    "ort": "Veranstaltungshalle Ratten, Kirchenviertel 156, 8673 Ratten",
    "quelle": "chess-results",
@@ -1540,11 +1917,11 @@
    "europa": true,
    "id": "cr:1493138",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.6653429,
    "links": {
     "chessresults": "https://chess-results.com/tnr1493138.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 8.9815246,
    "name": "Steckborn 2026 Schülerturnier U10",
    "ort": "Steckborn",
    "quelle": "chess-results",
@@ -1560,11 +1937,11 @@
    "europa": true,
    "id": "cr:1493140",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.6653429,
    "links": {
     "chessresults": "https://chess-results.com/tnr1493140.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 8.9815246,
    "name": "Steckborn 2026 Schülerturnier U13",
    "ort": "Steckborn",
    "quelle": "chess-results",
@@ -1580,11 +1957,11 @@
    "europa": true,
    "id": "cr:1493142",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 47.6653429,
    "links": {
     "chessresults": "https://chess-results.com/tnr1493142.aspx?lan=0"
    },
-   "lon": null,
+   "lon": 8.9815246,
    "name": "Steckborn 2026 Schülerturnier U16",
    "ort": "Steckborn",
    "quelle": "chess-results",
@@ -1600,13 +1977,13 @@
    "europa": true,
    "id": "cr:1493450",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.2079638,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_01_31_Ausschreibung%20LMU8U10.pdf",
     "chessresults": "https://chess-results.com/tnr1493450.aspx?lan=0",
     "website": "http://www.chess-vienna.at"
    },
-   "lon": null,
+   "lon": 16.423162,
    "name": "Wiener Landesmeisterschaft 2027 U08/U10",
    "ort": "Haus des Schachsports",
    "quelle": "chess-results",
@@ -1622,19 +1999,163 @@
    "europa": true,
    "id": "cr:1493451",
    "land": "Österreich",
-   "lat": null,
+   "lat": 48.2079638,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2027_01_31_Ausschreibung%20LMU12U14.pdf",
     "chessresults": "https://chess-results.com/tnr1493451.aspx?lan=0",
     "website": "http://www.chess-vienna.at"
    },
-   "lon": null,
+   "lon": 16.423162,
    "name": "Wiener Landesmeisterschaft U12/U14",
    "ort": "Haus des Schachsports",
    "quelle": "chess-results",
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-30"
+  },
+  "1493484": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60min + 30s/tah",
+   "bis": "2027-05-09",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1493484",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1493484.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Otevřené Mistrovství České Republiky v šachu amatérů 2027",
+   "ort": "Sportovní hala, Boršická 1313, 687 25 Hluk",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-05-04"
+  },
+  "1494538": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "40/1,5  Rest/0,5",
+   "bis": "2026-12-04",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1494538",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1494538.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Offene Horster Meisterschaften 2026",
+   "ort": "Gelsenkirchen",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-09-04"
+  },
+  "1495670": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "30'+30\"",
+   "bis": "2026-12-06",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1495670",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1495670.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Zagreb Advent Standard U1800 subota i nedjelja 5-6.12.2026.",
+   "ort": "Zagreb, MO Janko Matko",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-05"
+  },
+  "1495787": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x60 min + 30 s na tah",
+   "bis": "2026-12-20",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1495787",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1495787.aspx?lan=0",
+    "website": "http://www.chessfm.cz"
+   },
+   "lon": null,
+   "name": "TALENT CUP 2026 - turnaj A",
+   "ort": "Resort Sepetná, Ostravice",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-18"
+  },
+  "1495788": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x45 min + 30 s na tah",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1495788",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1495788.aspx?lan=0",
+    "website": "http://www.chessfm.cz"
+   },
+   "lon": null,
+   "name": "TALENT CUP 2026 - turnaj B",
+   "ort": "Resort Sepetná, Ostravice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-18"
+  },
+  "1495789": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x45 min + 30 s na tah",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1495789",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1495789.aspx?lan=0",
+    "website": "http://www.chessfm.cz"
+   },
+   "lon": null,
+   "name": "TALENT CUP 2026 - turnaj C",
+   "ort": "Resort Sepetná, Ostravice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-18"
+  },
+  "1496560": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 15 minutes for game with 5 seconds increment from move 1",
+   "bis": "2027-01-03",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1496560",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1496560.aspx?lan=0",
+    "website": "https://chess.hu/2-bodva-kupa-csak-1900-elo-alatt-1-napos-rapid-ertekszamszerzo-"
+   },
+   "lon": null,
+   "name": "2. Bódva Kupa Edelény 1900 Élő alatt (1 napos rapid verseny, kiemelt díjazás)",
+   "ort": "Közösségi Ház (Bányász Klub), Edelény, Kenderföldi út 12/A.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-03"
   },
   "1496756": {
    "bedenkzeit": "schnell",
@@ -1644,12 +2165,12 @@
    "europa": true,
    "id": "cr:1496756",
    "land": "Tschechien",
-   "lat": null,
+   "lat": 50.0874654,
    "links": {
     "chessresults": "https://chess-results.com/tnr1496756.aspx?lan=0",
     "website": "http://www.skdp.cz/porg"
    },
-   "lon": null,
+   "lon": 14.4212535,
    "name": "Praha - 110. PORG Open A (U20) turnaj v rapid šachu (21.11.2026)",
    "ort": "Praha",
    "quelle": "chess-results",
@@ -1665,12 +2186,12 @@
    "europa": true,
    "id": "cr:1496757",
    "land": "Tschechien",
-   "lat": null,
+   "lat": 50.0874654,
    "links": {
     "chessresults": "https://chess-results.com/tnr1496757.aspx?lan=0",
     "website": "http://www.skdp.cz/porg"
    },
-   "lon": null,
+   "lon": 14.4212535,
    "name": "Praha - 110. PORG Open B (U10) turnaj v rapid šachu (21.11.2026)",
    "ort": "Praha",
    "quelle": "chess-results",
@@ -1678,27 +2199,48 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-21"
   },
-  "1497596": {
-   "bedenkzeit": "blitz",
-   "bedenkzeit_text": "3min + 2sek/Zug",
-   "bis": "2026-11-17",
+  "1496771": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "75 min+30s +15 min",
+   "bis": "2027-03-14",
    "elo": true,
    "europa": true,
-   "id": "cr:1497596",
-   "land": "Österreich",
+   "id": "cr:1496771",
+   "land": "Slowenien",
    "lat": null,
    "links": {
-    "ausschreibung": "https://styria.chess.at/wp-content/uploads/2026/11/Grazer-Herbstblitzcup-Ausschreibung_v2.pdf",
-    "chessresults": "https://chess-results.com/tnr1497596.aspx?lan=0",
-    "website": "http://styria.chess.at"
+    "chessresults": "https://chess-results.com/tnr1496771.aspx?lan=0",
+    "website": "https://chess-festival.com/bled/"
    },
    "lon": null,
-   "name": "Grazer Herbstblitzcup 2026 - Termin 4 (17.11.)",
-   "ort": "JÖSSAS, Stremayrgasse 15, 8010 Graz",
+   "name": "Bled Chess Festival 2027: Bled OPEN",
+   "ort": "Bled",
    "quelle": "chess-results",
-   "runden": "11",
+   "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
-   "von": "2026-11-17"
+   "von": "2027-03-08"
+  },
+  "1497596": null,
+  "1501105": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60+30",
+   "bis": "2026-11-27",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1501105",
+   "land": "Schweiz",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1501105.aspx?lan=0",
+    "website": "https://www.sprengschach.ch/stadtmeisterschaft"
+   },
+   "lon": null,
+   "name": "5.offene Wiler StadtM OPEN - 4.Runden",
+   "ort": "Kantonschule, Hubstrasse 75, 9500 Wil",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-10-30"
   },
   "1501741": {
    "bedenkzeit": "klassisch",
@@ -1708,18 +2250,100 @@
    "europa": true,
    "id": "cr:1501741",
    "land": "Schweiz",
-   "lat": null,
+   "lat": 46.4868659,
    "links": {
     "chessresults": "https://chess-results.com/tnr1501741.aspx?lan=0",
     "website": "http://www.schweizer-schach-senioren.ch"
    },
-   "lon": null,
+   "lon": 9.906546,
    "name": "SSS - Pontresina 2027",
    "ort": "Sporthotel Pontresina, Via Maistra 145, 7504 Pontresina, 081 838 94 00",
    "quelle": "chess-results",
    "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-09-06"
+  },
+  "1501963": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes with 30 second increment from move 1",
+   "bis": "2027-05-23",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1501963",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1501963.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "6th Csomos Janos Memorial A group 2027.05.19-23. Gyula",
+   "ort": "Gyula, Hotel Hőforrás",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-05-19"
+  },
+  "1501971": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes with 30 second increment from move 1",
+   "bis": "2027-05-23",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1501971",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1501971.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "6th Csomos Janos Memorial B group 2027.05.19-23. Gyula",
+   "ort": "Gyula, Hotel Hőforrás",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-05-19"
+  },
+  "1502185": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "40 moves in 90 min. plus 30 min., bonus 30s",
+   "bis": "2026-11-25",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1502185",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1502185.aspx?lan=0",
+    "website": "http://www.chess.cz/kraje/jmss/"
+   },
+   "lon": null,
+   "name": "Jihomoravský krajský přebor I. třídy 2026-2027",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-25"
+  },
+  "1502537": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60 minut + 30 sekund za tah na celou parti",
+   "bis": "2026-12-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1502537",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1502537.aspx?lan=0",
+    "website": "http://www.sachy-lysa.cz"
+   },
+   "lon": null,
+   "name": "Vánoční JOLYhraní 2026 - vážný turnaj v Lysé nad Labem na FIDE elo",
+   "ort": "Náměstí B. Hrozného 1737/31, Lysá nad Labem",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-27"
   },
   "1502582": {
    "bedenkzeit": "klassisch",
@@ -1749,13 +2373,13 @@
    "europa": true,
    "id": "cr:1503041",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.7752135,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_21_Ausschreibung_LM_Blitzschach_2026.pdf",
     "chessresults": "https://chess-results.com/tnr1503041.aspx?lan=0",
     "website": "https://bsbschach.club"
    },
-   "lon": null,
+   "lon": 16.3258026,
    "name": "4. Bad Sauerbrunner Blitzschach-Open mit Bgld. Blitzschach-LM 2026",
    "ort": "Genussquelle Rosalia, Schulstraße 14, 7202 Bad Sauerbrunn",
    "quelle": "chess-results",
@@ -1771,13 +2395,13 @@
    "europa": true,
    "id": "cr:1503048",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.7752135,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_21_Ausschreibung_Jugend_LM_Blitzschach_2026.pdf",
     "chessresults": "https://chess-results.com/tnr1503048.aspx?lan=0",
     "website": "http://www.bchess.at"
    },
-   "lon": null,
+   "lon": 16.3258026,
    "name": "Offene Bgld. Jugendlandesmeisterschaft im Blitzschach 2026 (U14-U18)",
    "ort": "Genussquelle Rosalia, Schulstraße 14, 7202 Bad Sauerbrunn",
    "quelle": "chess-results",
@@ -1793,19 +2417,61 @@
    "europa": true,
    "id": "cr:1503050",
    "land": "Österreich",
-   "lat": null,
+   "lat": 47.7752135,
    "links": {
     "ausschreibung": "https://chess-results.com/Download/Kalender/2026_11_21_Ausschreibung_Jugend_LM_Blitzschach_2026.pdf",
     "chessresults": "https://chess-results.com/tnr1503050.aspx?lan=0",
     "website": "http://www.bchess.at"
    },
-   "lon": null,
+   "lon": 16.3258026,
    "name": "Offene Bgld. Jugendlandesmeisterschaft im Blitzschach 2026 (U8-U12)",
    "ort": "Genussquelle Rosalia, Schulstraße 14, 7202 Bad Sauerbrunn",
    "quelle": "chess-results",
    "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-21"
+  },
+  "1503548": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "20min + 2sek/tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1503548",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1503548.aspx?lan=0",
+    "website": "https://skoazapraha.cz/"
+   },
+   "lon": null,
+   "name": "OAZA AKROP OPEN 2026 - 5. turnaj - FINÁLE",
+   "ort": "Jeremenkova 1835/106, Praha 4 - Krč",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1504571": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10'+5\"",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1504571",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1504571.aspx?lan=0",
+    "website": "https://skploce.weebly.com/"
+   },
+   "lon": null,
+   "name": "II. Memorijalni šahovski turnir \"Vebi Abazi\", 22.11.2026., Ploče",
+   "ort": "Hotel Tolero, Obala kralja Petra Krešimira IV. 1, Ploče",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
   },
   "1506718": {
    "bedenkzeit": "blitz",
@@ -1826,6 +2492,26 @@
    "runden": "26",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-28"
+  },
+  "1506974": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 minuta fiksnog vremena + dodatak od 3 sekunde za svaki završeni potez",
+   "bis": "2026-12-06",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1506974",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1506974.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Međunarodni brzopotezni turnir ‘’BROD-2026“ 06.12.2026",
+   "ort": "Dom HVIDRE, ul. Stjepana Marjanovića 2, Sl.Brod",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-06"
   },
   "1507401": {
    "bedenkzeit": "schnell",
@@ -1915,6 +2601,67 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-08"
   },
+  "1510353": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 minuta + 3 sekunde dodatka",
+   "bis": "2026-12-06",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1510353",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1510353.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "4. Otvoreni brzopotezni turnir \"Sv. Katarina\" A - seniorski turnir",
+   "ort": "Restoran \"Štefova klet\", Gornja Dubrava 21",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-06"
+  },
+  "1510357": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 minuta + 5 sekunde dodatka",
+   "bis": "2026-12-06",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1510357",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1510357.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "4. Otvoreni ubrzani kadetski turnir \"Sv. Katarina\" B - kadetski turnir",
+   "ort": "Restoran \"Štefova klet\", Gornja Dubrava 21",
+   "quelle": "chess-results",
+   "runden": "8",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-06"
+  },
+  "1511227": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes for game with 30 seconds increment from move 1",
+   "bis": "2027-01-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1511227",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1511227.aspx?lan=0",
+    "website": "https://sixdayschess.hu/"
+   },
+   "lon": null,
+   "name": "SixDays Budapest January 2027 Open norm Edition",
+   "ort": "Budapest, Falk Miksa utca 10.",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-25"
+  },
   "1511272": {
    "bedenkzeit": "",
    "bedenkzeit_text": "60",
@@ -2001,6 +2748,27 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-21"
   },
+  "1511882": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60+30",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1511882",
+   "land": "Italien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1511882.aspx?lan=0",
+    "website": "https://vesus.org/tournament/1791146065406_ed9f"
+   },
+   "lon": null,
+   "name": "Campionato sociale 2026",
+   "ort": "Roma",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-10-11"
+  },
   "1512776": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "3 Minuten + 2 Sekunden",
@@ -2023,6 +2791,68 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-19"
   },
+  "1513030": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x13 minut + 5s/tah",
+   "bis": "2026-11-20",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1513030",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513030.aspx?lan=0",
+    "website": "http://www.sachkobylisy.com"
+   },
+   "lon": null,
+   "name": "Přebor ZŠ Dolní Chabry 2026 I",
+   "ort": "Praha, ZŠ Dolní Chabry, místnost A306",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1513147": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 s/move",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513147",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513147.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Vlastimil Hort Tournament 2026",
+   "ort": "Hotel Don Giovanni Prague",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1513369": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min.",
+   "bis": "2027-10-05",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1513369",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513369.aspx?lan=0",
+    "website": "https://ss-zrakoplovna-rperesina-vg.skole.hr/"
+   },
+   "lon": null,
+   "name": "Prvenstvo Zrakoplovne tehničke škole R. Perešina, V. Gorica  za 2026. godinu",
+   "ort": "Rudolfa Fizira 6, Velika Gorica",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-10-05"
+  },
   "1513372": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "40/1,5 +30 sec/move  Rest/0,5 +30 sec/mov",
@@ -2043,6 +2873,7 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-02"
   },
+  "1513373": null,
   "1513374": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "40/1,5 +30 sec/move  Rest/0,5 +30 sec/mov",
@@ -2062,6 +2893,133 @@
    "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-02"
+  },
+  "1513378": null,
+  "1513382": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10 minutes for game with 5 seconds increment from move 1",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513382",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513382.aspx?lan=0",
+    "website": "https://chess.hu/xxv-kovacs-aladar-simon-jozsef-emlekverseny/"
+   },
+   "lon": null,
+   "name": "XXV. Kovács Aladár-Simon József Emlékverseny (\"A\" csoport, nyílt) (1 napos rapid verseny, kiemelt díjazás)",
+   "ort": "Don Bosco Sportközpont, Kazincbarcika, Szent Erzsebet setany 2.",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1513385": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10 minutes for game with 5 seconds increment from move 1",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513385",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513385.aspx?lan=0",
+    "website": "https://chess.hu/xxv-kovacs-aladar-simon-jozsef-emlekverseny/"
+   },
+   "lon": null,
+   "name": "XXV. Kovács Aladár-Simon József Emlékverseny (\"B\" csoport, 1900 Élő alatt) (1 napos rapid verseny, kiemelt díjazás)",
+   "ort": "Don Bosco Sportközpont, Kazincbarcika, Szent Erzsebet setany 2.",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1513387": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10 minutes for game with 5 seconds increment from move 1",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513387",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513387.aspx?lan=0",
+    "website": "https://chess.hu/xxv-kovacs-aladar-simon-jozsef-emlekverseny/"
+   },
+   "lon": null,
+   "name": "XXV. Kovács Aladár-Simon József Emlékverseny (\"C\" csoport, Élő nélkül) (1 napos rapid verseny, kiemelt díjazás)",
+   "ort": "Don Bosco Sportközpont, Kazincbarcika, Szent Erzsebet setany 2.",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1513487": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "Blitz: 3 minutes for game with 2 seconds increment from move 1",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513487",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513487.aspx?lan=0",
+    "website": "https://chess.hu/bors-sandor-emlekverseny-fide-villamverseny/"
+   },
+   "lon": null,
+   "name": "Bors Sándor Emlékverseny / FIDE villámverseny 2026.11.21. / 450.000 Ft össz. díjazás",
+   "ort": "Magyar Sakkszövetség, 1055 Budapest, Falk Miksa utca 10., 2. emelet",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1513524": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + lépésenként 3 mp",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513524",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513524.aspx?lan=0",
+    "website": "http://www.chess.hu"
+   },
+   "lon": null,
+   "name": "IV. Duna Wellness Hotel Rapid Sakkverseny, 300.000 Ft díjalappal! / 2026.11.22.",
+   "ort": "Duna Wellness Hotel, Baja, Szentháromság tér 6.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1513527": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + lépésenként 3 mp",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1513527",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1513527.aspx?lan=0",
+    "website": "http://www.chess.hu"
+   },
+   "lon": null,
+   "name": "IV. Duna Wellness Hotel Rapid Sakkverseny - B csoport 2026.11.22.",
+   "ort": "Duna Wellness Hotel, Baja, Szentháromság tér 6.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
   },
   "1513982": null,
   "1513984": {
@@ -2105,6 +3063,48 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-21"
   },
+  "1514086": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 min + 2 s/tah",
+   "bis": "2026-12-19",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1514086",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1514086.aspx?lan=0",
+    "website": "http://www.chess.cz"
+   },
+   "lon": null,
+   "name": "MČR v bleskovém šachu 2026  - Pardubický kraj open",
+   "ort": "Palác Pardubice",
+   "quelle": "chess-results",
+   "runden": "15",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
+  "1514088": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 min + 2 s/tah",
+   "bis": "2026-12-19",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1514088",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1514088.aspx?lan=0",
+    "website": "http://www.chess.cz"
+   },
+   "lon": null,
+   "name": "MČR žen v bleskovém šachu 2026  - Memoriál Marka Vokáče",
+   "ort": "Palác Pardubice",
+   "quelle": "chess-results",
+   "runden": "13",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
   "1514292": {
    "bedenkzeit": "",
    "bedenkzeit_text": "",
@@ -2124,6 +3124,69 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-22"
+  },
+  "1514474": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 minuty + 2 sekundy za každý provedený tah (FIDE Blitz)",
+   "bis": "2026-11-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1514474",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1514474.aspx?lan=0",
+    "website": "https://docs.google.com/document/d/1JumeEhAEmv2TqdrzXsSvB3SzojL1q3oji6xpSO2w0SQ/"
+   },
+   "lon": null,
+   "name": "2026 Prague Autumn Chess Festival - Blitz Championship",
+   "ort": "EA Hotel Populus, U Staré Cihelny 2182/11, 130 00 Praha 3 – Žižkov, Česko",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1514475": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12 minut + 3 sekundy za každý provedený tah",
+   "bis": "2026-11-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1514475",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1514475.aspx?lan=0",
+    "website": "https://docs.google.com/document/d/1nzj-MPROZiDCBqWZh4CvNc6pZMYA68eI93rOYhjm0hw/"
+   },
+   "lon": null,
+   "name": "2026 Prague Autumn Chess Festival - Rapid Championship",
+   "ort": "EA Hotel Populus, U Staré Cihelny 2182/11, 130 00 Praha 3 – Žižkov, Česko",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-26"
+  },
+  "1514476": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minut + 30 sekund za každý provedený tah",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1514476",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1514476.aspx?lan=0",
+    "website": "https://docs.google.com/document/d/1andsqD-kz_ogB9TmBSoSml49nNTNDacNn2sQ4tdie-s/"
+   },
+   "lon": null,
+   "name": "2026 Prague Autumn Chess Festival - Open Championship",
+   "ort": "EA Hotel Populus, U Staré Cihelny 2182/11, 130 00 Praha 3 – Žižkov, Česko",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-27"
   },
   "1514654": {
    "bedenkzeit": "blitz",
@@ -2166,6 +3229,27 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-08-10"
   },
+  "1514857": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90min/40moves+30min/end+30sec increment per move starting from move 1",
+   "bis": "2026-12-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1514857",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1514857.aspx?lan=0",
+    "website": "http://www.chess.hu"
+   },
+   "lon": null,
+   "name": "♚ II. Forintos Győző Memorial GM Tournament",
+   "ort": "MTK Sportpark 1087 Budapest, Kerepesi út 17.",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2026-12-14"
+  },
   "1515014": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90 min + 30 sec",
@@ -2186,6 +3270,68 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-21"
+  },
+  "1515034": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90min/40moves+30min/end+30sec increment per move starting from move 1",
+   "bis": "2026-12-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1515034",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1515034.aspx?lan=0",
+    "website": "http://www.chess.hu"
+   },
+   "lon": null,
+   "name": "♚ II. Forintos Győző Memorial IM Tournament",
+   "ort": "MTK Sportpark 1087 Budapest, Kerepesi út 17.",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2026-12-14"
+  },
+  "1515035": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90min/40moves+30min/end+30sec increment per move starting from move 1",
+   "bis": "2026-12-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1515035",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1515035.aspx?lan=0",
+    "website": "http://www.chess.hu"
+   },
+   "lon": null,
+   "name": "♚ II. Forintos Győző Memorial U2200 Tournament",
+   "ort": "MTK Sportpark 1087 Budapest, Kerepesi út 17.",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-14"
+  },
+  "1515893": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "2x10min",
+   "bis": "2026-12-19",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1515893",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1515893.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Vánoční turnaj v Práčích - první ročník",
+   "ort": "Kulturní dům v Práčích, okres Znojmo",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
   },
   "1516582": {
    "bedenkzeit": "blitz",
@@ -2346,12 +3492,12 @@
    "europa": true,
    "id": "cr:1518184",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1518184.aspx?lan=0",
     "website": "https://vesus.org/tournament/dhWtB69w"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "ROMA CITTA' APERTA 2026 RAPID",
    "ort": "ROMA",
    "quelle": "chess-results",
@@ -2367,18 +3513,102 @@
    "europa": true,
    "id": "cr:1518185",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1518185.aspx?lan=0",
     "website": "https://vesus.org/tournament/OyU0-sFL"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "ROMA CITTA' APERTA 2026 BLITZ",
    "ort": "ROMA",
    "quelle": "chess-results",
    "runden": "8",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-13"
+  },
+  "1518242": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s/move",
+   "bis": "2027-02-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1518242",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1518242.aspx?lan=0",
+    "website": "https://praguechessfestival.com/"
+   },
+   "lon": null,
+   "name": "Prague International Chess Festival 2027 - D",
+   "ort": "Don Giovanni Hotel, Praha",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-18"
+  },
+  "1518244": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h/40 + 30 min + 30 s/move",
+   "bis": "2027-02-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1518244",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1518244.aspx?lan=0",
+    "website": "https://praguechessfestival.com"
+   },
+   "lon": null,
+   "name": "Prague International Chess Festival 2027 - E1",
+   "ort": "Don Giovanni Hotel, Praha",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-02-18"
+  },
+  "1518246": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 1,5 h + 30 s/move",
+   "bis": "2027-02-25",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1518246",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1518246.aspx?lan=0",
+    "website": "https://praguechessfestival.com/"
+   },
+   "lon": null,
+   "name": "Prague International Chess Festival 2027 - F",
+   "ort": "Don Giovanni Hotel, Praha",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-21"
+  },
+  "1518881": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60-60 min. + 30 sec-/move",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1518881",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1518881.aspx?lan=0",
+    "website": "https://chess.hu/tfse-u2000/"
+   },
+   "lon": null,
+   "name": "TFSE Racka U2000 5 fordulós értékszámszerző svájci verseny 2026. november 28-29.",
+   "ort": "1123 Budapest, Alkotás utca 48. Magyar Testnevelési és Sporttudományi Egyetem",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
   },
   "1518934": {
    "bedenkzeit": "klassisch",
@@ -2401,6 +3631,131 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-19"
   },
+  "1519020": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 minut + 5 sec a tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1519020",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1519020.aspx?lan=0",
+    "website": "http://postoupky.wz.cz:8080/"
+   },
+   "lon": null,
+   "name": "Grand Prix Zlínského Kraje v rapid šachu mládeže Kategorie U14",
+   "ort": "Bezměrov",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1519027": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 minut + 5 sec a tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1519027",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1519027.aspx?lan=0",
+    "website": "http://postoupky.wz.cz:8080/"
+   },
+   "lon": null,
+   "name": "Grand Prix Zlínského Kraje v rapid šachu mládeže Kategorie U12",
+   "ort": "Bezměrov",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1519035": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 minut + 5 sec a tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1519035",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1519035.aspx?lan=0",
+    "website": "http://postoupky.wz.cz:8080/"
+   },
+   "lon": null,
+   "name": "Grand Prix Zlínského Kraje v rapid šachu mládeže Kategorie U10",
+   "ort": "Bezměrov",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1520101": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90min+30sec increment per move starting from move 1",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1520101",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1520101.aspx?lan=0",
+    "website": "https://chess.hu/wellness-chess-tour-gp16-zaro-rendezveny-esztergom-hotel-bellev"
+   },
+   "lon": null,
+   "name": "Wellness Chess Tour GP18 évzáró esemény Esztergom Hotel Bellevue*** december 17-20.",
+   "ort": "Esztergom, Őrtorony u. 49, 2500",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-17"
+  },
+  "1521666": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5s",
+   "bis": "2027-02-07",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1521666",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1521666.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "PSB-Schnellschach-Grand-Prix Landau",
+   "ort": "Landau in der Pfalz",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-07"
+  },
+  "1521776": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90min + 30s/move",
+   "bis": "2026-12-13",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1521776",
+   "land": "Österreich",
+   "lat": null,
+   "links": {
+    "ausschreibung": "https://chess-results.com/Download/Kalender/2026_12_13_Wiener%20Adventopen.pdf",
+    "chessresults": "https://chess-results.com/tnr1521776.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Wiener Advent Open 2026",
+   "ort": "Haus des Schachsports, Spielmannplatz 1, 1020 Wien",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-07"
+  },
   "1521912": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "40/75 Min.+30s/Zug  15 Min. Rest+30s/Zug",
@@ -2420,6 +3775,69 @@
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-20"
+  },
+  "1522365": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3min + 2sec/tah",
+   "bis": "2026-11-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1522365",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1522365.aspx?lan=0",
+    "website": "https://prazskysach.cz/"
+   },
+   "lon": null,
+   "name": "PSS KP 2026 v bleskovém šachu jednotlivců",
+   "ort": "SK OAZA, Jeremenkova 106, Praha 4-Krč, bus zastávka Na Strži",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-30"
+  },
+  "1522848": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 s/tah",
+   "bis": "2026-12-03",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1522848",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1522848.aspx?lan=0",
+    "website": "http://www.sachkobylisy.com"
+   },
+   "lon": null,
+   "name": "Přebor Prahy 8 škol 2026 - kategorie I",
+   "ort": "TJ Kobylisy, U Školské zahrady 9, Praha 8",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-03"
+  },
+  "1522849": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 s/tah",
+   "bis": "2026-12-03",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1522849",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1522849.aspx?lan=0",
+    "website": "http://www.sachkobylisy.com"
+   },
+   "lon": null,
+   "name": "Přebor Prahy 8 škol 2026 - kategorie II",
+   "ort": "TJ Kobylisy, U Školské zahrady 9, Praha 8",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-03"
   },
   "1522941": {
    "bedenkzeit": "klassisch",
@@ -2441,6 +3859,27 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-10-04"
+  },
+  "1523072": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minut + 30 sekund na tah",
+   "bis": "2027-03-14",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1523072",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1523072.aspx?lan=0",
+    "website": "https://sachyvyskov.cz/"
+   },
+   "lon": null,
+   "name": "Okresní přebor Vyškov",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-22"
   },
   "1523391": {
    "bedenkzeit": "blitz",
@@ -2492,12 +3931,12 @@
    "europa": true,
    "id": "cr:1523734",
    "land": "Italien",
-   "lat": null,
+   "lat": 41.8933203,
    "links": {
     "chessresults": "https://chess-results.com/tnr1523734.aspx?lan=0",
     "website": "https://vesus.org/tournament/Lgw2aYq8"
    },
-   "lon": null,
+   "lon": 12.4829321,
    "name": "Master - ROMA CITTA' APERTA - 7° International Chess Festival 2026",
    "ort": "ROMA",
    "quelle": "chess-results",
@@ -2525,6 +3964,27 @@
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-28"
+  },
+  "1524193": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "4-4 perc, +3 másodperc lépésenként",
+   "bis": "2026-12-12",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1524193",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1524193.aspx?lan=0",
+    "website": "https://chess.hu/miklos-napi-villamverseny-kaposztas-miklos-emlekere-2/"
+   },
+   "lon": null,
+   "name": "Miklós-napi villámverseny",
+   "ort": "Budapest",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-12"
   },
   "1525454": {
    "bedenkzeit": "blitz",
@@ -2587,6 +4047,27 @@
    "ort": "Zürich",
    "quelle": "chess-results",
    "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-28"
+  },
+  "1526439": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 Minuten und 2 Sekunden",
+   "bis": "2026-12-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1526439",
+   "land": "Schweiz",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1526439.aspx?lan=0",
+    "website": "http://www.weihnachtsopen.ch"
+   },
+   "lon": null,
+   "name": "50. Zürcher Weihnachtsopen Blitzturnier",
+   "ort": "Zürich",
+   "quelle": "chess-results",
+   "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-28"
   },
@@ -2674,6 +4155,27 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-29"
   },
+  "1528075": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90min+30sec increment per move starting from move 1",
+   "bis": "2026-12-13",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1528075",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1528075.aspx?lan=0",
+    "website": "https://wellnesschesstour.com/"
+   },
+   "lon": null,
+   "name": "Wellness Chess Tour GP17 AquaMed-Hotel**** - Harkany 2026. 12. 10-13",
+   "ort": "Harkany",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-10"
+  },
   "1528348": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90min / 40 moves +  30min to finish  +30s/move from start",
@@ -2733,6 +4235,27 @@
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-02-19"
+  },
+  "1528379": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15min + 3s/tah",
+   "bis": "2026-12-05",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1528379",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1528379.aspx?lan=0",
+    "website": "http://www.sachovy-web-velkych-losin.webnode.cz"
+   },
+   "lon": null,
+   "name": "O losinského kapra 2026",
+   "ort": "Kouty nad Desnou",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-05"
   },
   "1528856": {
    "bedenkzeit": "schnell",
@@ -2817,6 +4340,190 @@
    "typ": "KO-System",
    "von": "2026-11-23"
   },
+  "1529184": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 min + 5 sec",
+   "bis": "2026-12-19",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529184",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529184.aspx?lan=0",
+    "website": "http://www.hurrasakk.hu"
+   },
+   "lon": null,
+   "name": "\"10 város\" / B2-verseny / Tapolcai Évzáró /  A-csoport",
+   "ort": "Tamási Áron Művelődési Központ, Tapolca, Kisfaludy Sándor utca 2-6.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
+  "1529185": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 min + 5 sec",
+   "bis": "2026-12-19",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529185",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529185.aspx?lan=0",
+    "website": "http://www.hurrasakk.hu"
+   },
+   "lon": null,
+   "name": "\"10 város\" / B2-verseny / Tapolcai Évzáró /  B-csoport",
+   "ort": "Tamási Áron Művelődési Központ, Tapolca, Kisfaludy Sándor utca 2-6.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
+  "1529187": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 min + 5 sec",
+   "bis": "2026-12-19",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529187",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529187.aspx?lan=0",
+    "website": "http://www.hurrasakk.hu"
+   },
+   "lon": null,
+   "name": "\"10 város\" / B2-verseny / Tapolcai Évzáró /  C-csoport",
+   "ort": "Tamási Áron Művelődési Központ, Tapolca, Kisfaludy Sándor utca 2-6.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
+  "1529346": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10min + 10s/tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1529346",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529346.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "VĚŽ OPEN PODZIMNÍ TURNAJ A",
+   "ort": "Vodárenská Věž Letná, Na Výšinách 1000/1 Praha 7",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1529350": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10min + 10s/tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1529350",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529350.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "VĚŽ OPEN PODZIMNÍ TURNAJ B",
+   "ort": "Vodárenská Věž Letná, Na Výšinách 1000/1 Praha 7",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1529405": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes for game with 30 seconds increment from move 1",
+   "bis": "2027-01-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529405",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529405.aspx?lan=0",
+    "website": "https://sixdayschess.hu/"
+   },
+   "lon": null,
+   "name": "SixDays Budapest January 2027 U2250",
+   "ort": "Budapest, Falk Miksa utca 10.",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-25"
+  },
+  "1529515": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-09-04",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529515",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529515.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Zadar Chess Festival, C-turnir, Zadar, 28.08.-04.09.2027.",
+   "ort": "Zadar, Centar za mlade Zadar, Stjepana Radića 11c",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-08-28"
+  },
+  "1529516": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-09-04",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529516",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529516.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Zadar Chess Festival, B-turnir, Zadar, 28.08.-04.09.2027.",
+   "ort": "Zadar, Centar za mlade Zadar, Stjepana Radića 11c",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-08-28"
+  },
+  "1529517": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-09-04",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1529517",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529517.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Zadar Chess Festival, A-turnir, Zadar, 28.08.-04.09.2027.",
+   "ort": "Zadar, Centar za mlade Zadar, Stjepana Radića 11c",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-08-28"
+  },
   "1529637": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90 Min./40 Zuege +30 Min. +30Sek. ab dem 1. Zug",
@@ -2846,18 +4553,99 @@
    "europa": true,
    "id": "cr:1529641",
    "land": "Deutschland",
-   "lat": null,
+   "lat": 49.5353466,
    "links": {
     "chessresults": "https://chess-results.com/tnr1529641.aspx?lan=0",
     "website": "http://www.sk-frankenthal.de/weihnachtsopen"
    },
-   "lon": null,
+   "lon": 8.3541391,
    "name": "11. Frankenthaler Weihnachtsopen C-Turnier",
    "ort": "Frankenthal",
    "quelle": "chess-results",
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-27"
+  },
+  "1529790": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 minut + 5 vteřin / tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1529790",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529790.aspx?lan=0",
+    "website": "https://www.orel.cz/"
+   },
+   "lon": null,
+   "name": "Mistrovstvi Orla 2026",
+   "ort": "Brno - Obřany, Hlaváčova 404/20",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1529858": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "All moves in 15 min",
+   "bis": "2026-11-25",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1529858",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529858.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Prebor skol v sachu 2026, 1. stupen ZS Okresni kolo Breclav",
+   "ort": "Břeclav",
+   "quelle": "chess-results",
+   "runden": "3",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-25"
+  },
+  "1529859": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "All moves in 15 min",
+   "bis": "2026-11-25",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1529859",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529859.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Prebor skol v sachu 2026, 2. stupen ZS Okresni kolo Breclav",
+   "ort": "Břeclav",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "von": "2026-11-25"
+  },
+  "1529860": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "All moves in 15 min",
+   "bis": "2026-11-25",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1529860",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1529860.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Prebor skol v sachu 2026, 2. stupen ZS Okresni kolo Breclav",
+   "ort": "Břeclav",
+   "quelle": "chess-results",
+   "runden": "1",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-25"
   },
   "1530124": {
    "bedenkzeit": "blitz",
@@ -2901,6 +4689,26 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-02-05"
   },
+  "1530446": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "45 minuta fiksnog vremena + dodatak od 10 sekundi za svaki završeni potez, po obje igračice",
+   "bis": "2026-12-06",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1530446",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1530446.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "28_ženski šahovski turnir \"Čarobni prsten\" _otvoreno pojedinačno prvenstvo OBŽ",
+   "ort": "Valpovo, hotel \"Villa Valpovo\"",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-04"
+  },
   "1530935": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90min+30sec pro Zug",
@@ -2943,6 +4751,46 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-04-16"
   },
+  "1531162": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes with 30 second increment from move 1",
+   "bis": "2026-12-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1531162",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1531162.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XIII. Karácsonyi Open",
+   "ort": "Budapest, Falk Miksa utca 10.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-27"
+  },
+  "1531163": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes with 30 second increment from move 1",
+   "bis": "2026-12-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1531163",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1531163.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XIII. Karácsonyi Open B csoport U1800",
+   "ort": "Budapest, Falk Miksa utca 10.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-27"
+  },
   "1531188": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "15 min + 5s",
@@ -2962,6 +4810,66 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-19"
+  },
+  "1531190": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5s",
+   "bis": "2027-04-24",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1531190",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1531190.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "PSB-Schnellschach-Grand-Prix Pirmasens",
+   "ort": "Hauenstein",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-04-24"
+  },
+  "1531193": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5s",
+   "bis": "2027-06-05",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1531193",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1531193.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "PSB-Schnellschach-Grand-Prix Hauenstein",
+   "ort": "Hauenstein",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-06-05"
+  },
+  "1531197": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 minut + 5 sekund",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1531197",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1531197.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "BéBéčko Junior Rapid",
+   "ort": "Bowling Brno",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
   },
   "1531597": {
    "bedenkzeit": "klassisch",
@@ -3047,25 +4955,109 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-18"
   },
-  "1532800": {
+  "1532198": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 70 minutes with 30 second increment from move 1",
+   "bis": "2027-01-17",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1532198",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1532198.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XXI. Prémium Évadnyitó Sakkverseny 2027. január 15-17.",
+   "ort": "Budapest, Váci út 116-118.",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-15"
+  },
+  "1532800": null,
+  "1532824": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "12 min. + 3 sec.",
-   "bis": "2026-11-17",
+   "bis": "2026-12-12",
    "elo": false,
    "europa": true,
-   "id": "cr:1532800",
+   "id": "cr:1532824",
    "land": "Tschechien",
    "lat": null,
    "links": {
-    "chessresults": "https://chess-results.com/tnr1532800.aspx?lan=0"
+    "chessresults": "https://chess-results.com/tnr1532824.aspx?lan=0"
    },
    "lon": null,
-   "name": "Svatomartinský rapid Hotel Beskyd 2026",
-   "ort": "Trojanovice",
+   "name": "Vánoční rapid Radegastovna Frenštát 2026",
+   "ort": "Frenštát p.R.",
    "quelle": "chess-results",
-   "runden": "9",
+   "runden": "10",
    "typ": "Einzel-Schweizersystem Turniere",
-   "von": "2026-11-17"
+   "von": "2026-12-12"
+  },
+  "1532840": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes for game with 30 seconds increment from move 1",
+   "bis": "2027-02-05",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1532840",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1532840.aspx?lan=0",
+    "website": "https://sixdayschess.hu/"
+   },
+   "lon": null,
+   "name": "SixDays February 2027 - GM",
+   "ort": "Budapest",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-31"
+  },
+  "1532841": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes for game with 30 seconds increment from move 1",
+   "bis": "2027-02-05",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1532841",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1532841.aspx?lan=0",
+    "website": "https://sixdayschess.hu/"
+   },
+   "lon": null,
+   "name": "SixDays February 2027 - IM",
+   "ort": "Budapest",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-31"
+  },
+  "1532842": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90 minutes for game with 30 seconds increment from move 1",
+   "bis": "2027-02-05",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1532842",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1532842.aspx?lan=0",
+    "website": "https://sixdayschess.hu/"
+   },
+   "lon": null,
+   "name": "SixDays February 2027 - U2250",
+   "ort": "Budapest",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-31"
   },
   "1532844": {
    "bedenkzeit": "",
@@ -3193,6 +5185,26 @@
    "typ": "Mannschafts-Rundenturniere",
    "von": "2026-11-21"
   },
+  "1532925": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90x90min/40moves + 30sec/move + 30min after 40 moves",
+   "bis": "2027-03-14",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1532925",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1532925.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Baranya Megyei I.o. Csapatbajnokság",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-22"
+  },
   "1532934": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "R1-R3: 20 min + 5 Sek/Zug; R4-R7: 90 min + 30 Sek/Zug",
@@ -3297,6 +5309,26 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-23"
   },
+  "1533219": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "2 x 5 minut",
+   "bis": "2026-12-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1533219",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533219.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "43. ročník Memoriálu Stanislava Vojty Vlašim 26.12.2026",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "12",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-26"
+  },
   "1533260": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90 Min.+30 Sek/Zug",
@@ -3316,6 +5348,47 @@
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-03-19"
+  },
+  "1533284": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-09-04",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1533284",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533284.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Zadar Chess Festival, A-turnir, Zadar, 28.08.-04.09.2027.",
+   "ort": "Zadar, Centar za mlade Zadar, Stjepana Radića 11c",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-08-28"
+  },
+  "1533354": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 min + 5 sek / Zug",
+   "bis": "2026-11-27",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1533354",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533354.aspx?lan=0",
+    "website": "https://www.schachklub-freiburgwest.de/"
+   },
+   "lon": null,
+   "name": "1. Rapid-Grand-Prix-Turnier des Schachbezirk Freiburg 2026/27",
+   "ort": "Freiburg im Breisgau",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-27"
   },
   "1533371": {
    "bedenkzeit": "schnell",
@@ -3357,6 +5430,48 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-28"
+  },
+  "1533402": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "10 - 10 perc",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1533402",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533402.aspx?lan=0",
+    "website": "https://chess.hu/xvii-gazdagret-kupa/"
+   },
+   "lon": null,
+   "name": "XVII. Gazdagrét Kupa A csoport 2026.11.21. 14 óra",
+   "ort": "Bpest, XI. kerület, Törökugrató u. 9. - Gazdagréti Közösségi Ház",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1533403": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "10 - 10 perc",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1533403",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533403.aspx?lan=0",
+    "website": "http://www.bgsc.hu"
+   },
+   "lon": null,
+   "name": "XVII. Gazdagrét Kupa B csoport 2026.11.21. 14 óra",
+   "ort": "Bpest, XI. kerület, Törökugrató u. 9. - Gazdagréti Közösségi Ház",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
   },
   "1533545": {
    "bedenkzeit": "klassisch",
@@ -3441,6 +5556,26 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-27"
+  },
+  "1533672": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid 2x15 min",
+   "bis": "2026-11-26",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1533672",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533672.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Nyugdíjas Klubtagok XXI. Országos Egyéni és Csapat Sakkbajnoksága (2026)",
+   "ort": "Budapest, FalkM u.10",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-26"
   },
   "1533709": {
    "bedenkzeit": "klassisch",
@@ -3527,6 +5662,47 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-12"
   },
+  "1533773": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x  20 min",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1533773",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533773.aspx?lan=0",
+    "website": "https://logikusakk.hu/xiii-bukkos-akos-chess-memorial-2026/"
+   },
+   "lon": null,
+   "name": "XIII. Bükkös Ákos Chess Memorial A csoport",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1533875": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min. + 5s za tah",
+   "bis": "2027-01-01",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1533875",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533875.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Krajský přebor starších žáků Zlínského kraje",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "von": "2027-01-01"
+  },
   "1533966": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90 min for first 40 moves and 15 min. for the rest of the game with 30 sec. increment from move 1",
@@ -3548,6 +5724,191 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-27"
   },
+  "1534163": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec/move",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534163",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534163.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "10 város a Magyar Sakkozásért - Salgótarján \"A\" csoport - OPEN",
+   "ort": "3104 Salgótarján, Gorkij krt. 1.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1534168": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec/move",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1534168",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534168.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "10 város a Magyar Sakkozásért - Salgótarján \"B\" csoport - U1600",
+   "ort": "3104 Salgótarján, Gorkij krt. 1.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1534169": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec/move",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1534169",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534169.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "10 város a Magyar Sakkozásért - Salgótarján \"C\" csoport - U10/U600 HuRRa",
+   "ort": "3104 Salgótarján, Gorkij krt. 1.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1534200": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-02-07",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534200",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534200.aspx?lan=0",
+    "website": "https://newzgclassic.com/ "
+   },
+   "lon": null,
+   "name": "New Zagreb Classic 2027 - Open E",
+   "ort": "Zagreb, hotel Sheraton, Kneza Borne 2",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-05"
+  },
+  "1534201": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-02-07",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534201",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534201.aspx?lan=0",
+    "website": "https://newzgclassic.com/ "
+   },
+   "lon": null,
+   "name": "New Zagreb Classic 2027 - Open D",
+   "ort": "Zagreb, hotel Sheraton, Kneza Borne 2",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-05"
+  },
+  "1534202": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-02-07",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534202",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534202.aspx?lan=0",
+    "website": "https://newzgclassic.com/ "
+   },
+   "lon": null,
+   "name": "New Zagreb Classic 2027 - Open C",
+   "ort": "Zagreb, hotel Sheraton, Kneza Borne 2",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-05"
+  },
+  "1534203": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-02-07",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534203",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534203.aspx?lan=0",
+    "website": "https://newzgclassic.com/ "
+   },
+   "lon": null,
+   "name": "New Zagreb Classic 2027 - Open B",
+   "ort": "Zagreb, hotel Sheraton, Kneza Borne 2",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-05"
+  },
+  "1534204": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-02-07",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534204",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534204.aspx?lan=0",
+    "website": "https://newzgclassic.com/ "
+   },
+   "lon": null,
+   "name": "New Zagreb Classic 2027 - Open A",
+   "ort": "Zagreb, hotel Sheraton, Kneza Borne 2",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-02-05"
+  },
+  "1534348": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 min + 3 sec dodatka za svaki odigrani potez",
+   "bis": "2027-01-17",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534348",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534348.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "7.  Međunarodni turnir memorijal \"FRANJO ZEČEVIĆ\" 2027. Drenovci 17.01.2027",
+   "ort": "Dom kulture, Toljani 1, Drenovci",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-17"
+  },
   "1534719": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90 Minuten für die ersten 40 Züge, danach 30 Minuten für den Rest, 30 Sekunden Bonus vom ersten Zug",
@@ -3567,6 +5928,69 @@
    "runden": "4",
    "typ": "KO-System",
    "von": "2026-11-23"
+  },
+  "1534833": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 min. / 40 move + 30 min. to the end of the lot + 30 sec per move",
+   "bis": "2026-12-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1534833",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534833.aspx?lan=0",
+    "website": "http://www.teplicechessclub.cz"
+   },
+   "lon": null,
+   "name": "TEPLICE CHESS CLUB Championship 2026",
+   "ort": "TEPLICE CHESS CLUB, Masarykova 1233/82, 415 01 Teplice",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2026-12-01"
+  },
+  "1534992": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x  20 min",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1534992",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1534992.aspx?lan=0",
+    "website": "https://logikusakk.hu/xiii-bukkos-akos-chess-memorial-2026/"
+   },
+   "lon": null,
+   "name": "XIII. Bükkös Ákos Chess Memorial E csoport",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1535108": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 perc játékosonként, lépésenként 5 másodperc bónuszidővel",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1535108",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1535108.aspx?lan=0",
+    "website": "https://franka-egom.ferences.eu/"
+   },
+   "lon": null,
+   "name": "II. Szent Bonaventura Diákolimpiai Gyakorlóverseny A Barátoknál",
+   "ort": "2500 Esztergom, Kossuth Lajos utca 27-31.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
   },
   "1535148": {
    "bedenkzeit": "klassisch",
@@ -3694,6 +6118,26 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-19"
   },
+  "1535538": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x 60min + 30s/tah",
+   "bis": "2026-12-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1535538",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1535538.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "4. ročník O Zlaté prasátko",
+   "ort": "Jídelna ZŠ Kollárova 2596/4 Prostějov",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-27"
+  },
   "1535666": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90'  + 30''",
@@ -3735,6 +6179,46 @@
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-09-03"
+  },
+  "1535719": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 15 minut + 5 s. za provedený tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1535719",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1535719.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "O brankovického krále - mladší (U08, U10)",
+   "ort": "Brankovice",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1535720": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 15 minut + 5 s. za provedený tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1535720",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1535720.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "O brankovického krále - starší (U12, U14)",
+   "ort": "Brankovice",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
   },
   "1535869": {
    "bedenkzeit": "klassisch",
@@ -3862,6 +6346,27 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-20"
   },
+  "1536748": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12 min + 3 s/tah",
+   "bis": "2026-12-19",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1536748",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1536748.aspx?lan=0",
+    "website": "https://www.sachyorlova.cz/"
+   },
+   "lon": null,
+   "name": "K2 Stavební CUP",
+   "ort": "Dolní Lutyně 735 53",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
   "1536757": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90' + 30\" each move",
@@ -3969,6 +6474,88 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-18"
   },
+  "1536817": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90+30",
+   "bis": "2026-12-15",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1536817",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1536817.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Pojedinačno prvenstvo ŠK Travno",
+   "ort": "Zagreb",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-04"
+  },
+  "1536866": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90+30",
+   "bis": "2026-12-15",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1536866",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1536866.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Pojedinačno prvenstvo ŠK Travno 2026",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-04"
+  },
+  "1536929": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10-10 min + 5 sec/move",
+   "bis": "2026-12-05",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1536929",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1536929.aspx?lan=0",
+    "website": "https://chess.hu/tfse-racka-rapid-21/"
+   },
+   "lon": null,
+   "name": "TFSE Racka Rapid FIDE rapid verseny, december 5.",
+   "ort": "1123 Bp. Alkostás utca 48. Magyar Testnevelési és Sporttudományi Egyetem",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-05"
+  },
+  "1537121": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "10 min",
+   "bis": "2026-12-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1537121",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1537121.aspx?lan=0",
+    "website": "https://sah-mladost.hr"
+   },
+   "lon": null,
+   "name": "Tradicionalni božićni šahovski turnir u Varaždinskim Toplicama, 26.12.2026.",
+   "ort": "Varaždinske Toplice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-26"
+  },
   "1537348": {
    "bedenkzeit": "",
    "bedenkzeit_text": "",
@@ -4011,6 +6598,46 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-03-06"
   },
+  "1537484": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 minuta +3 sekunde po igraču",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1537484",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1537484.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "25. ŠAHOVSKI TURNIR U KRALJEVICI    „ SVETI NIKOLA “",
+   "ort": "Hotel Kraljevica, Strossmayerova 33, Kraljevica",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-29"
+  },
+  "1537485": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 minuta +3 sekunde po igraču",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1537485",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1537485.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "25. ŠAHOVSKI TURNIR U KRALJEVICI    „ SVETI NIKOLA “ - kadetski turnir",
+   "ort": "Hotel Kraljevica, Strossmayerova 33, Kraljevica",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-29"
+  },
   "1537695": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "15min",
@@ -4052,25 +6679,111 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-27"
   },
-  "1538043": {
+  "1537801": {
    "bedenkzeit": "schnell",
-   "bedenkzeit_text": "2x15+5 vteřin na tah",
-   "bis": "2026-11-17",
+   "bedenkzeit_text": "15 min+5 sec",
+   "bis": "2026-11-28",
    "elo": false,
    "europa": true,
-   "id": "cr:1538043",
-   "land": "Tschechien",
+   "id": "cr:1537801",
+   "land": "Ungarn",
    "lat": null,
    "links": {
-    "chessresults": "https://chess-results.com/tnr1538043.aspx?lan=0"
+    "chessresults": "https://chess-results.com/tnr1537801.aspx?lan=0",
+    "website": "http://csongradcsanadsakk.hu"
    },
    "lon": null,
-   "name": "11. ročník Frýdlant Open 2026",
-   "ort": "Beseda Frýdlant, Tyršova 927, 464 01 Frýdlant",
+   "name": "„10 Város a Magyar Sakkozásért\" „B\" csoport 2026.11.28. Felnőtt és ifjúsági rapid sakk versenysorozat-3. állomás Szentes",
+   "ort": "Horváth Mihály Gimnázium 6600 Szentes, Szent Imre Herceg utca 2.",
    "quelle": "chess-results",
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
-   "von": "2026-11-17"
+   "von": "2026-11-28"
+  },
+  "1538043": null,
+  "1538075": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12 min. + 3 sek/na tah pro každého",
+   "bis": "2026-12-19",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538075",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538075.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Zlínský řapid pro mládež 2026-3.turnaj",
+   "ort": "ZŠ Zlín-Malenovice, Komenského 78",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-19"
+  },
+  "1538246": null,
+  "1538255": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15min",
+   "bis": "2026-11-25",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538255",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538255.aspx?lan=0",
+    "website": "http://www.sachyznojmo.cz"
+   },
+   "lon": null,
+   "name": "Přebor škol okresu Znojmo 2026 - kategorie \"A\" první stupeň ZŠ",
+   "ort": "Budova Obchodní akademie, Přemyslovců 4, Znojmo",
+   "quelle": "chess-results",
+   "runden": "3",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-25"
+  },
+  "1538256": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15min",
+   "bis": "2026-11-25",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538256",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538256.aspx?lan=0",
+    "website": "http://www.sachyznojmo.cz"
+   },
+   "lon": null,
+   "name": "Přebor škol okresu Znojmo 2026 - kategorie \"B\" druhý stupeň ZŠ",
+   "ort": "Budova Obchodní akademie, Přemyslovců 4, Znojmo",
+   "quelle": "chess-results",
+   "runden": "1",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-25"
+  },
+  "1538257": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15min",
+   "bis": "2026-12-02",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538257",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538257.aspx?lan=0",
+    "website": "http://www.sachyznojmo.cz"
+   },
+   "lon": null,
+   "name": "Přebor škol okresu Znojmo 2026 - kategorie \"C\" Střední školy",
+   "ort": "Budova Obchodní akademie, Přemyslovců 4, Znojmo",
+   "quelle": "chess-results",
+   "runden": "6",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-12-02"
   },
   "1538262": {
    "bedenkzeit": "",
@@ -4132,6 +6845,47 @@
    "ort": "",
    "quelle": "chess-results",
    "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-29"
+  },
+  "1538288": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60' + 30''",
+   "bis": "2027-01-17",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1538288",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538288.aspx?lan=0",
+    "website": "https://www.skkrapina"
+   },
+   "lon": null,
+   "name": "15. open Krapina 15.-17.1.2027.",
+   "ort": "Vatrogasni dom, Zagrebačka 1, Krapina",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-15"
+  },
+  "1538376": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sec ( Bronstein)",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1538376",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538376.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Advent u Mariji Bistrici",
+   "ort": "Marija Bistrica",
+   "quelle": "chess-results",
+   "runden": "11",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-29"
   },
@@ -4197,6 +6951,46 @@
    "typ": "Einzel-Rundenturniere",
    "von": "2027-01-14"
   },
+  "1538611": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 12 minut + 5 vteřin / tah",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538611",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538611.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Klubový přebor mládeže TJ Slovan Varnsdorf v rapidu",
+   "ort": "DDM Varnsdorf, Otáhalova 1260",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1538701": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-18",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538701",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538701.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "FRI šahovski turnir",
+   "ort": "FRI",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-18"
+  },
   "1538714": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "3min + 2s/move",
@@ -4218,6 +7012,130 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-20"
   },
+  "1538739": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7'+3\" - blitz",
+   "bis": "2026-12-13",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1538739",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538739.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XIII. Memorijal Mišela Bertusija - A turnir",
+   "ort": "Križevci, Restoran & catering \"Chill Out\", Trg Svetog Florijana 17",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-13"
+  },
+  "1538744": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7'+3\" - blitz",
+   "bis": "2026-12-13",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1538744",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538744.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XIII. Memorijal Mišela Bertusija - B turnir",
+   "ort": "Križevci, Restoran & catering \"Chill Out\", Trg Svetog Florijana 17",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-13"
+  },
+  "1538814": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538814",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538814.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely X-A csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1538819": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538819",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538819.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely B-csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1538827": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538827",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538827.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely D-csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1538828": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1538828",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1538828.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely G- csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
   "1538863": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "10 Minuten + 5 Sekunden pro Zug",
@@ -4238,6 +7156,27 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-03-14"
+  },
+  "1539112": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min. + 5 seconds increment from move 1",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539112",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539112.aspx?lan=0",
+    "website": "http://www.teplicechessclub.cz"
+   },
+   "lon": null,
+   "name": "VÁNOČNÍ ŠACHOVÝ TURNAJ DDM Teplice & TCC [JUNIOŘI]  - FIDE RAPID",
+   "ort": "Restaurace ALADDIN, Masarykova tř. 159/72, 415 01 Teplice (salónek)",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-20"
   },
   "1539114": {
    "bedenkzeit": "schnell",
@@ -4279,6 +7218,29 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-26"
   },
+  "1539154": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min. + 3 seconds increment from move 1",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539154",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539154.aspx?lan=0",
+    "website": "http://www.teplicechessclub.cz"
+   },
+   "lon": null,
+   "name": "VÁNOČNÍ ŠACHOVÝ TURNAJ TEPLICE CHESS CLUB 2026  - FIDE RAPID",
+   "ort": "Restaurace ALADDIN, Masarykova tř. 159/72, 415 01 Teplice (salónek)",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-20"
+  },
+  "1539156": null,
+  "1539162": null,
   "1539280": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90min+30min+30sec pro Zug",
@@ -4365,6 +7327,674 @@
    "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-08-14"
+  },
+  "1539462": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "45+30",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1539462",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539462.aspx?lan=0",
+    "website": "http://zelenielf.si"
+   },
+   "lon": null,
+   "name": "Elfov Pokal 1. turnir – Odprti kvalifikacijski turnir za vse ljubitelje šaha",
+   "ort": "Kotnikova ulica 5, 1000, Ljubljana.",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1539494": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539494",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539494.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno ubrzano prvenstvo Hrvatske za mlade za 2026. :: dječaci U08 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539495": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539495",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539495.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno ubrzano prvenstvo Hrvatske za mlade za 2026. :: dječaci U10 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539496": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539496",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539496.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno ubrzano prvenstvo Hrvatske za mlade za 2026. :: dječaci U12 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539497": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539497",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539497.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno ubrzano prvenstvo Hrvatske za mlade za 2026. :: djevojčice U08 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539498": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539498",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539498.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno ubrzano prvenstvo Hrvatske za mlade za 2026. :: djevojčice U10 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539499": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539499",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539499.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno ubrzano prvenstvo Hrvatske za mlade za 2026. :: djevojčice U12 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539509": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539509",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539509.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno brzopotezno prvenstvo Hrvatske za mlade za 2026. :: dječaci U08 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539510": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539510",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539510.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno brzopotezno prvenstvo Hrvatske za mlade za 2026. :: dječaci U12 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539511": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539511",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539511.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno brzopotezno prvenstvo Hrvatske za mlade za 2026. :: dječaci U10 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539512": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539512",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539512.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno brzopotezno prvenstvo Hrvatske za mlade za 2026. :: djevojčice U08 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539513": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539513",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539513.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno brzopotezno prvenstvo Hrvatske za mlade za 2026. :: djevojčice U12 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539514": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539514",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539514.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "Pojedinačno brzopotezno prvenstvo Hrvatske za mlade za 2026. :: djevojčice U10 ::",
+   "ort": "Vodice, Hotel „Imperial Park“",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539533": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539533",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539533.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO UBRZANO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 18 GODINA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539534": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539534",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539534.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO UBRZANO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 14 GODINA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539535": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539535",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539535.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO UBRZANO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 16 GODINA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539536": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539536",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539536.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO UBRZANO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 18 GODINA - ŽENSKA KONKURENCIJA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539537": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539537",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539537.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO UBRZANO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 16 GODINA - ŽENSKA KONKURENCIJA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539539": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 10 sekundi dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539539",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539539.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO UBRZANO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 14 GODINA - ŽENSKA KONKURENCIJA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1539541": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekunde dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539541",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539541.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO BRZOPOTEZNO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 18 GODINA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539543": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekunde dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539543",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539543.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO BRZOPOTEZNO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 16 GODINA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539544": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekunde dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539544",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539544.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO BRZOPOTEZNO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 14 GODINA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539546": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekunde dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539546",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539546.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO BRZOPOTEZNO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 18 GODINA - ŽENSKA KONKURENCIJA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539547": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekunde dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539547",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539547.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO BRZOPOTEZNO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 16 GODINA - ŽENSKA KONKURENCIJA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539548": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min + 3 sekunde dodatka za svaki završeni potez počevši od prvog",
+   "bis": "2026-11-22",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539548",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539548.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr/2026/10/05/pojedinacno-ubrzano-i-brzopotezno-"
+   },
+   "lon": null,
+   "name": "POJEDINAČNO BRZOPOTEZNO PRVENSTVO HRVATSKE ZA MLADE - 2026  - DO 14 GODINA - ŽENSKA KONKURENCIJA",
+   "ort": "Hotel Imperial, Vodice",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-22"
+  },
+  "1539766": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5+3",
+   "bis": "2026-11-19",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1539766",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539766.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "X. Studenski turnir",
+   "ort": "Studenski dom Stjepan radić, Restoran 2",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-19"
+  },
+  "1539778": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 minut na partii + 5 vteřin za tah",
+   "bis": "2026-12-03",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1539778",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539778.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "O šachového krále a královnu Bowlingu Brno 2/5 - 5. sezóna!",
+   "ort": "Bowling centrum Brno s.r.o., Líšeňská 4515/80, 615 00 Brno-Židenice",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-03"
+  },
+  "1539883": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "45+30",
+   "bis": "2026-12-13",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1539883",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539883.aspx?lan=0",
+    "website": "http://zelenielf.si"
+   },
+   "lon": null,
+   "name": "Elfov Pokal 4. turnir – Odprti kvalifikacijski turnir za vse ljubitelje šaha",
+   "ort": "Kotnikova ulica 5, 1000, Ljubljana.",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-12"
+  },
+  "1539885": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "45+30",
+   "bis": "2026-12-06",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1539885",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539885.aspx?lan=0",
+    "website": "http://zelenielf.si"
+   },
+   "lon": null,
+   "name": "Elfov Pokal 3. turnir – Otroški kvalifikacijski turnir do 10 let",
+   "ort": "Kotnikova ulica 5, 1000, Ljubljana.",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-05"
+  },
+  "1539886": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "45+30",
+   "bis": "2026-11-29",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1539886",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539886.aspx?lan=0",
+    "website": "http://zelenielf.si"
+   },
+   "lon": null,
+   "name": "Elfov Pokal 2. turnir – Kvalifikacijski turnir do 16 let",
+   "ort": "Kotnikova ulica 5, 1000, Ljubljana.",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1539913": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "30 minuta + 30 sekunde po dovšenom potezu",
+   "bis": "2027-01-03",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539913",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539913.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Novogodišnji U1800 2 i 3 siječnja 2027",
+   "ort": "Zagreb Kelekova 2",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-01-02"
+  },
+  "1539990": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 minutes + 3 sec increment per move",
+   "bis": "2026-12-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1539990",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1539990.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Two Crowns Christmas Cup at UNYP",
+   "ort": "Prague, Londynska 41 (UNYP main campus)",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-20"
   },
   "1540008": {
    "bedenkzeit": "schnell",
@@ -4534,6 +8164,48 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-29"
   },
+  "1540118": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 90min/40moves + 30min/end +30sec increment per move starting from move 1",
+   "bis": "2026-12-06",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1540118",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1540118.aspx?lan=0",
+    "website": "https://www.chessmanager.com/tournaments/6521709269221376"
+   },
+   "lon": null,
+   "name": "Qualifikation Ost zur LEM 2027 U10",
+   "ort": "Stralsund",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-05"
+  },
+  "1540147": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5'+3''",
+   "bis": "2026-11-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1540147",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1540147.aspx?lan=0",
+    "website": "http://skdubrovnik.hr"
+   },
+   "lon": null,
+   "name": "35. memorijalni šahovski turnir „Voda, kruh i mlijeko”  Brzopotezno prvenstvo grada Dubrovnika 2026",
+   "ort": "Studentski centar Dubrovnik, Ulica Marka Marojice 2B, Dubrovnik",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
   "1540155": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "15 min + 5\"/Zug",
@@ -4680,6 +8352,66 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-02-05"
   },
+  "1541034": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3+2",
+   "bis": "2026-11-21",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1541034",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1541034.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "9. memorial Dušana Rusjana in 6. memorial Flavija Nardina 2026",
+   "ort": "Solkan",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1541330": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10'+5\" - rapid",
+   "bis": "2026-12-12",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1541330",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1541330.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Kadetski adventski turnir \"Zvončići\"  U-16",
+   "ort": "DVD Gračec, Zagrebačka ulica 29",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-12"
+  },
+  "1541344": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10'+5\" - rapid",
+   "bis": "2026-12-12",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1541344",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1541344.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Kadetski adventski turnir \"Zvončići\" U-12",
+   "ort": "DVD Gračec, Zagrebačka ulica 29",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-12"
+  },
   "1541771": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "55 min. +  55s pro Zug",
@@ -4719,6 +8451,48 @@
    "runden": "5",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-02-06"
+  },
+  "1541820": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x  20 min",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1541820",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1541820.aspx?lan=0",
+    "website": "https://logikusakk.hu/xiii-bukkos-akos-chess-memorial-2026/"
+   },
+   "lon": null,
+   "name": "XIII. Bükkös Ákos Chess Memorial A csoport",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1541821": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x  20 min",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1541821",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1541821.aspx?lan=0",
+    "website": "https://logikusakk.hu/xiii-bukkos-akos-chess-memorial-2026/"
+   },
+   "lon": null,
+   "name": "XIII. Bükkös Ákos Chess Memorial C csoport",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
   },
   "1541948": {
    "bedenkzeit": "",
@@ -4760,6 +8534,27 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-19"
+  },
+  "1542007": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 + 5",
+   "bis": "2026-12-06",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1542007",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1542007.aspx?lan=0",
+    "website": "https://rapidkupamiskolc.hu/"
+   },
+   "lon": null,
+   "name": "I. Rapid Mikulás Kupa 2026 - Miskolc",
+   "ort": "City Hotel Miskolc - 3525 Miskolc, Csabai kapu 6.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-06"
   },
   "1542284": {
    "bedenkzeit": "blitz",
@@ -4865,6 +8660,47 @@
    "runden": "11",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-01"
+  },
+  "1542936": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 min/40 moves+ 30 min/end+ 30sec incr./move from move 1",
+   "bis": "2026-12-12",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1542936",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1542936.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "First Saturday 2026 December - IM-1",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2026-12-05"
+  },
+  "1542948": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 min/40 moves+ 30 min/end+ 30 sec incr,/move from move 1",
+   "bis": "2026-12-12",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1542948",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1542948.aspx?lan=0",
+    "website": "http://www.firstsaturday.hu"
+   },
+   "lon": null,
+   "name": "First Saturday 2026 December - GM",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2026-12-05"
   },
   "1542974": {
    "bedenkzeit": "schnell",
@@ -5008,6 +8844,46 @@
    "typ": "Einzel-Rundenturniere",
    "von": "2026-12-01"
   },
+  "1543082": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 minutes with an increment of 2 seconds per move starting as of move 1",
+   "bis": "2027-10-17",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543082",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543082.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "6. BLITZ ARSENAL HVAR 2027",
+   "ort": "Hvar, Arsenal Hvar",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-10-17"
+  },
+  "1543083": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes with an increment of 30 seconds per move starting as of move 1",
+   "bis": "2027-10-24",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543083",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543083.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "6. OPEN ARSENAL HVAR 2027",
+   "ort": "Hvar, Arsenal Hvar",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-10-18"
+  },
   "1543129": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "5+3",
@@ -5068,6 +8944,277 @@
    "runden": "7",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-01-20"
+  },
+  "1543306": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 min + 3 sekunde",
+   "bis": "2026-11-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543306",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543306.aspx?lan=0",
+    "website": "https://www.zsk.si/stajerska-kadetska-liga-2026-2027/"
+   },
+   "lon": null,
+   "name": "3. turnir ŠKL 2025/26 - OPEN",
+   "ort": "Srednja gradbena šola Maribor",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1543308": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 min + 3 sekunde",
+   "bis": "2026-11-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543308",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543308.aspx?lan=0",
+    "website": "https://www.zsk.si/stajerska-kadetska-liga-2026-2027/"
+   },
+   "lon": null,
+   "name": "3. turnir ŠKL 2026/27 - do 15 let",
+   "ort": "Srednja gradbena šola in gimnazija Maribor",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1543313": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 min + 3 sekunde",
+   "bis": "2026-11-20",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543313",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543313.aspx?lan=0",
+    "website": "https://www.zsk.si/stajerska-kadetska-liga-2026-2027/"
+   },
+   "lon": null,
+   "name": "3. turnir ŠKL 2026/27 - do 12 let",
+   "ort": "Srednja gradbena šola in gimnazija Maribor",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1543315": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 min + 3 sekunde",
+   "bis": "2026-11-20",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543315",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543315.aspx?lan=0",
+    "website": "https://www.zsk.si/stajerska-kadetska-liga-2026-2027/"
+   },
+   "lon": null,
+   "name": "3. turnir ŠKL 2026/27 - do 10 let",
+   "ort": "Srednja gradbena šola in gimnazija Maribor",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1543320": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 min + 3 sekunde",
+   "bis": "2026-11-20",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543320",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543320.aspx?lan=0",
+    "website": "https://www.zsk.si/stajerska-kadetska-liga-2026-2027/"
+   },
+   "lon": null,
+   "name": "3. turnir ŠKL 2026/27 - do 8 let",
+   "ort": "Srednja gradbena šola in gimnazija Maribor",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-20"
+  },
+  "1543353": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15minut + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543353",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543353.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Velkomeziříčská věž starší",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "8",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543354": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15minut + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543354",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543354.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Velkomeziříčská věž mladší",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "8",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543386": null,
+  "1543467": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5 sec",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543467",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543467.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Šachování Na Smetance 21.11.2026",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543543": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 + 5 minut",
+   "bis": "2026-12-12",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543543",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543543.aspx?lan=0",
+    "website": "https://khss.chess.cz/slavoj-6-rapid-ve-dvore-kralove-n-l-5-zari/"
+   },
+   "lon": null,
+   "name": "Slavoj 7",
+   "ort": "Knihovna Slavoj, Tylova 506, 544 01 Dvůr Králové n. L.",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-12"
+  },
+  "1543546": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes + 30 s increment from move 1",
+   "bis": "2027-01-06",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543546",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543546.aspx?lan=0",
+    "website": "https://gambittournament.com/"
+   },
+   "lon": null,
+   "name": "7th Gambit GM Closed Tournament",
+   "ort": "Prague",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-01"
+  },
+  "1543551": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes + 30 s increment from move 1",
+   "bis": "2027-01-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543551",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543551.aspx?lan=0",
+    "website": "https://gambittournament.com/"
+   },
+   "lon": null,
+   "name": "2nd Gambit IM Closed Tournament",
+   "ort": "Prague",
+   "quelle": "chess-results",
+   "runden": "0",
+   "typ": "Einzel-Rundenturniere",
+   "von": "2027-01-24"
+  },
+  "1543590": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 min. za 40 poteza + 30 min. do kraja partije uz dodatak 30 sek. po potezu",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543590",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543590.aspx?lan=0",
+    "website": "http://hrvatski-sahovski-savez.hr/"
+   },
+   "lon": null,
+   "name": "35. ekipno prvenstvo Republike Hrvatske  - I. A Hrvatska šahovska liga za 2026. -",
+   "ort": "Petrčane, hotel \"Pinija\"",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-21"
+  },
+  "1543609": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 perc",
+   "bis": "2026-12-05",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543609",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543609.aspx?lan=0",
+    "website": "https://pmssz.hu"
+   },
+   "lon": null,
+   "name": "Pest Megyei Ifjúsági 2. versenynap 2. korcsoport",
+   "ort": "Szepes Gyula Művelődési Központ, 2030 Érd, Alsó u. 9.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-05"
   },
   "1543654": {
    "bedenkzeit": "schnell",
@@ -5152,6 +9299,66 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-12-09"
   },
+  "1543687": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 + 3",
+   "bis": "2026-11-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543687",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543687.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "IV. Sáncoló Hajdúk \"A\" Hajdúböszörmény",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1543688": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 + 3",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543688",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543688.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "IV. Sáncoló Hajdúk \"B\" Hajdúböszörmény",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1543689": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543689",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543689.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "IV. Sáncoló Hajdúk \"C\" Hajdúböszörmény",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
   "1543715": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "110 Minuten plus 30 Sekunden pro Zug",
@@ -5173,6 +9380,27 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2027-11-08"
   },
+  "1543731": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "(90'/40+30')+30\"",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543731",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543731.aspx?lan=0",
+    "website": "https://hrvatski-sahovski-savez.hr"
+   },
+   "lon": null,
+   "name": "35. ekipno prvenstvo Republike Hrvatske - I. B HŠL seniori 2026.",
+   "ort": "Petrčane, hotel Pinija",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-21"
+  },
   "1543839": {
    "bedenkzeit": "",
    "bedenkzeit_text": "",
@@ -5192,6 +9420,686 @@
    "runden": "9",
    "typ": "Einzel-Schweizersystem Turniere",
    "von": "2026-11-22"
+  },
+  "1543873": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "13\"",
+   "bis": "2026-11-19",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543873",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543873.aspx?lan=0",
+    "website": "https://sah-mladost.hr/puz/"
+   },
+   "lon": null,
+   "name": "Prvenstvo učenika srednjih škola Varaždinske županije 2026/27 - VELIKI PUŽ - SREDNJE ŠKOLE - 2. turnir",
+   "ort": "Varaždin",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-19"
+  },
+  "1543875": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "13\"",
+   "bis": "2026-11-27",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543875",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543875.aspx?lan=0",
+    "website": "https://sah-mladost.hr/puz/"
+   },
+   "lon": null,
+   "name": "Prvenstvo učenika osnovnih škola Varaždinske županije 2026/27 - PUŽ - NIŽI RAZREDI - 2. turnir",
+   "ort": "IV. osnovna škola Varaždin",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-27"
+  },
+  "1543876": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "13\"",
+   "bis": "2026-11-27",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543876",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543876.aspx?lan=0",
+    "website": "https://sah-mladost.hr/puz/"
+   },
+   "lon": null,
+   "name": "Prvenstvo učenika osnovnih škola Varaždinske županije 2026/27 - PUŽ - VIŠI RAZREDI - 2. turnir",
+   "ort": "IV. osnovna škola Varaždin",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-27"
+  },
+  "1543908": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543908",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543908.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely C-csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543909": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543909",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543909.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely E-csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543910": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12-12 perc + 3 mp lépésenkénti időhozzáadás",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543910",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543910.aspx?lan=0",
+    "website": "https://chess.hu/iv-mindegy-sakkverseny/"
+   },
+   "lon": null,
+   "name": "IV. MindEgy Sakkverseny Szombathely F-csoport",
+   "ort": "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543917": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "Blitz 3 min + 2 sec / move",
+   "bis": "2027-05-28",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543917",
+   "land": "Österreich",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543917.aspx?lan=0",
+    "website": "https://grandprix-chess.com/"
+   },
+   "lon": null,
+   "name": "Grand Prix PlusCity - Blitz Tournament",
+   "ort": "PlusCity, Pasching/Linz",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-05-28"
+  },
+  "1543921": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid 10 min + 5 sec / move",
+   "bis": "2027-05-27",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543921",
+   "land": "Österreich",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543921.aspx?lan=0",
+    "website": "https://grandprix-chess.com/"
+   },
+   "lon": null,
+   "name": "Grand Prix PlusCity - Rapid Tournament",
+   "ort": "PlusCity, Pasching/Linz",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2027-05-27"
+  },
+  "1543955": null,
+  "1543956": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x25 minut",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1543956",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543956.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Turnaj všech generací 2026 uspořádaný k uctění památky mezinárodního velmistra Salo Flohra",
+   "ort": "ÚMČ Praha 5, Štefánikova 13, zasedací místnost 6. patro",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1543958": null,
+  "1543973": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minuta za 40 poteza + 30 minuta za ostatak partije uz dodatak od 30 sekundi po završenom potezu",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1543973",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543973.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "1. Hrvatska šahovska liga za žene za 2026. godinu",
+   "ort": "Petrčane, hotel Pinija",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-21"
+  },
+  "1544093": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 15 minut + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544093",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544093.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "GRAND PRIX MLÁDEŽE ŠSOK V RAPID ŠACHU 2026/2027-2.TURNAJ \"A\" HD10 A - 2017 a ml.",
+   "ort": "ZŠ Hrabišín",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544106": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 15 minut + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544106",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544106.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "GRAND PRIX MLÁDEŽE ŠSOK V RAPID ŠACHU 2026/2027-2.TURNAJ \"B\" HD12 B - 2015 a ml.",
+   "ort": "ZŠ Hrabišín",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544118": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 15 minut + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544118",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544118.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "GRAND PRIX MLÁDEŽE ŠSOK V RAPID ŠACHU 2026/2027-2.TURNAJ \"C\" HD14 C - 2013 a ml.",
+   "ort": "ZŠ Hrabišín",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544122": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2 x 15 minut + 5s/tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544122",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544122.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "GRAND PRIX MLÁDEŽE ŠSOK V RAPID ŠACHU 2026/2027-2.TURNAJ \"D\" HD18 D - 2009 a ml.",
+   "ort": "ZŠ Hrabišín",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544169": null,
+  "1544203": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 20min + 5s /tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544203",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544203.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "24. ročník Litoměřický pohár - mladší žáci",
+   "ort": "Litoměřice",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544204": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 20min + 5s /tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544204",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544204.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "24. ročník Litoměřický pohár - starší žáci",
+   "ort": "Litoměřice",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544206": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 20min + 5s /tah",
+   "bis": "2026-11-21",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544206",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544206.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "24. ročník Litoměřický pohár - dorost",
+   "ort": "Litoměřice",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544236": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12+3",
+   "bis": "2026-12-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1544236",
+   "land": "Italien",
+   "lat": 45.5201113,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544236.aspx?lan=0",
+    "website": "https://vesus.org/tournament/E3OqVxze"
+   },
+   "lon": 8.7692822,
+   "name": "Open FIDE A - 31.open semilampo \"Comune di Robecchetto con Induno\"",
+   "ort": "Robecchetto con Induno",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-26"
+  },
+  "1544237": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12+3",
+   "bis": "2026-12-26",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1544237",
+   "land": "Italien",
+   "lat": 45.5201113,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544237.aspx?lan=0",
+    "website": "https://vesus.org/tournament/8v1LwXZt"
+   },
+   "lon": 8.7692822,
+   "name": "Open FIDE B - 31.open semilampo \"Comune di Robecchetto con Induno\"",
+   "ort": "Robecchetto con Induno",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-12-26"
+  },
+  "1544249": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 minut + 5s/tah",
+   "bis": "2026-11-18",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544249",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544249.aspx?lan=0",
+    "website": "https://www.zsmetelkovo.cz/"
+   },
+   "lon": null,
+   "name": "Přebor školy ZŠ Metelkovo Teplice - 1.stupeň",
+   "ort": "Základní škola, Metelkovo nám. 968, Teplice",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-18"
+  },
+  "1544263": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 minut + 5s/tah",
+   "bis": "2026-11-18",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544263",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544263.aspx?lan=0",
+    "website": "https://www.zsmetelkovo.cz/"
+   },
+   "lon": null,
+   "name": "Přebor školy ZŠ Metelkovo Teplice - 2.stupeň",
+   "ort": "Základní škola, Metelkovo nám. 968, Teplice",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-18"
+  },
+  "1544278": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 40 minutes for the game with 30 seconds increment from move 1",
+   "bis": "2027-01-24",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1544278",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544278.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Hajdu-Bihar Youth Team Ch. 2026-2027",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "4",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "2026-11-22"
+  },
+  "1544334": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544334",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544334.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "BJPO U18 2026",
+   "ort": "Tuttlingen",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544336": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544336",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544336.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "BJPO U16 2026",
+   "ort": "Tuttlingen",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544338": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544338",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544338.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "BJPO U14 2026",
+   "ort": "Tuttlingen",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544340": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "3' + 2\"",
+   "bis": "2026-11-29",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1544340",
+   "land": "Italien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544340.aspx?lan=0",
+    "website": "https://www.federscacchi.com/fsi/index.php/component/content/article/462-campion"
+   },
+   "lon": null,
+   "name": "Campionato Italiano RAPID",
+   "ort": "Centro Sportivo La Favorita, Via degli Abeti 9, Spilimbergo",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-29"
+  },
+  "1544341": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3' + 2\"",
+   "bis": "2026-11-27",
+   "elo": true,
+   "europa": true,
+   "id": "cr:1544341",
+   "land": "Italien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544341.aspx?lan=0",
+    "website": "https://www.federscacchi.com/fsi/index.php/component/content/article/462-campion"
+   },
+   "lon": null,
+   "name": "Campionato Italiano BLITZ",
+   "ort": "Centro Sportivo La Favorita, Via degli Abeti 9, Spilimbergo",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-27"
+  },
+  "1544342": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15' + 5\"",
+   "bis": "2026-11-28",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544342",
+   "land": "Italien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544342.aspx?lan=0",
+    "website": "https://www.federscacchi.com/fsi/index.php/component/content/article/462-campion"
+   },
+   "lon": null,
+   "name": "Campionato Italiano 960 (Fischer Random)",
+   "ort": "Centro Sportivo La Favorita, Via degli Abeti 9, Spilimbergo",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-28"
+  },
+  "1544345": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544345",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544345.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "BJPO U12 2026",
+   "ort": "Tuttlingen",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "1544348": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:1544348",
+   "land": "Deutschland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1544348.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "BJPO U10 2026",
+   "ort": "Tuttlingen",
+   "quelle": "chess-results",
+   "runden": "7",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2026-11-21"
+  },
+  "494298": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7+3",
+   "bis": "2109-11-30",
+   "elo": true,
+   "europa": true,
+   "id": "cr:494298",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr494298.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Pojedinačno prvenstvo Ličko Senjske županije Senj 2019",
+   "ort": "SEnj",
+   "quelle": "chess-results",
+   "runden": "11",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2109-11-30"
+  },
+  "724607": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min.",
+   "bis": "2032-02-25",
+   "elo": true,
+   "europa": true,
+   "id": "cr:724607",
+   "land": "Slowenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr724607.aspx?lan=0",
+    "website": "http://www.drustvo-sahpiran.si"
+   },
+   "lon": null,
+   "name": "2. Pokal piranskega podeželja - 1. turnir",
+   "ort": "Sv. Peter (Občina Piran)",
+   "quelle": "chess-results",
+   "runden": "9",
+   "typ": "Einzel-Schweizersystem Turniere",
+   "von": "2032-02-25"
+  },
+  "92947": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min +15 sek/potez",
+   "bis": "3012-02-22",
+   "elo": false,
+   "europa": true,
+   "id": "cr:92947",
+   "land": "Kroatien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr92947.aspx?lan=0",
+    "website": "http://zng111.hr/skole/"
+   },
+   "lon": null,
+   "name": "Prvenstvo školskih športskih klubova Primorsko-goranske županije  2013 finale učenice",
+   "ort": "Dražice",
+   "quelle": "chess-results",
+   "runden": "5",
+   "typ": "Mannschafts-Rundenturniere",
+   "von": "3012-02-22"
   }
  }
 }

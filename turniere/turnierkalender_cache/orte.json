@@ -1,5 +1,9 @@
 {
  "orte": {
+  "Ascona, Schweiz": [
+   46.1554222,
+   8.7707865
+  ],
   "Bad Koenigshofen, Deutschland": [
    50.2993334,
    10.4674873
@@ -40,21 +44,62 @@
    50.8291313,
    6.9037057
   ],
+  "Burgdorf, Schweiz": [
+   47.0571316,
+   7.6237466
+  ],
+  "Businesspark Sursee, Allee 1A, 6210 Sursee, Schweiz": [
+   47.1717258,
+   8.1069422
+  ],
   "Böblingen, Deutschland": [
    48.684969,
    9.0113444
+  ],
+  "Dürnstein, Österreich": [
+   48.3953879,
+   15.5203111
   ],
   "Frankenthal, Deutschland": [
    49.5353466,
    8.3541391
   ],
+  "Genussquelle Rosalia, Schulstraße 14, 7202 Bad Sauerbrunn, Österreich": [
+   47.7752135,
+   16.3258026
+  ],
   "Gerolzhofen, Deutschland": [
    49.9023278,
    10.3450682
   ],
+  "Ginzkeygasse 2, 9020 Klagenfurt, Österreich": [
+   46.6334295,
+   14.3219876
+  ],
+  "Graz - Nova Park Hotel, Österreich": null,
+  "Graz - Novapark Hotel, Österreich": [
+   47.0957212,
+   15.4105277
+  ],
+  "Greifswald, Deutschland": [
+   54.095791,
+   13.3815238
+  ],
   "Hamburg, Deutschland": [
    53.5501721,
    10.0013165
+  ],
+  "Handelsakademie Lienz, Weidengasse 1, 9900 Lienz, Österreich": [
+   46.8281235,
+   12.750561
+  ],
+  "Hauptstraße 43, 2171 Herrnbaumgarten, Österreich": [
+   48.6963955,
+   16.693035
+  ],
+  "Haus des Schachsports, Österreich": [
+   48.2079638,
+   16.423162
   ],
   "Heinz Nixdorf MuseumsForum Paderborn, Deutschland": [
    51.731342,
@@ -68,6 +113,28 @@
    49.7816986,
    9.6796728
   ],
+  "Hotel Coronado, Via Francesco Borromini 10 – 6850 Mendrisio; Tel. 091 630 30 30, Schweiz": null,
+  "Hotel Hari im Schlegeli, Gartenweg 5, 3715 Adelboden, 033 673 60 60, Schweiz": [
+   46.4899282,
+   7.5615034
+  ],
+  "Hotel Kronenhof, Kirchhofplatz 7 - CH-8200 Schaffhausen, Schweiz": [
+   47.7040859,
+   8.6382793
+  ],
+  "Hotel Laaxerhof, Via Murschetg 35, 7032 Laax, 081 920 82 00, Schweiz": [
+   46.8266699,
+   9.2554863
+  ],
+  "Hotel Schloss Ragaz, Schlossstrasse 1, 7310 Bad Ragaz, 081 303 77 77, Schweiz": [
+   47.0052352,
+   9.5021527
+  ],
+  "Hotel Seedamm Plaza, Seedammstrasse 3, 8808 Pfäffikon (SZ), Schweiz": [
+   47.2003055,
+   8.7780752
+  ],
+  "Hôtel Alpha Palmiers, Rue du Petit-Chêne 34 · 1003 Lausanne +41 21 55 55 999, Schweiz": null,
   "Kelheim, Deutschland": [
    48.91849,
    11.8722777
@@ -76,9 +143,25 @@
    50.1515445,
    11.9502926
   ],
+  "Kongress- und Theaterhaus Bad Ischl, Österreich": [
+   47.7113628,
+   13.6188148
+  ],
+  "LINDE OBERSTRASS, Universitätstrasse 91, 8006 Zürich, Schweiz": [
+   47.3860559,
+   8.5450958
+  ],
   "Lage, Deutschland": [
    51.9914084,
    8.7919583
+  ],
+  "Landesmusikschule Scharnstein, Kirchenplatz 6, 4644 Scharnstein, Österreich": [
+   47.8991308,
+   13.9418539
+  ],
+  "Mövenpick Hotel - Aeschengraben 25 - CH-4051 Basel, Schweiz": [
+   47.5549807,
+   7.5857978
   ],
   "München, Deutschland": [
    48.1371079,
@@ -101,6 +184,10 @@
    51.7177044,
    8.752653
   ],
+  "Palmanova, Italien": [
+   45.9054635,
+   13.3099318
+  ],
   "Pforzheim, Deutschland": [
    48.890934,
    8.7025509
@@ -113,7 +200,31 @@
    51.0073675,
    6.9070394
   ],
+  "Praha, Tschechien": [
+   50.0874654,
+   14.4212535
+  ],
+  "ROMA, Italien": [
+   41.8933203,
+   12.4829321
+  ],
+  "Ranshofen, Österreich": [
+   48.2351825,
+   13.0148774
+  ],
+  "Rebstock Wil GmbH, Toggenburgerstrasse 54, 9500 Wil, Schweiz": [
+   47.4652644,
+   9.0478868
+  ],
   "Reichenbach, Goethe-Gymnasium (Schulteil Friedensschule), F.-Engels-Platz 7, Deutschland": null,
+  "Rifer Hauptstraße 37 5400 Hallein (RIF), Österreich": [
+   47.7267494,
+   13.0718723
+  ],
+  "Robecchetto con Induno, Italien": [
+   45.5201113,
+   8.7692822
+  ],
   "Schloss Rosenstein, Rosenstein 14, Stuttgart, Deutschland": [
    48.7784485,
    9.1800132
@@ -121,6 +232,18 @@
   "Schwäbisch Gmünd, Deutschland": [
    48.7999036,
    9.7977584
+  ],
+  "Sporthalle Kaserne, Nonnenbodenweg 5, 4410 Liestal, Schweiz": [
+   47.4843133,
+   7.7336032
+  ],
+  "Sporthotel Pontresina, Via Maistra 145, 7504 Pontresina, 081 838 94 00, Schweiz": [
+   46.4868659,
+   9.906546
+  ],
+  "Steckborn, Schweiz": [
+   47.6653429,
+   8.9815246
   ],
   "TSV Steppach, Neusäß, Deutschland": [
    48.3710252,
@@ -133,6 +256,14 @@
   "Undeloh, Deutschland": [
    53.197032,
    9.9764964
+  ],
+  "Veranstaltungshalle Ratten, Kirchenviertel 156, 8673 Ratten, Österreich": [
+   47.4978118,
+   15.7300246
+  ],
+  "Waldhotel**** Buolstrasse 3, CH-7270 Davos Platz, Schweiz": [
+   46.7933845,
+   9.8206999
   ],
   "Wesel, Deutschland": [
    51.6576909,
