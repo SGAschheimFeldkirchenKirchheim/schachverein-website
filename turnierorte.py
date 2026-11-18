@@ -5,7 +5,7 @@ Jede Stadt zählt pro Spieler einmal, egal wie oft man dort war. Gezählt werden
 Einzelturniere (keine Liga); Ausnahmen (z. B. Deutsche Hochschulmeisterschaft) kann der Webmaster zulassen.
 
 Ablauf:
-  1. Mitglied füllt auf turnierorte.html "Ort beantragen" aus -> Apps Script legt
+  1. Mitglied füllt auf turnierorte.html "Turnier einreichen" aus -> Apps Script legt
      turnierorte/antraege/<Datum>_<Name>.json im Repo an und schickt eine Mail.
   2. Webmaster: "Alles aktualisieren", dann  py turnierorte_pruefen.py  (prüft mit chess-results,
      sucht den Ort, fragt j/n) -> landet in turnierorte/besuche.json. Nochmal "Alles aktualisieren".
@@ -464,7 +464,7 @@ JS_ANTRAG = r"""
       .then(function (r) { return r.json(); })
       .then(function (a) {
         if (!a.ok) throw new Error(a.fehler || "Unbekannter Fehler");
-        m.className = "meldung ok"; m.textContent = "Danke! Dein Antrag ist angekommen und wird geprüft.";
+        m.className = "meldung ok"; m.textContent = "Danke! Dein Turnier ist angekommen und wird geprüft.";
         var name = f.elements.name.value; f.reset(); f.elements.name.value = name;
       })
       .catch(function (e) { m.className = "meldung fehler"; m.textContent = "Das hat nicht geklappt (" + e.message + "). Bitte später nochmal versuchen."; })
@@ -479,8 +479,8 @@ def antrag_html(skript_url):
         return ""
     return f"""
     <details class="card tour-antrag" id="beantragen">
-      <summary><span><strong>Ort beantragen</strong><br><span class="klein">Du hast in einer neuen Stadt ein Turnier gespielt – auch früher? Trag es ein, wir prüfen und vergeben den Punkt.</span></span>
-        <span class="btn">Beantragen</span></summary>
+      <summary><span><strong>Turnier einreichen</strong><br><span class="klein">Du hast ein Turnier gespielt – auch früher? Reich es ein, wir prüfen es und tragen es bei dir ein.</span></span>
+        <span class="btn">Einreichen</span></summary>
       <form id="tour-form" data-url="{html.escape(skript_url)}">
         <div class="tour-reihe">
           <label>Dein Name <input name="name" required maxlength="80" autocomplete="name" placeholder="Vor- und Nachname"></label>
@@ -571,7 +571,7 @@ def bauen(render_page, skript_url="", aktiv=None):
                     f'<div class="abz-grid">{"".join(_abz_karte(a) for a in selten)}</div>'
                     f'<p class="tour-weiter"><a href="{SEITE_ABZEICHEN}">Alle {len(infos)} Abzeichen ansehen →</a></p>')
     else:
-        rangliste = '<p class="tour-leer">Noch niemand auf Tour. Sei der Erste und beantrage unten deinen ersten Ort!</p>'
+        rangliste = '<p class="tour-leer">Noch niemand auf Tour. Sei der Erste und reich unten dein erstes Turnier ein!</p>'
         vorschau = f'<p class="tour-weiter"><a href="{SEITE_ABZEICHEN}">Alle {len(infos)} Abzeichen ansehen →</a></p>'
     daten = dict(basis, orte=_orte_daten(orte, namen),
                  rangliste=[{"id": t["id"], "name": t["name"], "seite": spieler_seite(t["id"]), "orte": t["werte"]["orte"],
