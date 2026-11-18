@@ -1,0 +1,4 @@
+Bilder fuer die Diashow auf der Oberlandquartett-Seite.
+Bildunterschrift = Dateiname, z. B. "2015 Siegermannschaft.jpg".
+Reihenfolge alphabetisch, zum Sortieren "01-", "02-" davor schreiben (wird nicht angezeigt).
+Beliebige Formate, es wird nichts abgeschnitten.

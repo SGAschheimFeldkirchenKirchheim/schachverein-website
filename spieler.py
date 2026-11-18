@@ -6,6 +6,21 @@ Spielerseiten (spieler/<name>.html) für alle eigenen Spieler aus den Mannschaft
   - alle gespielten Partien über alle Mannschaften und Saisons (aktuelle offen, ältere zugeklappt)
   - inoffizielle DWZ-Prognose mit der AKTUELLEN DWZ (Wertungsordnung des DSB)
 
+FOTO UND GEBURTSTAG:
+  - Foto: Für jeden Spieler legt der Build einen Platzhalter spieler/fotos/<name>.jpg an
+    ("Hier Bild einfügen"), z. B. spieler/fotos/arthur-krumm.jpg. Einfach durch das echte Foto
+    ersetzen (gleicher Name, auch .png/.webp geht). Platzhalter werden auf der Seite nicht gezeigt.
+    Am besten quadratisch oder Hochformat.
+  - Geburtstag: kommt automatisch aus der Geburtstagsliste (wie auf der Startseite).
+    Ausnahmen in spieler/profile.json, z. B.
+        {
+          "Arthur Krumm": {"alter": true},
+          "Max Muster":   {"geburtstag": false},
+          "Gast Spieler": {"geburtstag": "14.03."}
+        }
+    false = Geburtstag nicht zeigen, "TT.MM." = selbst eingetragen (z. B. wenn nicht in der Liste),
+    "alter": true/false = Alter zeigen oder nicht (Standard: GEBURTSTAG_ALTER).
+
 build_site.py: erst sammeln(teams, dsb) -> liga.SPIELER_SEITEN, dann bauen(...).
 Das Geburtsjahr von der DSB-Liste wird nur für den Entwicklungskoeffizienten benutzt,
 nie angezeigt oder gespeichert.
@@ -32,6 +47,13 @@ VERLAUF = os.path.join(ORDNER, "dwz_verlauf.json")   # wird bei jedem Build mit 
 VERLAUF_AN = True                   # DWZ-Verlauf zeigen (sobald mind. 2 verschiedene Werte aufgezeichnet sind)
 BERICHTE_MAX = 12                   # so viele Berichte, in denen der Spieler vorkommt, höchstens anzeigen
 TOUR_LINK = True                    # Link zum "AFK on Tour"-Profil, falls vorhanden
+FOTO_ORDNER = os.path.join(ORDNER, "fotos")          # spieler/fotos/<slug>.jpg
+PROFILE = os.path.join(ORDNER, "profile.json")       # Ausnahmen (Geburtstag aus/selbst, Alter)
+FOTO_PLATZHALTER = True             # für jeden Spieler einen Platzhalter "Hier Bild einfügen" anlegen
+GEBURTSTAG_AUTO = True              # Geburtstag aus der Geburtstagsliste zeigen (False = nur über profile.json)
+GEBURTSTAG_ALTER = False            # Alter dazu zeigen (pro Spieler änderbar mit "alter" in profile.json)
+MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September",
+          "Oktober", "November", "Dezember"]
 
 
 def esc(x):
@@ -51,6 +73,100 @@ def slug(name):
 def seite(name):
     """Pfad der Spielerseite relativ zur Website-Wurzel."""
     return f"{ORDNER}/{slug(name)}.html"
+
+
+# ==========================================
+# FOTO UND GEBURTSTAG
+# ==========================================
+_PLATZHALTER = None
+
+
+def _platzhalter_bytes():
+    """Graues Bild mit 'Hier Bild einfügen' (wird einmal erzeugt)."""
+    global _PLATZHALTER
+    if _PLATZHALTER is None:
+        from PIL import Image, ImageDraw
+        import io
+        im = Image.new("RGB", (400, 500), (200, 204, 212))
+        d = ImageDraw.Draw(im)
+        d.ellipse((130, 90, 270, 230), fill=(160, 166, 178))
+        d.ellipse((70, 260, 330, 560), fill=(160, 166, 178))
+        d.text((200, 470), "Hier Bild einfuegen", fill=(60, 64, 72), anchor="mm")
+        b = io.BytesIO()
+        im.save(b, "JPEG", quality=80)
+        _PLATZHALTER = b.getvalue()
+    return _PLATZHALTER
+
+
+def _ist_platzhalter(pfad):
+    try:
+        if os.path.getsize(pfad) != len(_platzhalter_bytes()):
+            return False
+        with open(pfad, "rb") as f:
+            return f.read() == _platzhalter_bytes()
+    except Exception:
+        return False
+
+
+def platzhalter_anlegen(name):
+    """Legt spieler/fotos/<name>.jpg als Platzhalter an, wenn noch gar kein Foto da ist."""
+    if not FOTO_PLATZHALTER:
+        return
+    if any(os.path.exists(os.path.join(FOTO_ORDNER, slug(name) + e)) for e in (".jpg", ".jpeg", ".png", ".webp")):
+        return
+    try:
+        os.makedirs(FOTO_ORDNER, exist_ok=True)
+        with open(os.path.join(FOTO_ORDNER, slug(name) + ".jpg"), "wb") as f:
+            f.write(_platzhalter_bytes())
+    except Exception as e:
+        print(f"Hinweis: Platzhalter für {name} nicht angelegt ({e}).")
+
+
+def foto(name):
+    """Pfad des Fotos relativ zur Website-Wurzel oder '' (Platzhalter zählen nicht)."""
+    for ext in (".jpg", ".jpeg", ".png", ".webp"):
+        pfad = os.path.join(FOTO_ORDNER, slug(name) + ext)
+        if os.path.exists(pfad) and not _ist_platzhalter(pfad):
+            return pfad.replace(os.sep, "/")
+    return ""
+
+
+def profile_laden():
+    try:
+        with open(PROFILE, encoding="utf-8") as f:
+            daten = json.load(f)
+        return {slug(k): v for k, v in daten.items() if isinstance(v, dict)}
+    except FileNotFoundError:
+        return {}
+    except ValueError as e:
+        print(f"Hinweis: {PROFILE} ist kein gültiges JSON ({e}) – keine Geburtstage auf Spielerseiten.")
+        return {}
+
+
+def geburtstag_text(name, profil, geburtstage, heute):
+    """'14. März' (+ ' · 34 Jahre'). Quelle: Geburtstagsliste, Ausnahmen in profile.json."""
+    profil = profil or {}
+    wert = profil.get("geburtstag", GEBURTSTAG_AUTO)
+    if not wert:
+        return ""
+    if isinstance(wert, str):                      # selbst eingetragen: "14.03." oder "14.03"
+        m = re.match(r"^\s*(\d{1,2})\.(\d{1,2})\.?", wert)
+        return f"{int(m.group(1))}. {MONATE[int(m.group(2)) - 1]}" if m and 1 <= int(m.group(2)) <= 12 else ""
+    for g in geburtstage or ():                    # aus der Geburtstagsliste (gleicher Name)
+        if slug(f"{g.get('vorname', '')} {g.get('nachname', '')}") != slug(name):
+            continue
+        try:
+            tag, monat, jahr = (int(x) for x in str(g.get("geburtstag", "")).split("."))
+        except ValueError:
+            return ""
+        text = f"{tag}. {MONATE[monat - 1]}"
+        if profil.get("alter", GEBURTSTAG_ALTER):
+            alter = heute.year - jahr - ((heute.month, heute.day) < (monat, tag))
+            text += f" · {alter} Jahre"
+        return text
+    if "geburtstag" in profil:
+        print(f"Hinweis: Geburtstag für {name} freigegeben, aber nicht in der Geburtstagsliste gefunden.")
+    return ""
 
 
 # ==========================================
@@ -346,13 +462,18 @@ def berichte_html(liste):
         f'<li><a href="../berichte/{esc(r["filename"])}">{esc(_plain(r["title"]))}</a>'
         + (f' <span class="klein">{r["when"].strftime("%d.%m.%Y")}</span>' if r.get("when") and r["when"].year > 1 else "")
         + "</li>" for r in liste[:BERICHTE_MAX])
-    mehr = f'<p class="klein">… und {len(liste) - BERICHTE_MAX} weitere.</p>' if len(liste) > BERICHTE_MAX else ""
+    rest = "".join(
+        f'<li><a href="../berichte/{esc(r["filename"])}">{esc(_plain(r["title"]))}</a>'
+        + (f' <span class="klein">{r["when"].strftime("%d.%m.%Y")}</span>' if r.get("when") and r["when"].year > 1 else "")
+        + "</li>" for r in liste[BERICHTE_MAX:])
+    mehr = (f'<details class="sp-mehr"><summary>… und {len(liste) - BERICHTE_MAX} weitere anzeigen</summary>'
+            f'<ul class="sp-berichte">{rest}</ul></details>') if rest else ""
     return f"""
     <h2 class="panel-titel sp-titel">In den Berichten</h2>
     <ul class="sp-berichte">{zeilen}</ul>{mehr}"""
 
 
-def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour=""):
+def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", geburtstag=""):
     """saison_jahr = Startjahr der aktuellen Saison (für Alter und Prognose)."""
     r_dsb = _int(dsb.get("dwz")) if dsb else None
     elo = _int(dsb.get("elo")) if dsb else None
@@ -380,6 +501,9 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour=""):
     zurueck_text = p["meldungen"][0]["team"] if p["meldungen"] else (p["partien"][0]["team"] if p["partien"] else "Mannschaften")
     return f"""
     <p class="zurueck"><a href="../{esc(zurueck)}">← {esc(zurueck_text)}</a></p>
+    <div class="sp-oben">
+    {f'<img class="sp-foto" src="../{esc(bild)}" alt="{esc(p["name"])}">' if bild else ""}
+    <div>
     <h1 class="sp-name">{esc(p["name"])}</h1>
     <div class="sp-kopf">
       <dl>
@@ -387,8 +511,11 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour=""):
         {f"<dt>ELO</dt><dd>{elo}</dd>" if elo else ""}
         {gesamt}
         {ha}
+        {f"<dt>Geburtstag</dt><dd>{esc(geburtstag)}</dd>" if geburtstag else ""}
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
+    </div>
+    </div>
     </div>
     {bezirk}
     {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour else ""}
@@ -402,6 +529,10 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour=""):
 
 STYLES = """<style>
       .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
+      .sp-oben { display: flex; gap: 2rem; align-items: flex-start; }
+      .sp-foto { width: 170px; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; flex: 0 0 auto;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); }
+      @media (max-width: 600px) { .sp-oben { flex-direction: column; gap: 1rem; } .sp-foto { width: 140px; } }
       .sp-kopf { display: flex; flex-wrap: wrap; gap: 0.8rem 3rem; align-items: flex-start; margin-bottom: 0.5rem; }
       .sp-kopf dl { display: grid; grid-template-columns: auto auto; gap: 0.2rem 1rem; margin: 0; }
       .sp-kopf dt { font-weight: bold; color: var(--navy); }
@@ -422,22 +553,28 @@ STYLES = """<style>
       .dwz-verlauf polyline { fill: none; stroke: var(--hell, #2c5d99); stroke-width: 2.5; stroke-linejoin: round; }
       .dwz-verlauf circle { fill: var(--hell, #2c5d99); }
       .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
+      .sp-mehr summary { cursor: pointer; color: var(--accent, #7fb2ff); font-size: .95rem; margin-bottom: .4rem; }
 </style>"""
 
 
-def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None):
+def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None, geburtstage=()):
     """Schreibt alle Spielerseiten. render_page/liga_styles kommen aus build_site/liga.
-    berichte = build_site.ALLE_BERICHTE; tour_seiten(name) -> 'tour-….html' oder ''."""
+    berichte = build_site.ALLE_BERICHTE; tour_seiten(name) -> 'tour-….html' oder '';
+    geburtstage = Geburtstagsliste (nur für Spieler, die in profile.json freigegeben sind)."""
     idx = dsb_index(dsb_liste)
     verlauf = verlauf_laden()
     heute = datetime.date.today()
+    profile = profile_laden()
     for p in spieler.values():
         dsb = dsb_finden(p["name"], idx)
         sl = slug(p["name"])
         if dsb:
             verlauf_eintragen(verlauf, sl, _int(dsb.get("dwz")), heute)
         tour = (tour_seiten(p["name"]) if tour_seiten and TOUR_LINK else "") or ""
-        content = seite_html(p, dsb, saison_jahr, verlauf.get(sl, []), berichte_finden(p["name"], berichte), tour)
+        platzhalter_anlegen(p["name"])
+        content = seite_html(p, dsb, saison_jahr, verlauf.get(sl, []), berichte_finden(p["name"], berichte), tour,
+                             bild=foto(p["name"]),
+                             geburtstag=geburtstag_text(p["name"], profile.get(sl), geburtstage, heute))
         render_page(p["name"], content, seite(p["name"]), css_path="../", nav_path="../",
                     extra_styles=liga_styles.replace("</style>", "") + STYLES.replace("<style>", ""),
                     description=f"{p['name']} – Partien und DWZ in der Mannschaftssaison.")

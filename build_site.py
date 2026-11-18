@@ -1245,10 +1245,11 @@ def build_ueber_uns():
 OQ_NEUESTE_OBEN = True     # True = neuestes Turnier oben
 OQ_VORSCHAU_JAHRE = 4      # so viele kommende Jahre mit Ausrichter anzeigen (0 = aus)
 OQ_AUSRICHTER_FEST = {}    # Abweichungen von der Reihum-Folge, z.B. {2028: "Holzkirchen"}
-# Fotos unter der Übersicht: (Datei, Bildunterschrift); fehlt eine Datei, wird sie einfach weggelassen
-OQ_FOTOS = [
-    ("turniere/oberlandquartett/sieger-2015.jpg", "Unsere Siegermannschaft beim Oberlandquartett 2015"),
-]
+# Diashow unter der Übersicht: alle Bilder aus diesem Ordner (alphabetisch).
+# Bildunterschrift = Dateiname, z. B. "2015 Siegermannschaft.jpg" -> "2015 Siegermannschaft".
+# Nummern zum Sortieren wie "01-" oder "01_" werden weggelassen. Jedes Bild wird ganz gezeigt (nichts abgeschnitten).
+OQ_DIASHOW = os.path.join("turniere", "oberlandquartett", "diashow")
+OQ_DIASHOW_SEKUNDEN = 6    # Wechsel alle x Sekunden (0 = nur mit Pfeilen)
 OQ_POKAL_SERIE, OQ_POKAL_GESAMT = 3, 5   # Pokal: 3x hintereinander oder 5x insgesamt (seit dem letzten Pokal)
 
 
@@ -1318,6 +1319,51 @@ def _oq_vorschau(zeilen, anzahl):
     return vorschau
 
 
+def oq_diashow_html():
+    if not os.path.isdir(OQ_DIASHOW):
+        return ""
+    namen = sorted(n for n in os.listdir(OQ_DIASHOW)
+                   if os.path.splitext(n)[1].lower() in (".jpg", ".jpeg", ".png", ".webp"))
+    if not namen:
+        return ""
+    esc = htmllib.escape
+    bilder = []
+    for i, n in enumerate(namen):
+        t = re.sub(r"^\d{1,2}[-_]+", "", os.path.splitext(n)[0]).replace("_", " ").strip()
+        url = "/".join(quote(x) for x in OQ_DIASHOW.split(os.sep)) + "/" + quote(n)
+        bilder.append(f'<figure{" class=an" if i == 0 else ""}><img src="{url}" alt="{esc(t)}">'
+                      f'<figcaption>{esc(t)}</figcaption></figure>')
+    knoepfe = ('<div class="oq-show-steuer"><button type="button" class="oq-z" aria-label="Zurück">←</button>'
+               '<button type="button" class="oq-v" aria-label="Weiter">→</button>'
+               f'<span class="oq-nr">1 / {len(namen)}</span></div>') if len(namen) > 1 else ""
+    return f"""<div class="oq-show" data-ms="{OQ_DIASHOW_SEKUNDEN * 1000}"><div class="oq-show-bilder">{"".join(bilder)}</div>{knoepfe}</div>
+<style>
+  .oq-show {{ margin: 1.5rem 0 2rem; max-width: 900px; }}
+  .oq-show-bilder {{ display: grid; align-items: start; }}
+  .oq-show figure {{ grid-area: 1 / 1; margin: 0; opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }}
+  .oq-show figure.an {{ opacity: 1; pointer-events: auto; }}
+  .oq-show img {{ display: block; max-width: 100%; max-height: 70vh; width: auto; height: auto; border-radius: 10px; }}
+  .oq-show figcaption {{ font-size: .9rem; color: var(--muted, #8a93a6); margin-top: .4rem; }}
+  .oq-show-steuer {{ display: flex; align-items: center; gap: .7rem; margin-top: .8rem; }}
+  .oq-show-steuer button {{ width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 1.5px solid var(--line, #3a4560); background: none; color: inherit; cursor: pointer; font-size: 1rem; }}
+  .oq-nr {{ font-size: .9rem; color: var(--muted, #8a93a6); font-variant-numeric: tabular-nums; }}
+  @media (prefers-reduced-motion: reduce) {{ .oq-show figure {{ transition: none; }} }}
+</style>
+<script>
+(function () {{
+  var s = document.querySelector(".oq-show"); if (!s) return;
+  var f = s.querySelectorAll("figure"), i = 0, t = null, ms = +s.dataset.ms, nr = s.querySelector(".oq-nr");
+  if (f.length < 2) return;
+  function geh(n) {{ f[i].classList.remove("an"); i = (n + f.length) % f.length; f[i].classList.add("an"); nr.textContent = (i + 1) + " / " + f.length; }}
+  function start() {{ stop(); if (ms && !matchMedia("(prefers-reduced-motion: reduce)").matches) t = setInterval(function () {{ geh(i + 1); }}, ms); }}
+  function stop() {{ if (t) clearInterval(t); t = null; }}
+  s.querySelector(".oq-v").onclick = function () {{ geh(i + 1); start(); }};
+  s.querySelector(".oq-z").onclick = function () {{ geh(i - 1); start(); }};
+  s.addEventListener("mouseenter", stop); s.addEventListener("mouseleave", start); start();
+}})();
+</script>"""
+
+
 def build_oberlandquartett():
     path = os.path.join("turniere", "oberlandquartett", "main.typ")
     if not os.path.exists(path):
@@ -1353,11 +1399,7 @@ def build_oberlandquartett():
                 f'<span class="oq-zahlen"><b>{siege}</b> Turniersiege · <b>{anz_pokale}</b> {"Pokal" if anz_pokale == 1 else "Pokale"}</span>'
                 f'<span class="oq-stand">{"Zum nächsten Pokal: " + ", ".join(stand) if stand else "Zum nächsten Pokal: noch kein Sieg"}</span></li>')
         html.append(f'<ul class="oq-karten">{"".join(karten)}</ul>')
-        fotos = [(d, t) for d, t in OQ_FOTOS if os.path.exists(d)]
-        if fotos:
-            html.append('<div class="oq-fotos">' + "".join(
-                f'<figure><img src="{quote(d)}" alt="{esc(t)}" loading="lazy"><figcaption>{esc(t)}</figcaption></figure>'
-                for d, t in fotos) + '</div>')
+        html.append(oq_diashow_html())
 
         kopf = "".join(f"<th>{esc(t)}</th>" for t in teams)
         reihen, kommend = [], []
@@ -3083,7 +3125,7 @@ def build_spieler(aktuell, teams, archiv):
             os.remove(alt)
     ACTIVE_PARENT.update({os.path.basename(x): "mannschaften.html" for x in liga.SPIELER_SEITEN})
     n = spieler.bauen(alle, dsb, render_page, liga.STYLES, aktuell, berichte=ALLE_BERICHTE,
-                      tour_seiten=turnierorte.seite_fuer_name)
+                      tour_seiten=turnierorte.seite_fuer_name, geburtstage=_geburtstag_liste())
     print(f"Spielerseiten: {n}")
 
 

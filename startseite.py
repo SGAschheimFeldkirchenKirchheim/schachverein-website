@@ -112,6 +112,14 @@ def wechselbild_html(urls, verhaeltnis):
     return f'<div class="st-wechsel" style="aspect-ratio:{verhaeltnis:.4f}">{imgs}</div>'
 
 
+def wechselbild_frei_html(liste):
+    """Überblenden für Fotos in verschiedenen Formaten: jedes Foto ganz, mittig, nichts abgeschnitten."""
+    if not liste:
+        return ""
+    imgs = "".join(f'<img src="{u}" alt=""{" class=an" if i == 0 else ""}>' for i, (u, _) in enumerate(liste))
+    return f'<div class="st-wechsel frei">{imgs}</div>'
+
+
 def polaroid_html(liste):
     if not liste:
         return ""
@@ -173,9 +181,11 @@ def berichte_html(berichte):
     karten = []
     for r in berichte[:BERICHTE_ANZAHL]:
         bild = f'<img src="{r["thumb"]}" alt="" loading="lazy">' if r.get("thumb") else ""
+        auszug = "" if bild else f'<span class="st-auszug">{r.get("snippet") or ""}</span>'
         karten.append(f"""
-        <a class="st-bkarte" href="berichte/{r['filename']}">{bild}
-          <span class="st-btext"><span class="st-meta">{r['meta']}</span><b>{r['title']}</b></span></a>""")
+        <a class="st-bkarte{"" if bild else " ohne-bild"}" href="berichte/{r['filename']}">{bild}
+          <span class="st-btext"><span class="st-meta">{r['meta']}</span><b>{r['title']}</b>{auszug}
+          {"" if bild else '<span class="st-weiter">Bericht lesen →</span>'}</span></a>""")
     if not karten:
         return ""
     return f"""
@@ -264,7 +274,7 @@ def seite(events, berichte, ergebnis_zeilen, geburtstage, mitglieder, mannschaft
     {kopf_html(termine_html(events, team_klasse, plain_text))}
     {berichte_html(berichte)}
     {kaestchen(wechselbild_html(k1, r1), mannschaften_inhalt)}
-    {kaestchen(polaroid_html(k2), historie_inhalt, umgedreht=True)}
+    {kaestchen(wechselbild_frei_html(k2), historie_inhalt, umgedreht=True)}
     {kaestchen(wechselbild_html(k3, r3), ueber_inhalt)}
     {JS.replace("__WECHSEL__", str(WECHSEL_SEKUNDEN * 1000)).replace("__POLAROID__", str(POLAROID_SEKUNDEN * 1000))}"""
     return content, CSS
@@ -323,6 +333,12 @@ CSS = """<style>
     color: inherit; text-decoration: none; transition: transform .3s; }
   .st-bkarte:hover { transform: translateY(-5px); }
   .st-bkarte img { display: block; width: 100%; height: auto; max-height: 340px; object-fit: contain; background: var(--surface); }
+  .st-spur { align-items: stretch; }
+  .st-bkarte.ohne-bild { display: flex; border-top: 4px solid var(--hell); }
+  .st-bkarte.ohne-bild .st-btext { display: flex; flex-direction: column; padding: 1.6rem 1.5rem; }
+  .st-bkarte.ohne-bild b { font-size: 1.6rem; line-height: 1.2; margin: .5rem 0 1rem; }
+  .st-auszug { color: var(--muted); display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+  .st-weiter { margin-top: auto; padding-top: 1rem; color: var(--hell); font-weight: 600; }
   .st-btext { display: block; padding: 1rem 1.2rem 1.3rem; } .st-btext b { display: block; font-family: var(--font-head); font-size: 1.25rem; color: var(--head); margin-top: .3rem; }
   .st-steuer { display: flex; align-items: center; gap: .9rem; margin-top: 1.2rem; }
   .st-steuer button { width: 2.8rem; height: 2.8rem; border-radius: 50%; border: 1.5px solid var(--line); background: none; color: var(--head); font-size: 1.15rem; cursor: pointer; }
@@ -340,6 +356,8 @@ CSS = """<style>
   .st-wechsel { position: relative; width: 100%; overflow: hidden; }
   .st-wechsel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.6s ease; }
   .st-wechsel img.an { opacity: 1; }
+  .st-wechsel.frei { display: grid; align-items: center; overflow: visible; }
+  .st-wechsel.frei img { position: static; grid-area: 1 / 1; height: auto; object-fit: initial; }
 
   .st-erg { width: 100%; border-collapse: collapse; font-size: 1.05rem; background: none !important; }
   .st-erg td { padding: .6rem .4rem; border-bottom: 1px solid var(--line); }

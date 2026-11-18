@@ -1,0 +1,6 @@
+Spielerfotos
+
+Fuer jeden Spieler liegt hier ein Platzhalter (grau, "Hier Bild einfuegen"), z. B. arthur-krumm.jpg.
+Einfach durch das echte Foto ersetzen, gleicher Dateiname (.png/.webp geht auch).
+Platzhalter werden auf der Website nicht angezeigt. Neue Spieler bekommen beim Build automatisch einen.
+Am besten Hochformat 4:5 oder quadratisch, ca. 600-800 px breit.
