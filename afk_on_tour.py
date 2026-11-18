@@ -9,6 +9,7 @@ Menü:
   [2] Anträge prüfen        (neue Anträge vom Website-Formular bestätigen/ablehnen)
   [3] Bearbeiten            (Profile und Turniere ändern, ausblenden, löschen, zusammenführen)
   [4] Turnier eintragen     (selbst eintragen, z. B. alte Opens)
+  [5] Alte Turniere suchen  (chess-results nach dem Namen durchsuchen und Treffer übernehmen)
   [0] Beenden
 Nach Änderungen fragt das Programm beim Beenden, ob es gleich hochladen soll.
 """
@@ -18,6 +19,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 os.chdir(HIER)
@@ -132,6 +134,121 @@ def eintragen(d, name=""):
             d.speichern()
         if not ja("Noch ein Turnier für " + name):
             return
+
+
+# ------------------------------------------------------------
+# [5] Alte Turniere auf chess-results suchen
+# ------------------------------------------------------------
+CR_SUCHE = "https://chess-results.com/SpielerSuche.aspx?lan=0"
+PROBE = os.path.join(tempfile.gettempdir(), "afk_spielersuche.html")   # Rohseite zur Fehlersuche (bleibt lokal)
+NICHT_VORSCHLAGEN = re.compile(r"liga|bundesliga|mannschaft|team|pokal|vereinsmeister|\bvm\b|club ?champ|online|lichess|chess\.com", re.I)
+DATUM = re.compile(r"\b(\d{1,2})\.(\d{1,2})\.(\d{4})\b|\b(\d{4})/(\d{1,2})/(\d{1,2})\b")
+
+
+def _formular(seite):
+    """Alle Eingabefelder des ASP.NET-Formulars -> dict, plus die Namen der Such-Felder."""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(seite, "html.parser")
+    felder, nach, vor, knopf = {}, None, None, None
+    for i in soup.find_all(["input", "select"]):
+        n = i.get("name")
+        if not n:
+            continue
+        typ = (i.get("type") or "").lower()
+        if i.name == "select":
+            opt = i.find("option", selected=True) or i.find("option")
+            felder[n] = opt.get("value", "") if opt else ""
+        elif typ in ("hidden", "text", ""):
+            felder[n] = i.get("value", "")
+        elif typ in ("checkbox", "radio") and i.has_attr("checked"):
+            felder[n] = i.get("value", "on")
+        low = n.lower()
+        if typ in ("text", "") and "nach" in low:
+            nach = n
+        elif typ in ("text", "") and "vor" in low:
+            vor = n
+        elif typ == "submit" and ("such" in low or "search" in low or not knopf):
+            knopf = (n, i.get("value", ""))
+    return felder, nach, vor, knopf
+
+
+def cr_spielersuche(name):
+    """[(tnr, Turniername, Datum JJJJ-MM-TT oder '')] aus der Spielersuche von chess-results."""
+    teile = name.split()
+    vorname, nachname = " ".join(teile[:-1]), teile[-1]
+    seite = tk._hole(CR_SUCHE)
+    if not seite:
+        print("  chess-results nicht erreichbar.")
+        return []
+    felder, nach, vor, knopf = _formular(seite)
+    if not nach:
+        print(f"  Suchformular nicht erkannt. Rohseite gespeichert: {PROBE}")
+        with open(PROBE, "w", encoding="utf-8") as f:
+            f.write(seite)
+        return []
+    felder[nach] = nachname
+    if vor:
+        felder[vor] = vorname
+    if knopf:
+        felder[knopf[0]] = knopf[1]
+    antwort = tk._hole(CR_SUCHE, daten=felder) or ""
+    with open(PROBE, "w", encoding="utf-8") as f:     # immer aufheben: hilft, falls die Seite sich ändert
+        f.write(antwort)
+    from bs4 import BeautifulSoup
+    treffer = {}
+    for tr in BeautifulSoup(antwort, "html.parser").find_all("tr"):
+        a = tr.find("a", href=re.compile(r"tnr\d+", re.I))
+        if not a:
+            continue
+        tnr = re.search(r"tnr(\d+)", a["href"], re.I).group(1)
+        zeile = tr.get_text(" ", strip=True)
+        # Nur Zeilen mit genau diesem Namen (Nachname, Vorname)
+        if tp.norm(nachname) not in tp.norm(zeile) or (vorname and tp.norm(vorname.split()[0]) not in tp.norm(zeile)):
+            continue
+        m = DATUM.search(zeile)
+        datum = ""
+        if m and m.group(1):
+            datum = f"{m.group(3)}-{int(m.group(2)):02d}-{int(m.group(1)):02d}"
+        elif m:
+            datum = f"{m.group(4)}-{int(m.group(5)):02d}-{int(m.group(6)):02d}"
+        treffer.setdefault(tnr, (tnr, a.get_text(" ", strip=True), datum))
+    if not treffer:
+        print(f"  Keine Turniere erkannt. Rohseite gespeichert: {PROBE} (bitte an Claude schicken)")
+    return sorted(treffer.values(), key=lambda t: t[2] or "0", reverse=True)
+
+
+def alte_turniere(d):
+    titel("Alte Turniere auf chess-results suchen")
+    print("Sucht in der Spielersuche von chess-results nach dem Namen und schlägt Turniere vor,")
+    print("die noch nicht eingetragen sind. Jede Übernahme wird wie ein Antrag angezeigt (mit Ort, Datum, Bedenkzeit).")
+    sid = profil_waehlen(d, "Profil wählen (oder leer für einen neuen Namen)")
+    name = d.spieler[sid]["name"] if sid else eingabe("Vor- und Nachname (leer = zurück)")
+    if not name or len(name.split()) < 2:
+        return
+    print(f"  Suche '{name}' … (dauert ein paar Sekunden)")
+    liste = cr_spielersuche(name)
+    sid = to.spieler_id(name)
+    schon = {re.search(r"tnr(\d+)", b.get("link", "")).group(1) for b in d.besuche
+             if b["spieler"] == sid and re.search(r"tnr(\d+)", b.get("link", ""))}
+    neu = [t for t in liste if t[0] not in schon]
+    if not neu:
+        print("  Nichts Neues gefunden." if liste else "")
+        return
+    print(f"\n  {len(neu)} Turniere noch nicht eingetragen ({len(liste) - len(neu)} schon da):")
+    for i, (tnr, tname, datum) in enumerate(neu, 1):
+        hinweis = "   (Liga/Mannschaft/Online?)" if NICHT_VORSCHLAGEN.search(tname) else ""
+        print(f"  {i:>3}. {datum[:7] or '   ?   '}  {tname[:70]}{hinweis}")
+    w = eingabe("Welche übernehmen? Nummern mit Komma, z. B. 1,3,7 (oder 'alle', leer = keine)")
+    if not w:
+        return
+    nummern = range(1, len(neu) + 1) if w.lower() == "alle" else [int(x) for x in re.findall(r"\d+", w) if 1 <= int(x) <= len(neu)]
+    for nr in nummern:
+        tnr, tname, _ = neu[nr - 1]
+        a = {"name": name, "link": tk.CR_LINK.format(tnr=tnr), "turnier": tname}
+        if NICHT_VORSCHLAGEN.search(tname):
+            print(f"  Hinweis: '{tname}' sieht nach Liga/Mannschaft/Online aus.")
+        if tp.antrag_pruefen(a, d.spieler, d.besuche, d.konf) == "j":
+            d.speichern()
 
 
 # ------------------------------------------------------------
@@ -335,7 +452,8 @@ def main():
     while True:
         offen = len(glob.glob(os.path.join(to.ORDNER, "antraege", "*.json")))
         titel(f"AFK on Tour   ·   {len(d.spieler)} Profile · {len(d.besuche)} Turniere · {offen} offene Anträge")
-        print("  [1] Alles aktualisieren\n  [2] Anträge prüfen\n  [3] Bearbeiten\n  [4] Turnier eintragen\n  [0] Beenden")
+        print("  [1] Alles aktualisieren\n  [2] Anträge prüfen\n  [3] Bearbeiten\n  [4] Turnier eintragen\n"
+              "  [5] Alte Turniere suchen (chess-results)\n  [0] Beenden")
         w = eingabe("Auswahl")
         if w == "1":
             aktualisieren(d)
@@ -345,6 +463,8 @@ def main():
             bearbeiten(d)
         elif w == "4":
             eintragen(d)
+        elif w == "5":
+            alte_turniere(d)
         elif w in ("0", "q", ""):
             if d.geaendert and ja("Es gibt Änderungen. Jetzt hochladen (dauert nur kurz)"):
                 aktualisieren(d, schnell=True)

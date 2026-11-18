@@ -72,6 +72,15 @@ def spieler_id(name):
     return vor + (teile[-1][0].upper() if len(teile) > 1 else "")
 
 
+def seite_fuer_name(name):
+    """Für die Spielerseiten: 'tour-<id>.html', wenn dieser Spieler ein AFK-on-Tour-Profil hat (sonst '')."""
+    sid = spieler_id(name)
+    profil = spieler_laden().get(sid)
+    if not profil or profil.get("ausgeblendet"):
+        return ""
+    return spieler_seite(sid) if os.path.exists(spieler_seite(sid)) else ""
+
+
 def anzeige_name(name):
     teile = name.split()
     return f"{' '.join(teile[:-1])} {teile[-1][0]}." if len(teile) > 1 else name

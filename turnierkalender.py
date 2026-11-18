@@ -64,7 +64,11 @@ GEOCODER = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q={q}
 PAUSE = 0.8                       # Sekunden zwischen zwei Abrufen derselben Seite (Server schonen)
 GEO_PRO_LAUF = 300                # höchstens so viele Orte pro Lauf nachschlagen (OpenStreetMap: max. 1 pro Sekunde)
 AFK_ALLE_TAGE = 2                 # Teilnehmerlisten höchstens alle 2 Tage neu prüfen
-VEREIN_MUSTER = re.compile(r"Aschheim|Feldkirchen|Kirchheim|\bAFK\b", re.I)
+# Unser Verein in Teilnehmerlisten. Bewusst NICHT nur "Kirchheim" (Kirchheim/Teck, b. Heidelberg …)
+VEREIN_MUSTER = re.compile(r"Aschheim|Feldkirchen[\s/-]*Kirchheim|\bAFK\b|\bSG\s*A[/ ]?F[/ ]?K\b", re.I)
+CR_RANG = "https://chess-results.com/tnr{tnr}.aspx?lan=0&art=1&turdet=NO"
+NEU_TAGE = 7                      # so lange gilt ein Turnier als "Neu"
+ENTWURF_TAGE = 30                 # Ergebnis-Entwürfe nur für Turniere, die höchstens so lange vorbei sind
 LIGA_MUSTER = re.compile(r"\bliga\b|bundesliga|league|mannschaft|\bteam|vereinspokal|schulschach|"
                          r"olympiad|seminar|kongress|congress|arbiter|vereinsmeisterschaft|\bvm\b|"
                          r"club-?meisterschaft|klubmeisterschaft|vereinsturnier|clubturnier|klubturnier|"
@@ -490,6 +494,8 @@ def quelle_chessresults(cache, laender, budget, heute):
             d = _hole(CR_DETAIL.format(tnr=tnr))
             ev = cr_details(tnr, d) if d else None
             # Nur kommende Turniere behalten; der Rest wird als 'erledigt' gemerkt
+            if ev:
+                ev["gefunden"] = heute.isoformat()
             bekannt[tnr] = ev if ev and ev["bis"] and ev["bis"] >= heute.isoformat() else None
     # Ältere Einträge (vor Version 2, ohne Elo-Schnitt) mit dem halben Restbudget auffrischen
     alt = [k for k, v in bekannt.items() if v and v.get("v", 1) < 2]
@@ -499,6 +505,7 @@ def quelle_chessresults(cache, laender, budget, heute):
         ev = cr_details(tnr, d) if d else None
         if ev and ev.get("von"):
             ev["lat"], ev["lon"] = bekannt[tnr].get("lat"), bekannt[tnr].get("lon")
+            ev["gefunden"] = bekannt[tnr].get("gefunden", "")
             bekannt[tnr] = ev
     for k, v in list(bekannt.items()):
         if v and v.get("bis") and v["bis"] < heute.isoformat():
@@ -514,6 +521,8 @@ def afk_abgleich(events, cache, heimat, max_km, budget, heute):
             continue
         tnr = ev["id"][3:]
         alt = stand.get(tnr)
+        if alt and alt.get("v", 1) < 2:
+            alt = None            # alter Stand (zählte auch andere Kirchheims) -> neu prüfen
         if alt and alt.get("geprueft", "") >= (heute - datetime.timedelta(days=AFK_ALLE_TAGE)).isoformat():
             ev["afk"] = alt.get("anzahl", 0)
             continue
@@ -530,8 +539,95 @@ def afk_abgleich(events, cache, heimat, max_km, budget, heute):
             for tr in BeautifulSoup(seite, "html.parser").find_all("tr"):
                 if VEREIN_MUSTER.search(tr.get_text(" ", strip=True)):
                     anzahl += 1
-        stand[tnr] = {"anzahl": anzahl, "geprueft": heute.isoformat()}
+        stand[tnr] = {"anzahl": anzahl, "geprueft": heute.isoformat(), "v": 2}
         ev["afk"] = anzahl
+    # Turniere mit AFKlern merken (auch nachdem sie vorbei sind) -> Ergebnis-Entwurf
+    merk = cache.setdefault("afk_turniere", {})
+    for ev in events:
+        if ev["id"].startswith("cr:") and ev.get("afk"):
+            merk.setdefault(ev["id"][3:], {"name": ev["name"], "von": ev["von"], "bis": ev["bis"],
+                                           "ort": ev.get("ort", ""), "land": ev.get("land", "")})
+
+
+def _cr_rangliste(seite):
+    """Endstand -> [(Platz, Name, Punkte, Verein)] (Spalten über die Kopfzeile erkannt)."""
+    if not BeautifulSoup or not seite:
+        return []
+    out = []
+    for tab in BeautifulSoup(seite, "html.parser").find_all("table"):
+        kopf, sp = None, {}
+        for tr in tab.find_all("tr"):
+            zellen = [td.get_text(" ", strip=True) for td in tr.find_all(["td", "th"])]
+            if kopf is None:
+                low = [z.lower().rstrip(".") for z in zellen]
+                if "name" in low and any(x in low for x in ("pkt", "pts", "punkte")):
+                    kopf = low
+                    sp = {"platz": next((i for i, x in enumerate(low) if x in ("rg", "rk", "rang", "rank", "nr")), 0),
+                          "name": low.index("name"),
+                          "punkte": next(i for i, x in enumerate(low) if x in ("pkt", "pts", "punkte")),
+                          "verein": next((i for i, x in enumerate(low) if x.startswith(("verein", "club", "verein/ort", "club/city"))), None)}
+                continue
+            if len(zellen) <= max(v for v in sp.values() if v is not None):
+                continue
+            verein = zellen[sp["verein"]] if sp["verein"] is not None else " ".join(zellen)
+            if VEREIN_MUSTER.search(verein):
+                out.append((zellen[sp["platz"]], zellen[sp["name"]], zellen[sp["punkte"]], verein))
+        if out:
+            return out
+    return out
+
+
+def _typst_text(t):
+    return re.sub(r"([\\*_#$@<>`\[\]])", r"\\\1", t)
+
+
+def ergebnis_entwuerfe(cache, heute, budget):
+    """Nach dem Turnier: Endstand der AFKler holen und als Bericht-Entwurf (_Ordner = noch nicht online) anlegen."""
+    merk = cache.get("afk_turniere", {})
+    offen = {}
+    for tnr, t in list(merk.items()):
+        if t.get("erledigt") or not t.get("bis") or t["bis"] >= heute.isoformat():
+            continue
+        if t["bis"] < (heute - datetime.timedelta(days=ENTWURF_TAGE)).isoformat():
+            t["erledigt"] = "zu alt"
+            continue
+        if budget[0] <= 0:
+            break
+        budget[0] -= 1
+        seite = _hole(CR_RANG.format(tnr=tnr))
+        if seite is None:
+            continue                      # nicht erreichbar -> nächste Nacht nochmal
+        ergebnis = _cr_rangliste(seite)
+        t["erledigt"] = heute.isoformat()
+        if ergebnis:
+            basis, gruppe = gruppe_trennen(t["name"])
+            offen.setdefault((_schluessel(basis), t["bis"][:7]), {"basis": basis, "t": t, "gruppen": []})["gruppen"].append(
+                (gruppe, tnr, ergebnis))
+    for (_, _), e in offen.items():
+        t, basis = e["t"], e["basis"]
+        d = datetime.date.fromisoformat(t["bis"])
+        slug = re.sub(r"[^A-Za-z0-9]+", "_", unicodedata.normalize("NFKD", basis).encode("ascii", "ignore").decode()).strip("_")[:50]
+        ordner = os.path.join("berichte", str(d.year), "_" + (slug or "Turnier") + "_Ergebnisse")
+        if os.path.exists(ordner):
+            continue
+        zeilen = ['#import "../../_funktionen.typ": *', "",
+                  f"#title[{_typst_text(basis)}: Unsere Ergebnisse]", f"#date[{d.strftime('%d.%m.%Y')}]",
+                  "#author[Website (automatischer Entwurf)]",
+                  "// Automatisch erstellt aus dem Endstand auf chess-results. Bitte ergänzen (Bericht, Fotos),",
+                  "// dann den Unterstrich vom Ordnernamen entfernen -> online.", "",
+                  f"Vom {datetime.date.fromisoformat(t['von']).strftime('%d.%m.')} bis {d.strftime('%d.%m.%Y')} fand "
+                  f"{_typst_text(basis)} in {_typst_text(t.get('ort') or '?')} statt. Mit dabei waren:", ""]
+        for gruppe, tnr, ergebnis in sorted(e["gruppen"]):
+            if gruppe:
+                titel = f"Gruppe {gruppe}" if len(gruppe) <= 3 and gruppe.isalpha() else gruppe
+                zeilen += [f"*{_typst_text(titel)}* (#link(\"{CR_LINK.format(tnr=tnr)}\")[Endstand])", ""]
+            for platz, name, punkte, _ in ergebnis:
+                zeilen.append(f"- Platz {_typst_text(platz)}: {_typst_text(name)} – {_typst_text(punkte)} Punkte")
+            zeilen.append("")
+        os.makedirs(ordner, exist_ok=True)
+        with open(os.path.join(ordner, "Bericht.typ"), "w", encoding="utf-8") as f:
+            f.write("\n".join(zeilen))
+        print(f"  Turnierkalender: Bericht-Entwurf angelegt: {ordner}")
 
 
 # ==========================================
@@ -683,6 +779,7 @@ def gruppieren(events):
     for ev in sorted(events, key=lambda e: (e["von"], e["name"])):
         basis, gruppe = gruppe_trennen(ev["name"])
         teil = {"gruppe": gruppe or "", "name": ev["name"], "link": ev.get("links", {}).get("chessresults", ""),
+                "gefunden": ev.get("gefunden", ""),
                 "schnitt": ev.get("schnitt"), "bedenkzeit": ev.get("bedenkzeit", ""), "elo": ev.get("elo"),
                 "afk": ev.get("afk") or 0, "gruppen": _gruppen(ev["name"])}
         k = (_schluessel(basis), ev.get("land", ""))
@@ -715,6 +812,12 @@ def gruppieren(events):
         c["elo"] = any(t["elo"] for t in c["teile"])
         c["afk"] = sum(t["afk"] for t in c["teile"])
         c["gruppen"] = sorted({g for t in c["teile"] for g in (t["gruppen"] or ["offen"])})
+        # stabiler Schlüssel für "Wer fährt mit?" (ändert sich nicht, wenn weitere Gruppen dazukommen)
+        basis = gruppe_trennen(c["name"])[0]
+        c["key"] = (re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", basis.lower()).encode("ascii", "ignore").decode())
+                    .strip("-")[:60] + "-" + c["von"])
+        gef = [t.get("gefunden") for t in c["teile"] if t.get("gefunden")]
+        c["gefunden"] = min(gef) if gef else ""
         for f in ("schnitt", "v", "bz_label", "quelle"):
             c.pop(f, None)
     karten.sort(key=lambda e: (e["von"], e["name"].lower()))
@@ -773,6 +876,8 @@ def aktualisieren(heute=None):
     events = zusammenfuehren(listen, konfig, heute)
     if quellen.get("chessresults", True):
         afk_abgleich(events, cr, konfig.get("heimat", {}), konfig.get("afk_abgleich_km", 400), budget, heute)
+        if konfig.get("ergebnis_entwuerfe", True) and not _nur_cache:
+            ergebnis_entwuerfe(cr, heute, budget)
         _speichere_json(os.path.join(CACHE, "chessresults.json"), cr)
     events = gruppieren(events)
     schule, semester = ferien(heute)
@@ -855,6 +960,49 @@ CSS = """
     background: var(--surface); color: var(--text); cursor: pointer; }
   .tk-filter input[type=number] { font: inherit; font-weight: normal; padding: 0.4rem 0.5rem; border: 1px solid var(--line);
     border-radius: 6px; background: var(--soft); color: var(--text); width: 100%; box-sizing: border-box; }
+  .tk-b.neu { background: #e74c3c; color: #fff; border-color: transparent; font-weight: 700; }
+  .tk-ansicht { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; margin: 0 0 0.8rem; }
+  .tk-ansicht button { font: inherit; font-size: 0.88rem; padding: 0.35rem 1rem; border: 0; background: transparent; color: var(--text); cursor: pointer; }
+  .tk-ansicht button.an { background: var(--hell, #6f9fd8); color: #0e1524; font-weight: 700; }
+  #tk-karte { height: 520px; border-radius: 10px; border: 1px solid var(--line); z-index: 0; }
+  @media (max-width: 600px) { #tk-karte { height: 400px; } }
+  .tk-mon-kopf { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.4rem 0 0.6rem; font-size: 1.1rem; }
+  .tk-mon-kopf button { font: inherit; font-size: 1.3rem; line-height: 1; padding: 0.15rem 0.7rem; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--text); cursor: pointer; }
+  .tk-mon { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+  .tk-wt { text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--muted); padding: 0.2rem 0; }
+  .tk-tag { min-height: 6.2rem; padding: 0.25rem; border: 1px solid var(--line); border-radius: 6px; background: var(--surface);
+    display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+  .tk-tag.leer { background: transparent; border-color: transparent; }
+  .tk-tag.schule { box-shadow: inset 0 4px 0 var(--tk-schule); }
+  .tk-tag.semester { box-shadow: inset 0 -4px 0 var(--tk-semester); }
+  .tk-tag.schule.semester { box-shadow: inset 0 4px 0 var(--tk-schule), inset 0 -4px 0 var(--tk-semester); }
+  .tk-tag.heute { outline: 2px solid var(--hell, #6f9fd8); }
+  .tk-tag .nr { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+  .tk-chip { display: block; font-size: 0.7rem; line-height: 1.25; padding: 1px 4px; border-radius: 4px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; text-decoration: none; color: #fff; background: #4a6a99; }
+  .tk-chip.klassisch { background: #2c6e49; } .tk-chip.schnell { background: #b7791f; } .tk-chip.blitz { background: #b83232; }
+  .tk-chip.mehr { background: transparent; color: var(--muted); }
+  @media (max-width: 600px) { .tk-tag { min-height: 3.2rem; } }
+  .tk-mon-liste { list-style: none; padding: 0; margin: 0.3rem 0 0; display: grid; gap: 0.35rem; font-size: 0.92rem; }
+  .tk-datum-k { display: inline-block; min-width: 6.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tk-ort-k { color: var(--muted); font-size: 0.85rem; }
+  .tk-links { align-items: center; }
+  @media (max-width: 600px) { .tk-chip { font-size: 0; height: 5px; padding: 0; } .tk-chip.mehr { font-size: 0.6rem; height: auto; } }
+  .tk-int { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.7rem; font-size: 0.85rem; }
+  .tk-karte-leg { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: 0.85rem; margin: 0.5rem 0 0; color: var(--muted); }
+  .tk-karte-leg i { display: inline-block; width: 0.75rem; height: 0.75rem; border-radius: 50%; margin-right: 0.3rem; vertical-align: -1px;
+    border: 1.5px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+  .tk-int button { font: inherit; font-size: 0.82rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--hell, #6f9fd8); background: transparent; color: var(--text); }
+  .tk-links .tk-int button { text-decoration: none; color: var(--text); }
+  .tk-int button.dabei { background: var(--hell, #6f9fd8); color: #0e1524; }
+  .tk-int.laedt { opacity: 0.5; }
+  .tk-int-wer { color: var(--muted); }
+  .tk-int-name { display: flex; gap: 0.3rem; flex: 1 1 100%; }
+  .tk-int-name input { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.5rem; border-radius: 6px; border: 1px solid var(--line);
+    background: var(--soft); color: var(--text); flex: 1; min-width: 0; }
+  .tk-int-name button { border-radius: 6px; }
   .tk-leer { padding: 1.5rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
   .tk-quellen { font-size: 0.8rem; color: var(--muted); margin-top: 2rem; }
   :root { --tk-schule: #1f8a70; --tk-semester: #7b4fbf; }
@@ -915,7 +1063,7 @@ JS = r"""
   var h = new Date(), bis = new Date(h.getFullYear(), h.getMonth() + D.standard.monate, 1);
   var STANDARD = {von: iso(h).slice(0, 7), bis: iso(bis).slice(0, 7), km: String(D.standard.km), land: [], q: "", meinelo: "",
     bz: ["klassisch", "schnell", "blitz", "?"], gr: ["offen", "jugend", "senioren", "frauen"],
-    elo: false, ferien: false, semester: false, empf: false, afk: false};
+    elo: false, ferien: false, semester: false, empf: false, afk: false, neu: false, interesse: false};
   function setze(w) {
     f.elements.von.value = w.von; f.elements.bis.value = w.bis; f.elements.km.value = w.km;
     var wl = Array.isArray(w.land) ? w.land : (w.land ? [w.land] : []);
@@ -923,14 +1071,14 @@ JS = r"""
     f.elements.q.value = w.q; f.elements.meinelo.value = w.meinelo || "";
     [].forEach.call(f.querySelectorAll("[name=bz]"), function (c) { c.checked = w.bz.indexOf(c.value) >= 0; });
     [].forEach.call(f.querySelectorAll("[name=gr]"), function (c) { c.checked = w.gr.indexOf(c.value) >= 0; });
-    ["elo", "ferien", "semester", "empf", "afk"].forEach(function (n) { f.elements[n].checked = !!w[n]; });
+    ["elo", "ferien", "semester", "empf", "afk", "neu", "interesse"].forEach(function (n) { f.elements[n].checked = !!w[n]; });
   }
   function lies() {
     var w = {von: f.elements.von.value, bis: f.elements.bis.value, km: f.elements.km.value, land: landListe(),
       q: f.elements.q.value.trim(), meinelo: +f.elements.meinelo.value || 0, bz: [], gr: []};
     [].forEach.call(f.querySelectorAll("[name=bz]:checked"), function (c) { w.bz.push(c.value); });
     [].forEach.call(f.querySelectorAll("[name=gr]:checked"), function (c) { w.gr.push(c.value); });
-    ["elo", "ferien", "semester", "empf", "afk"].forEach(function (n) { w[n] = f.elements[n].checked; });
+    ["elo", "ferien", "semester", "empf", "afk", "neu", "interesse"].forEach(function (n) { w[n] = f.elements[n].checked; });
     return w;
   }
   var gespeichert = null;
@@ -961,6 +1109,157 @@ JS = r"""
   }
 
   var SEITE_N = 20, anzeigen = SEITE_N, letzterFilter = "";
+  var ansicht = "liste", monatVersatz = 0, letzteListe = [], karteBox = document.getElementById("tk-kartebox");
+  try { ansicht = localStorage.getItem("afk-tk-ansicht") || "liste"; } catch (e) {}
+  function datumKurz(s) { return s ? s.slice(8, 10) + "." + s.slice(5, 7) + "." : ""; }
+  function istNeu(e) { return !!(e.gefunden && e.gefunden >= D.neu_ab); }
+  function ersterLink(e) {
+    var L = e.links || {}, t = e.teile && e.teile[0];
+    return L.ausschreibung || L.website || (t && t.link) || L.chessresults || L.fide || "";
+  }
+
+  // ---------- Ansicht-Umschalter ----------
+  [].forEach.call(document.querySelectorAll("[data-ansicht]"), function (b) {
+    b.classList.toggle("an", b.getAttribute("data-ansicht") === ansicht);
+    b.addEventListener("click", function () {
+      ansicht = b.getAttribute("data-ansicht");
+      try { localStorage.setItem("afk-tk-ansicht", ansicht); } catch (e) {}
+      [].forEach.call(document.querySelectorAll("[data-ansicht]"), function (x) { x.classList.toggle("an", x === b); });
+      zeige();
+    });
+  });
+
+  // ---------- Monatsansicht ----------
+  var WT = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+  function monatAnsicht(liste) {
+    var start = f.elements.von.value || iso(new Date()).slice(0, 7);
+    var basis = dt(start + "-01"); basis.setMonth(basis.getMonth() + monatVersatz);
+    var jahr = basis.getFullYear(), mo = basis.getMonth(), erster = new Date(jahr, mo, 1);
+    var tage = new Date(jahr, mo + 1, 0).getDate(), leer = (erster.getDay() + 6) % 7;
+    var html = '<div class="tk-mon-kopf"><button type="button" data-monat-nav="-1" aria-label="Vormonat">‹</button><b>' +
+      MON[mo] + " " + jahr + '</b><button type="button" data-monat-nav="1" aria-label="Nächster Monat">›</button></div>' +
+      '<div class="tk-mon">' + WT.map(function (w) { return '<div class="tk-wt">' + w + "</div>"; }).join("");
+    for (var i = 0; i < leer; i++) html += '<div class="tk-tag leer"></div>';
+    for (var d = 1; d <= tage; d++) {
+      var tag = iso(new Date(jahr, mo, d)), x = {von: tag, bis: tag};
+      var sch = ueberlapp(x, D.schule), sem = ueberlapp(x, D.semester);
+      var heute = tag === iso(new Date());
+      var am = liste.filter(function (e) { return e.von <= tag && e.bis >= tag; });
+      html += '<div class="tk-tag' + (sch.length ? " schule" : "") + (sem.length ? " semester" : "") + (heute ? " heute" : "") + '"' +
+        (sch.length ? ' title="' + esc(sch[0][2]) + '"' : "") + '><span class="nr">' + d + "</span>" +
+        am.slice(0, 4).map(function (e) {
+          var bz = (e._t && e._t[0] && e._t[0].bedenkzeit) || "";
+          return '<a class="tk-chip ' + bz + '" href="' + esc(ersterLink(e)) + '" target="_blank" rel="noopener" title="' +
+            esc(e.name + " · " + [e.ort, e.land].filter(Boolean).join(", ") + (e.km != null ? " · " + e.km + " km" : "")) + '">' + esc(e.name) + "</a>";
+        }).join("") + (am.length > 4 ? '<span class="tk-chip mehr">+' + (am.length - 4) + "</span>" : "") + "</div>";
+    }
+    html += "</div>";
+    var mStart = iso(erster), mEnde = iso(new Date(jahr, mo, tage));
+    var imMonat = liste.filter(function (e) { return e.von <= mEnde && e.bis >= mStart; });
+    html += '<h3 class="tk-monat">' + (imMonat.length ? imMonat.length + " Turnier" + (imMonat.length === 1 ? "" : "e") + " im " + MON[mo]
+      : "Keine Turniere im " + MON[mo]) + "</h3>";
+    if (imMonat.length) html += '<ul class="tk-mon-liste">' + imMonat.map(function (e) {
+      return '<li><span class="tk-datum-k">' + datumKurz(e.von) + (e.bis !== e.von ? "–" + datumKurz(e.bis) : "") + "</span> " +
+        (ersterLink(e) ? '<a href="' + esc(ersterLink(e)) + '" target="_blank" rel="noopener">' + esc(e.name) + "</a>" : esc(e.name)) +
+        ' <span class="tk-ort-k">' + esc([e.ort, e.land].filter(Boolean).join(", ")) + (e.km != null ? " · " + e.km + " km" : "") + "</span>" +
+        (istNeu(e) ? ' <span class="tk-b neu">Neu</span>' : "") + "</li>";
+    }).join("") + "</ul>";
+    out.innerHTML = html;
+  }
+
+  // ---------- Kartenansicht (lädt die Kartenbibliothek erst bei Bedarf) ----------
+  var karte = null, punkte = null, grenzen = null;
+  function laden(src, css) {
+    return new Promise(function (ok, fehler) {
+      var t = document.createElement(css ? "link" : "script");
+      if (css) { t.rel = "stylesheet"; t.href = src; ok(); } else { t.src = src; t.onload = ok; t.onerror = fehler; }
+      document.head.appendChild(t);
+    });
+  }
+  function kartenStil() {
+    if (!grenzen) return;
+    var fb = D.karte[document.documentElement.getAttribute("data-theme") === "dark" ? "dunkel" : "hell"];
+    document.getElementById("tk-karte").style.background = fb.meer;
+    grenzen.setStyle({color: fb.rand, weight: 0.8, fillColor: fb.land, fillOpacity: 1});
+  }
+  function karteAnsicht(liste) {
+    if (!window.L || !window.topojson) {
+      laden(D.libs.css, true);
+      laden(D.libs.leaflet).then(function () { return laden(D.libs.topojson); }).then(function () { karteAnsicht(letzteListe); });
+      return;
+    }
+    if (!karte) {
+      karte = L.map("tk-karte", {scrollWheelZoom: false, zoomSnap: 0.25}).setView([48.5, 11], 5);
+      karte.attributionControl.addAttribution('Grenzen &copy; <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
+      punkte = L.layerGroup().addTo(karte);
+      fetch(D.libs.grenzen).then(function (r) { return r.json(); }).then(function (topo) {
+        grenzen = L.geoJSON(topojson.feature(topo, topo.objects.countries), {interactive: false}).addTo(karte);
+        grenzen.bringToBack(); kartenStil();
+      });
+      new MutationObserver(kartenStil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+    }
+    punkte.clearLayers();
+    var FARBE = {klassisch: "#2c6e49", schnell: "#b7791f", blitz: "#b83232"}, pos = [];
+    liste.forEach(function (e) {
+      if (e.lat == null) return;
+      var bz = (e._t && e._t[0] && e._t[0].bedenkzeit) || "";
+      L.circleMarker([e.lat, e.lon], {radius: 7, color: "#fff", weight: 1.5, fillColor: FARBE[bz] || "#6f9fd8", fillOpacity: 0.95})
+        .bindPopup("<b>" + esc(e.name) + "</b><br>" + datumKurz(e.von) + (e.bis !== e.von ? " – " + datumKurz(e.bis) : "") + e.von.slice(0, 4) +
+          "<br>" + esc([e.ort, e.land].filter(Boolean).join(", ")) + (e.km != null ? " · " + e.km + " km" : "") +
+          (ersterLink(e) ? '<br><a href="' + esc(ersterLink(e)) + '" target="_blank" rel="noopener">Details</a>' : ""))
+        .addTo(punkte);
+      pos.push([e.lat, e.lon]);
+    });
+    karte.invalidateSize();
+    if (pos.length > 1) karte.fitBounds(pos, {padding: [30, 30], maxZoom: 8});
+    else if (pos.length === 1) karte.setView(pos[0], 8);
+    var ohne = liste.length - pos.length;
+    document.getElementById("tk-karte-hinweis").textContent = ohne ? ohne + " Turnier(e) ohne bekannten Ort sind nicht auf der Karte." : "";
+  }
+
+  // ---------- Wer fährt mit? ----------
+  var INTERESSE = {}, NAME = "";
+  try { NAME = localStorage.getItem("afk-name") || ""; } catch (e) {}
+  function kurz(n) { var t = n.trim().split(/\s+/); return t.length > 1 ? t.slice(0, -1).join(" ") + " " + t[t.length - 1].charAt(0).toUpperCase() + "." : n; }
+  function interesseHtml(e) {
+    if (!D.skript) return "";
+    var leute = INTERESSE[e.key] || [], ich = NAME && leute.indexOf(kurz(NAME)) >= 0;
+    return '<div class="tk-int" data-key="' + esc(e.key) + '">' +
+      '<button type="button" data-int="' + esc(e.key) + '" class="' + (ich ? "dabei" : "") + '">' + (ich ? "✓ Ich will hin" : "Ich will hin") + "</button>" +
+      (leute.length ? '<span class="tk-int-wer">' + (leute.length === 1 ? "Interesse: " : leute.length + " wollen hin: ") +
+        esc(leute.join(", ")) + "</span>" : "") + "</div>";
+  }
+  function interesseKlick(knopf) {
+    var key = knopf.getAttribute("data-int"), box = knopf.parentNode;
+    if (!NAME) {
+      if (box.querySelector("form")) return;
+      var fm = document.createElement("form");
+      fm.className = "tk-int-name";
+      fm.innerHTML = '<input name="n" placeholder="Dein Name (Vor- und Nachname)" maxlength="60" required><button>OK</button>';
+      fm.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        NAME = fm.elements.n.value.trim().replace(/\s+/g, " ");
+        if (NAME.split(" ").length < 2) { fm.elements.n.setCustomValidity("Bitte Vor- und Nachname"); fm.reportValidity(); NAME = ""; return; }
+        try { localStorage.setItem("afk-name", NAME); } catch (e) {}
+        senden(key, box);
+      });
+      box.appendChild(fm); fm.elements.n.focus();
+      return;
+    }
+    senden(key, box);
+  }
+  function senden(key, box) {
+    box.classList.add("laedt");
+    fetch(D.skript, {method: "POST", body: JSON.stringify({typ: "interesse", key: key, name: NAME, website: ""})})
+      .then(function (r) { return r.json(); })
+      .then(function (a) { if (!a.ok) throw new Error(a.fehler || "Fehler"); INTERESSE[key] = a.leute || []; zeige(); })
+      .catch(function (e) { box.classList.remove("laedt"); alert("Das hat nicht geklappt: " + e.message); });
+  }
+  if (D.skript) {
+    fetch(D.skript + "?aktion=interesse").then(function (r) { return r.json(); })
+      .then(function (a) { if (a && a.interesse) { INTERESSE = a.interesse; zeige(); } }).catch(function () {});
+  }
+
   function passendeTeile(e, w) {
     return e.teile.filter(function (t) {
       if (w.bz.indexOf(t.bedenkzeit || "?") < 0) return false;
@@ -985,6 +1284,8 @@ JS = r"""
       if (!e._t.length) return false;
       if (w.empf && !e.empfohlen) return false;
       if (w.afk && !e.afk) return false;
+      if (w.neu && !istNeu(e)) return false;
+      if (w.interesse && !(INTERESSE[e.key] || []).length) return false;
       var s = ueberlapp(e, D.schule).length, m = ueberlapp(e, D.semester).length;
       if ((w.ferien || w.semester) && !((w.ferien && s) || (w.semester && m))) return false;
       if (q && (e.name + " " + e.ort + " " + e.land).toLowerCase().indexOf(q) < 0) return false;
@@ -996,6 +1297,10 @@ JS = r"""
         : "Noch keine Turniere geladen. Der Kalender füllt sich beim nächsten nächtlichen Update.") + "</p>";
       return;
     }
+    letzteListe = liste;
+    karteBox.hidden = ansicht !== "karte"; out.hidden = ansicht === "karte";
+    if (ansicht === "monat") { monatAnsicht(liste); return; }
+    if (ansicht === "karte") { karteAnsicht(liste); return; }
     var html = "", monat = "";
     liste.slice(0, anzeigen).forEach(function (e) {
       var m = e.von.slice(0, 7);
@@ -1016,6 +1321,7 @@ JS = r"""
       if (sem.length) b += '<span class="tk-b semester">Semesterferien</span>';
       if (e.afk) b += '<span class="tk-b afk">' + e.afk + " AFK gemeldet</span>";
       if (e.empfohlen) b += '<span class="tk-b empf">★ Empfehlung</span>';
+      if (istNeu(e)) b = '<span class="tk-b neu" title="Seit ' + datumKurz(e.gefunden) + ' im Kalender">Neu</span>' + b;
       var L = e.links, l = "", einzel = e.teile.length === 1 && !e.teile[0].gruppe, teile = "";
       if (L.ausschreibung) l += '<a href="' + esc(L.ausschreibung) + '" target="_blank" rel="noopener">Ausschreibung</a>';
       if (L.website) l += '<a href="' + esc(L.website) + '" target="_blank" rel="noopener">Website</a>';
@@ -1041,7 +1347,7 @@ JS = r"""
         '<h4 class="tk-name">' + esc(e.name) + "</h4>" +
         '<p class="tk-ort">' + esc(ort) + (e.km != null ? " · " + e.km + " km" : "") + (e.bedenkzeit_text && einzel ? " · " + esc(e.bedenkzeit_text) : "") + "</p>" +
         (b ? '<div class="tk-badges">' + b + "</div>" : "") + teile + (e.notiz ? '<p class="tk-ort">' + esc(e.notiz) + "</p>" : "") +
-        '<div class="tk-links">' + l + "</div></div></article>";
+        '<div class="tk-links">' + l + interesseHtml(e) + "</div></div></article>";
     });
     html += "</div>";
     if (liste.length > anzeigen) {
@@ -1051,6 +1357,10 @@ JS = r"""
   }
   out.addEventListener("click", function (ev) {
     if (ev.target.id === "tk-mehr") { anzeigen += SEITE_N; zeige(); return; }
+    var mv = ev.target.closest("[data-monat-nav]");
+    if (mv) { monatVersatz += +mv.getAttribute("data-monat-nav"); zeige(); return; }
+    var ib = ev.target.closest("[data-int]");
+    if (ib) { interesseKlick(ib); return; }
     var k = ev.target.closest("[data-ics]"); if (k) ics(D.events[+k.getAttribute("data-ics")]);
   });
   f.addEventListener("input", zeige); f.addEventListener("change", zeige);
@@ -1080,12 +1390,20 @@ AUSSCHREIBUNG_TABS = """
     </nav>"""
 
 
-def seite_html(events, schule, semester, konfig, stand):
+def seite_html(events, schule, semester, konfig, stand, skript_url="", heute=None):
+    heute = heute or datetime.date.today()
     std = konfig.get("standard_filter", {})
     daten = {"events": events, "schule": schule, "semester": semester,
              "standard": {"km": std.get("km", 200), "monate": std.get("monate", 6)},
              "elo": {"unten": (konfig.get("elo_toleranz") or {}).get("unten", 350),
-                     "oben": (konfig.get("elo_toleranz") or {}).get("oben", 200)}}
+                     "oben": (konfig.get("elo_toleranz") or {}).get("oben", 200)},
+             "neu_ab": (heute - datetime.timedelta(days=NEU_TAGE)).isoformat(),
+             "skript": skript_url,
+             "karte": {"dunkel": {"meer": "#0e1524", "land": "#1d2b47", "rand": "#3c5070"},
+                       "hell": {"meer": "#dfe8f2", "land": "#f7f8fa", "rand": "#a8b6c7"}},
+             "libs": {"css": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css", "leaflet": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+                      "topojson": "https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js",
+                      "grenzen": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"}}
     km_optionen = "".join(f'<option value="{k}">bis {k} km</option>' for k in (50, 100, 200, 400, 800, 1500))
     heimat = html.escape((konfig.get("heimat") or {}).get("name", "uns"))
     fide_an = (konfig.get("quellen") or {}).get("fide", False)
@@ -1130,12 +1448,21 @@ def seite_html(events, schule, semester, konfig, stand):
         <label><input type="checkbox" name="elo"> nur Elo-gewertet</label>
         <label><input type="checkbox" name="afk"> mit AFK-Spielern</label>
         <label><input type="checkbox" name="empf"> nur Empfehlungen</label>
+        <label><input type="checkbox" name="neu"> nur neue</label>
+        <label><input type="checkbox" name="interesse"> mit Interessenten</label>
         <button type="button" id="tk-reset">Filter zurücksetzen</button>
       </div>
     </form></details>
     <div class="tk-legende"><span class="tk-anzahl" id="tk-zahl"></span>
       <span class="tk-b schule">Schulferien Bayern</span><span class="tk-b semester">Semesterferien (bayer. Unis)</span>
-      <span class="tk-b afk">AFK gemeldet</span><span class="tk-b empf">★ Empfehlung</span></div>
+      <span class="tk-b afk">AFK gemeldet</span><span class="tk-b neu">Neu</span><span class="tk-b empf">★ Empfehlung</span></div>
+    <div class="tk-ansicht" role="tablist">
+      <button type="button" data-ansicht="liste">Liste</button><button type="button" data-ansicht="monat">Monat</button>
+      <button type="button" data-ansicht="karte">Karte</button></div>
+    <div id="tk-kartebox" hidden><div id="tk-karte"></div>
+      <p class="tk-karte-leg"><span><i style="background:#2c6e49"></i>Klassisch</span><span><i style="background:#b7791f"></i>Schnellschach</span>
+        <span><i style="background:#b83232"></i>Blitz</span><span><i style="background:#6f9fd8"></i>unbekannt / gemischt</span>
+        <span id="tk-karte-hinweis"></span></p></div>
     <div id="tk-out" aria-live="polite"></div>
     <p class="tk-quellen">Quellen: {quellen_links}, eigene Liste. Stand: {stand}.
       Angaben ohne Gewähr – bitte immer die Ausschreibung prüfen. Noch mehr deutsche Turniere:
@@ -1145,7 +1472,15 @@ def seite_html(events, schule, semester, konfig, stand):
     """
 
 
-def bauen(render_page, heute=None):
+LETZTE_EVENTS = []      # nach bauen(): die Karten (für die Startseiten-Box "Diese Woche")
+
+
+def ist_neu(karte, heute=None):
+    heute = heute or datetime.date.today()
+    return bool(karte.get("gefunden")) and karte["gefunden"] >= (heute - datetime.timedelta(days=NEU_TAGE)).isoformat()
+
+
+def bauen(render_page, heute=None, skript_url=""):
     """Von build_site.py aufgerufen. Gibt (SEITE, TITEL) zurück oder None."""
     heute = heute or datetime.date.today()
     try:
@@ -1153,9 +1488,10 @@ def bauen(render_page, heute=None):
     except Exception as e:  # der Website-Build darf nie am Kalender scheitern
         print(f"WARNUNG: Turnierkalender übersprungen ({type(e).__name__}: {e})")
         events, schule, semester, konfig = [], [], [], _lade_json(KONFIG, {})
-    global ANZAHL
+    global ANZAHL, LETZTE_EVENTS
     ANZAHL = len(events)
-    inhalt = seite_html(events, schule, semester, konfig, heute.strftime("%d.%m.%Y"))
+    LETZTE_EVENTS = events
+    inhalt = seite_html(events, schule, semester, konfig, heute.strftime("%d.%m.%Y"), skript_url, heute)
     render_page(TITEL, inhalt, SEITE, extra_styles="<style>" + CSS + "</style>")
     return SEITE, TITEL
 

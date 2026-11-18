@@ -11,8 +11,11 @@ Das Geburtsjahr von der DSB-Liste wird nur für den Entwicklungskoeffizienten be
 nie angezeigt oder gespeichert.
 """
 
+import datetime
 import html
+import json
 import math
+import os
 import re
 import unicodedata
 from statistics import NormalDist
@@ -25,6 +28,10 @@ PROGNOSE = True                     # DWZ-Prognose anzeigen
 J_OHNE_ALTER = 15                   # Altersfaktor J, wenn kein Geburtsjahr bekannt (über 25 Jahre)
 KEIN_SPIELER = {"", "n.n.", "nn", "-", "spielfrei"}
 ERG_TEXT = {1.0: "1", 0.5: "½", 0.0: "0"}
+VERLAUF = os.path.join(ORDNER, "dwz_verlauf.json")   # wird bei jedem Build mit der DSB-DWZ fortgeschrieben
+VERLAUF_AN = True                   # DWZ-Verlauf zeigen (sobald mind. 2 verschiedene Werte aufgezeichnet sind)
+BERICHTE_MAX = 12                   # so viele Berichte, in denen der Spieler vorkommt, höchstens anzeigen
+TOUR_LINK = True                    # Link zum "AFK on Tour"-Profil, falls vorhanden
 
 
 def esc(x):
@@ -257,7 +264,95 @@ def prognose_html(p, r_alt, quelle, alter, index, aktuell):
         Offiziell ausgewertet wird die Saison erst am Ende.</p>"""
 
 
-def seite_html(p, dsb, saison_jahr):
+# ==========================================
+# DWZ-VERLAUF (eigene Aufzeichnung)
+# ==========================================
+def verlauf_laden():
+    try:
+        with open(VERLAUF, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def verlauf_eintragen(verlauf, sl, dwz, heute):
+    """Neuen Wert anhängen, wenn er sich geändert hat. Ein Eintrag = [Datum, DWZ]."""
+    if not dwz:
+        return
+    liste = verlauf.setdefault(sl, [])
+    if not liste or liste[-1][1] != dwz:
+        liste.append([heute.isoformat(), dwz])
+
+
+def verlauf_html(punkte):
+    """Kleines Liniendiagramm (SVG) aus [[Datum, DWZ], ...]."""
+    if not VERLAUF_AN or len(punkte) < 2:
+        return ""
+    # Stufenverlauf bis heute verlängern
+    pkt = [(datetime.date.fromisoformat(d), w) for d, w in punkte]
+    pkt.append((max(datetime.date.today(), pkt[-1][0]), pkt[-1][1]))
+    t0, t1 = pkt[0][0].toordinal(), pkt[-1][0].toordinal()
+    lo, hi = min(w for _, w in pkt), max(w for _, w in pkt)
+    lo, hi = lo - max(10, (hi - lo) * 0.15), hi + max(10, (hi - lo) * 0.15)
+    B, H, L, R, O, U = 640, 200, 44, 12, 12, 26
+    def x(d): return L + (d.toordinal() - t0) / max(1, t1 - t0) * (B - L - R)
+    def y(w): return O + (hi - w) / (hi - lo) * (H - O - U)
+    linie = []
+    for i, (d, w) in enumerate(pkt):
+        if i:
+            linie.append(f"{x(d):.1f},{y(pkt[i - 1][1]):.1f}")
+        linie.append(f"{x(d):.1f},{y(w):.1f}")
+    raster = ""
+    schritt = max(10, round((hi - lo) / 4 / 10) * 10)
+    w = math.ceil(lo / schritt) * schritt
+    while w <= hi:
+        raster += (f'<line x1="{L}" x2="{B - R}" y1="{y(w):.1f}" y2="{y(w):.1f}" class="dv-raster"/>'
+                   f'<text x="{L - 6}" y="{y(w) + 4:.1f}" text-anchor="end">{w}</text>')
+        w += schritt
+    marken = "".join(f'<circle cx="{x(d):.1f}" cy="{y(w):.1f}" r="3.5"><title>{d.strftime("%d.%m.%Y")}: {w}</title></circle>'
+                     for d, w in pkt[:-1])
+    jahre = ""
+    for j in range(pkt[0][0].year + 1, pkt[-1][0].year + 1):
+        d = datetime.date(j, 1, 1)
+        jahre += f'<text x="{x(d):.1f}" y="{H - 6}" text-anchor="middle">{j}</text>'
+    erster, letzter = pkt[0][1], pkt[-1][1]
+    diff = letzter - erster
+    return f"""
+    <h2 class="panel-titel sp-titel">DWZ-Verlauf</h2>
+    <p class="klein">Seit {pkt[0][0].strftime("%m/%Y")}: {erster} → {letzter}
+      ({"+" if diff > 0 else ""}{diff}). Aufgezeichnet von der Website, sobald sich die DWZ beim DSB ändert.</p>
+    <svg class="dwz-verlauf" viewBox="0 0 {B} {H}" role="img" aria-label="DWZ-Verlauf">
+      {raster}{jahre}<polyline points="{" ".join(linie)}"/>{marken}</svg>"""
+
+
+def _plain(x):
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", x or "")))
+
+
+def berichte_finden(name, berichte):
+    """Berichte, in denen der Spieler mit Vor- und Nachname (oder 'Nachname, Vorname') vorkommt."""
+    teile = name.split()
+    if len(teile) < 2:
+        return []
+    vor, nach = " ".join(teile[:-1]), teile[-1]
+    muster = re.compile(rf"\b{re.escape(vor)}\s+{re.escape(nach)}\b|\b{re.escape(nach)},\s*{re.escape(vor)}\b", re.I)
+    return [r for r in berichte if muster.search(_plain(r.get("title", "")) + " " + _plain(r.get("body", "")))]
+
+
+def berichte_html(liste):
+    if not liste:
+        return ""
+    zeilen = "".join(
+        f'<li><a href="../berichte/{esc(r["filename"])}">{esc(_plain(r["title"]))}</a>'
+        + (f' <span class="klein">{r["when"].strftime("%d.%m.%Y")}</span>' if r.get("when") and r["when"].year > 1 else "")
+        + "</li>" for r in liste[:BERICHTE_MAX])
+    mehr = f'<p class="klein">… und {len(liste) - BERICHTE_MAX} weitere.</p>' if len(liste) > BERICHTE_MAX else ""
+    return f"""
+    <h2 class="panel-titel sp-titel">In den Berichten</h2>
+    <ul class="sp-berichte">{zeilen}</ul>{mehr}"""
+
+
+def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour=""):
     """saison_jahr = Startjahr der aktuellen Saison (für Alter und Prognose)."""
     r_dsb = _int(dsb.get("dwz")) if dsb else None
     elo = _int(dsb.get("elo")) if dsb else None
@@ -296,9 +391,12 @@ def seite_html(p, dsb, saison_jahr):
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
     </div>
     {bezirk}
+    {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour else ""}
+    {verlauf_html(list(verlauf))}
     <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
     {partien_html(p, saison_jahr)}
     {prognose_html(p, r_alt, quelle, alter, index, saison_jahr) if PROGNOSE and r_alt else ""}
+    {berichte_html(list(berichte))}
     """
 
 
@@ -318,15 +416,33 @@ STYLES = """<style>
       .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
       .sp-saison[open] > summary h3::after { content: "▾"; }
       .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
+      .dwz-verlauf { width: 100%; max-width: 680px; height: auto; display: block; margin: 0.3rem 0 1rem; font-size: 11px; }
+      .dwz-verlauf text { fill: var(--muted, #777); }
+      .dwz-verlauf .dv-raster { stroke: var(--border, #e3e7ee); stroke-width: 1; }
+      .dwz-verlauf polyline { fill: none; stroke: var(--hell, #2c5d99); stroke-width: 2.5; stroke-linejoin: round; }
+      .dwz-verlauf circle { fill: var(--hell, #2c5d99); }
+      .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
 </style>"""
 
 
-def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr):
-    """Schreibt alle Spielerseiten. render_page/liga_styles kommen aus build_site/liga."""
+def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None):
+    """Schreibt alle Spielerseiten. render_page/liga_styles kommen aus build_site/liga.
+    berichte = build_site.ALLE_BERICHTE; tour_seiten(name) -> 'tour-….html' oder ''."""
     idx = dsb_index(dsb_liste)
+    verlauf = verlauf_laden()
+    heute = datetime.date.today()
     for p in spieler.values():
-        content = seite_html(p, dsb_finden(p["name"], idx), saison_jahr)
+        dsb = dsb_finden(p["name"], idx)
+        sl = slug(p["name"])
+        if dsb:
+            verlauf_eintragen(verlauf, sl, _int(dsb.get("dwz")), heute)
+        tour = (tour_seiten(p["name"]) if tour_seiten and TOUR_LINK else "") or ""
+        content = seite_html(p, dsb, saison_jahr, verlauf.get(sl, []), berichte_finden(p["name"], berichte), tour)
         render_page(p["name"], content, seite(p["name"]), css_path="../", nav_path="../",
                     extra_styles=liga_styles.replace("</style>", "") + STYLES.replace("<style>", ""),
                     description=f"{p['name']} – Partien und DWZ in der Mannschaftssaison.")
+    if dsb_liste:            # nur mit echten DSB-Daten fortschreiben
+        os.makedirs(ORDNER, exist_ok=True)
+        with open(VERLAUF, "w", encoding="utf-8") as f:     # eine Zeile pro Spieler
+            f.write("{\n" + ",\n".join(f"{json.dumps(k)}: {json.dumps(v)}" for k, v in sorted(verlauf.items())) + "\n}\n")
     return len(spieler)

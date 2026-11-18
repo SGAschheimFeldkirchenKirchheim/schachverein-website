@@ -21,6 +21,7 @@ import turnierorte  # "AFK on Tour": Turnierorte sammeln (Daten in turnierorte/)
 import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
+import suche  # seitenweite Suche: suche.html + suche.json (Einstellungen in suche.py)
 
 try:
     from zoneinfo import ZoneInfo
@@ -324,7 +325,7 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         css_path=css_path,
         nav_path=nav_path,
         nav=build_nav(nav_path, active, name),
-        extra_styles=GLOBAL_CSS + extra_styles,
+        extra_styles=GLOBAL_CSS + suche.KNOPF_CSS + extra_styles,
         logo=logo,
         head_icon=head_icon,
         description=desc,
@@ -336,6 +337,8 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
 
     if MAIL_UMLEITUNG:
         full_html = re.sub(r"[\w.+-]+@sg-afk\.de", MAIL_UMLEITUNG, full_html)
+    full_html = suche.knopf_einbauen(full_html, nav_path)
+    suche.merken(title, content, filename, description or PAGE_DESCRIPTIONS.get(name, ""))
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(full_html)
@@ -2843,6 +2846,100 @@ def geburtstage_heute(heute=None):
     return sorted(treffer)
 
 
+def geburtstage_woche(heute=None, tage=7):
+    """[(Datum, Anzeigename)] für heute .. heute+tage (ohne Alter)."""
+    if not GEBURTSTAGE_AN:
+        return []
+    heute = heute or TODAY
+    out = []
+    for i in range(tage + 1):
+        tag = heute + datetime.timedelta(days=i)
+        out += [(tag, n) for n, _ in geburtstage_heute(tag)]
+    return out
+
+
+# ==========================================
+# STARTSEITE: BOX "DIESE WOCHE"
+# ==========================================
+DIESE_WOCHE_AN = True
+DIESE_WOCHE_TAGE = 7          # Zeitraum ab heute
+DIESE_WOCHE_KM = 150          # neue Turniere aus dem Turnierkalender bis zu dieser Entfernung
+DIESE_WOCHE_MAX = 4           # höchstens so viele Einträge je Spalte
+WOCHENTAG = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+
+def diese_woche_html(upcoming_events, heute=None):
+    """Kompakte Übersicht: Termine der nächsten 7 Tage, Geburtstage, neue Turniere in der Nähe, neue Berichte.
+    Die Seite wird nachts neu gebaut; das Skript blendet zusätzlich vergangene Tage aus."""
+    if not DIESE_WOCHE_AN:
+        return ""
+    heute = heute or TODAY
+    ende = heute + datetime.timedelta(days=DIESE_WOCHE_TAGE)
+    def tag_txt(d):
+        return f"{WOCHENTAG[d.weekday()]} {d.day:02d}.{d.month:02d}."
+    spalten = []
+    termine = [ev for ev in upcoming_events if heute <= ev["date"] <= ende][:DIESE_WOCHE_MAX + 2]
+    if termine:
+        spalten.append(("Termine", "".join(
+            f'<li data-date="{ev["date"].isoformat()}"><span class="dw-tag">{tag_txt(ev["date"])}</span> '
+            f'{htmllib.escape(plain_text(ev["title"]))}</li>' for ev in termine), "termine.html", "Alle Termine"))
+    gb = geburtstage_woche(heute, DIESE_WOCHE_TAGE)[:DIESE_WOCHE_MAX + 2]
+    if gb:
+        spalten.append(("Geburtstage", "".join(
+            f'<li data-date="{d.isoformat()}"><span class="dw-tag">{"heute" if d == heute else tag_txt(d)}</span> '
+            f'{htmllib.escape(n)}</li>' for d, n in gb), "", ""))
+    neu = [e for e in getattr(turnierkalender, "LETZTE_EVENTS", [])
+           if turnierkalender.ist_neu(e, heute) and e.get("km") is not None and e["km"] <= DIESE_WOCHE_KM]
+    if neu:
+        neu.sort(key=lambda e: e["von"])
+        spalten.append(("Neu im Turnierkalender", "".join(
+            f'<li><span class="dw-tag">{datetime.date.fromisoformat(e["von"]).strftime("%d.%m.")}</span> '
+            f'{htmllib.escape(e["name"])} <span class="dw-km">{e["km"]} km</span></li>' for e in neu[:DIESE_WOCHE_MAX]),
+            turnierkalender.SEITE, f"Turnierkalender ({len(neu)} neu)" if len(neu) > DIESE_WOCHE_MAX else "Turnierkalender"))
+    frisch = [r for r in ALLE_BERICHTE if r['when'] != datetime.date.min and (heute - r['when']).days <= DIESE_WOCHE_TAGE
+              and r['when'] <= heute][:DIESE_WOCHE_MAX]
+    if frisch:
+        spalten.append(("Neue Berichte", "".join(
+            f'<li><a href="berichte/{r["filename"]}">{htmllib.escape(plain_text(r["title"]))}</a></li>' for r in frisch), "berichte.html", "Alle Berichte"))
+    if not spalten:
+        return ""
+    teile = "".join(
+        f'<div class="dw-spalte"><h3>{t}</h3><ul>{inhalt}</ul>'
+        + (f'<a class="dw-mehr" href="{link}">{linktext} →</a>' if link else "") + "</div>"
+        for t, inhalt, link, linktext in spalten)
+    return f"""<section class="diese-woche" aria-label="Diese Woche">
+      <h2>Diese Woche</h2><div class="dw-raster">{teile}</div>
+    </section>
+    <script>
+    (function () {{  // vergangene Tage ausblenden (die Seite kann bis zu einem Tag alt sein)
+      var h = new Date(), t = h.getFullYear() + "-" + ("0" + (h.getMonth() + 1)).slice(-2) + "-" + ("0" + h.getDate()).slice(-2);
+      [].forEach.call(document.querySelectorAll(".diese-woche li[data-date]"), function (li) {{
+        if (li.getAttribute("data-date") < t) li.remove();
+        else if (li.getAttribute("data-date") === t) li.querySelector(".dw-tag").textContent = "heute";
+      }});
+      [].forEach.call(document.querySelectorAll(".diese-woche .dw-spalte"), function (s) {{ if (!s.querySelector("li")) s.remove(); }});
+      [].forEach.call(document.querySelectorAll(".diese-woche ul"), function (u) {{
+        [].slice.call(u.children, {DIESE_WOCHE_MAX}).forEach(function (li) {{ li.remove(); }});
+      }});
+      var box = document.querySelector(".diese-woche"); if (box && !box.querySelector("li")) box.remove();
+    }})();
+    </script>"""
+
+
+DIESE_WOCHE_CSS = """<style>
+  .diese-woche { margin: 0 0 1.2rem; padding: 0.9rem 1.2rem 1rem; border-radius: 12px; border: 1px solid var(--border, #e3e7ee);
+    background: var(--soft, #f5f7fa); }
+  .diese-woche > h2 { margin: 0 0 0.5rem; font-size: 1.15rem; }
+  .dw-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.6rem 1.6rem; }
+  .dw-spalte h3 { margin: 0 0 0.3rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--text, #000) 60%, transparent); }
+  .dw-spalte ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; font-size: 0.92rem; line-height: 1.35; }
+  .dw-tag { display: inline-block; min-width: 4.6rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dw-km { font-size: 0.8rem; color: color-mix(in srgb, var(--text, #000) 55%, transparent); white-space: nowrap; }
+  .dw-mehr { display: inline-block; margin-top: 0.35rem; font-size: 0.85rem; }
+</style>"""
+
+
 def geburtstag_html(heute=None):
     leute = geburtstage_heute(heute)
     if not leute:
@@ -2905,6 +3002,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     index_content = f"""
     {read_hinweis()}
     {geburtstag_html()}
+    {diese_woche_html(upcoming_events)}
 
     <section class="hero">
       {diashow_html()}
@@ -3042,7 +3140,7 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     </style>"""
 
     render_page("Startseite", index_content, "index.html",
-                extra_styles=styles.replace("</style>", NEWS_CSS + liga.TICKER_CSS + "</style>") + GEBURTSTAG_CSS)
+                extra_styles=styles.replace("</style>", NEWS_CSS + liga.TICKER_CSS + "</style>") + GEBURTSTAG_CSS + DIESE_WOCHE_CSS)
 
 
 # ==========================================
@@ -3164,7 +3262,8 @@ def build_spieler(aktuell, teams, archiv):
         if alt.replace(os.sep, "/") not in liga.SPIELER_SEITEN:
             os.remove(alt)
     ACTIVE_PARENT.update({os.path.basename(x): "mannschaften.html" for x in liga.SPIELER_SEITEN})
-    n = spieler.bauen(alle, dsb, render_page, liga.STYLES, aktuell)
+    n = spieler.bauen(alle, dsb, render_page, liga.STYLES, aktuell, berichte=ALLE_BERICHTE,
+                      tour_seiten=turnierorte.seite_fuer_name)
     print(f"Spielerseiten: {n}")
 
 
@@ -3295,7 +3394,8 @@ if __name__ == "__main__":
     build_oberlandquartett()
     build_blitzjahreswertung()
     build_hall_of_fame()
-    turnierkalender.bauen(render_page)   # vor den Übersichten: die Karte "Extern" zeigt die Anzahl
+    turnierkalender.bauen(render_page, skript_url=einreichen.SKRIPT_URL)   # vor den Übersichten: die Karte "Extern" zeigt die Anzahl
+    suche.zusatz(turnierkalender.SEITE, " · ".join(f"{e['name']} {e.get('ort', '')}" for e in turnierkalender.LETZTE_EVENTS))
     turnierorte.bauen(render_page, einreichen.SKRIPT_URL, ACTIVE_PARENT)
     build_turniere_overview()
     build_ausschreibungen()
@@ -3324,5 +3424,6 @@ if __name__ == "__main__":
     build_index(upcoming, news, teams)
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams, saisons) else set())
+    suche.bauen(render_page)   # nach allen Seiten (Suchindex)
     build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
-    print("Build erfolgreich abgeschlossen!")
+    print("Build erfolgreich abgeschlossen!")
