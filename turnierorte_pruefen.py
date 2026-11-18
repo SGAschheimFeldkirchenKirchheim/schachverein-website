@@ -47,7 +47,8 @@ def ort_suchen(text):
         if treffer:
             a = treffer[0].get("address", {})
             stadt = a.get("city") or a.get("town") or a.get("village") or a.get("municipality") or a.get("county") or v
-            return {"stadt": stadt, "land": a.get("country", ""), "lat": float(treffer[0]["lat"]), "lon": float(treffer[0]["lon"])}
+            return {"stadt": stadt, "land": a.get("country", ""), "region": a.get("state", ""),
+                    "lat": float(treffer[0]["lat"]), "lon": float(treffer[0]["lon"])}
     return None
 
 
@@ -131,6 +132,7 @@ def antrag_pruefen(a, spieler, besuche, konf):
                 spieler[sid] = {"name": a.get("name", "").strip(), "anzeige": to.anzeige_name(a.get("name", "").strip())}
             besuche.append({
                 "spieler": sid, "turnier": info.get("turnier", ""), "stadt": ort["stadt"], "land": ort["land"],
+                "region": ort.get("region", ""),
                 "lat": round(ort["lat"], 5), "lon": round(ort["lon"], 5), "von": info.get("von", ""), "bis": info.get("bis", ""),
                 "link": info.get("link", ""), "bedenkzeit": info.get("bedenkzeit", ""),
                 "ausnahme": (a.get("begruendung") or "ja") if a.get("ausnahme") else "",
@@ -210,7 +212,8 @@ def verwalten(spieler, besuche, konf):
             elif art == "o":
                 ort = ort_suchen(input("  Stadt, Land: ").strip())
                 if ort:
-                    b.update(stadt=ort["stadt"], land=ort["land"], lat=round(ort["lat"], 5), lon=round(ort["lon"], 5))
+                    b.update(stadt=ort["stadt"], land=ort["land"], region=ort.get("region", ""),
+                             lat=round(ort["lat"], 5), lon=round(ort["lon"], 5))
                     print(f"  -> {ort['stadt']}, {ort['land']}")
                     geaendert = True
                 else:

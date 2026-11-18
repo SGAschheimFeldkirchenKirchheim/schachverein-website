@@ -27,21 +27,12 @@ import os
 import re
 import unicodedata
 
+import abzeichen
+
 ORDNER = "turnierorte"
 SEITE = "turnierorte.html"
 TITEL = "AFK on Tour"
 
-# Abzeichen: (Name, Beschreibung, Bedingung auf den Statistik-Werten)
-ABZEICHEN = [
-    ("Erste Reise", "Das erste Turnier auswärts", lambda s: s["orte"] >= 1),
-    ("5 Orte", "In 5 verschiedenen Orten gespielt", lambda s: s["orte"] >= 5),
-    ("10 Orte", "In 10 verschiedenen Orten gespielt", lambda s: s["orte"] >= 10),
-    ("25 Orte", "In 25 verschiedenen Orten gespielt", lambda s: s["orte"] >= 25),
-    ("Grenzgänger", "Turnier im Ausland gespielt", lambda s: s["ausland"] >= 1),
-    ("Europäer", "In 5 Ländern gespielt", lambda s: s["laender"] >= 5),
-    ("Stammgast", "3-mal oder öfter am selben Ort", lambda s: s["max_gleich"] >= 3),
-    ("Weltenbummler", "Mehr als 1000 km von zu Hause", lambda s: s["weiteste"] >= 1000),
-]
 
 
 def _lade(pfad, standard):
@@ -132,12 +123,14 @@ def auswerten(spieler, besuche, konf):
         werte = {"orte": len(zaehl), "laender": len(laender), "turniere": len(liste),
                  "ausland": len([l for l in laender if l != "Deutschland"]), "max_gleich": max(zaehl.values()),
                  "weiteste": round(weit)}
-        abz = [(n, t) for n, t, bed in ABZEICHEN if bed(werte)]
         tabelle.append({"id": sid, "name": spieler[sid].get("anzeige") or anzeige_name(spieler[sid].get("name", sid)),
-                        "werte": werte, "abzeichen": abz,
-                        "liste": sorted(liste, key=lambda b: b.get("von", ""), reverse=True)})
+                        "werte": werte, "liste": sorted(liste, key=lambda b: b.get("von", ""), reverse=True)})
     tabelle.sort(key=lambda t: (-t["werte"]["orte"], -t["werte"]["laender"], -t["werte"]["turniere"], t["name"]))
-    return tabelle, orte
+    infos, pro_abz = abzeichen.auswerten({t["id"]: t["liste"] for t in tabelle},
+                                         [b for t in tabelle for b in t["liste"]], heimat, konf)
+    for t in tabelle:
+        t.update(pro_abz[t["id"]])
+    return tabelle, orte, infos
 
 
 def _monat(datum):
@@ -149,8 +142,20 @@ def _monat(datum):
     return (datum or "")[:4]
 
 
-def _abzeichen_html(liste):
-    return "".join(f'<span class="tour-abz" title="{html.escape(b)}">{html.escape(n)}</span>' for n, b in liste)
+def _stufen_html(t, infos):
+    """Kleine Zähler je Stufe, z. B. Gold 2 · Silber 5 · Bronze 4."""
+    n = {}
+    for a in infos:
+        if a["id"] in t["erreicht"]:
+            n[a["stufe"]] = n.get(a["stufe"], 0) + 1
+    return " ".join(f'<span class="st st-{k}" title="{abzeichen.STUFEN[k][0]}">{n[k]}</span>'
+                    for k in ("legendaer", "gold", "silber", "bronze") if n.get(k))
+
+
+def _seltenste_html(t, infos, anzahl=4):
+    eigene = sorted((a for a in infos if a["id"] in t["erreicht"]), key=lambda a: (a["anteil"], -a["punkte"]))[:anzahl]
+    return "".join(f'<span class="tour-abz st-{a["stufe"]}" title="{html.escape(a["text"])} – {a["anteil"]} % im Verein">'
+                   f'{html.escape(a["name"])}</span>' for a in eigene)
 
 
 # ------------------------------------------------------------
@@ -175,6 +180,8 @@ CSS = """
   .leaflet-popup-content a { color: var(--link-c, #2c5d99); }
   .leaflet-container a.leaflet-popup-close-button { color: var(--muted, #888); }
   .leaflet-container { background: var(--soft, #e9eef3); font-family: inherit; }
+  #tour-karte .leaflet-tile-pane { filter: grayscale(0.9) brightness(1.03) contrast(0.92); }
+  [data-theme="dark"] #tour-karte .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) grayscale(0.9) brightness(0.8) contrast(0.95); }
   .leaflet-control-zoom a { background: var(--surface, #fff); color: var(--text, #222); border-color: var(--line, #ccc); }
   .leaflet-control-attribution { background: rgba(0,0,0,.35) !important; color: #ccc; }
   .leaflet-control-attribution a { color: #ddd; }
@@ -193,6 +200,32 @@ CSS = """
   .tour-profil .k { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.4rem; }
   .tour-profil ul { margin: 0.5rem 0 0; padding-left: 1.1rem; font-size: 0.88rem; }
   .tour-profil li small { color: var(--muted); }
+  .tour-hinweis { font-size: 0.9rem; color: var(--muted); }
+  .tour-abz.st-bronze, .st.st-bronze { background: #b87333; color: #fff; }
+  .tour-abz.st-silber, .st.st-silber { background: #8e9aa6; color: #fff; }
+  .tour-abz.st-gold, .st.st-gold { background: #d4a017; color: #1b1b1b; }
+  .tour-abz.st-legendaer, .st.st-legendaer { background: linear-gradient(135deg, #7b4fbf, #c0392b); color: #fff; }
+  .st { display: inline-block; min-width: 1.4rem; text-align: center; font-size: 0.75rem; font-weight: 700; padding: 0.05rem 0.35rem;
+    border-radius: 999px; margin-right: 0.15rem; }
+  .abz-kopf { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; margin: 1.4rem 0 0.8rem; }
+  .abz-kopf label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
+  .abz-kopf select { font: inherit; font-weight: normal; padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--soft); color: var(--text); }
+  .abz-kat { margin: 1.2rem 0 0.5rem; font-size: 1.05rem; }
+  .abz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 0.6rem; }
+  .abz { position: relative; padding: 0.7rem 0.85rem 0.75rem; border: 1px solid var(--line); border-left: 5px solid var(--line);
+    border-radius: 10px; background: var(--surface); }
+  .abz.st-bronze { border-left-color: #b87333; } .abz.st-silber { border-left-color: #8e9aa6; }
+  .abz.st-gold { border-left-color: #d4a017; } .abz.st-legendaer { border-left-color: #7b4fbf; }
+  .abz h4 { margin: 0 0 0.15rem; font-size: 0.98rem; display: flex; justify-content: space-between; gap: 0.5rem; align-items: baseline; }
+  .abz h4 small { font-weight: 600; font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .abz p { margin: 0; font-size: 0.84rem; }
+  .abz .wer { margin-top: 0.35rem; font-size: 0.78rem; color: var(--muted); }
+  .abz.offen { opacity: 0.55; }
+  .abz.erreicht { box-shadow: 0 0 0 1px var(--hell, #6f9fd8) inset; }
+  .abz .balken { height: 6px; border-radius: 3px; background: var(--soft); margin-top: 0.4rem; overflow: hidden; }
+  .abz .balken span { display: block; height: 100%; background: var(--hell, #6f9fd8); }
+  .abz .selten { position: absolute; right: 0.6rem; bottom: 0.45rem; font-size: 0.7rem; font-weight: 700; color: #c0392b; }
   .tour-leer { padding: 1.4rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
   .tour-antrag { margin-top: 2.5rem; }
   .tour-antrag > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between;
@@ -221,18 +254,9 @@ JS = r"""
   var D = JSON.parse(document.getElementById("tour-daten").textContent);
   if (!window.L || !document.getElementById("tour-karte")) return;
   var karte = L.map("tour-karte", {scrollWheelZoom: false}).setView([48.2, 11.6], 5);
-  // Dezente Karte passend zum Design: hell (Positron) bzw. dunkel (Dark Matter), wechselt mit dem Hell/Dunkel-Knopf
-  var ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende &copy; <a href="https://carto.com/attributions">CARTO</a>';
-  var KACHEL = {hell: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-                dunkel: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"};
-  var kacheln = null;
-  function thema() { return document.documentElement.getAttribute("data-theme") === "dark" ? "dunkel" : "hell"; }
-  function kartenstil() {
-    if (kacheln) karte.removeLayer(kacheln);
-    kacheln = L.tileLayer(KACHEL[thema()], {maxZoom: 18, subdomains: "abcd", attribution: ATTR}).addTo(karte);
-  }
-  kartenstil();
-  new MutationObserver(kartenstil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  // OpenStreetMap-Kacheln; per CSS-Filter entsättigt (hell) bzw. abgedunkelt (dunkel), damit sie zum Design passen
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende'}).addTo(karte);
   var ebene = L.layerGroup().addTo(karte), sel = document.getElementById("tour-wer");
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
   function zeichne() {
@@ -257,6 +281,54 @@ JS = r"""
     else if (punkte.length === 1) karte.setView(punkte[0], 8);
   }
   sel.addEventListener("change", zeichne);
+  zeichne();
+})();
+(function () {
+  var D = JSON.parse(document.getElementById("tour-daten").textContent), out = document.getElementById("abz-liste");
+  if (!out) return;
+  var wer = document.getElementById("abz-wer"), zeige = document.getElementById("abz-zeige"),
+      sort = document.getElementById("abz-sort"), stufe = document.getElementById("abz-stufe");
+  var RANG = {legendaer: 0, gold: 1, silber: 2, bronze: 3};
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function karte(a, sp) {
+    var hat = sp && sp.erreicht.indexOf(a.id) >= 0, fs = sp && sp.fortschritt[a.id];
+    var klasse = "abz st-" + a.stufe + (sp ? (hat ? " erreicht" : " offen") : "");
+    var wer = a.wer.length ? a.wer.length + " von " + D.anzahl_spieler + " (" + a.anteil + " %): " + a.wer.join(", ") : "noch niemand";
+    return '<div class="' + klasse + '"><h4>' + esc(a.name) + "<small>" + a.stufe_name + " · " + a.punkte + "</small></h4>" +
+      "<p>" + esc(a.text) + "</p>" +
+      (fs ? '<div class="balken" title="' + fs[0] + " von " + fs[1] + '"><span style="width:' + Math.round(100 * fs[0] / fs[1]) + '%"></span></div>' +
+            '<p class="wer">' + fs[0] + " / " + fs[1] + "</p>" : "") +
+      '<p class="wer">' + esc(wer) + "</p>" +
+      (a.wer.length && a.anteil <= 15 ? '<span class="selten">selten</span>' : "") + "</div>";
+  }
+  function zeichne() {
+    var sp = D.spieler[wer.value], z = zeige.value;
+    zeige.disabled = !sp; if (!sp) z = "alle";
+    var liste = D.abzeichen.filter(function (a) {
+      if (stufe.value && a.stufe !== stufe.value) return false;
+      if (z === "erreicht") return sp.erreicht.indexOf(a.id) >= 0;
+      if (z === "offen") return sp.erreicht.indexOf(a.id) < 0;
+      return true;
+    });
+    if (!liste.length) { out.innerHTML = '<p class="tour-leer">Keine Abzeichen für diese Auswahl.</p>'; return; }
+    if (sort.value === "kat") {
+      var kats = [], html = "";
+      liste.forEach(function (a) { if (kats.indexOf(a.kat) < 0) kats.push(a.kat); });
+      kats.forEach(function (k) {
+        var teil = liste.filter(function (a) { return a.kat === k; });
+        var n = sp ? teil.filter(function (a) { return sp.erreicht.indexOf(a.id) >= 0; }).length : 0;
+        html += '<h3 class="abz-kat">' + esc(k) + (sp ? " <small>(" + n + "/" + teil.length + ")</small>" : "") + '</h3><div class="abz-grid">' +
+          teil.map(function (a) { return karte(a, sp); }).join("") + "</div>";
+      });
+      out.innerHTML = html;
+    } else {
+      liste = liste.slice().sort(sort.value === "selten"
+        ? function (a, b) { return (a.wer.length ? a.anteil : 101) - (b.wer.length ? b.anteil : 101) || RANG[a.stufe] - RANG[b.stufe]; }
+        : function (a, b) { return RANG[a.stufe] - RANG[b.stufe] || a.anteil - b.anteil; });
+      out.innerHTML = '<div class="abz-grid">' + liste.map(function (a) { return karte(a, sp); }).join("") + "</div>";
+    }
+  }
+  [wer, zeige, sort, stufe].forEach(function (e) { e.addEventListener("change", zeichne); });
   zeichne();
 })();
 (function () {
@@ -316,13 +388,16 @@ def antrag_html(skript_url):
 def bauen(render_page, skript_url=""):
     konf = einstellungen()
     spieler = spieler_laden()
-    tabelle, orte = auswerten(spieler, besuche_laden(), konf)
+    tabelle, orte, infos = auswerten(spieler, besuche_laden(), konf)
     alle_orte = [o for o in orte.values() if any(b.get("spieler") in spieler for b in o["besuche"])]
     laender = {o["land"] for o in alle_orte if o.get("land")}
     turniere = {(b.get("turnier", ""), b.get("von", "")[:7], o["ort"]) for o in alle_orte for b in o["besuche"]}
     namen = {t["id"]: t["name"] for t in tabelle}
     daten = {
         "farbe": konf.get("flaggenfarbe", "#c0392b"), "flagge": FLAGGE,
+        "abzeichen": [dict(a, wer=[namen.get(w, w) for w in a["wer"]], wer_ids=a["wer"]) for a in infos],
+        "spieler": {t["id"]: {"name": t["name"], "erreicht": t["erreicht"], "fortschritt": t["fortschritt"]} for t in tabelle},
+        "anzahl_spieler": len(tabelle),
         "orte": [{"ort": o["ort"], "land": o.get("land", ""), "lat": o.get("lat"), "lon": o.get("lon"),
                   "besuche": [{"id": b["spieler"], "name": namen.get(b["spieler"], b["spieler"]), "monat": _monat(b.get("von", "")),
                                "turnier": b.get("turnier", ""), "link": b.get("link", "")}
@@ -336,21 +411,29 @@ def bauen(render_page, skript_url=""):
             f'<tr><td>{i}.</td><td><a href="#p-{html.escape(t["id"])}">{html.escape(t["name"])}</a></td>'
             f'<td class="z">{t["werte"]["orte"]}</td><td class="z">{t["werte"]["laender"]}</td><td class="z">{t["werte"]["turniere"]}</td>'
             f'<td class="z">{t["werte"]["weiteste"]} km</td>'
-            f'<td>{_abzeichen_html(t["abzeichen"])}</td></tr>'
+            f'<td class="z">{len(t["erreicht"])}</td></tr>'
             for i, t in enumerate(tabelle, 1))
         rangliste = (f'<div style="overflow-x:auto"><table class="tour-tab"><thead><tr><th>#</th><th>Spieler</th><th>Orte</th><th>Länder</th>'
                      f'<th>Turniere</th><th>Weiteste Reise</th><th>Abzeichen</th></tr></thead><tbody>{zeilen}</tbody></table></div>')
+        abz_tab = sorted(tabelle, key=lambda t: (-t["punkte"], -len(t["erreicht"]), t["name"]))
+        abz_zeilen = "".join(
+            f'<tr><td>{i}.</td><td><a href="#p-{html.escape(t["id"])}">{html.escape(t["name"])}</a></td>'
+            f'<td class="z"><b>{t["punkte"]}</b></td><td class="z">{len(t["erreicht"])}</td><td>{_stufen_html(t, infos)}</td>'
+            f'<td>{_seltenste_html(t, infos, 3)}</td></tr>' for i, t in enumerate(abz_tab, 1))
+        abz_rangliste = (f'<div style="overflow-x:auto"><table class="tour-tab"><thead><tr><th>#</th><th>Spieler</th><th>Punkte</th>'
+                         f'<th>Abzeichen</th><th>Stufen</th><th>Seltenste</th></tr></thead><tbody>{abz_zeilen}</tbody></table></div>')
         profile = "".join(
             f'<article class="tour-profil" id="p-{html.escape(t["id"])}"><h3>{html.escape(t["name"])}</h3>'
             f'<p class="k">{_anz(t["werte"]["orte"], "Ort", "Orte")} · {_anz(t["werte"]["laender"], "Land", "Länder")} · '
             f'{_anz(t["werte"]["turniere"], "Turnier", "Turniere")}</p>'
-            f'{_abzeichen_html(t["abzeichen"])}'
+            f'<p class="k">{t["punkte"]} Punkte · {_anz(len(t["erreicht"]), "Abzeichen", "Abzeichen")} {_stufen_html(t, infos)}</p>'
+            f'{_seltenste_html(t, infos)}'
             f'<ul>{_profil_orte(t["liste"])}</ul></article>'
             for t in tabelle)
         auswahl = "".join(f'<option value="{html.escape(t["id"])}">{html.escape(t["name"])}</option>' for t in tabelle)
     else:
         rangliste = '<p class="tour-leer">Noch niemand auf Tour. Sei der Erste und beantrage unten deinen ersten Ort!</p>'
-        profile, auswahl = "", ""
+        profile, auswahl, abz_rangliste = "", "", ""
     js_daten = json.dumps(daten, ensure_ascii=False).replace("</", "<\\/")
     inhalt = f"""
     <a href="turniere.html" style="text-decoration:none;">← Zurück zur Turniere-Übersicht</a>
@@ -363,6 +446,21 @@ def bauen(render_page, skript_url=""):
     <div id="tour-karte" role="img" aria-label="Karte der Turnierorte"></div>
     <h2 style="margin-top:2rem;">Rangliste</h2>
     {rangliste}
+    <h2 style="margin-top:2rem;">Abzeichen</h2>
+    <p class="tour-hinweis">{len(infos)} Abzeichen in vier Stufen:
+      <span class="tour-abz st-bronze">Bronze 10</span> <span class="tour-abz st-silber">Silber 25</span>
+      <span class="tour-abz st-gold">Gold 50</span> <span class="tour-abz st-legendaer">Legendär 100</span> Punkte.</p>
+    {abz_rangliste}
+    <div class="abz-kopf">
+      <label>Spieler <select id="abz-wer"><option value="">alle</option>{auswahl}</select></label>
+      <label>Zeige <select id="abz-zeige"><option value="alle">alle Abzeichen</option><option value="erreicht">nur erreichte</option>
+        <option value="offen">nur offene</option></select></label>
+      <label>Sortierung <select id="abz-sort"><option value="kat">nach Kategorie</option><option value="selten">seltenste zuerst</option>
+        <option value="stufe">nach Stufe</option></select></label>
+      <label>Stufe <select id="abz-stufe"><option value="">alle</option><option value="bronze">Bronze</option><option value="silber">Silber</option>
+        <option value="gold">Gold</option><option value="legendaer">Legendär</option></select></label>
+    </div>
+    <div id="abz-liste"></div>
     {('<h2 style="margin-top:2rem;">Profile</h2><div class="tour-profile">' + profile + '</div>') if profile else ''}
     {antrag_html(skript_url)}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">

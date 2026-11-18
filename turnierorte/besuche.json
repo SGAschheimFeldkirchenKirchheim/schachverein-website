@@ -11,7 +11,8 @@
   "link": "https://chess-results.com/tnr534227.aspx?lan=0",
   "bedenkzeit": "klassisch",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": "Tirol"
  },
  {
   "spieler": "Korbinian",
@@ -25,7 +26,8 @@
   "link": "https://chess-results.com/tnr585243.aspx?lan=0",
   "bedenkzeit": "klassisch",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": "Kärnten"
  },
  {
   "spieler": "Korbinian",
@@ -39,7 +41,8 @@
   "link": "",
   "bedenkzeit": "blitz",
   "ausnahme": "ja",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": ""
  },
  {
   "spieler": "Korbinian",
@@ -53,7 +56,8 @@
   "link": "https://chess-results.com/tnr1534478.aspx?lan=0",
   "bedenkzeit": "schnell",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": ""
  },
  {
   "spieler": "Korbinian",
@@ -67,7 +71,8 @@
   "link": "https://chess-results.com/tnr1371811.aspx?lan=0",
   "bedenkzeit": "klassisch",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": "Bayern"
  },
  {
   "spieler": "Korbinian",
@@ -81,7 +86,8 @@
   "link": "https://chess-results.com/tnr1049709.aspx?lan=0",
   "bedenkzeit": "klassisch",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": "Bayern"
  },
  {
   "spieler": "Korbinian",
@@ -95,7 +101,8 @@
   "link": "https://chess-results.com/tnr1049709.aspx?lan=0",
   "bedenkzeit": "klassisch",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": "Baden-Württemberg"
  },
  {
   "spieler": "Korbinian",
@@ -109,6 +116,7 @@
   "link": "https://chess-results.com/tnr1384883.aspx?lan=0",
   "bedenkzeit": "klassisch",
   "ausnahme": "",
-  "bestaetigt": "2026-11-18"
+  "bestaetigt": "2026-11-18",
+  "region": "Baden-Württemberg"
  }
 ]
