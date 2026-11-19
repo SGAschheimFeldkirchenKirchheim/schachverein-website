@@ -1,0 +1,3 @@
+Eigener Text pro Spieler: Datei <name>.txt (liegt fuer jeden leer bereit), z. B. arthur-krumm.txt.
+Einfach reinschreiben. Leerzeile = neuer Absatz, Links (https://...) werden klickbar.
+Leere Datei = kein Textkasten auf der Seite.

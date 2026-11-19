@@ -11,6 +11,8 @@ FOTO UND GEBURTSTAG:
     ("Hier Bild einfügen"), z. B. spieler/fotos/arthur-krumm.jpg. Einfach durch das echte Foto
     ersetzen (gleicher Name, auch .png/.webp geht). Platzhalter werden auf der Seite nicht gezeigt.
     Am besten quadratisch oder Hochformat.
+  - Eigener Text: spieler/texte/<name>.txt (leere Datei liegt für jeden Spieler bereit).
+    Einfach Text reinschreiben, Leerzeile = neuer Absatz, Links werden klickbar. Leer = kein Kasten.
   - Geburtstag: kommt automatisch aus der Geburtstagsliste (wie auf der Startseite).
     Ausnahmen in spieler/profile.json, z. B.
         {
@@ -49,6 +51,9 @@ VERLAUF_AN = True                   # DWZ-Verlauf zeigen (sobald mind. 2 verschi
 BERICHTE_MAX = 12                   # so viele Berichte, in denen der Spieler vorkommt, höchstens anzeigen
 TOUR_LINK = True                    # Link zum "AFK on Tour"-Profil, falls vorhanden
 FOTO_ORDNER = os.path.join(ORDNER, "fotos")          # spieler/fotos/<slug>.jpg
+TEXT_ORDNER = os.path.join(ORDNER, "texte")          # spieler/texte/<slug>.txt – eigener Text, leer = nichts
+TEXT_PLATZHALTER = True             # für jeden Spieler eine leere Textdatei anlegen
+TEXT_UEBERSCHRIFT = ""              # z. B. "Über mich"; "" = ohne Überschrift
 PROFILE = os.path.join(ORDNER, "profile.json")       # Ausnahmen (Geburtstag aus/selbst, Alter)
 FOTO_PLATZHALTER = True             # für jeden Spieler einen Platzhalter "Hier Bild einfügen" anlegen
 GEBURTSTAG_AUTO = True              # Geburtstag aus der Geburtstagsliste zeigen (False = nur über profile.json)
@@ -122,6 +127,30 @@ def platzhalter_anlegen(name):
             f.write(_platzhalter_bytes())
     except Exception as e:
         print(f"Hinweis: Platzhalter für {name} nicht angelegt ({e}).")
+
+
+def text_html(name):
+    """Inhalt von spieler/texte/<name>.txt als HTML (Leerzeile = neuer Absatz, Links werden klickbar)."""
+    pfad = os.path.join(TEXT_ORDNER, slug(name) + ".txt")
+    if not os.path.exists(pfad):
+        if TEXT_PLATZHALTER:
+            try:
+                os.makedirs(TEXT_ORDNER, exist_ok=True)
+                open(pfad, "w", encoding="utf-8").close()
+            except Exception:
+                pass
+        return ""
+    with open(pfad, encoding="utf-8-sig") as f:
+        roh = f.read().strip()
+    if not roh:
+        return ""
+    absaetze = []
+    for teil in re.split(r"\n\s*\n", roh):
+        t = esc(teil.strip())
+        t = re.sub(r"(https?://[^\s<]+)", r'<a href="\1" target="_blank" rel="noopener">\1</a>', t)
+        absaetze.append("<p>" + t.replace("\n", "<br>") + "</p>")
+    kopf = f"<strong>{esc(TEXT_UEBERSCHRIFT)}</strong>" if TEXT_UEBERSCHRIFT else ""
+    return f'<div class="sp-text">{kopf}{"".join(absaetze)}</div>'
 
 
 def foto(name):
@@ -478,7 +507,7 @@ def berichte_html(liste):
     <ul class="sp-berichte">{zeilen}</ul>{mehr}"""
 
 
-def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", geburtstag=""):
+def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", geburtstag="", text=""):
     """saison_jahr = Startjahr der aktuellen Saison (für Alter und Prognose)."""
     r_dsb = _int(dsb.get("dwz")) if dsb else None
     elo = _int(dsb.get("elo")) if dsb else None
@@ -519,6 +548,7 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", g
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
     </div>
+    {text}
     {bezirk}
     {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour else ""}
     </div>
@@ -536,6 +566,10 @@ STYLES = """<style>
       .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
       .sp-oben { display: flex; gap: 2.5rem; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
       .sp-links { flex: 1 1 auto; min-width: 0; }
+      .sp-text { max-width: 640px; margin: 1.2rem 0 .8rem; padding: .9rem 1.1rem; border-left: 3px solid var(--link-c, var(--link));
+        background: var(--soft, rgba(127,127,127,.08)); border-radius: 0 10px 10px 0; }
+      .sp-text p { margin: 0 0 .6rem; } .sp-text p:last-child { margin-bottom: 0; }
+      .sp-text strong { display: block; margin-bottom: .3rem; }
       .sp-foto { width: clamp(240px, 26vw, 380px); height: auto; max-height: 480px; object-fit: contain; border-radius: 12px;
         flex: 0 0 auto; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); }
       @media (max-width: 800px) { .sp-oben { flex-direction: column-reverse; gap: 1.2rem; } .sp-foto { width: min(100%, 320px); } }
@@ -580,7 +614,7 @@ def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=()
         tour = (tour_seiten(p["name"]) if tour_seiten and TOUR_LINK else "") or ""
         platzhalter_anlegen(p["name"])
         content = seite_html(p, dsb, saison_jahr, verlauf.get(sl, []), berichte_finden(p["name"], berichte), tour,
-                             bild=foto(p["name"]),
+                             bild=foto(p["name"]), text=text_html(p["name"]),
                              geburtstag=geburtstag_text(p["name"], profile.get(sl), geburtstage, heute))
         render_page(p["name"], content, seite(p["name"]), css_path="../", nav_path="../",
                     extra_styles=liga_styles.replace("</style>", "") + STYLES.replace("<style>", ""),
