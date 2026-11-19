@@ -270,6 +270,7 @@ def seite(events, berichte, ergebnis_zeilen, geburtstage, mitglieder, mannschaft
       {geburtstage_html(geburtstage)}"""
 
     content = f"""
+    <div class="st-voll pause-band" id="pause-band" hidden></div>
     {extra_oben}
     {kopf_html(termine_html(events, team_klasse, plain_text))}
     {berichte_html(berichte)}

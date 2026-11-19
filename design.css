@@ -516,3 +516,16 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
 [data-theme="dark"] .verlauf .g { stroke: var(--line); }
 [data-theme="dark"] .verlauf text { fill: var(--muted); }
 [data-theme="dark"] .verlauf circle { fill: var(--surface); }
+
+
+/* ---------- Pausen / Schließzeiten (ausfall.txt) ---------- */
+:root { --pause: #e0a84f; --pause-text: #8a560a; }
+:root[data-theme="dark"] { --pause-text: #f2c37a; }
+.pause-band { background: var(--pause); color: #1b1b1b; text-align: center; padding: .7rem 1rem; font-weight: 600; font-size: 1.05rem; }
+.pause-band[hidden] { display: none; }
+.st-glas .st-spielabend.pause { border-left-color: var(--pause); background: color-mix(in srgb, var(--pause) 16%, transparent); }
+.st-glas .st-spielabend.pause b { color: #f2c37a; }
+.custom-tabelle tr.pause-zeile td { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--pause) 22%, transparent) 0 12px, color-mix(in srgb, var(--pause) 8%, transparent) 12px 24px) !important;
+  color: var(--pause-text); padding-top: .9rem; padding-bottom: .9rem; font-size: 1.05rem; text-align: center; }
+.custom-tabelle tr.pause-zeile td:first-child { font-weight: 600; border-left: 4px solid var(--pause); }
+@media print { .custom-tabelle tr.pause-zeile td { background: #f3e2c4 !important; color: #000; } }

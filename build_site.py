@@ -568,8 +568,27 @@ def render_table_inner_html(parsed, today=TODAY):
             f'<th class="{k}">{h}</th>' if k else f'<th>{h}</th>' for h, k in zip(header, spalten_klasse)) + '</tr></thead>')
     out.append('<tbody>')
     rows = parsed['rows']
+    pausen = sorted(read_ausfall(), key=lambda a: a["start"]) if PAUSE_IM_KALENDER else []
+    breite = sum(c['colspan'] for c in next((x['cells'] for x in rows if x['kind'] != 'month'), [])) or len(header) or 2
+
+    def pause_zeile(a):
+        s_ = datetime.date.fromisoformat(a["start"]); e_ = datetime.date.fromisoformat(a["end"])
+        wann = (f"{s_.day}.{s_.month}." if s_ == e_ else f"{s_.day}.{s_.month}. – {e_.day}.{e_.month}.")
+        name = htmllib.escape(a["reason"] or "Pause")
+        return (f'<tr class="pause-zeile" data-monat="{s_:%Y-%m}"><td>{wann}</td>'
+                f'<td colspan="{breite - 1}"><b>{name}</b> – kein Spielabend</td></tr>')
+
+    def vor(schluessel):
+        while pausen and pausen[0]["start"] <= schluessel:
+            out.append(pause_zeile(pausen.pop(0)))
+
     for r, monat in zip(rows, monats_schluessel(rows)):
         dm = f' data-monat="{monat}"' if monat else ''
+        if r['kind'] == 'month':
+            if monat:
+                vor(f"{monat}-00")
+        elif r.get('date'):
+            vor(r['date'].isoformat())
         if r['kind'] == 'month':
             out.append(f'<tr class="monat-row"{dm}><td colspan="{r["colspan"]}" class="monat-header">{r["text"]}</td></tr>')
             continue
@@ -587,6 +606,7 @@ def render_table_inner_html(parsed, today=TODAY):
             tds.append(f'<td{cls}{span}>{c["text"]}</td>')
             spalte += c['colspan']
         out.append(f'<tr{tr_cls}>' + ''.join(tds) + '</tr>')
+    vor("9999")
     out.append('</tbody>')
     return '\n'.join(out)
 
@@ -2457,12 +2477,19 @@ STATS = [
 ]
 MANNSCHAFTEN_FALLBACK = "6"
 
+# Schließzeiten / Pausen kommen aus ausfall.txt (z. B. "19.12.2026 - 06.01.2027 = Weihnachtspause").
+# Startseite: Hinweis in "Diese Woche" + farbiges Band unter dem Menü; Terminkalender: gestreifte Zeile.
+PAUSE_BAND = True               # Band unter dem Menü auf der Startseite (nur bei mehrtägigen Pausen)
+PAUSE_VORLAUF_TAGE = 7          # so viele Tage vor Beginn erscheinen Band und "danach ...-Pause"
+PAUSE_IM_KALENDER = True        # Pausen als Zeile im Terminkalender
+
 # Wird im Browser ausgeführt, damit "heute / in 3 Tagen" und der nächste
 # Freitag immer stimmen, auch wenn die Seite schon länger nicht neu gebaut wurde.
 HOME_JS = """<script>
 (function () {
   var today = new Date(); today.setHours(0, 0, 0, 0);
   var AUSFALL = __AUSFALL__;   // Spielabend-Ausfälle aus ausfall.txt
+  var PAUSE_BAND = __PAUSE_BAND__, PAUSE_VORLAUF = __PAUSE_VORLAUF__;
 
   function two(x) { return ("0" + x).slice(-2); }
   function iso(d) { return d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()); }
@@ -2510,39 +2537,64 @@ HOME_JS = """<script>
   var empty = document.getElementById("events-empty");
   if (empty && total > 0 && shown === 0) empty.hidden = false;
 
-  // Nächster Spielabend: jeden Freitag, außer an Ausfalltagen
+  // Nächster Spielabend: jeden Freitag, außer an Ausfalltagen (ausfall.txt)
   var el = document.getElementById("spielabend");
+  var band = document.getElementById("pause-band");
+  function zeitraum(a) { return a.start === a.end ? "am " + dmi(a.start) : "vom " + dmi(a.start) + " bis " + dmi(a.end); }
+  function fett(t) { var b = document.createElement("b"); b.textContent = t; return b; }
   if (el) {
     var f = new Date(today);
     f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
-    var skipped = [];
-    var hit = blocked(f);
-    while (hit && skipped.length < 30) {
-      skipped.push({ d: new Date(f), reason: hit.reason });
-      f.setDate(f.getDate() + 7);
-      hit = blocked(f);
+    var pause = blocked(f), hit = pause, n = 0;
+    while (hit && n++ < 30) { f.setDate(f.getDate() + 7); hit = blocked(f); }
+    // Pause, die nach dem nächsten Spielabend bald beginnt (Vorschau)
+    var bald = null;
+    if (!pause) {
+      var g = new Date(f); g.setDate(g.getDate() + 7);
+      bald = blocked(g);
     }
-
+    var grenze = new Date(today); grenze.setDate(grenze.getDate() + PAUSE_VORLAUF);
     el.textContent = "";
-
     if (hit) {
       el.appendChild(document.createTextNode("Aktuell kein Spielabend" + (hit.reason ? ": " + hit.reason : "")));
+    } else if (pause) {
+      el.classList.add("pause");
+      el.appendChild(fett(pause.reason || "Pause"));
+      el.appendChild(document.createTextNode(" " + zeitraum(pause) + " – nächster Spielabend: Freitag, " + dm(f) + " ab 18:00 Uhr"));
     } else {
-      el.appendChild(document.createTextNode(
-        "Nächster Spielabend: Freitag, " + dm(f) + " ab 18:00 Uhr (" + rel(f) + ")"));
+      el.appendChild(document.createTextNode("Nächster Spielabend: Freitag, " + dm(f) + " ab 18:00 Uhr (" + rel(f) + ")"));
+      if (bald) {
+        el.classList.add("pause");
+        el.appendChild(document.createTextNode(" – "));
+        el.appendChild(fett("danach " + (bald.reason || "Pause") + (bald.start === bald.end ? "" : " bis " + dmi(bald.end))));
+      }
       var ank = angekuendigt();
       for (var k = 0; k < ank.length; k++) {
+        if (bald && ank[k] === bald) continue;
         var why = ank[k].reason ? " (" + ank[k].reason + ")" : "";
         var note = document.createElement("span");
         note.className = "spielabend-note";
-        note.textContent = ank[k].start === ank[k].end
-          ? "Am " + dmi(ank[k].start) + " kein Spielabend" + why
-          : "Vom " + dmi(ank[k].start) + " bis " + dmi(ank[k].end) + " kein Spielabend" + why;
+        note.textContent = (ank[k].start === ank[k].end ? "Am " + dmi(ank[k].start) : "Vom " + dmi(ank[k].start) + " bis " + dmi(ank[k].end)) + " kein Spielabend" + why;
         el.appendChild(document.createElement("br"));
         el.appendChild(note);
       }
     }
     el.hidden = false;
+
+    // Band unter dem Menü: während der Pause und PAUSE_VORLAUF Tage vorher
+    var b = pause || null;
+    if (!b) for (var i = 0; i < AUSFALL.length; i++) {
+      var st = AUSFALL[i].start.split("-"), sd = new Date(+st[0], st[1] - 1, +st[2]);
+      if (sd >= today && sd <= grenze && AUSFALL[i].start !== AUSFALL[i].end) { b = AUSFALL[i]; break; }
+    }
+    if (band && b && PAUSE_BAND) {
+      var weiter = new Date(+b.end.slice(0, 4), b.end.slice(5, 7) - 1, +b.end.slice(8, 10));
+      weiter.setDate(weiter.getDate() + 1);
+      while (weiter.getDay() !== 5 || blocked(weiter)) weiter.setDate(weiter.getDate() + 1);
+      band.appendChild(fett(b.reason || "Pause"));
+      band.appendChild(document.createTextNode(" " + zeitraum(b) + " – nächster Spielabend danach am Freitag, " + dm(weiter)));
+      band.hidden = false;
+    }
   }
 })();
 </script>"""
@@ -2974,7 +3026,9 @@ GEBURTSTAG_JS = """<script>
 def build_index(upcoming_events, home_news_snippets, teams=()):
     """Startseite – Aufbau, Texte und Bilder-Ordner: startseite.py"""
     ausfall_json = json.dumps(read_ausfall(), ensure_ascii=False).replace("<", "\\u003c")
-    home_js = HOME_JS.replace("__AUSFALL__", ausfall_json)
+    home_js = (HOME_JS.replace("__AUSFALL__", ausfall_json)
+               .replace("__PAUSE_BAND__", "true" if PAUSE_BAND else "false")
+               .replace("__PAUSE_VORLAUF__", str(int(PAUSE_VORLAUF_TAGE))))
 
     # Termine ab heute (das Skript blendet vergangene aus und zeigt nur die ersten)
     events = [ev for ev in upcoming_events if ev["date"] >= TODAY][:startseite.TERMINE_ANZAHL + 4]
