@@ -70,6 +70,7 @@
    37.3122991,
    13.57465
   ],
+  "ARRECIFE (LANZAROTE) Centro Insular de Ajedrez, Spanien": null,
   "Abdulezizli, 30 Feyruz Hajili, Baku, Aserbaidschan": [
    40.3755885,
    49.8328009
@@ -114,6 +115,7 @@
    24.1141842
   ],
   "Auditorio Pepe Marchena - C/ Virgen Guadalupe, 17 - 41620 Marchena (Sevilla), Spanien": null,
+  "Aula Municipal Ajedrez Caravaca, Spanien": null,
   "Av. das Descobertas 59, 2780-053 Oeiras, Portugal": [
    38.6822826,
    -9.3203704
@@ -122,9 +124,18 @@
    38.7634802,
    -9.2341181
   ],
+  "BAČ, TRG BRATSTVA JEDINSTVA 12, Serbien": [
+   45.2516213,
+   19.3823009
+  ],
+  "BINZ Ifa Hotel, Deutschland": null,
   "Bacoli, Italien": [
    40.7965939,
    14.0777733
+  ],
+  "Bad Dürkheim, Deutschland": [
+   49.4632944,
+   8.1705063
   ],
   "Bad Koenigshofen, Deutschland": [
    50.2993334,
@@ -177,6 +188,10 @@
    31.971376,
    34.791045
   ],
+  "Benkenstrasse 20, 1. OG, 4106 Therwil, Schweiz": [
+   47.4988926,
+   7.5566343
+  ],
   "Beograd, Gospodara Vučića broj 231, Serbien": null,
   "Berlin, Deutschland": [
    52.5173885,
@@ -199,6 +214,8 @@
    23.1470509
   ],
   "Biblioteca Felipe González Márquez C/ TORNEO S/N SEVILLA, Spanien": null,
+  "Biblioteca Municipala George Bodea Câmpulung Moldovenesc, Rumänien": null,
+  "Biblioteca Municipală George Bodea Câmpulung Moldovenesc, Rumänien": null,
   "Biblioteca da Escola, Portugal": [
    40.9449286,
    -8.4045462
@@ -335,6 +352,11 @@
    40.3836597,
    49.8241135
   ],
+  "C. Vicente Savall Pascual, 16, 03690 Sant Vicent del Raspeig, Alicante, Spanien": [
+   38.3952683,
+   -0.5226477
+  ],
+  "C/ Escuderoa 2. nte. Sierra 14012 Córdoba (Club Escuderia Alba), Spanien": null,
   "C/ NERVA 2, BOLLULLOS DEL CONDADO, Spanien": [
    37.3398389,
    -6.5335774
@@ -343,6 +365,7 @@
    37.4113915,
    -5.9781059
   ],
+  "CENTRO CÍVICO DEL VALLE C/Maestro Gordillo, Spanien": null,
   "CVČ Domino-Chrenová, Topoľova 1, 94901 Nitra, Slowakei": [
    48.3162273,
    18.0708367
@@ -373,6 +396,10 @@
    -0.987511
   ],
   "Casa de Cultura Dumbravitac, Rumänien": null,
+  "Casa del Pueblo, C/Carmen Picazo 12, Chiclana de la Frontera, Spanien": [
+   36.4191096,
+   -6.1460683
+  ],
   "Caseta Municipal, Alameda del Rio, Lora del Rio (Sevilla), Spanien": [
    37.6574267,
    -5.5275818
@@ -381,6 +408,10 @@
    43.2140359,
    5.5396318
   ],
+  "Castellón de la Plana, Spanien": [
+   39.9860347,
+   -0.0377354
+  ],
   "Castelnuovo del Garda, Italien": [
    45.4397416,
    10.7615812
@@ -388,6 +419,10 @@
   "Castlehill Chess Club, Dundee, Schottland": [
    56.4605938,
    -2.97019
+  ],
+  "Centro Carmen Jimenez, La Zubia (Granada, Spain), Spanien": [
+   40.4237276,
+   -3.6899043
   ],
   "Centro Carmen Jiménez - La Zubia, Spanien": [
    37.1137847,
@@ -469,6 +504,7 @@
    38.5664067,
    -0.6374064
   ],
+  "Comedor Cafetería Campus Viriato ( Av. Requejo – Zamora), Spanien": null,
   "Continental hotel, Marianske Lazne, Tschechien": [
    49.9673167,
    12.7013542
@@ -511,6 +547,10 @@
    16.4426256
   ],
   "Debrecen MÁV állomás, Ungarn": null,
+  "Despotovac, Serbien": [
+   44.0954702,
+   21.4366052
+  ],
   "Djenovici, Herceg Novi, Montenegro": [
    42.4517622,
    18.5367516
@@ -526,6 +566,10 @@
   "Dolní Lutyně 735 53, Tschechien": [
    49.8988168,
    18.4281743
+  ],
+  "Dolyna, Ivano-Frankivsk region, Ukraine": [
+   48.9152404,
+   24.7086412
   ],
   "Dom HVIDRE, ul. Stjepana Marjanovića 2, Sl.Brod, Kroatien": [
    45.1785678,
@@ -559,6 +603,11 @@
    46.1767211,
    18.9502591
   ],
+  "Dunfermline, Schottland": [
+   56.0713724,
+   -3.4616183
+  ],
+  "DÜZİÇİ SPIR SALONU, Türkei": null,
   "Dürnstein, Österreich": [
    48.3953879,
    15.5203111
@@ -572,11 +621,16 @@
    14.5043262
   ],
   "EGE PERLA AVM, Türkei": null,
+  "ENAE Business School, Spanien": null,
   "ESTEPONA, Spanien": [
    36.4268068,
    -5.1468484
   ],
   "Edificio Carmen Jiménez, La Zubia  (entrada por la Calle Rosa), Spanien": null,
+  "Eichetstraße 29-31, 5020 Salzburg, Österreich": [
+   47.8243682,
+   13.0453162
+  ],
   "Einstein 16, Ramat Gan, Israel": [
    32.0630996,
    34.8262105
@@ -654,6 +708,14 @@
   "Frith Manor Primary School, Lullington Garth, London N12 7BN, England": [
    51.6150124,
    -0.2009703
+  ],
+  "Fronton Gurea, Aingeru kalea 4, Azkoitia, Spanien": [
+   43.1781602,
+   -2.3114989
+  ],
+  "Fábrica Centro Ciência Viva de Aveiro, Portugal": [
+   40.6381021,
+   -8.6577436
   ],
   "GDC Casquilhos - R. Sousa Martins, Portugal": null,
   "Ganību dambis 21g, Rīga, Lettland": [
@@ -770,6 +832,10 @@
    48.2154008,
    16.2995991
   ],
+  "Hafnarfjörður, Island": [
+   64.0695354,
+   -21.9575664
+  ],
   "Hala Čair – Niš, \"VIP SALA\", Serbien": null,
   "Haladás Sporkomplexum 9700 Szombathely, rohonci út 3., Ungarn": [
    47.2208931,
@@ -881,6 +947,11 @@
    50.0786858,
    14.4755307
   ],
+  "Hotel Drim Struga www.drim.com.mk, Nordmazedonien": null,
+  "Hotel Fantastico, Senta, Arpadova 1, Serbien": [
+   46.1196593,
+   19.6729169
+  ],
   "Hotel Fantastiko, u Senti, ulica Arpadova br.1, Serbien": null,
   "Hotel Gstaaderhof, Lauenenstrasse 19, 3780 Gstaad, 033 748 63 63, Schweiz": [
    46.4721619,
@@ -910,6 +981,7 @@
    45.157389,
    14.7200531
   ],
+  "Hotel NH Iruña Park, Spanien": null,
   "Hotel Perinthos, Griechenland": [
    40.7072395,
    22.7975302
@@ -968,6 +1040,7 @@
    47.179034,
    20.4430418
   ],
+  "Isusovačka klasična gimnazija s pravom javnosti Osijek, Trg V. Lisinskog 1, Kroatien": null,
   "Jalə Plaza 1-ci mərtəbi AĞ AT ŞK, Aserbaidschan": null,
   "Jeremenkova 1835/106, Praha 4 - Krč, Tschechien": [
    50.0438786,
@@ -990,6 +1063,10 @@
    39.6626477,
    20.8502986
   ],
+  "KARPATHOU 8, PETROUPOLI, Griechenland": [
+   38.0434827,
+   23.6834256
+  ],
   "KENTPARK SOSYAL KÜTÜPHANE, Türkei": null,
   "KVLC klubas \"Želmenėlis\" adresu Vingio g. 14B, Klaipėda, Litauen": [
    55.7127529,
@@ -1002,6 +1079,10 @@
   "Kantonschule, Hubstrasse 75, 9500 Wil, Schweiz": [
    47.4652508,
    9.047905
+  ],
+  "Karpathou 8, PETROUPOLI, Griechenland": [
+   38.0434827,
+   23.6834256
   ],
   "Kasyno Oficerskie, ul.Generała Ignacego Ledóchowskiego 160, 05-160 Nowy Dwór Maz, Polen": [
    52.4373525,
@@ -1029,6 +1110,10 @@
    51.4096275,
    -0.3062621
   ],
+  "Kingston, England": [
+   52.1791855,
+   -0.0321477
+  ],
   "Kino dvorana dom kulture, Bošnjaci, Kroatien": [
    45.050207,
    18.7552586
@@ -1040,6 +1125,10 @@
   "Kirchgemeindehaus Johannes, Wylerstrasse 5, 3014 Bern, Schweiz": [
    46.9635562,
    7.45946
+  ],
+  "Kiryat Ono, Israel": [
+   32.0591691,
+   34.8594303
   ],
   "Knihovna Slavoj, Tylova 506, 544 01 Dvůr Králové n. L., Tschechien": null,
   "Kongress- und Theaterhaus Bad Ischl, Österreich": [
@@ -1229,9 +1318,17 @@
    21.9359228
   ],
   "Makedonska Kamenica, Motel Merak, Nordmazedonien": null,
+  "Makrinitsas 3, Athina, 115 22, Griechenland": [
+   37.991085,
+   23.755913
+  ],
   "Maraco Perú. Avenida de Andalucía, 11. Sevilla., Spanien": [
    37.3952072,
    -5.9905699
+  ],
+  "Maribor, Restavracija Gurmanski hram, Slowenien": [
+   46.5264596,
+   15.6689985
   ],
   "Marija Bistrica, Kroatien": [
    46.0046314,
@@ -1263,6 +1360,10 @@
    31.7791314,
    35.2200716
   ],
+  "Mykolaiv, Ukraine": [
+   46.9758615,
+   31.9939666
+  ],
   "Mövenpick Hotel - Aeschengraben 25 - CH-4051 Basel, Schweiz": [
    47.5549807,
    7.5857978
@@ -1282,6 +1383,10 @@
    14.2487679
   ],
   "Naxçıvan Şəhər Şahmat Mərkəzi, Aserbaidschan": null,
+  "Neubrandenburg, Deutschland": [
+   53.5574458,
+   13.2602781
+  ],
   "Neumuenster, Deutschland": [
    54.0703296,
    9.9884451
@@ -1316,6 +1421,10 @@
    48.3734166,
    19.6180984
   ],
+  "Oer-Erkenschwick, Deutschland": [
+   51.6398512,
+   7.2605914
+  ],
   "Ohlsbach, Deutschland": [
    48.4316699,
    7.9939024
@@ -1330,6 +1439,10 @@
   ],
   "Ostseebad Heringsdorf (Usedom), Deutschland": null,
   "Otopeni - Hotel RIN Aeroport, Rumänien": null,
+  "Pabellón Polideportivo Universitario, C/ Pedro Cerbuna, 12 Zaragoza, Spanien": [
+   41.6312111,
+   -0.929653
+  ],
   "Paderborn, Deutschland": [
    51.7177044,
    8.752653
@@ -1337,6 +1450,10 @@
   "Painsley Catholic College, Cheadle, Staffordshire, ST10 1LH, England": [
    52.9804647,
    -1.9904116
+  ],
+  "Palacio de Exposiciones y Congresos (FIBES), Avda Alcalde Luis Uruñuela 1, 41020, Spanien": [
+   37.3987457,
+   -5.9222037
   ],
   "Palacio de Ferias y Congresos Alcalde Francisco Jódar Alonso. Lorca, Murcia, Spanien": [
    37.9347521,
@@ -1394,6 +1511,10 @@
   "Patronat, CALLE Columbretes 22  -  TORNEO 3, 20 NOV., 17:45, Spanien": [
    41.6276802,
    -0.933138
+  ],
+  "Paula Stradiņa Medicīnas vēstures muzejs - Ukrainas Neatkarības iela 1, Riga, Lettland": [
+   56.9570522,
+   24.1080286
   ],
   "Payerne, Schweiz": [
    46.8208047,
@@ -1463,6 +1584,10 @@
    50.0874654,
    14.4212535
   ],
+  "Praha 8-Bohnice, Tschechien": [
+   50.1230611,
+   14.4464291
+  ],
   "Praha, Tschechien": [
    50.0874654,
    14.4212535
@@ -1519,6 +1644,7 @@
    47.3504945,
    8.2786906
   ],
+  "Restaurante Cuevas Romanas  Urb. La Colina C/ Las Cuevas s/n, Spanien": null,
   "Restoran \"ADA\" - Tojšići, Bosnien": null,
   "Restoran \"Štefova klet\", Gornja Dubrava 21, Kroatien": [
    46.4293881,
@@ -1614,6 +1740,10 @@
   ],
   "SK OAZA, Jeremenkova 106, Praha 4-Krč, bus zastávka Na Strži, Tschechien": null,
   "SK OAZA, Jeremenkova 1835/106, Praha 4-Krč, stanice autobusu Na Strži, Tschechien": null,
+  "SK Rockaden Umeås klubblokal, Moritzvägen 2, Umeå, Schweden": [
+   63.8256568,
+   20.2630745
+  ],
   "SPMC College, Rabat, Malta": [
    35.8818906,
    14.3988213
@@ -1643,6 +1773,7 @@
    -9.189069
   ],
   "Salón Bajo Plaza - Zahara 11688 (Cádiz), Spanien": null,
+  "Salón Municipal. Calle Cristo 16.  Tiñosillos (Ávila), Spanien": null,
   "San Juan Arria Plaza, S/N, 20304 Irun, Spanien": [
    43.3368061,
    -1.7841604
@@ -1983,8 +2114,13 @@
    46.6130191,
    13.8448586
   ],
+  "Triesen, Liechtenstein": [
+   47.106994,
+   9.5274876
+  ],
   "Trieste - I.T.I.S. hall via Pascoli 31, Italien": null,
   "Trnava, CVČ V jame, Slowakei": null,
+  "Trstenik, izlozbeni salon Doma  kulture, Serbien": null,
   "Turner Hall, Church Lane, Newmarket, CB8 0HP, England": [
    52.2446844,
    0.4027802
@@ -2000,6 +2136,10 @@
   "Tv. Nova de Teibas, 4425-674 Pedrouços, Portugal": [
    41.1913044,
    -8.5948096
+  ],
+  "Tweede Schinkelstraat 26h, 1075 TT Amsterdam, Niederlande": [
+   52.3533384,
+   4.8541016
   ],
   "UPeCe Bratislava, Staré Grunty 36, 841 04 Bratislava, Slowakei": [
    48.156033,
@@ -2056,6 +2196,10 @@
   "Vatrogasni dom, Zagrebačka 1, Krapina, Kroatien": [
    46.1640284,
    15.8700586
+  ],
+  "Vega de San Mateo, Spanien": [
+   27.9961882,
+   -15.5682128
   ],
   "Veranstaltungshalle Ratten, Kirchenviertel 156, 8673 Ratten, Österreich": [
    47.4978118,
@@ -2182,6 +2326,10 @@
    51.1089776,
    17.0326689
   ],
+  "Września, Polen": [
+   52.3250694,
+   17.5652282
+  ],
   "Wyllyotts Theatre, Potters Bar EN6 2JD, England": [
    51.6961677,
    -0.1938353
@@ -2204,6 +2352,10 @@
   "ZS Malokarpatske nam. 1, Bratislava - Lamac, Slowakei": [
    48.1846371,
    17.0510613
+  ],
+  "ZS kniezata Pribinu, Andreja Sulgana 1, Nitra, Slowakei": [
+   48.31295,
+   18.0894593
   ],
   "Zabrze, Polen": [
    50.3142806,
@@ -2268,6 +2420,10 @@
   "Černyševského 8, Bratislava, Slowakei": [
    48.1293276,
    17.1095094
+  ],
+  "Šahovska zveza Slovenije, Bravničarjeva ulica 13, 1000 Ljubljana, Slowenien": [
+   46.0616887,
+   14.5089463
   ],
   "Štětí, Tschechien": [
    50.4529016,
@@ -2384,6 +2540,10 @@
    44.7740015,
    20.503827
   ],
+  "Парк-хотел 'Москва\", Bulgarien": [
+   42.6736396,
+   23.3487209
+  ],
   "Плевен, Хотел \"Балкан\", Bulgarien": [
    43.4121894,
    24.6290719
@@ -2439,6 +2599,11 @@
    39.2075659,
    46.4049281
   ],
+  "Նոր Նորքի 6-րդ զանգ․, Լյուքսեմբուրգի 2-րդ նրբ․6/9, Armenien": null,
+  "Վանաձոր, Armenien": [
+   40.8112384,
+   44.4851821
+  ],
   "ք․Երևան, Շևչենկո 34, Armenien": [
    40.1570136,
    44.483239
@@ -2451,6 +2616,7 @@
    32.8191218,
    34.9983856
   ],
-  "ზუგდიდის სორტკომპლექსი; ჭ. ბენდელიანის ქ.#35, Georgien": null
+  "ზუგდიდის სორტკომპლექსი; ჭ. ბენდელიანის ქ.#35, Georgien": null,
+  "ზუგდიდის სპორტკომპლექსი; ჭ. ბენდელიანის ქ.#35, Georgien": null
  }
 }
