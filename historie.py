@@ -476,7 +476,7 @@ def jahrzehnt(jahr):
 
 
 def chronik_html(chronik, meilensteine, pdf):
-    """Chronik nach Jahrzehnten, Meilensteine stehen beim passenden Jahr (neueste oben)."""
+    """Chronik nach Jahrzehnten, Meilensteine stehen beim passenden Jahr (alt -> neu)."""
     jahre = {}                                     # Schlüsseljahr -> {"titel", "text", "marken"}
     for titel, text in chronik:
         k = jahr_schluessel(titel)
@@ -488,7 +488,7 @@ def chronik_html(chronik, meilensteine, pdf):
         k = j + 1                                  # Saison 2025/26 steht in der Chronik bei 2026
         jahre.setdefault(k, {"titel": str(k), "text": "", "marken": []})["marken"].append(html.rstrip("."))
     dek = {}
-    for k in sorted(jahre, reverse=True):
+    for k in sorted(jahre):                       # alt -> neu (oben -> unten)
         dek.setdefault(jahrzehnt(k), []).append(k)
     namen = sorted(dek, key=lambda d: int(d[:4]), reverse=True)
     pillen = "".join(f'<button type="button" data-dek="{d}"{" class=an" if d == namen[0] else ""}>{d}</button>'
@@ -505,7 +505,7 @@ def chronik_html(chronik, meilensteine, pdf):
         bloecke.append(f'<div class="gs-dek" data-dek="{d}">{"".join(z)}</div>')
     pdf_link = f'<a class="gs-pdf" href="{pdf}">Chronik als PDF</a>' if pdf else ""
     return (f'<div class="gs-pillen" role="tablist">{pillen}{pdf_link}</div>'
-            f'<p class="klein gs-legende"><span class="gs-marke">Erfolg</span> = Meilenstein der Saison. Neueste Jahre oben.</p>'
+            f'<p class="klein gs-legende"><span class="gs-marke">Erfolg</span> = Meilenstein der Saison.</p>'
             + "".join(bloecke))
 
 

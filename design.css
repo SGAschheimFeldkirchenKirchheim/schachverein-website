@@ -389,16 +389,15 @@ footer a:hover { color: #fff; }
 .pdf-card:hover { border-color: var(--hell); }
 .pdf-icon { flex: none; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: #fff; background: #b03a2e; border-radius: 4px; padding: 0.35rem 0.5rem; }
 
-/* ---------- Neu hier?: Schritt für Schritt ---------- */
-.neu-grid { display: flex !important; flex-direction: column; gap: 0 !important; counter-reset: schritt; max-width: 52rem; margin-top: 1.5rem; }
-.neu-card { counter-increment: schritt; position: relative; background: none !important; border: 0 !important;
-  border-left: 2px solid var(--line) !important; border-radius: 0 !important; box-shadow: none !important;
-  margin-left: 1.3rem; padding: 0.3rem 0 1.6rem 2.6rem !important; }
-.neu-card:last-child { border-left-color: transparent !important; }
-.neu-card::before { content: counter(schritt); position: absolute; left: -1.25rem; top: 0; width: 2.4rem; height: 2.4rem; border-radius: 50%;
-  background: var(--accent); color: #fff; display: grid; place-items: center; font-family: var(--font-head); font-size: 1.15rem; }
-.neu-card h3 { margin-top: 0.3rem; }
+/* ---------- Neu hier?: Kacheln ohne Nummern ---------- */
+.neu-grid { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1rem !important; margin-top: 1.5rem; }
+.neu-card { background: var(--surface) !important; border: 1px solid var(--line) !important; border-top: 3px solid var(--link-c) !important;
+  border-radius: 12px !important; box-shadow: none !important; padding: 1.2rem 1.4rem !important; }
+.neu-card h3 { margin: 0 0 .6rem; }
+.neu-card ul { padding-left: 1.1rem; margin: .4rem 0; }
+.neu-card p { margin: .4rem 0; }
 .neu-card a { color: var(--link-c); }
+.neu-card .btn { margin-top: .5rem; }
 
 /* ---------- Tabellen ---------- */
 .custom-tabelle th, .oq-tabelle th, .hof-tabelle th, .liga-tab th { background: var(--accent); color: #fff; }
