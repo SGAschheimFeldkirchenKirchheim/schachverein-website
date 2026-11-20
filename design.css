@@ -643,3 +643,16 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
   .kt-zwei { grid-template-columns: 1fr; gap: 0; }
   .kt-modal { padding: 1.3rem 1.1rem 1.2rem; }
 }
+
+/* Verwaltung: Nutzer als Karten (passt auch aufs Handy) */
+.kt-nutzer { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: .8rem; }
+.kt-nk { margin: 0; padding: 1rem 1.1rem; }
+.kt-nk-kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; }
+.kt-nk-kopf a { color: var(--head); text-decoration: none; }
+.kt-nk-rechte { margin: .7rem 0; display: flex; flex-wrap: wrap; gap: .3rem 1rem; align-items: center; font-size: .92rem; }
+.kt-recht-wahl { display: inline-flex; gap: .35rem; align-items: center; cursor: pointer; }
+.kt-recht-wahl input { width: 17px; height: 17px; accent-color: var(--link-c); }
+.kt-nk-akt { display: flex; flex-wrap: wrap; gap: .3rem; }
+.kt-nk-akt .kt-mini { margin: 0; }
+@media (max-width: 600px) { .kt-nk-akt { display: grid; grid-template-columns: 1fr 1fr; } .kt-nk-akt .kt-mini { padding: .5rem; } }
+a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }

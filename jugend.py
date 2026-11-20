@@ -89,10 +89,11 @@ TEAMS = [
     },
 ]
 
-# Erfolge (neueste zuerst); leere Liste = Abschnitt ausblenden
-ERFOLGE = [
-    ("2024/25", "Platz 2 in der U20 Landesliga Süd"),
-]
+# Erfolge (neueste zuerst): kommen automatisch aus der Geschichte (Titel, Platz 1, erstmals höhere Liga).
+# ERFOLGE_EXTRA: zusätzliche Erfolge von Hand, z. B. Einzelerfolge: ("2022/23", "Fabian Müller 6. der Bayerischen U16-Meisterschaft")
+ERFOLGE = []
+ERFOLGE_EXTRA = []
+ERFOLGE_SICHTBAR = 5      # so viele sofort, der Rest klappt auf
 
 # Fragen von Eltern (Frage, Antwort als HTML). {beitrag} = Jahresbeitrag Kinder aus build_site.BEITRAEGE
 FAQ = [
@@ -237,11 +238,19 @@ def seite(termine, berichte, beitrag="", liga_seiten=None):
 
     erfolge_html = ""
     if ERFOLGE:
-        zeilen = "".join(f"<li><strong>{esc(s)}:</strong> {esc(t)}</li>" for s, t in ERFOLGE)
+        def li(e):
+            s, t = e[0], e[1]
+            gold = len(e) > 2 and e[2]
+            return f'<li><b>{esc(s)}</b><span{" class=gold" if gold else ""}>{esc(t)}</span></li>'
+        sofort = "".join(li(e) for e in ERFOLGE[:ERFOLGE_SICHTBAR])
+        rest = "".join(li(e) for e in ERFOLGE[ERFOLGE_SICHTBAR:])
+        mehr = (f'<details class="jugend-mehr"><summary>Alle Erfolge ({len(ERFOLGE)})</summary><ul class="jugend-erfolge">{rest}</ul></details>'
+                if rest else "")
         erfolge_html = f"""
       <div class="card jugend-box">
         <h3>Erfolge</h3>
-        <ul>{zeilen}</ul>
+        <ul class="jugend-erfolge">{sofort}</ul>{mehr}
+        <p class="klein" style="margin-top:.6rem"><a href="geschichte.html#u20">Mehr in der Geschichte →</a></p>
       </div>"""
 
     links_html = "".join(f'<li><a href="{esc(u)}" target="_blank" rel="noopener">{esc(n)} ↗</a></li>'
@@ -312,6 +321,12 @@ STYLES = """<style>
       .jugend-box { padding: 1.1rem 1.3rem; border-top: 4px solid var(--jugend); }
       .jugend-box h3 { margin-top: 0; }
       .jugend-box p { margin: 0.35rem 0; }
+      .jugend-erfolge { list-style: none; padding: 0; margin: .4rem 0 0; }
+      .jugend-erfolge li { display: grid; grid-template-columns: 4.6rem 1fr; gap: .5rem; padding: .3rem 0; border-bottom: 1px solid var(--line, #eee); }
+      .jugend-erfolge li:last-child { border-bottom: 0; }
+      .jugend-erfolge b { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 600; }
+      .jugend-erfolge .gold { font-weight: 600; }
+      .jugend-mehr summary { cursor: pointer; color: var(--link-c); margin-top: .4rem; }
       .jugend-box ul { padding-left: 1.2rem; margin: 0.3rem 0 0; }
       .jugend-training .btn { display: inline-block; margin-top: 0.5rem; text-decoration: none; padding: 0.5rem 1rem; }
       section { margin-top: 2rem; }

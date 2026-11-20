@@ -81,6 +81,31 @@ def seite_fuer_name(name):
     return spieler_seite(sid) if os.path.exists(spieler_seite(sid)) else ""
 
 
+# Kurzfassung je Spieler für die Vereins-Spielerseiten (wird in bauen() gefüllt): {id: {...}}
+UEBERSICHT = {}
+
+
+def uebersicht_fuer_name(name):
+    """Für spieler.py: Zahlen und seltenste Abzeichen dieses Spielers (oder None)."""
+    return UEBERSICHT.get(spieler_id(name))
+
+
+def profil_box(u, pfad="../"):
+    """Kleine Box 'AFK on Tour' für die Spielerseite."""
+    zahlen = "".join(f'<div><b>{w}</b><span>{t}</span></div>' for w, t in
+                     ((u["orte"], "Orte"), (u["laender"], "Länder"), (u["turniere"], "Turniere"), (f'{u["km"]} km', "weiteste Reise")))
+    chips = "".join(f'<span class="tour-abz st-{a["stufe"]}" title="{html.escape(a["text"])}">{html.escape(a["name"])}</span>'
+                    for a in u["abzeichen"])
+    mehr = f' <span class="klein">+ {u["n_abz"] - len(u["abzeichen"])} weitere</span>' if u["n_abz"] > len(u["abzeichen"]) else ""
+    return f"""
+    <div class="card sp-tour">
+      <div class="sp-tour-kopf"><h2>AFK on Tour</h2><span class="klein">Platz {u["platz"]} von {u["von"]} · {u["punkte"]} Punkte</span></div>
+      <div class="sp-tour-zahlen">{zahlen}</div>
+      {f'<div class="tour-chips">{chips}{mehr}</div>' if chips else ""}
+      <p class="klein" style="margin:.8rem 0 0"><a href="{pfad}{html.escape(u["seite"])}">Karte und alle Turniere ansehen →</a></p>
+    </div>"""
+
+
 def anzeige_name(name):
     teile = name.split()
     return f"{' '.join(teile[:-1])} {teile[-1][0]}." if len(teile) > 1 else name
@@ -462,6 +487,10 @@ JS_ANTRAG = r"""
 (function () {
   var f = document.getElementById("tour-form"); if (!f) return;
   if (location.hash === "#beantragen") document.getElementById("beantragen").open = true;
+  // angemeldet: Name vorausfüllen (bleibt änderbar)
+  function vorbelegen(a) { if (a && a.ich && !f.elements.name.value) f.elements.name.value = a.ich.name; }
+  if (window.AFK_KONTO) window.AFK_KONTO.ich().then(vorbelegen);
+  else document.addEventListener("afk-konto", function (ev) { vorbelegen(ev.detail); });
   f.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var knopf = f.querySelector("button"), m = f.querySelector(".meldung"), d = {typ: "turnierort"};
@@ -625,8 +654,14 @@ def bauen(render_page, skript_url="", aktiv=None):
     _seite(render_page, aktiv, "Abzeichen – " + TITEL, inhalt, SEITE_ABZEICHEN, daten, JS_ABZEICHEN)
 
     # ---------- Spielerseiten ----------
+    UEBERSICHT.clear()
     for platz, t in enumerate(tabelle, 1):
         erreicht = sorted((a for a in abz_daten if a["id"] in t["erreicht"]), key=lambda a: (a["anteil"], -a["punkte"]))
+        if not spieler.get(t["id"], {}).get("ausgeblendet"):
+            UEBERSICHT[t["id"]] = {"platz": platz, "von": len(tabelle), "punkte": t["punkte"], "orte": t["werte"]["orte"],
+                                   "laender": t["werte"]["laender"], "turniere": t["werte"]["turniere"],
+                                   "km": t["werte"]["weiteste"], "seite": spieler_seite(t["id"]), "n_abz": len(erreicht),
+                                   "abzeichen": [{"name": a["name"], "stufe": a["stufe"], "text": a["text"]} for a in erreicht[:5]]}
         naechste = sorted(((a, t["fortschritt"][a["id"]]) for a in abz_daten if a["id"] in t["fortschritt"]),
                           key=lambda x: (-x[1][0] / x[1][1], x[0]["punkte"]))[:4]
         zahlen = _zahlen([(t["werte"]["orte"], "Orte"), (t["werte"]["laender"], "Länder"), (t["werte"]["turniere"], "Turniere"),

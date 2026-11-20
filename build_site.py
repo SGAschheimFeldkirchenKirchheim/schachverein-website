@@ -1145,7 +1145,7 @@ def pdf_liste_html(entries):
 
 
 def ausschreibungen_wahl_html(intern_link):
-    """Zwei Karten: Intern (eigene PDFs) / Extern (Turnierkalender)."""
+    """Drei Karten: Intern (eigene PDFs) / Turnierkalender / AFK on Tour."""
     n = len(ausschreibungen_eintraege())
     m = turnierkalender.ANZAHL
     return f"""<div class="pdf-grid">
@@ -1155,7 +1155,11 @@ def ausschreibungen_wahl_html(intern_link):
             </a>
             <a class="pdf-card" href="{turnierkalender.SEITE}">
               <span class="pdf-icon" aria-hidden="true" style="background:var(--hell);color:#0e1524">EU</span>
-              <span class="pdf-text"><strong>Extern</strong><br><small>Turnierkalender · Opens in Bayern, Deutschland und Europa{f" · {m} Turniere" if m else ""}</small></span>
+              <span class="pdf-text"><strong>Turnierkalender</strong><br><small>Opens in Bayern, Deutschland und Europa{f" · {m} Turniere" if m else ""}</small></span>
+            </a>
+            <a class="pdf-card" href="{turnierorte.SEITE}">
+              <span class="pdf-icon" aria-hidden="true" style="background:var(--hell);color:#0e1524">TOUR</span>
+              <span class="pdf-text"><strong>AFK on Tour</strong><br><small>Wo wir schon überall Turniere gespielt haben – mit Karte und Abzeichen</small></span>
             </a>
           </div>"""
 
@@ -2318,6 +2322,8 @@ ALLE_BERICHTE = []   # wird von build_berichte() gefüllt (z. B. für die Jugend
 def build_berichte():
     reports = []
     seen = {}
+    # Wer hat eine Profilseite? (Spielerseiten vom letzten Build + registrierte Mitglieder)
+    profil_slugs = {os.path.basename(p)[:-5] for p in glob.glob(os.path.join("spieler", "*.html"))} | set(konten.PROFILE)
 
     if os.path.exists("berichte"):
         # Kopierte Bilder werden bei jedem Build neu erzeugt
@@ -2352,7 +2358,18 @@ def build_berichte():
             km = re.search(r'(?m)^\s*#kategorie\[(.*?)\]', code)
             kategorien = {k.strip().lower() for k in km.group(1).split(",")} if km else set()
 
+            # Titelbild (Editor: "// titelbild: bild2.jpg"), sonst das erste Bild
+            tb = re.search(r'(?m)^\s*//\s*titelbild:\s*(\S+)', code)
+            thumb = next((i for i in images if tb and os.path.basename(i) == tb.group(1)), images[0] if images else "")
+            # Autor -> Profilseite (nicht bei "// gast": Name von einem Gast, vom Admin nicht bestätigt)
+            autor_slug = ""
+            if author and not re.search(r'(?m)^\s*//\s*gast\s*$', code):
+                s_ = spieler.slug(plain_text(author))
+                if s_ in profil_slugs:
+                    autor_slug = s_
+            autor_html = f'<a href="../spieler/{autor_slug}.html">{author}</a>' if autor_slug else author
             meta = date + (f" · von {author}" if author and date else (f"von {author}" if author else ""))
+            meta_link = date + (f" · von {autor_html}" if author and date else (f"von {autor_html}" if author else ""))
             reports.append({
                 'stem': slug,
                 'filename': slug + ".html",
@@ -2360,7 +2377,10 @@ def build_berichte():
                 'meta': meta,
                 'body': body_html,
                 'snippet': snippet,
-                'thumb': images[0] if images else "",
+                'thumb': thumb,
+                'meta_link': meta_link,
+                'autor': plain_text(author) if author else "",
+                'autor_slug': autor_slug,
                 'when': when or date_from_filename(slug) or datetime.date.min,
                 'kategorien': kategorien,
             })
@@ -2381,7 +2401,7 @@ def build_berichte():
         article_content = f"""
         <a href="../berichte.html" style="text-decoration:none;">← Zurück zur Berichte-Übersicht</a>
         <h1 style="margin-top:1rem;">{r['title']}</h1>
-        <p class="news-meta">{r['meta']}</p>
+        <p class="news-meta">{r['meta_link']}</p>
         <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
         <div class="article-content">{r['body']}</div>
         """
@@ -3177,7 +3197,8 @@ def build_spieler(aktuell, teams, archiv):
             os.remove(alt)
     ACTIVE_PARENT.update({os.path.basename(x): "mannschaften.html" for x in liga.SPIELER_SEITEN})
     n = spieler.bauen(alle, dsb, render_page, liga.STYLES, aktuell, berichte=ALLE_BERICHTE,
-                      tour_seiten=turnierorte.seite_fuer_name, geburtstage=_geburtstag_liste(), konten=konten.PROFILE)
+                      tour_seiten=turnierorte.seite_fuer_name, geburtstage=_geburtstag_liste(), konten=konten.PROFILE,
+                      tour_box=lambda name: (lambda u: turnierorte.profil_box(u) if u else "")(turnierorte.uebersicht_fuer_name(name)))
     print(f"Spielerseiten: {n}")
 
 
@@ -3272,8 +3293,10 @@ def build_historie(aktuell, teams, archiv):
     weiterleitung(historie.ALTE_SEITE, f"{historie.SEITE}#mannschaften")
 
 
-def build_jugend(termine, liga_seiten=None):
+def build_jugend(termine, liga_seiten=None, erfolge=None):
     berichte = [r for r in ALLE_BERICHTE if "jugend" in r['kategorien']]
+    if erfolge:
+        jugend.ERFOLGE = erfolge + [e for e in jugend.ERFOLGE_EXTRA if e not in erfolge]
     beitrag = next((preis for wer, preis in BEITRAEGE if "Kinder" in wer), "")
     content, styles = jugend.seite(termine, berichte, beitrag, liga_seiten)
     render_page("Jugend", content, "jugend.html", extra_styles=styles)
@@ -3344,7 +3367,8 @@ if __name__ == "__main__":
     liga.VEREIN_INDEX = liga.auf.verein_index(teams)
     liga_seiten = {d["kurz"]: liga.seite_datei(d) for d in teams}
     j_termine = spalten_termine(jugend.TERMINE_SPALTE)
-    build_jugend(j_termine, liga_seiten)
+    build_jugend(j_termine, liga_seiten,
+                 historie.erfolge(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a), ("u20", "u16", "u14")))
     s_termine = spalten_termine(senioren.TERMINE_SPALTE)
     extra = []
     # Senioren mit Daten vom Tabellenrechner -> volle Teamseite (senioren.html) aus liga.py

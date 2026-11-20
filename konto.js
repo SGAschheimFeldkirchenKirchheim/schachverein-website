@@ -84,7 +84,7 @@
       '<div class="kt-menue-kopf">Angemeldet als <b>' + esc(a.ich.benutzer) + "</b></div>" +
       '<a href="' + PFAD + 'mein-profil.html">Mein Profil</a>' +
       '<a href="' + PFAD + "spieler/" + esc(a.ich.slug) + '.html">Meine Seite ansehen</a>' +
-      (a.ich.darf.verwaltung ? '<a href="' + PFAD + 'verwaltung.html">Verwaltung' + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
+      (a.ich.darf.verwaltung ? '<a href="' + PFAD + "verwaltung.html" + (a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">Verwaltung' + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
       '<button type="button" data-kt="abmelden">Abmelden</button></div>');
     KNOPF.parentNode.appendChild(m);
     m.querySelector("[data-kt=abmelden]").addEventListener("click", function () { abmelden(false); });
@@ -160,7 +160,7 @@
         '<div class="kt-info">Deine Angaben werden mit der Mitgliederliste abgeglichen. Danach bestätigt ein Admin die Registrierung.</div>' +
         '<div class="kt-zwei">' + feld("vorname", "Vorname", "text", 'autocomplete="given-name" required') +
         feld("nachname", "Nachname", "text", 'autocomplete="family-name" required') + "</div>" +
-        feld("geb", "Geburtsdatum", "text", 'placeholder="TT.MM.JJJJ" inputmode="numeric" autocomplete="bday" required') +
+        feld("geb", "Geburtsdatum", "text", 'placeholder="TT.MM.JJJJ" inputmode="numeric" maxlength="10" autocomplete="bday" required') +
         feld("benutzer", "Benutzername", "text", 'autocomplete="username" autocapitalize="none" maxlength="20" required') +
         '<div class="kt-zwei">' + feld("pw", "Passwort", "password", 'autocomplete="new-password" minlength="8" required') +
         feld("pw2", "Wiederholen", "password", 'autocomplete="new-password" required') + "</div>" +
@@ -187,6 +187,11 @@
             hinweis("benutzer", a.frei ? "Benutzername ist frei" : (a.grund || "„" + g.benutzer.value.trim() + "“ ist schon vergeben"), !!a.frei);
           });
         }, 400);
+      });
+      g.geb.addEventListener("input", function () {          // nur Ziffern tippen, Punkte kommen von selbst
+        if (/^\d{1,2}\.\d{1,2}\.\d{0,4}$/.test(g.geb.value)) return;
+        var z = g.geb.value.replace(/\D/g, "").slice(0, 8);
+        g.geb.value = z.length > 4 ? z.slice(0, 2) + "." + z.slice(2, 4) + "." + z.slice(4) : z.length > 2 ? z.slice(0, 2) + "." + z.slice(2) : z;
       });
       g.geb.addEventListener("blur", function () {
         var m = g.geb.value.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
@@ -302,6 +307,8 @@
         radio("oeffentlich", "Geburtstag öffentlich", "Alle sehen „" + esc(gbDatum) + "“, auch auf der Startseite bei „Geburtstage diese Woche“.") +
         radio("nichts", "Nichts zeigen", "Weder Jahrgang noch Geburtstag.") +
         '<p class="kt-klein links">Admins sehen deinen Geburtstag immer – zum Gratulieren.</p></div>' +
+        '<div class="kt-karte"><h2>AFK on Tour</h2><label class="kt-check"><input type="checkbox" name="tour"' + (p.tour ? " checked" : "") + '> ' +
+        "<span>Meine Turnierreisen (Orte, Abzeichen) auf meinem Profil zeigen – falls ich bei AFK on Tour eingetragen bin.</span></label></div>" +
         '<button type="submit" class="kt-btn">Speichern</button></form>' +
         '<div class="kt-seite-rechts"><div class="kt-karte"><h2>Foto</h2><div class="kt-foto-rahmen">' +
         (p.foto ? '<img class="kt-foto" alt="" src="' + p.foto + '">' : '<div class="kt-foto leer">Noch kein Foto</div>') + "</div>" +
@@ -321,7 +328,7 @@
         ev.preventDefault();
         var b = f.querySelector("button[type=submit]"); b.disabled = true;
         api("m_profil", { text: f.text.value, lichess: f.lichess.value, chesscom: f.chesscom.value,
-          gb: (f.querySelector("[name=gb]:checked") || {}).value }).then(function (r) {
+          gb: (f.querySelector("[name=gb]:checked") || {}).value, tour: f.tour.checked }).then(function (r) {
           b.disabled = false;
           if (!r.ok) return meldung(box, r.fehler, "schlecht");
           try { sessionStorage.removeItem(ICH_KEY); } catch (e) {}
@@ -397,87 +404,125 @@
   }
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
-    var reiter = (location.hash || "#antraege").slice(1);
+    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null;
     function laden() {
-      api("m_admin_liste").then(function (a) {
-        if (!a.ok) return bitteAnmelden(box, a.fehler || "Kein Zugriff.");
-        zeichnen(a);
+      Promise.all([api("m_admin_liste"), api("b_liste")]).then(function (r) {
+        if (!r[0].ok) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
+        NUTZER = r[0]; BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
+        zeichnen();
       });
     }
-    function zeichnen(a) {
-      var inh = a.inhaber, n = a.nutzer;
+    function tag(s) { return '<span class="kt-tag ' + s + '">' + { inhaber: "Inhaber", admin: "Admin", mitglied: "Mitglied" }[s] + "</span>"; }
+    function datumKurz(iso) { var m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + "." + m[2] + "." + m[1] : esc(iso || ""); }
+    function zeichnen() {
+      var a = NUTZER, inh = a.inhaber, n = a.nutzer;
       var offen = n.filter(function (x) { return x.status === "wartet"; });
       var aktiv = n.filter(function (x) { return x.status === "aktiv" && !x.ausgeblendet && !x.ausgetreten; });
       var weg = n.filter(function (x) { return x.status === "aktiv" && (x.ausgeblendet || x.ausgetreten); });
       var meld = box.querySelector(".kt-meldung"), alteMeldung = meld && !meld.hidden ? [meld.textContent, meld.className] : null;
-      function tag(s) { return '<span class="kt-tag ' + s + '">' + { inhaber: "Inhaber", admin: "Admin", mitglied: "Mitglied" }[s] + "</span>"; }
-      function knoepfe(x) {
-        if (x.stufe === "inhaber" || x.benutzer === a.ich) return "";
+      function aktionen(x) {
+        if (x.stufe === "inhaber" || x.benutzer === a.ich) return [];
         var k = [], adminZiel = x.stufe === "admin";
         if (inh && !adminZiel) k.push(["zum_admin", "Zum Admin"]);
         if (inh && adminZiel) k.push(["zum_mitglied", "Zum Mitglied"]);
-        if (inh) k.push(["rechte-zeigen", "Rechte"]);
         if (inh || !adminZiel) {
           k.push(["pw_code", "Passwort-Code"]);
           k.push([x.ausgeblendet ? "einblenden" : "ausblenden", x.ausgeblendet ? "Einblenden" : "Ausblenden"]);
         }
         if (inh) k.push(["loeschen", "Löschen", "rot"]);
-        return k.map(function (b) { return '<button type="button" class="kt-mini ' + (b[2] || "") + '" data-akt="' + b[0] + '" data-ziel="' + esc(x.benutzer) + '">' + b[1] + "</button>"; }).join("");
+        return k;
       }
-      function zeile(x) {
-        return "<tr><td>" + esc(x.benutzer) + '</td><td><a href="' + PFAD + "spieler/" + esc(x.slug) + '.html">' + esc(x.name) + "</a>" +
-          (x.ausgetreten ? ' <span class="kt-tag aus">ausgetreten</span>' : x.ausgeblendet ? ' <span class="kt-tag aus">ausgeblendet</span>' : "") +
-          "</td><td>" + tag(x.stufe) + "</td><td>" +
-          (x.stufe !== "mitglied" ? '<span class="kt-recht">alle</span>' : x.rechte.length ? x.rechte.map(function (r) { return '<span class="kt-recht">' + esc(r) + "</span>"; }).join("") : "–") +
-          "</td><td>" + zeitText(x.zuletzt) + '</td><td class="kt-akt">' + knoepfe(x) + "</td></tr>" +
-          (inh && x.stufe === "mitglied" ? '<tr class="kt-rechte-zeile" data-fuer="' + esc(x.benutzer) + '" hidden><td colspan="6">' +
-            a.rechte.map(function (r) { return '<label><input type="checkbox" value="' + r + '"' + (x.rechte.indexOf(r) >= 0 ? " checked" : "") + "> " + r + "</label>"; }).join(" ") +
-            ' <button type="button" class="kt-mini" data-akt="rechte" data-ziel="' + esc(x.benutzer) + '">Speichern</button></td></tr>' : "");
+      function knopf(b, x) { return '<button type="button" class="kt-mini ' + (b[2] || "") + '" data-akt="' + b[0] + '" data-ziel="' + esc(x.benutzer) + '">' + b[1] + "</button>"; }
+      function rechte(x) {
+        if (x.stufe !== "mitglied") return '<span class="kt-recht">alle</span>';
+        if (!inh) return x.rechte.length ? x.rechte.map(function (r) { return '<span class="kt-recht">' + esc(r) + "</span>"; }).join("") : "–";
+        return a.rechte.map(function (r) {
+          return '<label class="kt-recht-wahl"><input type="checkbox" data-recht="' + r + '" data-ziel="' + esc(x.benutzer) + '"' + (x.rechte.indexOf(r) >= 0 ? " checked" : "") + "> " + esc(r) + "</label>";
+        }).join("");
       }
-      function tabelle(liste) {
-        return liste.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="kt-tab"><thead><tr><th>Benutzername</th><th>Name</th><th>Stufe</th><th>Rechte</th><th>Zuletzt da</th><th></th></tr></thead><tbody>' +
-          liste.map(zeile).join("") + "</tbody></table></div>" : '<p class="kt-klein links">Keine.</p>';
+      function nutzerListe(liste) {
+        if (!liste.length) return '<p class="kt-klein links">Keine.</p>';
+        return '<div class="kt-nutzer">' + liste.map(function (x) {
+          return '<div class="kt-karte kt-nk"><div class="kt-nk-kopf"><div><a href="' + PFAD + "spieler/" + esc(x.slug) + '.html"><b>' + esc(x.name) + "</b></a>" +
+            (x.ausgetreten ? ' <span class="kt-tag aus">ausgetreten</span>' : x.ausgeblendet ? ' <span class="kt-tag aus">ausgeblendet</span>' : "") +
+            '<br><span class="kt-grau">' + esc(x.benutzer) + " · " + zeitText(x.zuletzt) + "</span></div>" + tag(x.stufe) + "</div>" +
+            '<div class="kt-nk-rechte"><span class="kt-grau">Rechte:</span> ' + rechte(x) + "</div>" +
+            '<div class="kt-nk-akt">' + aktionen(x).map(function (b) { return knopf(b, x); }).join("") + "</div></div>";
+        }).join("") + "</div>";
       }
+      var B = BERICHTE, bOffen = B.offen || [], bOnline = B.online || [];
+      function berichtZeile(e, offenListe) {
+        var autor = e.autor ? esc(e.autor) + (e.konto ? ' <span class="kt-verifiziert" style="margin-left:.2rem">verifiziert</span>' : e.gast ? ' <span class="kt-tag mitglied">Gast</span>' : "") : "";
+        var bearb = '<a class="kt-btn leise" href="' + PFAD + "berichte.html?bearbeiten=" + encodeURIComponent(e.id) + '#einreichen">' + (offenListe ? "Ansehen" : "Bearbeiten") + "</a>";
+        if (offenListe) {
+          return '<div class="kt-karte kt-antrag" data-bid="' + esc(e.id) + '"><div><b>' + esc(e.titel) + '</b><br><span class="kt-grau">' + (autor ? "von " + autor + " · " : "") + datumKurz(e.datum) + "</span></div>" +
+            (e.gast && e.autor ? '<div><label class="kt-check" style="margin:0"><input type="checkbox" name="autorOk"> <span>Autor ist wirklich <b>' + esc(e.autor) + "</b> (Profil verlinken)</span></label></div>"
+              : e.konto ? '<div class="kt-gut">Eingeloggt geschrieben – Autor sicher</div>' : "<div></div>") +
+            '<div class="kt-zeile">' + bearb + '<button type="button" class="kt-btn gruen" data-b="veroeffentlichen">Freigeben</button>' +
+            '<button type="button" class="kt-btn rot" data-b="loeschen">Löschen</button></div></div>';
+        }
+        return '<tr data-bid="' + esc(e.id) + '"><td><b>' + esc(e.titel) + '</b> <span class="kt-grau">· ' + (autor ? autor + " · " : "") + datumKurz(e.datum) + "</span></td>" +
+          '<td class="kt-akt"><a class="kt-mini" href="' + PFAD + "berichte.html?bearbeiten=" + encodeURIComponent(e.id) + '#einreichen">Bearbeiten</a>' +
+          '<button type="button" class="kt-mini rot" data-b="zurueckziehen">Zurückziehen</button></td></tr>';
+      }
+      function r(name, titel, zahl) {
+        return '<button type="button" data-r="' + name + '"' + (reiter === name ? ' class="an"' : "") + ">" + titel + (zahl ? " <em>" + zahl + "</em>" : "") + "</button>";
+      }
+      function teil(name, html) { return '<div class="kt-reiter-inhalt" data-r="' + name + '"' + (reiter === name ? "" : " hidden") + ">" + html + "</div>"; }
       box.innerHTML = '<p class="kt-unter">Angemeldet als <b>' + esc(a.ich) + "</b> " + tag(inh ? "inhaber" : "admin") + "</p>" +
         '<p class="kt-meldung" hidden></p>' +
-        '<div class="kt-reiter" role="tablist">' +
-        '<button type="button" data-r="antraege"' + (reiter === "antraege" ? ' class="an"' : "") + ">Anträge" + (offen.length ? " <em>" + offen.length + "</em>" : "") + "</button>" +
-        '<button type="button" data-r="nutzer"' + (reiter === "nutzer" ? ' class="an"' : "") + ">Nutzer (" + aktiv.length + ")</button>" +
-        '<button type="button" data-r="weg"' + (reiter === "weg" ? ' class="an"' : "") + ">Ausgeblendet / ausgetreten (" + weg.length + ")</button></div>" +
-        '<div class="kt-reiter-inhalt" data-r="antraege"' + (reiter === "antraege" ? "" : " hidden") + ">" +
-        (offen.length ? offen.map(function (x) {
+        '<div class="kt-reiter" role="tablist">' + r("antraege", "Anträge", offen.length) + r("berichte", "Berichte", bOffen.length) +
+        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" +
+        teil("antraege", offen.length ? offen.map(function (x) {
           return '<div class="kt-karte kt-antrag"><div><b>' + esc(x.name) + '</b><br><span class="kt-grau">Benutzername ' + esc(x.benutzer) + " · " + zeitText(x.seit) + "</span></div>" +
             '<div class="kt-gut">Name und Geburtsdatum stimmen mit der Mitgliederliste überein</div>' +
             '<div class="kt-zeile"><button type="button" class="kt-btn gruen" data-akt="annehmen" data-ziel="' + esc(x.benutzer) + '">Annehmen</button>' +
             '<button type="button" class="kt-btn rot" data-akt="ablehnen" data-ziel="' + esc(x.benutzer) + '">Ablehnen</button></div></div>';
-        }).join("") : '<p class="kt-klein links">Keine offenen Anträge.</p>') + "</div>" +
-        '<div class="kt-reiter-inhalt" data-r="nutzer"' + (reiter === "nutzer" ? "" : " hidden") + ">" + tabelle(aktiv) +
-        '<p class="kt-klein links">' + (inh ? "Admins sehen hier nur Passwort-Codes und Ausblenden – und das nur bei Mitgliedern."
-          : "Stufen und Rechte kann nur der Inhaber ändern.") + "</p></div>" +
-        '<div class="kt-reiter-inhalt" data-r="weg"' + (reiter === "weg" ? "" : " hidden") + ">" + tabelle(weg) +
-        '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p></div>';
+        }).join("") : '<p class="kt-klein links">Keine offenen Anträge.</p>') +
+        teil("berichte", "<h3>Warten auf Freigabe</h3>" + (bOffen.length ? bOffen.map(function (e) { return berichtZeile(e, true); }).join("") : '<p class="kt-klein links">Keine Entwürfe.</p>') +
+          '<h3 style="margin-top:1.8rem">Online</h3>' + (bOnline.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="kt-tab">' + bOnline.map(function (e) { return berichtZeile(e, false); }).join("") + "</table></div>"
+            : '<p class="kt-klein links">Keine.</p>') +
+          '<p class="kt-klein links">Hier stehen alle Berichte von diesem und letztem Jahr. „Zurückziehen“ macht einen Bericht wieder zum Entwurf; endgültig löschen geht bei Entwürfen.</p>') +
+        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen. Admins haben alle Rechte."
+          : "Stufen und Rechte kann nur der Inhaber ändern.") + "</p>") +
+        teil("weg", nutzerListe(weg) + '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p>');
       if (alteMeldung) { var m2 = box.querySelector(".kt-meldung"); m2.textContent = alteMeldung[0]; m2.className = alteMeldung[1]; m2.hidden = false; }
-      [].forEach.call(box.querySelectorAll("[data-r]"), function (b) {
-        if (b.tagName !== "BUTTON") return;
+      [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (b) {
         b.addEventListener("click", function () {
           reiter = b.getAttribute("data-r"); history.replaceState(null, "", "#" + reiter);
           [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (x) { x.classList.toggle("an", x === b); });
           [].forEach.call(box.querySelectorAll(".kt-reiter-inhalt"), function (x) { x.hidden = x.getAttribute("data-r") !== reiter; });
         });
       });
+      function fertig(r) {
+        meldung(box, r.ok ? r.meldung : r.fehler, r.ok ? (r.code ? "code" : "gut") : "schlecht");
+        if (r.ok) { try { sessionStorage.removeItem(ICH_KEY); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
+      }
       [].forEach.call(box.querySelectorAll("[data-akt]"), function (b) {
         b.addEventListener("click", function () {
           var akt = b.getAttribute("data-akt"), ziel = b.getAttribute("data-ziel");
-          if (akt === "rechte-zeigen") { var z = box.querySelector('.kt-rechte-zeile[data-fuer="' + ziel + '"]'); z.hidden = !z.hidden; return; }
           var fragen = { loeschen: "Konto von „" + ziel + "“ endgültig löschen?", zum_admin: "„" + ziel + "“ zum Admin machen?", ablehnen: "Registrierung von „" + ziel + "“ ablehnen?" };
           if (fragen[akt] && !confirm(fragen[akt])) return;
-          var rechte = akt === "rechte" ? [].map.call(box.querySelectorAll('.kt-rechte-zeile[data-fuer="' + ziel + '"] input:checked'), function (c) { return c.value; }) : undefined;
           b.disabled = true;
-          api("m_admin", { aktion: akt, ziel: ziel, rechte: rechte }).then(function (r) {
-            b.disabled = false;
-            meldung(box, r.ok ? r.meldung : r.fehler, r.ok ? (r.code ? "code" : "gut") : "schlecht");
-            if (r.ok) { try { sessionStorage.removeItem(ICH_KEY); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
-          });
+          api("m_admin", { aktion: akt, ziel: ziel }).then(function (r) { b.disabled = false; fertig(r); });
+        });
+      });
+      [].forEach.call(box.querySelectorAll("[data-recht]"), function (c) {    // Rechte: Häkchen speichert sofort
+        c.addEventListener("change", function () {
+          var ziel = c.getAttribute("data-ziel");
+          var liste = [].map.call(box.querySelectorAll('[data-recht][data-ziel="' + ziel + '"]:checked'), function (x) { return x.getAttribute("data-recht"); });
+          api("m_admin", { aktion: "rechte", ziel: ziel, rechte: liste }).then(fertig);
+        });
+      });
+      [].forEach.call(box.querySelectorAll("[data-b]"), function (b) {
+        b.addEventListener("click", function () {
+          var el = b.closest("[data-bid]"), id = el.getAttribute("data-bid"), was = b.getAttribute("data-b");
+          var titel = el.querySelector("b").textContent;
+          if (was === "loeschen" && !confirm("„" + titel + "“ endgültig löschen? Das geht nicht rückgängig.")) return;
+          if (was === "zurueckziehen" && !confirm("„" + titel + "“ zurückziehen? Er verschwindet beim nächsten Build von der Website.")) return;
+          var ok = el.querySelector("[name=autorOk]");
+          b.disabled = true;
+          api("b_status", { id: id, aktion: was, autorOk: ok ? ok.checked : false }).then(function (r) { b.disabled = false; fertig(r); });
         });
       });
     }

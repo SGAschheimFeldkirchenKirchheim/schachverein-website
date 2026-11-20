@@ -581,6 +581,26 @@ def seite(aktuell, teams, archiv, seiten_pfad, chronik=(), pdf=""):
     return content, liga.STYLES + "<style>" + CSS + "</style>"
 
 
+def erfolge(aktuell, teams, archiv, seiten_pfad, keys):
+    """Erfolge der Bereiche keys (z. B. Jugend) für andere Seiten: [(Saison, Text, Titel?)], neueste zuerst."""
+    daten, roh = sammeln(aktuell, teams, archiv, seiten_pfad)
+    anzahl = anzahl_je_saison(daten, roh, aktuell)
+    bereiche = [b for b in BEREICHE if b["key"] in keys]
+    def passt(t):
+        team = t.split(":")[0].strip()
+        if any(team == b["titel"] for b in bereiche) or bereich_von(team) in bereiche:
+            return True
+        return "Jugend" in t and any("Jugend" in b["titel"] for b in bereiche)
+    aus, gesehen = [], set()
+    for j, rang, text in sorted(erstmals(daten, anzahl, roh), key=lambda m: (-(m[0] or 0), m[1])):
+        t = re.sub(r"<[^>]+>", "", text).rstrip(".").strip()
+        if j is None or j > aktuell or rang == 3 or not passt(t) or (j, t) in gesehen:
+            continue
+        gesehen.add((j, t))
+        aus.append((saison_text(j), t, rang == 2))
+    return aus
+
+
 def karte():
     """Karte für die Mannschaften-Übersicht."""
     return f"""

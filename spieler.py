@@ -501,9 +501,23 @@ def berichte_finden(name, berichte):
     return [r for r in berichte if muster.search(_plain(r.get("title", "")) + " " + _plain(r.get("body", "")))]
 
 
-def berichte_html(liste):
+def berichte_html(liste, eigene=()):
+    """eigene = Berichte, die dieser Spieler geschrieben hat (stehen oben, mit Zähler)."""
+    eigene = list(eigene)
+    geschrieben = ""
+    if eigene:
+        li = "".join(f'<li><a href="../berichte/{esc(r["filename"])}">{esc(_plain(r["title"]))}</a>'
+                     + (f' <span class="klein">{r["when"].strftime("%d.%m.%Y")}</span>' if r.get("when") and r["when"].year > 1 else "")
+                     + "</li>" for r in eigene[:BERICHTE_MAX])
+        rest_e = "".join(f'<li><a href="../berichte/{esc(r["filename"])}">{esc(_plain(r["title"]))}</a></li>' for r in eigene[BERICHTE_MAX:])
+        geschrieben = (f'<h2 class="panel-titel sp-titel">Geschriebene Berichte <span class="sp-anzahl">{len(eigene)}</span></h2>'
+                       f'<ul class="sp-berichte">{li}</ul>'
+                       + (f'<details class="sp-mehr"><summary>… und {len(eigene) - BERICHTE_MAX} weitere anzeigen</summary>'
+                          f'<ul class="sp-berichte">{rest_e}</ul></details>' if rest_e else ""))
+    namen = {r["filename"] for r in eigene}
+    liste = [r for r in liste if r["filename"] not in namen]
     if not liste:
-        return ""
+        return geschrieben
     zeilen = "".join(
         f'<li><a href="../berichte/{esc(r["filename"])}">{esc(_plain(r["title"]))}</a>'
         + (f' <span class="klein">{r["when"].strftime("%d.%m.%Y")}</span>' if r.get("when") and r["when"].year > 1 else "")
@@ -514,13 +528,13 @@ def berichte_html(liste):
         + "</li>" for r in liste[BERICHTE_MAX:])
     mehr = (f'<details class="sp-mehr"><summary>… und {len(liste) - BERICHTE_MAX} weitere anzeigen</summary>'
             f'<ul class="sp-berichte">{rest}</ul></details>') if rest else ""
-    return f"""
+    return geschrieben + f"""
     <h2 class="panel-titel sp-titel">In den Berichten</h2>
     <ul class="sp-berichte">{zeilen}</ul>{mehr}"""
 
 
 def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", geburtstag="", text="",
-               gb_label="Jahrgang", konto=None):
+               gb_label="Jahrgang", konto=None, eigene=(), tour_box=""):
     """saison_jahr = Startjahr der aktuellen Saison (für Alter und Prognose)."""
     r_dsb = _int(dsb.get("dwz")) if dsb else None
     elo = _int(dsb.get("elo")) if dsb else None
@@ -559,20 +573,22 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", g
         {f"<dt>ELO</dt><dd>{elo}</dd>" if elo else ""}
         {gesamt}
         {ha}
+        {f'<dt>Berichte</dt><dd>{len(eigene)} geschrieben</dd>' if eigene else ""}
         <div class="sp-gb" data-gb-zeile{"" if geburtstag else " hidden"}><dt>{esc(gb_label)}</dt><dd>{esc(geburtstag)}</dd></div>
       </dl>
       {"" if nur_profil else f'<div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>'}
     </div>
     <div class="sp-text" data-kt-text{"" if text else " hidden"}>{text}</div>
     {bezirk}
-    {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour else ""}
+    {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour and not tour_box else ""}
     </div>
     {f'<img class="sp-foto" src="../{esc(bild)}" alt="{esc(p["name"])}">' if bild else ""}
     </div>
+    {tour_box}
     {verlauf_html(list(verlauf))}
     {"" if nur_profil else '<h2 class="panel-titel sp-titel">Gespielte Partien</h2>' + partien_html(p, saison_jahr)}
     {prognose_html(p, r_alt, quelle, alter, index, saison_jahr) if PROGNOSE and r_alt and not nur_profil else ""}
-    {berichte_html(list(berichte))}
+    {berichte_html(list(berichte), eigene)}
     """
 
 
@@ -612,10 +628,26 @@ STYLES = """<style>
       .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
       .sp-mehr summary { cursor: pointer; color: var(--link-c, var(--link)); font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
       .sp-mehr summary:hover { text-decoration: underline; }
+      .sp-anzahl { font-size: .8rem; font-weight: 700; background: var(--soft, rgba(127,127,127,.12)); border-radius: 999px; padding: .1rem .55rem; vertical-align: middle; }
+      .sp-tour { margin: 1.2rem 0 1.6rem; padding: 1.1rem 1.3rem; max-width: 760px; }
+      .sp-tour-kopf { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .3rem 1rem; }
+      .sp-tour-kopf h2 { margin: 0; font-size: 1.15rem; color: var(--navy); }
+      .sp-tour-zahlen { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: .8rem 0; }
+      .sp-tour-zahlen div { text-align: center; padding: .5rem .2rem; border-radius: 8px; background: var(--soft, rgba(127,127,127,.08)); }
+      .sp-tour-zahlen b { display: block; font-size: 1.3rem; color: var(--navy); }
+      .sp-tour-zahlen span { font-size: .78rem; color: var(--muted); }
+      @media (max-width: 520px) { .sp-tour-zahlen { grid-template-columns: repeat(2, 1fr); } }
+      .tour-chips { display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+      .tour-abz { display: inline-block; font-size: 0.78rem; padding: 0.1rem 0.55rem; border-radius: 999px; background: var(--hell, #6f9fd8); color: #0e1524; white-space: nowrap; }
+      .tour-abz.st-bronze { background: #b87333; color: #fff; }
+      .tour-abz.st-silber { background: #8e9aa6; color: #fff; }
+      .tour-abz.st-gold { background: #d4a017; color: #1b1b1b; }
+      .tour-abz.st-legendaer { background: linear-gradient(135deg, #7b4fbf, #c0392b); color: #fff; }
 </style>"""
 
 
-def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None, geburtstage=(), konten=None):
+def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None, geburtstage=(), konten=None,
+          tour_box=None):
     """Schreibt alle Spielerseiten. render_page/liga_styles kommen aus build_site/liga.
     berichte = build_site.ALLE_BERICHTE; tour_seiten(name) -> 'tour-….html' oder '';
     geburtstage = Geburtstagsliste (nur für Spieler, die in profile.json freigegeben sind)."""
@@ -644,8 +676,11 @@ def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=()
             platzhalter_anlegen(p["name"])
             bild, text, gb_label = foto(p["name"]), text_html(p["name"]), "Jahrgang"
             gb = geburtstag_text(p["name"], profile.get(sl), geburtstage, heute)
+        # Tour-Box nur, wenn das Mitglied es in "Mein Profil" eingeschaltet hat
+        box = tour_box(p["name"]) if tour_box and k and k.get("tour") else ""
+        eigene = [r for r in berichte if r.get("autor_slug") == sl]
         content = seite_html(p, dsb, saison_jahr, verlauf.get(sl, []), berichte_finden(p["name"], berichte), tour,
-                             bild=bild, text=text, geburtstag=gb, gb_label=gb_label, konto=k)
+                             bild=bild, text=text, geburtstag=gb, gb_label=gb_label, konto=k, eigene=eigene, tour_box=box or "")
         render_page(p["name"], content, seite(p["name"]), css_path="../", nav_path="../",
                     extra_styles=liga_styles.replace("</style>", "") + STYLES.replace("<style>", ""),
                     description=f"{p['name']} – Partien und DWZ in der Mannschaftssaison.")
