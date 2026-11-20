@@ -54,7 +54,7 @@ REITER = [
     ("partien", "Partien"),          # nur wenn Partien hochgeladen sind (Ligamanager), siehe partien.py
     ("aufstellung", "Aufstellung"),  # Meldeliste mit Ergebnissen je Runde (ohne Meldeliste: Spielerstatistik)
     ("verlauf", "Verlauf"),
-    ("saisons", "Saisons"),          # Platz/Klasse aller Saisons (nur wenn es ein Archiv gibt)
+    # ("saisons", "Saisons"),        # früher: Platz aller Saisons – jetzt in der Geschichte (Link unter den Saison-Knöpfen)
     ("rechner", "Tabellenrechner"),  # nicht in abgeschlossenen Saisons
 ]
 NICHT_IM_ARCHIV = {"rechner"}        # Reiter, die es in alten Saisons nicht gibt
@@ -839,6 +839,12 @@ def saison_leiste(saisons):
     return f'<nav class="saisons" aria-label="Saison">{knoepfe}</nav>'
 
 
+def geschichte_link(d):
+    """Kleiner Link unter den Saison-Knöpfen zu allen Platzierungen in der Geschichte."""
+    url = d.get("geschichte_url")
+    return f'<p class="klein saisons-link"><a href="{esc(url)}">Alle Platzierungen in der Geschichte →</a></p>' if url else ""
+
+
 def archiv_banner(d):
     if not d.get("archiv"):
         return ""
@@ -898,6 +904,7 @@ def team_seite(d):
     </div>
     {archiv_banner(d)}
     {saison_leiste(d.get("saisons"))}
+    {geschichte_link(d)}
     <nav class="reiter" aria-label="Bereiche">{knoepfe}</nav>
     {panels}
     <p class="klein quelle">Wertung nach Turnierordnung §15 selbst berechnet (MP, BP, Mannschaftssiege,
@@ -1160,6 +1167,7 @@ STYLES = """<style>
       .saisons span { margin-right: 0.3rem; }
       .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
       .saisons a:hover { border-color: var(--link); }
+      .saisons-link { margin: .1rem 0 .6rem; }
       .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
       .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
       .archiv-hinweis a { font-weight: bold; }

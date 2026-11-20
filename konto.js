@@ -9,14 +9,14 @@
   var PFAD = (SCRIPT && SCRIPT.getAttribute("data-pfad")) || "";
   if (!SKRIPT) return;
 
-  var KEY = "afk-sitzung", ICH_KEY = "afk-ich", ICH_MINUTEN = 5;
+  var KEY = "afk-sitzung", ICH_KEY = "afk-ich", GEB_KEY = "afk-geb", ICH_MINUTEN = 5, GEB_STUNDEN = 12;
   var MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
   // ---------- Grundlagen ----------
   function token() { try { return localStorage.getItem(KEY) || ""; } catch (e) { return ""; } }
   function setzeToken(t) {
-    try { if (t) localStorage.setItem(KEY, t); else localStorage.removeItem(KEY); sessionStorage.removeItem(ICH_KEY); } catch (e) {}
+    try { if (t) localStorage.setItem(KEY, t); else localStorage.removeItem(KEY); localStorage.removeItem(ICH_KEY); localStorage.removeItem(GEB_KEY); } catch (e) {}
   }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; }
@@ -46,22 +46,25 @@
     return t.length ? '<p class="sp-links-profil">' + t.join(" · ") + "</p>" : "";
   }
 
-  // Eigene Daten (kurz im sessionStorage gemerkt, damit nicht jede Seite fragt)
+  // Eigene Daten (im Browser gemerkt: Seiten zeigen sofort den letzten Stand, im Hintergrund wird nachgeladen)
   var ICH_PROMISE = null;
   function ich(neu) {
     if (!token()) return Promise.resolve(null);
     if (ICH_PROMISE && !neu) return ICH_PROMISE;
-    if (!neu) {
-      try {
-        var c = JSON.parse(sessionStorage.getItem(ICH_KEY) || "null");
-        if (c && c.t === token() && Date.now() - c.zeit < ICH_MINUTEN * 60000) return (ICH_PROMISE = Promise.resolve(c.d));
-      } catch (e) {}
-    }
-    ICH_PROMISE = api("m_ich").then(function (a) {
-      if (!a.ok) return null;
-      try { sessionStorage.setItem(ICH_KEY, JSON.stringify({ t: token(), zeit: Date.now(), d: a })); } catch (e) {}
+    var frisch = api("m_ich").then(function (a) {
+      if (!a.ok) { try { localStorage.removeItem(ICH_KEY); } catch (e) {} return null; }
+      try { localStorage.setItem(ICH_KEY, JSON.stringify({ t: token(), zeit: Date.now(), d: a })); } catch (e) {}
       return a;
     });
+    if (!neu) {
+      // Sofort mit dem letzten Stand anzeigen (kein Warten); im Hintergrund wird nachgeladen,
+      // der neue Stand gilt dann ab der nächsten Seite. Rechte prüft der Server ohnehin bei jeder Aktion.
+      try {
+        var c = JSON.parse(localStorage.getItem(ICH_KEY) || "null");
+        if (c && c.t === token()) return (ICH_PROMISE = Promise.resolve(c.d));
+      } catch (e) {}
+    }
+    ICH_PROMISE = frisch;
     return ICH_PROMISE;
   }
 
@@ -331,7 +334,7 @@
           gb: (f.querySelector("[name=gb]:checked") || {}).value, tour: f.tour.checked }).then(function (r) {
           b.disabled = false;
           if (!r.ok) return meldung(box, r.fehler, "schlecht");
-          try { sessionStorage.removeItem(ICH_KEY); } catch (e) {}
+          try { localStorage.removeItem(ICH_KEY); } catch (e) {}
           meldung(box, "Gespeichert. Auf deiner Seite siehst du es sofort, alle anderen ab morgen früh.", "gut");
         });
       });
@@ -496,7 +499,7 @@
       });
       function fertig(r) {
         meldung(box, r.ok ? r.meldung : r.fehler, r.ok ? (r.code ? "code" : "gut") : "schlecht");
-        if (r.ok) { try { sessionStorage.removeItem(ICH_KEY); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
+        if (r.ok) { try { localStorage.removeItem(ICH_KEY); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
       }
       [].forEach.call(box.querySelectorAll("[data-akt]"), function (b) {
         b.addEventListener("click", function () {
@@ -583,8 +586,18 @@
 
   var GEB_PROMISE = null;
   function geburtstage() {
-    if (!GEB_PROMISE) GEB_PROMISE = api("m_geburtstage").then(function (r) { return r.ok ? r : null; });
-    return GEB_PROMISE;
+    if (GEB_PROMISE) return GEB_PROMISE;
+    var c = null;
+    try { c = JSON.parse(localStorage.getItem(GEB_KEY) || "null"); } catch (e) {}
+    var gueltig = c && c.t === token() && Date.now() - c.zeit < GEB_STUNDEN * 3600000;
+    var laden = function () {
+      return api("m_geburtstage").then(function (r) {
+        try { if (r.ok) localStorage.setItem(GEB_KEY, JSON.stringify({ t: token(), zeit: Date.now(), d: r })); else localStorage.removeItem(GEB_KEY); } catch (e) {}
+        return r.ok ? r : null;
+      });
+    };
+    if (gueltig) { if (Date.now() - c.zeit > 3600000) laden(); return (GEB_PROMISE = Promise.resolve(c.d)); }
+    return (GEB_PROMISE = laden());
   }
 
   // Startseite: "Geburtstage diese Woche" für Berechtigte mit allen Mitgliedern

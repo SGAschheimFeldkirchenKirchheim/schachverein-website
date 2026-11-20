@@ -3175,6 +3175,8 @@ def saisons_verknuepfen(aktuell, teams, archiv):
                             for j in sorted(andere, reverse=True)]
             d["historie"] = [{"saison": saison_text(j), "href": wurzel + seiten_pfad(andere[j], aktuell),
                               "d": andere[j]} for j in sorted(andere, reverse=True)]
+            ber = historie.bereich_von(d.get("kurz", ""))
+            d["geschichte_url"] = wurzel + "geschichte.html" + (f"#{ber['key']}" if ber else "#mannschaften")
             if jahr != aktuell:
                 d["aktuell_url"] = wurzel + (seiten_pfad(andere[aktuell], aktuell) if aktuell in andere
                                              else "mannschaften.html")
