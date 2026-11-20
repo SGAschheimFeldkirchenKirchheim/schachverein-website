@@ -9,7 +9,8 @@
   "gb": "oeffentlich",
   "jahr": "2003",
   "geburtstag": "2003-12-09",
-  "foto": 0
+  "foto": 0,
+  "tour": false
  },
  {
   "slug": "korbinian-ruff",
@@ -21,6 +22,7 @@
   "gb": "jahr",
   "jahr": "2002",
   "geburtstag": "",
-  "foto": 1795175310119
+  "foto": 1795175310119,
+  "tour": false
  }
 ]

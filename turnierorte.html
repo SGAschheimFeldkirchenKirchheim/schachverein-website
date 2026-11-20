@@ -327,6 +327,10 @@
 (function () {
   var f = document.getElementById("tour-form"); if (!f) return;
   if (location.hash === "#beantragen") document.getElementById("beantragen").open = true;
+  // angemeldet: Name vorausfüllen (bleibt änderbar)
+  function vorbelegen(a) { if (a && a.ich && !f.elements.name.value) f.elements.name.value = a.ich.name; }
+  if (window.AFK_KONTO) window.AFK_KONTO.ich().then(vorbelegen);
+  else document.addEventListener("afk-konto", function (ev) { vorbelegen(ev.detail); });
   f.addEventListener("submit", function (ev) {
     ev.preventDefault();
     var knopf = f.querySelector("button"), m = f.querySelector(".meldung"), d = {typ: "turnierort"};
