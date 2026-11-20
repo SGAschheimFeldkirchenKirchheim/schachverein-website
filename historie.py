@@ -401,34 +401,116 @@ def tabelle(eintraege):
             f'<tbody>{"".join(zeilen)}</tbody></table></div>')
 
 
-def bereich_block(daten, roh, bereich):
+def mini_linie(eintraege, bereich, farbe_):
+    """Kleine Verlaufslinie (letzte 12 Saisons) für die Mannschaftskarte."""
+    pkt = [(j, stufe(e["klasse"], bereich)[0]) for j, e in eintraege]
+    pkt = [p for p in pkt if p[1] is not None][-12:]
+    if not pkt:
+        return ""
+    n = len(bereich["stufen"]) - 1 or 1
+    w, h = 240, 56
+    xs = [(i * w / max(1, len(pkt) - 1)) if len(pkt) > 1 else w / 2 for i in range(len(pkt))]
+    ys = [6 + k * (h - 12) / n for _, k in pkt]
+    linie = (f'<polyline fill="none" stroke="{farbe_}" stroke-width="3" stroke-linejoin="round" '
+             f'points="{" ".join(f"{x:.0f},{y:.0f}" for x, y in zip(xs, ys))}"/>' if len(pkt) > 1 else "")
+    punkt = f'<circle cx="{xs[-1]:.0f}" cy="{ys[-1]:.0f}" r="4.5" fill="{farbe_}"/>'
+    return f'<svg class="gs-mini" viewBox="-6 0 {w + 12} {h}" preserveAspectRatio="none" aria-hidden="true">{linie}{punkt}</svg>'
+
+
+def bereich_block(daten, roh, bereich, aktuell):
     teams = teams_im_bereich(daten, bereich)
     if not teams:
         return ""
-    karten = []
+    karten, heute = [], []
     for t in teams:
         eintraege = sorted((j, s[t]) for j, s in daten.items() if t in s)
+        f = farbe(t, bereich, daten)
+        letzte_j, letzte = eintraege[-1]
+        jetzt = letzte_j == aktuell
+        if jetzt:
+            platz = f' · Platz {letzte["platz"]}' if letzte.get("platz") else ""
+            heute.append(f'<span><b style="color:{f}">{esc(t)}</b> {esc(letzte["klasse"])}{platz}</span>')
+        stufen = [stufe(e["klasse"], bereich) for _, e in eintraege]
+        beste = min((k for k, _ in stufen if k is not None), default=None)
+        beste_name = bereich["stufen"][beste][1] if beste is not None else "–"
+        auf = sum(1 for _, e in eintraege if e["status"] == "auf")
+        titel = sum(1 for _, e in eintraege if e.get("titel") or (e.get("platz") == 1 and e["status"] != "läuft"))
         karten.append(f"""
-        <details class="card hist-team" style="--team:{farbe(t, bereich, daten)}">
-          <summary><h4>{esc(t)}</h4><span class="klein">{esc(eintraege[-1][1]['klasse'])}
-            ({saison_text(eintraege[-1][0])})</span></summary>
+        <details class="card hist-team gs-team" style="--team:{f}">
+          <summary>
+            <span class="gs-kopf"><h4>{esc(t)}</h4><span class="klein">{"heute" if jetzt else "zuletzt " + saison_text(letzte_j)}: {esc(letzte["klasse"])}</span></span>
+            {mini_linie(eintraege, bereich, f)}
+            <span class="gs-zahlen"><span><b>{len(eintraege)}</b>Saisons</span><span><b>{auf}</b>Aufstiege</span>
+              <span><b>{titel}</b>Titel</span></span>
+            <span class="klein gs-beste">Beste Liga: <strong>{esc(beste_name)}</strong></span>
+            <span class="gs-auf">Alle Saisons ▾</span>
+          </summary>
           {steckbrief(t, eintraege, roh, bereich)}
           {tabelle(eintraege)}
         </details>""")
     unter = f'<p class="klein">{esc(bereich["untertitel"])}</p>' if bereich.get("untertitel") else ""
+    heute_box = (f'<div class="gs-heute"><span class="gs-label">Saison {saison_text(aktuell)}</span>'
+                 f'{"".join(heute)}</div>') if heute else ""
     return f"""
-      <section class="hist-bereich" id="{bereich['key']}">
+      <section class="hist-bereich gs-bereich" id="{bereich['key']}" data-b="{bereich['key']}">
         <h3>{esc(bereich['titel'])}</h3>{unter}
-        {liga_grafik(daten, bereich)}
-        <div class="hist-teams">{"".join(karten)}</div>
+        {heute_box}
+        <div class="card gs-grafik">{liga_grafik(daten, bereich)}</div>
+        <div class="gs-teams">{"".join(karten)}</div>
       </section>"""
 
 
 # ==========================================
 # SEITE
 # ==========================================
-def seite(aktuell, teams, archiv, seiten_pfad, chronik=""):
-    """-> (content, styles). chronik = HTML der Vereinsgeschichte (dokumente/historie.typ), steht mit auf der Seite."""
+def jahr_schluessel(ueberschrift):
+    """'1994/95' -> 1995, '2026' -> 2026 (Kalenderjahr, in dem die Saison endet)."""
+    m = re.match(r"(\d{4})(?:/(\d{2}))?", ueberschrift)
+    if not m:
+        return 0
+    return int(m.group(1)) + (1 if m.group(2) else 0)
+
+
+def jahrzehnt(jahr):
+    return "1952–1989" if jahr < 1990 else f"{jahr // 10 * 10}er"
+
+
+def chronik_html(chronik, meilensteine, pdf):
+    """Chronik nach Jahrzehnten, Meilensteine stehen beim passenden Jahr (neueste oben)."""
+    jahre = {}                                     # Schlüsseljahr -> {"titel", "text", "marken"}
+    for titel, text in chronik:
+        k = jahr_schluessel(titel)
+        e = jahre.setdefault(k, {"titel": titel, "text": "", "marken": []})
+        e["text"] += text
+    for j, rang, html in sorted(meilensteine, key=lambda m: m[1]):
+        if j is None:
+            continue
+        k = j + 1                                  # Saison 2025/26 steht in der Chronik bei 2026
+        jahre.setdefault(k, {"titel": str(k), "text": "", "marken": []})["marken"].append(html.rstrip("."))
+    dek = {}
+    for k in sorted(jahre, reverse=True):
+        dek.setdefault(jahrzehnt(k), []).append(k)
+    namen = sorted(dek, key=lambda d: int(d[:4]), reverse=True)
+    pillen = "".join(f'<button type="button" data-dek="{d}"{" class=an" if d == namen[0] else ""}>{d}</button>'
+                     for d in reversed(namen))                   # alt -> neu, das neueste Jahrzehnt ist offen
+    bloecke = []
+    for d in namen:
+        z = []
+        for k in dek[d]:
+            e = jahre[k]
+            marken = "".join(f'<span class="gs-marke">{m}</span>' for m in e["marken"])
+            anker = esc(e["titel"].replace("/", "-"))
+            z.append(f'<div class="gs-jahr" id="j{anker}"><b class="gs-j">{esc(e["titel"])}</b><div>'
+                     f'{f"<div class=gs-marken>{marken}</div>" if marken else ""}{e["text"]}</div></div>')
+        bloecke.append(f'<div class="gs-dek" data-dek="{d}">{"".join(z)}</div>')
+    pdf_link = f'<a class="gs-pdf" href="{pdf}">Chronik als PDF</a>' if pdf else ""
+    return (f'<div class="gs-pillen" role="tablist">{pillen}{pdf_link}</div>'
+            f'<p class="klein gs-legende"><span class="gs-marke">Erfolg</span> = Meilenstein der Saison. Neueste Jahre oben.</p>'
+            + "".join(bloecke))
+
+
+def seite(aktuell, teams, archiv, seiten_pfad, chronik=(), pdf=""):
+    """-> (content, styles). chronik = [(Jahr-Überschrift, HTML-Absätze)] aus dokumente/historie.typ."""
     daten, roh = sammeln(aktuell, teams, archiv, seiten_pfad)
     anzahl = anzahl_je_saison(daten, roh, aktuell)
     jetzt = anzahl.get(aktuell, {})
@@ -436,35 +518,64 @@ def seite(aktuell, teams, archiv, seiten_pfad, chronik=""):
     if teile:
         teile[-1] = teile[-1].rstrip("-") + "mannschaften"
     kurz = ", ".join(teile[:-1]) + " und " + teile[-1] if len(teile) > 1 else "".join(teile)
-    springen = " · ".join(f'<a href="#{b["key"]}">{esc(b["titel"])}</a>' for b in BEREICHE
-                          if teams_im_bereich(daten, b))
-    sprung = " · ".join(f'<a href="#{k}">{t}</a>' for k, t in
-                        [("wachstum", "So sind wir gewachsen"), ("meilensteine", "Meilensteine"),
-                         ("chronik", "Chronik 1952 bis heute"), ("ligen", "Wer spielte wo?")] if k != "chronik" or chronik)
+    bereiche = [b for b in BEREICHE if teams_im_bereich(daten, b)]
+    b_pillen = "".join(f'<button type="button" data-b="{b["key"]}"{" class=an" if i == 0 else ""}>{esc(b["titel"])}</button>'
+                       for i, b in enumerate(bereiche))
     content = f"""
       <h1>Unsere Geschichte</h1>
-      <p class="lead">Von den Schachfreunden Feldkirchen 1952 bis zu den Mannschaften von heute – wie der Verein
-        gewachsen ist, was er erlebt hat und wer wann in welcher Liga spielte.</p>
-      <p class="hist-sprung">{sprung}</p>
+      <p class="lead">Seit 1952 wird in Feldkirchen, Aschheim und Kirchheim Schach gespielt. Hier steht, was der Verein
+        erlebt hat – und welche Mannschaft wann in welcher Liga spielte.</p>
+      <div class="gs-reiter" role="tablist">
+        <a href="#chronik" data-r="chronik" class="an">Vereinsgeschichte</a>
+        <a href="#mannschaften" data-r="mannschaften">Mannschaften</a>
+      </div>
 
-      <h2 id="wachstum">So sind wir gewachsen</h2>
-      {f'<p>In der Saison {saison_text(aktuell)} spielen wir mit <strong>{kurz}</strong>.</p>' if kurz else ''}
-      {wachstum_grafik(anzahl, roh)}
-      <p class="klein">Balken antippen oder darüberfahren für die Zahlen.</p>
+      <section class="gs-teil" data-r="chronik" id="chronik">
+        <span id="meilensteine"></span>
+        {chronik_html(chronik, erstmals(daten, anzahl, roh), pdf)}
+      </section>
 
-      <h2 id="meilensteine">Meilensteine</h2>
-      {zeitleiste(erstmals(daten, anzahl, roh))}
+      <section class="gs-teil" data-r="mannschaften" id="mannschaften">
+        <h2 id="wachstum">So sind wir gewachsen</h2>
+        {f'<p>In der Saison {saison_text(aktuell)} spielen wir mit <strong>{kurz}</strong>.</p>' if kurz else ''}
+        <div class="card gs-grafik">{wachstum_grafik(anzahl, roh)}</div>
+        <p class="klein">Balken antippen oder darüberfahren für die Zahlen.</p>
 
-      {chronik}
-
-      <h2 id="ligen">Wer spielte wo?</h2>
-      <p class="klein">Springen zu: {springen}. Punkt antippen für Liga und Platz.
-        ▲ Aufstieg, ▼ Abstieg, ★ Meister/Titel, gestrichelt = Saisons dazwischen fehlen.
-        {HINWEIS_NUMMERN}</p>
-      {"".join(bereich_block(daten, roh, b) for b in BEREICHE)}
+        <h2 id="ligen">Wer spielte wo?</h2>
+        <p class="klein">Punkt antippen für Liga und Platz. ▲ Aufstieg, ▼ Abstieg, ★ Meister/Titel,
+          gestrichelt = Saisons dazwischen fehlen. Karte antippen für alle Saisons. {HINWEIS_NUMMERN}</p>
+        <div class="gs-pillen gs-b-pillen" role="tablist">{b_pillen}</div>
+        {"".join(bereich_block(daten, roh, b, aktuell) for b in BEREICHE)}
+      </section>
       <script>
-        // Breite Grafiken (Handy): beim Laden ganz nach rechts wischen, damit die neuesten Saisons zu sehen sind
-        document.querySelectorAll(".hist-scroll").forEach(function (el) {{ el.scrollLeft = el.scrollWidth; }});
+      (function () {{
+        var teile = document.querySelectorAll(".gs-teil"), reiter = document.querySelectorAll(".gs-reiter a");
+        function zeige(r) {{
+          teile.forEach(function (t) {{ t.hidden = t.getAttribute("data-r") !== r; }});
+          reiter.forEach(function (a) {{ a.classList.toggle("an", a.getAttribute("data-r") === r); }});
+          document.querySelectorAll(".gs-teil:not([hidden]) .hist-scroll").forEach(function (el) {{ el.scrollLeft = el.scrollWidth; }});
+        }}
+        function gruppe(sel, attr, wert) {{
+          document.querySelectorAll(sel + " button").forEach(function (b) {{ b.classList.toggle("an", b.getAttribute(attr) === wert); }});
+        }}
+        function dek(d) {{ gruppe(".gs-pillen:not(.gs-b-pillen)", "data-dek", d);
+          document.querySelectorAll(".gs-dek").forEach(function (x) {{ x.hidden = x.getAttribute("data-dek") !== d; }}); }}
+        function ber(b) {{ gruppe(".gs-b-pillen", "data-b", b);
+          document.querySelectorAll(".gs-bereich").forEach(function (x) {{ x.hidden = x.getAttribute("data-b") !== b; }});
+          var s = document.querySelector('.gs-bereich[data-b="' + b + '"] .hist-scroll'); if (s) s.scrollLeft = s.scrollWidth; }}
+        document.querySelectorAll("[data-dek]").forEach(function (b) {{ if (b.tagName === "BUTTON") b.onclick = function () {{ dek(b.getAttribute("data-dek")); }}; }});
+        document.querySelectorAll(".gs-b-pillen button").forEach(function (b) {{ b.onclick = function () {{ ber(b.getAttribute("data-b")); }}; }});
+        reiter.forEach(function (a) {{ a.onclick = function (ev) {{ ev.preventDefault(); history.replaceState(null, "", a.getAttribute("href")); zeige(a.getAttribute("data-r")); }}; }});
+        var erste = document.querySelector(".gs-pillen:not(.gs-b-pillen) button.an"); if (erste) dek(erste.getAttribute("data-dek"));
+        var eb = document.querySelector(".gs-b-pillen button"); if (eb) ber(eb.getAttribute("data-b"));
+        // Sprungziele aus alten Links: #wachstum, #ligen, #erw ... -> Mannschaften; #j2026 -> passendes Jahrzehnt
+        var h = decodeURIComponent(location.hash.slice(1)), ziel = h && document.getElementById(h);
+        var inM = ziel && ziel.closest('.gs-teil[data-r="mannschaften"]');
+        zeige(inM || h === "mannschaften" ? "mannschaften" : "chronik");
+        if (ziel && ziel.classList.contains("gs-bereich")) ber(h);
+        var d = ziel && ziel.closest(".gs-dek"); if (d) dek(d.getAttribute("data-dek"));
+        if (ziel && h !== "chronik" && h !== "mannschaften") setTimeout(function () {{ ziel.scrollIntoView(); }}, 50);
+      }})();
       </script>
     """
     return content, liga.STYLES + "<style>" + CSS + "</style>"
@@ -480,7 +591,7 @@ def karte():
           .team-grid > .team-historie p {{ grid-column: 3 / -2; }}
         }}
       </style>
-      <a class="card team-karte team-historie" href="{SEITE}#wachstum">
+      <a class="card team-karte team-historie" href="{SEITE}#mannschaften">
         <h3>Mannschaftshistorie</h3>
         <p>Wie der Verein an Mannschaften gewachsen ist und wer wann in welcher Liga spielte – Erwachsene, Senioren und Jugend.</p>
         <span class="k-mehr">Zur Geschichte →</span>
@@ -531,4 +642,44 @@ CSS = """
                                         border-radius: 50%; background: var(--link, #1c4e9c); }
       .hist-jahr { font-weight: bold; color: var(--navy); }
       .hist-meilensteine ul { margin: 0.2rem 0 0; padding-left: 1.1rem; }
+      /* Neue Gliederung: Reiter, Jahrzehnte, Mannschaftskarten */
+      .gs-reiter { display: flex; gap: .3rem; margin: 1.2rem 0 1.8rem; border-bottom: 1px solid var(--line, var(--border, #e3e6ea)); }
+      .gs-reiter a { padding: .7rem 1.1rem; font-weight: 700; color: var(--muted, #777); text-decoration: none; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+      .gs-reiter a.an { color: var(--head, var(--navy)); border-color: var(--link-c, var(--link, #1c4e9c)); }
+      .gs-teil[hidden], .gs-dek[hidden], .gs-bereich[hidden] { display: none; }
+      .gs-pillen { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin: 0 0 1rem; }
+      .gs-pillen button { font: inherit; font-weight: 600; padding: .45rem 1rem; border-radius: 20px; cursor: pointer;
+        border: 1px solid var(--line, var(--border, #ddd)); background: var(--surface, #fff); color: var(--muted, #666); }
+      .gs-pillen button.an { background: var(--link-c, #1c4e9c); border-color: var(--link-c, #1c4e9c); color: #0e1524; }
+      :root:not([data-theme="dark"]) .gs-pillen button.an { background: #1c2d52; border-color: #1c2d52; color: #fff; }
+      .gs-pdf { margin-left: auto; font-weight: 600; }
+      .gs-legende { margin: 0 0 .5rem; }
+      .gs-jahr { display: grid; grid-template-columns: 7rem 1fr; gap: 1.2rem; padding: 1.2rem 0; border-bottom: 1px solid var(--line, var(--border, #e3e6ea)); }
+      .gs-j { font-family: var(--font-display, Georgia, serif); font-size: 1.45rem; color: var(--head, var(--navy)); font-variant-numeric: tabular-nums; }
+      .gs-jahr p { margin: 0 0 .6rem; }
+      .gs-marken { margin-bottom: .5rem; }
+      .gs-marke { display: inline-block; background: #e0a84f22; color: #9a6510; border: 1px solid #e0a84f66; border-radius: 20px;
+        padding: .12rem .65rem; font-size: .85rem; font-weight: 600; margin: 0 .35rem .35rem 0; }
+      .gs-marke strong { font-weight: 700; }
+      :root[data-theme="dark"] .gs-marke { color: #f2c37a; }
+      .gs-grafik { padding: .8rem 1rem; overflow: hidden; }
+      .gs-heute { display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center; margin: .6rem 0 .8rem; font-size: .92rem; }
+      .gs-heute > span:not(.gs-label) { background: var(--surface, #fff); border: 1px solid var(--line, var(--border, #e3e6ea)); border-radius: 20px; padding: .25rem .75rem; }
+      .gs-label { font-size: .82rem; font-weight: 700; color: var(--link-c, var(--link)); margin-right: .2rem; }
+      .gs-teams { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .9rem; margin-top: 1rem; }
+      .gs-team { border-left: 0; border-top: 4px solid var(--team); padding: 1rem 1.1rem; }
+      .gs-team[open] { grid-column: 1 / -1; }
+      .gs-team > summary { display: block; }
+      .gs-team > summary::after, .gs-team[open] > summary::after { content: none; }
+      .gs-kopf { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; }
+      .gs-kopf h4 { font-size: 1.2rem; }
+      .gs-mini { display: block; width: 100%; height: 56px; margin: .6rem 0 .4rem; }
+      .gs-beste { display: block; margin-top: .5rem; text-align: center; }
+      .gs-zahlen { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; text-align: center; font-size: .78rem; color: var(--muted, #777); }
+      .gs-zahlen b { display: block; font-size: 1.1rem; color: var(--head, var(--navy)); }
+      .gs-zahlen b.gs-liga { font-size: .85rem; line-height: 1.35rem; }
+      .gs-auf { display: block; margin-top: .6rem; font-size: .85rem; font-weight: 600; color: var(--link-c, var(--link)); }
+      .gs-team[open] .gs-auf { display: none; }
+      .gs-team[open] .gs-mini { max-width: 420px; }
+      @media (max-width: 800px) { .gs-jahr { grid-template-columns: 1fr; gap: .2rem; } }
 """

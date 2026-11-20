@@ -861,7 +861,7 @@ def build_turniere_overview():
     <section class="ausschreibungen-block">
       <h2>Ausschreibungen</h2>
       <p>Unsere eigenen Turniere als PDF oder Opens in ganz Europa im Turnierkalender.</p>
-      {ausschreibungen_wahl_html("ausschreibungen.html#intern")}
+      {ausschreibungen_wahl_html("ausschreibungen.html")}
     </section>
     """
     render_page("Turniere & Ergebnisse", content, "turniere.html")
@@ -2021,23 +2021,17 @@ def typst_absatz_html(text):
 
 
 def geschichte_chronik():
-    """Chronik aus dokumente/historie.typ als HTML-Abschnitt (steht auf geschichte.html, siehe build_historie)."""
+    """Chronik aus dokumente/historie.typ -> [(Jahr-Überschrift, HTML-Absätze)] (steht auf geschichte.html)."""
     quelle = os.path.join(DOKUMENTE_ORDNER, "historie.typ")
     if not os.path.exists(quelle):
-        return ""
+        return []
     with open(quelle, "r", encoding="utf-8") as f:
         code = f.read()
-    jahre = re.findall(r'#jahr\("([^"]+)"\)\[\n(.*?)\n\]', code, re.DOTALL)
-    teile = ['<h2 id="chronik">Chronik 1952 bis heute</h2>',
-             '<p><a class="btn btn-outline" href="dokumente/historie.pdf">Chronik als PDF</a></p>',
-             '<div class="zeitleiste">']
-    for jahr, inhalt in jahre:
+    jahre = []
+    for jahr, inhalt in re.findall(r'#jahr\("([^"]+)"\)\[\n(.*?)\n\]', code, re.DOTALL):
         inhalt = re.sub(r'(?m)^\s*//.*\n?', '', inhalt)   # Kommentare (offene Fragen) nicht anzeigen
-        absaetze = "".join(f'<p>{typst_absatz_html(a)}</p>' for a in re.split(r'\n\s*\n', inhalt) if a.strip())
-        anker = htmllib.escape(jahr.replace("/", "-"))
-        teile.append(f'<section class="zl-jahr" id="j{anker}"><h2>{htmllib.escape(jahr)}</h2><div>{absaetze}</div></section>')
-    teile.append('</div>')
-    return "\n".join(teile)
+        jahre.append((jahr, "".join(f'<p>{typst_absatz_html(a)}</p>' for a in re.split(r'\n\s*\n', inhalt) if a.strip())))
+    return jahre
 
 
 # ==========================================
@@ -3270,11 +3264,12 @@ def weiterleitung(alt, neu):
 
 def build_historie(aktuell, teams, archiv):
     """Eine Seite für alles: Vereinsgeschichte (Chronik) + Mannschaftshistorie."""
-    content, styles = historie.seite(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a), geschichte_chronik())
+    pdf = "dokumente/historie.pdf" if os.path.exists(os.path.join(DOKUMENTE_ORDNER, "historie.typ")) else ""
+    content, styles = historie.seite(aktuell, teams, archiv, lambda d, a: seiten_pfad(d, a), geschichte_chronik(), pdf)
     render_page(historie.TITEL, content, historie.SEITE, extra_styles=styles + GESCHICHTE_CSS,
                 description="Die Geschichte der SG Aschheim/Feldkirchen/Kirchheim von 1952 bis heute: Chronik, "
                             "Meilensteine und welche Mannschaft wann in welcher Liga spielte.")
-    weiterleitung(historie.ALTE_SEITE, f"{historie.SEITE}#wachstum")
+    weiterleitung(historie.ALTE_SEITE, f"{historie.SEITE}#mannschaften")
 
 
 def build_jugend(termine, liga_seiten=None):
@@ -3320,7 +3315,7 @@ if __name__ == "__main__":
     # Teams zuerst laden: das Untermenü "Mannschaften" steht auf jeder Seite
     aktuell, teams, archiv = saisons_laden()
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
-    SUBNAV["mannschaften.html"].append((historie.SEITE + "#wachstum", "Historie"))
+    SUBNAV["mannschaften.html"].append((historie.SEITE + "#mannschaften", "Historie"))
     # Mitgliederbereich: Liste abgleichen, öffentliche Profile holen (vor Startseite und Spielerseiten)
     konten.synchronisieren(_geburtstag_liste(), spieler.slug)
     konten.laden()

@@ -836,7 +836,7 @@ def saison_leiste(saisons):
         return ""
     aktiv = ' aria-current="page"'
     knoepfe = "".join(f'<a href="{esc(h)}"{aktiv if a else ""}>{esc(t)}</a>' for t, h, a in saisons)
-    return f'<nav class="saisons" aria-label="Saison"><span class="klein">Saison</span>{knoepfe}</nav>'
+    return f'<nav class="saisons" aria-label="Saison">{knoepfe}</nav>'
 
 
 def archiv_banner(d):
