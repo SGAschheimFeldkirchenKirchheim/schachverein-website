@@ -56,6 +56,34 @@ CSS = """
       .be-vorschau figcaption { font-size: .85rem; color: var(--muted); margin-top: .3rem; }
       .be-hilfe { font-size: .82rem; color: var(--muted); margin: .4rem 0 0; }
       .be-hilfe code { background: var(--soft); padding: 0 .3rem; border-radius: 4px; }
+      /* Partien im Editor */
+      .be-partien h4 { margin: 1rem 0 .4rem; font-size: .95rem; }
+      .be-partie { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; padding: .5rem .7rem; border: 1px solid var(--line); border-radius: 8px; margin-bottom: .4rem; background: var(--surface); }
+      .be-partie .be-nr { background: var(--soft); padding: .1rem .5rem; border-radius: 6px; font-size: .8rem; font-weight: 700; }
+      .be-p-text { flex: 1 1 14rem; }
+      .be-p-akt { display: flex; gap: .3rem; }
+      .be-p-akt button { font: inherit; font-size: .8rem; padding: .3rem .6rem; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); cursor: pointer; }
+      .be-p-akt button.rot { color: #d0544a; }
+      /* Dialoge */
+      body.be-dlg-offen { overflow: hidden; }
+      .be-dlg-hg { position: fixed; inset: 0; z-index: 200; background: rgba(5, 10, 20, .55); display: grid; place-items: center; padding: 1rem; }
+      .be-dlg { width: min(760px, 100%); max-height: calc(100vh - 2rem); overflow: auto; background: var(--surface); color: var(--text);
+        border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.3rem; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+      .be-dlg h3 { margin: 0 0 .8rem; }
+      .be-dlg label { display: block; font-weight: 600; font-size: .9rem; margin: .6rem 0 .3rem; }
+      .be-dlg textarea, .be-dlg input[type=url], .be-dlg input[type=number] { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .5rem .6rem; box-sizing: border-box; }
+      .be-dlg textarea, .be-dlg input[type=url] { width: 100%; font-weight: 400; }
+      .be-pgn { height: 7rem; font-family: ui-monospace, Consolas, monospace !important; font-size: .82rem !important; }
+      .be-datei { display: inline-block !important; font-weight: 400 !important; color: var(--link-c); cursor: pointer; margin: .2rem 0 !important; }
+      .be-erkannt.gut { color: #2f8f55; } .be-erkannt.fehler { color: #d0544a; }
+      :root[data-theme="dark"] .be-erkannt.gut { color: #6fd59a; }
+      .be-wahl { font-weight: 400 !important; margin: .2rem 0 !important; display: flex !important; gap: .4rem; align-items: center; }
+      .be-ab { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin: .2rem 0 .4rem; }
+      .be-ab input { width: 4.5rem; }
+      .be-ab .be-kat { margin: 0; }
+      .be-dlg-vorschau .pz { margin: 1rem 0 0; }
+      .be-dlg-fuss { z-index: 10; display: flex; justify-content: flex-end; gap: .5rem; margin-top: 1.1rem; position: sticky; bottom: -1.2rem; background: var(--surface); padding: .6rem 0 .2rem; }
+      .be-dlg-fuss .btn[disabled] { opacity: .5; cursor: default; }
       .be-bilder { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: 1rem; }
       .be-bild { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg); position: relative; }
       .be-bild img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }

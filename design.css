@@ -656,3 +656,45 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
 .kt-nk-akt .kt-mini { margin: 0; }
 @media (max-width: 600px) { .kt-nk-akt { display: grid; grid-template-columns: 1fr 1fr; } .kt-nk-akt .kt-mini { padding: .5rem; } }
 a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
+
+/* Partien in Berichten (partie.js) */
+.pz { container-type: inline-size; margin: 1.6rem 0; padding: 1rem 1.1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); outline: none; }
+.pz:focus-visible { border-color: var(--link-c); }
+.pz-kopf { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .8rem; margin-bottom: .8rem; }
+.pz-namen { font-weight: 600; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.pz-f { width: .8rem; height: .8rem; border-radius: 3px; border: 1px solid #8a93a3; display: inline-block; }
+.pz-f.w { background: #fff; } .pz-f.b { background: #222; }
+:root[data-theme="dark"] .pz-f.b { background: #000; border-color: #aab; }
+.pz-gegen { color: var(--muted); margin: 0 .2rem; } .pz-elo { color: var(--muted); font-weight: 400; font-size: .85rem; }
+.pz-erg { margin-left: auto; font-size: 1.1rem; } .pz-info { flex-basis: 100%; font-size: .82rem; color: var(--muted); }
+.pz-rumpf { display: grid; grid-template-columns: minmax(0, 26rem) minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.pz-brett { width: 100%; aspect-ratio: 1; }
+.pz-brett cg-board { background-color: #e9eef6; background-image: conic-gradient(#8ca2c0 25%, #e9eef6 0 50%, #8ca2c0 0 75%, #e9eef6 0); background-size: 25% 25%; }
+.pz-brett cg-board square.last-move { background-color: rgba(255, 213, 74, .45); }
+.pz-knoepfe { display: grid; grid-template-columns: repeat(5, 1fr); gap: .3rem; margin-top: .5rem; }
+.pz-knoepfe button { font: inherit; padding: .45rem 0; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--text); cursor: pointer; }
+.pz-knoepfe button:hover { border-color: var(--link-c); }
+.pz-zuege { max-height: 27rem; overflow-y: auto; font-size: .93rem; line-height: 1.75; padding-right: .3rem; }
+.pz-zuege button { all: unset; cursor: pointer; padding: .05rem .25rem; border-radius: 4px; font-weight: 600; color: var(--text); }
+.pz-zuege button:hover { background: var(--soft); }
+.pz-zuege button[aria-current] { background: var(--accent, #3b5f93); color: #fff; }
+.pz-var { color: var(--muted); font-size: .88rem; } .pz-var button { font-weight: 400; color: var(--muted); }
+.pz-kom { color: #3f8f5f; font-style: italic; font-size: .88rem; } :root[data-theme="dark"] .pz-kom { color: #7fd0a0; }
+.pz-ende { margin-top: .4rem; font-weight: 700; }
+.pz-aktionen { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin-top: .7rem; padding-top: .5rem; border-top: 1px solid var(--line); font-size: .82rem; }
+.pz-aktionen [hidden] { display: none; }
+@container (max-width: 620px) {
+  .pz-rumpf { grid-template-columns: 1fr; }
+  .pz-zuege { max-height: 13rem; border-top: 1px solid var(--line); padding-top: .5rem; }
+}
+
+/* chess-results-Tabelle in Berichten (bericht_extras.py) */
+.cr-box { margin: 1.6rem 0; }
+.cr-box figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .2rem 1rem; margin-bottom: .5rem; }
+.cr-tab { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.cr-tab th { text-align: left; font-size: .8rem; color: var(--muted); border-bottom: 2px solid var(--line); padding: .35rem .5rem; }
+.cr-tab td { padding: .35rem .5rem; border-bottom: 1px solid var(--line); }
+.cr-tab tr.eigen td { background: rgba(111, 159, 216, .16); font-weight: 600; }
+.cr-mehr { margin-top: .5rem; font: inherit; font-size: .9rem; background: none; border: 0; color: var(--link-c); cursor: pointer; padding: 0; }
+.cr-platzhalter { margin: 1.4rem 0; padding: 1rem; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: .92rem; }
+@media (max-width: 600px) { .cr-tab { font-size: .82rem; } .cr-tab td, .cr-tab th { padding: .3rem .3rem; } .cr-tab td.name { overflow-wrap: anywhere; } }

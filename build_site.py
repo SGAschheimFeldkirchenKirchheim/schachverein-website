@@ -19,6 +19,7 @@ import chessresults  # Vereinsturniere von chess-results.com (turniere/chessresu
 import turnierkalender  # externe Turniere: FIDE + chess-results (turniere/turnierkalender.json)
 import turnierorte  # "AFK on Tour": Turnierorte sammeln (Daten in turnierorte/)
 import konten   # Mitgliederbereich: Login, eigenes Profil, Verwaltung (Backend: Apps Script)
+import bericht_extras  # Partien (PGN) und chess-results-Tabellen in Berichten
 import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
@@ -2156,8 +2157,8 @@ def report_inline(text):
 IMG_RE = re.compile(r'^#image\(\s*"([^"]+)"\s*(?:,(.*))?\)\s*$')
 
 
-def report_blocks(body, img=None):
-    """Zerlegt den Berichtstext in HTML-Blöcke (Überschriften, Absätze, Listen, Bilder)."""
+def report_blocks(body, img=None, extra=None):
+    """Zerlegt den Berichtstext in HTML-Blöcke (Überschriften, Absätze, Listen, Bilder, Partien, Tabellen)."""
     out, para, items, list_tag = [], [], [], None
 
     def flush():
@@ -2181,6 +2182,13 @@ def report_blocks(body, img=None):
             flush()
             continue
         if line.startswith('//') or re.match(r'#(set|show|let|import)\b', line):
+            continue
+
+        if extra and re.match(r'#(partie|tabelle)\(', line):
+            flush()
+            x = extra(line)
+            if x:
+                out.append(x)
             continue
 
         im = IMG_RE.match(line)
@@ -2232,7 +2240,7 @@ def make_snippet(blocks, limit=200):
             return htmllib.escape(out, quote=False)
     return ""
 
-def typst_to_html_article(typst_text, img=None):
+def typst_to_html_article(typst_text, img=None, extra=None):
     def meta(name):
         m = re.search(r'#' + name + r'\[(.*?)\]', typst_text)
         return m.group(1).strip() if m else ""
@@ -2242,7 +2250,7 @@ def typst_to_html_article(typst_text, img=None):
     author = meta("author")
 
     body = re.sub(r'#(?:title|date|author|entwurf|kategorie)\[.*?\]', '', typst_text)
-    blocks = report_blocks(body, img)
+    blocks = report_blocks(body, img, extra)
 
     esc = lambda s: htmllib.escape(s, quote=False)
     return esc(title), esc(date), esc(author), "\n".join(blocks), make_snippet(blocks)
@@ -2346,8 +2354,11 @@ def build_berichte():
             seen[slug] = filepath
 
             images = []
+            dm = re.search(r'#date\[(.*?)\]', code)
+            extra = bericht_extras.handler(os.path.dirname(filepath), parse_german_date(dm.group(1).strip()) if dm else None,
+                                           lambda t, fp=filepath: print(f"WARNUNG [{fp}]: {t}"))
             title, date, author, body_html, snippet = typst_to_html_article(
-                code, make_img_handler(filepath, slug, images))
+                code, make_img_handler(filepath, slug, images), extra)
 
             when = parse_german_date(date)
             if when is None:
@@ -2383,6 +2394,7 @@ def build_berichte():
                 'autor_slug': autor_slug,
                 'when': when or date_from_filename(slug) or datetime.date.min,
                 'kategorien': kategorien,
+                'partien': extra.partien,
             })
 
         # Neueste zuerst
@@ -2404,9 +2416,11 @@ def build_berichte():
         <p class="news-meta">{r['meta_link']}</p>
         <hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;">
         <div class="article-content">{r['body']}</div>
+        {bericht_extras.SKRIPT if r['partien'] else ""}
         """
         render_page(r['title'], article_content, os.path.join("berichte", r['filename']),
-                    css_path="../", nav_path="../", extra_styles=article_styles,
+                    css_path="../", nav_path="../",
+                    extra_styles=(bericht_extras.kopf_html() if r['partien'] else "") + article_styles,
                     description=r['snippet'] or None)
     def overview_card(r):
         return f"""

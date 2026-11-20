@@ -9,7 +9,19 @@
   var KATEGORIEN = JSON.parse(APP.getAttribute("data-kat") || "[]");
   var SPEICHER = "afk-bericht-entwurf2", MAX_BILDER = 12, BILD_PX = 1600;
   var ICH = null;                              // angemeldetes Mitglied (aus konto.js) oder null
-  var Z = { id: null, bilder: [], titelbild: 0, kat: [], eintrag: null };
+  var Z = { id: null, bilder: [], titelbild: 0, kat: [], partien: [], eintrag: null };
+  var MAX_PARTIEN = 10;
+  var BASIS = (document.currentScript && document.currentScript.src || "").replace(/[^\/]*$/, "");
+  var MODUL = null;
+  function partieModul() {                      // partie.js + Brett-Bibliothek erst laden, wenn sie gebraucht werden
+    if (!MODUL) {
+      ["chessground.base.css", "chessground.cburnett.css"].forEach(function (f) {
+        var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASIS + "lib/partien/" + f; document.head.appendChild(l);
+      });
+      MODUL = import(BASIS + "partie.js");
+    }
+    return MODUL;
+  }
 
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function $(sel) { return APP.querySelector(sel); }
@@ -56,6 +68,15 @@
         if (b) out.push('<figure><img src="' + esc(b.daten || b.url) + '" alt="">' + (b.unterschrift ? "<figcaption>" + esc(b.unterschrift) + "</figcaption>" : "") + "</figure>");
         return;
       }
+      if ((m = l.match(/^\[Partie (\d+)\]$/))) {
+        flush(); var p = Z.partien[+m[1] - 1];
+        if (p) out.push('<figure class="pz" data-partie="' + esc(JSON.stringify(p)) + '"></figure>');
+        return;
+      }
+      if ((m = l.match(/^\[Tabelle (\S+)\]$/))) {
+        flush(); out.push('<p class="cr-platzhalter">Tabelle von chess-results – wird beim nächsten Build geladen.<br><a href="' + esc(m[1]) + '" target="_blank" rel="noopener">' + esc(m[1]) + "</a></p>");
+        return;
+      }
       if ((m = l.match(/^(={1,3})\s+(.*)$/))) { flush(); var h = m[1].length + 1; out.push("<h" + h + ">" + inline(m[2]) + "</h" + h + ">"); return; }
       if ((m = l.match(/^(?:(\d+\.)|([-+]))\s+(.*)$/))) { var t = m[2] ? "ul" : "ol"; if (para.length || (tag && tag !== t)) flush(); tag = t; items.push(m[3]); return; }
       if (items.length) flush();
@@ -66,7 +87,8 @@
   }
 
   // ---------- Typst (vorhandener Bericht) -> Editor-Schreibweise ----------
-  function ausTypst(typ, dateien) {
+  function ausTypst(typ, dateien, pgnDateien) {
+    var partien = [];
     function meta(n) { var m = typ.match(new RegExp("#" + n + "\\[(.*?)\\]")); return m ? m[1].trim() : ""; }
     var tb = (typ.match(/^\/\/\s*titelbild:\s*(\S+)/m) || [])[1] || "";
     var bilder = [], namen = {};
@@ -84,6 +106,16 @@
       if (/^\s*#(import|title|date|author|kategorie|set|show|let)\b/.test(l) || /^\s*\/\//.test(l)) return;
       var im = l.trim().match(/^#image\(\s*"([^"]+)"\s*(?:,\s*alt:\s*"([^"]*)")?[^)]*\)\s*$/);
       if (im) { var n = bildNr(im[1], im[2]); if (n) zeilen.push("[Bild " + n + "]"); else fehlt = true; return; }
+      var pm = l.trim().match(/^#partie\(\s*"([^"]+)"(.*)\)\s*$/);
+      if (pm) {
+        var datei = (pgnDateien || []).filter(function (x) { return x.name === pm[1]; })[0];
+        if (!datei) { fehlt = true; return; }
+        var abm = pm[2].match(/ab:\s*(-?\d+)/), sm = pm[2].match(/sicht:\s*"(\w)"/);
+        partien.push({ pgn: datei.pgn.trim(), ab: abm ? +abm[1] : 0, sicht: sm && sm[1] === "b" ? "b" : "w" });
+        zeilen.push("[Partie " + partien.length + "]"); return;
+      }
+      var tm = l.trim().match(/^#tabelle\(\s*"([^"]+)"\s*\)\s*$/);
+      if (tm) { zeilen.push("[Tabelle " + tm[1] + "]"); return; }
       l = l.replace(/\s*\\$/, "");
       l = l.replace(/#link\("([^"]+)"\)\[([^\]]*)\]/g, "[$2]($1)").replace(/#strong\[([^\]]*)\]/g, "*$1*").replace(/#emph\[([^\]]*)\]/g, "_$1_");
       if (/(^|[^\\])#[a-z]/i.test(l)) fehlt = true;
@@ -95,7 +127,7 @@
       ok: !fehlt, titel: meta("title"), datum: meta("date"), autor: meta("author"),
       kat: kat ? kat.split(",").map(function (k) { return k.trim().toLowerCase(); }) : [],
       text: zeilen.join("\n").replace(/^\n+|\n+$/g, "").replace(/\n{3,}/g, "\n\n"),
-      bilder: bilder, titelbild: Math.max(0, tb ? bilder.map(function (b) { return b.name; }).indexOf(tb) : 0)
+      bilder: bilder, titelbild: Math.max(0, tb ? bilder.map(function (b) { return b.name; }).indexOf(tb) : 0), partien: partien
     };
   }
 
@@ -174,6 +206,210 @@
     }
   }
 
+
+  // ---------- Partien ----------
+  function partieText(p, info) {
+    if (!info) return "Partie";
+    var k = info.kopf;
+    return (k.White || "?") + " – " + (k.Black || "?") + (info.ergebnis && info.ergebnis !== "*" ? " " + info.ergebnis.replace("1/2-1/2", "½–½").replace("-", "–") : "");
+  }
+  function startText(p, info) {
+    if (!p.ab) return "Grundstellung";
+    if (p.ab < 0 || !info || p.ab >= info.zuege.length) return "Schlussstellung";
+    var z = info.zuege[p.ab];
+    return "ab " + z.nr + ". Zug, " + (z.farbe === "w" ? "Weiß" : "Schwarz") + " am Zug";
+  }
+  function partienZeichnen() {
+    var box = $(".be-partien");
+    if (!box) return;
+    if (!Z.partien.length) { box.innerHTML = ""; return; }
+    box.innerHTML = "<h4>Partien</h4>" + Z.partien.map(function (p, i) {
+      return '<div class="be-partie" data-i="' + i + '"><span class="be-nr">' + (i + 1) + '</span><span class="be-p-text">Partie ' + (i + 1) + "</span>" +
+        '<span class="be-p-akt"><button type="button" data-p="ein">Einfügen</button><button type="button" data-p="bearb">Bearbeiten</button>' +
+        '<button type="button" class="rot" data-p="weg">Weg</button></span></div>';
+    }).join("");
+    partieModul().then(function (P) {
+      [].forEach.call(box.querySelectorAll(".be-partie"), function (el) {
+        var p = Z.partien[+el.getAttribute("data-i")], info = P.lesen(p.pgn);
+        el.querySelector(".be-p-text").innerHTML = "<b>" + esc(partieText(p, info)) + '</b> <span class="klein">' + esc(startText(p, info)) + "</span>";
+      });
+    });
+    [].forEach.call(box.querySelectorAll("[data-p]"), function (k) {
+      k.addEventListener("click", function () {
+        var i = +k.closest(".be-partie").getAttribute("data-i"), was = k.getAttribute("data-p");
+        if (was === "ein") return einfuegen("[Partie " + (i + 1) + "]");
+        if (was === "bearb") return partieDialog(i);
+        if (!confirm("Partie " + (i + 1) + " entfernen?")) return;
+        var t = $(".be-text");
+        t.value = t.value.split("\n").filter(function (z) { return z.trim() !== "[Partie " + (i + 1) + "]"; }).join("\n")
+          .replace(/\[Partie (\d+)\]/g, function (a, n) { return +n > i + 1 ? "[Partie " + (n - 1) + "]" : a; });
+        Z.partien.splice(i, 1); partienZeichnen(); merken();
+      });
+    });
+  }
+
+  function dialog(html) {
+    var hg = document.createElement("div");
+    hg.className = "be-dlg-hg";
+    hg.innerHTML = '<div class="be-dlg" role="dialog" aria-modal="true">' + html + "</div>";
+    document.body.appendChild(hg);
+    document.body.classList.add("be-dlg-offen");
+    function zu() { hg.remove(); document.body.classList.remove("be-dlg-offen"); document.removeEventListener("keydown", taste); }
+    function taste(ev) { if (ev.key === "Escape") zu(); }
+    document.addEventListener("keydown", taste);
+    hg.addEventListener("mousedown", function (ev) { if (ev.target === hg) zu(); });
+    [].forEach.call(hg.querySelectorAll("[data-zu]"), function (b) { b.addEventListener("click", zu); });
+    return { el: hg.firstChild, zu: zu };
+  }
+
+  function namensgleich(a, b) {               // "Ruff, Korbinian" == "Korbinian Ruff"
+    function n(x) { return String(x || "").toLowerCase().replace(/[^a-zäöüß ,]/g, "").split(/[ ,]+/).filter(Boolean).sort().join(" "); }
+    return !!a && !!b && n(a) === n(b);
+  }
+
+  function partieDialog(index) {
+    if (index === null && Z.partien.length >= MAX_PARTIEN) return meldung("Höchstens " + MAX_PARTIEN + " Partien pro Bericht.", "fehler");
+    var alt = index === null ? null : Z.partien[index];
+    var nummer = index === null ? Z.partien.length + 1 : index + 1;
+    var d = dialog('<h3>' + (alt ? "Partie " + nummer + " bearbeiten" : "Partie einfügen") + '</h3>' +
+      '<label>PGN hier einfügen (aus Lichess, ChessBase, chess.com …)<textarea class="be-pgn" spellcheck="false" placeholder="[White &quot;…&quot;]&#10;[Black &quot;…&quot;]&#10;&#10;1. e4 e5 2. Sf3 …"></textarea></label>' +
+      '<p class="be-dlg-zeile"><label class="be-datei">oder .pgn-Datei wählen<input type="file" accept=".pgn,text/plain,application/x-chess-pgn" hidden></label></p>' +
+      '<div class="be-auswahl" hidden></div><p class="be-erkannt klein"></p>' +
+      '<div class="be-optionen" hidden><label>Brett startet bei</label><div class="be-kat be-start">' +
+      '<button type="button" data-s="grund">Grundstellung</button><button type="button" data-s="zug">ab Zug …</button><button type="button" data-s="ende">Schlussstellung</button></div>' +
+      '<div class="be-ab" hidden>Zug <input type="number" min="1" class="be-zugnr" inputmode="numeric"> <div class="be-kat be-farbe"><button type="button" data-f="w">Weiß am Zug</button><button type="button" data-f="b">Schwarz am Zug</button></div></div>' +
+      '<label>Diese Farbe steht unten</label><div class="be-kat be-sicht"><button type="button" data-v="w">Weiß</button><button type="button" data-v="b">Schwarz</button></div>' +
+      '<div class="be-dlg-vorschau"></div></div>' +
+      '<div class="be-dlg-fuss"><button type="button" class="btn leise" data-zu>Abbrechen</button><button type="button" class="btn be-ok" disabled>' +
+      (alt ? "Übernehmen" : "Als [Partie " + nummer + "] einfügen") + "</button></div>");
+    var el = d.el, ta = el.querySelector(".be-pgn");
+    var S = { spiele: [], wahl: [], start: "grund", zug: 1, farbe: "w", sicht: "w", info: null };
+    if (alt) { ta.value = alt.pgn; S.sicht = alt.sicht; }
+
+    partieModul().then(function (P) {
+      function ab() {                              // Einstellungen -> Halbzug
+        if (S.start === "grund" || !S.info) return 0;
+        if (S.start === "ende") return -1;
+        var z = S.info.zuege, i;
+        for (i = 0; i < z.length; i++) if (z[i].nr > S.zug || (z[i].nr === S.zug && (S.farbe === "w" || z[i].farbe === "b"))) break;
+        return Math.min(i, z.length);
+      }
+      function knoepfe(sel, attr, wert) { [].forEach.call(el.querySelectorAll(sel + " button"), function (b) { b.classList.toggle("an", b.getAttribute(attr) === wert); }); }
+      function zeichnen() {
+        var gewaehlt = S.spiele.filter(function (x, i) { return S.wahl[i]; });
+        var info = S.info = gewaehlt.length ? P.lesen(gewaehlt[0]) : null;
+        var ok = !!(info && info.zuege.length);
+        var e = el.querySelector(".be-erkannt");
+        if (!ta.value.trim()) e.textContent = "";
+        else if (!S.spiele.length || !ok) { e.textContent = "Keine Züge erkannt – ist das eine PGN?"; e.className = "be-erkannt klein fehler"; }
+        else {
+          e.className = "be-erkannt klein gut";
+          e.textContent = gewaehlt.length > 1 ? gewaehlt.length + " Partien ausgewählt – sie werden einzeln eingefügt, die Einstellungen gelten für alle."
+            : "Erkannt: " + partieText(null, info) + ", " + Math.ceil(info.zuege.length / 2) + " Züge" +
+              (info.kommentare ? ", " + info.kommentare + " Kommentar" + (info.kommentare > 1 ? "e" : "") : "") +
+              (info.varianten ? ", " + info.varianten + " Variante" + (info.varianten > 1 ? "n" : "") : "");
+        }
+        el.querySelector(".be-optionen").hidden = !ok;
+        el.querySelector(".be-ok").disabled = !ok;
+        knoepfe(".be-start", "data-s", S.start); knoepfe(".be-farbe", "data-f", S.farbe); knoepfe(".be-sicht", "data-v", S.sicht);
+        el.querySelector(".be-ab").hidden = S.start !== "zug";
+        el.querySelector(".be-zugnr").value = S.zug;
+        var v = el.querySelector(".be-dlg-vorschau");
+        if (ok) {
+          v.innerHTML = '<figure class="pz" data-partie="' + esc(JSON.stringify({ pgn: gewaehlt[0], ab: ab(), sicht: S.sicht })) + '"></figure>';
+          P.viewer(v.firstChild);
+        } else v.innerHTML = "";
+      }
+      function seiteRaten() {                         // eigene Partie mit Schwarz -> Schwarz unten
+        var g = S.spiele.filter(function (x, i) { return S.wahl[i]; });
+        var inf = g.length === 1 && ICH ? P.lesen(g[0]) : null;
+        if (!inf) return;
+        if (namensgleich(inf.kopf.Black, ICH.ich.name)) S.sicht = "b";
+        else if (namensgleich(inf.kopf.White, ICH.ich.name)) S.sicht = "w";
+      }
+      function einlesen(neuGelesen) {
+        S.spiele = P.partien(ta.value).filter(function (x) { var i = P.lesen(x); return i && i.zuege.length; });
+        if (!S.spiele.length && ta.value.trim()) S.spiele = [ta.value.trim()];
+        S.wahl = S.spiele.map(function (x, i) { return i === 0; });
+        var aw = el.querySelector(".be-auswahl");
+        aw.hidden = S.spiele.length < 2;
+        aw.innerHTML = S.spiele.length < 2 ? "" : "<label>Die Datei enthält " + S.spiele.length + " Partien – welche sollen rein?</label>" +
+          S.spiele.map(function (x, i) {
+            var inf = P.lesen(x);
+            return '<label class="be-wahl"><input type="checkbox" data-w="' + i + '"' + (i === 0 ? " checked" : "") + "> " + esc(partieText(null, inf)) +
+              (inf.kopf.Round && inf.kopf.Round !== "?" ? ' <span class="klein">Runde ' + esc(inf.kopf.Round) + "</span>" : "") + "</label>";
+          }).join("");
+        [].forEach.call(aw.querySelectorAll("[data-w]"), function (c) {
+          c.addEventListener("change", function () { S.wahl[+c.getAttribute("data-w")] = c.checked; seiteRaten(); zeichnen(); });
+        });
+        if (neuGelesen) seiteRaten();
+        zeichnen();
+      }
+      if (alt) {                                    // Einstellungen der vorhandenen Partie übernehmen
+        einlesen(false);
+        var inf = S.info;
+        if (alt.ab < 0) S.start = "ende";
+        else if (alt.ab > 0 && inf) {
+          S.start = "zug";
+          var z = inf.zuege[Math.min(alt.ab, inf.zuege.length - 1)];
+          if (alt.ab >= inf.zuege.length) S.start = "ende"; else { S.zug = z.nr; S.farbe = z.farbe; }
+        }
+        zeichnen();
+      }
+      var timer = null;
+      ta.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(function () { einlesen(true); }, 300); });
+      el.querySelector(".be-datei input").addEventListener("change", function (ev) {
+        var f = ev.target.files[0]; if (!f) return;
+        var r = new FileReader();
+        r.onload = function () { ta.value = String(r.result).slice(0, 2000000); einlesen(true); };
+        r.readAsText(f);
+      });
+      el.addEventListener("click", function (ev) {
+        var b = ev.target.closest("button"); if (!b) return;
+        if (b.hasAttribute("data-s")) { S.start = b.getAttribute("data-s"); if (S.start === "zug" && S.info && S.zug === 1) { var mitte = S.info.zuege[Math.floor(S.info.zuege.length / 2)]; S.zug = mitte.nr; S.farbe = mitte.farbe; } zeichnen(); }
+        if (b.hasAttribute("data-f")) { S.farbe = b.getAttribute("data-f"); zeichnen(); }
+        if (b.hasAttribute("data-v")) { S.sicht = b.getAttribute("data-v"); zeichnen(); }
+      });
+      el.querySelector(".be-zugnr").addEventListener("change", function (ev) { S.zug = Math.max(1, parseInt(ev.target.value, 10) || 1); zeichnen(); });
+      el.querySelector(".be-ok").addEventListener("click", function () {
+        var gewaehlt = S.spiele.filter(function (x, i) { return S.wahl[i]; });
+        if (alt) {
+          Z.partien[index] = { pgn: gewaehlt[0], ab: ab(), sicht: S.sicht };
+        } else {
+          var platz = MAX_PARTIEN - Z.partien.length;
+          if (gewaehlt.length > platz) { meldung("Höchstens " + MAX_PARTIEN + " Partien – " + (gewaehlt.length - platz) + " weggelassen.", "fehler"); gewaehlt = gewaehlt.slice(0, platz); }
+          var marken = [];
+          gewaehlt.forEach(function (pgn) {
+            S.info = P.lesen(pgn);
+            Z.partien.push({ pgn: pgn, ab: ab(), sicht: S.sicht });
+            marken.push("[Partie " + Z.partien.length + "]");
+          });
+          einfuegen(marken.join("\n\n"));
+        }
+        d.zu(); partienZeichnen(); merken();
+      });
+      if (!alt) ta.focus();
+    }).catch(function () { el.querySelector(".be-erkannt").textContent = "Das Schachbrett konnte nicht geladen werden."; });
+  }
+
+  function tabelleDialog() {
+    var d = dialog('<h3>Tabelle von chess-results einfügen</h3>' +
+      '<label>Link zum Turnier<input type="url" class="be-crurl" placeholder="https://chess-results.com/tnr1171232.aspx"></label>' +
+      '<p class="klein">Gezeigt wird die Endtabelle bzw. der aktuelle Stand, unsere Spieler hervorgehoben. Bei Turnieren mit mehreren Gruppen den Link der Gruppe nehmen, die gezeigt werden soll. ' +
+      'In den ersten 30 Tagen nach dem Berichtsdatum aktualisiert sich die Tabelle jede Nacht.</p><p class="be-erkannt klein"></p>' +
+      '<div class="be-dlg-fuss"><button type="button" class="btn leise" data-zu>Abbrechen</button><button type="button" class="btn be-ok">Einfügen</button></div>');
+    var inp = d.el.querySelector(".be-crurl");
+    inp.focus();
+    function ok() {
+      var m = inp.value.trim().match(/^https?:\/\/(?:[\w-]+\.)?chess-results\.com\/(?:\w+\/)?tnr(\d+)\.aspx/i);
+      if (!m) { var e = d.el.querySelector(".be-erkannt"); e.textContent = "Das ist kein chess-results-Link (er enthält „tnr“ und eine Nummer)."; e.className = "be-erkannt klein fehler"; return; }
+      einfuegen("[Tabelle https://chess-results.com/tnr" + m[1] + ".aspx]");
+      d.zu();
+    }
+    d.el.querySelector(".be-ok").addEventListener("click", ok);
+    inp.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); ok(); } });
+  }
+
   // ---------- Werkzeugleiste ----------
   function umschliessen(links, rechts, platzhalter) {
     var t = $(".be-text"), a = t.selectionStart, e = t.selectionEnd, sel = t.value.slice(a, e) || platzhalter;
@@ -195,6 +431,8 @@
       var url = prompt("Adresse des Links (https://…):", "https://");
       if (url && /^https?:\/\/\S+$/.test(url)) umschliessen("[", "](" + url + ")", "Linktext");
     }
+    if (was === "partie") return partieDialog(null);
+    if (was === "tabelle") return tabelleDialog();
     if (was === "bild") {
       var genutzt = ($(".be-text").value.match(/\[Bild (\d+)\]/g) || []).map(function (x) { return +x.match(/\d+/)[0]; });
       for (var i = 0; i < Z.bilder.length; i++) if (genutzt.indexOf(i + 1) < 0) return einfuegen("[Bild " + (i + 1) + "]");
@@ -212,7 +450,7 @@
     if (Z.id) return;                                // beim Bearbeiten nichts im Browser speichern
     clearTimeout(merkTimer);
     merkTimer = setTimeout(function () {
-      var w = felder(); w.bilder = Z.bilder; w.titelbild = Z.titelbild;
+      var w = felder(); w.bilder = Z.bilder; w.titelbild = Z.titelbild; w.partien = Z.partien;
       try { localStorage.setItem(SPEICHER, JSON.stringify(w)); }
       catch (e) { try { w.bilder = []; localStorage.setItem(SPEICHER, JSON.stringify(w)); } catch (e2) {} }
       var s = $(".be-gespeichert"); if (s) { var d = new Date(); s.textContent = "Entwurf im Browser gespeichert · " + d.getHours() + ":" + ("0" + d.getMinutes()).slice(-2); }
@@ -245,11 +483,11 @@
       '<div class="be-tabs"><button type="button" class="an" data-tab="schreiben">Schreiben</button><button type="button" data-tab="vorschau">Vorschau</button></div>' +
       '<div class="be-schreiben"><div class="be-leiste"><button type="button" data-l="fett" title="Fett"><b>B</b></button><button type="button" data-l="kursiv" title="Kursiv"><i>I</i></button>' +
       '<button type="button" data-l="ueber">Überschrift</button><i class="tr"></i><button type="button" data-l="liste">• Liste</button>' +
-      '<button type="button" data-l="link">Link</button><button type="button" data-l="bild">Bild</button></div>' +
+      '<button type="button" data-l="link">Link</button><button type="button" data-l="bild">Bild</button><i class="tr"></i><button type="button" data-l="partie">Partie</button><button type="button" data-l="tabelle">Tabelle</button></div>' +
       '<textarea class="be-text" maxlength="' + MAX + '" placeholder="Leere Zeile = neuer Absatz"></textarea>' +
       '<p class="be-hilfe"><code>*fett*</code> <code>_kursiv_</code> <code>= Überschrift</code> <code>- Punkt</code> <code>[Text](https://…)</code> <code>[Bild 2]</code> – oder einfach die Knöpfe benutzen.</p></div>' +
       '<div class="be-vorschau" hidden></div>' +
-      '<div class="be-bilder"></div>' +
+      '<div class="be-partien"></div><div class="be-bilder"></div>' +
       '<label class="be-falle" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>' +
       '<div class="be-fuss"><span class="klein be-gespeichert"></span><span><button type="button" class="btn leise be-abbrechen" hidden>Abbrechen</button> ' +
       '<button type="button" class="btn be-senden">Einreichen</button></span></div><p class="be-meldung" hidden role="status"></p>' +
@@ -269,6 +507,7 @@
         $(".be-schreiben").hidden = v; $(".be-vorschau").hidden = !v;
         if (v) $(".be-vorschau").innerHTML = "<h1>" + inline($("[name=titel]").value || "Ohne Titel") + '</h1><p class="news-meta">' +
           esc($("[name=datum]").value) + ($("[name=autor]").value ? " · von " + esc($("[name=autor]").value) : "") + "</p>" + vorschauHtml($(".be-text").value);
+        if (v && $(".be-vorschau [data-partie]")) partieModul().then(function (P) { [].forEach.call(APP.querySelectorAll(".be-vorschau [data-partie]"), P.viewer); });
       });
     });
     [].forEach.call(APP.querySelectorAll("[data-l]"), function (b) { b.addEventListener("click", function () { leiste(b.getAttribute("data-l")); }); });
@@ -279,9 +518,9 @@
   function befuellen(w) {
     $("[name=titel]").value = w.titel || ""; $("[name=autor]").value = w.autor || ""; $("[name=datum]").value = w.datum || heute();
     $(".be-text").value = w.text || ""; if ($("[name=mail]")) $("[name=mail]").value = w.mail || "";
-    Z.kat = (w.kat || []).slice(); Z.bilder = (w.bilder || []).slice(); Z.titelbild = w.titelbild || 0;
+    Z.kat = (w.kat || []).slice(); Z.bilder = (w.bilder || []).slice(); Z.titelbild = w.titelbild || 0; Z.partien = (w.partien || []).slice();
     [].forEach.call(APP.querySelectorAll("[data-kat]"), function (b) { b.classList.toggle("an", Z.kat.indexOf(b.getAttribute("data-kat")) >= 0); });
-    bilderZeichnen(); knopfText();
+    bilderZeichnen(); partienZeichnen(); knopfText();
   }
   function neuAnfangen(leeren) {
     Z.id = null; Z.eintrag = null;
@@ -299,6 +538,7 @@
     if (!datum) return meldung("Datum bitte als TT.MM.JJJJ.", "fehler");
     var d = { id: Z.id, titel: w.titel, autor: w.autor, datum: datum, text: w.text, mail: w.mail, kategorien: Z.kat,
       titelbild: Z.titelbild, website: $("[name=website]").value,
+      partien: Z.partien,
       bilder: Z.bilder.map(function (b) { return b.daten ? { daten: b.daten, unterschrift: b.unterschrift } : { name: b.name, unterschrift: b.unterschrift }; }) };
     var k = $(".be-senden"); k.disabled = true;
     meldung(Z.bilder.some(function (b) { return b.daten; }) ? "Wird hochgeladen – mit Fotos kann das etwas dauern …" : "Wird gesendet …", "");
@@ -322,7 +562,7 @@
     meldung("Bericht wird geladen …", "");
     api("b_laden", { id: id }).then(function (a) {
       if (!a.ok) return meldung(a.fehler, "fehler");
-      var p = ausTypst(a.typst, a.bilder);
+      var p = ausTypst(a.typst, a.bilder, a.partien);
       if (!p.ok) return meldung("Dieser Bericht enthält Sonderformatierungen, die der Editor nicht kennt. Bitte direkt in der Datei Bericht.typ ändern.", "fehler");
       Z.id = a.eintrag.id; Z.eintrag = a.eintrag;
       befuellen(p);
