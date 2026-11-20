@@ -1289,6 +1289,7 @@ JS = r"""
   }
   function umschalten(key, box) {
     post({typ: "interesse", key: key}, box, function (a) {
+      if (SITZUNG && !ICH) ICH = {status: "ok", mitglied: true};
       INTERESSE[key] = a.leute || [];
       if (a.dabei) MEINE[key] = true; else delete MEINE[key];
       zeige();
@@ -1296,7 +1297,7 @@ JS = r"""
   }
   function interesseKlick(knopf) {
     var key = knopf.getAttribute("data-int"), box = knopf.parentNode;
-    if (ICH && ICH.status === "ok") return umschalten(key, box);
+    if (SITZUNG || (ICH && ICH.status === "ok")) return umschalten(key, box);   // angemeldet: nie nach dem Namen fragen
     if (ICH && ICH.status === "wartet")
       return hinweis(box, "„" + ICH.name + "“ wird für dieses Gerät erst nach Freigabe aktiv – das kann etwas dauern.");
     nameFormular(box, "Dein Name (Vor- und Nachname)", function (n) {
