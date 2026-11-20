@@ -80,7 +80,10 @@
       </a>
       <div class="kopf-tools">
         <a class="kopf-knopf such-knopf" href="suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
-    <button type="button" class="kopf-knopf theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">
+    <button type="button" class="kopf-knopf konto-knopf" id="konto-knopf" aria-label="Anmelden" title="Anmelden" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="kopf-knopf theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">
           <svg class="icon-mond" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
           <svg class="icon-sonne" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
         </button>
@@ -179,12 +182,24 @@
        wie lange Formspree Einsendungen speichert (Einstellungen im Formspree-Konto)
        und auf welcher Grundlage die USA-Übermittlung erfolgt. -->
 
-  <h3>5. Externe Links</h3>
+  <h3 id="mitgliederbereich">5. Mitgliederbereich (Anmeldung und eigenes Profil)</h3>
+  <p>
+    Vereinsmitglieder ab 18 Jahren können sich auf der Website registrieren und ihr Profil selbst gestalten. Dafür verarbeiten wir: Vor- und Nachname, Geburtsdatum (nur zum Abgleich mit der Mitgliederliste), Benutzername, Passwort (nur als verschlüsselter Hashwert), freiwillige Angaben im Profil (Text, Lichess-/Chess.com-Name, Foto, Sichtbarkeit des Geburtstags) sowie den Zeitpunkt der letzten Anmeldung. Damit du angemeldet bleibst, speichert dein Browser ein Anmelde-Token im lokalen Speicher (localStorage); es wird beim Abmelden gelöscht.
+  </p>
+  <p>
+    Die Daten liegen in einem Google-Konto des Vereins (Google Apps Script und Google Drive, Anbieter: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland). Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die du bei der Registrierung erteilst und jederzeit widerrufen kannst. Öffentlich sichtbar ist nur, was du selbst im Profil freigibst; standardmäßig ist das von deinem Geburtsdatum nur der Jahrgang. Den vollständigen Geburtstag sehen Admins des Vereins, damit wir gratulieren können.
+  </p>
+  <p>
+    Du kannst dein Konto jederzeit selbst unter „Mein Profil“ löschen. Dann werden Konto, Profilangaben und Foto gelöscht. Wer aus dem Verein austritt, wird automatisch abgemeldet und sein Profil ausgeblendet.
+  </p>
+  <!-- TODO Vorstand: Text prüfen. Mit Google sollte für das Vereinskonto der Auftragsverarbeitungsvertrag (Google Workspace/Cloud Data Processing Addendum) bestehen. -->
+
+  <h3>6. Externe Links</h3>
   <p>
     Auf unserer Website verlinken wir auf externe Seiten, zum Beispiel Google Maps, den Schachbezirk München oder den Deutschen Schachbund. Diese Seiten werden nicht automatisch geladen. Erst wenn du einen Link anklickst, werden Daten (zum Beispiel deine IP-Adresse) an den jeweiligen Anbieter übermittelt. Für deren Datenverarbeitung gelten die Datenschutzhinweise der Anbieter.
   </p>
 
-  <h3>6. Deine Rechte</h3>
+  <h3>7. Deine Rechte</h3>
   <p>
     Du hast das Recht auf Auskunft über die zu deiner Person gespeicherten Daten (Art. 15 DSGVO), auf Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Eine erteilte Einwilligung kannst du jederzeit widerrufen. Wende dich dazu an die oben genannte E-Mail-Adresse.
   </p>
@@ -237,5 +252,6 @@
       knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
     })();
   </script>
+  <script src="konto.js" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-pfad="" defer></script>
 </body>
 </html>

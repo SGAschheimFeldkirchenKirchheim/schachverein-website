@@ -149,11 +149,14 @@
   .tk-int button.dabei { background: var(--hell, #6f9fd8); color: #0e1524; }
   .tk-int.laedt { opacity: 0.5; }
   .tk-int-wer { color: var(--muted); }
+  .tk-v { width: 14px; height: 14px; vertical-align: -2px; margin-left: 3px; fill: #3fae6c; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .tk-v path { fill: none; }
+  .tk-int-mitglied { flex-basis: 100%; font-size: .82rem; color: var(--muted); margin-top: .2rem; }
   .tk-int button.tk-int-als { border: 0; background: none; padding: 0; font-weight: 400; font-size: 0.78rem; color: var(--muted);
     text-decoration: underline dotted; }
   .tk-links .tk-int button.tk-int-als { color: var(--muted); }
   .tk-int-hinweis { color: var(--muted); font-size: 0.78rem; flex: 1 1 100%; }
-  .tk-int-name { display: flex; gap: 0.3rem; flex: 1 1 100%; }
+  .tk-int-name { display: flex; flex-wrap: wrap; gap: 0.3rem; flex: 1 1 100%; }
   .tk-int-name input { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.5rem; border-radius: 6px; border: 1px solid var(--line);
     background: var(--soft); color: var(--text); flex: 1; min-width: 0; }
   .tk-int-name button { border-radius: 6px; }
@@ -187,7 +190,10 @@
       </a>
       <div class="kopf-tools">
         <a class="kopf-knopf such-knopf" href="suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
-    <button type="button" class="kopf-knopf theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">
+    <button type="button" class="kopf-knopf konto-knopf" id="konto-knopf" aria-label="Anmelden" title="Anmelden" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="kopf-knopf theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">
           <svg class="icon-mond" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
           <svg class="icon-sonne" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
         </button>
@@ -485,8 +491,9 @@
   // ---------- Wer fährt mit? ----------
   // Ein Name = ein Konto mit einem oder mehreren Geräten. Das Gerät hat eine zufällige Kennung
   // (afk-geraet im Browser); der Server entscheidet, welcher Name dazu gehört und ob er freigegeben ist.
-  var INTERESSE = {}, MEINE = {}, ICH = null, GERAET = "";
+  var INTERESSE = {}, MEINE = {}, ICH = null, GERAET = "", SITZUNG = "";
   try {
+    SITZUNG = localStorage.getItem("afk-sitzung") || "";          // angemeldetes Mitglied (konto.js)
     localStorage.removeItem("afk-name");                         // alte Version: Namen nur im Browser
     GERAET = localStorage.getItem("afk-geraet") || "";
     if (!/^[a-f0-9]{32}$/.test(GERAET)) {
@@ -498,12 +505,15 @@
   function interesseHtml(e) {
     if (!D.skript || !GERAET) return "";
     var leute = INTERESSE[e.key] || [], ich = !!MEINE[e.key], wartet = ICH && ICH.status === "wartet";
+    var namen = leute.map(function (l) {
+      return typeof l === "string" ? esc(l) : esc(l.n) + (l.v ? '<svg class="tk-v" viewBox="0 0 16 16" role="img" aria-label="registriertes Mitglied"><title>registriertes Mitglied</title><circle cx="8" cy="8" r="7.2"/><path d="M4.6 8.3l2.2 2.2 4.6-4.8"/></svg>' : "");
+    });
     return '<div class="tk-int" data-key="' + esc(e.key) + '">' +
       '<button type="button" data-int="' + esc(e.key) + '" class="' + (ich ? "dabei" : "") + '"' +
       (wartet ? ' title="„' + esc(ICH.name) + '“ wartet noch auf Freigabe"' : "") + ">" + (ich ? "✓ Ich will hin" : "Ich will hin") + "</button>" +
       (leute.length ? '<span class="tk-int-wer">' + (leute.length === 1 ? "Interesse: " : leute.length + " wollen hin: ") +
-        esc(leute.join(", ")) + "</span>" : "") +
-      (ich && ICH && ICH.status === "ok" ? (ICH.antrag ? '<span class="tk-int-hinweis">Änderung zu „' + esc(ICH.antrag) + '“ beantragt</span>'
+        namen.join(", ") + "</span>" : "") +
+      (ich && ICH && ICH.status === "ok" && !ICH.mitglied ? (ICH.antrag ? '<span class="tk-int-hinweis">Änderung zu „' + esc(ICH.antrag) + '“ beantragt</span>'
         : '<button type="button" class="tk-int-als" data-int-umbenennen="' + esc(e.key) + '">Name falsch?</button>') : "") + "</div>";
   }
   function hinweis(box, text) {
@@ -513,6 +523,7 @@
   function post(daten, box, fertig) {
     box.classList.add("laedt");
     daten.geraet = GERAET; daten.website = "";
+    if (SITZUNG) daten.sitzung = SITZUNG;
     fetch(D.skript, {method: "POST", body: JSON.stringify(daten)})
       .then(function (r) { return r.json(); })
       .then(function (a) {
@@ -527,7 +538,10 @@
     if (box.querySelector("form")) return;
     var fm = document.createElement("form");
     fm.className = "tk-int-name";
-    fm.innerHTML = '<input name="n" placeholder="' + text + '" maxlength="60" required><button>OK</button>';
+    fm.innerHTML = '<input name="n" placeholder="' + text + '" maxlength="60" required><button>OK</button>' +
+      (window.AFK_KONTO ? '<small class="tk-int-mitglied">Vereinsmitglied ab 18? <a href="#" data-anmelden>Oben rechts anmelden</a> – dann mit Haken.</small>' : "");
+    var anm = fm.querySelector("[data-anmelden]");
+    if (anm) anm.addEventListener("click", function (ev) { ev.preventDefault(); window.AFK_KONTO.fenster("login"); });
     fm.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var n = fm.elements.n.value.trim().replace(/\s+/g, " ");
@@ -565,7 +579,7 @@
     });
   }
   if (D.skript && GERAET) {
-    fetch(D.skript + "?aktion=interesse&geraet=" + GERAET).then(function (r) { return r.json(); })
+    fetch(D.skript + "?aktion=interesse&geraet=" + GERAET + (SITZUNG ? "&sitzung=" + encodeURIComponent(SITZUNG) : "")).then(function (r) { return r.json(); })
       .then(function (a) {
         if (!a || !a.interesse) return;
         INTERESSE = a.interesse; ICH = a.ich || null; MEINE = {};
@@ -731,5 +745,6 @@
       knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
     })();
   </script>
+  <script src="konto.js" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-pfad="" defer></script>
 </body>
 </html>

@@ -214,6 +214,9 @@
         background: var(--soft, rgba(127,127,127,.08)); border-radius: 0 10px 10px 0; }
       .sp-text p { margin: 0 0 .6rem; } .sp-text p:last-child { margin-bottom: 0; }
       .sp-text strong { display: block; margin-bottom: .3rem; }
+      .sp-text[hidden], .sp-gb[hidden] { display: none; }
+      .sp-gb { display: contents; }
+      .sp-links-profil { font-size: .95rem; }
       .sp-foto { width: clamp(240px, 26vw, 380px); height: auto; max-height: 480px; object-fit: contain; border-radius: 12px;
         flex: 0 0 auto; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); }
       @media (max-width: 800px) { .sp-oben { flex-direction: column-reverse; gap: 1.2rem; } .sp-foto { width: min(100%, 320px); } }
@@ -262,7 +265,10 @@
       </a>
       <div class="kopf-tools">
         <a class="kopf-knopf such-knopf" href="../suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
-    <button type="button" class="kopf-knopf theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">
+    <button type="button" class="kopf-knopf konto-knopf" id="konto-knopf" aria-label="Anmelden" title="Anmelden" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="kopf-knopf theme-schalter" id="theme-schalter" aria-label="Farbmodus wechseln">
           <svg class="icon-mond" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
           <svg class="icon-sonne" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
         </button>
@@ -285,7 +291,7 @@
   <main id="main" class="container">
     
     <p class="zurueck"><a href="../afk-1.html">← AFK 1</a></p>
-    <div class="sp-oben">
+    <div class="sp-oben" data-profil-slug="stefans-kasims">
     <div class="sp-links">
     <h1 class="sp-name">Stefans Kasims</h1>
     <div class="sp-kopf">
@@ -294,19 +300,18 @@
         <dt>ELO</dt><dd>2002</dd>
         <dt>Bilanz</dt><dd>11½ / 15 (77 %) seit 2024/25</dd>
         <dt>Partien</dt><dd>Heim 9 · Auswärts 6</dd>
-        <dt>Geburtstag</dt><dd>3. Mai 2004</dd>
+        <div class="sp-gb" data-gb-zeile><dt>Jahrgang</dt><dd>2004</dd></div>
       </dl>
       <div><strong>Gemeldet für</strong><ul class="sp-meldungen"><li><a href="../afk-1.html">AFK 1</a> <span class="klein">Bezirksliga · Nr. 2 · Stamm</span></li></ul></div>
     </div>
-    
+    <div class="sp-text" data-kt-text hidden></div>
     <p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1127&amp;PKZ=NU4164783&amp;Itemid=4164" target="_blank" rel="noopener">Beim Schachbezirk ansehen ↗</a></p>
     
     </div>
     
     </div>
     
-    <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    <details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">1 / 2</span></h3></summary>
+    <h2 class="panel-titel sp-titel">Gespielte Partien</h2><details class="sp-saison" open><summary><h3>Saison 2026/27 <span class="klein">1 / 2</span></h3></summary>
         <h4><a href="../afk-1.html">AFK 1</a> <span class="team-klasse">Bezirksliga</span></h4>
         <div class="tab-wrap"><table class="liga-tab">
           <thead><tr><th title="Runde">Rd</th><th class="neben">Ort</th><th title="Brett">Brt</th>
@@ -387,5 +392,6 @@
       knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
     })();
   </script>
+  <script src="../konto.js" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-pfad="../" defer></script>
 </body>
 </html>
