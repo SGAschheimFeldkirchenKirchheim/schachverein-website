@@ -1565,7 +1565,7 @@
           <div class="ein-reihe">
             <label>Titel <input name="titel" required maxlength="120" placeholder="z. B. AFK 2 gewinnt das Derby"></label>
             <label>Autor/in <input name="autor" required maxlength="80" autocomplete="name" placeholder="Vor- und Nachname"></label>
-            <label>Datum <input name="datum" type="date" required value="2026-11-19"></label>
+            <label>Datum <input name="datum" type="date" required value="2026-11-20"></label>
           </div>
           <label>Text
             <textarea name="text" required maxlength="20000" placeholder="Leere Zeile = neuer Absatz"></textarea>
@@ -1605,7 +1605,7 @@
             .then(function (a) {
               if (!a.ok) throw new Error(a.fehler || "Unbekannter Fehler");
               meldung.className = "ein-meldung ok"; meldung.textContent = 'Danke! Dein Bericht ist angekommen und erscheint, sobald er durchgesehen ist.';
-              f.reset(); f.elements.datum.value = '2026-11-19';
+              f.reset(); f.elements.datum.value = '2026-11-20';
               try { localStorage.removeItem(SPEICHER); } catch (e) {}
             })
             .catch(function (e) {
