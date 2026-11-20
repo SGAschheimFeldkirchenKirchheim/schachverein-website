@@ -218,15 +218,15 @@ def ergebnisse_html(zeilen):
 
 
 def geburtstage_html(liste):
-    """liste = [(datum, name, alter)]"""
+    """liste = [(datum, name, alter)] – nur öffentlich freigegebene. Für Admins füllt konto.js die Liste nach dem Login."""
     if not liste:
-        return ""
+        return f'<div class="st-geb" data-geb-woche="{GEBURTSTAG_TAGE}" hidden><h3>Geburtstage diese Woche</h3><ul></ul></div>'
     heute = datetime.date.today()
     z = "".join(
         f'<li data-date="{d.isoformat()}"><span><b>{esc(n)}</b> <span class="st-meta">'
         f'{"heute" if d == heute else f"{WOCHENTAG[d.weekday()]} {d.day:02d}.{d.month:02d}."}</span></span>'
         f'{f"<em>wird {a}</em>" if GEBURTSTAG_ALTER and a else ""}</li>' for d, n, a in liste)
-    return f'<div class="st-geb"><h3>Geburtstage diese Woche</h3><ul>{z}</ul></div>'
+    return f'<div class="st-geb" data-geb-woche="{GEBURTSTAG_TAGE}"><h3>Geburtstage diese Woche</h3><ul>{z}</ul></div>'
 
 
 def kaestchen(bild, inhalt, umgedreht=False):
@@ -372,6 +372,7 @@ CSS = """<style>
   .st-fakten b { display: block; font-family: var(--font-head); font-size: 2.4rem; color: var(--head); line-height: 1.1; }
   .st-fakten span { color: var(--muted); }
   .st-wann { list-style: none; padding: 0; margin: 1rem 0; font-size: 1.08rem; display: grid; gap: .4rem; }
+  .st-geb[hidden] { display: none; }
   .st-geb { margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
   .st-geb h3 { font-size: 1.1rem; margin: 0 0 .5rem; }
   .st-geb ul { list-style: none; padding: 0; margin: 0; }

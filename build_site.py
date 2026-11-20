@@ -18,6 +18,7 @@ import faq     # FAQ-Seite (Fragen in faq.py)
 import chessresults  # Vereinsturniere von chess-results.com (turniere/chessresults.json)
 import turnierkalender  # externe Turniere: FIDE + chess-results (turniere/turnierkalender.json)
 import turnierorte  # "AFK on Tour": Turnierorte sammeln (Daten in turnierorte/)
+import konten   # Mitgliederbereich: Login, eigenes Profil, Verwaltung (Backend: Apps Script)
 import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Archiv)
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
@@ -259,6 +260,7 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
         jahr=TODAY.year,
         spielort_hinweis=(f'<p class="spielort-hinweis">{SPIELORT_HINWEIS}</p>' if SPIELORT_HINWEIS else ""),
         stand=letzte_aenderung(),
+        konto_js=konten.script_tag(css_path, nav_path),
     )
 
     if MAIL_UMLEITUNG:
@@ -2857,7 +2859,9 @@ def geburtstage_heute(heute=None):
     if not GEBURTSTAGE_AN:
         return []
     heute = heute or TODAY
-    liste = _geburtstag_liste()
+    # öffentlich nur, wer seinen Geburtstag im Profil selbst freigegeben hat (Admins sehen alle nach dem Login)
+    liste = [m for m in _geburtstag_liste()
+             if konten.geburtstag_oeffentlich(spieler.slug(f"{m.get('vorname', '')} {m.get('nachname', '')}"))]
     vornamen = {}
     for m in liste:
         v = str(m.get("vorname", "")).strip().lower()
@@ -3179,7 +3183,7 @@ def build_spieler(aktuell, teams, archiv):
             os.remove(alt)
     ACTIVE_PARENT.update({os.path.basename(x): "mannschaften.html" for x in liga.SPIELER_SEITEN})
     n = spieler.bauen(alle, dsb, render_page, liga.STYLES, aktuell, berichte=ALLE_BERICHTE,
-                      tour_seiten=turnierorte.seite_fuer_name, geburtstage=_geburtstag_liste())
+                      tour_seiten=turnierorte.seite_fuer_name, geburtstage=_geburtstag_liste(), konten=konten.PROFILE)
     print(f"Spielerseiten: {n}")
 
 
@@ -3317,6 +3321,11 @@ if __name__ == "__main__":
     aktuell, teams, archiv = saisons_laden()
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
     SUBNAV["mannschaften.html"].append((historie.SEITE + "#wachstum", "Historie"))
+    # Mitgliederbereich: Liste abgleichen, öffentliche Profile holen (vor Startseite und Spielerseiten)
+    konten.synchronisieren(_geburtstag_liste(), spieler.slug)
+    konten.laden()
+    konten.seiten_bauen(render_page)
+    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html"})   # nicht in die Sitemap
     build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))

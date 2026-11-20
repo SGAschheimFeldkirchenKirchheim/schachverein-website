@@ -77,6 +77,8 @@ jobs:
           DSB_VKZ: ${{ secrets.DSB_VKZ }}
           # Geburtstagsliste (lädt update_all.py hoch); auf der Seite erscheinen nur die Geburtstagskinder des Tages
           GEBURTSTAGE: ${{ secrets.GEBURTSTAGE }}
+          # Mitgliederbereich (konten.py): Schlüssel aus dem Apps Script, Funktion syncSchluesselZeigen()
+          KONTO_SCHLUESSEL: ${{ secrets.KONTO_SCHLUESSEL }}
 
       # 5. Änderungen committen und pushen
       - name: Commit and Push Changes

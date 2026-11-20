@@ -19,7 +19,7 @@ TITEL = "Suche"
 TEXT_LAENGE = 2500             # so viele Zeichen Text je Seite kommen in den Index
 TEXT_LAENGE_BERICHT = 8000     # Berichte ganz (bis zu dieser Länge)
 MAX_TREFFER = 40
-AUSLASSEN = {"404.html", SEITE}    # diese Seiten nie finden
+AUSLASSEN = {"mein-profil.html", "verwaltung.html", "404.html", SEITE}    # diese Seiten nie finden
 # Seiten, die bei gleichem Treffer weiter oben stehen (Wurzel-Dateinamen)
 WICHTIG = {"index.html", "termine.html", "mannschaften.html", "berichte.html", "jugend.html",
            "turniere.html", "kontakt.html", "faq.html"}
@@ -64,7 +64,9 @@ KNOPF_CSS = ""   # Aussehen des Such-Knopfs: design.css (Abschnitt Header)
 
 def knopf_einbauen(seite_html, nav_path):
     """Setzt den Such-Knopf vor den Hell/Dunkel-Schalter im Kopf."""
-    marke = '<button type="button" class="kopf-knopf theme-schalter"'
+    marke = '<button type="button" class="kopf-knopf konto-knopf"'      # Reihenfolge: Suche, Konto, Hell/Dunkel
+    if marke not in seite_html:
+        marke = '<button type="button" class="kopf-knopf theme-schalter"'
     if marke not in seite_html or 'such-knopf"' in seite_html:
         return seite_html
     return seite_html.replace(marke, KNOPF.format(nav_path=nav_path) + "\n    " + marke, 1)

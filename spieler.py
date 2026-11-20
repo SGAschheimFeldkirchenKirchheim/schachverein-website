@@ -13,16 +13,13 @@ FOTO UND GEBURTSTAG:
     Am besten quadratisch oder Hochformat.
   - Eigener Text: spieler/texte/<name>.txt (leere Datei liegt für jeden Spieler bereit).
     Einfach Text reinschreiben, Leerzeile = neuer Absatz, Links werden klickbar. Leer = kein Kasten.
-  - Geburtstag: kommt automatisch aus der Geburtstagsliste (wie auf der Startseite).
+  - Jahrgang: kommt automatisch aus der Geburtstagsliste. Tag und Monat werden NIE gezeigt (Datenschutz).
     Ausnahmen in spieler/profile.json, z. B.
         {
-          "Arthur Krumm": {"alter": true},
           "Max Muster":   {"geburtstag": false},
-          "Gast Spieler": {"geburtstag": "14.03."}
+          "Gast Spieler": {"geburtstag": "1990"}
         }
-    false = Geburtstag nicht zeigen, "TT.MM." = selbst eingetragen (z. B. wenn nicht in der Liste),
-    "alter": true/false = Alter zeigen oder nicht (Standard: GEBURTSTAG_ALTER),
-    "jahr": true/false = Geburtsjahr zeigen oder nicht (Standard: GEBURTSTAG_JAHR).
+    false = Jahrgang nicht zeigen, "1990" = selbst eingetragen (z. B. wenn nicht in der Liste).
 
 build_site.py: erst sammeln(teams, dsb) -> liga.SPIELER_SEITEN, dann bauen(...).
 Das Geburtsjahr von der DSB-Liste wird nur für den Entwicklungskoeffizienten benutzt,
@@ -36,6 +33,7 @@ import math
 import os
 import re
 import unicodedata
+from urllib.parse import quote
 from statistics import NormalDist
 
 # ==========================================
@@ -51,14 +49,13 @@ VERLAUF_AN = True                   # DWZ-Verlauf zeigen (sobald mind. 2 verschi
 BERICHTE_MAX = 12                   # so viele Berichte, in denen der Spieler vorkommt, höchstens anzeigen
 TOUR_LINK = True                    # Link zum "AFK on Tour"-Profil, falls vorhanden
 FOTO_ORDNER = os.path.join(ORDNER, "fotos")          # spieler/fotos/<slug>.jpg
+KONTO_FOTOS = os.path.join(ORDNER, "fotos_konto")    # Fotos aus dem Mitgliederbereich (konten.py)
 TEXT_ORDNER = os.path.join(ORDNER, "texte")          # spieler/texte/<slug>.txt – eigener Text, leer = nichts
 TEXT_PLATZHALTER = True             # für jeden Spieler eine leere Textdatei anlegen
 TEXT_UEBERSCHRIFT = ""              # z. B. "Über mich"; "" = ohne Überschrift
 PROFILE = os.path.join(ORDNER, "profile.json")       # Ausnahmen (Geburtstag aus/selbst, Alter)
 FOTO_PLATZHALTER = True             # für jeden Spieler einen Platzhalter "Hier Bild einfügen" anlegen
-GEBURTSTAG_AUTO = True              # Geburtstag aus der Geburtstagsliste zeigen (False = nur über profile.json)
-GEBURTSTAG_JAHR = True              # Geburtsjahr mit anzeigen ("9. Dezember 2003")
-GEBURTSTAG_ALTER = False            # Alter dazu zeigen (pro Spieler änderbar mit "alter" in profile.json)
+GEBURTSTAG_AUTO = True              # Jahrgang aus der Geburtstagsliste zeigen (False = nur über profile.json)
 MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September",
           "Oktober", "November", "Dezember"]
 
@@ -141,7 +138,12 @@ def text_html(name):
                 pass
         return ""
     with open(pfad, encoding="utf-8-sig") as f:
-        roh = f.read().strip()
+        return absaetze_html(f.read())
+
+
+def absaetze_html(roh):
+    """Text -> <p>-Absätze (Leerzeile = neuer Absatz, Links klickbar). Gleiche Regeln wie konto.js."""
+    roh = (roh or "").strip()
     if not roh:
         return ""
     absaetze = []
@@ -150,7 +152,27 @@ def text_html(name):
         t = re.sub(r"(https?://[^\s<]+)", r'<a href="\1" target="_blank" rel="noopener">\1</a>', t)
         absaetze.append("<p>" + t.replace("\n", "<br>") + "</p>")
     kopf = f"<strong>{esc(TEXT_UEBERSCHRIFT)}</strong>" if TEXT_UEBERSCHRIFT else ""
-    return f'<div class="sp-text">{kopf}{"".join(absaetze)}</div>'
+    return kopf + "".join(absaetze)
+
+
+def konto_text_html(k):
+    """Text und Lichess/Chess.com-Links aus dem eigenen Profil (Mitgliederbereich)."""
+    links = []
+    if k.get("lichess"):
+        links.append(f'Lichess: <a href="https://lichess.org/@/{quote(k["lichess"])}" target="_blank" rel="noopener">{esc(k["lichess"])}</a>')
+    if k.get("chesscom"):
+        links.append(f'Chess.com: <a href="https://www.chess.com/member/{quote(k["chesscom"])}" target="_blank" rel="noopener">{esc(k["chesscom"])}</a>')
+    return absaetze_html(k.get("text", "")) + (f'<p class="sp-links-profil">{" · ".join(links)}</p>' if links else "")
+
+
+def konto_geburtstag(k):
+    """(Beschriftung, Wert) nach der Wahl im Profil: nur Jahrgang / Geburtstag öffentlich / nichts."""
+    if k.get("gb") == "nichts":
+        return "Jahrgang", ""
+    if k.get("gb") == "oeffentlich" and k.get("geburtstag"):
+        j, m, t = k["geburtstag"].split("-")
+        return "Geburtstag", f"{int(t)}. {MONATE[int(m) - 1]} {j}"
+    return "Jahrgang", k.get("jahr", "")
 
 
 def foto(name):
@@ -174,32 +196,22 @@ def profile_laden():
         return {}
 
 
-def geburtstag_text(name, profil, geburtstage, heute):
-    """'14. März' (+ ' · 34 Jahre'). Quelle: Geburtstagsliste, Ausnahmen in profile.json."""
+def geburtstag_text(name, profil, geburtstage, heute=None):
+    """Nur der Jahrgang ('1983') – Tag und Monat werden aus Datenschutzgründen nie gezeigt.
+    Quelle: Geburtstagsliste, Ausnahmen in profile.json."""
     profil = profil or {}
     wert = profil.get("geburtstag", GEBURTSTAG_AUTO)
     if not wert:
         return ""
-    if isinstance(wert, str):                      # selbst eingetragen: "14.03." oder "14.03.2001"
-        m = re.match(r"^\s*(\d{1,2})\.(\d{1,2})\.?(\d{4})?", wert)
-        if not m or not 1 <= int(m.group(2)) <= 12:
-            return ""
-        jahr = f" {m.group(3)}" if m.group(3) and profil.get("jahr", GEBURTSTAG_JAHR) else ""
-        return f"{int(m.group(1))}. {MONATE[int(m.group(2)) - 1]}{jahr}"
+    if isinstance(wert, (str, int)) and not isinstance(wert, bool):   # selbst eingetragen: "1983" oder "14.03.1983"
+        m = re.search(r"(\d{4})", str(wert))
+        return m.group(1) if m else ""
     for g in geburtstage or ():                    # aus der Geburtstagsliste (gleicher Name)
-        if slug(f"{g.get('vorname', '')} {g.get('nachname', '')}") != slug(name):
-            continue
-        try:
-            tag, monat, jahr = (int(x) for x in str(g.get("geburtstag", "")).split("."))
-        except ValueError:
-            return ""
-        text = f"{tag}. {MONATE[monat - 1]}" + (f" {jahr}" if profil.get("jahr", GEBURTSTAG_JAHR) else "")
-        if profil.get("alter", GEBURTSTAG_ALTER):
-            alter = heute.year - jahr - ((heute.month, heute.day) < (monat, tag))
-            text += f" · {alter} Jahre"
-        return text
+        if slug(f"{g.get('vorname', '')} {g.get('nachname', '')}") == slug(name):
+            m = re.search(r"(\d{4})", str(g.get("geburtstag", "")))
+            return m.group(1) if m else ""
     if "geburtstag" in profil:
-        print(f"Hinweis: Geburtstag für {name} freigegeben, aber nicht in der Geburtstagsliste gefunden.")
+        print(f"Hinweis: Jahrgang für {name} freigegeben, aber nicht in der Geburtstagsliste gefunden.")
     return ""
 
 
@@ -507,7 +519,8 @@ def berichte_html(liste):
     <ul class="sp-berichte">{zeilen}</ul>{mehr}"""
 
 
-def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", geburtstag="", text=""):
+def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", geburtstag="", text="",
+               gb_label="Jahrgang", konto=None):
     """saison_jahr = Startjahr der aktuellen Saison (für Alter und Prognose)."""
     r_dsb = _int(dsb.get("dwz")) if dsb else None
     elo = _int(dsb.get("elo")) if dsb else None
@@ -531,33 +544,34 @@ def seite_html(p, dsb, saison_jahr, verlauf=(), berichte=(), tour="", bild="", g
     gesamt = (f"<dt>Bilanz</dt><dd>{_punkte(pkt)} / {n} ({round(100 * pkt / n)} %)"
               f"{' seit ' + esc(p['partien'][-1]['saison']) if len({x['jahr'] for x in p['partien']}) > 1 else ''}</dd>"
               if n else "")
-    zurueck = p["meldungen"][0]["datei"] if p["meldungen"] else (p["partien"][0]["datei"] if p["partien"] else "mannschaften.html")
-    zurueck_text = p["meldungen"][0]["team"] if p["meldungen"] else (p["partien"][0]["team"] if p["partien"] else "Mannschaften")
+    nur_profil = not p["meldungen"] and not p["partien"]          # Mitglied ohne Mannschaftseinsätze
+    daten = (f' data-profil-slug="{esc(slug(p["name"]))}"' + (f' data-benutzer="{esc(konto["benutzer"])}"' if konto else ""))
+    zurueck = p["meldungen"][0]["datei"] if p["meldungen"] else (p["partien"][0]["datei"] if p["partien"] else "ueber-uns.html")
+    zurueck_text = p["meldungen"][0]["team"] if p["meldungen"] else (p["partien"][0]["team"] if p["partien"] else "Über uns")
     return f"""
     <p class="zurueck"><a href="../{esc(zurueck)}">← {esc(zurueck_text)}</a></p>
-    <div class="sp-oben">
+    <div class="sp-oben"{daten}>
     <div class="sp-links">
-    <h1 class="sp-name">{esc(p["name"])}</h1>
+    <h1 class="sp-name">{esc(p["name"])}{'<span class="kt-verifiziert" title="Registriertes Mitglied">verifiziert</span>' if konto else ""}</h1>
     <div class="sp-kopf">
       <dl>
-        <dt>DWZ</dt><dd>{r_alt or "–"}</dd>
+        {f'<dt>DWZ</dt><dd>{r_alt or "–"}</dd>' if r_alt or not nur_profil else ""}
         {f"<dt>ELO</dt><dd>{elo}</dd>" if elo else ""}
         {gesamt}
         {ha}
-        {f"<dt>Geburtstag</dt><dd>{esc(geburtstag)}</dd>" if geburtstag else ""}
+        <div class="sp-gb" data-gb-zeile{"" if geburtstag else " hidden"}><dt>{esc(gb_label)}</dt><dd>{esc(geburtstag)}</dd></div>
       </dl>
-      <div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>
+      {"" if nur_profil else f'<div><strong>Gemeldet für</strong><ul class="sp-meldungen">{meldungen}</ul></div>'}
     </div>
-    {text}
+    <div class="sp-text" data-kt-text{"" if text else " hidden"}>{text}</div>
     {bezirk}
     {f'<p class="klein"><a href="../{esc(tour)}">Turnierreisen bei AFK on Tour ansehen →</a></p>' if tour else ""}
     </div>
     {f'<img class="sp-foto" src="../{esc(bild)}" alt="{esc(p["name"])}">' if bild else ""}
     </div>
     {verlauf_html(list(verlauf))}
-    <h2 class="panel-titel sp-titel">Gespielte Partien</h2>
-    {partien_html(p, saison_jahr)}
-    {prognose_html(p, r_alt, quelle, alter, index, saison_jahr) if PROGNOSE and r_alt else ""}
+    {"" if nur_profil else '<h2 class="panel-titel sp-titel">Gespielte Partien</h2>' + partien_html(p, saison_jahr)}
+    {prognose_html(p, r_alt, quelle, alter, index, saison_jahr) if PROGNOSE and r_alt and not nur_profil else ""}
     {berichte_html(list(berichte))}
     """
 
@@ -570,6 +584,9 @@ STYLES = """<style>
         background: var(--soft, rgba(127,127,127,.08)); border-radius: 0 10px 10px 0; }
       .sp-text p { margin: 0 0 .6rem; } .sp-text p:last-child { margin-bottom: 0; }
       .sp-text strong { display: block; margin-bottom: .3rem; }
+      .sp-text[hidden], .sp-gb[hidden] { display: none; }
+      .sp-gb { display: contents; }
+      .sp-links-profil { font-size: .95rem; }
       .sp-foto { width: clamp(240px, 26vw, 380px); height: auto; max-height: 480px; object-fit: contain; border-radius: 12px;
         flex: 0 0 auto; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); }
       @media (max-width: 800px) { .sp-oben { flex-direction: column-reverse; gap: 1.2rem; } .sp-foto { width: min(100%, 320px); } }
@@ -598,7 +615,7 @@ STYLES = """<style>
 </style>"""
 
 
-def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None, geburtstage=()):
+def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=(), tour_seiten=None, geburtstage=(), konten=None):
     """Schreibt alle Spielerseiten. render_page/liga_styles kommen aus build_site/liga.
     berichte = build_site.ALLE_BERICHTE; tour_seiten(name) -> 'tour-….html' oder '';
     geburtstage = Geburtstagsliste (nur für Spieler, die in profile.json freigegeben sind)."""
@@ -606,16 +623,29 @@ def bauen(spieler, dsb_liste, render_page, liga_styles, saison_jahr, berichte=()
     verlauf = verlauf_laden()
     heute = datetime.date.today()
     profile = profile_laden()
-    for p in spieler.values():
+    konten = konten or {}
+    alle = dict(spieler)
+    for sl_k, k in konten.items():          # registrierte Mitglieder ohne Mannschaftseinsätze bekommen auch eine Seite
+        if not any(slug(p["name"]) == sl_k for p in alle.values()):
+            alle["konto:" + sl_k] = {"name": k["name"], "meldungen": [], "partien": [], "url": ""}
+    for p in alle.values():
         dsb = dsb_finden(p["name"], idx)
         sl = slug(p["name"])
         if dsb:
             verlauf_eintragen(verlauf, sl, _int(dsb.get("dwz")), heute)
         tour = (tour_seiten(p["name"]) if tour_seiten and TOUR_LINK else "") or ""
-        platzhalter_anlegen(p["name"])
+        k = konten.get(sl)
+        if k:                                # eigenes Profil aus dem Mitgliederbereich
+            kfoto = os.path.join(KONTO_FOTOS, sl + ".jpg")
+            bild = kfoto.replace(os.sep, "/") if k.get("foto") and os.path.exists(kfoto) else foto(p["name"])
+            text = konto_text_html(k) or text_html(p["name"])
+            gb_label, gb = konto_geburtstag(k)
+        else:
+            platzhalter_anlegen(p["name"])
+            bild, text, gb_label = foto(p["name"]), text_html(p["name"]), "Jahrgang"
+            gb = geburtstag_text(p["name"], profile.get(sl), geburtstage, heute)
         content = seite_html(p, dsb, saison_jahr, verlauf.get(sl, []), berichte_finden(p["name"], berichte), tour,
-                             bild=foto(p["name"]), text=text_html(p["name"]),
-                             geburtstag=geburtstag_text(p["name"], profile.get(sl), geburtstage, heute))
+                             bild=bild, text=text, geburtstag=gb, gb_label=gb_label, konto=k)
         render_page(p["name"], content, seite(p["name"]), css_path="../", nav_path="../",
                     extra_styles=liga_styles.replace("</style>", "") + STYLES.replace("<style>", ""),
                     description=f"{p['name']} – Partien und DWZ in der Mannschaftssaison.")
