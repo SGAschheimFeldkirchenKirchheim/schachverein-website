@@ -2,3 +2,4 @@
 __pycache__/
 turniere/blitzjahreswertung/output*.svg
 turniere/blitzjahreswertung/archiv/*/output*.svg
+konto_schluessel.txt
