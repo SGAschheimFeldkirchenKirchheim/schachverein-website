@@ -8,15 +8,6 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
-UID:2026-11-20-ganztag-nacht-der-mathematik-jugend@sg-afk
-DTSTAMP:20261120T000000Z
-DTSTART;VALUE=DATE:20261120
-DTEND;VALUE=DATE:20261121
-SUMMARY:Nacht der Mathematik
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
 UID:2026-11-21-14-jugend-landesliga-sued-runde-1-jugend@sg-afk
 DTSTAMP:20261121T000000Z
 DTSTART:20261121T130000Z
