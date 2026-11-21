@@ -117,6 +117,18 @@
       .be-drop { border: 2px dashed var(--line); border-radius: 10px; display: grid; place-items: center; text-align: center; color: var(--muted);
         font-size: .9rem; padding: 1rem; min-height: 9rem; cursor: pointer; }
       .be-drop.ueber { border-color: var(--link-c); color: var(--link-c); }
+      .be-drop { gap: .25rem; align-content: center; font: inherit; background: none; }
+      .be-drop svg { width: 2.2rem; height: 2.2rem; fill: none; stroke: currentColor; stroke-width: 1.6; margin: 0 auto .2rem; }
+      .be-drop svg .v { fill: currentColor; stroke: none; opacity: .55; }
+      .be-drop b { color: var(--text); font-size: 1rem; }
+      .be-drop span { font-size: .82rem; line-height: 1.35; font-weight: 400; }
+      .be-drop { min-width: 0; overflow-wrap: anywhere; }
+      @media (max-width: 700px) {
+        .be-drop { grid-column: 1 / -1; min-height: 0; padding: .8rem 1rem; text-align: left; overflow-wrap: normal;
+          grid-template-columns: 2.4rem 1fr; place-items: center start; column-gap: .8rem; row-gap: 0; }
+        .be-drop svg { grid-row: span 2; margin: 0; width: 2rem; height: 2rem; }
+      }
+      .be-drop:hover, .be-drop:focus-visible { border-color: var(--link-c); color: var(--link-c); outline: none; }
       .be-fuss { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
       .be-falle { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
       .be-meldung { margin: .8rem 0 0; padding: .7rem 1rem; border-radius: 10px; font-weight: 600; }
@@ -128,7 +140,7 @@
       .be-st { font-size: .76rem; font-weight: 700; padding: .12rem .5rem; border-radius: 20px; white-space: nowrap; }
       .be-st.online { background: #3fae6c26; color: #2f8f55; } .be-st.entwurf { background: #e0a84f26; color: #9a6510; }
       :root[data-theme="dark"] .be-st.online { color: #6fd59a; } :root[data-theme="dark"] .be-st.entwurf { color: #f2c37a; }
-      @media (max-width: 700px) { .be-reihe { grid-template-columns: 1fr; } .be-bilder { grid-template-columns: 1fr 1fr; }
+      @media (max-width: 700px) { .be-reihe { grid-template-columns: 1fr; } .be-bilder { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
         .be-meine tr { display: grid; grid-template-columns: 1fr auto; border-bottom: 1px solid var(--line); padding: .5rem 0; }
         .be-meine td { border: 0; padding: .15rem .3rem; }
         .be-meine td.be-k { grid-column: 1 / -1; text-align: left !important; } }
