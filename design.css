@@ -431,8 +431,11 @@ footer a:hover { color: #fff; }
 .custom-tabelle td[class*="bg-"] a { color: inherit; }
 /* Mannschaftsspalten: Eintrag in der Farbe der Mannschaft (überschreibt die Typst-Farbe).
    Lieber die Typst-Farben? Diese zwei Zeilen löschen. */
-.custom-tabelle td.team-zelle { background: color-mix(in srgb, var(--team) 16%, var(--surface)); color: var(--text);
-  box-shadow: inset 4px 0 0 var(--team); }
+/* Terminkalender: Farbe nur, wo sie etwas bedeutet (Mannschaftsfarbe nur im Spaltenkopf) */
+.custom-tabelle td.team-zelle { background: var(--soft); color: var(--text); }
+.custom-tabelle td.verein-zelle { background: rgba(232, 185, 49, .22); color: var(--text); font-weight: 600; }
+.custom-tabelle td .abw { color: #d9730d; font-weight: 800; }
+[data-theme="dark"] .custom-tabelle td .abw { color: #ffb347; }
 
 /* ---------- Auf- und Abstieg in Ligatabellen ----------
    Kommt automatisch vom Schachbezirk (Tabellenrechner, auf_ab.py).

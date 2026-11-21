@@ -21,3 +21,7 @@
 
 
 #let LinkTypst = link("https://typst.app/")[Typst]
+
+// Terminkalender (vom Termine-Programm verwendet)
+#let VereinFarbe = rgb("#f6ecc9")                                      // Vereinstermine
+#let abw(x) = text(fill: rgb("#d9730d"), weight: "bold", x)           // Abweichung von Fr 19:30

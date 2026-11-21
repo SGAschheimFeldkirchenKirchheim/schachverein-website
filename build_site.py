@@ -341,11 +341,15 @@ def typst_inline_to_html(txt):
         url = htmllib.escape(link_m.group(1), quote=True)
         return f'<a href="{url}" target="_blank" rel="noopener">{label}</a>'
 
+    # Terminkalender: #abw[...] = Abweichung (orange), #strong[...] = Spielabend (fett)
+    txt = re.sub(r'#abw\[([^\]]*)\]', '\x01\\1\x02', txt)
+    txt = re.sub(r'^#strong\[(.*)\]$', '\x03\\1\x04', txt, flags=re.DOTALL)
     txt = re.sub(r'#strong\s*\(\s*"(.*?)"\s*\)', r'\1', txt, flags=re.DOTALL)
     txt = re.sub(r'#align\s*\([^)]*\)\[(.*)\]', r'\1', txt, flags=re.DOTALL)
     txt = re.sub(r'#(?:strong|underline|emph)\[(.*)\]', r'\1', txt, flags=re.DOTALL)
     txt = txt.replace('*', '').strip()
-    return htmllib.escape(txt, quote=False)
+    return (htmllib.escape(txt, quote=False).replace('\x01', '<b class="abw">').replace('\x02', '</b>')
+            .replace('\x03', '<strong>').replace('\x04', '</strong>'))
 
 
 def parse_typst_table(typst_content):
@@ -604,8 +608,8 @@ def render_table_inner_html(parsed, today=TODAY):
         tds, spalte = [], 0
         for c in r['cells']:
             klassen = []
-            if c['fill']:
-                klassen.append(f'bg-{c["fill"].lower()}')
+            if c['fill'] == 'VereinFarbe' and c['text'].strip():     # sonst keine Füllfarben (Variante A)
+                klassen.append('verein-zelle')
             if c['colspan'] == 1 and spalte < len(spalten_klasse) and spalten_klasse[spalte] and c['text'].strip():
                 klassen += ['team-zelle', spalten_klasse[spalte]]
             cls = f' class="{" ".join(klassen)}"' if klassen else ''
@@ -662,6 +666,7 @@ def extract_upcoming_events(parsed, today=TODAY, limit=NEXT_EVENTS_COUNT):
             else:
                 title = '<br>'.join(f"{t} ({', '.join(names)})" for t, names in groups.items())
 
+        when = re.sub(r'</?(?:b|strong)\b[^>]*>', '', when)          # Hervorhebungen nur im Kalender
         events.append({'date': r['date'], 'when': when, 'title': title, 'who': who})
         if len(events) >= limit:
             break
@@ -3292,7 +3297,7 @@ def spalten_termine(spalte, today=TODAY):
             continue
         title = r['cells'][idx]['text']
         if title and not re.search(r'spiel?frei', title, re.I):
-            events.append({'date': r['date'], 'when': r['cells'][0]['text'], 'title': title, 'who': ''})
+            events.append({'date': r['date'], 'when': re.sub(r'</?(?:b|strong)\b[^>]*>', '', r['cells'][0]['text']), 'title': title, 'who': ''})
     return events
 
 
