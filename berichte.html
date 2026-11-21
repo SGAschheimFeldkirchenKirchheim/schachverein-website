@@ -88,6 +88,9 @@
       .be-vorschau figure { margin: 1rem 0; } .be-vorschau img { max-width: 100%; border-radius: 6px; display: block; }
       .be-vorschau figcaption { font-size: .85rem; color: var(--muted); margin-top: .3rem; }
       .be-hilfe { font-size: .82rem; color: var(--muted); margin: .4rem 0 0; }
+      .be-seitenkopf { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+      .be-intro { color: var(--muted); max-width: 46rem; }
+      .einreichen.offen { padding: 1.2rem 1.4rem; }
       .be-hilfe code { background: var(--soft); padding: 0 .3rem; border-radius: 4px; }
       /* Partien im Editor */
       .be-partien h4 { margin: 1rem 0 .4rem; font-size: .95rem; }
@@ -184,7 +187,7 @@
       <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="geschichte.html#mannschaften">Historie</a></div></div>
       <a href="jugend.html">Jugend</a>
       <a href="termine.html">Termine</a>
-      <a href="berichte.html" aria-current="page">Berichte</a>
+      <div class="nav-gruppe offen"><a href="berichte.html" aria-current="page">Berichte</a><button type="button" class="nav-auf" aria-expanded="true" aria-label="Berichte aufklappen"></button><div class="nav-unter"><a href="bericht-schreiben.html">Bericht schreiben</a></div></div>
       <div class="nav-gruppe"><a href="turniere.html">Turniere</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Turniere aufklappen"></button><div class="nav-unter"><a href="oberlandquartett.html">Oberlandquartett</a><a href="blitzjahreswertung.html">Blitzjahreswertung</a><a href="vereinsintern.html">Hall of Fame</a><a href="ausschreibungen.html">Ausschreibungen</a><a href="turnierkalender.html">Turnierkalender</a><a href="turnierorte.html">AFK on Tour</a></div></div>
       <a href="faq.html">FAQ</a>
       <a href="kontakt.html">Kontakt</a>
@@ -192,7 +195,12 @@
   </header>
 
   <main id="main" class="container">
-    <h1>Aktuelle Berichte &amp; News</h1><h2 class='jahr-titel'>2026</h2><div class='grid' style='grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));'>
+    <script>
+  (function () {
+    var q = location.search;
+    if (location.hash === "#einreichen" || /[?&]bearbeiten=/.test(q)) location.replace("bericht-schreiben.html" + q);
+  })();
+</script><div class="be-seitenkopf"><h1>Aktuelle Berichte &amp; News</h1><a class="btn be-schreiben-knopf" href="bericht-schreiben.html">Bericht schreiben</a></div><h2 class='jahr-titel'>2026</h2><div class='grid' style='grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));'>
         <div class="card news-card">
           <img class="news-thumb" src="berichte/bilder/2026-kooperationsturnier-ebe/siegerfoto.jpg" alt="" loading="lazy">
           <h3>Schnellschach-Vereinsmeisterschaft 2026</h3>
@@ -1631,14 +1639,6 @@
           <a href="berichte/2015-archiv-schach-gemeinschaft-afk-gewinnt-freundschaftsturni.html" class="btn">Bericht lesen →</a>
         </div>
         </div></details></details>
-      <details class="card einreichen" id="einreichen">
-        <summary><span><strong>Selbst etwas erlebt?</strong><br><span class="klein">Turnier gespielt, Mannschaftskampf erlebt, etwas Lustiges passiert? Schreib es auf – mit Fotos. Wir schauen kurz drüber und stellen es online.</span></span>
-          <span class="btn">Bericht schreiben</span></summary>
-        <div class="be-app" id="be-app" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-max="20000" data-kat="[[&quot;turnier&quot;, &quot;Turnier&quot;], [&quot;jugend&quot;, &quot;Jugend&quot;], [&quot;senioren&quot;, &quot;Senioren&quot;], [&quot;afk 1&quot;, &quot;AFK 1&quot;], [&quot;afk 2&quot;, &quot;AFK 2&quot;], [&quot;afk 3&quot;, &quot;AFK 3&quot;], [&quot;afk 4&quot;, &quot;AFK 4&quot;], [&quot;afk 5&quot;, &quot;AFK 5&quot;], [&quot;afk 6&quot;, &quot;AFK 6&quot;], [&quot;verein&quot;, &quot;Verein&quot;]]">
-          <noscript><p>Für den Editor wird JavaScript benötigt.</p></noscript>
-        </div>
-      </details>
-      <script src="bericht.js" defer></script>
   </main>
 
   <footer>
