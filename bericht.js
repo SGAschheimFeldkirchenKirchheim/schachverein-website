@@ -4,7 +4,7 @@
   "use strict";
   var APP = document.getElementById("be-app");
   if (!APP) return;
-  var DETAILS = document.getElementById("einreichen");
+  var DETAILS = document.getElementById("einreichen");          // Rahmen um den Editor
   var SKRIPT = APP.getAttribute("data-skript"), MAX = +APP.getAttribute("data-max") || 20000;
   var KATEGORIEN = JSON.parse(APP.getAttribute("data-kat") || "[]");
   var SPEICHER = "afk-bericht-entwurf2", MAX_BILDER = 12, BILD_PX = 1600;
@@ -558,7 +558,7 @@
   // ---------- Bearbeiten ----------
   function bearbeiten(id) {
     if (!ICH) return meldung("Zum Bearbeiten bitte oben rechts anmelden.", "fehler");
-    DETAILS.open = true;
+    if ("open" in DETAILS) DETAILS.open = true;
     meldung("Bericht wird geladen …", "");
     api("b_laden", { id: id }).then(function (a) {
       if (!a.ok) return meldung(a.fehler, "fehler");
@@ -607,7 +607,7 @@
     formular(); neuAnfangen(false); meineLaden();
     var p = new URLSearchParams(location.search).get("bearbeiten");
     if (p) bearbeiten(p);
-    else if (location.hash === "#einreichen") DETAILS.open = true;
+    else if (location.hash === "#einreichen" && "open" in DETAILS) DETAILS.open = true;
   }
   if (!token()) start(null);
   else if (window.AFK_KONTO) window.AFK_KONTO.ich().then(start, function () { start(null); });

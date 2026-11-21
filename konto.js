@@ -456,7 +456,7 @@
       var B = BERICHTE, bOffen = B.offen || [], bOnline = B.online || [];
       function berichtZeile(e, offenListe) {
         var autor = e.autor ? esc(e.autor) + (e.konto ? ' <span class="kt-verifiziert" style="margin-left:.2rem">verifiziert</span>' : e.gast ? ' <span class="kt-tag mitglied">Gast</span>' : "") : "";
-        var bearb = '<a class="kt-btn leise" href="' + PFAD + "berichte.html?bearbeiten=" + encodeURIComponent(e.id) + '#einreichen">' + (offenListe ? "Ansehen" : "Bearbeiten") + "</a>";
+        var bearb = '<a class="kt-btn leise" href="' + PFAD + "bericht-schreiben.html?bearbeiten=" + encodeURIComponent(e.id) + '">' + (offenListe ? "Ansehen" : "Bearbeiten") + "</a>";
         if (offenListe) {
           return '<div class="kt-karte kt-antrag" data-bid="' + esc(e.id) + '"><div><b>' + esc(e.titel) + '</b><br><span class="kt-grau">' + (autor ? "von " + autor + " · " : "") + datumKurz(e.datum) + "</span></div>" +
             (e.gast && e.autor ? '<div><label class="kt-check" style="margin:0"><input type="checkbox" name="autorOk"> <span>Autor ist wirklich <b>' + esc(e.autor) + "</b> (Profil verlinken)</span></label></div>"
@@ -465,7 +465,7 @@
             '<button type="button" class="kt-btn rot" data-b="loeschen">Löschen</button></div></div>';
         }
         return '<tr data-bid="' + esc(e.id) + '"><td><b>' + esc(e.titel) + '</b> <span class="kt-grau">· ' + (autor ? autor + " · " : "") + datumKurz(e.datum) + "</span></td>" +
-          '<td class="kt-akt"><a class="kt-mini" href="' + PFAD + "berichte.html?bearbeiten=" + encodeURIComponent(e.id) + '#einreichen">Bearbeiten</a>' +
+          '<td class="kt-akt"><a class="kt-mini" href="' + PFAD + "bericht-schreiben.html?bearbeiten=" + encodeURIComponent(e.id) + '">Bearbeiten</a>' +
           '<button type="button" class="kt-mini rot" data-b="zurueckziehen">Zurückziehen</button></td></tr>';
       }
       function r(name, titel, zahl) {

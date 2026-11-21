@@ -134,6 +134,9 @@ NAV = [
 # Reiter -> Liste (Seite, Text). Reiter ohne Eintrag haben kein Untermenü.
 # "mannschaften.html" wird beim Build automatisch mit den aktuellen Teams gefüllt (siehe MAIN).
 SUBNAV = {
+    "berichte.html": [
+        (einreichen.SEITE, "Bericht schreiben"),
+    ],
     "ueber-uns.html": [
         ("geschichte.html", "Geschichte"),
         ("dokumente/satzung.pdf", "Satzung (PDF)"),
@@ -150,6 +153,7 @@ SUBNAV = {
 
 # Unterseiten, bei denen im Menü der übergeordnete Reiter markiert wird
 ACTIVE_PARENT = {
+    einreichen.SEITE: "berichte.html",
     "ausschreibungen.html": "turniere.html",
     turnierkalender.SEITE: "turniere.html",
     turnierorte.SEITE: "turniere.html",
@@ -2460,7 +2464,12 @@ def build_berichte():
             parts.append(f"<details class='vergangene-jahre'><summary>Vergangene Jahre</summary>{inner}</details>")
 
     body = "\n".join(parts) if parts else "<p>Aktuell sind noch keine Berichte vorhanden.</p>"
-    overview_content = "<h1>Aktuelle Berichte &amp; News</h1>" + body + einreichen.block()
+    overview_content = (einreichen.WEITERLEITUNG +
+                        f'<div class="be-seitenkopf"><h1>Aktuelle Berichte &amp; News</h1>{einreichen.knopf()}</div>' + body)
+    if einreichen.SKRIPT_URL:
+        render_page("Bericht schreiben", einreichen.seite(), einreichen.SEITE,
+                    extra_styles="<style>" + einreichen.CSS + "</style>",
+                    description="Bericht für die Website der SG AFK schreiben – mit Fotos, Partien und Tabellen.")
     render_page("Berichte & News", overview_content, "berichte.html",
                 extra_styles="<style>" + NEWS_CSS + einreichen.CSS + "</style>")
 

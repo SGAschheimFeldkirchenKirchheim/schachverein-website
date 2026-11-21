@@ -55,6 +55,9 @@ CSS = """
       .be-vorschau figure { margin: 1rem 0; } .be-vorschau img { max-width: 100%; border-radius: 6px; display: block; }
       .be-vorschau figcaption { font-size: .85rem; color: var(--muted); margin-top: .3rem; }
       .be-hilfe { font-size: .82rem; color: var(--muted); margin: .4rem 0 0; }
+      .be-seitenkopf { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+      .be-intro { color: var(--muted); max-width: 46rem; }
+      .einreichen.offen { padding: 1.2rem 1.4rem; }
       .be-hilfe code { background: var(--soft); padding: 0 .3rem; border-radius: 4px; }
       /* Partien im Editor */
       .be-partien h4 { margin: 1rem 0 .4rem; font-size: .95rem; }
@@ -115,17 +118,42 @@ CSS = """
 """
 
 
+SEITE = "bericht-schreiben.html"
+
+
 def block(css_path=""):
-    """Editor-Block unten auf der Berichte-Übersicht (leer, wenn SKRIPT_URL fehlt)."""
+    """Der Editor (eigene Seite bericht-schreiben.html). Leer, wenn SKRIPT_URL fehlt."""
     if not SKRIPT_URL:
         return ""
     kat = html.escape(json.dumps(KATEGORIEN, ensure_ascii=False), quote=True)
     return f"""
-      <details class="card einreichen" id="einreichen">
-        <summary><span><strong>Selbst etwas erlebt?</strong><br><span class="klein">{html.escape(INTRO)}</span></span>
-          <span class="btn">Bericht schreiben</span></summary>
+      <div class="card einreichen offen" id="einreichen">
         <div class="be-app" id="be-app" data-skript="{html.escape(SKRIPT_URL)}" data-max="{MAX_ZEICHEN}" data-kat="{kat}">
           <noscript><p>Für den Editor wird JavaScript benötigt.</p></noscript>
         </div>
-      </details>
+      </div>
       <script src="{css_path}bericht.js" defer></script>"""
+
+
+def seite():
+    """Inhalt von bericht-schreiben.html."""
+    return f"""
+      <div class="be-seitenkopf"><h1>Bericht schreiben</h1><a class="klein" href="berichte.html">← Alle Berichte</a></div>
+      <p class="be-intro">{html.escape(INTRO)}</p>
+      {block()}"""
+
+
+def knopf():
+    """Knopf oben auf der Berichte-Übersicht."""
+    if not SKRIPT_URL:
+        return ""
+    return f'<a class="btn be-schreiben-knopf" href="{SEITE}">Bericht schreiben</a>'
+
+
+# Alte Links (berichte.html#einreichen, ?bearbeiten=...) auf die neue Seite umleiten
+WEITERLEITUNG = f"""<script>
+  (function () {{
+    var q = location.search;
+    if (location.hash === "#einreichen" || /[?&]bearbeiten=/.test(q)) location.replace("{SEITE}" + q);
+  }})();
+</script>"""
