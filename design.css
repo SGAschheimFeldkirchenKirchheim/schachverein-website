@@ -670,9 +670,9 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
 .pz-rumpf { display: grid; grid-template-columns: minmax(0, 3fr) minmax(13rem, 2fr); gap: 1.2rem; align-items: start; }
 .pz-brettrahmen { position: relative; }
 .pz-brett { width: 100%; aspect-ratio: 1; }
-.pz-brett coords { font-size: 11px; font-weight: 700; opacity: 1; }
-.pz-brett coords.ranks coord:nth-child(odd), .pz-brett coords.files coord:nth-child(even) { color: #e9eef6; }
-.pz-brett coords.ranks coord:nth-child(even), .pz-brett coords.files coord:nth-child(odd) { color: #5f7696; }
+.pz .pz-brett coords { font-size: 11px; font-weight: 700; opacity: 1; }
+.pz .pz-brett coords.ranks coord:nth-child(odd), .pz-brett coords.files coord:nth-child(even) { color: #e9eef6; }
+.pz .pz-brett coords.ranks coord:nth-child(even), .pz-brett coords.files coord:nth-child(odd) { color: #5f7696; }
 /* Ergebnis-Auflösung nach dem letzten Zug */
 .pz-auf { position: absolute; inset: 0; z-index: 5; display: grid; place-content: center; text-align: center; gap: .2rem;
   background: rgba(10, 18, 32, .55); color: #fff; cursor: pointer; border-radius: 2px; }
@@ -754,7 +754,14 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
   .ps-stand { font-size: 1.15rem; }
 }
 /* Koordinaten in die Ecke der Randfelder (ragt nicht mehr übers Brett) */
-.pz-brett coords.files { left: 0; bottom: 0; height: auto; }
-.pz-brett coords.files coord { text-align: right; padding: 0 3px 1px 0; }
-.pz-brett coords.ranks { left: 2px; top: 0; height: 100%; }
-.pz-brett coords.ranks coord { transform: none; padding-top: 1px; }
+.pz .pz-brett coords.files { left: 0; bottom: 0; height: auto; }
+.pz .pz-brett coords.files coord { text-align: right; padding: 0 3px 1px 0; }
+.pz .pz-brett coords.ranks { left: 2px; top: 0; height: 100%; }
+.pz .pz-brett coords.ranks coord { transform: none; padding-top: 1px; }
+
+/* Nur eine Stellung (FEN) */
+.pz-diagramm { max-width: 30rem; }
+.pz-diag-fuss { display: flex; justify-content: space-between; align-items: center; gap: .5rem 1rem; flex-wrap: wrap; margin-top: .6rem; font-size: .92rem; }
+.pz-diag-fuss .pz-f { margin-right: .4rem; vertical-align: -1px; }
+.pz-diag-fuss a { font-size: .85rem; margin-right: .6rem; }
+.pz-diag-fuss button { font: inherit; padding: .3rem .7rem; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--text); cursor: pointer; }

@@ -258,6 +258,11 @@
           return;
         }
         var info = P.lesen(p.pgn);
+        if (info && !info.zuege.length) {
+          var nm = info.kopf.White && info.kopf.White !== "?" ? partieText(p, info) + " · " : "";
+          el.querySelector(".be-p-text").innerHTML = "<b>Stellung (Diagramm)</b> <span class=\"klein\">" + esc(nm + (info.startWeiss ? "Weiß" : "Schwarz") + " am Zug") + "</span>";
+          return;
+        }
         el.querySelector(".be-p-text").innerHTML = "<b>" + esc(partieText(p, info)) + '</b> <span class="klein">' + esc(startText(p, info)) + "</span>";
       });
     });
@@ -299,7 +304,7 @@
     var alt = index === null ? null : Z.partien[index];
     var nummer = index === null ? Z.partien.length + 1 : index + 1;
     var d = dialog('<h3>' + (alt ? "Partie " + nummer + " bearbeiten" : "Partie einfügen") + '</h3>' +
-      '<label>PGN hier einfügen (aus Lichess, ChessBase, chess.com …)<textarea class="be-pgn" spellcheck="false" placeholder="[White &quot;…&quot;]&#10;[Black &quot;…&quot;]&#10;&#10;1. e4 e5 2. Sf3 …"></textarea></label>' +
+      '<label>PGN oder Stellung (FEN) hier einfügen – aus Lichess, ChessBase, chess.com …<textarea class="be-pgn" spellcheck="false" placeholder="[White &quot;…&quot;]&#10;[Black &quot;…&quot;]&#10;&#10;1. e4 e5 2. Sf3 …"></textarea></label>' +
       '<p class="be-dlg-zeile"><label class="be-datei">oder .pgn-Datei wählen<input type="file" accept=".pgn,text/plain,application/x-chess-pgn" hidden></label></p>' +
       '<div class="be-auswahl" hidden></div>' +
       '<label class="be-check be-sammelwahl" hidden><input type="checkbox" class="be-sammlung" checked> <span><b>Als Sammlung einfügen</b> – eine Tabelle mit allen Partien, darunter ein Brett (ideal für Mannschaftskämpfe). Sonst wird jede Partie ein eigenes Brett.</span></label>' +
@@ -348,17 +353,22 @@
           return /^\s*\[/.test(p) ? zeile + "\n" + p : zeile + "\n\n" + p;
         }
         var p = setze(setze(setze(pgn, "Result", S.e), "Black", S.s || "?"), "White", S.w || "?");
-        return p.replace(/(1-0|0-1|1\/2-1\/2|\*)\s*$/, "").replace(/\s+$/, "") + " " + S.e;
+        var rumpf = p.replace(/(1-0|0-1|1\/2-1\/2|\*)\s*$/, "").replace(/\s+$/, "");
+        return rumpf + (/\]$/.test(rumpf) ? "\n\n" : " ") + S.e;           // ohne Züge: Leerzeile nach dem Kopf behalten
       }
       function knoepfe(sel, attr, wert) { [].forEach.call(el.querySelectorAll(sel + " button"), function (b) { b.classList.toggle("an", b.getAttribute(attr) === wert); }); }
       function zeichnen() {
         var gewaehlt = S.spiele.filter(function (x, i) { return S.wahl[i]; });
         var info = S.info = gewaehlt.length ? P.lesen(gewaehlt[0]) : null;
-        var ok = !!(info && info.zuege.length);
+        var ok = !!(info && (info.zuege.length || info.kopf.FEN));
+        var diagramm = ok && !info.zuege.length;
         var e = el.querySelector(".be-erkannt");
         if (!ta.value.trim()) e.textContent = "";
         else if (!S.spiele.length || !ok) { e.textContent = "Keine Züge erkannt – ist das eine PGN?"; e.className = "be-erkannt klein fehler"; }
-        else {
+        else if (diagramm && gewaehlt.length === 1) {
+          e.className = "be-erkannt klein gut";
+          e.textContent = "Erkannt: Stellung ohne Züge – wird als Diagramm gezeigt (" + (info.startWeiss ? "Weiß" : "Schwarz") + " am Zug).";
+        } else {
           e.className = "be-erkannt klein gut";
           e.textContent = gewaehlt.length > 1 ? gewaehlt.length + " Partien ausgewählt – sie werden einzeln eingefügt, die Einstellungen gelten für alle."
             : "Erkannt: " + (info.kopf.White || info.kopf.Black ? partieText(null, info) + ", " : "") + Math.ceil(info.zuege.length / 2) + " Züge" +
@@ -373,6 +383,11 @@
           if (x.previousElementSibling && x.previousElementSibling.tagName === "LABEL" && sel !== ".be-spieler") x.previousElementSibling.hidden = alsSammlung;
         });
         if (alsSammlung) el.querySelector(".be-ab").hidden = true;
+        if (diagramm && !alsSammlung) {               // Diagramm: kein Startzug, kein Ergebnis-Schalter
+          el.querySelector(".be-start").hidden = true; el.querySelector(".be-start").previousElementSibling.hidden = true;
+          el.querySelector(".be-ab").hidden = true;
+        }
+        el.querySelector(".be-spannung").closest("label").hidden = !!diagramm && !alsSammlung;
         el.querySelector(".be-optionen").hidden = !ok;
         el.querySelector(".be-ok").disabled = !ok;
         knoepfe(".be-start", "data-s", S.start); knoepfe(".be-farbe", "data-f", S.farbe); knoepfe(".be-sicht", "data-v", S.sicht);
@@ -395,7 +410,7 @@
         else if (namensgleich(inf.kopf.White, ICH.ich.name)) S.sicht = "w";
       }
       function einlesen(neuGelesen) {
-        S.spiele = P.partien(ta.value).filter(function (x) { var i = P.lesen(x); return i && i.zuege.length; });
+        S.spiele = P.partien(ta.value).filter(function (x) { var i = P.lesen(x); return i && (i.zuege.length || i.kopf.FEN); });
         if (!S.spiele.length && ta.value.trim()) S.spiele = [ta.value.trim()];
         S.wahl = S.spiele.map(function (x, i) { return i === 0 || !!(alt && alt.sammlung) || (neuGelesen && S.spiele.length <= 12); });
         var aw = el.querySelector(".be-auswahl");
@@ -409,7 +424,11 @@
         [].forEach.call(aw.querySelectorAll("[data-w]"), function (c) {
           c.addEventListener("change", function () { S.wahl[+c.getAttribute("data-w")] = c.checked; seiteRaten(); namenFuellen(); zeichnen(); });
         });
-        if (neuGelesen) seiteRaten();
+        if (neuGelesen) {
+          seiteRaten();
+          var erstes = S.spiele[0] && P.lesen(S.spiele[0]);
+          if (erstes && !erstes.zuege.length && erstes.kopf.FEN) S.sicht = erstes.startWeiss ? "w" : "b";   // Diagramm: wer am Zug ist, unten
+        }
         namenFuellen();
         zeichnen();
       }
@@ -556,7 +575,7 @@
   }
   function formular() {
     var hinweis = ICH ? (darfDirekt()
-      ? '<div class="be-hinweis gruen">Angemeldet als <b>' + esc(ICH.ich.benutzer) + "</b> · Du darfst direkt veröffentlichen – dein Bericht ist nach dem nächsten Build online.</div>"
+      ? '<div class="be-hinweis gruen">Angemeldet als <b>' + esc(ICH.ich.benutzer) + "</b> · Du darfst direkt veröffentlichen – dein Bericht ist ein paar Minuten nach dem Absenden online.</div>"
       : '<div class="be-hinweis">Angemeldet als <b>' + esc(ICH.ich.benutzer) + "</b> · Dein Bericht wird von einem Admin kurz angeschaut und dann freigegeben.</div>")
       : '<div class="be-hinweis">Dein Bericht wird von einem Admin kurz angeschaut und dann freigegeben.</div>';
     APP.innerHTML = '<div class="be-kopf"></div>' + hinweis +
@@ -637,8 +656,8 @@
       var warBearbeiten = !!Z.id;
       try { if (!warBearbeiten) localStorage.removeItem(SPEICHER); } catch (e) {}
       neuAnfangen(true);
-      meldung(warBearbeiten ? "Gespeichert." + (a.status === "online" ? " Die Änderung ist nach dem nächsten Build online." : "")
-        : a.status === "online" ? "Veröffentlicht! Dein Bericht ist nach dem nächsten Build online (spätestens morgen früh)."
+      meldung(warBearbeiten ? "Gespeichert." + (a.status === "online" ? " Die Änderung ist in wenigen Minuten online." : "")
+        : a.status === "online" ? "Veröffentlicht! Dein Bericht ist in wenigen Minuten online."
         : "Danke! Dein Bericht ist angekommen und erscheint, sobald ein Admin ihn freigegeben hat.", "ok");
       meineLaden();
     });

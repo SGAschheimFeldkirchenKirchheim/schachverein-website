@@ -79,9 +79,19 @@ function baum(pgn, startFen) {
 }
 
 // ---------- Viewer ----------
+// Nur eine Stellung (FEN) eingefügt -> kleine PGN daraus machen
+const FEN_RE = /^(?:[rnbqkpRNBQKP1-8]+\/){7}[rnbqkpRNBQKP1-8]+(?:\s+[wb](?:\s+(?:-|[KQkq]{1,4})(?:\s+(?:-|[a-h][36])(?:\s+\d+\s+\d+)?)?)?)?$/;
+export function alsPgn(text) {
+  const t = String(text || "").trim();
+  if (!FEN_RE.test(t)) return text;
+  const teile = t.split(/\s+/);
+  const fen = [teile[0], teile[1] || "w", teile[2] || "-", teile[3] || "-", teile[4] || "0", teile[5] || "1"].join(" ");
+  return `[SetUp "1"]\n[FEN "${fen}"]\n\n*`;
+}
+
 // Mehrere Partien in einer PGN-Datei trennen
 export function partien(text) {
-  const t = String(text || "").replace(/\r\n?/g, "\n").replace(/^\uFEFF/, "").trim();
+  const t = alsPgn(String(text || "").replace(/\r\n?/g, "\n").replace(/^\uFEFF/, "").trim());
   if (!t) return [];
   const teile = t.split(/\n\s*\n(?=\s*\[)/);
   const aus = [];
@@ -115,6 +125,8 @@ export function viewer(el) {
   const kopf = kopfDaten(cfg.pgn || "");
   const startFen = kopf.FEN || new Chess().fen();
   const { haupt, ergebnis, vorab } = baum(cfg.pgn || "", startFen);
+  const diagramm = haupt.length === 0;              // nur eine Stellung (FEN) ohne Züge
+  const weissZieht = startFen.split(" ")[1] !== "b";
   const erg = ERG[kopf.Result || ergebnis] ?? (kopf.Result || ergebnis || "");
   const spannung = cfg.ergebnis === "ende" && !!erg;
   let verraten = !spannung;
@@ -127,6 +139,26 @@ export function viewer(el) {
   const name = (n, elo) => esc(n || "?") + (elo && elo !== "?" ? ` <span class="pz-elo">${esc(elo)}</span>` : "");
   const info = [kopf.Event, kopf.Round && kopf.Round !== "?" ? "Runde " + kopf.Round : "", kopf.Date && !/\?/.test(kopf.Date) ? kopf.Date.split(".").reverse().join(".") : ""]
     .filter((x) => x && x !== "?").join(" · ");
+  const mitNamen = offen(kopf.White) || offen(kopf.Black);
+  el.classList.toggle("pz-diagramm", diagramm);
+  if (diagramm) {
+    el.innerHTML = `
+    ${mitNamen || info ? `<div class="pz-kopf">${mitNamen ? `<div class="pz-namen"><span class="pz-sp"><span class="pz-f w"></span>${name(kopf.White, kopf.WhiteElo)}</span>
+      <span class="pz-gegen">–</span><span class="pz-sp"><span class="pz-f b"></span>${name(kopf.Black, kopf.BlackElo)}</span></div>` : ""}${info ? `<div class="pz-info">${esc(info)}</div>` : ""}</div>` : ""}
+    <div class="pz-brettrahmen"><div class="pz-brett"></div></div>
+    <div class="pz-diag-fuss"><span><span class="pz-f ${weissZieht ? "w" : "b"}"></span>${weissZieht ? "Weiß" : "Schwarz"} am Zug</span>
+      <span><a class="pz-li" target="_blank" rel="noopener">Auf Lichess analysieren ↗</a>
+      <button type="button" data-a="drehen" title="Brett drehen" aria-label="Brett drehen">⇅</button></span></div>`;
+    const brett = el.querySelector(".pz-brett");
+    const cg = Chessground(brett, { viewOnly: true, coordinates: true, fen: startFen, orientation: unten,
+      turnColor: weissZieht ? "white" : "black", check: (() => { try { return new Chess(startFen).inCheck(); } catch (e) { return false; } })() });
+    el.querySelector(".pz-li").href = "https://lichess.org/analysis/standard/" + startFen.replace(/ /g, "_");
+    el.querySelector("[data-a=drehen]").addEventListener("click", () => { unten = unten === "white" ? "black" : "white"; cg.set({ orientation: unten }); });
+    const ro = new ResizeObserver(() => cg.redrawAll());
+    ro.observe(brett);
+    el.__pz = () => { ro.disconnect(); cg.destroy(); };
+    return;
+  }
   el.innerHTML = `
     <div class="pz-kopf"><div class="pz-namen"><span class="pz-sp"><span class="pz-f w"></span>${name(kopf.White, kopf.WhiteElo)}</span>
       <span class="pz-gegen">–</span><span class="pz-sp"><span class="pz-f b"></span>${name(kopf.Black, kopf.BlackElo)}</span></div>
@@ -151,7 +183,7 @@ export function viewer(el) {
   dl.download = ((kopf.White || "Weiss") + " - " + (kopf.Black || "Schwarz")).replace(/[\\/:*?"<>|]/g, "") + ".pgn";
   el.querySelector(".pz-li").href = "https://lichess.org/analysis/pgn/" +
     encodeURIComponent(haupt.map((z, i) => (z.farbe === "w" ? z.nr + ". " : i === 0 ? z.nr + "... " : "") + z.san).join(" "));
-  if (kopf.FEN) el.querySelector(".pz-li").hidden = true;
+  if (kopf.FEN) el.querySelector(".pz-li").href = "https://lichess.org/analysis/standard/" + startFen.replace(/ /g, "_");
 
   // Zugliste: Hauptvariante fett, Varianten in Klammern darunter
   const alle = [];
@@ -241,7 +273,7 @@ const EIGEN = /afk|aschheim|feldkirchen|kirchheim/i;          // unser Verein (f
 export function sammlung(box) {
   let cfg = {};
   try { cfg = JSON.parse(box.getAttribute("data-sammlung")); } catch (e) { return; }
-  const pgns = partien(cfg.pgn).filter((p) => { const i = lesen(p); return i && i.zuege.length; });
+  const pgns = partien(cfg.pgn).filter((p) => { const i = lesen(p); return i && (i.zuege.length || i.kopf.FEN); });
   if (!pgns.length) return;
   const infos = pgns.map(lesen), spannung = cfg.ergebnis === "ende";
   const teams = new Set();
