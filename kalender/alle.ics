@@ -44,6 +44,15 @@ URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
  ermine.html
 END:VEVENT
 BEGIN:VEVENT
+UID:2026-11-27-19-mmm-runde-3-afk-2-afk-3-afk-4-afk-5-alle@sg-afk
+DTSTAMP:20261127T000000Z
+DTSTART:20261127T183000Z
+DTEND:20261127T213000Z
+SUMMARY:MMM Runde 3 (AFK 2\, AFK 3\, AFK 4\, AFK 5)
+URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
+ ermine.html
+END:VEVENT
+BEGIN:VEVENT
 UID:2026-11-27-19-mmm-runde-2-afk-6-alle@sg-afk
 DTSTAMP:20261127T000000Z
 DTSTART:20261127T183000Z
