@@ -709,10 +709,26 @@
 
   // ---------- Start ----------
   var gestartet = false;
+  // Warnung für Admins/Schreiber, wenn das Apps Script nicht zum Stand der Website passt
+  function versionPruefen() {
+    var soll = APP.getAttribute("data-version");
+    if (!soll || !ICH || !(ICH.ich.darf.verwaltung || ICH.ich.darf.berichte)) return;
+    api("b_version").then(function (a) {
+      var ist = a && a.ok ? a.version : "";
+      if (ist === soll) return;
+      var text = !ist || ist < soll
+        ? "<b>Das Apps Script ist nicht auf dem neuesten Stand</b> (läuft: " + esc(ist || "alt") + ", nötig: " + esc(soll) + "). " +
+          "Neue Funktionen wie Partien werden sonst nicht gespeichert. Im Apps Script Berichte.gs durch die neue Datei ersetzen, speichern und " +
+          "<b>Bereitstellen → Bereitstellungen verwalten → Stift → „Neue Version“</b> wählen."
+        : "<b>Die Website ist älter als das Apps Script</b> (Website: " + esc(soll) + ", Apps Script: " + esc(ist) + "). " +
+          "Bitte die neuen Website-Dateien einspielen und „Alles aktualisieren“ laufen lassen.";
+      APP.insertAdjacentHTML("afterbegin", '<div class="be-hinweis rot" role="alert">' + text + "</div>");
+    });
+  }
   function start(a) {
     if (gestartet) return; gestartet = true;
     ICH = a && a.ich ? a : null;
-    formular(); neuAnfangen(false); meineLaden();
+    formular(); neuAnfangen(false); meineLaden(); versionPruefen();
     var p = new URLSearchParams(location.search).get("bearbeiten");
     if (p) bearbeiten(p);
     else if (location.hash === "#einreichen" && "open" in DETAILS) DETAILS.open = true;

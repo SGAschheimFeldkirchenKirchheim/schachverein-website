@@ -118,6 +118,15 @@ export function lesen(pgn) {
     kommentare: kom, varianten: vars, startWeiss: startFen.split(" ")[1] !== "b", startNr: +startFen.split(" ")[5] || 1 };
 }
 
+let AKTIV = null;
+document.addEventListener("keydown", (e) => {
+  if (!AKTIV || !document.contains(AKTIV) || !AKTIV.__taste || e.ctrlKey || e.altKey || e.metaKey) return;
+  const t = e.target, tag = t && t.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (t && t.isContentEditable)) return;   // beim Tippen nicht stören
+  if (t && t.closest && t.closest(".ps-tab") && (e.key === "ArrowUp" || e.key === "ArrowDown")) return;
+  AKTIV.__taste(e);
+});
+
 export function viewer(el) {
   if (el.__pz) el.__pz();                          // schon gebaut (Editor-Vorschau): alten Beobachter lösen
   let cfg = {};
@@ -253,10 +262,13 @@ export function viewer(el) {
     const z = e.target.closest("[data-z]"); if (z) zeige(alle[+z.dataset.z]);
   });
   el.tabIndex = 0;
-  el.addEventListener("keydown", (e) => {
+  // Pfeiltasten: steuern das Brett, mit dem man zuletzt etwas gemacht hat (oder das einzige auf der Seite)
+  el.__taste = (e) => {
     const k = { ArrowLeft: "zurueck", ArrowRight: "vor", Home: "anfang", End: "ende", f: "drehen" }[e.key];
     if (k) { e.preventDefault(); aktion[k](); }
-  });
+  };
+  ["pointerdown", "focusin", "mouseenter"].forEach((n) => el.addEventListener(n, () => { AKTIV = el; }));
+  if (!AKTIV || !document.contains(AKTIV) || el.closest(".be-dlg")) AKTIV = el;
   let x0 = null;
   brett.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
   brett.addEventListener("touchend", (e) => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) aktion[dx < 0 ? "vor" : "zurueck"](); });

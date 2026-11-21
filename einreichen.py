@@ -29,6 +29,8 @@ CSS = """
       .einreichen[open] > summary .btn { opacity: 0.6; }
       .be-app { padding: 0 1.2rem 1.3rem; }
       .be-hinweis { padding: .7rem 1rem; border-radius: 10px; margin: 0 0 1rem; font-size: .95rem; background: var(--soft); color: var(--soft-text); }
+      .be-hinweis.rot { border: 1px solid rgba(208, 84, 74, .55); background: rgba(208, 84, 74, .12); color: #e0796f; }
+      :root:not([data-theme="dark"]) .be-hinweis.rot { color: #b23b30; }
       .be-hinweis.gruen { background: #3fae6c22; border: 1px solid #3fae6c66; color: #2f8f55; }
       :root[data-theme="dark"] .be-hinweis.gruen { color: #6fd59a; }
       .be-reihe { display: grid; grid-template-columns: 2fr 1.4fr 1fr; gap: .8rem; margin-bottom: .8rem; }
@@ -83,6 +85,7 @@ CSS = """
       .be-wahl { font-weight: 400 !important; margin: .2rem 0 !important; display: flex !important; gap: .4rem; align-items: center; }
       .be-spieler { display: grid; grid-template-columns: 1fr 1fr 9rem; gap: .6rem; }
       .be-spieler input, .be-spieler select { width: 100%; font: inherit; font-weight: 400; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .45rem .6rem; box-sizing: border-box; }
+      .be-dlg .be-check[hidden] { display: none !important; }
       .be-dlg .be-check { display: flex !important; gap: .5rem; align-items: flex-start; font-weight: 400 !important; margin: .7rem 0 .4rem !important; }
       .be-check input { margin-top: .25rem; }
       @media (max-width: 600px) { .be-spieler { grid-template-columns: 1fr 1fr; } .be-spieler label:last-child { grid-column: 1 / -1; } }
@@ -137,6 +140,10 @@ CSS = """
 
 SEITE = "bericht-schreiben.html"
 
+# Muss zu B_VERSION in AppsScript/Berichte.gs passen. Sonst sehen Admins im Editor eine Warnung,
+# dass das Apps Script nicht auf dem neuesten Stand ist (Datei ersetzen + "Neue Version" bereitstellen).
+APPS_SCRIPT_VERSION = "2026-11-21.1"
+
 
 def block(css_path=""):
     """Der Editor (eigene Seite bericht-schreiben.html). Leer, wenn SKRIPT_URL fehlt."""
@@ -145,7 +152,7 @@ def block(css_path=""):
     kat = html.escape(json.dumps(KATEGORIEN, ensure_ascii=False), quote=True)
     return f"""
       <div class="card einreichen offen" id="einreichen">
-        <div class="be-app" id="be-app" data-skript="{html.escape(SKRIPT_URL)}" data-max="{MAX_ZEICHEN}" data-kat="{kat}">
+        <div class="be-app" id="be-app" data-skript="{html.escape(SKRIPT_URL)}" data-max="{MAX_ZEICHEN}" data-kat="{kat}" data-version="{APPS_SCRIPT_VERSION}">
           <noscript><p>Für den Editor wird JavaScript benötigt.</p></noscript>
         </div>
       </div>
