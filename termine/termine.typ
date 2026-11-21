@@ -14,7 +14,7 @@
   [22.11. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: red)[U20 MMM, 1.Liga Runde 1],
   [22.11. So, 11:00 Uhr], [Münchner Blitz-EM], [], [], [], [], [], [], [], [],
   [26.11. Do, 19:30 Uhr], [], table.cell(fill: green)[MMM Runde 3], [], [], [], [], [], [], [],
-  table.cell(fill: DarkSlateGray)[27.11. Fr, 19:30 Uhr], [], [], [], [], [], [], table.cell(fill: green)[MMM Runde 2], [], [],
+  table.cell(fill: DarkSlateGray)[27.11. Fr, 19:30 Uhr], [], [], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 3], table.cell(fill: green)[MMM Runde 2], [], [],
   [29.11. So, 10:00 Uhr], [], [], [], [], [], [], [], [], table.cell(fill: blueViolet)[U14/U16 MMM Runde 1-3],
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Dezember")]],
   [05.12. Sa], [], [], [], [], [], [], [], [], [Schulschach EM],
