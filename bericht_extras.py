@@ -6,6 +6,8 @@ In Bericht.typ (schreibt der Editor auf der Website, geht aber auch von Hand):
         ab    = Halbzug, bei dem das Brett startet (0 = Grundstellung, -1 = Schlussstellung)
         sicht = "w" oder "b" (diese Farbe steht unten)
         ergebnis: "ende" = Ergebnis erst nach dem letzten Zug zeigen (sonst oben neben den Namen)
+  #partien("partie1.pgn", ergebnis: "ende")    mehrere Partien in einer PGN-Datei: eine Tabelle, ein Brett
+        (z. B. Mannschaftskampf; mit [WhiteTeam]/[BlackTeam] in der PGN gibt es den Endstand dazu)
   #tabelle("https://chess-results.com/tnr1171232.aspx")   Endtabelle bzw. aktueller Stand
 
 Im Browser: partie.js (Brett: lib/partien/chessground, Regeln: lib/partien/chess.js).
@@ -28,6 +30,7 @@ AKTUALISIEREN_TAGE = 30          # so lange nach dem Berichtsdatum wird die Tabe
 CACHE_ORDNER = os.path.join("berichte", "_cache_chessresults")
 CACHE_MINUTEN = 60
 
+SAMMLUNG_RE = re.compile(r'^#partien\(\s*"([^"]+)"\s*((?:,\s*\w+\s*:\s*(?:"[^"]*"|-?\d+)\s*)*)\)\s*$')
 PARTIE_RE = re.compile(r'^#partie\(\s*"([^"]+)"\s*((?:,\s*\w+\s*:\s*(?:"[^"]*"|-?\d+)\s*)*)\)\s*$')
 TABELLE_RE = re.compile(r'^#tabelle\(\s*"([^"]+)"\s*\)\s*$')
 TNR_RE = re.compile(r'^https?://(?:[\w-]+\.)?chess-results\.com/(?:\w+/)?tnr(\d+)\.aspx', re.I)
@@ -71,6 +74,27 @@ def partie_html(ordner, zeile, warnung):
     if args.get("ergebnis") == "ende":
         daten["ergebnis"] = "ende"
     return f'<figure class="pz" data-partie="{esc(json.dumps(daten, ensure_ascii=False))}"><noscript>Zum Nachspielen der Partie bitte JavaScript einschalten.</noscript></figure>'
+
+
+def sammlung_html(ordner, zeile, warnung):
+    m = SAMMLUNG_RE.match(zeile)
+    if not m:
+        return None
+    name = m.group(1)
+    if os.path.basename(name) != name or not name.lower().endswith(".pgn"):
+        warnung(f"Partien '{name}' ungültig (nur .pgn-Datei aus demselben Ordner).")
+        return ""
+    try:
+        with open(os.path.join(ordner, name), encoding="utf-8-sig") as f:
+            pgn = f.read().strip()
+    except OSError:
+        warnung(f"Partien '{name}' nicht gefunden.")
+        return ""
+    args = dict(re.findall(r'(\w+)\s*:\s*"?(-?[\w]+)"?', m.group(2) or ""))
+    daten = {"pgn": pgn}
+    if args.get("ergebnis") == "ende":
+        daten["ergebnis"] = "ende"
+    return f'<div class="ps" data-sammlung="{esc(json.dumps(daten, ensure_ascii=False))}"><noscript>Zum Nachspielen der Partien bitte JavaScript einschalten.</noscript></div>'
 
 
 # ==========================================
@@ -148,6 +172,11 @@ def handler(ordner, berichtsdatum, warnung):
     """Für build_site.report_blocks: Zeile -> HTML (oder None, wenn die Zeile nichts von uns ist).
     handler.partien zählt mit, ob die Seite partie.js braucht."""
     def h(zeile):
+        if zeile.startswith("#partien("):
+            out = sammlung_html(ordner, zeile, warnung)
+            if out:
+                h.partien += 1
+            return out
         if zeile.startswith("#partie("):
             out = partie_html(ordner, zeile, warnung)
             if out:

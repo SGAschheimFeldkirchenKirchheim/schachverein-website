@@ -2188,7 +2188,7 @@ def report_blocks(body, img=None, extra=None):
         if line.startswith('//') or re.match(r'#(set|show|let|import)\b', line):
             continue
 
-        if extra and re.match(r'#(partie|tabelle)\(', line):
+        if extra and re.match(r'#(partien?|tabelle)\(', line):
             flush()
             x = extra(line)
             if x:

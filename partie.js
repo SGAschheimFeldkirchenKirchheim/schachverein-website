@@ -184,6 +184,7 @@ export function viewer(el) {
       const auf = el.querySelector(".pz-auf");
       auf.hidden = !amEnde;
       if (amEnde) { auf.classList.remove("an"); void auf.offsetWidth; auf.classList.add("an"); }
+      if (amEnde) el.dispatchEvent(new CustomEvent("pz-ende"));
       if (amEnde && !verraten) {
         verraten = true;
         el.querySelectorAll(".pz-erg, .pz-ende").forEach((x) => { x.hidden = false; x.classList.add("pz-neu"); });
@@ -234,4 +235,86 @@ export function viewer(el) {
   zeige(ab < 0 ? haupt[haupt.length - 1] || null : ab ? haupt[Math.min(ab, haupt.length) - 1] : null);
 }
 
+// ---------- Sammlung: mehrere Partien, eine Tabelle, ein Brett ----------
+// <div class="ps" data-sammlung='{"pgn":"…mehrere Partien…","ergebnis":"ende"}'></div>
+const EIGEN = /afk|aschheim|feldkirchen|kirchheim/i;          // unser Verein (für "unser Spieler unten")
+export function sammlung(box) {
+  let cfg = {};
+  try { cfg = JSON.parse(box.getAttribute("data-sammlung")); } catch (e) { return; }
+  const pgns = partien(cfg.pgn).filter((p) => { const i = lesen(p); return i && i.zuege.length; });
+  if (!pgns.length) return;
+  const infos = pgns.map(lesen), spannung = cfg.ergebnis === "ende";
+  const teams = new Set();
+  infos.forEach((i) => { if (i.kopf.WhiteTeam) teams.add(i.kopf.WhiteTeam); if (i.kopf.BlackTeam) teams.add(i.kopf.BlackTeam); });
+  const tl = [...teams];
+  const wir = tl.length === 2 ? (tl.find((t) => EIGEN.test(t)) || infos[0].kopf.WhiteTeam) : "";
+  const die = wir ? tl.find((t) => t !== wir) : "";
+  const PUNKTE = { "1-0": [1, 0], "0-1": [0, 1], "1/2-1/2": [.5, .5] };
+  let stand = wir ? [0, 0] : null, offen = false;
+  infos.forEach((i) => {
+    const p = PUNKTE[i.kopf.Result || i.ergebnis];
+    if (!p) { offen = true; return; }
+    if (stand) { const w = i.kopf.WhiteTeam === wir; stand[0] += w ? p[0] : p[1]; stand[1] += w ? p[1] : p[0]; }
+  });
+  const zahl = (x) => (x === .5 ? "½" : String(x).replace(".5", "½"));
+  const ergText = (i) => ERG[i.kopf.Result || i.ergebnis] || "–";
+  const gesehen = new Set();
+  const kurzName = (n) => { n = String(n || "?"); if (n.includes(",")) { const [a, b] = n.split(","); return a.trim() + (b && b.trim() ? ", " + b.trim()[0] + "." : ""); }
+    const t = n.trim().split(/\s+/); return t.length > 1 ? t[t.length - 1] + ", " + t[0][0] + "." : n; };
+  const k0 = infos[0].kopf;
+  const titel = wir ? esc(wir) + " – " + esc(die) : esc(k0.Event && k0.Event !== "?" ? k0.Event : "Partien");
+  const unter = [wir && k0.Event && k0.Event !== "?" ? k0.Event : "", k0.Round && k0.Round !== "?" ? "Runde " + k0.Round : ""].filter(Boolean).join(" · ");
+  let aktiv = 0;
+  const m = location.hash.match(/^#brett-(\d+)$/);
+  if (m && !document.querySelector(".ps[data-brett-ziel]")) { box.dataset.brettZiel = "1"; aktiv = Math.min(+m[1] - 1, pgns.length - 1); }
+
+  function standHtml() {
+    if (!stand) return "";
+    if (spannung && gesehen.size < pgns.length) return '<span class="ps-stand zu">? : ?</span>';
+    return `<span class="ps-stand${spannung ? " pz-neu" : ""}">${zahl(stand[0])} : ${zahl(stand[1])}${offen ? ' <small>(läuft)</small>' : ""}</span>`;
+  }
+  function zeile(i, j) {
+    const k = i.kopf, wert = (e) => (e && e !== "?" && e !== "0" ? `<span class="ps-elo">${esc(e)}</span>` : "");
+    const name = (n, t) => `<span class="ps-name${wir && t === wir ? " eigen" : ""}"><span class="ps-lang">${esc(n || "?")}</span><span class="ps-kurz">${esc(kurzName(n))}</span></span>`;
+    const erg = spannung && !gesehen.has(j) ? '<td class="ps-erg zu">?</td>' : `<td class="ps-erg">${esc(ergText(i))}</td>`;
+    return `<tr data-j="${j}"${j === aktiv ? ' class="an" aria-current="true"' : ""} tabindex="0"><td class="ps-nr">${esc(k.Board || j + 1)}</td>
+      <td><span class="pz-f w"></span>${name(k.White, k.WhiteTeam)}${wert(k.WhiteElo)}</td>
+      <td><span class="pz-f b"></span>${name(k.Black, k.BlackTeam)}${wert(k.BlackElo)}</td>${erg}</tr>`;
+  }
+  function zeichnen() {
+    box.innerHTML = `<div class="ps-kopf"><div><h3>${titel}</h3>${unter ? `<span class="klein">${esc(unter)}</span>` : ""}</div><div class="ps-standplatz">${standHtml()}</div></div>
+      <div class="ps-tabrahmen"><table class="ps-tab">${infos.map(zeile).join("")}</table></div>
+      <div class="ps-brett"></div>
+      <div class="ps-nav"><button type="button" data-n="${aktiv - 1}"${aktiv ? "" : " hidden"}>← Brett ${esc(infos[aktiv - 1] ? infos[aktiv - 1].kopf.Board || aktiv : "")}</button>
+        <button type="button" data-n="${aktiv + 1}"${aktiv < pgns.length - 1 ? "" : " hidden"}>Brett ${esc(infos[aktiv + 1] ? infos[aktiv + 1].kopf.Board || aktiv + 2 : "")} →</button></div>`;
+    const k = infos[aktiv].kopf;
+    const sicht = wir && k.BlackTeam === wir ? "b" : "w";
+    const fig = document.createElement("figure");
+    fig.className = "pz";
+    fig.setAttribute("data-partie", JSON.stringify({ pgn: pgns[aktiv], ab: 0, sicht, ergebnis: spannung ? "ende" : "" }));
+    box.querySelector(".ps-brett").appendChild(fig);
+    if (spannung) fig.addEventListener("pz-ende", () => {     // Partie zu Ende geklickt -> Ergebnis in der Tabelle aufdecken
+      if (gesehen.has(aktiv)) return;
+      gesehen.add(aktiv);
+      const td = box.querySelector(`tr[data-j="${aktiv}"] .ps-erg`);
+      td.outerHTML = `<td class="ps-erg"><span class="pz-neu">${esc(ergText(infos[aktiv]))}</span></td>`;
+      box.querySelector(".ps-standplatz").innerHTML = standHtml();
+    });
+    viewer(fig);
+  }
+  function waehle(j) { if (j < 0 || j >= pgns.length) return; aktiv = j; zeichnen(); box.querySelector("tr.an").focus({ preventScroll: true }); }
+  box.addEventListener("click", (e) => {
+    const r = e.target.closest("tr[data-j]"); if (r) return waehle(+r.dataset.j);
+    const n = e.target.closest("[data-n]"); if (n) { waehle(+n.dataset.n); box.scrollIntoView({ behavior: "smooth", block: "start" }); }
+  });
+  box.addEventListener("keydown", (e) => {
+    const r = e.target.closest("tr[data-j]");
+    if (r && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); waehle(+r.dataset.j); }
+    if (r && (e.key === "ArrowDown" || e.key === "ArrowUp")) { e.preventDefault(); waehle(+r.dataset.j + (e.key === "ArrowDown" ? 1 : -1)); }
+  });
+  zeichnen();
+  if (box.dataset.brettZiel) box.scrollIntoView({ block: "start" });
+}
+
 document.querySelectorAll("[data-partie]").forEach(viewer);
+document.querySelectorAll("[data-sammlung]").forEach(sammlung);

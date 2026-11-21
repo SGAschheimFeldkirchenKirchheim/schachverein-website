@@ -719,3 +719,42 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
 .cr-mehr { margin-top: .5rem; font: inherit; font-size: .9rem; background: none; border: 0; color: var(--link-c); cursor: pointer; padding: 0; }
 .cr-platzhalter { margin: 1.4rem 0; padding: 1rem; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: .92rem; }
 @media (max-width: 600px) { .cr-tab { font-size: .82rem; } .cr-tab td, .cr-tab th { padding: .3rem .3rem; } .cr-tab td.name { overflow-wrap: anywhere; } }
+
+/* Partien-Sammlung (mehrere Partien, eine Tabelle, ein Brett) */
+.ps { container-type: inline-size; margin: 1.6rem 0; padding: 1rem 1.1rem 1.1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.ps-kopf { display: flex; justify-content: space-between; align-items: flex-start; gap: .3rem 1rem; margin-bottom: .7rem; }
+.ps-kopf h3 { margin: 0 0 .1rem; font-size: 1.1rem; }
+.ps-stand { font-weight: 800; font-size: 1.35rem; white-space: nowrap; display: inline-block; }
+.ps-stand.zu { color: var(--muted); }
+.ps-stand small { font-size: .75rem; font-weight: 400; color: var(--muted); }
+.ps-tab { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.ps-tab td { padding: .45rem .5rem; border-bottom: 1px solid var(--line); cursor: pointer; background: transparent !important; }
+.ps-tab tr:hover td { background: var(--soft) !important; }
+.ps-tab tr.an td { background: rgba(59, 111, 176, .2) !important; }
+.ps-tab tr.an td:first-child { box-shadow: inset 3px 0 0 #3b6fb0; }
+.ps-tab tr:focus-visible { outline: 2px solid #3b6fb0; outline-offset: -2px; }
+.ps-nr { width: 2rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ps-tab .pz-f { margin-right: .35rem; vertical-align: -1px; width: .7rem; height: .7rem; }
+.ps-name.eigen { font-weight: 700; }
+.ps-elo { color: var(--muted); font-size: .8rem; margin-left: .35rem; }
+.ps-erg { text-align: right; font-weight: 700; white-space: nowrap; width: 3.4rem; }
+.ps-erg.zu { color: var(--muted); }
+.ps-kurz { display: none; }
+.ps .pz { border: 0; padding: 0; margin: 1rem 0 0; background: none; }
+.ps-nav { display: flex; justify-content: space-between; margin-top: .8rem; font-size: .92rem; }
+.ps-nav button { all: unset; cursor: pointer; color: var(--link-c); }
+.ps-nav button[hidden] { display: none; }
+.ps-nav button:last-child { margin-left: auto; }
+.ps-tab { table-layout: fixed; }
+.ps-tab td:nth-child(2), .ps-tab td:nth-child(3) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@container (max-width: 560px) {
+  .ps-lang, .ps-elo { display: none; } .ps-kurz { display: inline; }
+  .ps-nr { width: 1.4rem; } .ps-erg { width: 2.6rem; }
+  .ps-tab td { padding: .42rem .3rem; }
+  .ps-stand { font-size: 1.15rem; }
+}
+/* Koordinaten in die Ecke der Randfelder (ragt nicht mehr übers Brett) */
+.pz-brett coords.files { left: 0; bottom: 0; height: auto; }
+.pz-brett coords.files coord { text-align: right; padding: 0 3px 1px 0; }
+.pz-brett coords.ranks { left: 2px; top: 0; height: 100%; }
+.pz-brett coords.ranks coord { transform: none; padding-top: 1px; }

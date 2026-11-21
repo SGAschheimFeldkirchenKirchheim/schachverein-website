@@ -47,6 +47,14 @@ Ein Backslash am Zeilenende macht einen Zeilenumbruch ohne neuen Absatz.
 // Namen und Ergebnis kommen aus der PGN ([White "…"], [Black "…"], [Result "…"]).
 #partie("partie1.pgn", ab: 0, sicht: "w", ergebnis: "ende")
 
+// ---------- Mehrere Partien als Sammlung (z. B. Mannschaftskampf) ----------
+// Alle Partien in EINER PGN-Datei. Oben eine Tabelle (Brett, Weiß, Schwarz, Wertung, Ergebnis), darunter ein Brett.
+// Aus der PGN gelesen: [Board "1"] Brettnummer, [WhiteElo "…"]/[BlackElo "…"] Wertung (leer = nicht gezeigt),
+// [WhiteTeam "SG AFK 2"]/[BlackTeam "…"] -> Endstand oben rechts, unser Spieler steht immer unten.
+//   ergebnis: "ende" – Ergebnisse und Endstand erst zeigen, wenn die Partien durchgeklickt wurden
+// Direktlink auf ein Brett: …/bericht.html#brett-3
+// #partien("mannschaftskampf.pgn", ergebnis: "ende")
+
 // ---------- Tabelle von chess-results (Endstand bzw. aktueller Stand) ----------
 // Wird beim Build geholt; in den ersten 30 Tagen nach dem Datum jede Nacht neu.
 #tabelle("https://chess-results.com/tnr1171232.aspx")

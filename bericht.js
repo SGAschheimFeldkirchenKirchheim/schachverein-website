@@ -75,7 +75,8 @@
       }
       if ((m = l.match(/^\[Partie (\d+)\]$/))) {
         flush(); var p = Z.partien[+m[1] - 1];
-        if (p) out.push('<figure class="pz" data-partie="' + esc(JSON.stringify(p)) + '"></figure>');
+        if (p && p.sammlung) out.push('<div class="ps" data-sammlung="' + esc(JSON.stringify({ pgn: p.pgn, ergebnis: p.ergebnis })) + '"></div>');
+        else if (p) out.push('<figure class="pz" data-partie="' + esc(JSON.stringify(p)) + '"></figure>');
         return;
       }
       if ((m = l.match(/^\[Tabelle (\S+)\]$/))) {
@@ -111,6 +112,13 @@
       if (/^\s*#(import|title|date|author|kategorie|set|show|let)\b/.test(l) || /^\s*\/\//.test(l)) return;
       var im = l.trim().match(/^#image\(\s*"([^"]+)"\s*(?:,\s*alt:\s*"([^"]*)")?[^)]*\)\s*$/);
       if (im) { var n = bildNr(im[1], im[2]); if (n) zeilen.push("[Bild " + n + "]"); else fehlt = true; return; }
+      var sm2 = l.trim().match(/^#partien\(\s*"([^"]+)"(.*)\)\s*$/);
+      if (sm2) {
+        var dat = (pgnDateien || []).filter(function (x) { return x.name === sm2[1]; })[0];
+        if (!dat) { fehlt = true; return; }
+        partien.push({ pgn: dat.pgn.trim(), ab: 0, sicht: "w", sammlung: true, ergebnis: /ergebnis:\s*"ende"/.test(sm2[2]) ? "ende" : "" });
+        zeilen.push("[Partie " + partien.length + "]"); return;
+      }
       var pm = l.trim().match(/^#partie\(\s*"([^"]+)"(.*)\)\s*$/);
       if (pm) {
         var datei = (pgnDateien || []).filter(function (x) { return x.name === pm[1]; })[0];
@@ -242,7 +250,14 @@
     }).join("");
     partieModul().then(function (P) {
       [].forEach.call(box.querySelectorAll(".be-partie"), function (el) {
-        var p = Z.partien[+el.getAttribute("data-i")], info = P.lesen(p.pgn);
+        var p = Z.partien[+el.getAttribute("data-i")];
+        if (p.sammlung) {
+          var alle = P.partien(p.pgn), k = (P.lesen(alle[0]) || { kopf: {} }).kopf;
+          el.querySelector(".be-p-text").innerHTML = "<b>Sammlung: " + alle.length + " Partien</b> <span class=\"klein\">" +
+            esc(k.WhiteTeam && k.BlackTeam ? k.WhiteTeam + " – " + k.BlackTeam : k.Event || "") + (p.ergebnis === "ende" ? " · Ergebnis erst am Ende" : "") + "</span>";
+          return;
+        }
+        var info = P.lesen(p.pgn);
         el.querySelector(".be-p-text").innerHTML = "<b>" + esc(partieText(p, info)) + '</b> <span class="klein">' + esc(startText(p, info)) + "</span>";
       });
     });
@@ -286,7 +301,9 @@
     var d = dialog('<h3>' + (alt ? "Partie " + nummer + " bearbeiten" : "Partie einfügen") + '</h3>' +
       '<label>PGN hier einfügen (aus Lichess, ChessBase, chess.com …)<textarea class="be-pgn" spellcheck="false" placeholder="[White &quot;…&quot;]&#10;[Black &quot;…&quot;]&#10;&#10;1. e4 e5 2. Sf3 …"></textarea></label>' +
       '<p class="be-dlg-zeile"><label class="be-datei">oder .pgn-Datei wählen<input type="file" accept=".pgn,text/plain,application/x-chess-pgn" hidden></label></p>' +
-      '<div class="be-auswahl" hidden></div><p class="be-erkannt klein"></p>' +
+      '<div class="be-auswahl" hidden></div>' +
+      '<label class="be-check be-sammelwahl" hidden><input type="checkbox" class="be-sammlung" checked> <span><b>Als Sammlung einfügen</b> – eine Tabelle mit allen Partien, darunter ein Brett (ideal für Mannschaftskämpfe). Sonst wird jede Partie ein eigenes Brett.</span></label>' +
+      '<p class="be-erkannt klein"></p>' +
       '<div class="be-optionen" hidden><div class="be-spieler"><label>Weiß<input type="text" class="be-w" maxlength="80" placeholder="Name"></label>' +
       '<label>Schwarz<input type="text" class="be-s" maxlength="80" placeholder="Name"></label>' +
       '<label>Ergebnis<select class="be-e"><option value="1-0">1–0</option><option value="1/2-1/2">½–½</option><option value="0-1">0–1</option>' +
@@ -300,7 +317,7 @@
       '<div class="be-dlg-fuss"><button type="button" class="btn leise" data-zu>Abbrechen</button><button type="button" class="btn be-ok" disabled>' +
       (alt ? "Übernehmen" : "Als [Partie " + nummer + "] einfügen") + "</button></div>");
     var el = d.el, ta = el.querySelector(".be-pgn");
-    var S = { spiele: [], wahl: [], start: "grund", zug: 1, farbe: "w", sicht: "w", info: null, w: "", s: "", e: "*", spannung: false };
+    var S = { spiele: [], wahl: [], start: "grund", zug: 1, farbe: "w", sicht: "w", info: null, w: "", s: "", e: "*", spannung: false, sammlung: true };
     if (alt) { ta.value = alt.pgn; S.sicht = alt.sicht; S.spannung = alt.ergebnis === "ende"; }
     el.querySelector(".be-spannung").checked = S.spannung;
 
@@ -348,13 +365,24 @@
               (info.kommentare ? ", " + info.kommentare + " Kommentar" + (info.kommentare > 1 ? "e" : "") : "") +
               (info.varianten ? ", " + info.varianten + " Variante" + (info.varianten > 1 ? "n" : "") : "");
         }
+        var alsSammlung = gewaehlt.length > 1 && S.sammlung;
+        el.querySelector(".be-sammelwahl").hidden = gewaehlt.length < 2;
+        if (ok && gewaehlt.length > 1) e.textContent = gewaehlt.length + " Partien ausgewählt" + (alsSammlung ? " – sie kommen als Sammlung in den Bericht." : " – jede wird ein eigenes Brett, die Einstellungen gelten für alle.");
+        [".be-spieler", ".be-start", ".be-sicht"].forEach(function (sel) {
+          var x = el.querySelector(sel); x.hidden = alsSammlung || (sel === ".be-spieler" && gewaehlt.length !== 1);
+          if (x.previousElementSibling && x.previousElementSibling.tagName === "LABEL" && sel !== ".be-spieler") x.previousElementSibling.hidden = alsSammlung;
+        });
+        if (alsSammlung) el.querySelector(".be-ab").hidden = true;
         el.querySelector(".be-optionen").hidden = !ok;
         el.querySelector(".be-ok").disabled = !ok;
         knoepfe(".be-start", "data-s", S.start); knoepfe(".be-farbe", "data-f", S.farbe); knoepfe(".be-sicht", "data-v", S.sicht);
-        el.querySelector(".be-ab").hidden = S.start !== "zug";
+        el.querySelector(".be-ab").hidden = S.start !== "zug" || alsSammlung;
         el.querySelector(".be-zugnr").value = S.zug;
         var v = el.querySelector(".be-dlg-vorschau");
-        if (ok) {
+        if (ok && alsSammlung) {
+          v.innerHTML = '<div class="ps" data-sammlung="' + esc(JSON.stringify({ pgn: gewaehlt.join("\n\n"), ergebnis: S.spannung ? "ende" : "" })) + '"></div>';
+          P.sammlung(v.firstChild);
+        } else if (ok) {
           v.innerHTML = '<figure class="pz" data-partie="' + esc(JSON.stringify({ pgn: mitKopf(gewaehlt[0]), ab: ab(), sicht: S.sicht, ergebnis: S.spannung ? "ende" : "" })) + '"></figure>';
           P.viewer(v.firstChild);
         } else v.innerHTML = "";
@@ -369,13 +397,13 @@
       function einlesen(neuGelesen) {
         S.spiele = P.partien(ta.value).filter(function (x) { var i = P.lesen(x); return i && i.zuege.length; });
         if (!S.spiele.length && ta.value.trim()) S.spiele = [ta.value.trim()];
-        S.wahl = S.spiele.map(function (x, i) { return i === 0; });
+        S.wahl = S.spiele.map(function (x, i) { return i === 0 || !!(alt && alt.sammlung) || (neuGelesen && S.spiele.length <= 12); });
         var aw = el.querySelector(".be-auswahl");
         aw.hidden = S.spiele.length < 2;
         aw.innerHTML = S.spiele.length < 2 ? "" : "<label>Die Datei enthält " + S.spiele.length + " Partien – welche sollen rein?</label>" +
           S.spiele.map(function (x, i) {
             var inf = P.lesen(x);
-            return '<label class="be-wahl"><input type="checkbox" data-w="' + i + '"' + (i === 0 ? " checked" : "") + "> " + esc(partieText(null, inf)) +
+            return '<label class="be-wahl"><input type="checkbox" data-w="' + i + '"' + (S.wahl[i] ? " checked" : "") + "> " + esc(partieText(null, inf)) +
               (inf.kopf.Round && inf.kopf.Round !== "?" ? ' <span class="klein">Runde ' + esc(inf.kopf.Round) + "</span>" : "") + "</label>";
           }).join("");
         [].forEach.call(aw.querySelectorAll("[data-w]"), function (c) {
@@ -418,10 +446,18 @@
         });
       });
       el.querySelector(".be-e").addEventListener("change", function (ev) { S.e = ev.target.value; zeichnen(); });
+      el.querySelector(".be-sammlung").addEventListener("change", function (ev) { S.sammlung = ev.target.checked; zeichnen(); });
       el.querySelector(".be-spannung").addEventListener("change", function (ev) { S.spannung = ev.target.checked; zeichnen(); });
       el.querySelector(".be-zugnr").addEventListener("change", function (ev) { S.zug = Math.max(1, parseInt(ev.target.value, 10) || 1); zeichnen(); });
       el.querySelector(".be-ok").addEventListener("click", function () {
         var gewaehlt = S.spiele.filter(function (x, i) { return S.wahl[i]; });
+        if (gewaehlt.length > 1 && S.sammlung) {
+          var neu = { pgn: gewaehlt.join("\n\n"), ab: 0, sicht: "w", sammlung: true, ergebnis: S.spannung ? "ende" : "" };
+          if (alt) Z.partien[index] = neu;
+          else if (Z.partien.length >= MAX_PARTIEN) { meldung("Höchstens " + MAX_PARTIEN + " Partien/Sammlungen pro Bericht.", "fehler"); return; }
+          else { Z.partien.push(neu); einfuegen("[Partie " + Z.partien.length + "]"); }
+          d.zu(); partienZeichnen(); merken(); return;
+        }
         if (alt) {
           Z.partien[index] = { pgn: mitKopf(gewaehlt[0]), ab: ab(), sicht: S.sicht, ergebnis: S.spannung ? "ende" : "" };
         } else {
@@ -556,7 +592,10 @@
         $(".be-schreiben").hidden = v; $(".be-vorschau").hidden = !v;
         if (v) $(".be-vorschau").innerHTML = "<h1>" + inline($("[name=titel]").value || "Ohne Titel") + '</h1><p class="news-meta">' +
           esc($("[name=datum]").value) + ($("[name=autor]").value ? " · von " + esc($("[name=autor]").value) : "") + "</p>" + vorschauHtml($(".be-text").value);
-        if (v && $(".be-vorschau [data-partie]")) partieModul().then(function (P) { [].forEach.call(APP.querySelectorAll(".be-vorschau [data-partie]"), P.viewer); });
+        if (v && $(".be-vorschau [data-partie], .be-vorschau [data-sammlung]")) partieModul().then(function (P) {
+          [].forEach.call(APP.querySelectorAll(".be-vorschau [data-partie]"), P.viewer);
+          [].forEach.call(APP.querySelectorAll(".be-vorschau [data-sammlung]"), P.sammlung);
+        });
       });
     });
     [].forEach.call(APP.querySelectorAll("[data-l]"), function (b) { b.addEventListener("click", function () { leiste(b.getAttribute("data-l")); }); });
