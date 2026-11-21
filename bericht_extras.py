@@ -5,6 +5,7 @@ In Bericht.typ (schreibt der Editor auf der Website, geht aber auch von Hand):
   #partie("partie1.pgn", ab: 19, sicht: "w")   PGN-Datei im selben Ordner
         ab    = Halbzug, bei dem das Brett startet (0 = Grundstellung, -1 = Schlussstellung)
         sicht = "w" oder "b" (diese Farbe steht unten)
+        ergebnis: "ende" = Ergebnis erst nach dem letzten Zug zeigen (sonst oben neben den Namen)
   #tabelle("https://chess-results.com/tnr1171232.aspx")   Endtabelle bzw. aktueller Stand
 
 Im Browser: partie.js (Brett: lib/partien/chessground, Regeln: lib/partien/chess.js).
@@ -67,6 +68,8 @@ def partie_html(ordner, zeile, warnung):
     except ValueError:
         ab = 0
     daten = {"pgn": pgn, "ab": ab, "sicht": "b" if args.get("sicht") == "b" else "w"}
+    if args.get("ergebnis") == "ende":
+        daten["ergebnis"] = "ende"
     return f'<figure class="pz" data-partie="{esc(json.dumps(daten, ensure_ascii=False))}"><noscript>Zum Nachspielen der Partie bitte JavaScript einschalten.</noscript></figure>'
 
 

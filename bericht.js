@@ -116,7 +116,8 @@
         var datei = (pgnDateien || []).filter(function (x) { return x.name === pm[1]; })[0];
         if (!datei) { fehlt = true; return; }
         var abm = pm[2].match(/ab:\s*(-?\d+)/), sm = pm[2].match(/sicht:\s*"(\w)"/);
-        partien.push({ pgn: datei.pgn.trim(), ab: abm ? +abm[1] : 0, sicht: sm && sm[1] === "b" ? "b" : "w" });
+        partien.push({ pgn: datei.pgn.trim(), ab: abm ? +abm[1] : 0, sicht: sm && sm[1] === "b" ? "b" : "w",
+          ergebnis: /ergebnis:\s*"ende"/.test(pm[2]) ? "ende" : "" });
         zeilen.push("[Partie " + partien.length + "]"); return;
       }
       var tm = l.trim().match(/^#tabelle\(\s*"([^"]+)"\s*\)\s*$/);
@@ -286,7 +287,12 @@
       '<label>PGN hier einfügen (aus Lichess, ChessBase, chess.com …)<textarea class="be-pgn" spellcheck="false" placeholder="[White &quot;…&quot;]&#10;[Black &quot;…&quot;]&#10;&#10;1. e4 e5 2. Sf3 …"></textarea></label>' +
       '<p class="be-dlg-zeile"><label class="be-datei">oder .pgn-Datei wählen<input type="file" accept=".pgn,text/plain,application/x-chess-pgn" hidden></label></p>' +
       '<div class="be-auswahl" hidden></div><p class="be-erkannt klein"></p>' +
-      '<div class="be-optionen" hidden><label>Brett startet bei</label><div class="be-kat be-start">' +
+      '<div class="be-optionen" hidden><div class="be-spieler"><label>Weiß<input type="text" class="be-w" maxlength="80" placeholder="Name"></label>' +
+      '<label>Schwarz<input type="text" class="be-s" maxlength="80" placeholder="Name"></label>' +
+      '<label>Ergebnis<select class="be-e"><option value="1-0">1–0</option><option value="1/2-1/2">½–½</option><option value="0-1">0–1</option>' +
+      '<option value="*">offen / ohne</option></select></label></div>' +
+      '<label class="be-check"><input type="checkbox" class="be-spannung"> <span>Ergebnis erst nach dem letzten Zug verraten – mit kleinem Effekt. Sonst steht es oben neben den Namen.</span></label>' +
+      '<label>Brett startet bei</label><div class="be-kat be-start">' +
       '<button type="button" data-s="grund">Grundstellung</button><button type="button" data-s="zug">ab Zug …</button><button type="button" data-s="ende">Schlussstellung</button></div>' +
       '<div class="be-ab" hidden>Zug <input type="number" min="1" class="be-zugnr" inputmode="numeric"> <div class="be-kat be-farbe"><button type="button" data-f="w">Weiß am Zug</button><button type="button" data-f="b">Schwarz am Zug</button></div></div>' +
       '<label>Diese Farbe steht unten</label><div class="be-kat be-sicht"><button type="button" data-v="w">Weiß</button><button type="button" data-v="b">Schwarz</button></div>' +
@@ -294,8 +300,9 @@
       '<div class="be-dlg-fuss"><button type="button" class="btn leise" data-zu>Abbrechen</button><button type="button" class="btn be-ok" disabled>' +
       (alt ? "Übernehmen" : "Als [Partie " + nummer + "] einfügen") + "</button></div>");
     var el = d.el, ta = el.querySelector(".be-pgn");
-    var S = { spiele: [], wahl: [], start: "grund", zug: 1, farbe: "w", sicht: "w", info: null };
-    if (alt) { ta.value = alt.pgn; S.sicht = alt.sicht; }
+    var S = { spiele: [], wahl: [], start: "grund", zug: 1, farbe: "w", sicht: "w", info: null, w: "", s: "", e: "*", spannung: false };
+    if (alt) { ta.value = alt.pgn; S.sicht = alt.sicht; S.spannung = alt.ergebnis === "ende"; }
+    el.querySelector(".be-spannung").checked = S.spannung;
 
     partieModul().then(function (P) {
       function ab() {                              // Einstellungen -> Halbzug
@@ -304,6 +311,27 @@
         var z = S.info.zuege, i;
         for (i = 0; i < z.length; i++) if (z[i].nr > S.zug || (z[i].nr === S.zug && (S.farbe === "w" || z[i].farbe === "b"))) break;
         return Math.min(i, z.length);
+      }
+      function gewaehlteSpiele() { return S.spiele.filter(function (x, i) { return S.wahl[i]; }); }
+      function namenFuellen() {                    // Namen/Ergebnis aus der PGN in die Felder
+        var g = gewaehlteSpiele(), inf = g.length === 1 ? P.lesen(g[0]) : null;
+        el.querySelector(".be-spieler").hidden = !inf;
+        if (!inf) return;
+        var k = inf.kopf, leer = function (x) { return !x || x === "?" ? "" : x; };
+        S.w = leer(k.White); S.s = leer(k.Black);
+        S.e = { "1-0": "1-0", "0-1": "0-1", "1/2-1/2": "1/2-1/2" }[inf.ergebnis] || "*";
+        el.querySelector(".be-w").value = S.w; el.querySelector(".be-s").value = S.s; el.querySelector(".be-e").value = S.e;
+      }
+      function mitKopf(pgn) {                      // eingegebene Namen/Ergebnis in die PGN schreiben
+        if (gewaehlteSpiele().length !== 1) return pgn;
+        function setze(p, tag, wert) {
+          var re = new RegExp('^\\s*\\[' + tag + '\\s+"[^"]*"\\]\\s*$', "m");
+          var zeile = '[' + tag + ' "' + String(wert).replace(/["\\]/g, "") + '"]';
+          if (re.test(p)) return p.replace(re, zeile);
+          return /^\s*\[/.test(p) ? zeile + "\n" + p : zeile + "\n\n" + p;
+        }
+        var p = setze(setze(setze(pgn, "Result", S.e), "Black", S.s || "?"), "White", S.w || "?");
+        return p.replace(/(1-0|0-1|1\/2-1\/2|\*)\s*$/, "").replace(/\s+$/, "") + " " + S.e;
       }
       function knoepfe(sel, attr, wert) { [].forEach.call(el.querySelectorAll(sel + " button"), function (b) { b.classList.toggle("an", b.getAttribute(attr) === wert); }); }
       function zeichnen() {
@@ -316,7 +344,7 @@
         else {
           e.className = "be-erkannt klein gut";
           e.textContent = gewaehlt.length > 1 ? gewaehlt.length + " Partien ausgewählt – sie werden einzeln eingefügt, die Einstellungen gelten für alle."
-            : "Erkannt: " + partieText(null, info) + ", " + Math.ceil(info.zuege.length / 2) + " Züge" +
+            : "Erkannt: " + (info.kopf.White || info.kopf.Black ? partieText(null, info) + ", " : "") + Math.ceil(info.zuege.length / 2) + " Züge" +
               (info.kommentare ? ", " + info.kommentare + " Kommentar" + (info.kommentare > 1 ? "e" : "") : "") +
               (info.varianten ? ", " + info.varianten + " Variante" + (info.varianten > 1 ? "n" : "") : "");
         }
@@ -327,7 +355,7 @@
         el.querySelector(".be-zugnr").value = S.zug;
         var v = el.querySelector(".be-dlg-vorschau");
         if (ok) {
-          v.innerHTML = '<figure class="pz" data-partie="' + esc(JSON.stringify({ pgn: gewaehlt[0], ab: ab(), sicht: S.sicht })) + '"></figure>';
+          v.innerHTML = '<figure class="pz" data-partie="' + esc(JSON.stringify({ pgn: mitKopf(gewaehlt[0]), ab: ab(), sicht: S.sicht, ergebnis: S.spannung ? "ende" : "" })) + '"></figure>';
           P.viewer(v.firstChild);
         } else v.innerHTML = "";
       }
@@ -351,9 +379,10 @@
               (inf.kopf.Round && inf.kopf.Round !== "?" ? ' <span class="klein">Runde ' + esc(inf.kopf.Round) + "</span>" : "") + "</label>";
           }).join("");
         [].forEach.call(aw.querySelectorAll("[data-w]"), function (c) {
-          c.addEventListener("change", function () { S.wahl[+c.getAttribute("data-w")] = c.checked; seiteRaten(); zeichnen(); });
+          c.addEventListener("change", function () { S.wahl[+c.getAttribute("data-w")] = c.checked; seiteRaten(); namenFuellen(); zeichnen(); });
         });
         if (neuGelesen) seiteRaten();
+        namenFuellen();
         zeichnen();
       }
       if (alt) {                                    // Einstellungen der vorhandenen Partie übernehmen
@@ -381,18 +410,27 @@
         if (b.hasAttribute("data-f")) { S.farbe = b.getAttribute("data-f"); zeichnen(); }
         if (b.hasAttribute("data-v")) { S.sicht = b.getAttribute("data-v"); zeichnen(); }
       });
+      var namenTimer = null;
+      [".be-w", ".be-s"].forEach(function (sel, i) {
+        el.querySelector(sel).addEventListener("input", function (ev) {
+          if (i === 0) S.w = ev.target.value.trim(); else S.s = ev.target.value.trim();
+          clearTimeout(namenTimer); namenTimer = setTimeout(zeichnen, 350);
+        });
+      });
+      el.querySelector(".be-e").addEventListener("change", function (ev) { S.e = ev.target.value; zeichnen(); });
+      el.querySelector(".be-spannung").addEventListener("change", function (ev) { S.spannung = ev.target.checked; zeichnen(); });
       el.querySelector(".be-zugnr").addEventListener("change", function (ev) { S.zug = Math.max(1, parseInt(ev.target.value, 10) || 1); zeichnen(); });
       el.querySelector(".be-ok").addEventListener("click", function () {
         var gewaehlt = S.spiele.filter(function (x, i) { return S.wahl[i]; });
         if (alt) {
-          Z.partien[index] = { pgn: gewaehlt[0], ab: ab(), sicht: S.sicht };
+          Z.partien[index] = { pgn: mitKopf(gewaehlt[0]), ab: ab(), sicht: S.sicht, ergebnis: S.spannung ? "ende" : "" };
         } else {
           var platz = MAX_PARTIEN - Z.partien.length;
           if (gewaehlt.length > platz) { meldung("Höchstens " + MAX_PARTIEN + " Partien – " + (gewaehlt.length - platz) + " weggelassen.", "fehler"); gewaehlt = gewaehlt.slice(0, platz); }
           var marken = [];
           gewaehlt.forEach(function (pgn) {
             S.info = P.lesen(pgn);
-            Z.partien.push({ pgn: pgn, ab: ab(), sicht: S.sicht });
+            Z.partien.push({ pgn: mitKopf(pgn), ab: ab(), sicht: S.sicht, ergebnis: S.spannung ? "ende" : "" });
             marken.push("[Partie " + Z.partien.length + "]");
           });
           einfuegen(marken.join("\n\n"));

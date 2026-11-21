@@ -1,6 +1,7 @@
 /* SG AFK – Partie-Viewer in Berichten.
    <figure class="pz" data-partie='{"pgn":"…","ab":45,"sicht":"w"}'></figure>
-   ab = Halbzug, bei dem das Brett startet (0 = Grundstellung, -1 = Schlussstellung), sicht = "w" | "b" (diese Farbe unten).
+   ab = Halbzug, bei dem das Brett startet (0 = Grundstellung, -1 = Schlussstellung), sicht = "w" | "b" (diese Farbe unten),
+   ergebnis = "ende": Ergebnis erst nach dem letzten Zug zeigen (mit kleinem Effekt), sonst steht es oben neben den Namen.
    Wird auch vom Bericht-Editor benutzt (import("./partie.js") -> viewer, partien, lesen).
    Kommentare {…} und Varianten (…) werden angezeigt; Varianten sind anklickbar. */
 import { Chessground } from "./lib/partien/chessground.min.js";
@@ -115,17 +116,24 @@ export function viewer(el) {
   const startFen = kopf.FEN || new Chess().fen();
   const { haupt, ergebnis, vorab } = baum(cfg.pgn || "", startFen);
   const erg = ERG[kopf.Result || ergebnis] ?? (kopf.Result || ergebnis || "");
+  const spannung = cfg.ergebnis === "ende" && !!erg;
+  let verraten = !spannung;
+  const offen = (n) => n && n !== "?" && !/^(weiß|weiss|schwarz|white|black)$/i.test(n.trim());
+  const kurz = (n) => (n.includes(",") ? n.split(",")[0] : n.trim().split(/\s+/).slice(-1)[0]).trim();
+  const sieger = erg === "1–0" ? (offen(kopf.White) ? kurz(kopf.White) + " gewinnt" : "Weiß gewinnt")
+    : erg === "0–1" ? (offen(kopf.Black) ? kurz(kopf.Black) + " gewinnt" : "Schwarz gewinnt") : erg === "½–½" ? "Remis" : "";
   let unten = cfg.sicht === "b" ? "black" : "white";
   let akt = null;                                   // aktueller Zug (Objekt) oder null = Start
   const name = (n, elo) => esc(n || "?") + (elo && elo !== "?" ? ` <span class="pz-elo">${esc(elo)}</span>` : "");
   const info = [kopf.Event, kopf.Round && kopf.Round !== "?" ? "Runde " + kopf.Round : "", kopf.Date && !/\?/.test(kopf.Date) ? kopf.Date.split(".").reverse().join(".") : ""]
     .filter((x) => x && x !== "?").join(" · ");
   el.innerHTML = `
-    <div class="pz-kopf"><div class="pz-namen"><span class="pz-f w"></span>${name(kopf.White, kopf.WhiteElo)}
-      <span class="pz-gegen">–</span><span class="pz-f b"></span>${name(kopf.Black, kopf.BlackElo)}</div>
-      ${erg ? `<b class="pz-erg">${esc(erg)}</b>` : ""}${info ? `<div class="pz-info">${esc(info)}</div>` : ""}</div>
+    <div class="pz-kopf"><div class="pz-namen"><span class="pz-sp"><span class="pz-f w"></span>${name(kopf.White, kopf.WhiteElo)}</span>
+      <span class="pz-gegen">–</span><span class="pz-sp"><span class="pz-f b"></span>${name(kopf.Black, kopf.BlackElo)}</span></div>
+      ${erg ? `<b class="pz-erg"${spannung ? " hidden" : ""}>${esc(erg)}</b>` : ""}${info ? `<div class="pz-info">${esc(info)}</div>` : ""}</div>
     <div class="pz-rumpf">
-      <div class="pz-links"><div class="pz-brett"></div>
+      <div class="pz-links"><div class="pz-brettrahmen"><div class="pz-brett"></div>
+        ${spannung ? `<div class="pz-auf" hidden><b>${esc(erg)}</b><span>${esc(sieger)}</span></div>` : ""}</div>
         <div class="pz-knoepfe" role="toolbar" aria-label="Partie steuern">
           <button type="button" data-a="anfang" title="Anfang" aria-label="Anfang">⏮</button>
           <button type="button" data-a="zurueck" title="Zurück (←)" aria-label="Zurück">◀</button>
@@ -163,7 +171,7 @@ export function viewer(el) {
     return h;
   }
   liste.innerHTML = (vorab ? `<p class="pz-kom">${esc(vorab)}</p>` : "") + `<div class="pz-haupt">${linieHtml(haupt, true)}</div>` +
-    (erg ? `<div class="pz-ende">${esc(erg)}</div>` : "");
+    (erg ? `<div class="pz-ende"${spannung ? " hidden" : ""}>${esc(erg)}</div>` : "");
 
   function zeige(z) {
     akt = z;
@@ -171,6 +179,16 @@ export function viewer(el) {
     cg.set({ fen: z ? z.fen : startFen, orientation: unten, lastMove: z ? [z.from, z.to] : undefined,
       check: !!(z && /[+#]$/.test(z.san)), turnColor: z ? (z.farbe === "w" ? "black" : "white") : (startFen.split(" ")[1] === "b" ? "black" : "white") });
     liste.querySelectorAll("[aria-current]").forEach((b) => b.removeAttribute("aria-current"));
+    if (spannung) {                               // Ergebnis-Auflösung beim letzten Zug
+      const amEnde = !!z && z === haupt[haupt.length - 1];
+      const auf = el.querySelector(".pz-auf");
+      auf.hidden = !amEnde;
+      if (amEnde) { auf.classList.remove("an"); void auf.offsetWidth; auf.classList.add("an"); }
+      if (amEnde && !verraten) {
+        verraten = true;
+        el.querySelectorAll(".pz-erg, .pz-ende").forEach((x) => { x.hidden = false; x.classList.add("pz-neu"); });
+      }
+    }
     if (z) {
       const b = liste.querySelector(`[data-z="${alle.indexOf(z)}"]`);
       if (b) {
@@ -197,6 +215,7 @@ export function viewer(el) {
     drehen: () => { unten = unten === "white" ? "black" : "white"; zeige(akt); },
   };
   el.addEventListener("click", (e) => {
+    if (e.target.closest(".pz-auf")) { e.target.closest(".pz-auf").hidden = true; return; }
     const b = e.target.closest("[data-a]"); if (b) return aktion[b.dataset.a]();
     const z = e.target.closest("[data-z]"); if (z) zeige(alle[+z.dataset.z]);
   });
