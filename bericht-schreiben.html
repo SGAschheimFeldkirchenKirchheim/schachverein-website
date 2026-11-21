@@ -46,6 +46,8 @@
       .einreichen[open] > summary .btn { opacity: 0.6; }
       .be-app { padding: 0 1.2rem 1.3rem; }
       .be-hinweis { padding: .7rem 1rem; border-radius: 10px; margin: 0 0 1rem; font-size: .95rem; background: var(--soft); color: var(--soft-text); }
+      .be-hinweis.rot { border: 1px solid rgba(208, 84, 74, .55); background: rgba(208, 84, 74, .12); color: #e0796f; }
+      :root:not([data-theme="dark"]) .be-hinweis.rot { color: #b23b30; }
       .be-hinweis.gruen { background: #3fae6c22; border: 1px solid #3fae6c66; color: #2f8f55; }
       :root[data-theme="dark"] .be-hinweis.gruen { color: #6fd59a; }
       .be-reihe { display: grid; grid-template-columns: 2fr 1.4fr 1fr; gap: .8rem; margin-bottom: .8rem; }
@@ -100,6 +102,7 @@
       .be-wahl { font-weight: 400 !important; margin: .2rem 0 !important; display: flex !important; gap: .4rem; align-items: center; }
       .be-spieler { display: grid; grid-template-columns: 1fr 1fr 9rem; gap: .6rem; }
       .be-spieler input, .be-spieler select { width: 100%; font: inherit; font-weight: 400; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .45rem .6rem; box-sizing: border-box; }
+      .be-dlg .be-check[hidden] { display: none !important; }
       .be-dlg .be-check { display: flex !important; gap: .5rem; align-items: flex-start; font-weight: 400 !important; margin: .7rem 0 .4rem !important; }
       .be-check input { margin-top: .25rem; }
       @media (max-width: 600px) { .be-spieler { grid-template-columns: 1fr 1fr; } .be-spieler label:last-child { grid-column: 1 / -1; } }
@@ -201,7 +204,7 @@
       <p class="be-intro">Turnier gespielt, Mannschaftskampf erlebt, etwas Lustiges passiert? Schreib es auf – mit Fotos. Wir schauen kurz drüber und stellen es online.</p>
       
       <div class="card einreichen offen" id="einreichen">
-        <div class="be-app" id="be-app" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-max="20000" data-kat="[[&quot;turnier&quot;, &quot;Turnier&quot;], [&quot;jugend&quot;, &quot;Jugend&quot;], [&quot;senioren&quot;, &quot;Senioren&quot;], [&quot;afk 1&quot;, &quot;AFK 1&quot;], [&quot;afk 2&quot;, &quot;AFK 2&quot;], [&quot;afk 3&quot;, &quot;AFK 3&quot;], [&quot;afk 4&quot;, &quot;AFK 4&quot;], [&quot;afk 5&quot;, &quot;AFK 5&quot;], [&quot;afk 6&quot;, &quot;AFK 6&quot;], [&quot;verein&quot;, &quot;Verein&quot;]]">
+        <div class="be-app" id="be-app" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-max="20000" data-kat="[[&quot;turnier&quot;, &quot;Turnier&quot;], [&quot;jugend&quot;, &quot;Jugend&quot;], [&quot;senioren&quot;, &quot;Senioren&quot;], [&quot;afk 1&quot;, &quot;AFK 1&quot;], [&quot;afk 2&quot;, &quot;AFK 2&quot;], [&quot;afk 3&quot;, &quot;AFK 3&quot;], [&quot;afk 4&quot;, &quot;AFK 4&quot;], [&quot;afk 5&quot;, &quot;AFK 5&quot;], [&quot;afk 6&quot;, &quot;AFK 6&quot;], [&quot;verein&quot;, &quot;Verein&quot;]]" data-version="2026-11-21.1">
           <noscript><p>Für den Editor wird JavaScript benötigt.</p></noscript>
         </div>
       </div>
