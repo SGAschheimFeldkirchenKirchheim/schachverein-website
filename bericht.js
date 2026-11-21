@@ -11,6 +11,11 @@
   var ICH = null;                              // angemeldetes Mitglied (aus konto.js) oder null
   var Z = { id: null, bilder: [], titelbild: 0, kat: [], partien: [], eintrag: null };
   var MAX_PARTIEN = 10;
+  var ICON = {          // kleine Symbole für die Kacheln unter dem Text
+    foto: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="8" width="26" height="19" rx="3"/><circle cx="16" cy="17.5" r="5"/><path d="M11 8l2-3h6l2 3"/></svg>',
+    partie: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path class="v" d="M4 4h6v6H4zM16 4h6v6h-6zM10 10h6v6h-6zM22 10h6v6h-6zM4 16h6v6H4zM16 16h6v6h-6zM10 22h6v6h-6zM22 22h6v6h-6z"/></svg>',
+    tabelle: '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="24" height="22" rx="2"/><path d="M4 11h24M4 16.5h24M4 22h24M11 5v22"/><path class="v" d="M4 11h24v5.5H4z" opacity=".35"/></svg>'
+  };
   var BASIS = (document.currentScript && document.currentScript.src || "").replace(/[^\/]*$/, "");
   var MODUL = null;
   function partieModul() {                      // partie.js + Brett-Bibliothek erst laden, wenn sie gebraucht werden
@@ -180,7 +185,10 @@
         '<input type="text" placeholder="Bildunterschrift" maxlength="200" value="' + esc(b.unterschrift) + '">' +
         '<div class="be-akt">' + (i === Z.titelbild ? "" : '<button type="button" data-b="titel">Titelbild</button>') +
         '<button type="button" data-b="ein">Einfügen</button><button type="button" class="rot" data-b="weg" title="Entfernen">Weg</button></div></div>';
-    }).join("") + (Z.bilder.length < MAX_BILDER ? '<label class="be-drop">Fotos hierher ziehen<br>oder antippen zum Auswählen<input type="file" accept="image/*" multiple hidden></label>' : "");
+    }).join("") + (Z.bilder.length < MAX_BILDER ? '<label class="be-drop">' + ICON.foto + "<b>Fotos</b><span>hierher ziehen oder antippen</span>" +
+      '<input type="file" accept="image/*" multiple hidden></label>' : "") +
+      '<button type="button" class="be-drop be-kachel" data-k="partie">' + ICON.partie + "<b>Schachpartie</b><span>PGN einfügen – zum Nachspielen im Bericht</span></button>" +
+      '<button type="button" class="be-drop be-kachel" data-k="tabelle">' + ICON.tabelle + "<b>Turniertabelle</b><span>Link von chess-results.com</span></button>";
     [].forEach.call(box.querySelectorAll(".be-bild"), function (el) {
       var i = +el.getAttribute("data-i");
       el.querySelector("input").addEventListener("input", function (ev) { Z.bilder[i].unterschrift = ev.target.value; merken(); });
@@ -197,7 +205,10 @@
         });
       });
     });
-    var drop = box.querySelector(".be-drop");
+    [].forEach.call(box.querySelectorAll("[data-k]"), function (k) {
+      k.addEventListener("click", function () { if (k.getAttribute("data-k") === "partie") partieDialog(null); else tabelleDialog(); });
+    });
+    var drop = box.querySelector("label.be-drop");
     if (drop) {
       drop.querySelector("input").addEventListener("change", function (ev) { bilderDazu(ev.target.files); ev.target.value = ""; });
       ["dragenter", "dragover"].forEach(function (n) { drop.addEventListener(n, function (ev) { ev.preventDefault(); drop.classList.add("ueber"); }); });
@@ -436,7 +447,7 @@
     if (was === "bild") {
       var genutzt = ($(".be-text").value.match(/\[Bild (\d+)\]/g) || []).map(function (x) { return +x.match(/\d+/)[0]; });
       for (var i = 0; i < Z.bilder.length; i++) if (genutzt.indexOf(i + 1) < 0) return einfuegen("[Bild " + (i + 1) + "]");
-      var f = APP.querySelector(".be-drop input"); if (f) f.click();
+      var f = APP.querySelector("label.be-drop input"); if (f) f.click();
     }
   }
 
@@ -527,6 +538,7 @@
     var w = {};
     if (!leeren) { try { w = JSON.parse(localStorage.getItem(SPEICHER) || "{}"); } catch (e) {} }
     if (!w.autor && ICH) w.autor = ICH.ich.name;
+    if (!(w.titel || "").trim() && !(w.text || "").trim()) w.datum = "";        // leerer Entwurf: Datum von heute
     befuellen(w);
     $(".be-kopf").innerHTML = ""; $(".be-abbrechen").hidden = true;
     history.replaceState(null, "", location.pathname + location.hash);
