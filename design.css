@@ -677,7 +677,7 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
 .pz-zuege { max-height: 27rem; overflow-y: auto; font-size: .93rem; line-height: 1.75; padding-right: .3rem; }
 .pz-zuege button { all: unset; cursor: pointer; padding: .05rem .25rem; border-radius: 4px; font-weight: 600; color: var(--text); }
 .pz-zuege button:hover { background: var(--soft); }
-.pz-zuege button[aria-current] { background: var(--accent, #3b5f93); color: #fff; }
+.pz-zuege button[aria-current] { background: #3b6fb0; color: #fff; }
 .pz-var { color: var(--muted); font-size: .88rem; } .pz-var button { font-weight: 400; color: var(--muted); }
 .pz-kom { color: #3f8f5f; font-style: italic; font-size: .88rem; } :root[data-theme="dark"] .pz-kom { color: #7fd0a0; }
 .pz-ende { margin-top: .4rem; font-weight: 700; }
