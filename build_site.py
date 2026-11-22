@@ -218,6 +218,27 @@ def build_nav(nav_path, active, seite=None):
     return "\n      ".join(links)
 
 
+_DATEI_VERSION = {}
+
+
+def _cache_brecher(html):
+    """Hängt an eigene .css/.js-Dateien ?v=<Prüfsumme> an. Ändert sich eine Datei, lädt der Browser sie
+    sofort neu (sonst zeigt er bis zu 10 Minuten die alte Fassung aus dem Zwischenspeicher)."""
+    import hashlib
+
+    def ersetze(m):
+        name = m.group(2)
+        if name not in _DATEI_VERSION:
+            try:
+                with open(name, "rb") as f:
+                    _DATEI_VERSION[name] = hashlib.sha1(f.read()).hexdigest()[:8]
+            except OSError:
+                _DATEI_VERSION[name] = ""
+        v = _DATEI_VERSION[name]
+        return f'{m.group(1)}{name}{"?v=" + v if v else ""}"'
+    return re.sub(r'((?:src|href)="(?:\.\./)*)([\w-]+\.(?:css|js))"', ersetze, html)
+
+
 def render_page(title, content, filename, css_path="", nav_path="", extra_styles="", description=None):
     template_path = os.path.join("templates", "base.html")
     if not os.path.exists(template_path):
@@ -271,6 +292,7 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
     if MAIL_UMLEITUNG:
         full_html = re.sub(r"[\w.+-]+@sg-afk\.de", MAIL_UMLEITUNG, full_html)
     full_html = suche.knopf_einbauen(full_html, nav_path)
+    full_html = _cache_brecher(full_html)
     suche.merken(title, content, filename, description or PAGE_DESCRIPTIONS.get(name, ""))
 
     with open(filename, "w", encoding="utf-8") as f:
