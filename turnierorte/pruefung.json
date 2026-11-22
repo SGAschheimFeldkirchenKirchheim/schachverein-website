@@ -1,23 +1,7 @@
 {
- "stand": "2026-11-22 13:59",
+ "stand": "2026-11-22 14:05",
  "fehler": 0,
  "eintraege": [
-  {
-   "key": {
-    "spieler": "KorbinianR",
-    "turnier": "Deutsche Uni-Meisterschaft 2026",
-    "von": "2026-11",
-    "link": "https://chess-results.com/tnr1534478.aspx?lan=0",
-    "stadt": "Berlin"
-   },
-   "meldungen": [
-    {
-     "code": "bedenkzeit",
-     "stufe": "gelb",
-     "text": "Nicht klassisch, aber keine Ausnahme eingetragen"
-    }
-   ]
-  },
   {
    "key": {
     "spieler": "KorbinianR",
