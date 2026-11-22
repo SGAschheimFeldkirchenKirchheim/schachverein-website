@@ -117,7 +117,10 @@
   "bedenkzeit": "klassisch",
   "ausnahme": "",
   "bestaetigt": "2026-11-18",
-  "region": "Baden-Württemberg"
+  "region": "Baden-Württemberg",
+  "ok": [
+   "kein_link"
+  ]
  },
  {
   "spieler": "DavidM",
