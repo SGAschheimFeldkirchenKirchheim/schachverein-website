@@ -1389,22 +1389,31 @@ def oq_diashow_html():
     for i, n in enumerate(namen):
         t = re.sub(r"^\d{1,2}[-_]+", "", os.path.splitext(n)[0]).replace("_", " ").strip()
         url = "/".join(quote(x) for x in OQ_DIASHOW.split(os.sep)) + "/" + quote(n)
-        bilder.append(f'<figure{" class=an" if i == 0 else ""}><img src="{url}" alt="{esc(t)}">'
+        bilder.append(f'<figure{" class=an" if i == 0 else ""}><span class="oq-bg" style="background-image:url(\'{url}\')"></span>'
+                      f'<img src="{url}" alt="{esc(t)}"{"" if i == 0 else " loading=lazy"}>'
                       f'<figcaption>{esc(t)}</figcaption></figure>')
     knoepfe = ('<div class="oq-show-steuer"><button type="button" class="oq-z" aria-label="Zurück">←</button>'
-               '<button type="button" class="oq-v" aria-label="Weiter">→</button>'
-               f'<span class="oq-nr">1 / {len(namen)}</span></div>') if len(namen) > 1 else ""
+               f'<span class="oq-nr">1 / {len(namen)}</span>'
+               '<button type="button" class="oq-v" aria-label="Weiter">→</button></div>') if len(namen) > 1 else ""
+    # Fester Rahmen (Seitenverhältnis 3:2): jedes Foto steht vollständig darin, der Rand wird mit einer
+    # unscharfen, abgedunkelten Kopie desselben Fotos gefüllt -> gleiche Höhe, nichts springt, nichts abgeschnitten.
     return f"""<div class="oq-show" data-ms="{OQ_DIASHOW_SEKUNDEN * 1000}"><div class="oq-show-bilder">{"".join(bilder)}</div>{knoepfe}</div>
 <style>
-  .oq-show {{ margin: 1.5rem 0 2rem; max-width: 900px; }}
-  .oq-show-bilder {{ display: grid; align-items: start; }}
-  .oq-show figure {{ grid-area: 1 / 1; margin: 0; opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }}
+  .oq-show {{ position: relative; margin: 1.5rem 0 2rem; max-width: 900px; aspect-ratio: 3 / 2; max-height: 520px;
+    border-radius: 12px; overflow: hidden; background: #0a0f1a; }}
+  .oq-show-bilder, .oq-show figure {{ position: absolute; inset: 0; margin: 0; }}
+  .oq-show figure {{ opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }}
   .oq-show figure.an {{ opacity: 1; pointer-events: auto; }}
-  .oq-show img {{ display: block; max-width: 100%; max-height: 70vh; width: auto; height: auto; border-radius: 10px; }}
-  .oq-show figcaption {{ font-size: .9rem; color: var(--muted, #8a93a6); margin-top: .4rem; }}
-  .oq-show-steuer {{ display: flex; align-items: center; gap: .7rem; margin-top: .8rem; }}
-  .oq-show-steuer button {{ width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 1.5px solid var(--line, #3a4560); background: none; color: inherit; cursor: pointer; font-size: 1rem; }}
-  .oq-nr {{ font-size: .9rem; color: var(--muted, #8a93a6); font-variant-numeric: tabular-nums; }}
+  .oq-bg {{ position: absolute; inset: -30px; background: center / cover no-repeat; filter: blur(26px) brightness(.45) saturate(1.2); }}
+  .oq-show img {{ position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }}
+  .oq-show figcaption {{ position: absolute; left: 0; right: 0; bottom: 0; padding: 2.2rem 1rem .75rem; font-size: .92rem; font-weight: 600;
+    color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, .65)); }}
+  .oq-show-steuer {{ position: absolute; right: .7rem; bottom: .6rem; display: flex; align-items: center; gap: .45rem; z-index: 2; }}
+  .oq-show-steuer button {{ width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .45);
+    color: #fff; cursor: pointer; font-size: 1rem; backdrop-filter: blur(4px); }}
+  .oq-show-steuer button:hover {{ background: rgba(0, 0, 0, .7); }}
+  .oq-nr {{ font-size: .85rem; color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px #000; }}
+  @media (max-width: 600px) {{ .oq-show {{ aspect-ratio: 4 / 3; border-radius: 10px; }} }}
   @media (prefers-reduced-motion: reduce) {{ .oq-show figure {{ transition: none; }} }}
 </style>
 <script>
@@ -1417,6 +1426,10 @@ def oq_diashow_html():
   function stop() {{ if (t) clearInterval(t); t = null; }}
   s.querySelector(".oq-v").onclick = function () {{ geh(i + 1); start(); }};
   s.querySelector(".oq-z").onclick = function () {{ geh(i - 1); start(); }};
+  var x0 = null;                                            // Wischen am Handy
+  s.addEventListener("touchstart", function (e) {{ x0 = e.touches[0].clientX; }}, {{ passive: true }});
+  s.addEventListener("touchend", function (e) {{ if (x0 === null) return; var d = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(d) > 40) {{ geh(i + (d < 0 ? 1 : -1)); start(); }} }});
   s.addEventListener("mouseenter", stop); s.addEventListener("mouseleave", start); start();
 }})();
 </script>"""
