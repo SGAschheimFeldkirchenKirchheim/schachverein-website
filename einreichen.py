@@ -142,7 +142,7 @@ SEITE = "bericht-schreiben.html"
 
 # Muss zu B_VERSION in AppsScript/Berichte.gs passen. Sonst sehen Admins im Editor eine Warnung,
 # dass das Apps Script nicht auf dem neuesten Stand ist (Datei ersetzen + "Neue Version" bereitstellen).
-APPS_SCRIPT_VERSION = "2026-11-22.1"
+APPS_SCRIPT_VERSION = "2026-11-22.2"
 
 
 def block(css_path=""):

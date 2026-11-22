@@ -21,6 +21,7 @@ import urllib.parse
 import turnierkalender as tk
 import turnierorte as to
 
+CR_ALLE = tk.CR_START + "&zeilen=99999"     # komplette Teilnehmerliste (sonst nur die ersten ~100)
 GEOCODER = ("https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1"
             "&accept-language=de&q={q}")
 
@@ -101,7 +102,7 @@ def auswerten(a):
         info["bedenkzeit"] = d.get("bedenkzeit") or a.get("bedenkzeit", "")
         info["cr_ort"] = ", ".join(x for x in (d.get("ort", ""), d.get("land", "")) if x)
         info["link"] = tk.CR_LINK.format(tnr=tnr)
-        gefunden = name_in_teilnehmern(a.get("name", ""), tk._hole(tk.CR_START.format(tnr=tnr)))
+        gefunden = name_in_teilnehmern(a.get("name", ""), tk._hole(CR_ALLE.format(tnr=tnr)))
     if not info.get("von") and a.get("monat"):
         info["von"] = info["bis"] = a["monat"]
     suchtext = ", ".join(x for x in (a.get("stadt", ""), a.get("land", "")) if x) or info.get("cr_ort", "")
@@ -383,8 +384,12 @@ def cache_ergaenzen(besuche, spieler, cache):
             neu += 1
         name = (spieler.get(b["spieler"]) or {}).get("name", "")
         namen = c.setdefault("namen", {})
+        if not c.get("voll"):                    # alte Prüfung nur mit der gekürzten Liste -> "nicht gefunden" nochmal prüfen
+            for n in [n for n, v in namen.items() if v is False]:
+                namen.pop(n)
+            c["voll"] = True
         if c.get("erreichbar") and name and name not in namen:
-            seite = tk._hole(tk.CR_START.format(tnr=tnr))
+            seite = tk._hole(CR_ALLE.format(tnr=tnr))
             if seite is not None:
                 namen[name] = name_in_teilnehmern(name, seite)
                 neu += 1

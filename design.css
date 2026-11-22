@@ -773,3 +773,40 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
 .pz-diag-fuss .pz-f { margin-right: .4rem; vertical-align: -1px; }
 .pz-diag-fuss a { font-size: .85rem; margin-right: .6rem; }
 .pz-diag-fuss button { font: inherit; padding: .3rem .7rem; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--text); cursor: pointer; }
+
+/* Listen (Sommerfest, Zusagen …) – listen.html und Verwaltung -> Listen */
+.ls-karte { display: flex; flex-direction: column; gap: .2rem; text-decoration: none; }
+.ls-text { max-width: 46rem; }
+.ls-sum { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1rem 0; }
+.ls-sum div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: .5rem .9rem; font-size: .9rem; }
+.ls-sum b { font-size: 1.2rem; color: var(--head); display: block; }
+.ls-felder { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: 0 .8rem; margin-top: .8rem; }
+.ls-felder .ls-breit { grid-column: span 2; }
+.kt-feld select { appearance: auto; }
+.ls-auf { display: grid; grid-template-columns: 1fr auto; gap: .5rem .8rem; align-items: center; }
+.ls-frei { color: #2f9a5c; }
+.ls-kopfzeile { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.6rem; flex-wrap: wrap; }
+.ls-kopfzeile h3 { margin: 0; } .ls-knoepfe { display: flex; gap: .4rem; }
+.ls-tab { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.ls-tab th { text-align: left; font-size: .82rem; color: var(--muted); font-weight: 600; padding: .5rem .6rem; border-bottom: 1.5px solid var(--line); }
+.ls-tab td { padding: .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.ls-tab tr.ich td { background: rgba(63, 174, 108, .08); }
+.ls-tab tr.weg td { color: var(--muted); font-style: italic; }
+.ls-zeit { display: block; font-size: .78rem; color: var(--muted); margin-top: .15rem; }
+.ls-status { font-size: .8rem; padding: .15rem .55rem; border-radius: 20px; background: var(--soft); color: var(--muted); white-space: nowrap; }
+.ls-status.sichtbar { background: #3fae6c22; color: #2f9a5c; } .ls-status.geplant, .ls-status.verwaltung { background: #e0a84f2e; color: #9a6510; }
+.ls-editor-kopf { display: grid; grid-template-columns: 2fr 1.6fr 1fr 1fr; gap: 0 .8rem; margin-top: .8rem; }
+.ls-feldzeile { display: grid; grid-template-columns: 1.3fr 1.3fr 1.6fr auto auto auto; gap: .5rem; align-items: center; margin-bottom: .5rem; font-size: .85rem; }
+.ls-feldzeile input:not([type=checkbox]), .ls-feldzeile select { width: 100%; box-sizing: border-box; padding: .45rem .6rem; border-radius: 8px;
+  border: 1.5px solid var(--line); background: var(--bg); color: var(--text); font: inherit; font-size: .9rem; }
+.ls-feldzeile .ls-unsichtbar { visibility: hidden; }
+.ls-hinweis { margin: 0 0 1rem; } .ls-hinweis span + a { margin-left: .6rem; }
+@media (max-width: 720px) {
+  .ls-editor-kopf, .ls-feldzeile { grid-template-columns: 1fr 1fr; } .ls-felder .ls-breit { grid-column: auto; }
+  .ls-tab { font-size: .85rem; }
+}
+@media print {
+  body:has(#kt-seite[data-seite="listen"]) header, body:has(#kt-seite[data-seite="listen"]) nav,
+  body:has(#kt-seite[data-seite="listen"]) footer, .ls-form, .ls-knoepfe, .kt-meldung, .ls-hinweis, [data-uebernehmen] { display: none !important; }
+  .ls-tab tr.ich td { background: none; }
+}

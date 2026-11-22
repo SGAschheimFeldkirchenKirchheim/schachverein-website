@@ -87,9 +87,10 @@
       '<div class="kt-menue-kopf">Angemeldet als <b>' + esc(a.ich.benutzer) + "</b></div>" +
       '<a href="' + PFAD + 'mein-profil.html">Mein Profil</a>' +
       '<a href="' + PFAD + "spieler/" + esc(a.ich.slug) + '.html">Meine Seite ansehen</a>' +
-      (a.ich.darf.verwaltung || a.ich.darf.turniere ? '<a href="' + PFAD + "verwaltung.html" +
-        (!a.ich.darf.verwaltung || a.offenTurniere && !a.offenAntraege && !a.offenBerichte ? "#turniere" : a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">' +
-        (a.ich.darf.verwaltung ? "Verwaltung" : "Turnier-Anträge") + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
+      ((a.listen && a.listen.length) || a.ich.darf.listen ? '<a href="' + PFAD + 'listen.html">Listen' + (a.listen && a.listen.length ? " (" + a.listen.length + ")" : "") + "</a>" : "") +
+      (a.ich.darf.verwaltung || a.ich.darf.turniere || a.ich.darf.listen ? '<a href="' + PFAD + "verwaltung.html" +
+        (!a.ich.darf.verwaltung ? (a.ich.darf.turniere ? "#turniere" : "#listen") : a.offenTurniere && !a.offenAntraege && !a.offenBerichte ? "#turniere" : a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">' +
+        "Verwaltung" + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
       '<button type="button" data-kt="abmelden">Abmelden</button></div>');
     KNOPF.parentNode.appendChild(m);
     m.querySelector("[data-kt=abmelden]").addEventListener("click", function () { abmelden(false); });
@@ -409,15 +410,16 @@
   }
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
-    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
+    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, LISTEN = null, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
     function laden() {
-      Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere")]).then(function (r) {
-        // m_turniere unbekannt = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
-        TURNIERE = r[2].ok ? r[2] : { offen: [], rueckfrage: [], angenommen: [], alt: r[2].fehler === "Unbekannte Anfrage" };
-        NUR_TURNIERE = !r[0].ok && r[2].ok;            // Mitglied mit dem Recht "turniere"
-        if (!r[0].ok && !NUR_TURNIERE) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
+      Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere"), api("l_admin_liste")]).then(function (r) {
+        // "Unbekannte Anfrage" = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
+        TURNIERE = r[2].ok ? r[2] : { offen: [], rueckfrage: [], angenommen: [], alt: r[2].fehler === "Unbekannte Anfrage", kein: true };
+        LISTEN = r[3].ok ? r[3] : { listen: [], alt: r[3].fehler === "Unbekannte Anfrage", kein: !r[0].ok };
+        NUR_TURNIERE = !r[0].ok;                        // kein Admin: nur die Reiter seiner Rechte (turniere, listen)
+        if (NUR_TURNIERE && !r[2].ok && !r[3].ok) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
         NUTZER = r[0].ok ? r[0] : { nutzer: [], rechte: [], ich: "", inhaber: false };
-        if (NUR_TURNIERE) reiter = "turniere";
+        if (NUR_TURNIERE && ["turniere", "listen"].indexOf(reiter) < 0) reiter = r[2].ok ? "turniere" : "listen";
         BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
         zeichnen();
       });
@@ -467,7 +469,7 @@
               feld("turnier", "Turnier", "text", 'value="' + esc(b.turnier || "") + '"') +
               feld("link", "chess-results-Link", "url", 'value="' + esc(b.link || "") + '"') +
               '<label class="kt-check"><input type="checkbox" name="cr_holen"> <span>Name und Datum neu von chess-results holen</span></label>' +
-              feld("ort", "Ort (leer = bleibt " + esc(b.stadt || "?") + ")", "text", 'placeholder="z. B. Berlin, Deutschland"') +
+              feld("ort", "Ort", "text", 'value="' + esc([b.stadt, b.land].filter(Boolean).join(", ")) + '" placeholder="z. B. Berlin, Deutschland"') +
               feld("datum", "Datum (JJJJ-MM)", "text", 'value="' + esc(String(b.von || "").slice(0, 7)) + '"') +
               '<div class="kt-feld"><label>Bedenkzeit</label><select name="bedenkzeit">' + ["klassisch", "schnell", "blitz"].map(function (z) {
                 return '<option value="' + z + '"' + (b.bedenkzeit === z ? " selected" : "") + ">" + z + "</option>"; }).join("") + "</select></div>" +
@@ -569,15 +571,17 @@
         '<p class="kt-klein links">Änderungen übernimmt der nächste Build (startet von selbst, ein paar Minuten). Einen neuen Ort sucht er auf der Karte, ' +
         "neue Turniere kommen über das Formular auf der AFK-on-Tour-Seite.</p>");
       if (reiter === "turniere" && !TOUR) { TOUR = "laedt"; api("m_tour_daten").then(function (r) { TOUR = r.ok ? r : { fehlerText: r.fehler || "Nicht geladen" }; zeichnen(); }); }
+      var listenTeil = teil("listen", "");
       if (NUR_TURNIERE) {
-        box.innerHTML = '<p class="kt-unter">AFK on Tour – Turnier-Anträge</p><p class="kt-meldung" hidden></p>' + turnierTeil;
-        box.querySelector(".kt-reiter-inhalt").hidden = false;
+        box.innerHTML = '<p class="kt-meldung" hidden></p><div class="kt-reiter" role="tablist">' +
+          (TURNIERE.kein ? "" : r("turniere", "Turniere", tOffen)) + (LISTEN.kein ? "" : r("listen", "Listen")) + "</div>" +
+          (TURNIERE.kein ? "" : turnierTeil) + (LISTEN.kein ? "" : listenTeil);
       } else
       box.innerHTML = '<p class="kt-unter">Angemeldet als <b>' + esc(a.ich) + "</b> " + tag(inh ? "inhaber" : "admin") + "</p>" +
         '<p class="kt-meldung" hidden></p>' +
         '<div class="kt-reiter" role="tablist">' + r("antraege", "Anträge", offen.length) + r("berichte", "Berichte", bOffen.length) +
-        r("turniere", "Turniere", tOffen) +
-        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" + turnierTeil +
+        r("turniere", "Turniere", tOffen) + r("listen", "Listen") +
+        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" + turnierTeil + listenTeil +
         teil("antraege", offen.length ? offen.map(function (x) {
           return '<div class="kt-karte kt-antrag"><div><b>' + esc(x.name) + '</b><br><span class="kt-grau">Benutzername ' + esc(x.benutzer) + " · " + zeitText(x.seit) + "</span></div>" +
             '<div class="kt-gut">Name und Geburtsdatum stimmen mit der Mitgliederliste überein</div>' +
@@ -588,9 +592,10 @@
           '<h3 style="margin-top:1.8rem">Online</h3>' + (bOnline.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="kt-tab">' + bOnline.map(function (e) { return berichtZeile(e, false); }).join("") + "</table></div>"
             : '<p class="kt-klein links">Keine.</p>') +
           '<p class="kt-klein links">Hier stehen alle Berichte von diesem und letztem Jahr. „Zurückziehen“ macht einen Bericht wieder zum Entwurf; endgültig löschen geht bei Entwürfen.</p>') +
-        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen. Admins haben alle Rechte."
+        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen, <b>listen</b> = Listen (Sommerfest …) anlegen. Admins haben alle Rechte."
           : "Stufen und Rechte kann nur der Inhaber ändern.") + "</p>") +
         teil("weg", nutzerListe(weg) + '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p>');
+      if (box.querySelector('[data-r="listen"].kt-reiter-inhalt')) listenVerwaltung(box, LISTEN, zeichnen, fertig);
       if (alteMeldung) { var m2 = box.querySelector(".kt-meldung"); m2.textContent = alteMeldung[0]; m2.className = alteMeldung[1]; m2.hidden = false; }
       [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (b) {
         b.addEventListener("click", function () {
@@ -654,7 +659,7 @@
         var v = function (n) { return (tf.elements[n].value || "").trim(); };
         if (v("turnier") && v("turnier") !== (b.turnier || "")) w.turnier = v("turnier");
         if (v("link") !== (b.link || "") || tf.cr_holen.checked) { w.link = v("link"); w.cr_holen = tf.cr_holen.checked; }
-        if (v("ort")) w.ort = v("ort");
+        if (v("ort") && v("ort") !== [b.stadt, b.land].filter(Boolean).join(", ")) w.ort = v("ort");
         if (v("datum") && v("datum") !== String(b.von || "").slice(0, 7)) w.datum = v("datum");
         if (v("bedenkzeit") !== (b.bedenkzeit || "")) w.bedenkzeit = v("bedenkzeit");
         if (!Object.keys(w).length) return fehler(tf, "Nichts geändert.");
@@ -684,6 +689,254 @@
     }
     box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
     laden();
+  }
+
+  // ---------- Listen (Sommerfest, Zusagen, Helfer …) ----------
+  var L_ARTEN = { text: "Text", zahl: "Zahl", auswahl: "Auswahl (eigene Optionen)", jnv: "Ja / Nein / Vielleicht", aufgaben: "Aufgaben zum Übernehmen" };
+  var L_VORLAGEN = {
+    leer: { titel: "", felder: [] },
+    sommerfest: { titel: "Sommerfest", felder: [
+      { name: "Personen", art: "zahl", pflicht: true, summe: true }, { name: "Bringe mit", art: "text" },
+      { name: "Grillwunsch", art: "auswahl", optionen: ["Wurst", "Steak", "vegetarisch"], summe: true },
+      { name: "Wer übernimmt was", art: "aufgaben", optionen: ["Getränke kaufen", "Grill aufbauen", "Kuchen"] }] },
+    zusage: { titel: "Zusage", felder: [{ name: "Ich komme", art: "jnv", pflicht: true, summe: true }, { name: "Kommentar", art: "text" }] },
+    helfer: { titel: "Helfer", felder: [{ name: "Aufgabe", art: "aufgaben", optionen: ["Aufbau", "Abbau", "Kasse"], pflicht: true }, { name: "Kommentar", art: "text" }] },
+    fahrt: { titel: "Fahrgemeinschaft", felder: [{ name: "Ich bin", art: "auswahl", optionen: ["Fahrer", "Mitfahrer"], pflicht: true, summe: true },
+      { name: "Freie Plätze", art: "zahl", summe: true }, { name: "Abfahrt von", art: "text" }] }
+  };
+  var L_STATUS = { entwurf: "Entwurf", verwaltung: "nur Verwaltung", geplant: "geplant", sichtbar: "sichtbar", beendet: "beendet" };
+  function zweistellig(n) { return ("0" + n).slice(-2); }
+  function zeitKurz(ms) { if (!ms) return ""; var d = new Date(ms); return zweistellig(d.getDate()) + "." + zweistellig(d.getMonth() + 1) + ". " + zweistellig(d.getHours()) + ":" + zweistellig(d.getMinutes()); }
+  function datumDe(iso) { var m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + "." + m[2] + "." + m[1] : ""; }
+  function lStatusText(l) {
+    if (l.status === "sichtbar") return l.sofort || !l.bis ? "sichtbar" : "sichtbar bis " + datumDe(l.bis);
+    if (l.status === "geplant") return "ab " + datumDe(l.von) + " sichtbar";
+    return L_STATUS[l.status] || l.status;
+  }
+  function wertText(f, v) {
+    if (v == null || v === "") return "";
+    return Array.isArray(v) ? v.join(", ") : String(v);
+  }
+  function verlauf(e) {
+    var t = [];
+    (e.frueher || []).forEach(function (x) { t.push("erstellt " + zeitKurz(x.erstellt), "gelöscht " + zeitKurz(x.geloescht)); });
+    t.push((t.length ? "neu erstellt " : "erstellt ") + zeitKurz(e.erstellt));
+    (e.bearbeitet || []).forEach(function (b, i) { t.push((i + 1) + ". Bearbeitung " + zeitKurz(b)); });
+    return t.join(" · ");
+  }
+
+  function seiteListen(box) {
+    if (!token()) return bitteAnmelden(box, "Listen sind nur für angemeldete Mitglieder.");
+    var id = new URLSearchParams(location.search).get("id");
+    box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
+    if (!id) {
+      return api("l_laden", {}).then(function (r) {
+        if (!r.ok) return bitteAnmelden(box, r.fehler);
+        box.innerHTML = r.listen.length ? '<div class="kt-nutzer">' + r.listen.map(function (l) {
+          return '<a class="kt-karte ls-karte" href="?id=' + encodeURIComponent(l.id) + '"><b>' + esc(l.titel) + '</b><span class="kt-grau">' + esc(lStatusText(l)) + "</span></a>";
+        }).join("") + "</div>" : '<p class="kt-klein links">Gerade gibt es keine offenen Listen.</p>';
+      });
+    }
+    function laden() { return api("l_laden", { id: id }).then(function (r) { if (!r.ok) return meldung(box, r.fehler, "schlecht"); zeichnen(r); }); }
+    function zeichnen(r) {
+      var L = r.liste, F = L.felder, E = r.eintraege, aktiv = E.filter(function (e) { return !e.geloescht; });
+      var ich = E.filter(function (e) { return e.ich && !e.geloescht; })[0];
+      document.title = L.titel + " – SG AFK";
+      var h1 = document.querySelector("main h1, h1"); if (h1) h1.textContent = L.titel;
+      var html = '<p class="kt-unter">' + esc(lStatusText(L)) + " · nur für angemeldete Mitglieder</p>" +
+        (L.status !== "sichtbar" ? '<p class="kt-warn">Diese Liste sehen gerade nur Verwaltung und Listen-Berechtigte.</p>' : "") +
+        (L.text ? '<div class="ls-text">' + textHtml(L.text) + "</div>" : "") + '<p class="kt-meldung" hidden></p>';
+      // Summen
+      var sum = ['<div><b>' + aktiv.length + "</b>Einträge</div>"];
+      F.forEach(function (f) {
+        if (!f.summe) return;
+        if (f.art === "zahl") sum.push("<div><b>" + aktiv.reduce(function (s, e) { return s + (Number(e.werte[f.id]) || 0); }, 0) + "</b>" + esc(f.name) + "</div>");
+        else (f.art === "jnv" ? ["Ja", "Nein", "Vielleicht"] : f.optionen).forEach(function (o) {
+          var n = aktiv.filter(function (e) { return e.werte[f.id] === o; }).length;
+          if (n) sum.push("<div><b>" + n + "</b>" + esc(f.art === "jnv" ? f.name + ": " + o : o) + "</div>");
+        });
+      });
+      html += '<div class="ls-sum">' + sum.join("") + "</div>";
+      // Doppelte in Textspalten
+      F.forEach(function (f) {
+        if (f.art !== "text") return;
+        var z = {};
+        aktiv.forEach(function (e) { String(e.werte[f.id] || "").split(/,|\bund\b/).forEach(function (t) { t = t.trim(); if (t) { var k = t.toLowerCase(); z[k] = z[k] || { t: t, n: 0 }; z[k].n++; } }); });
+        Object.keys(z).forEach(function (k) { if (z[k].n > 1) html += '<p class="kt-hinweis">Hinweis: „' + esc(z[k].t) + "“ steht bei „" + esc(f.name) + "“ schon " + z[k].n + "×.</p>"; });
+      });
+      // Eigener Eintrag
+      if (r.darfEintragen) {
+        html += '<form class="kt-karte kt-form ls-form" novalidate><b>Dein Eintrag</b><div class="ls-felder">' + F.map(function (f) {
+          var v = ich ? ich.werte[f.id] : undefined, lab = esc(f.name) + (f.pflicht ? " *" : "");
+          if (f.art === "aufgaben") return '<div class="kt-feld ls-breit"><label>' + lab + "</label>" + f.optionen.map(function (o) {
+            return '<label class="kt-check" style="display:inline-flex;margin-right:1rem"><input type="checkbox" name="' + f.id + '" value="' + esc(o) + '"' + (v && v.indexOf(o) >= 0 ? " checked" : "") + "> <span>" + esc(o) + "</span></label>"; }).join("") + "</div>";
+          if (f.art === "auswahl" || f.art === "jnv") return '<div class="kt-feld"><label>' + lab + '</label><select name="' + f.id + '"><option value="">–</option>' +
+            (f.art === "jnv" ? ["Ja", "Nein", "Vielleicht"] : f.optionen).map(function (o) { return '<option' + (v === o ? " selected" : "") + ">" + esc(o) + "</option>"; }).join("") + "</select></div>";
+          return '<div class="kt-feld' + (f.art === "text" ? " ls-breit" : "") + '"><label>' + lab + '</label><input name="' + f.id + '" type="' + (f.art === "zahl" ? "number" : "text") + '" min="0" value="' + esc(v == null ? "" : v) + '"></div>';
+        }).join("") + '</div><p class="kt-fehler" hidden></p><div class="kt-zeile"><button type="submit" class="kt-btn gruen">' + (ich ? "Änderung speichern" : "Eintragen") + "</button>" +
+          (ich ? '<button type="button" class="kt-btn rot" data-l="weg">Eintrag löschen</button>' : "") + "</div></form>";
+      }
+      // Aufgaben
+      F.filter(function (f) { return f.art === "aufgaben"; }).forEach(function (f) {
+        html += '<h3 style="margin-top:1.6rem">' + esc(f.name) + '</h3><div class="kt-karte ls-auf">' + f.optionen.map(function (o) {
+          var wer = aktiv.filter(function (e) { return (e.werte[f.id] || []).indexOf(o) >= 0; });
+          var meins = ich && (ich.werte[f.id] || []).indexOf(o) >= 0;
+          return "<div>" + esc(o) + "</div><div>" + (wer.length ? esc(wer.map(function (e) { return e.name; }).join(", ")) : '<span class="ls-frei">frei</span>') +
+            (r.darfEintragen && !meins ? ' <button type="button" class="kt-mini" data-uebernehmen="' + esc(f.id) + '" data-opt="' + esc(o) + '">Übernehmen</button>' : "") + "</div>";
+        }).join("") + "</div>";
+      });
+      // Alle Einträge
+      html += '<div class="ls-kopfzeile"><h3>Alle Einträge</h3>' + (r.verwalter ? '<span class="ls-knoepfe"><button type="button" class="kt-mini" data-l="csv">Excel (CSV)</button>' +
+        '<button type="button" class="kt-mini" data-l="druck">Drucken / PDF</button></span>' : "") + "</div>";
+      html += '<div class="kt-karte kt-tabelle-rahmen"><table class="ls-tab"><tr><th>Name</th>' + F.map(function (f) { return "<th>" + esc(f.name) + "</th>"; }).join("") + "</tr>" +
+        (E.length ? E.map(function (e) {
+          if (e.geloescht) return '<tr class="weg"><td>' + esc(e.name) + '</td><td colspan="' + F.length + '">hat den Eintrag am ' + zeitKurz(e.geloescht) + " gelöscht (" + verlauf(e) + ")</td></tr>";
+          return '<tr' + (e.ich ? ' class="ich"' : "") + "><td><b>" + esc(e.name) + '</b><span class="ls-zeit">' + verlauf(e) + "</span></td>" +
+            F.map(function (f) { return "<td>" + esc(wertText(f, e.werte[f.id])) + "</td>"; }).join("") + "</tr>";
+        }).join("") : '<tr><td colspan="' + (F.length + 1) + '" class="kt-grau">Noch niemand eingetragen.</td></tr>') + "</table></div>";
+      box.innerHTML = html;
+      var form = box.querySelector(".ls-form");
+      function senden(zusatz) {
+        var w = {};
+        F.forEach(function (f) {
+          if (f.art === "aufgaben") w[f.id] = [].map.call(form.querySelectorAll('[name="' + f.id + '"]:checked'), function (x) { return x.value; });
+          else w[f.id] = (form.elements[f.id].value || "").trim();
+        });
+        if (zusatz) w[zusatz[0]] = (w[zusatz[0]] || []).concat([zusatz[1]]);
+        laedt(form, true);
+        api("l_eintragen", { id: id, werte: w }).then(function (a) {
+          laedt(form, false);
+          if (!a.ok) { fehler(form, a.fehler); form.scrollIntoView({ block: "center" }); return; }
+          laden().then(function () { meldung(box, a.meldung, "gut"); });
+        });
+      }
+      if (form) form.addEventListener("submit", function (ev) { ev.preventDefault(); senden(); });
+      [].forEach.call(box.querySelectorAll("[data-uebernehmen]"), function (k) {
+        k.addEventListener("click", function () { senden([k.getAttribute("data-uebernehmen"), k.getAttribute("data-opt")]); });
+      });
+      var weg = box.querySelector('[data-l="weg"]');
+      if (weg) weg.addEventListener("click", function () {
+        if (!confirm("Deinen Eintrag löschen? Alle sehen dann, dass du ihn gelöscht hast.")) return;
+        api("l_loeschen", { id: id }).then(function (a) { if (!a.ok) return meldung(box, a.fehler, "schlecht"); laden().then(function () { meldung(box, a.meldung, "gut"); }); });
+      });
+      var csv = box.querySelector('[data-l="csv"]');
+      if (csv) csv.addEventListener("click", function () {
+        var q = function (s) { s = String(s == null ? "" : s); return /[";\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+        var zeilen = [["Name"].concat(F.map(function (f) { return f.name; }), ["Erstellt", "Zuletzt geändert", "Gelöscht"])];
+        E.forEach(function (e) {
+          zeilen.push([e.name].concat(F.map(function (f) { return wertText(f, e.werte[f.id]); }),
+            [zeitKurz(e.erstellt), zeitKurz((e.bearbeitet || []).slice(-1)[0]), zeitKurz(e.geloescht)]));
+        });
+        var blob = new Blob(["﻿" + zeilen.map(function (z) { return z.map(q).join(";"); }).join("\r\n")], { type: "text/csv;charset=utf-8" });
+        var a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+        a.download = L.titel.replace(/[^\wäöüÄÖÜß -]+/g, "").trim() + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+      });
+      var druck = box.querySelector('[data-l="druck"]');
+      if (druck) druck.addEventListener("click", function () { window.print(); });
+    }
+    laden();
+  }
+
+  // Verwaltung -> Reiter "Listen"
+  function listenVerwaltung(box, LISTEN, neuZeichnen, fertig) {
+    var S = listenVerwaltung.S || (listenVerwaltung.S = { edit: null });
+    function feldZeile(f, i) {
+      var opt = f.art === "auswahl" || f.art === "aufgaben";
+      return '<div class="ls-feldzeile" data-fi="' + i + '"><input data-f="name" value="' + esc(f.name || "") + '" placeholder="Spaltenname">' +
+        '<select data-f="art">' + Object.keys(L_ARTEN).map(function (a) { return '<option value="' + a + '"' + (f.art === a ? " selected" : "") + ">" + L_ARTEN[a] + "</option>"; }).join("") + "</select>" +
+        '<input data-f="optionen" value="' + esc((f.optionen || []).join(", ")) + '" placeholder="Optionen mit Komma"' + (opt ? "" : ' class="ls-unsichtbar" tabindex="-1"') + ">" +
+        '<label title="Pflicht"><input type="checkbox" data-f="pflicht"' + (f.pflicht ? " checked" : "") + "> Pflicht</label>" +
+        '<label title="Summe oben anzeigen"><input type="checkbox" data-f="summe"' + (f.summe ? " checked" : "") + (f.art === "text" || f.art === "aufgaben" ? " disabled" : "") + "> Summe</label>" +
+        '<button type="button" class="kt-mini rot" data-fweg="' + i + '">×</button></div>';
+    }
+    function editor() {
+      var l = S.edit;
+      return '<form class="kt-karte kt-form ls-editor" novalidate><b>' + (l.id ? "Liste bearbeiten" : "Neue Liste") + "</b>" +
+        '<div class="ls-editor-kopf">' + feld("ltitel", "Titel", "text", 'value="' + esc(l.titel || "") + '"') +
+        '<div class="kt-feld"><label>Sichtbar für</label><select name="sicht">' +
+        [["entwurf", "niemand (Entwurf)"], ["verwaltung", "nur Verwaltung (zum Testen)"], ["mitglieder", "alle angemeldeten Mitglieder"]].map(function (o) {
+          return '<option value="' + o[0] + '"' + (l.sicht === o[0] ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></div>" +
+        feld("von", "Sichtbar ab", "date", 'value="' + esc(l.von || "") + '"') + feld("bis", "bis", "date", 'value="' + esc(l.bis || "") + '"') + "</div>" +
+        '<div class="kt-feld"><label for="kt-ltext">Text</label><textarea id="kt-ltext" name="ltext" style="min-height:70px">' + esc(l.text || "") + "</textarea></div>" +
+        '<label class="kt-check"><input type="checkbox" name="sofort"' + (l.sofort ? " checked" : "") + "> <span>Sofort sichtbar (Zeitraum ignorieren)</span></label>" +
+        '<label class="kt-check"><input type="checkbox" name="startseite"' + (l.startseite ? " checked" : "") + "> <span>Auf der Startseite anzeigen (für angemeldete Mitglieder)</span></label>" +
+        '<h3 style="margin-top:1.2rem">Spalten</h3><p class="kt-klein links">Der Name steht immer dabei. Spalten frei benennen; „Summe“ zeigt oben Gesamtzahl bzw. Anzahl je Option.</p>' +
+        '<div class="ls-felderliste">' + (l.felder || []).map(feldZeile).join("") + "</div>" +
+        '<p><button type="button" class="kt-mini" data-l="feld">+ Spalte</button></p>' +
+        '<p class="kt-fehler" hidden></p><div class="kt-zeile"><button type="submit" class="kt-btn gruen">Speichern</button>' +
+        '<button type="button" class="kt-btn leise" data-l="abbrechen">Abbrechen</button>' +
+        (l.id ? '<button type="button" class="kt-btn rot" data-l="loeschen">Liste löschen</button>' : "") + "</div></form>";
+    }
+    function lesen(form) {
+      var l = S.edit;
+      l.titel = form.elements.ltitel.value.trim(); l.text = form.elements.ltext.value; l.sicht = form.elements.sicht.value;
+      l.von = form.elements.von.value; l.bis = form.elements.bis.value; l.sofort = form.elements.sofort.checked; l.startseite = form.elements.startseite.checked;
+      l.felder = [].map.call(form.querySelectorAll("[data-fi]"), function (z) {
+        var alt = l.felder[+z.getAttribute("data-fi")] || {}, g = function (n) { return z.querySelector('[data-f="' + n + '"]'); };
+        return { id: alt.id || "", name: g("name").value.trim(), art: g("art").value, pflicht: g("pflicht").checked, summe: g("summe").checked,
+          optionen: g("optionen").value.split(",").map(function (o) { return o.trim(); }).filter(Boolean) };
+      });
+      return l;
+    }
+    var html = "";
+    if (LISTEN && LISTEN.alt) html += '<p class="kt-warn">Das Apps Script kennt die Listen noch nicht: Listen.gs anlegen, Code.gs und Mitglieder.gs ersetzen, neue Version bereitstellen.</p>';
+    var listen = (LISTEN && LISTEN.listen) || [];
+    html += listen.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="ls-tab"><tr><th>Liste</th><th>Status</th><th>Einträge</th><th></th></tr>' + listen.map(function (l) {
+      return '<tr><td><b>' + esc(l.titel) + '</b></td><td><span class="ls-status ' + l.status + '">' + esc(lStatusText(l)) + "</span></td><td>" + l.eintraege + "</td>" +
+        '<td class="kt-akt"><button type="button" class="kt-mini" data-lbearb="' + esc(l.id) + '">Bearbeiten</button>' +
+        '<a class="kt-mini" href="' + PFAD + "listen.html?id=" + encodeURIComponent(l.id) + '">Ansehen / Auswertung</a></td></tr>';
+    }).join("") + "</table></div>" : '<p class="kt-klein links">Noch keine Listen.</p>';
+    if (!S.edit) html += '<p class="kt-zeile" style="align-items:center"><button type="button" class="kt-btn gruen" data-l="neu">Neue Liste</button> <span class="kt-grau">Vorlage</span> <select data-l="vorlage">' +
+      [["leer", "leer"], ["sommerfest", "Sommerfest"], ["zusage", "Zusage (ich komme / nicht)"], ["helfer", "Helferliste"], ["fahrt", "Fahrgemeinschaft"]].map(function (v) {
+        return '<option value="' + v[0] + '">' + v[1] + "</option>"; }).join("") + "</select></p>";
+    else html += editor();
+    var teil = box.querySelector('[data-r="listen"].kt-reiter-inhalt');
+    teil.innerHTML = html;
+    var neu = teil.querySelector('[data-l="neu"]');
+    if (neu) neu.addEventListener("click", function () {
+      var v = L_VORLAGEN[teil.querySelector('[data-l="vorlage"]').value];
+      S.edit = { titel: v.titel, felder: JSON.parse(JSON.stringify(v.felder)), sicht: "entwurf" }; neuZeichnen();
+    });
+    [].forEach.call(teil.querySelectorAll("[data-lbearb]"), function (k) {
+      k.addEventListener("click", function () {
+        var l = listen.filter(function (x) { return x.id === k.getAttribute("data-lbearb"); })[0];
+        S.edit = JSON.parse(JSON.stringify(l.liste)); neuZeichnen();
+      });
+    });
+    var form = teil.querySelector(".ls-editor");
+    if (!form) return;
+    form.addEventListener("change", function (ev) {
+      if (ev.target.getAttribute("data-f") === "art") { lesen(form); neuZeichnen(); }
+    });
+    form.querySelector('[data-l="feld"]').addEventListener("click", function () { lesen(form); S.edit.felder.push({ name: "", art: "text" }); neuZeichnen(); });
+    [].forEach.call(form.querySelectorAll("[data-fweg]"), function (k) {
+      k.addEventListener("click", function () { lesen(form); S.edit.felder.splice(+k.getAttribute("data-fweg"), 1); neuZeichnen(); });
+    });
+    form.querySelector('[data-l="abbrechen"]').addEventListener("click", function () { S.edit = null; neuZeichnen(); });
+    var lw = form.querySelector('[data-l="loeschen"]');
+    if (lw) lw.addEventListener("click", function () {
+      if (!confirm("„" + S.edit.titel + "“ mit allen Einträgen endgültig löschen? Vorher ggf. unter „Ansehen“ als Excel/PDF sichern.")) return;
+      api("l_admin_loeschen", { id: S.edit.id }).then(function (r) { if (r.ok) S.edit = null; fertig(r); });
+    });
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var l = lesen(form);
+      if (!l.titel) return fehler(form, "Titel fehlt.");
+      if (l.felder.some(function (f) { return (f.art === "auswahl" || f.art === "aufgaben") && !f.optionen.length; })) return fehler(form, "Bei Auswahl/Aufgaben bitte Optionen mit Komma eintragen.");
+      laedt(form, true);
+      api("l_admin_speichern", { liste: l }).then(function (r) { laedt(form, false); if (!r.ok) return fehler(form, r.fehler); S.edit = null; fertig(r); });
+    });
+  }
+
+  // Startseite: Hinweis auf offene Listen (nur angemeldet)
+  function listenHinweis(a) {
+    if (!a || !a.listen || !document.querySelector("[data-geb-woche]")) return;
+    var l = a.listen.filter(function (x) { return x.startseite; });
+    if (!l.length || document.querySelector(".ls-hinweis")) return;
+    var ziel = document.querySelector("main") || document.body;
+    ziel.insertBefore(el('<div class="kt-leiste ls-hinweis">' + l.map(function (x) {
+      return '<span><b>' + esc(x.titel) + "</b>" + (x.bis ? " – bis " + datumDe(x.bis) : "") + '</span><a href="' + PFAD + "listen.html?id=" + encodeURIComponent(x.id) + '">Eintragen</a>';
+    }).join("") + "</div>"), ziel.firstChild);
   }
 
   // ---------- Spielerseiten: eigene Änderungen sofort, Admin-Ansicht ----------
@@ -788,9 +1041,11 @@
       var art = seite.getAttribute("data-seite");
       if (art === "profil") seiteProfil(seite);
       if (art === "verwaltung") seiteVerwaltung(seite);
+      if (art === "listen") seiteListen(seite);
     }
     spielerseite(a);
     startseite(a);
+    listenHinweis(a);
     // Andere Skripte (z. B. "Ich will hin") können die Anmeldung nutzen
     document.dispatchEvent(new CustomEvent("afk-konto", { detail: a }));
   });
