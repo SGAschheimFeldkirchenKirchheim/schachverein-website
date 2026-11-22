@@ -6,4 +6,4 @@
   weihnachtsblitz: "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/blitzjahreswertung.html",
 )
 
-#let stand = "10.11.2026"
+#let stand = "22.11.2026"
