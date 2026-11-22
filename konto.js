@@ -888,9 +888,9 @@
         '<td class="kt-akt"><button type="button" class="kt-mini" data-lbearb="' + esc(l.id) + '">Bearbeiten</button>' +
         '<a class="kt-mini" href="' + PFAD + "listen.html?id=" + encodeURIComponent(l.id) + '">Ansehen / Auswertung</a></td></tr>';
     }).join("") + "</table></div>" : '<p class="kt-klein links">Noch keine Listen.</p>';
-    if (!S.edit) html += '<p class="kt-zeile" style="align-items:center"><button type="button" class="kt-btn gruen" data-l="neu">Neue Liste</button> <span class="kt-grau">Vorlage</span> <select data-l="vorlage">' +
+    if (!S.edit) html += '<p class="kt-zeile" style="align-items:center"><button type="button" class="kt-btn gruen" data-l="neu">Neue Liste</button> <label class="ls-vorlage-wahl"><span class="kt-grau">Vorlage</span> <select class="ls-vorlage" data-l="vorlage">' +
       [["leer", "leer"], ["sommerfest", "Sommerfest"], ["zusage", "Zusage (ich komme / nicht)"], ["helfer", "Helferliste"], ["fahrt", "Fahrgemeinschaft"]].map(function (v) {
-        return '<option value="' + v[0] + '">' + v[1] + "</option>"; }).join("") + "</select></p>";
+        return '<option value="' + v[0] + '">' + v[1] + "</option>"; }).join("") + "</select></label></p>";
     else html += editor();
     var teil = box.querySelector('[data-r="listen"].kt-reiter-inhalt');
     teil.innerHTML = html;

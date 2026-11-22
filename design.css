@@ -800,6 +800,10 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
 .ls-feldzeile input:not([type=checkbox]), .ls-feldzeile select { width: 100%; box-sizing: border-box; padding: .45rem .6rem; border-radius: 8px;
   border: 1.5px solid var(--line); background: var(--bg); color: var(--text); font: inherit; font-size: .9rem; }
 .ls-feldzeile .ls-unsichtbar { visibility: hidden; }
+.ls-vorlage-wahl { display: inline-flex; align-items: center; gap: .6rem; }
+.ls-vorlage { min-width: 15rem; padding: .62rem .8rem; border-radius: 9px; border: 1.5px solid var(--line);
+  background: var(--bg); color: var(--text); font: inherit; font-size: 1rem; cursor: pointer; }
+.ls-vorlage:focus { outline: none; border-color: var(--link-c); }
 .ls-hinweis { margin: 0 0 1rem; } .ls-hinweis span + a { margin-left: .6rem; }
 @media (max-width: 720px) {
   .ls-editor-kopf, .ls-feldzeile { grid-template-columns: 1fr 1fr; } .ls-felder .ls-breit { grid-column: auto; }

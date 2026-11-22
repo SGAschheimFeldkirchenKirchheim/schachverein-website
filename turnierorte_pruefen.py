@@ -77,7 +77,8 @@ def name_in_teilnehmern(name, seite):
 def offene_dateien():
     """Offene Anträge, Rückfragen und auf der Website angenommene (falls der Build sie noch nicht eingetragen hat)."""
     return [p for unter in ("", "rueckfrage", "angenommen")
-            for p in sorted(glob.glob(os.path.join(to.ORDNER, "antraege", unter, "*.json")))]
+            for p in sorted(glob.glob(os.path.join(to.ORDNER, "antraege", unter, "*.json")))
+            if not os.path.basename(p).startswith("aenderungen_")]
 
 
 def frage(text, erlaubt):
@@ -240,7 +241,7 @@ def angenommene_eintragen():
 # ------------------------------------------------------------
 # Änderungen aus der Website-Verwaltung (Reiter Turniere -> Alle Einträge).
 # Das Apps Script legt antraege/aenderungen/<Zeit>.json an, der GitHub-Build wendet sie hier an.
-# Was nicht klappt (Ort nicht gefunden, Eintrag weg), steht in antraege/aenderungen_fehler.json.
+# Was nicht klappt (Ort nicht gefunden, Eintrag weg), steht in turnierorte/aenderungen_fehler.json.
 # ------------------------------------------------------------
 AENDERUNG_FELDER = ("spieler", "turnier", "von", "link", "stadt")
 
@@ -251,12 +252,15 @@ def _passt(b, key):
 
 def aenderungen_anwenden():
     ordner = os.path.join(to.ORDNER, "antraege", "aenderungen")
+    alt_pfad = os.path.join(to.ORDNER, "antraege", "aenderungen_fehler.json")      # früherer Ort
+    if os.path.exists(alt_pfad):
+        os.replace(alt_pfad, os.path.join(to.ORDNER, "aenderungen_fehler.json"))
     dateien = sorted(glob.glob(os.path.join(ordner, "*.json")))
     if not dateien:
         return 0
     alt_cache, tk._nur_cache = tk._nur_cache, False
     spieler, besuche, n = to.spieler_laden(), to.besuche_laden(), 0
-    fehler_pfad = os.path.join(to.ORDNER, "antraege", "aenderungen_fehler.json")
+    fehler_pfad = os.path.join(to.ORDNER, "aenderungen_fehler.json")      # nicht in antraege/ (sonst sieht es aus wie ein Antrag)
     fehler = to._lade(fehler_pfad, [])
     try:
         for pfad in dateien:
