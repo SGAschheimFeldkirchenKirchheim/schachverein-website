@@ -8,15 +8,6 @@ X-WR-TIMEZONE:Europe/Berlin
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
-UID:2026-11-21-14-landesliga-sued-runde-1-jugend-alle@sg-afk
-DTSTAMP:20261121T000000Z
-DTSTART:20261121T130000Z
-DTEND:20261121T160000Z
-SUMMARY:Landesliga Süd Runde 1 (Jugend)
-URL:https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/t
- ermine.html
-END:VEVENT
-BEGIN:VEVENT
 UID:2026-11-22-10-u20-mmm-1-liga-runde-1-jugend-alle@sg-afk
 DTSTAMP:20261122T000000Z
 DTSTART:20261122T090000Z
