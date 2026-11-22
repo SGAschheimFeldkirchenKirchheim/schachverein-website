@@ -10,7 +10,6 @@
     [* Termin *], [* Verein *], [* AFK 1 *], [* AFK 2 *], [* AFK 3 *], [* AFK 4 *], [* AFK 5 *], [* AFK 6 *], [* Senioren *], [* Jugend *]
   ),
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("November")]],
-  [21.11. Sa, 14:00 Uhr], [], [], [], [], [], [], [], [], [Landesliga Süd Runde 1],
   [22.11. So, 10:00 Uhr], [], [], [], [], [], [], [], [], [U20 MMM, 1.Liga Runde 1],
   [22.11. So, 11:00 Uhr], table.cell(fill: VereinFarbe)[Münchner Blitz-EM], [], [], [], [], [], [], [], [],
   [26.11. #abw[Do], 19:30 Uhr], [], [MMM Runde 3], [], [], [], [], [], [], [],
