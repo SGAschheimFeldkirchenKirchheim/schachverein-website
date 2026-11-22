@@ -621,6 +621,7 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
 .kt-antrag { display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 1rem; align-items: center; }
 .kt-antrag b { color: var(--head); font-size: 1.1rem; }
 .kt-grau { color: var(--muted); } .kt-gut { color: #2f9a5c; font-size: .9rem; } :root[data-theme="dark"] .kt-gut { color: #6fd59a; }
+.kt-warn { color: #c0453b; font-size: .9rem; } :root[data-theme="dark"] .kt-warn { color: #ff8a80; }
 .kt-tabelle-rahmen { padding: .5rem 1rem; overflow-x: auto; }
 .kt-tab { width: 100%; border-collapse: collapse; font-size: .95rem; }
 .kt-tab th { text-align: left; color: var(--muted); font-weight: 600; padding: .5rem .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }

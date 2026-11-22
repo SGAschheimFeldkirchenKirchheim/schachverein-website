@@ -66,6 +66,12 @@ def name_in_teilnehmern(name, seite):
     return any(all(re.search(r"\b" + t + r"\b", z) for t in teile) for z in zeilen)
 
 
+def offene_dateien():
+    """Offene Anträge, Rückfragen und auf der Website angenommene (falls der Build sie noch nicht eingetragen hat)."""
+    return [p for unter in ("", "rueckfrage", "angenommen")
+            for p in sorted(glob.glob(os.path.join(to.ORDNER, "antraege", unter, "*.json")))]
+
+
 def frage(text, erlaubt):
     while True:
         a = input(text).strip().lower()
@@ -73,8 +79,8 @@ def frage(text, erlaubt):
             return a
 
 
-def antrag_pruefen(a, spieler, besuche, konf):
-    """Zeigt den Antrag mit Prüfergebnis und fragt nach. Gibt 'j', 'n' oder 's' zurück."""
+def auswerten(a):
+    """chess-results-Daten und Ort zu einem Antrag holen -> (info, ort, gefunden)."""
     info = dict(a)
     gefunden = None
     tnr = re.search(r"tnr(\d{5,8})", a.get("link", "") or "")
@@ -93,11 +99,51 @@ def antrag_pruefen(a, spieler, besuche, konf):
         info["von"] = info["bis"] = a["monat"]
     suchtext = ", ".join(x for x in (a.get("stadt", ""), a.get("land", "")) if x) or info.get("cr_ort", "")
     ort = ort_suchen(suchtext) if suchtext else None
+    return info, ort, gefunden
+
+
+def eintrag_anlegen(a, info, ort, spieler, besuche):
+    sid = to.spieler_id(a.get("name", ""))
+    if sid not in spieler:
+        spieler[sid] = {"name": a.get("name", "").strip(), "anzeige": to.anzeige_name(a.get("name", "").strip())}
+    besuche.append({
+        "spieler": sid, "turnier": info.get("turnier", ""), "stadt": ort["stadt"], "land": ort["land"],
+        "region": ort.get("region", ""),
+        "lat": round(ort["lat"], 5), "lon": round(ort["lon"], 5), "von": info.get("von", ""), "bis": info.get("bis", ""),
+        "link": info.get("link", ""), "bedenkzeit": info.get("bedenkzeit", ""),
+        "ausnahme": (a.get("begruendung") or "ja") if a.get("ausnahme") else "",
+        "bestaetigt": datetime.date.today().isoformat(),
+    })
+
+
+def doppelt_eingetragen(sid, info, besuche):
+    return any(b["spieler"] == sid and ((info.get("link") and b.get("link") == info.get("link")) or
+               (b.get("turnier") == info.get("turnier") and b.get("von", "")[:7] == info.get("von", "")[:7])) for b in besuche)
+
+
+def aehnliches_profil(name, spieler):
+    """Neues Profil, aber es gibt schon jemanden mit gleichem Nachnamen bzw. gleichem Vornamen + Initial?"""
+    teile = norm(name).split()
+    if not teile:
+        return ""
+    for p in spieler.values():
+        t = norm(p.get("name", "")).split()
+        if t and ((len(teile) > 1 and len(t) > 1 and t[-1] == teile[-1]) or t[0] == teile[0] and t[-1][:1] == teile[-1][:1]):
+            return p.get("name", "")
+    return ""
+
+
+def antrag_pruefen(a, spieler, besuche, konf):
+    """Zeigt den Antrag mit Prüfergebnis und fragt nach. Gibt 'j', 'n' oder 's' zurück."""
+    if a.get("rueckfrage"):
+        print(f"\n  RÜCKFRAGE: {a['rueckfrage']}")
+    if a.get("angenommen_von"):
+        print(f"  (auf der Website angenommen von {a['angenommen_von']})")
+    info, ort, gefunden = auswerten(a)
     while True:
         gruppe = to.ort_gruppe(ort["stadt"], konf.get("ort_gruppen")) if ort else "?"
         sid = to.spieler_id(a.get("name", ""))
-        doppelt = any(b["spieler"] == sid and ((info.get("link") and b.get("link") == info.get("link")) or
-                      (b.get("turnier") == info.get("turnier") and b.get("von", "")[:7] == info.get("von", "")[:7])) for b in besuche)
+        doppelt = doppelt_eingetragen(sid, info, besuche)
         schon_ort = ort and any(b["spieler"] == sid and to.ort_gruppe(b.get("stadt", ""), konf.get("ort_gruppen")) == gruppe for b in besuche)
         print("\n" + "=" * 70)
         print(f"  Spieler:     {a.get('name')}" + ("" if sid in spieler else "   (NEUES PROFIL)"))
@@ -131,17 +177,56 @@ def antrag_pruefen(a, spieler, besuche, konf):
             print("  Ohne Ort geht es nicht – bitte [o] wählen.")
             continue
         if w == "j":
-            if sid not in spieler:
-                spieler[sid] = {"name": a.get("name", "").strip(), "anzeige": to.anzeige_name(a.get("name", "").strip())}
-            besuche.append({
-                "spieler": sid, "turnier": info.get("turnier", ""), "stadt": ort["stadt"], "land": ort["land"],
-                "region": ort.get("region", ""),
-                "lat": round(ort["lat"], 5), "lon": round(ort["lon"], 5), "von": info.get("von", ""), "bis": info.get("bis", ""),
-                "link": info.get("link", ""), "bedenkzeit": info.get("bedenkzeit", ""),
-                "ausnahme": (a.get("begruendung") or "ja") if a.get("ausnahme") else "",
-                "bestaetigt": datetime.date.today().isoformat(),
-            })
+            eintrag_anlegen(a, info, ort, spieler, besuche)
         return w
+
+
+# ------------------------------------------------------------
+# Auf der Website angenommene Anträge (Verwaltung -> Turniere) automatisch eintragen.
+# Läuft im GitHub-Build (build_site.py). Unklare Fälle landen in antraege/rueckfrage/ und
+# erscheinen in der Verwaltung und in  py afk_on_tour.py  [2].
+# ------------------------------------------------------------
+def angenommene_eintragen():
+    dateien = sorted(glob.glob(os.path.join(to.ORDNER, "antraege", "angenommen", "*.json")))
+    if not dateien:
+        return 0
+    alt_cache, tk._nur_cache = tk._nur_cache, False          # hier immer aus dem Netz holen
+    spieler, besuche, n = to.spieler_laden(), to.besuche_laden(), 0
+    try:
+        for pfad in dateien:
+            try:
+                with open(pfad, encoding="utf-8") as f:
+                    a = json.load(f)
+            except (OSError, ValueError):
+                continue
+            info, ort, gefunden = auswerten(a)
+            sid = to.spieler_id(a.get("name", ""))
+            grund = ""
+            if not ort:
+                grund = "Ort nicht gefunden"
+            elif doppelt_eingetragen(sid, info, besuche):
+                grund = "Turnier ist für den Spieler schon eingetragen"
+            elif sid not in spieler and aehnliches_profil(a.get("name", ""), spieler):
+                grund = f"Neues Profil, aber es gibt schon „{aehnliches_profil(a.get('name', ''), spieler)}“ – dieselbe Person?"
+            elif sid in spieler and spieler[sid].get("name", "").strip().lower() != a.get("name", "").strip().lower():
+                grund = f"Kürzel gehört schon zu „{spieler[sid].get('name')}“ – dieselbe Person?"
+            if grund:
+                a["rueckfrage"] = grund
+                ziel = os.path.join(to.ORDNER, "antraege", "rueckfrage", os.path.basename(pfad))
+                to._speichere(ziel, a)
+                print(f"AFK on Tour: Rückfrage zu {a.get('name')}: {grund}")
+            else:
+                eintrag_anlegen(a, info, ort, spieler, besuche)
+                n += 1
+                print(f"AFK on Tour: eingetragen – {a.get('name')}, {info.get('turnier') or ort['stadt']}"
+                      + ("" if not info.get("link") or gefunden else " (Name nicht in der chess-results-Teilnehmerliste)"))
+            os.remove(pfad)
+    finally:
+        tk._nur_cache = alt_cache
+    if n:
+        to._speichere(os.path.join(to.ORDNER, "spieler.json"), spieler)
+        to._speichere(os.path.join(to.ORDNER, "besuche.json"), besuche)
+    return n
 
 
 def verwalten(spieler, besuche, konf):
@@ -252,7 +337,7 @@ def main():
             if antrag_pruefen(a, spieler, besuche, konf) == "j":
                 geaendert = True
     else:
-        dateien = sorted(glob.glob(os.path.join(to.ORDNER, "antraege", "*.json")))
+        dateien = offene_dateien()
         if not dateien:
             print("Keine offenen Anträge. (Vorher 'Alles aktualisieren' gedrückt?)")
         for pfad in dateien:

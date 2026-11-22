@@ -87,7 +87,9 @@
       '<div class="kt-menue-kopf">Angemeldet als <b>' + esc(a.ich.benutzer) + "</b></div>" +
       '<a href="' + PFAD + 'mein-profil.html">Mein Profil</a>' +
       '<a href="' + PFAD + "spieler/" + esc(a.ich.slug) + '.html">Meine Seite ansehen</a>' +
-      (a.ich.darf.verwaltung ? '<a href="' + PFAD + "verwaltung.html" + (a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">Verwaltung' + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
+      (a.ich.darf.verwaltung || a.ich.darf.turniere ? '<a href="' + PFAD + "verwaltung.html" +
+        (!a.ich.darf.verwaltung || a.offenTurniere && !a.offenAntraege && !a.offenBerichte ? "#turniere" : a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">' +
+        (a.ich.darf.verwaltung ? "Verwaltung" : "Turnier-Anträge") + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
       '<button type="button" data-kt="abmelden">Abmelden</button></div>');
     KNOPF.parentNode.appendChild(m);
     m.querySelector("[data-kt=abmelden]").addEventListener("click", function () { abmelden(false); });
@@ -407,13 +409,34 @@
   }
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
-    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null;
+    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false;
     function laden() {
-      Promise.all([api("m_admin_liste"), api("b_liste")]).then(function (r) {
-        if (!r[0].ok) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
-        NUTZER = r[0]; BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
+      Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere")]).then(function (r) {
+        // m_turniere unbekannt = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
+        TURNIERE = r[2].ok ? r[2] : { offen: [], rueckfrage: [], angenommen: [], alt: r[2].fehler === "Unbekannte Anfrage" };
+        NUR_TURNIERE = !r[0].ok && r[2].ok;            // Mitglied mit dem Recht "turniere"
+        if (!r[0].ok && !NUR_TURNIERE) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
+        NUTZER = r[0].ok ? r[0] : { nutzer: [], rechte: [], ich: "", inhaber: false };
+        if (NUR_TURNIERE) reiter = "turniere";
+        BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
         zeichnen();
       });
+    }
+    function turnierKarte(t, art) {
+      var wo = [t.stadt, t.land].filter(Boolean).join(", "), wann = t.monat ? datumKurz(t.monat + "-01").slice(3) : "";
+      var turnier = t.turnier ? esc(t.turnier) : t.link ? "Turnier auf chess-results" : "";
+      var zeile2 = [t.link ? '<a href="' + esc(t.link) + '" target="_blank" rel="noopener">' + turnier + "</a>" : turnier,
+        esc(wo), esc(wann), esc(t.bedenkzeit || "")].filter(Boolean).join(" · ");
+      var hinweis = art === "rueckfrage" ? '<div class="kt-warn">Rückfrage: ' + esc(t.rueckfrage || "bitte am PC prüfen") + "<br>Am PC: py afk_on_tour.py → [2]</div>"
+        : art === "angenommen" ? '<div class="kt-gut">Angenommen von ' + esc(t.angenommen_von || "?") + " – wird beim nächsten Build eingetragen</div>"
+        : t.ausnahme ? '<div class="kt-warn">Ausnahme beantragt: ' + esc(t.begruendung || "(ohne Begründung)") + "</div>"
+        : t.bedenkzeit && t.bedenkzeit !== "klassisch" ? '<div class="kt-warn">Nicht klassisch und keine Ausnahme beantragt</div>'
+        : t.link ? '<div class="kt-gut">Mit chess-results-Link – Ort und Datum kommen automatisch</div>' : '<div class="kt-grau">Ohne Link – Angaben bitte kurz prüfen</div>';
+      var knoepfe = art === "angenommen" ? "<div></div>" : '<div class="kt-zeile">' +
+        (art === "offen" ? '<button type="button" class="kt-btn gruen" data-t="annehmen">Annehmen</button>' : "") +
+        '<button type="button" class="kt-btn rot" data-t="ablehnen">Ablehnen</button></div>';
+      return '<div class="kt-karte kt-antrag" data-tdatei="' + esc(t.datei) + '"><div><b>' + esc(t.name) + '</b><br><span class="kt-grau">' + zeile2 +
+        (t.eingereicht ? "<br>eingereicht " + datumKurz(t.eingereicht) : "") + "</span></div>" + hinweis + knoepfe + "</div>";
     }
     function tag(s) { return '<span class="kt-tag ' + s + '">' + { inhaber: "Inhaber", admin: "Admin", mitglied: "Mitglied" }[s] + "</span>"; }
     function datumKurz(iso) { var m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + "." + m[2] + "." + m[1] : esc(iso || ""); }
@@ -472,10 +495,23 @@
         return '<button type="button" data-r="' + name + '"' + (reiter === name ? ' class="an"' : "") + ">" + titel + (zahl ? " <em>" + zahl + "</em>" : "") + "</button>";
       }
       function teil(name, html) { return '<div class="kt-reiter-inhalt" data-r="' + name + '"' + (reiter === name ? "" : " hidden") + ">" + html + "</div>"; }
+      var T = TURNIERE, tOffen = T.offen.length + T.rueckfrage.length;
+      var turnierTeil = teil("turniere", (T.alt ? '<p class="kt-warn">Das Apps Script kennt die Turnier-Anträge noch nicht: Code.gs und Mitglieder.gs ersetzen, ' +
+          "speichern und „Bereitstellen → Bereitstellungen verwalten → Stift → Neue Version“.</p>" : "") +
+        "<h3>Offen</h3>" + (T.offen.length ? T.offen.map(function (t) { return turnierKarte(t, "offen"); }).join("") : '<p class="kt-klein links">Keine offenen Anträge.</p>') +
+        (T.rueckfrage.length ? '<h3 style="margin-top:1.8rem">Rückfragen</h3>' + T.rueckfrage.map(function (t) { return turnierKarte(t, "rueckfrage"); }).join("") : "") +
+        (T.angenommen.length ? '<h3 style="margin-top:1.8rem">Wird gerade eingetragen</h3>' + T.angenommen.map(function (t) { return turnierKarte(t, "angenommen"); }).join("") : "") +
+        '<p class="kt-klein links">„Annehmen“: Der nächste Build (startet von selbst, dauert ein paar Minuten) holt Ort und Datum von chess-results bzw. der Karte und trägt das Turnier ein. ' +
+        "Ist etwas unklar (Ort nicht gefunden, Name ähnlich wie ein bestehendes Profil), landet der Antrag unter „Rückfragen“.</p>");
+      if (NUR_TURNIERE) {
+        box.innerHTML = '<p class="kt-unter">AFK on Tour – Turnier-Anträge</p><p class="kt-meldung" hidden></p>' + turnierTeil;
+        box.querySelector(".kt-reiter-inhalt").hidden = false;
+      } else
       box.innerHTML = '<p class="kt-unter">Angemeldet als <b>' + esc(a.ich) + "</b> " + tag(inh ? "inhaber" : "admin") + "</p>" +
         '<p class="kt-meldung" hidden></p>' +
         '<div class="kt-reiter" role="tablist">' + r("antraege", "Anträge", offen.length) + r("berichte", "Berichte", bOffen.length) +
-        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" +
+        r("turniere", "Turniere", tOffen) +
+        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" + turnierTeil +
         teil("antraege", offen.length ? offen.map(function (x) {
           return '<div class="kt-karte kt-antrag"><div><b>' + esc(x.name) + '</b><br><span class="kt-grau">Benutzername ' + esc(x.benutzer) + " · " + zeitText(x.seit) + "</span></div>" +
             '<div class="kt-gut">Name und Geburtsdatum stimmen mit der Mitgliederliste überein</div>' +
@@ -486,7 +522,7 @@
           '<h3 style="margin-top:1.8rem">Online</h3>' + (bOnline.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="kt-tab">' + bOnline.map(function (e) { return berichtZeile(e, false); }).join("") + "</table></div>"
             : '<p class="kt-klein links">Keine.</p>') +
           '<p class="kt-klein links">Hier stehen alle Berichte von diesem und letztem Jahr. „Zurückziehen“ macht einen Bericht wieder zum Entwurf; endgültig löschen geht bei Entwürfen.</p>') +
-        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen. Admins haben alle Rechte."
+        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen. Admins haben alle Rechte."
           : "Stufen und Rechte kann nur der Inhaber ändern.") + "</p>") +
         teil("weg", nutzerListe(weg) + '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p>');
       if (alteMeldung) { var m2 = box.querySelector(".kt-meldung"); m2.textContent = alteMeldung[0]; m2.className = alteMeldung[1]; m2.hidden = false; }
@@ -515,6 +551,16 @@
           var ziel = c.getAttribute("data-ziel");
           var liste = [].map.call(box.querySelectorAll('[data-recht][data-ziel="' + ziel + '"]:checked'), function (x) { return x.getAttribute("data-recht"); });
           api("m_admin", { aktion: "rechte", ziel: ziel, rechte: liste }).then(fertig);
+        });
+      });
+      [].forEach.call(box.querySelectorAll("[data-t]"), function (b) {
+        b.addEventListener("click", function () {
+          var el = b.closest("[data-tdatei]"), was = b.getAttribute("data-t"), name = el.querySelector("b").textContent;
+          if (was === "ablehnen" && !confirm("Antrag von „" + name + "“ ablehnen? Er wird gelöscht.")) return;
+          [].forEach.call(el.querySelectorAll("button"), function (x) { x.disabled = true; });
+          api("m_turnier", { aktion: was, datei: el.getAttribute("data-tdatei") }).then(function (r) {
+            [].forEach.call(el.querySelectorAll("button"), function (x) { x.disabled = false; }); fertig(r);
+          });
         });
       });
       [].forEach.call(box.querySelectorAll("[data-b]"), function (b) {

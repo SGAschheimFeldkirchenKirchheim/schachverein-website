@@ -3369,6 +3369,12 @@ if __name__ == "__main__":
     aktuell, teams, archiv = saisons_laden()
     SUBNAV["mannschaften.html"] = [(liga.seite_datei(d), d["kurz"]) for d in teams if d["kurz"] not in jugend_kurznamen()]
     SUBNAV["mannschaften.html"].append((historie.SEITE + "#mannschaften", "Historie"))
+    if os.environ.get("GITHUB_ACTIONS"):     # in der Verwaltung angenommene AFK-on-Tour-Anträge eintragen (vor den Spielerseiten)
+        try:
+            import turnierorte_pruefen
+            turnierorte_pruefen.angenommene_eintragen()
+        except Exception as e:
+            print(f"AFK on Tour: angenommene Anträge nicht eingetragen ({type(e).__name__}: {e})")
     # Mitgliederbereich: Liste abgleichen, öffentliche Profile holen (vor Startseite und Spielerseiten)
     konten.synchronisieren(_geburtstag_liste(), spieler.slug)
     konten.laden()

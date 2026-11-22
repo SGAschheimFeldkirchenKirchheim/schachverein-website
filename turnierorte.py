@@ -7,8 +7,12 @@ Einzelturniere (keine Liga); Ausnahmen (z. B. Deutsche Hochschulmeisterschaft) k
 Ablauf:
   1. Mitglied füllt auf turnierorte.html "Turnier einreichen" aus -> Apps Script legt
      turnierorte/antraege/<Datum>_<Name>.json im Repo an und schickt eine Mail.
-  2. Webmaster: "Alles aktualisieren", dann  py turnierorte_pruefen.py  (prüft mit chess-results,
-     sucht den Ort, fragt j/n) -> landet in turnierorte/besuche.json. Nochmal "Alles aktualisieren".
+  2. Freigeben – eine der beiden Arten:
+     a) Website: Verwaltung -> Reiter "Turniere" -> Annehmen (Admins und alle mit dem Recht "turniere").
+        Der Antrag wandert nach antraege/angenommen/, der nächste GitHub-Build trägt ihn ein
+        (turnierorte_pruefen.angenommene_eintragen). Unklare Fälle -> antraege/rueckfrage/.
+     b) PC: py afk_on_tour.py -> [2] Anträge prüfen (auch Rückfragen; prüft mit chess-results,
+        sucht den Ort, fragt j/n) -> turnierorte/besuche.json, danach hochladen.
   Eigene alte Turniere direkt eintragen:  py turnierorte_pruefen.py --neu
   Fehler korrigieren (löschen, ausblenden, Link/Ort/Datum ändern):  py turnierorte_pruefen.py --verwalten
 

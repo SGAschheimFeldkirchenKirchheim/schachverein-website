@@ -95,7 +95,7 @@ def aktualisieren(d, schnell=False):
 # [2] Anträge prüfen
 # ------------------------------------------------------------
 def antraege(d):
-    dateien = sorted(glob.glob(os.path.join(to.ORDNER, "antraege", "*.json")))
+    dateien = tp.offene_dateien()
     titel(f"Anträge prüfen ({len(dateien)} offen)")
     if not dateien:
         print("Keine offenen Anträge. Tipp: erst [1] Alles aktualisieren, dann kommen neue Anträge an.")
@@ -450,7 +450,7 @@ def main():
     d = Daten()
     regionen_nachholen(d)
     while True:
-        offen = len(glob.glob(os.path.join(to.ORDNER, "antraege", "*.json")))
+        offen = len(tp.offene_dateien())
         titel(f"AFK on Tour   ·   {len(d.spieler)} Profile · {len(d.besuche)} Turniere · {offen} offene Anträge")
         print("  [1] Alles aktualisieren\n  [2] Anträge prüfen\n  [3] Bearbeiten\n  [4] Turnier eintragen\n"
               "  [5] Alte Turniere suchen (chess-results)\n  [0] Beenden")
