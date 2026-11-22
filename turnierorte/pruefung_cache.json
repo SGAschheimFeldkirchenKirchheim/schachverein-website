@@ -52,25 +52,33 @@
   "erreichbar": true,
   "von": "",
   "ort": "",
-  "namen": {}
+  "namen": {
+   "David Mehlhorn": true
+  }
  },
  "655067": {
   "erreichbar": true,
   "von": "",
   "ort": "",
-  "namen": {}
+  "namen": {
+   "David Mehlhorn": false
+  }
  },
  "814859": {
   "erreichbar": true,
   "von": "",
   "ort": "",
-  "namen": {}
+  "namen": {
+   "David Mehlhorn": true
+  }
  },
  "901173": {
   "erreichbar": true,
   "von": "",
   "ort": "",
-  "namen": {}
+  "namen": {
+   "David Mehlhorn": true
+  }
  },
  "983068": {
   "erreichbar": true,
@@ -81,6 +89,30 @@
   }
  },
  "649615": {
+  "erreichbar": true,
+  "von": "",
+  "ort": "",
+  "namen": {
+   "David Mehlhorn": false
+  }
+ },
+ "534227": {
+  "erreichbar": true,
+  "von": "",
+  "ort": "",
+  "namen": {
+   "Korbinian Ruff": true
+  }
+ },
+ "1371811": {
+  "erreichbar": true,
+  "von": "",
+  "ort": "",
+  "namen": {
+   "Korbinian Ruff": true
+  }
+ },
+ "1187199": {
   "erreichbar": true,
   "von": "",
   "ort": "",

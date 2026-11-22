@@ -1,5 +1,5 @@
 {
- "stand": "2026-11-22 13:23",
+ "stand": "2026-11-22 13:24",
  "fehler": 2,
  "eintraege": [
   {
@@ -62,6 +62,38 @@
     "von": "2023-04",
     "link": "https://chess-results.com/tnr1384883.aspx?lan=0",
     "stadt": "Karlsruhe"
+   },
+   "meldungen": [
+    {
+     "code": "name",
+     "stufe": "gelb",
+     "text": "Name nicht in der chess-results-Teilnehmerliste"
+    }
+   ]
+  },
+  {
+   "key": {
+    "spieler": "DavidM",
+    "turnier": "Reykjavik Open 2023",
+    "von": "2023-04",
+    "link": "https://chess-results.com/tnr655067.aspx?lan=0",
+    "stadt": "Reykjavik"
+   },
+   "meldungen": [
+    {
+     "code": "name",
+     "stufe": "gelb",
+     "text": "Name nicht in der chess-results-Teilnehmerliste"
+    }
+   ]
+  },
+  {
+   "key": {
+    "spieler": "DavidM",
+    "turnier": "28. Offene Internationale Bayerische Schachmeisterschaft",
+    "von": "2025-11",
+    "link": "https://chess-results.com/tnr1187199.aspx?lan=0",
+    "stadt": "Gmund"
    },
    "meldungen": [
     {
