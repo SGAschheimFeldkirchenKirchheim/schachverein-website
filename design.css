@@ -561,10 +561,10 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
 .kt-form.laedt { opacity: .7; }
 .kt-feld { margin-bottom: .85rem; }
 .kt-feld label { display: block; font-size: .88rem; font-weight: 600; margin-bottom: .3rem; color: var(--head); }
-.kt-feld input, .kt-feld textarea { width: 100%; box-sizing: border-box; padding: .62rem .8rem; border-radius: 9px; border: 1.5px solid var(--line);
+.kt-feld input, .kt-feld textarea, .kt-feld select { width: 100%; box-sizing: border-box; padding: .62rem .8rem; border-radius: 9px; border: 1.5px solid var(--line);
   background: var(--bg); color: var(--text); font: inherit; }
 .kt-feld textarea { resize: vertical; line-height: 1.5; min-height: 130px; }
-.kt-feld input:focus, .kt-feld textarea:focus { outline: none; border-color: var(--link-c); }
+.kt-feld input:focus, .kt-feld textarea:focus, .kt-feld select:focus { outline: none; border-color: var(--link-c); }
 .kt-feld small { display: block; margin-top: .3rem; font-size: .83rem; color: var(--muted); min-height: 0; }
 .kt-feld small:empty { display: none; }
 .kt-feld.gut input { border-color: #3fae6c; } .kt-feld.gut small { color: #2f9a5c; }
@@ -621,6 +621,7 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
 .kt-antrag { display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 1rem; align-items: center; }
 .kt-antrag b { color: var(--head); font-size: 1.1rem; }
 .kt-grau { color: var(--muted); } .kt-gut { color: #2f9a5c; font-size: .9rem; } :root[data-theme="dark"] .kt-gut { color: #6fd59a; }
+.kt-tour form.kt-karte { margin: -.4rem 0 1rem; }
 .kt-warn { color: #c0453b; font-size: .9rem; } :root[data-theme="dark"] .kt-warn { color: #ff8a80; }
 .kt-tabelle-rahmen { padding: .5rem 1rem; overflow-x: auto; }
 .kt-tab { width: 100%; border-collapse: collapse; font-size: .95rem; }

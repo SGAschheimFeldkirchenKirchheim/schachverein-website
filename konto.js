@@ -409,7 +409,7 @@
   }
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
-    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false;
+    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
     function laden() {
       Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere")]).then(function (r) {
         // m_turniere unbekannt = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
@@ -421,6 +421,51 @@
         BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
         zeichnen();
       });
+    }
+    function tourLaden() {
+      TOUR = "laedt"; zeichnen();
+      api("m_tour_daten").then(function (r) { TOUR = r.ok ? r : { fehlerText: r.fehler || "Nicht geladen" }; zeichnen(); });
+    }
+    function tourHtml() {
+      if (!TOUR) return '<button type="button" class="kt-btn leise" data-tour="laden">Einträge anzeigen</button>';
+      if (TOUR === "laedt") return '<p class="kt-klein links">Lädt …</p>';
+      if (TOUR.fehlerText) return '<p class="kt-warn">' + esc(TOUR.fehlerText) + "</p>";
+      var sp = TOUR.spieler || {}, ids = Object.keys(sp).sort(function (x, y) { return (sp[x].name || x).localeCompare(sp[y].name || y, "de"); });
+      var anzahl = function (sid) { return TOUR.besuche.filter(function (b) { return b.spieler === sid; }).length; };
+      var h = '<div class="kt-feld" style="max-width:24rem"><label>Spieler</label><select data-tour="wahl"><option value="">– wählen –</option>' +
+        ids.map(function (sid) { return '<option value="' + esc(sid) + '"' + (sid === TOUR_WAHL ? " selected" : "") + ">" + esc(sp[sid].name || sid) + " (" + anzahl(sid) + ")</option>"; }).join("") + "</select></div>";
+      if (TOUR_WAHL && sp[TOUR_WAHL]) {
+        var liste = TOUR.besuche.map(function (b, i) { return { b: b, i: i }; }).filter(function (x) { return x.b.spieler === TOUR_WAHL; })
+          .sort(function (x, y) { return String(y.b.von || "").localeCompare(String(x.b.von || "")); });
+        h += liste.map(function (x) {
+          var b = x.b, wann = String(b.von || "").length >= 7 ? b.von.slice(5, 7) + "." + b.von.slice(0, 4) : esc(b.von || "");
+          var titel = b.link ? '<a href="' + esc(b.link) + '" target="_blank" rel="noopener">' + esc(b.turnier || "chess-results") + "</a>" : esc(b.turnier || "–");
+          var karte = '<div class="kt-karte kt-antrag" data-ti="' + x.i + '"><div><b>' + esc(b.stadt || "?") + "</b>" + (b.land ? ' <span class="kt-grau">' + esc(b.land) + "</span>" : "") +
+            (b.ausgeblendet ? ' <span class="kt-tag aus">ausgeblendet</span>' : "") + '<br><span class="kt-grau">' + titel + " · " + wann + (b.bedenkzeit ? " · " + esc(b.bedenkzeit) : "") + "</span></div><div></div>" +
+            '<div class="kt-zeile"><button type="button" class="kt-mini" data-ta="bearbeiten">Bearbeiten</button>' +
+            '<button type="button" class="kt-mini" data-ta="' + (b.ausgeblendet ? "einblenden" : "ausblenden") + '">' + (b.ausgeblendet ? "Einblenden" : "Ausblenden") + "</button>" +
+            '<button type="button" class="kt-mini rot" data-ta="loeschen">Löschen</button></div></div>';
+          if (TOUR_EDIT === x.i) {
+            karte += '<form class="kt-karte kt-form" data-tform="' + x.i + '" novalidate>' +
+              feld("turnier", "Turnier", "text", 'value="' + esc(b.turnier || "") + '"') +
+              feld("link", "chess-results-Link", "url", 'value="' + esc(b.link || "") + '"') +
+              '<label class="kt-check"><input type="checkbox" name="cr_holen"> <span>Name und Datum neu von chess-results holen</span></label>' +
+              feld("ort", "Ort (leer = bleibt " + esc(b.stadt || "?") + ")", "text", 'placeholder="z. B. Berlin, Deutschland"') +
+              feld("datum", "Datum (JJJJ-MM)", "text", 'value="' + esc(String(b.von || "").slice(0, 7)) + '"') +
+              '<div class="kt-feld"><label>Bedenkzeit</label><select name="bedenkzeit">' + ["klassisch", "schnell", "blitz"].map(function (z) {
+                return '<option value="' + z + '"' + (b.bedenkzeit === z ? " selected" : "") + ">" + z + "</option>"; }).join("") + "</select></div>" +
+              '<p class="kt-fehler" hidden></p><div class="kt-zeile"><button type="submit" class="kt-btn gruen">Speichern</button>' +
+              '<button type="button" class="kt-btn leise" data-ta="abbrechen">Abbrechen</button></div></form>';
+          }
+          return karte;
+        }).join("") || '<p class="kt-klein links">Keine Einträge.</p>';
+        h += '<p style="margin-top:1rem"><button type="button" class="kt-mini rot" data-ta="profil_loeschen">Ganzes Profil löschen</button></p>';
+      }
+      if (TOUR.wartend && TOUR.wartend.length) h += '<h3 style="margin-top:1.5rem">Wartet auf den nächsten Build</h3><ul class="kt-klein links">' +
+        TOUR.wartend.map(function (w) { return "<li>" + esc(w.was) + ' <span class="kt-grau">(' + esc(w.wer || "") + ", " + esc(w.zeit || "") + ")</span></li>"; }).join("") + "</ul>";
+      if (TOUR.fehler && TOUR.fehler.length) h += '<h3 style="margin-top:1.5rem">Hat nicht geklappt</h3><ul class="kt-klein links">' +
+        TOUR.fehler.map(function (w) { return '<li><span class="kt-warn">' + esc(w.fehler) + "</span> – " + esc(w.was) + ' <span class="kt-grau">(' + esc(w.zeit || "") + ")</span></li>"; }).join("") + "</ul>";
+      return h;
     }
     function turnierKarte(t, art) {
       var wo = [t.stadt, t.land].filter(Boolean).join(", "), wann = t.monat ? datumKurz(t.monat + "-01").slice(3) : "";
@@ -502,7 +547,10 @@
         (T.rueckfrage.length ? '<h3 style="margin-top:1.8rem">Rückfragen</h3>' + T.rueckfrage.map(function (t) { return turnierKarte(t, "rueckfrage"); }).join("") : "") +
         (T.angenommen.length ? '<h3 style="margin-top:1.8rem">Wird gerade eingetragen</h3>' + T.angenommen.map(function (t) { return turnierKarte(t, "angenommen"); }).join("") : "") +
         '<p class="kt-klein links">„Annehmen“: Der nächste Build (startet von selbst, dauert ein paar Minuten) holt Ort und Datum von chess-results bzw. der Karte und trägt das Turnier ein. ' +
-        "Ist etwas unklar (Ort nicht gefunden, Name ähnlich wie ein bestehendes Profil), landet der Antrag unter „Rückfragen“.</p>");
+        "Ist etwas unklar (Ort nicht gefunden, Name ähnlich wie ein bestehendes Profil), landet der Antrag unter „Rückfragen“.</p>" +
+        '<h3 style="margin-top:2.2rem">Alle Einträge bearbeiten</h3><div class="kt-tour">' + tourHtml() + "</div>" +
+        '<p class="kt-klein links">Änderungen übernimmt der nächste Build (startet von selbst, ein paar Minuten). Einen neuen Ort sucht er auf der Karte, ' +
+        "neue Turniere kommen über das Formular auf der AFK-on-Tour-Seite.</p>");
       if (NUR_TURNIERE) {
         box.innerHTML = '<p class="kt-unter">AFK on Tour – Turnier-Anträge</p><p class="kt-meldung" hidden></p>' + turnierTeil;
         box.querySelector(".kt-reiter-inhalt").hidden = false;
@@ -552,6 +600,42 @@
           var liste = [].map.call(box.querySelectorAll('[data-recht][data-ziel="' + ziel + '"]:checked'), function (x) { return x.getAttribute("data-recht"); });
           api("m_admin", { aktion: "rechte", ziel: ziel, rechte: liste }).then(fertig);
         });
+      });
+      var tl = box.querySelector('[data-tour="laden"]'); if (tl) tl.addEventListener("click", tourLaden);
+      var tw = box.querySelector('[data-tour="wahl"]'); if (tw) tw.addEventListener("change", function () { TOUR_WAHL = tw.value; TOUR_EDIT = -1; zeichnen(); });
+      function tourSenden(aktion, b, werte, knoepfe) {
+        var sp = TOUR.spieler[TOUR_WAHL] || {};
+        var key = b ? { spieler: b.spieler, turnier: b.turnier || "", von: b.von || "", link: b.link || "", stadt: b.stadt || "" } : { spieler: TOUR_WAHL };
+        [].forEach.call(knoepfe || [], function (x) { x.disabled = true; });
+        api("m_tour_aendern", { aktion: aktion, key: key, sid: TOUR_WAHL, werte: werte || {},
+          beschreibung: (sp.name || TOUR_WAHL) + (b ? ", " + (b.stadt || "") + " " + String(b.von || "").slice(0, 7) : "") }).then(function (r) {
+          [].forEach.call(knoepfe || [], function (x) { x.disabled = false; });
+          if (r.ok) { TOUR_EDIT = -1; TOUR = null; tourLaden(); }
+          fertig(r);
+        });
+      }
+      [].forEach.call(box.querySelectorAll("[data-ta]"), function (k) {
+        k.addEventListener("click", function () {
+          var was = k.getAttribute("data-ta"), el = k.closest("[data-ti]"), i = el ? +el.getAttribute("data-ti") : -1, b = i >= 0 ? TOUR.besuche[i] : null;
+          if (was === "bearbeiten") { TOUR_EDIT = i; return zeichnen(); }
+          if (was === "abbrechen") { TOUR_EDIT = -1; return zeichnen(); }
+          if (was === "loeschen" && !confirm("Eintrag " + (b.stadt || "") + " (" + (b.turnier || "") + ") löschen?")) return;
+          if (was === "profil_loeschen" && !confirm("Profil „" + ((TOUR.spieler[TOUR_WAHL] || {}).name || TOUR_WAHL) + "“ mit allen Einträgen löschen?")) return;
+          tourSenden(was, b, null, [k]);
+        });
+      });
+      var tf = box.querySelector("[data-tform]");
+      if (tf) tf.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var b = TOUR.besuche[+tf.getAttribute("data-tform")], w = {};
+        var v = function (n) { return (tf.elements[n].value || "").trim(); };
+        if (v("turnier") && v("turnier") !== (b.turnier || "")) w.turnier = v("turnier");
+        if (v("link") !== (b.link || "") || tf.cr_holen.checked) { w.link = v("link"); w.cr_holen = tf.cr_holen.checked; }
+        if (v("ort")) w.ort = v("ort");
+        if (v("datum") && v("datum") !== String(b.von || "").slice(0, 7)) w.datum = v("datum");
+        if (v("bedenkzeit") !== (b.bedenkzeit || "")) w.bedenkzeit = v("bedenkzeit");
+        if (!Object.keys(w).length) return fehler(tf, "Nichts geändert.");
+        tourSenden("aendern", b, w, tf.querySelectorAll("button"));
       });
       [].forEach.call(box.querySelectorAll("[data-t]"), function (b) {
         b.addEventListener("click", function () {

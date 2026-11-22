@@ -229,6 +229,100 @@ def angenommene_eintragen():
     return n
 
 
+# ------------------------------------------------------------
+# Änderungen aus der Website-Verwaltung (Reiter Turniere -> Alle Einträge).
+# Das Apps Script legt antraege/aenderungen/<Zeit>.json an, der GitHub-Build wendet sie hier an.
+# Was nicht klappt (Ort nicht gefunden, Eintrag weg), steht in antraege/aenderungen_fehler.json.
+# ------------------------------------------------------------
+AENDERUNG_FELDER = ("spieler", "turnier", "von", "link", "stadt")
+
+
+def _passt(b, key):
+    return all((b.get(f) or "") == (key.get(f) or "") for f in AENDERUNG_FELDER)
+
+
+def aenderungen_anwenden():
+    ordner = os.path.join(to.ORDNER, "antraege", "aenderungen")
+    dateien = sorted(glob.glob(os.path.join(ordner, "*.json")))
+    if not dateien:
+        return 0
+    alt_cache, tk._nur_cache = tk._nur_cache, False
+    spieler, besuche, n = to.spieler_laden(), to.besuche_laden(), 0
+    fehler_pfad = os.path.join(to.ORDNER, "antraege", "aenderungen_fehler.json")
+    fehler = to._lade(fehler_pfad, [])
+    try:
+        for pfad in dateien:
+            try:
+                with open(pfad, encoding="utf-8") as f:
+                    a = json.load(f)
+            except (OSError, ValueError):
+                os.remove(pfad)
+                continue
+            art, w, sid = a.get("aktion", ""), a.get("werte") or {}, a.get("sid", "")
+            text = ""
+            if art in ("profil_loeschen", "profil_ausblenden", "profil_einblenden"):
+                if sid not in spieler:
+                    text = "Profil gibt es nicht mehr"
+                elif art == "profil_loeschen":
+                    besuche[:] = [b for b in besuche if b["spieler"] != sid]
+                    spieler.pop(sid)
+                elif art == "profil_ausblenden":
+                    spieler[sid]["ausgeblendet"] = True
+                else:
+                    spieler[sid].pop("ausgeblendet", None)
+            else:
+                b = next((x for x in besuche if _passt(x, a.get("key") or {})), None)
+                if b is None:
+                    text = "Eintrag nicht gefunden (inzwischen geändert?)"
+                elif art == "loeschen":
+                    besuche.remove(b)
+                elif art in ("ausblenden", "einblenden"):
+                    if art == "ausblenden":
+                        b["ausgeblendet"] = True
+                    else:
+                        b.pop("ausgeblendet", None)
+                elif art == "aendern":
+                    if "link" in w and w["link"] != b.get("link", ""):
+                        tnr = re.search(r"tnr(\d{5,8})", w["link"] or "")
+                        b["link"] = tk.CR_LINK.format(tnr=tnr.group(1)) if tnr else (w["link"] or "")
+                        if tnr and w.get("cr_holen"):
+                            seite = tk._hole(tk.CR_DETAIL.format(tnr=tnr.group(1)))
+                            d = tk.cr_details(tnr.group(1), seite) if seite else {}
+                            if d.get("name"):
+                                b["turnier"], b["von"], b["bis"] = d["name"], d.get("von") or b.get("von", ""), d.get("bis") or b.get("bis", "")
+                            else:
+                                text = "chess-results nicht erreichbar – nur der Link wurde geändert"
+                    if w.get("turnier"):
+                        b["turnier"] = w["turnier"]
+                    if w.get("datum"):
+                        b["von"] = b["bis"] = w["datum"]
+                    if w.get("bedenkzeit") in ("klassisch", "schnell", "blitz"):
+                        b["bedenkzeit"] = w["bedenkzeit"]
+                    if w.get("ort"):
+                        ort = ort_suchen(w["ort"])
+                        if ort:
+                            b.update(stadt=ort["stadt"], land=ort["land"], region=ort.get("region", ""),
+                                     lat=round(ort["lat"], 5), lon=round(ort["lon"], 5))
+                        else:
+                            text = (text + "; " if text else "") + f"Ort „{w['ort']}“ nicht gefunden – Rest übernommen"
+                else:
+                    text = "Unbekannte Aktion"
+            if text:
+                fehler.append({"zeit": a.get("zeit", ""), "wer": a.get("wer", ""), "was": a.get("beschreibung", art), "fehler": text})
+                print(f"AFK on Tour: Änderung „{a.get('beschreibung', art)}“: {text}")
+            else:
+                print(f"AFK on Tour: Änderung übernommen – {a.get('beschreibung', art)}")
+            n += 1
+            os.remove(pfad)
+    finally:
+        tk._nur_cache = alt_cache
+    to._speichere(os.path.join(to.ORDNER, "spieler.json"), spieler)
+    to._speichere(os.path.join(to.ORDNER, "besuche.json"), besuche)
+    if fehler:
+        to._speichere(fehler_pfad, fehler[-20:])
+    return n
+
+
 def verwalten(spieler, besuche, konf):
     """Einträge eines Spielers anzeigen und löschen / aus- und einblenden / Link, Ort oder Datum ändern."""
     geaendert = False

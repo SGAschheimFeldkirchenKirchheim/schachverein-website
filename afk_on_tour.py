@@ -87,7 +87,7 @@ def aktualisieren(d, schnell=False):
         print(f"update_all.py nicht gefunden ({UPDATE_ALL}).")
         return
     titel("Website hochladen" if schnell else "Alles aktualisieren")
-    subprocess.call([sys.executable, UPDATE_ALL] + (["website"] if schnell else []), cwd=os.path.dirname(UPDATE_ALL))
+    subprocess.call([sys.executable, UPDATE_ALL, "website" if schnell else "alles"], cwd=os.path.dirname(UPDATE_ALL))
     d.laden()          # neue Anträge / Änderungen vom anderen Rechner einlesen
 
 

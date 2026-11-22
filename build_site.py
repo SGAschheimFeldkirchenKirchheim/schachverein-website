@@ -3372,6 +3372,7 @@ if __name__ == "__main__":
     if os.environ.get("GITHUB_ACTIONS"):     # in der Verwaltung angenommene AFK-on-Tour-Anträge eintragen (vor den Spielerseiten)
         try:
             import turnierorte_pruefen
+            turnierorte_pruefen.aenderungen_anwenden()      # Bearbeiten in der Verwaltung
             turnierorte_pruefen.angenommene_eintragen()
         except Exception as e:
             print(f"AFK on Tour: angenommene Anträge nicht eingetragen ({type(e).__name__}: {e})")
