@@ -1,6 +1,6 @@
 {
- "stand": "2026-11-22 13:39",
- "fehler": 2,
+ "stand": "2026-11-22 13:59",
+ "fehler": 0,
  "eintraege": [
   {
    "key": {
@@ -22,31 +22,15 @@
    "key": {
     "spieler": "KorbinianR",
     "turnier": "Grenke B-Open",
-    "von": "2026-04",
-    "link": "https://chess-results.com/tnr1384883.aspx?lan=0",
-    "stadt": "Karlsruhe"
-   },
-   "meldungen": [
-    {
-     "code": "doppelt",
-     "stufe": "rot",
-     "text": "Gleiches Turnier (oder gleicher Link) doppelt beim selben Spieler"
-    }
-   ]
-  },
-  {
-   "key": {
-    "spieler": "KorbinianR",
-    "turnier": "Grenke B-Open",
     "von": "2023-04",
-    "link": "https://chess-results.com/tnr1384883.aspx?lan=0",
+    "link": "",
     "stadt": "Karlsruhe"
    },
    "meldungen": [
     {
-     "code": "doppelt",
-     "stufe": "rot",
-     "text": "Gleiches Turnier (oder gleicher Link) doppelt beim selben Spieler"
+     "code": "kein_link",
+     "stufe": "gelb",
+     "text": "Kein chess-results-Link"
     }
    ]
   }
