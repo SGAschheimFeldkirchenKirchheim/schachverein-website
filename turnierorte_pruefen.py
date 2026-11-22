@@ -26,7 +26,11 @@ GEOCODER = ("https://nominatim.openstreetmap.org/search?format=json&limit=1&addr
 
 
 def norm(text):
-    t = unicodedata.normalize("NFKD", (text or "").lower()).encode("ascii", "ignore").decode()
+    """Kleinbuchstaben, ä=ae, ö=oe, ü=ue, ß=ss, Akzente weg, Satzzeichen -> Leerzeichen."""
+    t = (text or "").lower()
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("ß", "ss")):
+        t = t.replace(a, b)
+    t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode()
     return re.sub(r"[^a-z ]+", " ", t)
 
 
@@ -56,14 +60,17 @@ def ort_suchen(text):
 
 
 def name_in_teilnehmern(name, seite):
-    teile = [t for t in norm(name).split() if len(t) > 1]
-    if not seite or not teile:
+    """Steht der Name in einer Zeile der Teilnehmerliste? Reihenfolge egal ("Müller, Max"),
+    ä = ae usw., bei Doppelnamen ("Hans-Peter", "Müller-Lüdenscheidt") reicht ein Teil."""
+    gruppen = [[t for t in norm(wort).split() if len(t) > 1] for wort in (name or "").split()]
+    gruppen = [g for g in gruppen if g]
+    if not seite or not gruppen:
         return False
     if tk.BeautifulSoup:
         zeilen = [norm(tr.get_text(" ", strip=True)) for tr in tk.BeautifulSoup(seite, "html.parser").find_all("tr")]
     else:
         zeilen = norm(seite).splitlines()
-    return any(all(re.search(r"\b" + t + r"\b", z) for t in teile) for z in zeilen)
+    return any(all(any(re.search(r"\b" + t + r"\b", z) for t in g) for g in gruppen) for z in zeilen)
 
 
 def offene_dateien():
@@ -276,6 +283,9 @@ def aenderungen_anwenden():
                     text = "Eintrag nicht gefunden (inzwischen geändert?)"
                 elif art == "loeschen":
                     besuche.remove(b)
+                elif art == "ok":
+                    if w.get("code") in PRUEF_TEXTE and w["code"] not in (b.get("ok") or []):
+                        b["ok"] = (b.get("ok") or []) + [w["code"]]
                 elif art in ("ausblenden", "einblenden"):
                     if art == "ausblenden":
                         b["ausgeblendet"] = True
@@ -321,6 +331,134 @@ def aenderungen_anwenden():
     if fehler:
         to._speichere(fehler_pfad, fehler[-20:])
     return n
+
+
+# ------------------------------------------------------------
+# Prüfliste: Fehler (rot) und Hinweise (gelb) zu allen Einträgen.
+# Der GitHub-Build schreibt turnierorte/pruefung.json (Verwaltung -> Turniere), afk_on_tour.py [3] zeigt sie auch.
+# chess-results/Karte werden nur für neue Links abgefragt (Zwischenspeicher pruefung_cache.json).
+# "Passt so" speichert den Code im Eintrag unter "ok" -> Meldung verschwindet.
+# ------------------------------------------------------------
+PRUEF_DATEI = os.path.join(to.ORDNER, "pruefung.json")
+PRUEF_CACHE = os.path.join(to.ORDNER, "pruefung_cache.json")
+MAX_KM_ABWEICHUNG = 50
+PRUEF_TEXTE = {
+    "ort": ("rot", "Ort ohne Kartenpunkt oder Land fehlt"),
+    "datum": ("rot", "Datum fehlt oder unvollständig"),
+    "doppelt": ("rot", "Gleiches Turnier (oder gleicher Link) doppelt beim selben Spieler"),
+    "link_kaputt": ("rot", "chess-results-Link führt zu keinem Turnier"),
+    "name": ("gelb", "Name nicht in der chess-results-Teilnehmerliste"),
+    "kein_link": ("gelb", "Kein chess-results-Link"),
+    "bedenkzeit": ("gelb", "Nicht klassisch, aber keine Ausnahme eingetragen"),
+    "turnier": ("gelb", "Turniername fehlt"),
+    "datum_cr": ("gelb", "Datum weicht von chess-results ab"),
+    "ort_cr": ("gelb", "Ort liegt weit weg vom chess-results-Ort"),
+    "region": ("gelb", "Bundesland fehlt (zählt für Abzeichen)"),
+}
+
+
+def _tnr(link):
+    m = re.search(r"tnr(\d{5,8})", link or "")
+    return m.group(1) if m else ""
+
+
+def cache_ergaenzen(besuche, spieler, cache):
+    """Holt chess-results-Daten (und den Ort auf der Karte) für Links, die noch nicht im Zwischenspeicher sind."""
+    neu = 0
+    for b in besuche:
+        tnr = _tnr(b.get("link"))
+        if not tnr:
+            continue
+        c = cache.setdefault(tnr, {})
+        if "erreichbar" not in c:
+            seite = tk._hole(tk.CR_DETAIL.format(tnr=tnr))
+            if seite is None:                    # Netzfehler -> beim nächsten Mal nochmal
+                cache.pop(tnr, None)
+                continue
+            d = tk.cr_details(tnr, seite)
+            c.update(erreichbar=bool(d.get("name")), von=d.get("von", ""), ort=", ".join(x for x in (d.get("ort"), d.get("land")) if x))
+            if c["ort"]:
+                o = ort_suchen(c["ort"])
+                c["lat"], c["lon"] = (round(o["lat"], 4), round(o["lon"], 4)) if o else (None, None)
+            neu += 1
+        name = (spieler.get(b["spieler"]) or {}).get("name", "")
+        namen = c.setdefault("namen", {})
+        if c.get("erreichbar") and name and name not in namen:
+            seite = tk._hole(tk.CR_START.format(tnr=tnr))
+            if seite is not None:
+                namen[name] = name_in_teilnehmern(name, seite)
+                neu += 1
+    return neu
+
+
+def meldungen(b, besuche, spieler, cache):
+    """-> Liste von Codes (ohne die mit "Passt so" bestätigten)."""
+    m = []
+    if b.get("lat") is None or b.get("lon") is None or not b.get("land"):
+        m.append("ort")
+    if not re.match(r"\d{4}-\d{2}", b.get("von") or ""):
+        m.append("datum")
+    gleich = [x for x in besuche if x["spieler"] == b["spieler"] and x is not b and not x.get("ausgeblendet") and (
+        (b.get("link") and _tnr(x.get("link")) == _tnr(b.get("link")) and _tnr(b.get("link"))) or
+        (b.get("turnier") and x.get("turnier") == b.get("turnier") and (x.get("von") or "")[:7] == (b.get("von") or "")[:7]
+         and not (_tnr(b.get("link")) and _tnr(x.get("link")))))]      # zwei verschiedene Links = zwei Turniere
+    if gleich and not b.get("ausgeblendet"):
+        m.append("doppelt")
+    tnr = _tnr(b.get("link"))
+    c = cache.get(tnr, {}) if tnr else {}
+    if not tnr:
+        m.append("kein_link")
+    elif c.get("erreichbar") is False:
+        m.append("link_kaputt")
+    elif c.get("erreichbar"):
+        name = (spieler.get(b["spieler"]) or {}).get("name", "")
+        if c.get("namen", {}).get(name) is False:
+            m.append("name")
+        if c.get("von") and (b.get("von") or "")[:7] and c["von"][:7] != b["von"][:7]:
+            m.append("datum_cr")
+        if c.get("lat") is not None and b.get("lat") is not None and \
+                to._km(c["lat"], c["lon"], b["lat"], b["lon"]) > MAX_KM_ABWEICHUNG:
+            m.append("ort_cr")
+    if b.get("bedenkzeit") and b["bedenkzeit"] != "klassisch" and not b.get("ausnahme"):
+        m.append("bedenkzeit")
+    if not (b.get("turnier") or "").strip():
+        m.append("turnier")
+    if b.get("land") == "Deutschland" and not b.get("region"):
+        m.append("region")
+    ok = set(b.get("ok") or [])
+    return [x for x in m if x not in ok]
+
+
+def meldung_text(code):
+    return PRUEF_TEXTE.get(code, ("gelb", code))[1]
+
+
+def pruefliste(netz=True):
+    """Schreibt turnierorte/pruefung.json. netz=False: nur mit dem Zwischenspeicher."""
+    spieler, besuche = to.spieler_laden(), to.besuche_laden()
+    cache = to._lade(PRUEF_CACHE, {})
+    if netz:
+        alt_cache, tk._nur_cache = tk._nur_cache, False
+        try:
+            if cache_ergaenzen(besuche, spieler, cache):
+                to._speichere(PRUEF_CACHE, cache)
+        finally:
+            tk._nur_cache = alt_cache
+    eintraege, fehler = [], 0
+    for b in besuche:
+        codes = meldungen(b, besuche, spieler, cache)
+        if not codes:
+            continue
+        rot = [c for c in codes if PRUEF_TEXTE.get(c, ("gelb",))[0] == "rot"]
+        fehler += bool(rot)
+        eintraege.append({"key": {f: b.get(f) or "" for f in AENDERUNG_FELDER},
+                          "meldungen": [{"code": c, "stufe": PRUEF_TEXTE.get(c, ("gelb",))[0], "text": meldung_text(c)} for c in codes]})
+    daten = {"stand": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"), "fehler": fehler, "eintraege": eintraege}
+    alt = to._lade(PRUEF_DATEI, {})
+    if {k: v for k, v in alt.items() if k != "stand"} != {k: v for k, v in daten.items() if k != "stand"}:
+        to._speichere(PRUEF_DATEI, daten)      # nur bei Änderungen schreiben (sonst jede Nacht ein Commit)
+    print(f"AFK on Tour: Prüfliste – {len(eintraege)} Einträge mit Meldungen, davon {fehler} mit Fehlern")
+    return daten
 
 
 def verwalten(spieler, besuche, konf):

@@ -622,6 +622,9 @@ main.container > p, .jugend-intro, .lead { max-width: var(--text-breite); }
 .kt-antrag b { color: var(--head); font-size: 1.1rem; }
 .kt-grau { color: var(--muted); } .kt-gut { color: #2f9a5c; font-size: .9rem; } :root[data-theme="dark"] .kt-gut { color: #6fd59a; }
 .kt-tour form.kt-karte { margin: -.4rem 0 1rem; }
+.kt-hinweis { color: #a86a00; font-size: .9rem; } :root[data-theme="dark"] .kt-hinweis { color: #f2c37a; }
+.kt-pruef-sp { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+.kt-link { background: none; border: 0; padding: 0 0 0 .3rem; color: var(--link-c); text-decoration: underline; cursor: pointer; font: inherit; font-size: .85rem; }
 .kt-warn { color: #c0453b; font-size: .9rem; } :root[data-theme="dark"] .kt-warn { color: #ff8a80; }
 .kt-tabelle-rahmen { padding: .5rem 1rem; overflow-x: auto; }
 .kt-tab { width: 100%; border-collapse: collapse; font-size: .95rem; }

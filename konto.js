@@ -430,10 +430,23 @@
       if (!TOUR) return '<button type="button" class="kt-btn leise" data-tour="laden">Einträge anzeigen</button>';
       if (TOUR === "laedt") return '<p class="kt-klein links">Lädt …</p>';
       if (TOUR.fehlerText) return '<p class="kt-warn">' + esc(TOUR.fehlerText) + "</p>";
+      var PR = {}, prSp = {};
+      ((TOUR.pruefung || {}).eintraege || []).forEach(function (e) {
+        var k = e.key; PR[[k.spieler, k.turnier, k.von, k.link, k.stadt].join("|")] = e.meldungen;
+        var z = prSp[k.spieler] || (prSp[k.spieler] = { rot: 0, gelb: 0 });
+        e.meldungen.forEach(function (m) { z[m.stufe === "rot" ? "rot" : "gelb"]++; });
+      });
+      function prVon(b) { return PR[[b.spieler, b.turnier || "", b.von || "", b.link || "", b.stadt || ""].join("|")] || []; }
+      function zahlText(z) { return z ? [z.rot ? z.rot + (z.rot === 1 ? " Fehler" : " Fehler") : "", z.gelb ? z.gelb + (z.gelb === 1 ? " Hinweis" : " Hinweise") : ""].filter(Boolean).join(", ") : ""; }
       var sp = TOUR.spieler || {}, ids = Object.keys(sp).sort(function (x, y) { return (sp[x].name || x).localeCompare(sp[y].name || y, "de"); });
       var anzahl = function (sid) { return TOUR.besuche.filter(function (b) { return b.spieler === sid; }).length; };
-      var h = '<div class="kt-feld" style="max-width:24rem"><label>Spieler</label><select data-tour="wahl"><option value="">– wählen –</option>' +
-        ids.map(function (sid) { return '<option value="' + esc(sid) + '"' + (sid === TOUR_WAHL ? " selected" : "") + ">" + esc(sp[sid].name || sid) + " (" + anzahl(sid) + ")</option>"; }).join("") + "</select></div>";
+      var mitMeldung = ids.filter(function (sid) { return prSp[sid]; }).sort(function (x, y) { return prSp[y].rot - prSp[x].rot || prSp[y].gelb - prSp[x].gelb; });
+      var h = '<div class="kt-karte"><b>Prüfliste</b> <span class="kt-grau">' + (TOUR.pruefung && TOUR.pruefung.stand ? "Stand " + esc(TOUR.pruefung.stand) : "noch nicht erstellt (kommt mit dem nächsten Build)") + "</span>" +
+        (mitMeldung.length ? '<div class="kt-pruef-sp">' + mitMeldung.map(function (sid) {
+          return '<button type="button" class="kt-mini' + (prSp[sid].rot ? " rot" : "") + '" data-tour-sp="' + esc(sid) + '">' + esc(sp[sid].name || sid) + " · " + zahlText(prSp[sid]) + "</button>";
+        }).join("") + "</div>" : '<p class="kt-gut" style="margin:.5rem 0 0">Alles in Ordnung.</p>') + "</div>";
+      h += '<div class="kt-feld" style="max-width:24rem"><label>Spieler</label><select data-tour="wahl"><option value="">– wählen –</option>' +
+        ids.map(function (sid) { return '<option value="' + esc(sid) + '"' + (sid === TOUR_WAHL ? " selected" : "") + ">" + esc(sp[sid].name || sid) + " (" + anzahl(sid) + ")" + (prSp[sid] ? " – " + zahlText(prSp[sid]) : "") + "</option>"; }).join("") + "</select></div>";
       if (TOUR_WAHL && sp[TOUR_WAHL]) {
         var liste = TOUR.besuche.map(function (b, i) { return { b: b, i: i }; }).filter(function (x) { return x.b.spieler === TOUR_WAHL; })
           .sort(function (x, y) { return String(y.b.von || "").localeCompare(String(x.b.von || "")); });
@@ -441,7 +454,11 @@
           var b = x.b, wann = String(b.von || "").length >= 7 ? b.von.slice(5, 7) + "." + b.von.slice(0, 4) : esc(b.von || "");
           var titel = b.link ? '<a href="' + esc(b.link) + '" target="_blank" rel="noopener">' + esc(b.turnier || "chess-results") + "</a>" : esc(b.turnier || "–");
           var karte = '<div class="kt-karte kt-antrag" data-ti="' + x.i + '"><div><b>' + esc(b.stadt || "?") + "</b>" + (b.land ? ' <span class="kt-grau">' + esc(b.land) + "</span>" : "") +
-            (b.ausgeblendet ? ' <span class="kt-tag aus">ausgeblendet</span>' : "") + '<br><span class="kt-grau">' + titel + " · " + wann + (b.bedenkzeit ? " · " + esc(b.bedenkzeit) : "") + "</span></div><div></div>" +
+            (b.ausgeblendet ? ' <span class="kt-tag aus">ausgeblendet</span>' : "") + '<br><span class="kt-grau">' + titel + " · " + wann + (b.bedenkzeit ? " · " + esc(b.bedenkzeit) : "") + "</span></div><div>" +
+            prVon(b).map(function (m) {
+              return '<div class="' + (m.stufe === "rot" ? "kt-warn" : "kt-hinweis") + '">' + esc(m.text) +
+                ' <button type="button" class="kt-link" data-ta="ok" data-code="' + esc(m.code) + '" data-text="' + esc(m.text) + '">Passt so</button></div>';
+            }).join("") + "</div>" +
             '<div class="kt-zeile"><button type="button" class="kt-mini" data-ta="bearbeiten">Bearbeiten</button>' +
             '<button type="button" class="kt-mini" data-ta="' + (b.ausgeblendet ? "einblenden" : "ausblenden") + '">' + (b.ausgeblendet ? "Einblenden" : "Ausblenden") + "</button>" +
             '<button type="button" class="kt-mini rot" data-ta="loeschen">Löschen</button></div></div>';
@@ -540,7 +557,7 @@
         return '<button type="button" data-r="' + name + '"' + (reiter === name ? ' class="an"' : "") + ">" + titel + (zahl ? " <em>" + zahl + "</em>" : "") + "</button>";
       }
       function teil(name, html) { return '<div class="kt-reiter-inhalt" data-r="' + name + '"' + (reiter === name ? "" : " hidden") + ">" + html + "</div>"; }
-      var T = TURNIERE, tOffen = T.offen.length + T.rueckfrage.length;
+      var T = TURNIERE, tOffen = T.offen.length + T.rueckfrage.length + (T.pruefFehler || 0);
       var turnierTeil = teil("turniere", (T.alt ? '<p class="kt-warn">Das Apps Script kennt die Turnier-Anträge noch nicht: Code.gs und Mitglieder.gs ersetzen, ' +
           "speichern und „Bereitstellen → Bereitstellungen verwalten → Stift → Neue Version“.</p>" : "") +
         "<h3>Offen</h3>" + (T.offen.length ? T.offen.map(function (t) { return turnierKarte(t, "offen"); }).join("") : '<p class="kt-klein links">Keine offenen Anträge.</p>') +
@@ -551,6 +568,7 @@
         '<h3 style="margin-top:2.2rem">Alle Einträge bearbeiten</h3><div class="kt-tour">' + tourHtml() + "</div>" +
         '<p class="kt-klein links">Änderungen übernimmt der nächste Build (startet von selbst, ein paar Minuten). Einen neuen Ort sucht er auf der Karte, ' +
         "neue Turniere kommen über das Formular auf der AFK-on-Tour-Seite.</p>");
+      if (reiter === "turniere" && !TOUR) { TOUR = "laedt"; api("m_tour_daten").then(function (r) { TOUR = r.ok ? r : { fehlerText: r.fehler || "Nicht geladen" }; zeichnen(); }); }
       if (NUR_TURNIERE) {
         box.innerHTML = '<p class="kt-unter">AFK on Tour – Turnier-Anträge</p><p class="kt-meldung" hidden></p>' + turnierTeil;
         box.querySelector(".kt-reiter-inhalt").hidden = false;
@@ -577,6 +595,7 @@
       [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (b) {
         b.addEventListener("click", function () {
           reiter = b.getAttribute("data-r"); history.replaceState(null, "", "#" + reiter);
+          if (reiter === "turniere" && !TOUR) return zeichnen();
           [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (x) { x.classList.toggle("an", x === b); });
           [].forEach.call(box.querySelectorAll(".kt-reiter-inhalt"), function (x) { x.hidden = x.getAttribute("data-r") !== reiter; });
         });
@@ -602,13 +621,16 @@
         });
       });
       var tl = box.querySelector('[data-tour="laden"]'); if (tl) tl.addEventListener("click", tourLaden);
+      [].forEach.call(box.querySelectorAll("[data-tour-sp]"), function (k) {
+        k.addEventListener("click", function () { TOUR_WAHL = k.getAttribute("data-tour-sp"); TOUR_EDIT = -1; zeichnen(); });
+      });
       var tw = box.querySelector('[data-tour="wahl"]'); if (tw) tw.addEventListener("change", function () { TOUR_WAHL = tw.value; TOUR_EDIT = -1; zeichnen(); });
-      function tourSenden(aktion, b, werte, knoepfe) {
+      function tourSenden(aktion, b, werte, knoepfe, zusatz) {
         var sp = TOUR.spieler[TOUR_WAHL] || {};
         var key = b ? { spieler: b.spieler, turnier: b.turnier || "", von: b.von || "", link: b.link || "", stadt: b.stadt || "" } : { spieler: TOUR_WAHL };
         [].forEach.call(knoepfe || [], function (x) { x.disabled = true; });
         api("m_tour_aendern", { aktion: aktion, key: key, sid: TOUR_WAHL, werte: werte || {},
-          beschreibung: (sp.name || TOUR_WAHL) + (b ? ", " + (b.stadt || "") + " " + String(b.von || "").slice(0, 7) : "") }).then(function (r) {
+          beschreibung: (sp.name || TOUR_WAHL) + (b ? ", " + (b.stadt || "") + " " + String(b.von || "").slice(0, 7) : "") + (zusatz ? " – " + zusatz : "") }).then(function (r) {
           [].forEach.call(knoepfe || [], function (x) { x.disabled = false; });
           if (r.ok) { TOUR_EDIT = -1; TOUR = null; tourLaden(); }
           fertig(r);
@@ -619,6 +641,7 @@
           var was = k.getAttribute("data-ta"), el = k.closest("[data-ti]"), i = el ? +el.getAttribute("data-ti") : -1, b = i >= 0 ? TOUR.besuche[i] : null;
           if (was === "bearbeiten") { TOUR_EDIT = i; return zeichnen(); }
           if (was === "abbrechen") { TOUR_EDIT = -1; return zeichnen(); }
+          if (was === "ok") return tourSenden("ok", b, { code: k.getAttribute("data-code") }, [k], k.getAttribute("data-text"));
           if (was === "loeschen" && !confirm("Eintrag " + (b.stadt || "") + " (" + (b.turnier || "") + ") löschen?")) return;
           if (was === "profil_loeschen" && !confirm("Profil „" + ((TOUR.spieler[TOUR_WAHL] || {}).name || TOUR_WAHL) + "“ mit allen Einträgen löschen?")) return;
           tourSenden(was, b, null, [k]);

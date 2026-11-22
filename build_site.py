@@ -3374,6 +3374,7 @@ if __name__ == "__main__":
             import turnierorte_pruefen
             turnierorte_pruefen.aenderungen_anwenden()      # Bearbeiten in der Verwaltung
             turnierorte_pruefen.angenommene_eintragen()
+            turnierorte_pruefen.pruefliste()               # Fehler/Hinweise für die Verwaltung
         except Exception as e:
             print(f"AFK on Tour: angenommene Anträge nicht eingetragen ({type(e).__name__}: {e})")
     # Mitgliederbereich: Liste abgleichen, öffentliche Profile holen (vor Startseite und Spielerseiten)

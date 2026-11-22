@@ -278,6 +278,7 @@ def bearbeiten(d):
 
 
 def profil_menue(d, sid):
+    cache = to._lade(tp.PRUEF_CACHE, {})
     while sid in d.spieler:
         p = d.spieler[sid]
         liste = d.von(sid)
@@ -285,6 +286,9 @@ def profil_menue(d, sid):
         for i, b in enumerate(liste, 1):
             aus = "  [AUSGEBLENDET]" if b.get("ausgeblendet") else ""
             print(f"  {i:2d}  {b.get('von', '')[:10]:10s}  {b.get('stadt', '')}, {b.get('land', '')}  –  {b.get('turnier') or '-'}{aus}")
+            for code in tp.meldungen(b, d.besuche, d.spieler, cache):     # Prüfliste (wie in der Verwaltung)
+                stufe = tp.PRUEF_TEXTE.get(code, ("gelb",))[0]
+                print(f"        {'FEHLER' if stufe == 'rot' else 'Hinweis'}: {tp.meldung_text(code)}")
         print("\n  [Nummer] Turnier bearbeiten   [t] Turnier hinzufügen\n"
               "  [n] Name ändern   [a] Anzeigename ändern   [z] mit anderem Profil zusammenführen\n"
               "  [x] Profil löschen   [leer] zurück")
