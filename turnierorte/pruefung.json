@@ -1,5 +1,5 @@
 {
- "stand": "2026-11-22 13:37",
+ "stand": "2026-11-22 13:39",
  "fehler": 2,
  "eintraege": [
   {
@@ -11,11 +11,6 @@
     "stadt": "Berlin"
    },
    "meldungen": [
-    {
-     "code": "name",
-     "stufe": "gelb",
-     "text": "Name nicht in der chess-results-Teilnehmerliste"
-    },
     {
      "code": "bedenkzeit",
      "stufe": "gelb",
@@ -36,11 +31,6 @@
      "code": "doppelt",
      "stufe": "rot",
      "text": "Gleiches Turnier (oder gleicher Link) doppelt beim selben Spieler"
-    },
-    {
-     "code": "name",
-     "stufe": "gelb",
-     "text": "Name nicht in der chess-results-Teilnehmerliste"
     }
    ]
   },
@@ -57,59 +47,6 @@
      "code": "doppelt",
      "stufe": "rot",
      "text": "Gleiches Turnier (oder gleicher Link) doppelt beim selben Spieler"
-    },
-    {
-     "code": "name",
-     "stufe": "gelb",
-     "text": "Name nicht in der chess-results-Teilnehmerliste"
-    }
-   ]
-  },
-  {
-   "key": {
-    "spieler": "DavidM",
-    "turnier": "Reykjavik Open 2023",
-    "von": "2023-04",
-    "link": "https://chess-results.com/tnr655067.aspx?lan=0",
-    "stadt": "Reykjavik"
-   },
-   "meldungen": [
-    {
-     "code": "name",
-     "stufe": "gelb",
-     "text": "Name nicht in der chess-results-Teilnehmerliste"
-    }
-   ]
-  },
-  {
-   "key": {
-    "spieler": "DavidM",
-    "turnier": "28. Offene Internationale Bayerische Schachmeisterschaft",
-    "von": "2025-11",
-    "link": "https://chess-results.com/tnr1187199.aspx?lan=0",
-    "stadt": "Gmund"
-   },
-   "meldungen": [
-    {
-     "code": "name",
-     "stufe": "gelb",
-     "text": "Name nicht in der chess-results-Teilnehmerliste"
-    }
-   ]
-  },
-  {
-   "key": {
-    "spieler": "DavidM",
-    "turnier": "25. Offene Internationale Bayerische Schachmeisterschaft Tegernsee",
-    "von": "2022-11",
-    "link": "https://chess-results.com/tnr649615.aspx?lan=0",
-    "stadt": "Gmund"
-   },
-   "meldungen": [
-    {
-     "code": "name",
-     "stufe": "gelb",
-     "text": "Name nicht in der chess-results-Teilnehmerliste"
     }
    ]
   }

@@ -6,7 +6,8 @@
   "namen": {
    "Korbinian Ruff": true,
    "David Mehlhorn": true
-  }
+  },
+  "voll": true
  },
  "1496981": {
   "erreichbar": true,
@@ -14,15 +15,17 @@
   "ort": "",
   "namen": {
    "Korbinian Ruff": true
-  }
+  },
+  "voll": true
  },
  "1534478": {
   "erreichbar": true,
   "von": "",
   "ort": "",
   "namen": {
-   "Korbinian Ruff": false
-  }
+   "Korbinian Ruff": true
+  },
+  "voll": true
  },
  "1049709": {
   "erreichbar": true,
@@ -30,15 +33,17 @@
   "ort": "",
   "namen": {
    "Korbinian Ruff": true
-  }
+  },
+  "voll": true
  },
  "1384883": {
   "erreichbar": true,
   "von": "",
   "ort": "",
   "namen": {
-   "Korbinian Ruff": false
-  }
+   "Korbinian Ruff": true
+  },
+  "voll": true
  },
  "534226": {
   "erreichbar": true,
@@ -46,7 +51,8 @@
   "ort": "",
   "namen": {
    "David Mehlhorn": true
-  }
+  },
+  "voll": true
  },
  "574640": {
   "erreichbar": true,
@@ -54,15 +60,17 @@
   "ort": "",
   "namen": {
    "David Mehlhorn": true
-  }
+  },
+  "voll": true
  },
  "655067": {
   "erreichbar": true,
   "von": "",
   "ort": "",
   "namen": {
-   "David Mehlhorn": false
-  }
+   "David Mehlhorn": true
+  },
+  "voll": true
  },
  "814859": {
   "erreichbar": true,
@@ -70,7 +78,8 @@
   "ort": "",
   "namen": {
    "David Mehlhorn": true
-  }
+  },
+  "voll": true
  },
  "901173": {
   "erreichbar": true,
@@ -78,7 +87,8 @@
   "ort": "",
   "namen": {
    "David Mehlhorn": true
-  }
+  },
+  "voll": true
  },
  "983068": {
   "erreichbar": true,
@@ -86,15 +96,17 @@
   "ort": "",
   "namen": {
    "David Mehlhorn": true
-  }
+  },
+  "voll": true
  },
  "649615": {
   "erreichbar": true,
   "von": "",
   "ort": "",
   "namen": {
-   "David Mehlhorn": false
-  }
+   "David Mehlhorn": true
+  },
+  "voll": true
  },
  "534227": {
   "erreichbar": true,
@@ -102,7 +114,8 @@
   "ort": "",
   "namen": {
    "Korbinian Ruff": true
-  }
+  },
+  "voll": true
  },
  "1371811": {
   "erreichbar": true,
@@ -110,14 +123,16 @@
   "ort": "",
   "namen": {
    "Korbinian Ruff": true
-  }
+  },
+  "voll": true
  },
  "1187199": {
   "erreichbar": true,
   "von": "",
   "ort": "",
   "namen": {
-   "David Mehlhorn": false
-  }
+   "David Mehlhorn": true
+  },
+  "voll": true
  }
 }
