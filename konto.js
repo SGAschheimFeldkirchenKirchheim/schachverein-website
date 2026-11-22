@@ -473,6 +473,7 @@
               feld("datum", "Datum (JJJJ-MM)", "text", 'value="' + esc(String(b.von || "").slice(0, 7)) + '"') +
               '<div class="kt-feld"><label>Bedenkzeit</label><select name="bedenkzeit">' + ["klassisch", "schnell", "blitz"].map(function (z) {
                 return '<option value="' + z + '"' + (b.bedenkzeit === z ? " selected" : "") + ">" + z + "</option>"; }).join("") + "</select></div>" +
+              feld("ausnahme", "Ausnahme (Begründung, z. B. Deutsche Hochschulmeisterschaft – leer = keine)", "text", 'value="' + esc(b.ausnahme === "ja" ? "ja" : b.ausnahme || "") + '"') +
               '<p class="kt-fehler" hidden></p><div class="kt-zeile"><button type="submit" class="kt-btn gruen">Speichern</button>' +
               '<button type="button" class="kt-btn leise" data-ta="abbrechen">Abbrechen</button></div></form>';
           }
@@ -662,6 +663,7 @@
         if (v("ort") && v("ort") !== [b.stadt, b.land].filter(Boolean).join(", ")) w.ort = v("ort");
         if (v("datum") && v("datum") !== String(b.von || "").slice(0, 7)) w.datum = v("datum");
         if (v("bedenkzeit") !== (b.bedenkzeit || "")) w.bedenkzeit = v("bedenkzeit");
+        if (v("ausnahme") !== (b.ausnahme || "")) w.ausnahme = v("ausnahme");
         if (!Object.keys(w).length) return fehler(tf, "Nichts geändert.");
         tourSenden("aendern", b, w, tf.querySelectorAll("button"));
       });

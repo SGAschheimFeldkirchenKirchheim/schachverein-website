@@ -307,6 +307,8 @@ def aenderungen_anwenden():
                         b["turnier"] = w["turnier"]
                     if w.get("datum"):
                         b["von"] = b["bis"] = w["datum"]
+                    if "ausnahme" in w:                    # Begründung; leer = keine Ausnahme
+                        b["ausnahme"] = (w["ausnahme"] or "").strip()
                     if w.get("bedenkzeit") in ("klassisch", "schnell", "blitz"):
                         b["bedenkzeit"] = w["bedenkzeit"]
                     if w.get("ort"):
