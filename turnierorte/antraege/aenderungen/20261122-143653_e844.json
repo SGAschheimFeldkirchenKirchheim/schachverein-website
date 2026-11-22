@@ -1,0 +1,18 @@
+{
+ "aktion": "aendern",
+ "sid": "KorbinianR",
+ "key": {
+  "spieler": "KorbinianR",
+  "turnier": "Grenke B-Open",
+  "von": "2026-04",
+  "link": "https://chess-results.com/tnr1049709.aspx?lan=0",
+  "stadt": "Karlsruhe"
+ },
+ "werte": {
+  "link": "https://s3.chess-results.com/tnr1384883.aspx?lan=0&tno=1384883&zeilen=99999&SNode=S0",
+  "cr_holen": false
+ },
+ "wer": "Korbinian Ruff",
+ "zeit": "2026-11-22 14:36",
+ "beschreibung": "Korbinian Ruff, Karlsruhe 2026-04: ändern"
+}
