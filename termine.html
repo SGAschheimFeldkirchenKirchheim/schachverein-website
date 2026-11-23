@@ -236,7 +236,7 @@
   var monate = []; zeilen.forEach(function (z) { var m = z.getAttribute("data-monat"); if (monate.indexOf(m) < 0) monate.push(m); });
   monate.sort();
   if (!monate.length) { document.getElementById("termine-filter").hidden = true; return; }
-  var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter";
+  var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter2";
   var PDFS = {}; try { PDFS = JSON.parse(document.getElementById("termine-pdfs").textContent); } catch (e) {}
   function name(m) { return MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
   monate.forEach(function (m) { [von, bis].forEach(function (s) { var o = document.createElement("option"); o.value = m; o.textContent = name(m); s.appendChild(o); }); });
@@ -244,8 +244,10 @@
   var h = new Date(), jetzt = h.getFullYear() + "-" + ("0" + (h.getMonth() + 1)).slice(-2);
   var start = monate.filter(function (m) { return m >= jetzt; })[0] || monate[0];
   var w = null; try { w = JSON.parse(localStorage.getItem(SPEICHER) || "null"); } catch (e) {}
-  von.value = w && monate.indexOf(w.von) >= 0 ? w.von : start;
-  bis.value = w && monate.indexOf(w.bis) >= 0 ? w.bis : monate[monate.length - 1];
+  // Gemerkte Auswahl nur, wenn man sie selbst gewählt hat; "bis zum letzten Monat" bleibt "bis zum Ende",
+  // auch wenn neue Monate dazukommen (z. B. ein Termin ein Jahr später). Vergangene Monate fallen weg.
+  von.value = w && monate.indexOf(w.von) >= 0 && w.von >= start ? w.von : start;
+  bis.value = w && !w.ende && monate.indexOf(w.bis) >= 0 && w.bis >= von.value ? w.bis : monate[monate.length - 1];
   function anwenden(geaendert) {
     // Bis vor Von: tauschen (z. B. "April bis März" -> "März bis April")
     if (bis.value < von.value) { var t = von.value; von.value = bis.value; bis.value = t; }
@@ -269,10 +271,10 @@
     if (pdf) { knopf.href = pdf; knopf.setAttribute("download", "Termine_" + a + "_bis_" + b + ".pdf"); knopf.dataset.drucken = ""; }
     else { knopf.href = "#"; knopf.removeAttribute("download"); knopf.dataset.drucken = "1"; }
     document.getElementById("druck-zeitraum").textContent = a === b ? name(a) : name(a) + " – " + name(b);
-    try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b})); } catch (e) {}
+    if (geaendert === true) try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b, ende: b === monate[monate.length - 1]})); } catch (e) {}
   }
-  von.addEventListener("change", anwenden); bis.addEventListener("change", anwenden);
-  document.getElementById("tf-alle").addEventListener("click", function () { von.value = monate[0]; bis.value = monate[monate.length - 1]; anwenden(); });
+  von.addEventListener("change", function () { anwenden(true); }); bis.addEventListener("change", function () { anwenden(true); });
+  document.getElementById("tf-alle").addEventListener("click", function () { von.value = monate[0]; bis.value = monate[monate.length - 1]; anwenden(true); });
   // Drucken/PDF immer im hellen Design
   var thema = null;
   window.addEventListener("beforeprint", function () { thema = document.documentElement.getAttribute("data-theme"); document.documentElement.setAttribute("data-theme", "light"); });
