@@ -491,6 +491,16 @@ JS_ANTRAG = r"""
 (function () {
   var f = document.getElementById("tour-form"); if (!f) return;
   if (location.hash === "#beantragen") document.getElementById("beantragen").open = true;
+  // Monat: Liste der letzten 10 Jahre, neuester zuerst (statt des kleinen Monatswählers des Browsers)
+  (function () {
+    var MON = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+    var sel = f.elements.monat, h = new Date();
+    for (var k = 0; k < 120; k++) {
+      var d = new Date(h.getFullYear(), h.getMonth() - k, 1), o = document.createElement("option");
+      o.value = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
+      o.textContent = MON[d.getMonth()] + " " + d.getFullYear(); sel.appendChild(o);
+    }
+  })();
   // angemeldet: Name vorausfüllen (bleibt änderbar)
   function vorbelegen(a) { if (a && a.ich && !f.elements.name.value) f.elements.name.value = a.ich.name; }
   if (window.AFK_KONTO) window.AFK_KONTO.ich().then(vorbelegen);
@@ -533,7 +543,7 @@ def antrag_html(skript_url):
           <label>Turnier <input name="turnier" maxlength="150" placeholder="z. B. Grenke Open"></label>
           <label>Stadt <input name="stadt" maxlength="80" placeholder="z. B. Karlsruhe"></label>
           <label>Land <input name="land" maxlength="60" value="Deutschland"></label>
-          <label>Monat <input name="monat" type="month"></label>
+          <label>Monat <select name="monat" class="tour-monat"><option value="">– wählen –</option></select></label>
           <label>Bedenkzeit <select name="bedenkzeit"><option value="klassisch">Klassisch</option><option value="schnell">Schnellschach</option><option value="blitz">Blitz</option></select></label>
         </div>
         <label class="inline"><input type="checkbox" name="ausnahme"> Besonderes Turnier (Ausnahme, z. B. Meisterschaft mit anderer Bedenkzeit)</label>

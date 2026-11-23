@@ -1066,12 +1066,29 @@ JS = r"""
     [].forEach.call(f.querySelectorAll("[name=land]"), function (c) { c.checked = false; }); zeige();
   });
 
+  // Monatsauswahl (statt des kleinen Monatswählers des Browsers): aktueller Monat bis ~1 Jahr voraus
+  var MON = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  function monatOption(sel, m) {
+    if (!m || sel.querySelector('option[value="' + m + '"]')) return;
+    var o = document.createElement("option"); o.value = m; o.textContent = MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4);
+    var nach = [].filter.call(sel.options, function (x) { return x.value > m; })[0];
+    sel.insertBefore(o, nach || null);
+  }
+  (function () {
+    var h0 = new Date(), anzahl = Math.max(13, Math.ceil(D.tage_voraus / 30) + 1);
+    for (var k = 0; k < anzahl; k++) {
+      var d = new Date(h0.getFullYear(), h0.getMonth() + k, 1), m = iso(d).slice(0, 7);
+      monatOption(f.elements.von, m); monatOption(f.elements.bis, m);
+    }
+  })();
+
   // Standardwerte
   var h = new Date(), bis = new Date(h.getFullYear(), h.getMonth() + D.standard.monate, 1);
   var STANDARD = {von: iso(h).slice(0, 7), bis: iso(bis).slice(0, 7), km: String(D.standard.km), land: [], q: "", meinelo: "",
     bz: ["klassisch", "schnell", "blitz", "?"], gr: ["offen", "jugend", "senioren", "frauen"],
     elo: false, ferien: false, semester: false, empf: false, afk: false, neu: false, interesse: false};
   function setze(w) {
+    monatOption(f.elements.von, w.von); monatOption(f.elements.bis, w.bis);
     f.elements.von.value = w.von; f.elements.bis.value = w.bis; f.elements.km.value = w.km;
     var wl = Array.isArray(w.land) ? w.land : (w.land ? [w.land] : []);
     [].forEach.call(f.querySelectorAll("[name=land]"), function (c) { c.checked = wl.indexOf(c.value) >= 0; });
@@ -1462,6 +1479,7 @@ def seite_html(events, schule, semester, konfig, stand, skript_url="", heute=Non
     std = konfig.get("standard_filter", {})
     daten = {"events": events, "schule": schule, "semester": semester,
              "standard": {"km": std.get("km", 200), "monate": std.get("monate", 6)},
+             "tage_voraus": int(konfig.get("tage_voraus", 400)),
              "elo": {"unten": (konfig.get("elo_toleranz") or {}).get("unten", 350),
                      "oben": (konfig.get("elo_toleranz") or {}).get("oben", 200)},
              "neu_ab": (heute - datetime.timedelta(days=NEU_TAGE)).isoformat(),
@@ -1488,8 +1506,8 @@ def seite_html(events, schule, semester, konfig, stand, skript_url="", heute=Non
       </p>
     <details class="tk-box" id="tk-box"><summary>Filter anzeigen</summary>
     <form id="tk-filter" class="tk-filter" onsubmit="return false">
-      <label>Von <input type="month" name="von"></label>
-      <label>Bis <input type="month" name="bis"></label>
+      <label>Von <select name="von"></select></label>
+      <label>Bis <select name="bis"></select></label>
       <label>Entfernung <select name="km">{km_optionen}<option value="alle">ganz Europa</option></select></label>
       <div class="tk-land"><span class="tk-land-titel">Länder</span>
         <details class="tk-land-dd"><summary id="tk-land-text">alle Länder</summary>
