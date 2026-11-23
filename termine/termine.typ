@@ -54,5 +54,7 @@
   [#strong[30.04. Fr, 19:30 Uhr]], [], [MMM Runde 9], [], [MMM Runde 9], [MMM Runde 9], [MMM Runde 9], [], [], [],
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Mai")]],
   [#strong[14.05. Fr, 19:30 Uhr]], [], [], [], [], [], [], [], [MSMM Runde 7], [],
+  table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("November 2027")]],
+  [19.11. Fr, 18:00 Uhr], table.cell(fill: VereinFarbe)[#link("https://www.mathenacht.de/")[#underline[Mathenacht]]], [], [], [], [], [], [], [], [],
 )
 ]
