@@ -490,6 +490,11 @@ def assign_dates(rows, today=TODAY):
     year = today.year if today.month >= 7 else today.year - 1
     prev_month = None
     for r in rows:
+        if r['kind'] == 'month':                  # "November 2027": Jahr steht dabei (Termine über ein Jahr hinaus)
+            jm = re.search(r'\b(20\d\d)\b', r.get('text', ''))
+            if jm:
+                year, prev_month = int(jm.group(1)), None
+            continue
         if r['kind'] != 'row':
             continue
         r['date'] = None
