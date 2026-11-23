@@ -11,6 +11,7 @@ import glob
 from urllib.parse import quote
 
 import partien  # Reiter "Partien" (Partie-Viewer)
+import prognose
 import spieler as spielerseiten  # Spielerseiten (spieler/<name>.html)
 import aufstellung as auf        # Meldelisten mit Ergebnissen + Einsatz-Prognose (Einstellungen dort)
 import re
@@ -49,6 +50,7 @@ EIGENER_NAME = "SG AFK {nr}"
 # Reiter auf der Team-Seite (Reihenfolge = Anzeige; Eintrag löschen = Reiter weg)
 REITER = [
     ("tabelle", "Tabelle"),
+    ("prognose", "Prognose"),        # Simulation Saisonende (prognose.py), nur laufende Saison
     ("spieltage", "Spieltage"),
     ("spiele", "Unsere Spiele"),
     ("partien", "Partien"),          # nur wenn Partien hochgeladen sind (Ligamanager), siehe partien.py
@@ -57,7 +59,7 @@ REITER = [
     # ("saisons", "Saisons"),        # früher: Platz aller Saisons – jetzt in der Geschichte (Link unter den Saison-Knöpfen)
     ("rechner", "Tabellenrechner"),  # nicht in abgeschlossenen Saisons
 ]
-NICHT_IM_ARCHIV = {"rechner"}        # Reiter, die es in alten Saisons nicht gibt
+NICHT_IM_ARCHIV = {"rechner", "prognose"}        # Reiter, die es in alten Saisons nicht gibt
 
 # Zusätzliche Karten ohne Liga-Daten (nur in der Übersicht)
 EXTRA_KARTEN = [
@@ -160,6 +162,7 @@ def lade_teams(ordner=DATEN_ORDNER):
             continue
         if EIGENER_NAME and d.get("eigen") is not None:
             original = d["teams"].get(str(d["eigen"]), "")
+            d["eigen_name"] = original          # Originalname (z. B. für den LigaOrakel-Link)
             nr = re.search(r"(\d+)\s*$", original)
             d["teams"][str(d["eigen"])] = EIGENER_NAME.format(kurz=d["kurz"], nr=nr.group(1) if nr else "").strip()
         d.setdefault("runden_tabellen", {})
@@ -879,6 +882,7 @@ REITER_FUNKTIONEN = {
     "spieler": reiter_spieler, "verlauf": reiter_verlauf, "rechner": reiter_rechner,
     "saisons": reiter_saisons, "aufstellung": reiter_aufstellung,
     "partien": partien.reiter_partien,
+    "prognose": prognose.reiter_prognose,
 }
 
 
