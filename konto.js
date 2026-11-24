@@ -1748,6 +1748,24 @@
     teil.querySelector('[data-m="urlspeichern"]').addEventListener("click", function (ev) { aktion("url", { url: teil.querySelector('[data-m="url"]').value }, ev.target); });
   }
 
+  // ---------- Seite "mail.html": Links aus den Benachrichtigungs-Mails (bestätigen / abbestellen) ----------
+  function seiteMail(box) {
+    var q = new URLSearchParams(location.search), b = q.get("b") || "", art = q.has("ok") ? "ok" : q.has("ab") ? "ab" : "", w = q.get(art) || "";
+    var weiter = '<p class="kt-klein links"><a href="' + PFAD + 'mein-profil.html#benachrichtigungen">Zu den Einstellungen</a> · <a href="' + PFAD + '">Zur Startseite</a></p>';
+    function ergebnis(r) {
+      box.innerHTML = '<div class="kt-karte"><p class="kt-meldung ' + (r.ok && r.gueltig !== false ? "gut" : "schlecht") + '">' + esc(r.ok ? r.text : r.fehler) + "</p>" + weiter + "</div>";
+    }
+    if (!art || !b || !w) return ergebnis({ ok: false, fehler: "Dieser Link ist unvollständig. Bitte den Link aus der Mail komplett öffnen." });
+    function schicken() {
+      box.innerHTML = '<div class="kt-karte"><p class="kt-klein links">Einen Moment …</p></div>';
+      apiRoh("n_link", { art: art, b: b, w: w }).then(ergebnis);
+    }
+    if (art === "ok") return schicken();
+    box.innerHTML = '<div class="kt-karte"><p>Möchtest du alle E-Mail-Benachrichtigungen abbestellen? Deine Adresse wird dann gelöscht.</p>' +
+      '<div class="kt-zeile"><button type="button" class="kt-btn rot" data-ab>Ja, abbestellen</button></div>' + weiter + "</div>";
+    box.querySelector("[data-ab]").addEventListener("click", schicken);
+  }
+
   // ---------- Profil: Berichte, in denen du vorkommst ----------
   var MEINE = null;
   function meineDaten() {
@@ -1774,6 +1792,7 @@
       if (art === "listen") seiteListen(seite);
       if (art === "umfrage") seiteUmfrage(seite);
       if (art === "mitmachen") seiteMitmachen(seite);
+      if (art === "mail") seiteMail(seite);
     }
     spielerseite(a);
     startseite(a);

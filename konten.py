@@ -143,12 +143,12 @@ def geburtstag_oeffentlich(slug):
 
 
 def seiten_bauen(render_page):
-    """mein-profil.html, verwaltung.html, listen.html und umfrage.html (Inhalt baut konto.js im Browser)."""
+    """mein-profil.html, verwaltung.html, listen.html, umfrage.html, mitmachen.html und mail.html (Inhalt baut konto.js im Browser)."""
     if not AN or not SKRIPT_URL:
         return
     for datei, titel, art in (("mein-profil.html", "Mein Profil", "profil"), ("verwaltung.html", "Verwaltung", "verwaltung"),
                              ("listen.html", "Listen", "listen"), ("umfrage.html", "Umfrage", "umfrage"),
-                             ("mitmachen.html", "Mitmachen", "mitmachen")):
+                             ("mitmachen.html", "Mitmachen", "mitmachen"), ("mail.html", "E-Mail-Benachrichtigungen", "mail")):
         content = (f'<h1>{titel}</h1><div id="kt-seite" data-seite="{art}">'
                    '<noscript><p>Für diese Seite wird JavaScript benötigt.</p></noscript></div>')
         render_page(titel, content, datei, description=f"{titel} – Mitgliederbereich der SG AFK.")
