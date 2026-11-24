@@ -1305,7 +1305,8 @@ JS = r"""
     box.appendChild(fm); fm.elements.n.focus();
   }
   function umschalten(key, box) {
-    post({typ: "interesse", key: key}, box, function (a) {
+    var ev = D.events.filter(function (e) { return e.key === key; })[0];
+    post({typ: "interesse", key: key, titel: ev ? ev.name : ""}, box, function (a) {
       if (SITZUNG && !ICH) ICH = {status: "ok", mitglied: true};
       INTERESSE[key] = a.leute || [];
       if (a.dabei) MEINE[key] = true; else delete MEINE[key];

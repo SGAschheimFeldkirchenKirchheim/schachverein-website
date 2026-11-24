@@ -25,6 +25,7 @@ import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellun
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
 import startseite  # Startseite: Aufbau, Texte, Bilder-Ordner (startseite/)
 import suche  # seitenweite Suche: suche.html + suche.json (Einstellungen in suche.py)
+import benachrichtigung  # Mail-Benachrichtigungen: Neuigkeiten erkennen und ans Apps Script melden
 
 try:
     from zoneinfo import ZoneInfo
@@ -3321,6 +3322,30 @@ def build_mannschaften(teams, saisons=None):
     return True
 
 
+def alle_termin_eintraege(today=TODAY):
+    """Alle kommenden Termine aller Spalten (für die Mail-Benachrichtigungen): [{datum, zeit, spalte, text}]."""
+    pfad = os.path.join("termine", "termine.typ")
+    if not os.path.exists(pfad):
+        return []
+    with open(pfad, "r", encoding="utf-8") as f:
+        parsed = parse_typst_table(f.read())
+    assign_dates(parsed['rows'])
+    kopf = [plain_text(h).strip() for h in parsed['header'] or []]
+    out = []
+    for r in parsed['rows']:
+        if r['kind'] != 'row' or not r.get('date') or r['date'] < today:
+            continue
+        zeit = re.search(r'(\d{1,2}:\d{2})', plain_text(r['cells'][0]['text'])) if r['cells'] else None
+        spalte = 0
+        for c in r['cells']:
+            if spalte > 0 and spalte < len(kopf) and c['colspan'] == 1:
+                text = plain_text(c['text']).strip()
+                if text:
+                    out.append({'datum': r['date'], 'zeit': zeit.group(1) if zeit else "", 'spalte': kopf[spalte], 'text': text})
+            spalte += c['colspan']
+    return out
+
+
 def spalten_termine(spalte, today=TODAY):
     """Kommende Termine aus einer Spalte (z. B. "Jugend", "Senioren") in termine/termine.typ."""
     pfad = os.path.join("termine", "termine.typ")
@@ -3423,7 +3448,7 @@ if __name__ == "__main__":
     konten.synchronisieren(_geburtstag_liste(), spieler.slug)
     konten.laden()
     konten.seiten_bauen(render_page)
-    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html", "listen.html", "umfrage.html"})   # nicht in die Sitemap
+    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html", "listen.html", "umfrage.html", "mitmachen.html"})   # nicht in die Sitemap
     build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
@@ -3464,5 +3489,9 @@ if __name__ == "__main__":
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams, saisons) else set())
     suche.bauen(render_page)   # nach allen Seiten (Suchindex)
+    # Mail-Benachrichtigungen: Neuigkeiten seit dem letzten Build ans Apps Script (nur im GitHub-Build)
+    benachrichtigung.melden(alle_termin_eintraege(), read_ausfall(), ALLE_BERICHTE, ausschreibungen_eintraege(), teams,
+                            SITE_URL, spieler.slug, liga.seite_datei,
+                            lambda ev: konten._post({"typ": "n_ereignisse", "s": konten._schluessel(), "ereignisse": ev}) if konten._schluessel() else None)
     build_sitemap()   # zuletzt, damit alle erzeugten Seiten enthalten sind
     print("Build erfolgreich abgeschlossen!")

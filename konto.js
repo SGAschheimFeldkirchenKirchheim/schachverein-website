@@ -327,7 +327,9 @@
         '<button type="button" class="kt-btn leise" data-kt="ab">Abmelden</button>' +
         '<button type="button" class="kt-btn leise" data-kt="ab-alle">Auf allen Geräten abmelden</button>' +
         (i.stufe === "inhaber" ? "" : '<button type="button" class="kt-btn rot" data-kt="del">Konto löschen</button>') +
-        '</div><div class="kt-unterform"></div></div></div></div>';
+        '</div><div class="kt-unterform"></div></div></div></div>' +
+        '<div class="kt-karte nl-box" id="benachrichtigungen"></div>';
+      nlKarte(box.querySelector(".nl-box"));
       var f = box.querySelector(".kt-haupt"), z = box.querySelector(".kt-zaehler");
       function zaehlen() { z.textContent = f.text.value.length + " / 600 Zeichen"; }
       f.text.addEventListener("input", zaehlen); zaehlen();
@@ -411,7 +413,7 @@
   }
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
-    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, LISTEN = null, UMF = null, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
+    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, LISTEN = null, UMF = null, MAILS = null, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
     function laden() {
       Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere"), api("l_admin_liste"), api("u_admin_liste")]).then(function (r) {
         // "Unbekannte Anfrage" = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
@@ -584,7 +586,8 @@
         '<p class="kt-meldung" hidden></p>' +
         '<div class="kt-reiter" role="tablist">' + r("antraege", "Anträge", offen.length) + r("berichte", "Berichte", bOffen.length) +
         r("turniere", "Turniere", tOffen) + r("listen", "Listen") + r("terminfinder", "Terminfinder") +
-        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" + turnierTeil + listenTeil + umfTeil +
+        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + (inh ? r("mails", "Mails") : "") + "</div>" + turnierTeil + listenTeil + umfTeil +
+        (inh ? teil("mails", "") : "") +
         teil("antraege", offen.length ? offen.map(function (x) {
           return '<div class="kt-karte kt-antrag"><div><b>' + esc(x.name) + '</b><br><span class="kt-grau">Benutzername ' + esc(x.benutzer) + " · " + zeitText(x.seit) + "</span></div>" +
             '<div class="kt-gut">Name und Geburtsdatum stimmen mit der Mitgliederliste überein</div>' +
@@ -600,11 +603,14 @@
         teil("weg", nutzerListe(weg) + '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p>');
       if (box.querySelector('[data-r="listen"].kt-reiter-inhalt')) listenVerwaltung(box, LISTEN, zeichnen, fertig);
       if (box.querySelector('[data-r="terminfinder"].kt-reiter-inhalt')) umfragenVerwaltung(box, UMF, zeichnen, fertig);
+      if (inh && reiter === "mails" && !MAILS) { MAILS = "laedt"; api("n_admin", {}).then(function (m) { MAILS = m.ok ? m : { fehlerText: m.fehler || "Nicht geladen" }; zeichnen(); }); }
+      if (inh) mailsVerwaltung(box.querySelector('[data-r="mails"].kt-reiter-inhalt'), MAILS === "laedt" ? null : MAILS, laden, function (r) { MAILS = null; fertig(r); });
       if (alteMeldung) { var m2 = box.querySelector(".kt-meldung"); m2.textContent = alteMeldung[0]; m2.className = alteMeldung[1]; m2.hidden = false; }
       [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (b) {
         b.addEventListener("click", function () {
           reiter = b.getAttribute("data-r"); history.replaceState(null, "", "#" + reiter);
           if (reiter === "turniere" && !TOUR) return zeichnen();
+          if (reiter === "mails" && !MAILS) return zeichnen();
           [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (x) { x.classList.toggle("an", x === b); });
           [].forEach.call(box.querySelectorAll(".kt-reiter-inhalt"), function (x) { x.hidden = x.getAttribute("data-r") !== reiter; });
         });
@@ -844,6 +850,36 @@
   }
 
   // Verwaltung -> Reiter "Listen"
+  // Personenauswahl "Alle" / "Nur ausgewählte" (Listen)
+  function personenWahl(nutzer, teilnehmer, titel) {
+    var alle = teilnehmer === "alle", gew = alle ? [] : teilnehmer;
+    return '<h3 style="margin-top:1rem">' + titel + "</h3>" +
+      '<label class="kt-check"><input type="radio" name="pwer" value="alle"' + (alle ? " checked" : "") + "> <span>Alle angemeldeten Mitglieder (" + nutzer.length + ")</span></label>" +
+      '<label class="kt-check"><input type="radio" name="pwer" value="wahl"' + (alle ? "" : " checked") + '> <span data-pzahl>Nur ausgewählte Personen' + (alle ? "" : " (" + gew.length + " gewählt)") + "</span></label>" +
+      (alle ? "" : '<div class="uf-personen"><div class="kt-zeile" style="margin:0 0 .5rem"><input data-pfilter placeholder="Name suchen …"><button type="button" class="kt-mini" data-pkeine>keine</button></div><div class="uf-pliste">' +
+        nutzer.map(function (x) { return '<label data-pname="' + esc(x.name.toLowerCase()) + '"><input type="checkbox" data-pperson value="' + esc(x.benutzer) + '"' + (gew.indexOf(x.benutzer) >= 0 ? " checked" : "") + "> " + esc(x.name) + "</label>"; }).join("") +
+        "</div></div>");
+  }
+  function personenLesen(form, alt) {
+    var r = form.querySelector("[name=pwer]:checked");
+    if (!r || r.value === "alle") return "alle";
+    var an = form.querySelectorAll("[data-pperson]");
+    return an.length ? [].filter.call(an, function (c) { return c.checked; }).map(function (c) { return c.value; }) : (alt === "alle" ? [] : alt || []);
+  }
+  function personenBinden(form, neu) {
+    [].forEach.call(form.querySelectorAll("[name=pwer]"), function (r) { r.addEventListener("change", neu); });
+    [].forEach.call(form.querySelectorAll("[data-pperson]"), function (c) {
+      c.addEventListener("change", function () { form.querySelector("[data-pzahl]").textContent = "Nur ausgewählte Personen (" + form.querySelectorAll("[data-pperson]:checked").length + " gewählt)"; });
+    });
+    var fi = form.querySelector("[data-pfilter]");
+    if (fi) fi.addEventListener("input", function () {
+      var q = fi.value.trim().toLowerCase();
+      [].forEach.call(form.querySelectorAll("[data-pname]"), function (l) { l.hidden = q && l.getAttribute("data-pname").indexOf(q) < 0; });
+    });
+    var kb = form.querySelector("[data-pkeine]");
+    if (kb) kb.addEventListener("click", function () { [].forEach.call(form.querySelectorAll("[data-pperson]"), function (c) { c.checked = false; }); neu(); });
+  }
+
   function listenVerwaltung(box, LISTEN, neuZeichnen, fertig) {
     var S = listenVerwaltung.S || (listenVerwaltung.S = { edit: null });
     function feldZeile(f, i) {
@@ -863,6 +899,7 @@
         [["entwurf", "niemand (Entwurf)"], ["verwaltung", "nur Verwaltung (zum Testen)"], ["mitglieder", "alle angemeldeten Mitglieder"]].map(function (o) {
           return '<option value="' + o[0] + '"' + (l.sicht === o[0] ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") + "</select></div>" +
         feld("von", "Sichtbar ab", "date", 'value="' + esc(l.von || "") + '"') + feld("bis", "bis", "date", 'value="' + esc(l.bis || "") + '"') + "</div>" +
+        personenWahl(LISTEN.nutzer || [], l.teilnehmer || "alle", "Für wen? (gilt bei „alle angemeldeten Mitglieder“)") +
         '<div class="kt-feld"><label for="kt-ltext">Text</label><textarea id="kt-ltext" name="ltext" style="min-height:70px">' + esc(l.text || "") + "</textarea></div>" +
         '<label class="kt-check"><input type="checkbox" name="sofort"' + (l.sofort ? " checked" : "") + "> <span>Sofort sichtbar (Zeitraum ignorieren)</span></label>" +
         '<label class="kt-check"><input type="checkbox" name="startseite"' + (l.startseite ? " checked" : "") + "> <span>Auf der Startseite anzeigen (für angemeldete Mitglieder)</span></label>" +
@@ -876,6 +913,7 @@
     function lesen(form) {
       var l = S.edit;
       l.titel = form.elements.ltitel.value.trim(); l.text = form.elements.ltext.value; l.sicht = form.elements.sicht.value;
+      l.teilnehmer = personenLesen(form, l.teilnehmer);
       l.von = form.elements.von.value; l.bis = form.elements.bis.value; l.sofort = form.elements.sofort.checked; l.startseite = form.elements.startseite.checked;
       l.felder = [].map.call(form.querySelectorAll("[data-fi]"), function (z) {
         var alt = l.felder[+z.getAttribute("data-fi")] || {}, g = function (n) { return z.querySelector('[data-f="' + n + '"]'); };
@@ -887,8 +925,8 @@
     var html = "";
     if (LISTEN && LISTEN.alt) html += '<p class="kt-warn">Das Apps Script kennt die Listen noch nicht: Listen.gs anlegen, Code.gs und Mitglieder.gs ersetzen, neue Version bereitstellen.</p>';
     var listen = (LISTEN && LISTEN.listen) || [];
-    html += listen.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="ls-tab"><tr><th>Liste</th><th>Status</th><th>Einträge</th><th></th></tr>' + listen.map(function (l) {
-      return '<tr><td><b>' + esc(l.titel) + '</b></td><td><span class="ls-status ' + l.status + '">' + esc(lStatusText(l)) + "</span></td><td>" + l.eintraege + "</td>" +
+    html += listen.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="ls-tab"><tr><th>Liste</th><th>Status</th><th>Für</th><th>Einträge</th><th></th></tr>' + listen.map(function (l) {
+      return '<tr><td><b>' + esc(l.titel) + '</b></td><td><span class="ls-status ' + l.status + '">' + esc(lStatusText(l)) + "</span></td><td>" + (l.fuer > 0 ? l.fuer + " Pers." : "alle") + "</td><td>" + l.eintraege + "</td>" +
         '<td class="kt-akt"><button type="button" class="kt-mini" data-lbearb="' + esc(l.id) + '">Bearbeiten</button>' +
         '<a class="kt-mini" href="' + PFAD + "listen.html?id=" + encodeURIComponent(l.id) + '">Ansehen / Auswertung</a></td></tr>';
     }).join("") + "</table></div>" : '<p class="kt-klein links">Noch keine Listen.</p>';
@@ -911,6 +949,7 @@
     });
     var form = teil.querySelector(".ls-editor");
     if (!form) return;
+    personenBinden(form, function () { lesen(form); neuZeichnen(); });
     form.addEventListener("change", function (ev) {
       if (ev.target.getAttribute("data-f") === "art") { lesen(form); neuZeichnen(); }
     });
@@ -928,6 +967,7 @@
       ev.preventDefault();
       var l = lesen(form);
       if (!l.titel) return fehler(form, "Titel fehlt.");
+      if (l.teilnehmer !== "alle" && !l.teilnehmer.length) return fehler(form, "Bitte Personen anhaken (oder „Alle“).");
       if (l.felder.some(function (f) { return (f.art === "auswahl" || f.art === "aufgaben") && !f.optionen.length; })) return fehler(form, "Bei Auswahl/Aufgaben bitte Optionen mit Komma eintragen.");
       laedt(form, true);
       api("l_admin_speichern", { liste: l }).then(function (r) { laedt(form, false); if (!r.ok) return fehler(form, r.fehler); S.edit = null; fertig(r); });
@@ -1069,17 +1109,45 @@
     return O.length > 10 && Object.keys(tage).length >= 2;
   }
 
-  // Reiter "Umfrage" oben im Menü (nur für Eingeladene, farbig)
-  function umfrageReiter(a) {
+  // Reiter "Mitmachen" oben im Menü: Umfragen + Listen, die für mich da sind (farbig, rote Zahl = noch offen)
+  function mitmachenDinge(a) {
+    var d = [];
+    (a && a.umfragen || []).forEach(function (u) { d.push({ art: "umfrage", id: u.id, titel: u.titel, offen: u.offen, neu: u.neu || 0, fest: u.fest }); });
+    (a && a.listen || []).forEach(function (l) { d.push({ art: "liste", id: l.id, titel: l.titel, offen: l.offen, bis: l.bis }); });
+    return d;
+  }
+  function mitmachenReiter(a) {
     var alt = document.querySelector(".nav-umfrage");
     if (alt) alt.remove();
-    var nav = document.querySelector(".kopf nav");
-    if (!nav || !a || !a.umfragen || !a.umfragen.length) return;
-    var offen = a.umfragen.filter(function (u) { return u.offen; }).length;
-    var link = el('<a class="nav-umfrage" href="' + PFAD + "umfrage.html" + (a.umfragen.length === 1 ? "?id=" + encodeURIComponent(a.umfragen[0].id) : "") + '">Umfrage' +
-      (offen ? ' <em title="noch nicht abgestimmt">' + offen + "</em>" : "") + "</a>");
-    if (/umfrage\.html$/.test(location.pathname)) link.setAttribute("aria-current", "page");
+    var nav = document.querySelector(".kopf nav"), d = mitmachenDinge(a);
+    if (!nav || !d.length) return;
+    var offen = d.filter(function (x) { return x.offen; }).length;
+    var ziel = d.length === 1 ? (d[0].art === "umfrage" ? "umfrage.html" : "listen.html") + "?id=" + encodeURIComponent(d[0].id) : "mitmachen.html";
+    var link = el('<a class="nav-umfrage" href="' + PFAD + ziel + '">Mitmachen' + (offen ? ' <em title="noch nichts eingetragen">' + offen + "</em>" : "") + "</a>");
+    if (/(mitmachen|umfrage|listen)\.html$/.test(location.pathname)) link.setAttribute("aria-current", "page");
     nav.appendChild(link);
+  }
+  function seiteMitmachen(box) {
+    if (!token()) return bitteAnmelden(box, "Nur für angemeldete Mitglieder.");
+    box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
+    ich(true).then(function (a) {
+      if (!a) return bitteAnmelden(box, "Bitte neu anmelden.");
+      mitmachenReiter(a);
+      var d = mitmachenDinge(a);
+      function karte(x) {
+        var st = x.art === "umfrage"
+          ? (x.fest ? '<span class="uf-st fest">Termin steht fest</span>' : x.neu ? '<span class="uf-st offen">' + x.neu + " neue Termine – bitte nachtragen</span>"
+            : x.offen ? '<span class="uf-st offen">noch nicht abgestimmt</span>' : '<span class="uf-st ok">abgestimmt</span>')
+          : (x.offen ? '<span class="uf-st offen">noch nicht eingetragen</span>' : '<span class="uf-st ok">eingetragen</span>') +
+            (x.bis ? '<span class="kt-grau">bis ' + datumDe(x.bis) + "</span>" : "");
+        return '<a class="kt-karte ls-karte" href="' + PFAD + (x.art === "umfrage" ? "umfrage.html" : "listen.html") + "?id=" + encodeURIComponent(x.id) + '"><b>' + esc(x.titel) + "</b>" + st + "</a>";
+      }
+      var u = d.filter(function (x) { return x.art === "umfrage"; }), l = d.filter(function (x) { return x.art === "liste"; });
+      box.innerHTML = (!d.length ? '<p class="kt-klein links">Gerade gibt es nichts für dich – schön!</p>' : "") +
+        (u.length ? '<h2 class="mm-kopf">Umfragen</h2><div class="kt-nutzer">' + u.map(karte).join("") + "</div>" : "") +
+        (l.length ? '<h2 class="mm-kopf">Listen</h2><div class="kt-nutzer">' + l.map(karte).join("") + "</div>" : "") +
+        '<p class="kt-klein links" style="margin-top:1.4rem">Ältere Umfragen und alle Listen: <a href="' + PFAD + 'umfrage.html">Umfragen</a> · <a href="' + PFAD + 'listen.html">Listen</a></p>';
+    });
   }
 
   function seiteUmfrage(box) {
@@ -1277,7 +1345,7 @@
         api("u_abstimmen", { id: id, antworten: MEIN, kommentar: KOMM }).then(function (a) {
           s.disabled = false;
           if (!a.ok) return meldung(box, a.fehler, "schlecht");
-          ich(true).then(umfrageReiter);
+          ich(true).then(mitmachenReiter);
           laden().then(function () { meldung(box, a.meldung, "gut"); });
         });
       });
@@ -1474,6 +1542,119 @@
     });
   }
 
+  // ---------- Mail-Benachrichtigungen (Profil + Verwaltung → Mails) ----------
+  var NL_THEMEN = [
+    ["umfragen", "Umfragen", "neue Umfrage für dich, neue Termine in einer Umfrage, Termin steht fest"],
+    ["listen", "Listen", "neue Liste für dich (Sommerfest, Helfer …)"],
+    ["termine", "Termine", "neue Termine – nur aus diesen Spalten:", "spalten"],
+    ["aenderungen", "Termin geändert oder fällt aus", "verschoben, abgesagt, Spielabend fällt aus – gleiche Auswahl wie bei „Termine“"],
+    ["ergebnisse", "Ergebnisse", "Mannschaftskampf gespielt – nur diese Mannschaften:", "mannschaften"],
+    ["berichte", "Berichte", "jeder neue Bericht"],
+    ["ausschreibungen", "Ausschreibungen", "neue Turnier-Ausschreibung"],
+    ["turnier", "Turnierkalender", "jemand will auch zu einem Turnier, bei dem du „Ich will hin“ gedrückt hast"],
+    ["erwaehnt", "Du wirst erwähnt", "ein neuer Bericht verlinkt dein Profil oder enthält eine Partie von dir"]
+  ];
+  function nlKarte(el) {
+    if (!el) return;
+    el.innerHTML = '<h2>Benachrichtigungen per E-Mail</h2><p class="kt-klein links">Lädt …</p>';
+    api("n_laden").then(function (r) {
+      if (!r.ok) {
+        el.innerHTML = '<h2>Benachrichtigungen per E-Mail</h2><p class="kt-klein links">' + (r.fehler === "Unbekannte Anfrage" ? "Kommt bald." : esc(r.fehler)) + "</p>";
+        return;
+      }
+      var S = { mail: r.mail, freq: r.freq, themen: r.themen, spalten: r.spalten.slice(), mannschaften: r.mannschaften.slice() };
+      function chips(name, alle) {
+        return '<div class="nl-sub">' + alle.map(function (x) {
+          var an = S[name].indexOf(x) >= 0;
+          return '<label class="' + (an ? "an" : "") + '"><input type="checkbox" data-nlchip="' + name + '" value="' + esc(x) + '"' + (an ? " checked" : "") + "> " + esc(x) + "</label>";
+        }).join("") + "</div>";
+      }
+      function zeichnen() {
+        el.innerHTML = '<h2>Benachrichtigungen per E-Mail</h2><p class="kt-meldung" hidden></p>' +
+          '<p class="kt-klein links">Freiwillig. Die Adresse sieht nur der Webseiten-Verantwortliche, sie wird nirgends angezeigt. ' +
+          "Mails kommen von sgafk1952@gmail.com, in jeder Mail steht ein Abmelde-Link." + (r.versand ? "" : " <b>Der Mailversand wird gerade eingerichtet – eintragen geht schon, Mails kommen bald.</b>") + "</p>" +
+          '<div class="nl-zeile"><input class="nl-feld" type="email" data-nl="mail" placeholder="deine@adresse.de" value="' + esc(S.mail) + '">' +
+          (r.bestaetigt && S.mail === r.mail ? '<span class="nl-ok">bestätigt</span>' : r.wartet && S.mail === r.mail ? '<span class="nl-wartet">wartet auf Bestätigung</span><button type="button" class="kt-mini" data-nl="nochmal">Mail nochmal schicken</button>' : "") + "</div>" +
+          '<div class="nl-titel">Wie oft?</div><div class="nl-radio">' +
+          '<label><input type="radio" name="nlfreq" value="zeitnah"' + (S.freq !== "taeglich" ? " checked" : "") + "> zeitnah (höchstens 1 Mail pro Stunde)</label>" +
+          '<label><input type="radio" name="nlfreq" value="taeglich"' + (S.freq === "taeglich" ? " checked" : "") + "> 1× am Tag (abends)</label></div>" +
+          '<div class="nl-titel">Worüber?</div>' + NL_THEMEN.map(function (t) {
+            return '<div class="nl-thema"><input type="checkbox" data-nlthema="' + t[0] + '"' + (S.themen[t[0]] ? " checked" : "") + "><div><b>" + t[1] + '</b><div class="kt-grau nl-klein">' + t[2] + "</div></div>" +
+              (t[3] ? chips(t[3], t[3] === "spalten" ? r.alleSpalten : r.alleMannschaften) : "") + "</div>";
+          }).join("") +
+          '<div class="kt-zeile" style="margin-top:1rem"><button type="button" class="kt-btn" data-nl="speichern">Speichern</button>' +
+          (r.mail ? '<button type="button" class="kt-btn leise" data-nl="ab">Alles abbestellen</button>' : "") + "</div>";
+        function lesen() {
+          S.mail = el.querySelector('[data-nl="mail"]').value.trim();
+          S.freq = (el.querySelector("[name=nlfreq]:checked") || {}).value || "zeitnah";
+          [].forEach.call(el.querySelectorAll("[data-nlthema]"), function (c) { S.themen[c.getAttribute("data-nlthema")] = c.checked; });
+          ["spalten", "mannschaften"].forEach(function (n) { S[n] = [].filter.call(el.querySelectorAll('[data-nlchip="' + n + '"]'), function (c) { return c.checked; }).map(function (c) { return c.value; }); });
+        }
+        [].forEach.call(el.querySelectorAll("[data-nlchip]"), function (c) { c.addEventListener("change", function () { c.parentNode.classList.toggle("an", c.checked); }); });
+        function senden(extra, knopf) {
+          lesen();
+          knopf.disabled = true;
+          var d = { mail: S.mail, freq: S.freq, themen: S.themen, spalten: S.spalten, mannschaften: S.mannschaften };
+          for (var k in extra) d[k] = extra[k];
+          api("n_speichern", d).then(function (a) {
+            knopf.disabled = false;
+            if (!a.ok) return meldung(el, a.fehler, "schlecht");
+            nlKarte(el);
+            setTimeout(function () { meldung(el, a.meldung, "gut"); }, 900);
+          });
+        }
+        el.querySelector('[data-nl="speichern"]').addEventListener("click", function (ev) { senden({}, ev.target); });
+        var n = el.querySelector('[data-nl="nochmal"]');
+        if (n) n.addEventListener("click", function () { senden({ neuSenden: true }, n); });
+        var ab = el.querySelector('[data-nl="ab"]');
+        if (ab) ab.addEventListener("click", function () {
+          if (confirm("Alle Benachrichtigungen abbestellen und die Adresse löschen?")) senden({ abbestellen: true }, ab);
+        });
+      }
+      zeichnen();
+    });
+  }
+
+  // Verwaltung → Reiter "Mails" (nur Inhaber)
+  function mailsVerwaltung(teil, M, laden, fertig) {
+    if (!teil) return;
+    if (!M) { teil.innerHTML = '<p class="kt-klein links">Lädt …</p>'; return; }
+    if (M.fehlerText) { teil.innerHTML = '<p class="kt-warn">' + esc(M.fehlerText) + "</p>"; return; }
+    var st = M.letzter;
+    var zahl = NL_THEMEN.map(function (t) { return t[1] + ": " + (M.themen[t[0]] || 0); }).join(" · ");
+    teil.innerHTML =
+      '<div class="kt-karte"><h3 style="margin-top:0">Stand</h3>' +
+      "<p>" + (M.eingerichtet ? '<span class="ls-status sichtbar">Versand eingerichtet</span>' : '<span class="ls-status beendet">Versand noch nicht eingerichtet</span>') + "</p>" +
+      "<p><b>" + M.abonnenten + "</b> bestätigte Abonnenten" + (M.unbestaetigt ? ", " + M.unbestaetigt + " noch nicht bestätigt" : "") + " · <b>" + M.warteschlange + "</b> Neuigkeiten warten</p>" +
+      '<p class="kt-klein links">' + esc(zahl) + "</p>" +
+      (st ? '<p class="kt-klein links">Letzter Lauf: ' + zeitKurz(st.zeit) + (st.fehler ? ' – <span class="kt-warn">' + esc(st.fehler) + "</span>" : " – " + (st.mails || 0) + " Mails" + (st.rest != null ? ", heute noch " + st.rest + " möglich" : "")) + "</p>" : "") +
+      '<div class="kt-zeile"><button type="button" class="kt-btn leise" data-m="test">Testmail an mich</button><button type="button" class="kt-btn leise" data-m="jetzt">Jetzt verschicken</button></div></div>' +
+      '<div class="kt-karte"><h3 style="margin-top:0">Einrichtung (einmal)</h3>' +
+      '<p class="kt-klein links">Die Mails verschickt ein kleines Mail-Script im Vereinskonto (Ordner MailScript, Anleitung in LIESMICH.txt). Hier nur zwei Dinge eintragen:</p>' +
+      '<p><b>1. Schlüssel</b> – erzeugen und im Mail-Script als Skripteigenschaft <code>SCHLUESSEL</code> eintragen:</p>' +
+      '<div class="kt-zeile"><button type="button" class="kt-btn leise" data-m="schluessel">' + (M.eingerichtet ? "Neuen Schlüssel erzeugen" : "Schlüssel erzeugen") + '</button><input class="nl-feld" data-m="schl" readonly placeholder="(wird nur einmal angezeigt)" style="min-width:22rem"></div>' +
+      '<p style="margin-top:1rem"><b>2. Adresse des Mail-Scripts</b> (Web-App-URL, endet auf /exec):</p>' +
+      '<div class="kt-zeile"><input class="nl-feld" data-m="url" value="' + esc(M.url) + '" placeholder="https://script.google.com/macros/s/…/exec" style="min-width:26rem"><button type="button" class="kt-btn leise" data-m="urlspeichern">Speichern</button></div></div>';
+    function aktion(art, daten, knopf) {
+      knopf.disabled = true;
+      var d = { aktion: art };
+      for (var k in daten) d[k] = daten[k];
+      api("n_admin", d).then(function (r) {
+        knopf.disabled = false;
+        if (r.ok && r.schluessel) { var f = teil.querySelector('[data-m="schl"]'); f.value = r.schluessel; f.select(); return meldung(teil.closest("#kt-seite") || teil, r.meldung, "gut"); }
+        if (r.ok && art === "jetzt") r.meldung = r.mails ? r.mails + " Mails verschickt." : (r.info || "Nichts zu verschicken.");
+        fertig(r);
+      });
+    }
+    teil.querySelector('[data-m="test"]').addEventListener("click", function (ev) { aktion("test", {}, ev.target); });
+    teil.querySelector('[data-m="jetzt"]').addEventListener("click", function (ev) { aktion("jetzt", {}, ev.target); });
+    teil.querySelector('[data-m="schluessel"]').addEventListener("click", function (ev) {
+      if (M.eingerichtet && !confirm("Neuen Schlüssel erzeugen? Danach musst du ihn auch im Mail-Script ändern, sonst gehen keine Mails mehr raus.")) return;
+      aktion("schluessel", {}, ev.target);
+    });
+    teil.querySelector('[data-m="urlspeichern"]').addEventListener("click", function (ev) { aktion("url", { url: teil.querySelector('[data-m="url"]').value }, ev.target); });
+  }
+
   // ---------- Start ----------
   ich().then(function (a) {
     knopfZeigen(a);
@@ -1484,11 +1665,12 @@
       if (art === "verwaltung") seiteVerwaltung(seite);
       if (art === "listen") seiteListen(seite);
       if (art === "umfrage") seiteUmfrage(seite);
+      if (art === "mitmachen") seiteMitmachen(seite);
     }
     spielerseite(a);
     startseite(a);
     listenHinweis(a);
-    umfrageReiter(a);
+    mitmachenReiter(a);
     // Andere Skripte (z. B. "Ich will hin") können die Anmeldung nutzen
     document.dispatchEvent(new CustomEvent("afk-konto", { detail: a }));
   });

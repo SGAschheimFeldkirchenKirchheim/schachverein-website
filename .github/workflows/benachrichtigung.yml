@@ -1,0 +1,44 @@
+name: Benachrichtigungen verschicken
+
+# Stündlich: das Apps Script verschickt gesammelte Neuigkeiten (Umfragen, Listen, Termine, Berichte …)
+# an alle, die im Profil Mails bestellt haben. Ohne Abonnenten oder ohne Neuigkeiten passiert nichts.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  senden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            konten.py
+            einreichen.py
+          sparse-checkout-cone-mode: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Senden
+        env:
+          KONTO_SCHLUESSEL: ${{ secrets.KONTO_SCHLUESSEL }}
+        run: |
+          pip install -q requests
+          python - <<'PY'
+          import konten
+          s = konten._schluessel()
+          if not s or not konten.SKRIPT_URL:
+              print("Kein KONTO_SCHLUESSEL oder keine Skript-URL - nichts zu tun.")
+          else:
+              a = konten._post({"typ": "n_senden", "s": s})
+              print({k: v for k, v in a.items() if k in ("ok", "mails", "info", "fehler")})
+          PY

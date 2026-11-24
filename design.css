@@ -923,3 +923,19 @@ span.uf-rz { cursor: default; }
 .uf-tagzeile .uf-chips { margin: 0; }
 .uf-tagzeile .kt-mini { font-size: .72rem; padding: .1rem .4rem; }
 .uf-neu input[type=time] { padding: .45rem .5rem; border-radius: 9px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: .9rem; }
+.mm-kopf { font-size: 1.2rem; margin: 1.2rem 0 .7rem; }
+/* Mail-Benachrichtigungen (Profil) */
+.nl-box { margin-top: 1.2rem; max-width: 52rem; }
+.nl-zeile { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin: .7rem 0; }
+.nl-feld { padding: .55rem .8rem; border-radius: 9px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; min-width: 16rem; max-width: 100%; box-sizing: border-box; }
+.nl-ok { background: #3fae6c22; color: #2f9a5c; border-radius: 20px; padding: .15rem .6rem; font-size: .8rem; font-weight: 600; }
+.nl-wartet { background: #e0a84f2e; color: #9a6510; border-radius: 20px; padding: .15rem .6rem; font-size: .8rem; font-weight: 600; }
+.nl-titel { font-weight: 700; margin: 1rem 0 .3rem; color: var(--head); }
+.nl-radio { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: .92rem; }
+.nl-radio label { display: flex; gap: .4rem; align-items: center; cursor: pointer; }
+.nl-thema { border-top: 1px solid var(--line); padding: .65rem 0; display: grid; grid-template-columns: auto 1fr; gap: .2rem .7rem; align-items: start; }
+.nl-thema > input { width: 18px; height: 18px; margin-top: .15rem; accent-color: var(--link-c); }
+.nl-klein { font-size: .85rem; }
+.nl-sub { grid-column: 2; display: flex; flex-wrap: wrap; gap: .35rem .4rem; margin-top: .3rem; }
+.nl-sub label { border: 1px solid var(--line); border-radius: 999px; padding: .15rem .65rem; font-size: .82rem; display: flex; gap: .3rem; align-items: center; cursor: pointer; }
+.nl-sub label.an { background: var(--soft); border-color: var(--hell); color: var(--soft-text); }
