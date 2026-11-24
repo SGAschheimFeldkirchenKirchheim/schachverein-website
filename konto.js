@@ -20,7 +20,29 @@
   }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; }
+  var ZEIT = /[?&]zeit\b/.test(location.search), ZEITEN = [];
+  function zeitZeigen(typ, gesamt, server) {
+    if (!ZEIT) return;
+    ZEITEN.push(typ + " " + (gesamt / 1000).toFixed(1) + " s" + (server != null ? " (Server " + (server / 1000).toFixed(1) + " s)" : ""));
+    var b = document.getElementById("kt-zeiten");
+    if (!b) { b = document.createElement("div"); b.id = "kt-zeiten"; document.body.appendChild(b); }
+    b.textContent = ZEITEN.join(" · ");
+  }
   function api(typ, daten) {
+    var t0 = Date.now();
+    return apiRoh(typ, daten).then(function (a) { zeitZeigen(typ, Date.now() - t0, a && a.ms); return a; });
+  }
+  // Zuletzt geladener Stand im Browser: sofort anzeigen, dann frisch nachladen (fn wird bis zu 2× aufgerufen)
+  function schnell(schluessel, laden, fn) {
+    var k = "afk-c:" + schluessel, alt = null;
+    try { var c = JSON.parse(sessionStorage.getItem(k) || "null"); if (c && c.t === token()) alt = c.d; } catch (e) {}
+    if (alt) fn(alt, false);
+    return laden().then(function (a) {
+      if (a && a.ok) { try { sessionStorage.setItem(k, JSON.stringify({ t: token(), d: a })); } catch (e) {} }
+      fn(a, true, alt);
+    });
+  }
+  function apiRoh(typ, daten) {
     daten = daten || {};
     daten.typ = typ;
     if (token() && !daten.sitzung) daten.sitzung = token();
@@ -294,8 +316,21 @@
   function seiteProfil(box) {
     if (!token()) return bitteAnmelden(box, "Melde dich an, um dein Profil zu bearbeiten.");
     box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
+    var GETIPPT = false, GEZEICHNET = false;
+    // Sofort mit dem gespeicherten Stand (ohne Foto) zeichnen, dann frisch mit Foto – außer man tippt schon
+    ich().then(function (c) { if (c && c.profil && !GEZEICHNET) malen(c, true); });
     api("m_ich", { mitFoto: true }).then(function (a) {
       if (!a.ok) return bitteAnmelden(box, a.fehler || "Bitte neu anmelden.");
+      if (GEZEICHNET && GETIPPT) {          // nur das Foto nachtragen
+        var r = box.querySelector(".kt-foto-rahmen");
+        if (r && a.profil.foto) r.innerHTML = '<img class="kt-foto" alt="" src="' + a.profil.foto + '">';
+        return;
+      }
+      malen(a);
+    });
+    var NL_KARTE = null;
+    function malen(a, ausCache) {
+      GEZEICHNET = true;
       var i = a.ich, p = a.profil, jahr = i.jahr, gbDatum = datumText(i.geburtstag);
       var stufe = { inhaber: "Inhaber", admin: "Admin", mitglied: "Mitglied" }[i.stufe];
       function radio(wert, titel, text) {
@@ -318,7 +353,7 @@
         "<span>Meine Turnierreisen (Orte, Abzeichen) auf meinem Profil zeigen – falls ich bei AFK on Tour eingetragen bin.</span></label></div>" +
         '<button type="submit" class="kt-btn">Speichern</button></form>' +
         '<div class="kt-seite-rechts"><div class="kt-karte"><h2>Foto</h2><div class="kt-foto-rahmen">' +
-        (p.foto ? '<img class="kt-foto" alt="" src="' + p.foto + '">' : '<div class="kt-foto leer">Noch kein Foto</div>') + "</div>" +
+        (p.foto ? '<img class="kt-foto" alt="" src="' + p.foto + '">' : '<div class="kt-foto leer">' + (ausCache ? "Lädt …" : "Noch kein Foto") + "</div>") + "</div>" +
         '<div class="kt-zeile"><label class="kt-btn leise">Neues Foto<input type="file" accept="image/*" hidden></label>' +
         (p.foto ? '<button type="button" class="kt-btn rot" data-kt="foto-weg">Entfernen</button>' : "") + "</div>" +
         '<p class="kt-klein links">Hochformat oder quadratisch, mindestens 800 px breit.</p></div>' +
@@ -329,7 +364,8 @@
         (i.stufe === "inhaber" ? "" : '<button type="button" class="kt-btn rot" data-kt="del">Konto löschen</button>') +
         '</div><div class="kt-unterform"></div></div></div></div>' +
         '<div class="kt-karte nl-box" id="benachrichtigungen"></div>';
-      nlKarte(box.querySelector(".nl-box"));
+      if (NL_KARTE) box.querySelector(".nl-box").replaceWith(NL_KARTE);      // Mail-Kasten nur einmal laden
+      else nlKarte(NL_KARTE = box.querySelector(".nl-box"));
       var f = box.querySelector(".kt-haupt"), z = box.querySelector(".kt-zaehler");
       function zaehlen() { z.textContent = f.text.value.length + " / 600 Zeichen"; }
       f.text.addEventListener("input", zaehlen); zaehlen();
@@ -399,7 +435,9 @@
           });
         });
       });
-    });
+    }
+    box.addEventListener("input", function () { GETIPPT = true; });
+    box.addEventListener("change", function () { GETIPPT = true; });
   }
 
   // ---------- Seite "Verwaltung" ----------
@@ -414,8 +452,17 @@
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
     var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, LISTEN = null, UMF = null, MAILS = null, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
+    function holen() {      // eine Sammelanfrage; älteres Apps Script ohne m_verwaltung: wie früher 5 Anfragen
+      return api("m_verwaltung").then(function (v) {
+        if (v.ok || v.fehler !== "Unbekannte Anfrage") return v;
+        return Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere"), api("l_admin_liste"), api("u_admin_liste")])
+          .then(function (r) { return { ok: true, teile: r }; });
+      });
+    }
     function laden() {
-      Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere"), api("l_admin_liste"), api("u_admin_liste")]).then(function (r) {
+      return schnell("verw", holen, function (v, frisch) {
+        if (!v.ok) return frisch ? bitteAnmelden(box, v.fehler || "Kein Zugriff.") : null;
+        var r = v.teile;
         // "Unbekannte Anfrage" = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
         TURNIERE = r[2].ok ? r[2] : { offen: [], rueckfrage: [], angenommen: [], alt: r[2].fehler === "Unbekannte Anfrage", kein: true };
         LISTEN = r[3].ok ? r[3] : { listen: [], alt: r[3].fehler === "Unbekannte Anfrage", kein: !r[0].ok };
@@ -425,6 +472,9 @@
         NUTZER = r[0].ok ? r[0] : { nutzer: [], rechte: [], ich: "", inhaber: false };
         if (NUR_TURNIERE && ["turniere", "listen", "terminfinder"].indexOf(reiter) < 0) reiter = r[2].ok ? "turniere" : r[3].ok ? "listen" : "terminfinder";
         BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
+        // frische Daten, während jemand gerade tippt: übernehmen, aber nicht neu zeichnen (Eingaben bleiben)
+        var a = document.activeElement;
+        if (frisch && a && box.contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
         zeichnen();
       });
     }
@@ -617,7 +667,7 @@
       });
       function fertig(r) {
         meldung(box, r.ok ? r.meldung : r.fehler, r.ok ? (r.code ? "code" : "gut") : "schlecht");
-        if (r.ok) { try { localStorage.removeItem(ICH_KEY); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
+        if (r.ok) { try { localStorage.removeItem(ICH_KEY); sessionStorage.removeItem("afk-c:verw"); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
       }
       [].forEach.call(box.querySelectorAll("[data-akt]"), function (b) {
         b.addEventListener("click", function () {
@@ -741,8 +791,8 @@
     var id = new URLSearchParams(location.search).get("id");
     box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
     if (!id) {
-      return api("l_laden", {}).then(function (r) {
-        if (!r.ok) return bitteAnmelden(box, r.fehler);
+      return schnell("listen", function () { return api("l_laden", {}); }, function (r, frisch) {
+        if (!r.ok) return frisch ? bitteAnmelden(box, r.fehler) : null;
         box.innerHTML = (r.listen.length ? '<div class="kt-nutzer">' + r.listen.map(function (l) {
           return '<a class="kt-karte ls-karte" href="?id=' + encodeURIComponent(l.id) + '"><b>' + esc(l.titel) + '</b><span class="kt-grau">' + esc(lStatusText(l)) + "</span></a>";
         }).join("") + "</div>" : '<p class="kt-klein links">Gerade gibt es keine offenen Listen.</p>') +
@@ -1130,8 +1180,12 @@
   function seiteMitmachen(box) {
     if (!token()) return bitteAnmelden(box, "Nur für angemeldete Mitglieder.");
     box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
+    ich().then(function (a) { if (a) zeigen(a); });          // sofort der gespeicherte Stand
     ich(true).then(function (a) {
       if (!a) return bitteAnmelden(box, "Bitte neu anmelden.");
+      zeigen(a);
+    });
+    function zeigen(a) {
       mitmachenReiter(a);
       var d = mitmachenDinge(a);
       function karte(x) {
@@ -1147,7 +1201,7 @@
         (u.length ? '<h2 class="mm-kopf">Umfragen</h2><div class="kt-nutzer">' + u.map(karte).join("") + "</div>" : "") +
         (l.length ? '<h2 class="mm-kopf">Listen</h2><div class="kt-nutzer">' + l.map(karte).join("") + "</div>" : "") +
         '<p class="kt-klein links" style="margin-top:1.4rem">Ältere Umfragen und alle Listen: <a href="' + PFAD + 'umfrage.html">Umfragen</a> · <a href="' + PFAD + 'listen.html">Listen</a></p>';
-    });
+    }
   }
 
   function seiteUmfrage(box) {
@@ -1156,8 +1210,8 @@
     var h1 = document.querySelector("main h1");
     box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
     if (!id) {
-      return api("u_laden", {}).then(function (r) {
-        if (!r.ok) return bitteAnmelden(box, r.fehler);
+      return schnell("umf", function () { return api("u_laden", {}); }, function (r, frisch) {
+        if (!r.ok) return frisch ? bitteAnmelden(box, r.fehler) : null;
         var mein = r.umfragen.filter(function (u) { return u.eingeladen && u.aktuell; });
         if (mein.length === 1 && !r.verwalter) return location.replace("?id=" + encodeURIComponent(mein[0].id));
         function karte(u) {
@@ -1174,10 +1228,12 @@
           (r.verwalter ? '<p style="margin-top:1.2rem"><a class="kt-btn leise" href="' + PFAD + 'verwaltung.html#terminfinder">Umfragen verwalten / neu anlegen</a></p>' : "");
       });
     }
-    var R = null, MEIN = {}, KOMM = "";
-    function laden() {
-      return api("u_laden", { id: id }).then(function (r) {
-        if (!r.ok) return bitteAnmelden(box, r.fehler);
+    var R = null, MEIN = {}, KOMM = "", GEKLICKT = false;
+    function laden(neu) {
+      if (neu) { GEKLICKT = false; try { sessionStorage.removeItem("afk-c:umf-" + id); } catch (e) {} }
+      return schnell("umf-" + id, function () { return api("u_laden", { id: id }); }, function (r, frisch) {
+        if (!r.ok) return frisch ? bitteAnmelden(box, r.fehler) : null;
+        if (frisch && GEKLICKT) { R = r; return; }       // schon angeklickt: Auswahl nicht überschreiben
         R = r;
         var ich = r.zeilen.filter(function (z) { return z.ich; })[0];
         MEIN = ich && ich.antworten ? JSON.parse(JSON.stringify(ich.antworten)) : {};
@@ -1313,6 +1369,7 @@
       [].forEach.call(box.querySelectorAll("[data-uo]"), function (k) {
         k.addEventListener("click", function () {
           var oid = k.getAttribute("data-uo"), w = k.getAttribute("data-uw");
+          GEKLICKT = true;
           if (MEIN[oid] === w) delete MEIN[oid]; else MEIN[oid] = w;
           var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
         });
@@ -1320,6 +1377,7 @@
       [].forEach.call(box.querySelectorAll("[data-uz]"), function (k) {
         k.addEventListener("click", function () {
           var oid = k.getAttribute("data-uz"), w = MEIN[oid];
+          GEKLICKT = true;
           if (!w || w === "x") MEIN[oid] = "j"; else if (w === "j") MEIN[oid] = "v"; else delete MEIN[oid];
           var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
         });
@@ -1327,6 +1385,7 @@
       [].forEach.call(box.querySelectorAll("[data-utag]"), function (k) {
         k.addEventListener("click", function () {
           var tag = k.getAttribute("data-utag"), liste = O.filter(function (o) { return uTagKey(o) === tag; });
+          GEKLICKT = true;
           var alle = liste.every(function (o) { return MEIN[o.id] === "j"; });
           liste.forEach(function (o) { if (alle) delete MEIN[o.id]; else MEIN[o.id] = "j"; });
           var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
@@ -1334,7 +1393,7 @@
       });
       [].forEach.call(box.querySelectorAll("[data-uk]"), function (f) {
         f.addEventListener("input", function () {
-          KOMM = f.value;
+          KOMM = f.value; GEKLICKT = true;
           [].forEach.call(box.querySelectorAll("[data-uk]"), function (g) { if (g !== f) g.value = KOMM; });
         });
       });
@@ -1346,7 +1405,7 @@
           s.disabled = false;
           if (!a.ok) return meldung(box, a.fehler, "schlecht");
           ich(true).then(mitmachenReiter);
-          laden().then(function () { meldung(box, a.meldung, "gut"); });
+          laden(true).then(function () { meldung(box, a.meldung, "gut"); });
         });
       });
       [].forEach.call(box.querySelectorAll("[data-uf]"), function (k) {
@@ -1356,7 +1415,7 @@
           k.disabled = true;
           api("u_admin_festlegen", { id: id, option: opt }).then(function (a) {
             if (!a.ok) { k.disabled = false; return meldung(box, a.fehler, "schlecht"); }
-            laden().then(function () { meldung(box, a.meldung, "gut"); });
+            laden(true).then(function () { meldung(box, a.meldung, "gut"); });
           });
         });
       });
@@ -1574,7 +1633,8 @@
           '<p class="kt-klein links">Freiwillig. Die Adresse sieht nur der Webseiten-Verantwortliche, sie wird nirgends angezeigt. ' +
           "Mails kommen von sgafk1952@gmail.com, in jeder Mail steht ein Abmelde-Link." + (r.versand ? "" : " <b>Der Mailversand wird gerade eingerichtet – eintragen geht schon, Mails kommen bald.</b>") + "</p>" +
           '<div class="nl-zeile"><input class="nl-feld" type="email" data-nl="mail" placeholder="deine@adresse.de" value="' + esc(S.mail) + '">' +
-          (r.bestaetigt && S.mail === r.mail ? '<span class="nl-ok">bestätigt</span>' : r.wartet && S.mail === r.mail ? '<span class="nl-wartet">wartet auf Bestätigung</span><button type="button" class="kt-mini" data-nl="nochmal">Mail nochmal schicken</button>' : "") + "</div>" +
+          (r.bestaetigt && S.mail === r.mail ? '<span class="nl-ok">bestätigt</span>' : r.spaeter && S.mail === r.mail ? '<span class="nl-wartet">Bestätigungsmail kommt, sobald der Versand läuft</span>'
+            : r.wartet && S.mail === r.mail ? '<span class="nl-wartet">wartet auf Bestätigung</span><button type="button" class="kt-mini" data-nl="nochmal">Mail nochmal schicken</button>' : "") + "</div>" +
           '<div class="nl-titel">Wie oft?</div><div class="nl-radio">' +
           '<label><input type="radio" name="nlfreq" value="zeitnah"' + (S.freq !== "taeglich" ? " checked" : "") + "> zeitnah (höchstens 1 Mail pro Stunde)</label>" +
           '<label><input type="radio" name="nlfreq" value="taeglich"' + (S.freq === "taeglich" ? " checked" : "") + "> 1× am Tag (abends)</label></div>" +
