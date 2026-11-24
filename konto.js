@@ -1579,7 +1579,7 @@
           '<label><input type="radio" name="nlfreq" value="zeitnah"' + (S.freq !== "taeglich" ? " checked" : "") + "> zeitnah (höchstens 1 Mail pro Stunde)</label>" +
           '<label><input type="radio" name="nlfreq" value="taeglich"' + (S.freq === "taeglich" ? " checked" : "") + "> 1× am Tag (abends)</label></div>" +
           '<div class="nl-titel">Worüber?</div>' + NL_THEMEN.map(function (t) {
-            return '<div class="nl-thema"><input type="checkbox" data-nlthema="' + t[0] + '"' + (S.themen[t[0]] ? " checked" : "") + "><div><b>" + t[1] + '</b><div class="kt-grau nl-klein">' + t[2] + "</div></div>" +
+            return '<div class="nl-thema' + (S.themen[t[0]] ? "" : " nl-aus") + '"><input type="checkbox" data-nlthema="' + t[0] + '"' + (S.themen[t[0]] ? " checked" : "") + "><div><b>" + t[1] + '</b><div class="kt-grau nl-klein">' + t[2] + "</div></div>" +
               (t[3] ? chips(t[3], t[3] === "spalten" ? r.alleSpalten : r.alleMannschaften) : "") + "</div>";
           }).join("") +
           '<div class="kt-zeile" style="margin-top:1rem"><button type="button" class="kt-btn" data-nl="speichern">Speichern</button>' +
@@ -1591,6 +1591,7 @@
           ["spalten", "mannschaften"].forEach(function (n) { S[n] = [].filter.call(el.querySelectorAll('[data-nlchip="' + n + '"]'), function (c) { return c.checked; }).map(function (c) { return c.value; }); });
         }
         [].forEach.call(el.querySelectorAll("[data-nlchip]"), function (c) { c.addEventListener("change", function () { c.parentNode.classList.toggle("an", c.checked); }); });
+        [].forEach.call(el.querySelectorAll("[data-nlthema]"), function (c) { c.addEventListener("change", function () { c.parentNode.classList.toggle("nl-aus", !c.checked); }); });
         function senden(extra, knopf) {
           lesen();
           knopf.disabled = true;

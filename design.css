@@ -939,3 +939,4 @@ span.uf-rz { cursor: default; }
 .nl-sub { grid-column: 2; display: flex; flex-wrap: wrap; gap: .35rem .4rem; margin-top: .3rem; }
 .nl-sub label { border: 1px solid var(--line); border-radius: 999px; padding: .15rem .65rem; font-size: .82rem; display: flex; gap: .3rem; align-items: center; cursor: pointer; }
 .nl-sub label.an { background: var(--soft); border-color: var(--hell); color: var(--soft-text); }
+.nl-thema.nl-aus .nl-sub { opacity: .45; }
