@@ -19,7 +19,7 @@
     try {
       if (t) localStorage.setItem(KEY, t); else localStorage.removeItem(KEY);
       localStorage.removeItem(ICH_KEY); localStorage.removeItem(GEB_KEY);
-      if (!t) Object.keys(localStorage).forEach(function (k) { if (k.indexOf("afk-c:") === 0) localStorage.removeItem(k); });   // gespeicherte Seiten beim Abmelden weg
+      if (!t) Object.keys(localStorage).forEach(function (k) { if (k.indexOf("afk-c:") === 0 || k === "afk-foto") localStorage.removeItem(k); });   // gespeicherte Seiten beim Abmelden weg
     } catch (e) {}
   }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -320,20 +320,34 @@
   function seiteProfil(box) {
     if (!token()) return bitteAnmelden(box, "Melde dich an, um dein Profil zu bearbeiten.");
     box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
-    var GETIPPT = false, GEZEICHNET = false;
-    // Sofort mit dem gespeicherten Stand (ohne Foto) zeichnen, dann frisch mit Foto – außer man tippt schon
-    ich().then(function (c) { if (c && c.profil && !GEZEICHNET) malen(c, true); });
-    api("m_ich", { mitFoto: true }).then(function (a) {
+    var GETIPPT = false, GEZEICHNET = false, FOTO = "";
+    // Sofort mit dem gespeicherten Stand zeichnen, dann frisch (ohne Foto) – außer man tippt schon.
+    // Das Foto kommt aus dem Browser-Speicher, sonst von der Website-Kopie, nur zuletzt aus Drive (langsam).
+    ich().then(function (c) { if (c && c.profil && !GEZEICHNET) malen(c); });
+    api("m_ich").then(function (a) {
       if (!a.ok) return bitteAnmelden(box, a.fehler || "Bitte neu anmelden.");
-      if (GEZEICHNET && GETIPPT) {          // nur das Foto nachtragen
-        var r = box.querySelector(".kt-foto-rahmen");
-        if (r && a.profil.foto) r.innerHTML = '<img class="kt-foto" alt="" src="' + a.profil.foto + '">';
-        return;
-      }
-      malen(a);
+      if (!(GEZEICHNET && GETIPPT)) malen(a);
     });
-    var NL_KARTE = null;
-    function malen(a, ausCache) {
+    function fotoZeigen(src) {
+      FOTO = src;
+      var r = box.querySelector(".kt-foto-rahmen");
+      if (r) r.innerHTML = src ? '<img class="kt-foto" alt="" src="' + src + '">' : '<div class="kt-foto leer">Noch kein Foto</div>';
+    }
+    function fotoMerken(v, daten) { try { if (daten.length < 1500000) localStorage.setItem("afk-foto", JSON.stringify({ t: token(), v: v, d: daten })); } catch (e) {} }
+    function fotoLaden(a) {
+      var v = a.profil.fotoV, slug = a.ich.slug;
+      if (!v) return fotoZeigen("");
+      try { var c = JSON.parse(localStorage.getItem("afk-foto") || "null"); if (c && c.t === token() && c.v === v) return fotoZeigen(c.d); } catch (e) {}
+      fetch(PFAD + "spieler/konten.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { return []; }).then(function (liste) {
+        var oef = (liste || []).filter(function (p) { return p.slug === slug && p.foto === v; })[0];
+        if (oef) return fotoZeigen(PFAD + "spieler/fotos_konto/" + slug + ".jpg?v=" + v);
+        api("m_ich", { mitFoto: true }).then(function (x) {          // ganz neu hochgeladen oder nicht öffentlich
+          if (x.ok && x.profil.foto) { fotoMerken(v, x.profil.foto); fotoZeigen(x.profil.foto); }
+        });
+      });
+    }
+    var NL_KARTE = null, FOTO_V = null;
+    function malen(a) {
       GEZEICHNET = true;
       var i = a.ich, p = a.profil, jahr = i.jahr, gbDatum = datumText(i.geburtstag);
       var stufe = { inhaber: "Inhaber", admin: "Admin", mitglied: "Mitglied" }[i.stufe];
@@ -357,9 +371,9 @@
         "<span>Meine Turnierreisen (Orte, Abzeichen) auf meinem Profil zeigen – falls ich bei AFK on Tour eingetragen bin.</span></label></div>" +
         '<button type="submit" class="kt-btn">Speichern</button></form>' +
         '<div class="kt-seite-rechts"><div class="kt-karte"><h2>Foto</h2><div class="kt-foto-rahmen">' +
-        (p.foto ? '<img class="kt-foto" alt="" src="' + p.foto + '">' : '<div class="kt-foto leer">' + (ausCache ? "Lädt …" : "Noch kein Foto") + "</div>") + "</div>" +
+        (FOTO ? '<img class="kt-foto" alt="" src="' + FOTO + '">' : '<div class="kt-foto leer">' + (p.fotoV ? "Lädt …" : "Noch kein Foto") + "</div>") + "</div>" +
         '<div class="kt-zeile"><label class="kt-btn leise">Neues Foto<input type="file" accept="image/*" hidden></label>' +
-        (p.foto ? '<button type="button" class="kt-btn rot" data-kt="foto-weg">Entfernen</button>' : "") + "</div>" +
+        (p.fotoV || FOTO ? '<button type="button" class="kt-btn rot" data-kt="foto-weg">Entfernen</button>' : "") + "</div>" +
         '<p class="kt-klein links">Hochformat oder quadratisch, mindestens 800 px breit.</p></div>' +
         '<div class="kt-karte"><h2>Konto</h2><div class="kt-stapel">' +
         '<button type="button" class="kt-btn leise" data-kt="pw">Passwort ändern</button>' +
@@ -370,6 +384,7 @@
         '<div class="kt-karte nl-box" id="benachrichtigungen"></div>';
       if (NL_KARTE) box.querySelector(".nl-box").replaceWith(NL_KARTE);      // Mail-Kasten nur einmal laden
       else nlKarte(NL_KARTE = box.querySelector(".nl-box"));
+      if (FOTO_V !== (p.fotoV || 0)) { FOTO_V = p.fotoV || 0; FOTO = ""; fotoLaden(a); }
       var f = box.querySelector(".kt-haupt"), z = box.querySelector(".kt-zaehler");
       function zaehlen() { z.textContent = f.text.value.length + " / 600 Zeichen"; }
       f.text.addEventListener("input", zaehlen); zaehlen();
@@ -393,7 +408,8 @@
             if (!r.ok) return meldung(box, r.fehler, "schlecht");
             meldung(box, b.breite < 800 ? "Foto gespeichert – es ist nur " + b.breite + " px breit und wirkt auf der Seite eventuell unscharf. Ein größeres Foto wäre besser."
               : "Foto gespeichert.", b.breite < 800 ? "warn" : "gut");
-            var r2 = box.querySelector(".kt-foto-rahmen"); r2.innerHTML = '<img class="kt-foto" alt="" src="' + b.url + '">';
+            fotoMerken(r.v || 0, b.url); fotoZeigen(b.url); FOTO_V = r.v || 0;
+            try { localStorage.removeItem(ICH_KEY); } catch (e) {}
           });
         }).catch(function () { meldung(box, "Das Bild konnte nicht gelesen werden.", "schlecht"); });
       });
@@ -402,7 +418,8 @@
         if (!confirm("Foto wirklich entfernen?")) return;
         api("m_foto", { loeschen: true }).then(function (r) {
           if (!r.ok) return meldung(box, r.fehler, "schlecht");
-          box.querySelector(".kt-foto-rahmen").innerHTML = '<div class="kt-foto leer">Noch kein Foto</div>';
+          fotoZeigen(""); FOTO_V = 0;
+          try { localStorage.removeItem("afk-foto"); localStorage.removeItem(ICH_KEY); } catch (e) {}
           var weg = box.querySelector("[data-kt=foto-weg]"); if (weg) weg.remove();
           meldung(box, "Foto entfernt.", "gut");
         });
