@@ -16,7 +16,11 @@
   // ---------- Grundlagen ----------
   function token() { try { return localStorage.getItem(KEY) || ""; } catch (e) { return ""; } }
   function setzeToken(t) {
-    try { if (t) localStorage.setItem(KEY, t); else localStorage.removeItem(KEY); localStorage.removeItem(ICH_KEY); localStorage.removeItem(GEB_KEY); } catch (e) {}
+    try {
+      if (t) localStorage.setItem(KEY, t); else localStorage.removeItem(KEY);
+      localStorage.removeItem(ICH_KEY); localStorage.removeItem(GEB_KEY);
+      if (!t) Object.keys(localStorage).forEach(function (k) { if (k.indexOf("afk-c:") === 0) localStorage.removeItem(k); });   // gespeicherte Seiten beim Abmelden weg
+    } catch (e) {}
   }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function el(html) { var d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; }
@@ -35,10 +39,10 @@
   // Zuletzt geladener Stand im Browser: sofort anzeigen, dann frisch nachladen (fn wird bis zu 2× aufgerufen)
   function schnell(schluessel, laden, fn) {
     var k = "afk-c:" + schluessel, alt = null;
-    try { var c = JSON.parse(sessionStorage.getItem(k) || "null"); if (c && c.t === token()) alt = c.d; } catch (e) {}
+    try { var c = JSON.parse(localStorage.getItem(k) || "null"); if (c && c.t === token()) alt = c.d; } catch (e) {}
     if (alt) fn(alt, false);
     return laden().then(function (a) {
-      if (a && a.ok) { try { sessionStorage.setItem(k, JSON.stringify({ t: token(), d: a })); } catch (e) {} }
+      if (a && a.ok) { try { localStorage.setItem(k, JSON.stringify({ t: token(), d: a })); } catch (e) {} }
       fn(a, true, alt);
     });
   }
@@ -614,10 +618,18 @@
         return '<button type="button" data-r="' + name + '"' + (reiter === name ? ' class="an"' : "") + ">" + titel + (zahl ? " <em>" + zahl + "</em>" : "") + "</button>";
       }
       function teil(name, html) { return '<div class="kt-reiter-inhalt" data-r="' + name + '"' + (reiter === name ? "" : " hidden") + ">" + html + "</div>"; }
-      var T = TURNIERE, tOffen = T.offen.length + T.rueckfrage.length + (T.pruefFehler || 0);
+      var T = TURNIERE, tOffen = T.kurz ? T.anzahl : T.offen.length + T.rueckfrage.length + (T.pruefFehler || 0);
+      if (reiter === "turniere" && T.kurz && !T.laedt && !T.kein) {
+        T.laedt = true;
+        api("m_turniere").then(function (x) { if (x.ok) TURNIERE = x; else T.fehlerText = x.fehler; T.laedt = false; T.kurz = !x.ok; zeichnen(); });
+      }
+      if (reiter === "berichte" && !BERICHTE.voll && !BERICHTE.laedt && !NUR_TURNIERE) {
+        BERICHTE.laedt = true;
+        api("b_liste").then(function (x) { if (x.ok) { BERICHTE = x; BERICHTE.voll = true; } else BERICHTE.laedt = false; zeichnen(); });
+      }
       var turnierTeil = teil("turniere", (T.alt ? '<p class="kt-warn">Das Apps Script kennt die Turnier-Anträge noch nicht: Code.gs und Mitglieder.gs ersetzen, ' +
           "speichern und „Bereitstellen → Bereitstellungen verwalten → Stift → Neue Version“.</p>" : "") +
-        "<h3>Offen</h3>" + (T.offen.length ? T.offen.map(function (t) { return turnierKarte(t, "offen"); }).join("") : '<p class="kt-klein links">Keine offenen Anträge.</p>') +
+        "<h3>Offen</h3>" + (T.kurz ? '<p class="kt-klein links">' + (T.fehlerText ? esc(T.fehlerText) : "Lädt …") + "</p>" : T.offen.length ? T.offen.map(function (t) { return turnierKarte(t, "offen"); }).join("") : '<p class="kt-klein links">Keine offenen Anträge.</p>') +
         (T.rueckfrage.length ? '<h3 style="margin-top:1.8rem">Rückfragen</h3>' + T.rueckfrage.map(function (t) { return turnierKarte(t, "rueckfrage"); }).join("") : "") +
         (T.angenommen.length ? '<h3 style="margin-top:1.8rem">Wird gerade eingetragen</h3>' + T.angenommen.map(function (t) { return turnierKarte(t, "angenommen"); }).join("") : "") +
         '<p class="kt-klein links">„Annehmen“: Der nächste Build (startet von selbst, dauert ein paar Minuten) holt Ort und Datum von chess-results bzw. der Karte und trägt das Turnier ein. ' +
@@ -659,7 +671,8 @@
       [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (b) {
         b.addEventListener("click", function () {
           reiter = b.getAttribute("data-r"); history.replaceState(null, "", "#" + reiter);
-          if (reiter === "turniere" && !TOUR) return zeichnen();
+          if (reiter === "turniere" && (!TOUR || TURNIERE.kurz)) return zeichnen();
+          if (reiter === "berichte" && !BERICHTE.voll) return zeichnen();
           if (reiter === "mails" && !MAILS) return zeichnen();
           [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (x) { x.classList.toggle("an", x === b); });
           [].forEach.call(box.querySelectorAll(".kt-reiter-inhalt"), function (x) { x.hidden = x.getAttribute("data-r") !== reiter; });
@@ -667,7 +680,7 @@
       });
       function fertig(r) {
         meldung(box, r.ok ? r.meldung : r.fehler, r.ok ? (r.code ? "code" : "gut") : "schlecht");
-        if (r.ok) { try { localStorage.removeItem(ICH_KEY); sessionStorage.removeItem("afk-c:verw"); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
+        if (r.ok) { try { localStorage.removeItem(ICH_KEY); localStorage.removeItem("afk-c:verw"); } catch (e) {} laden(); ich(true).then(knopfZeigen); }
       }
       [].forEach.call(box.querySelectorAll("[data-akt]"), function (b) {
         b.addEventListener("click", function () {
@@ -1230,7 +1243,7 @@
     }
     var R = null, MEIN = {}, KOMM = "", GEKLICKT = false;
     function laden(neu) {
-      if (neu) { GEKLICKT = false; try { sessionStorage.removeItem("afk-c:umf-" + id); } catch (e) {} }
+      if (neu) { GEKLICKT = false; try { localStorage.removeItem("afk-c:umf-" + id); } catch (e) {} }
       return schnell("umf-" + id, function () { return api("u_laden", { id: id }); }, function (r, frisch) {
         if (!r.ok) return frisch ? bitteAnmelden(box, r.fehler) : null;
         if (frisch && GEKLICKT) { R = r; return; }       // schon angeklickt: Auswahl nicht überschreiben
