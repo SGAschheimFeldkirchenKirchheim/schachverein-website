@@ -814,3 +814,72 @@ a.kt-mini, a.kt-btn { text-decoration: none; display: inline-block; }
   body:has(#kt-seite[data-seite="listen"]) footer, .ls-form, .ls-knoepfe, .kt-meldung, .ls-hinweis, [data-uebernehmen] { display: none !important; }
   .ls-tab tr.ich td { background: none; }
 }
+
+/* ---------- Terminfinder (umfrage.html, Verwaltung → Terminfinder) ---------- */
+.kopf nav a.nav-umfrage { background: var(--hell); color: #0f1c33; border-radius: 999px; padding: .3rem .85rem; align-self: center; }
+.kopf nav a.nav-umfrage:hover { background: #8fb6e4; color: #0f1c33; }
+@media (max-width: 1100px) { .kopf nav a.nav-umfrage { align-self: flex-start; margin: .5rem 0; padding: .35rem .9rem; } }
+.kopf nav a.nav-umfrage em { font-style: normal; background: #d0544a; color: #fff; border-radius: 9px; font-size: .75rem; padding: 0 .4rem; margin-left: .2rem; }
+.uf-meta { color: var(--muted); font-size: .9rem; margin: -.4rem 0 1rem; }
+.uf-text { margin-bottom: 1rem; }
+.uf-fest { background: #3fae6c1f; border: 1.5px solid #3fae6c; color: #1d6b40; border-radius: 12px; padding: .8rem 1rem; margin-bottom: 1.2rem; font-size: 1.05rem; }
+:root[data-theme="dark"] .uf-fest { color: #8fdcae; }
+.uf-st { font-size: .85rem; font-weight: 600; color: var(--muted); }
+.uf-st.offen { color: #b5651d; } .uf-st.ok { color: #2f9a5c; } .uf-st.fest { color: #2f9a5c; }
+.uf-scroll { overflow-x: auto; }
+.uf-tab { border-collapse: separate; border-spacing: 0; width: 100%; font-size: .92rem; }
+.uf-tab th, .uf-tab td { border-bottom: 1px solid var(--line); padding: .45rem .4rem; text-align: center; }
+.uf-tab th { color: var(--head); vertical-align: bottom; font-weight: 600; }
+.uf-tab .uf-name { text-align: left; white-space: nowrap; }
+.uf-tab td.uf-k { white-space: normal; color: var(--muted); font-size: .82rem; min-width: 8rem; }
+.uf-wt { display: block; font-size: .72rem; color: var(--muted); font-weight: 500; text-transform: uppercase; }
+.uf-dt { display: block; font-size: 1.02rem; }
+.uf-uz { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
+.uf-tab td.uf-j { background: #3fae6c1f; color: #2f8a55; font-weight: 700; }
+.uf-tab td.uf-v { background: #e0a84f24; color: #a86a00; font-weight: 700; }
+.uf-tab td.uf-x { background: #e0675c1c; color: #c0473d; }
+.uf-tab td.uf-leer { color: var(--line); }
+.uf-tab tr.uf-ich td:not(.uf-j):not(.uf-v):not(.uf-x) { background: var(--soft); }
+.uf-tab tr.uf-ich td.uf-name { font-weight: 700; }
+.uf-tab tr.uf-summe td { font-weight: 700; border-bottom: none; }
+.uf-tab th.uf-best { background: #3fae6c26; border-radius: 8px 8px 0 0; }
+.uf-tab td.uf-best { box-shadow: inset 2px 0 0 #3fae6c, inset -2px 0 0 #3fae6c; }
+.uf-tab tr.uf-summe td.uf-best { box-shadow: inset 2px 0 0 #3fae6c, inset -2px 0 0 #3fae6c, inset 0 -2px 0 #3fae6c; border-radius: 0 0 8px 8px; }
+.uf-vl { color: #a86a00; font-weight: 500; font-size: .85em; }
+.uf-komm { width: 100%; min-width: 9rem; box-sizing: border-box; padding: .4rem .55rem; border-radius: 8px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: .88rem; }
+.uf-wahl { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.uf-wahl button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: .85rem; padding: .2rem .45rem; cursor: pointer; }
+.uf-wahl button + button { border-left: 1px solid var(--line); }
+.uf-wahl button.an.j { background: #2e7d4f; color: #fff; } .uf-wahl button.an.v { background: #c08a1e; color: #fff; } .uf-wahl button.an.x { background: #b03a2e; color: #fff; }
+.uf-wahl.gross { display: flex; width: 100%; border: 0; gap: .4rem; background: none; }
+.uf-wahl.gross button { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: .45rem 0; font-size: 1rem; }
+.uf-wahl.gross button.an { border-color: transparent; }
+.uf-handy { display: none; }
+.uf-opt { display: grid; grid-template-columns: auto 1fr; gap: .5rem .8rem; align-items: center; padding: .8rem 0; border-bottom: 1px solid var(--line); }
+.uf-opt:last-of-type { border-bottom: none; }
+.uf-datum { width: 3.6rem; text-align: center; border: 1px solid var(--line); border-radius: 9px; padding: .25rem 0; }
+.uf-gross { font-size: 1.25rem; font-weight: 700; color: var(--head); line-height: 1.15; }
+.uf-opt.uf-best .uf-datum { border-color: #3fae6c; box-shadow: 0 0 0 2px #3fae6c33; }
+.uf-bestwort { color: #2f9a5c; font-size: .85rem; font-weight: 600; }
+.uf-balken { height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; display: flex; margin-top: .35rem; }
+.uf-balken i { display: block; height: 100%; } .uf-balken i.j { background: #2e7d4f; } .uf-balken i.v { background: #c08a1e; }
+.uf-namen { font-size: .8rem; color: var(--muted); margin-top: .3rem; }
+.uf-knoepfe { grid-column: 2; }
+.uf-handy-komm { margin-top: .8rem; }
+.uf-verw { margin-top: 1.4rem; }
+.uf-verw select { padding: .55rem .6rem; border-radius: 9px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; max-width: 100%; }
+@media (max-width: 760px) {
+  .uf-pc { display: none; }
+  .uf-handy { display: block; }
+}
+/* Verwaltung: Umfrage anlegen */
+.uf-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: .4rem 0 .8rem; }
+.uf-chip { background: var(--soft); color: var(--soft-text); border-radius: 999px; padding: .2rem .3rem .2rem .7rem; font-size: .85rem; }
+.uf-chip button { border: 0; background: none; color: inherit; cursor: pointer; font-size: 1rem; padding: 0 .3rem; }
+.uf-neu { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.uf-neu select, .uf-neu input:not([type=checkbox]), .uf-personen input[data-ufilter] { padding: .5rem .6rem; border-radius: 9px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: .9rem; }
+.uf-wts { display: inline-flex; flex-wrap: wrap; gap: .5rem; font-size: .9rem; }
+.uf-personen { border: 1px solid var(--line); border-radius: 10px; padding: .7rem; margin: .2rem 0 .6rem; }
+.uf-pliste { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .25rem .8rem; max-height: 16rem; overflow-y: auto; font-size: .9rem; }
+.uf-pliste label { display: flex; gap: .4rem; align-items: center; cursor: pointer; }
+.uf-pliste label[hidden] { display: none; }

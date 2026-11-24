@@ -3423,7 +3423,7 @@ if __name__ == "__main__":
     konten.synchronisieren(_geburtstag_liste(), spieler.slug)
     konten.laden()
     konten.seiten_bauen(render_page)
-    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html", "listen.html"})   # nicht in die Sitemap
+    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html", "listen.html", "umfrage.html"})   # nicht in die Sitemap
     build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))

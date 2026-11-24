@@ -88,8 +88,9 @@
       '<a href="' + PFAD + 'mein-profil.html">Mein Profil</a>' +
       '<a href="' + PFAD + "spieler/" + esc(a.ich.slug) + '.html">Meine Seite ansehen</a>' +
       ((a.listen && a.listen.length) || a.ich.darf.listen ? '<a href="' + PFAD + 'listen.html">Listen' + (a.listen && a.listen.length ? " (" + a.listen.length + ")" : "") + "</a>" : "") +
-      (a.ich.darf.verwaltung || a.ich.darf.turniere || a.ich.darf.listen ? '<a href="' + PFAD + "verwaltung.html" +
-        (!a.ich.darf.verwaltung ? (a.ich.darf.turniere ? "#turniere" : "#listen") : a.offenTurniere && !a.offenAntraege && !a.offenBerichte ? "#turniere" : a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">' +
+      ((a.umfragen && a.umfragen.length) || a.ich.darf.terminfinder ? '<a href="' + PFAD + 'umfrage.html">Umfragen' + (a.umfragen && a.umfragen.length ? " (" + a.umfragen.length + ")" : "") + "</a>" : "") +
+      (a.ich.darf.verwaltung || a.ich.darf.turniere || a.ich.darf.listen || a.ich.darf.terminfinder ? '<a href="' + PFAD + "verwaltung.html" +
+        (!a.ich.darf.verwaltung ? (a.ich.darf.turniere ? "#turniere" : a.ich.darf.listen ? "#listen" : "#terminfinder") : a.offenTurniere && !a.offenAntraege && !a.offenBerichte ? "#turniere" : a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">' +
         "Verwaltung" + (a.offen ? ' <span class="kt-zahl innen">' + a.offen + "</span>" : "") + "</a>" : "") +
       '<button type="button" data-kt="abmelden">Abmelden</button></div>');
     KNOPF.parentNode.appendChild(m);
@@ -410,16 +411,17 @@
   }
   function seiteVerwaltung(box) {
     if (!token()) return bitteAnmelden(box, "Die Verwaltung ist nur für Admins.");
-    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, LISTEN = null, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
+    var reiter = (location.hash || "#antraege").slice(1), NUTZER = null, BERICHTE = null, TURNIERE = null, NUR_TURNIERE = false, LISTEN = null, UMF = null, TOUR = null, TOUR_WAHL = "", TOUR_EDIT = -1;
     function laden() {
-      Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere"), api("l_admin_liste")]).then(function (r) {
+      Promise.all([api("m_admin_liste"), api("b_liste"), api("m_turniere"), api("l_admin_liste"), api("u_admin_liste")]).then(function (r) {
         // "Unbekannte Anfrage" = Apps Script noch ohne diese Funktion (keine neue Version bereitgestellt)
         TURNIERE = r[2].ok ? r[2] : { offen: [], rueckfrage: [], angenommen: [], alt: r[2].fehler === "Unbekannte Anfrage", kein: true };
         LISTEN = r[3].ok ? r[3] : { listen: [], alt: r[3].fehler === "Unbekannte Anfrage", kein: !r[0].ok };
-        NUR_TURNIERE = !r[0].ok;                        // kein Admin: nur die Reiter seiner Rechte (turniere, listen)
-        if (NUR_TURNIERE && !r[2].ok && !r[3].ok) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
+        UMF = r[4].ok ? r[4] : { umfragen: [], nutzer: [], alt: r[4].fehler === "Unbekannte Anfrage", kein: !r[0].ok };
+        NUR_TURNIERE = !r[0].ok;                        // kein Admin: nur die Reiter seiner Rechte (turniere, listen, terminfinder)
+        if (NUR_TURNIERE && !r[2].ok && !r[3].ok && !r[4].ok) return bitteAnmelden(box, r[0].fehler || "Kein Zugriff.");
         NUTZER = r[0].ok ? r[0] : { nutzer: [], rechte: [], ich: "", inhaber: false };
-        if (NUR_TURNIERE && ["turniere", "listen"].indexOf(reiter) < 0) reiter = r[2].ok ? "turniere" : "listen";
+        if (NUR_TURNIERE && ["turniere", "listen", "terminfinder"].indexOf(reiter) < 0) reiter = r[2].ok ? "turniere" : r[3].ok ? "listen" : "terminfinder";
         BERICHTE = r[1].ok ? r[1] : { offen: [], online: [] };
         zeichnen();
       });
@@ -572,17 +574,17 @@
         '<p class="kt-klein links">Änderungen übernimmt der nächste Build (startet von selbst, ein paar Minuten). Einen neuen Ort sucht er auf der Karte, ' +
         "neue Turniere kommen über das Formular auf der AFK-on-Tour-Seite.</p>");
       if (reiter === "turniere" && !TOUR) { TOUR = "laedt"; api("m_tour_daten").then(function (r) { TOUR = r.ok ? r : { fehlerText: r.fehler || "Nicht geladen" }; zeichnen(); }); }
-      var listenTeil = teil("listen", "");
+      var listenTeil = teil("listen", ""), umfTeil = teil("terminfinder", "");
       if (NUR_TURNIERE) {
         box.innerHTML = '<p class="kt-meldung" hidden></p><div class="kt-reiter" role="tablist">' +
-          (TURNIERE.kein ? "" : r("turniere", "Turniere", tOffen)) + (LISTEN.kein ? "" : r("listen", "Listen")) + "</div>" +
-          (TURNIERE.kein ? "" : turnierTeil) + (LISTEN.kein ? "" : listenTeil);
+          (TURNIERE.kein ? "" : r("turniere", "Turniere", tOffen)) + (LISTEN.kein ? "" : r("listen", "Listen")) + (UMF.kein ? "" : r("terminfinder", "Terminfinder")) + "</div>" +
+          (TURNIERE.kein ? "" : turnierTeil) + (LISTEN.kein ? "" : listenTeil) + (UMF.kein ? "" : umfTeil);
       } else
       box.innerHTML = '<p class="kt-unter">Angemeldet als <b>' + esc(a.ich) + "</b> " + tag(inh ? "inhaber" : "admin") + "</p>" +
         '<p class="kt-meldung" hidden></p>' +
         '<div class="kt-reiter" role="tablist">' + r("antraege", "Anträge", offen.length) + r("berichte", "Berichte", bOffen.length) +
-        r("turniere", "Turniere", tOffen) + r("listen", "Listen") +
-        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" + turnierTeil + listenTeil +
+        r("turniere", "Turniere", tOffen) + r("listen", "Listen") + r("terminfinder", "Terminfinder") +
+        r("nutzer", "Nutzer (" + aktiv.length + ")") + r("weg", "Ausgeblendet / ausgetreten (" + weg.length + ")") + "</div>" + turnierTeil + listenTeil + umfTeil +
         teil("antraege", offen.length ? offen.map(function (x) {
           return '<div class="kt-karte kt-antrag"><div><b>' + esc(x.name) + '</b><br><span class="kt-grau">Benutzername ' + esc(x.benutzer) + " · " + zeitText(x.seit) + "</span></div>" +
             '<div class="kt-gut">Name und Geburtsdatum stimmen mit der Mitgliederliste überein</div>' +
@@ -593,10 +595,11 @@
           '<h3 style="margin-top:1.8rem">Online</h3>' + (bOnline.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="kt-tab">' + bOnline.map(function (e) { return berichtZeile(e, false); }).join("") + "</table></div>"
             : '<p class="kt-klein links">Keine.</p>') +
           '<p class="kt-klein links">Hier stehen alle Berichte von diesem und letztem Jahr. „Zurückziehen“ macht einen Bericht wieder zum Entwurf; endgültig löschen geht bei Entwürfen.</p>') +
-        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen, <b>listen</b> = Listen (Sommerfest …) anlegen. Admins haben alle Rechte."
+        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen, <b>listen</b> = Listen (Sommerfest …) anlegen, <b>terminfinder</b> = Terminfinder-Umfragen anlegen und festlegen. Admins haben alle Rechte."
           : "Stufen und Rechte kann nur der Inhaber ändern.") + "</p>") +
         teil("weg", nutzerListe(weg) + '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p>');
       if (box.querySelector('[data-r="listen"].kt-reiter-inhalt')) listenVerwaltung(box, LISTEN, zeichnen, fertig);
+      if (box.querySelector('[data-r="terminfinder"].kt-reiter-inhalt')) umfragenVerwaltung(box, UMF, zeichnen, fertig);
       if (alteMeldung) { var m2 = box.querySelector(".kt-meldung"); m2.textContent = alteMeldung[0]; m2.className = alteMeldung[1]; m2.hidden = false; }
       [].forEach.call(box.querySelectorAll(".kt-reiter button"), function (b) {
         b.addEventListener("click", function () {
@@ -1035,6 +1038,299 @@
     });
   }
 
+  // ---------- Terminfinder (Umfragen: wann können alle?) ----------
+  var U_WT = { Mo: "Montag", Di: "Dienstag", Mi: "Mittwoch", Do: "Donnerstag", Fr: "Freitag", Sa: "Samstag", So: "Sonntag" };
+  var U_WTK = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+  function uTermin(o) {
+    if (o.datum) {
+      var p = o.datum.split("-").map(Number), d = new Date(p[0], p[1] - 1, p[2]), kurz = zweistellig(p[2]) + "." + zweistellig(p[1]) + ".";
+      return { wt: WT[d.getDay()], gross: zweistellig(p[2]), klein: MONATE[p[1] - 1].slice(0, 3), kopf: kurz, zeit: o.zeit || "",
+        lang: WT[d.getDay()] + " " + kurz + p[0] + (o.zeit ? ", " + o.zeit + " Uhr" : "") };
+    }
+    return { wt: o.wt, gross: o.wt, klein: "", kopf: U_WT[o.wt] || o.wt, zeit: o.zeit || "", lang: (U_WT[o.wt] || o.wt) + (o.zeit ? ", " + o.zeit + " Uhr" : ""), woche: true };
+  }
+  function uSortKey(o) { return (o.datum || "9999-" + U_WTK.indexOf(o.wt)) + " " + (o.zeit || ""); }
+
+  // Reiter "Umfrage" oben im Menü (nur für Eingeladene, farbig)
+  function umfrageReiter(a) {
+    var alt = document.querySelector(".nav-umfrage");
+    if (alt) alt.remove();
+    var nav = document.querySelector(".kopf nav");
+    if (!nav || !a || !a.umfragen || !a.umfragen.length) return;
+    var offen = a.umfragen.filter(function (u) { return u.offen; }).length;
+    var link = el('<a class="nav-umfrage" href="' + PFAD + "umfrage.html" + (a.umfragen.length === 1 ? "?id=" + encodeURIComponent(a.umfragen[0].id) : "") + '">Umfrage' +
+      (offen ? ' <em title="noch nicht abgestimmt">' + offen + "</em>" : "") + "</a>");
+    if (/umfrage\.html$/.test(location.pathname)) link.setAttribute("aria-current", "page");
+    nav.appendChild(link);
+  }
+
+  function seiteUmfrage(box) {
+    if (!token()) return bitteAnmelden(box, "Umfragen sind nur für angemeldete Mitglieder.");
+    var id = new URLSearchParams(location.search).get("id");
+    var h1 = document.querySelector("main h1");
+    box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
+    if (!id) {
+      return api("u_laden", {}).then(function (r) {
+        if (!r.ok) return bitteAnmelden(box, r.fehler);
+        var mein = r.umfragen.filter(function (u) { return u.eingeladen && u.aktuell; });
+        if (mein.length === 1 && !r.verwalter) return location.replace("?id=" + encodeURIComponent(mein[0].id));
+        function karte(u) {
+          var st = u.fest ? '<span class="uf-st fest">Termin: ' + esc(uTermin(u.fest).lang) + "</span>"
+            : !u.eingeladen ? '<span class="uf-st">nicht eingeladen (Verwaltung)</span>'
+            : u.abgestimmt ? '<span class="uf-st ok">abgestimmt</span>' : '<span class="uf-st offen">noch nicht abgestimmt</span>';
+          return '<a class="kt-karte ls-karte" href="?id=' + encodeURIComponent(u.id) + '"><b>' + esc(u.titel) + "</b>" + st +
+            '<span class="kt-grau">' + u.antworten + " Antworten" + (u.bis && !u.fest ? " · bis " + datumDe(u.bis) : "") + "</span></a>";
+        }
+        var akt = r.umfragen.filter(function (u) { return u.aktuell; }), alt = r.umfragen.filter(function (u) { return !u.aktuell; });
+        box.innerHTML = (akt.length ? '<div class="kt-nutzer">' + akt.map(karte).join("") + "</div>" : '<p class="kt-klein links">Gerade gibt es keine Umfrage für dich.</p>') +
+          (alt.length ? '<h3 style="margin-top:1.6rem">Ältere</h3><div class="kt-nutzer">' + alt.map(karte).join("") + "</div>" : "") +
+          (r.verwalter ? '<p style="margin-top:1.2rem"><a class="kt-btn leise" href="' + PFAD + 'verwaltung.html#terminfinder">Umfragen verwalten / neu anlegen</a></p>' : "");
+      });
+    }
+    var R = null, MEIN = {}, KOMM = "";
+    function laden() {
+      return api("u_laden", { id: id }).then(function (r) {
+        if (!r.ok) return bitteAnmelden(box, r.fehler);
+        R = r;
+        var ich = r.zeilen.filter(function (z) { return z.ich; })[0];
+        MEIN = ich && ich.antworten ? JSON.parse(JSON.stringify(ich.antworten)) : {};
+        KOMM = ich ? ich.kommentar : "";
+        zeichnen();
+      });
+    }
+    function zeichnen() {
+      var U = R.umfrage, Z = R.zeilen, O = U.optionen, darf = R.darfAbstimmen, n = Z.length;
+      if (h1) h1.textContent = U.titel;
+      function antwort(z, oid) { return z.ich ? MEIN[oid] : (z.antworten || {})[oid]; }
+      var zahl = O.map(function (o) {
+        var j = 0, v = 0;
+        Z.forEach(function (z) { var a = antwort(z, o.id); if (a === "j") j++; if (a === "v") v++; });
+        return { j: j, v: v };
+      });
+      var best = -1;
+      zahl.forEach(function (c, i) { if (c.j > 0 && (best < 0 || c.j > zahl[best].j || (c.j === zahl[best].j && c.v > zahl[best].v))) best = i; });
+      if (U.fest) best = O.map(function (o) { return o.id; }).indexOf(U.fest);
+      function kl(i) { return i === best ? " uf-best" : ""; }
+      function wahl(oid, gross) {
+        return '<span class="uf-wahl' + (gross ? " gross" : "") + '">' + ["j", "v", "x"].map(function (w) {
+          return '<button type="button" data-uo="' + esc(oid) + '" data-uw="' + w + '" class="' + (MEIN[oid] === w ? "an " + w : "") + '" aria-label="' +
+            { j: "kann", v: "vielleicht", x: "kann nicht" }[w] + '">' + { j: "✓", v: "?", x: "✗" }[w] + "</button>";
+        }).join("") + "</span>";
+      }
+      var meta = '<p class="uf-meta"><span class="kt-tag mitglied">' + (U.teilnehmer === "alle" ? "alle Mitglieder" : n + " eingeladen") + "</span> " +
+        (U.von_wer ? "von " + esc(U.von_wer) : "") + (U.bis && !U.fest ? " · abstimmen bis " + datumDe(U.bis) : "") +
+        " · " + Z.filter(function (z) { return z.antworten; }).length + " von " + n + " haben abgestimmt</p>";
+      var html = '<p class="kt-meldung" hidden></p>' + meta + (U.text ? '<div class="uf-text">' + textHtml(U.text) + "</div>" : "");
+      if (U.fest) html += '<div class="uf-fest">Der Termin steht fest: <b>' + esc(uTermin(O[best]).lang) + "</b></div>";
+      else if (U.abgelaufen) html += '<p class="kt-hinweis">Die Abstimmung ist beendet – der Termin wird bald festgelegt.</p>';
+      else if (!R.eingeladen) html += '<p class="kt-hinweis">Du bist nicht eingeladen und siehst die Umfrage nur als Verwaltung.</p>';
+      // PC: Tabelle
+      html += '<div class="kt-karte uf-pc"><div class="uf-scroll"><table class="uf-tab"><tr><th class="uf-name">Name</th>' + O.map(function (o, i) {
+        var t = uTermin(o);
+        return '<th class="' + kl(i) + '"><span class="uf-wt">' + esc(t.woche ? "jeden" : t.wt) + '</span><span class="uf-dt">' + esc(t.kopf) + '</span><span class="uf-uz">' + esc(t.zeit || "") + "</span></th>";
+      }).join("") + '<th class="uf-name">Kommentar</th></tr>' + Z.map(function (z) {
+        if (z.ich && darf) {
+          return '<tr class="uf-ich"><td class="uf-name">' + esc(z.name) + " (du)</td>" + O.map(function (o, i) { return '<td class="' + kl(i) + '">' + wahl(o.id) + "</td>"; }).join("") +
+            '<td class="uf-name"><input class="uf-komm" data-uk maxlength="200" placeholder="Kommentar" value="' + esc(KOMM) + '"></td></tr>';
+        }
+        return "<tr" + (z.ich ? ' class="uf-ich"' : "") + '><td class="uf-name">' + esc(z.name) + (z.ich ? " (du)" : "") +
+          (!z.antworten ? ' <span class="kt-grau">– noch offen</span>' : "") + "</td>" + O.map(function (o, i) {
+          var a = antwort(z, o.id);
+          return '<td class="uf-' + (a || "leer") + kl(i) + '">' + ({ j: "✓", v: "?", x: "✗" }[a] || "·") + "</td>";
+        }).join("") + '<td class="uf-name uf-k">' + esc(z.ich ? KOMM : z.kommentar) + "</td></tr>";
+      }).join("") + '<tr class="uf-summe"><td class="uf-name">können</td>' + zahl.map(function (c, i) {
+        return '<td class="' + kl(i) + '">' + c.j + (c.v ? ' <span class="uf-vl">+' + c.v + "?</span>" : "") + "</td>";
+      }).join("") + "<td></td></tr></table></div></div>";
+      // Handy: Karten
+      html += '<div class="kt-karte uf-handy">' + O.map(function (o, i) {
+        var t = uTermin(o), c = zahl[i];
+        var namen = function (w) { return Z.filter(function (z) { return antwort(z, o.id) === w; }).map(function (z) { return z.name.split(" ")[0]; }).join(", "); };
+        var nj = namen("j"), nv = namen("v"), nx = namen("x");
+        return '<div class="uf-opt' + kl(i) + '"><div class="uf-datum"><div class="uf-wt">' + esc(t.woche ? "jeden" : t.wt) + '</div><div class="uf-gross">' + esc(t.gross) +
+          '</div><div class="uf-uz">' + esc((t.klein ? t.klein + " · " : "") + (t.zeit || "")) + "</div></div><div>" +
+          "<b>" + c.j + " von " + n + "</b> können" + (c.v ? ' <span class="uf-vl">+' + c.v + " vielleicht</span>" : "") +
+          (i === best ? ' <span class="uf-bestwort">' + (U.fest ? "festgelegt" : "bester Termin") + "</span>" : "") +
+          '<div class="uf-balken"><i style="width:' + (n ? c.j / n * 100 : 0) + '%" class="j"></i><i style="width:' + (n ? c.v / n * 100 : 0) + '%" class="v"></i></div>' +
+          '<div class="uf-namen">' + (nj ? "✓ " + esc(nj) : "") + (nv ? " · ? " + esc(nv) : "") + (nx ? " · ✗ " + esc(nx) : "") + "</div></div>" +
+          (darf && R.eingeladen ? '<div class="uf-knoepfe">' + wahl(o.id, true) + "</div>" : "") + "</div>";
+      }).join("") + (darf ? '<div class="uf-handy-komm"><input class="uf-komm" data-uk maxlength="200" placeholder="Kommentar (z. B. kann erst ab 20 Uhr)" value="' + esc(KOMM) + '"></div>' : "") +
+        (Z.some(function (z) { return z.kommentar && !z.ich; }) ? '<div class="uf-namen" style="margin-top:.8rem">' + Z.filter(function (z) { return z.kommentar && !z.ich; }).map(function (z) {
+          return "<b>" + esc(z.name.split(" ")[0]) + ":</b> " + esc(z.kommentar); }).join("<br>") + "</div>" : "") + "</div>";
+      if (darf) html += '<div class="kt-zeile"><button type="button" class="kt-btn gruen" data-us>Speichern</button><span class="kt-grau">Nochmal tippen nimmt die Auswahl zurück. Ändern geht bis zum Festlegen.</span></div>';
+      if (R.verwalter) {
+        html += '<div class="kt-karte uf-verw"><b>Verwaltung</b><div class="kt-zeile">' + (U.fest
+          ? '<button type="button" class="kt-btn leise" data-uf="">Wieder öffnen</button>'
+          : '<select data-ufw>' + O.map(function (o, i) { return '<option value="' + esc(o.id) + '"' + (i === best ? " selected" : "") + ">" + esc(uTermin(o).lang) + " (" + zahl[i].j + (zahl[i].v ? " +" + zahl[i].v + "?" : "") + ")</option>"; }).join("") +
+            '</select><button type="button" class="kt-btn" data-uf="x">Diesen Termin nehmen</button>') +
+          '<a class="kt-btn leise" href="' + PFAD + 'verwaltung.html#terminfinder">Bearbeiten</a></div></div>';
+      }
+      box.innerHTML = html;
+      [].forEach.call(box.querySelectorAll("[data-uo]"), function (k) {
+        k.addEventListener("click", function () {
+          var oid = k.getAttribute("data-uo"), w = k.getAttribute("data-uw");
+          if (MEIN[oid] === w) delete MEIN[oid]; else MEIN[oid] = w;
+          var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
+        });
+      });
+      [].forEach.call(box.querySelectorAll("[data-uk]"), function (f) {
+        f.addEventListener("input", function () {
+          KOMM = f.value;
+          [].forEach.call(box.querySelectorAll("[data-uk]"), function (g) { if (g !== f) g.value = KOMM; });
+        });
+      });
+      var s = box.querySelector("[data-us]");
+      if (s) s.addEventListener("click", function () {
+        s.disabled = true;
+        api("u_abstimmen", { id: id, antworten: MEIN, kommentar: KOMM }).then(function (a) {
+          s.disabled = false;
+          if (!a.ok) return meldung(box, a.fehler, "schlecht");
+          ich(true).then(umfrageReiter);
+          laden().then(function () { meldung(box, a.meldung, "gut"); });
+        });
+      });
+      [].forEach.call(box.querySelectorAll("[data-uf]"), function (k) {
+        k.addEventListener("click", function () {
+          var opt = k.getAttribute("data-uf") ? box.querySelector("[data-ufw]").value : "";
+          if (opt && !confirm("„" + uTermin(O.filter(function (o) { return o.id === opt; })[0]).lang + "“ festlegen? Danach kann niemand mehr abstimmen.")) return;
+          k.disabled = true;
+          api("u_admin_festlegen", { id: id, option: opt }).then(function (a) {
+            if (!a.ok) { k.disabled = false; return meldung(box, a.fehler, "schlecht"); }
+            laden().then(function () { meldung(box, a.meldung, "gut"); });
+          });
+        });
+      });
+    }
+    laden();
+  }
+
+  // Verwaltung → Reiter "Terminfinder"
+  function umfragenVerwaltung(box, UMF, neuZeichnen, fertig) {
+    var S = umfragenVerwaltung.S || (umfragenVerwaltung.S = { edit: null, art: "datum" });
+    var teil = box.querySelector('[data-r="terminfinder"].kt-reiter-inhalt');
+    if (!teil) return;
+    var nutzer = (UMF && UMF.nutzer) || [], liste = (UMF && UMF.umfragen) || [];
+    var html = UMF && UMF.alt ? '<p class="kt-warn">Das Apps Script kennt den Terminfinder noch nicht: neue Version hochladen (Alles aktualisieren macht das).</p>' : "";
+    if (!S.edit) {
+      html += liste.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="ls-tab"><tr><th>Umfrage</th><th>Termine</th><th>Eingeladen</th><th>Antworten</th><th>Stand</th><th></th></tr>' + liste.map(function (u) {
+        var fest = u.fest ? u.optionen.filter(function (o) { return o.id === u.fest; })[0] : null;
+        return "<tr><td><b>" + esc(u.titel) + "</b></td><td>" + u.optionen.length + "</td><td>" + (u.eingeladen < 0 ? "alle" : u.eingeladen) + "</td><td>" + u.antworten + "</td>" +
+          "<td>" + (fest ? '<span class="ls-status sichtbar">fest: ' + esc(uTermin(fest).lang) + "</span>" : u.abgelaufen ? '<span class="ls-status beendet">Frist vorbei</span>' : '<span class="ls-status geplant">läuft</span>') + "</td>" +
+          '<td class="kt-akt"><button type="button" class="kt-mini" data-ubearb="' + esc(u.id) + '">Bearbeiten</button>' +
+          '<a class="kt-mini" href="' + PFAD + "umfrage.html?id=" + encodeURIComponent(u.id) + '">Ansehen</a></td></tr>';
+      }).join("") + "</table></div>" : '<p class="kt-klein links">Noch keine Umfragen.</p>';
+      html += '<p><button type="button" class="kt-btn gruen" data-u="neu">Neue Umfrage</button></p>' +
+        '<p class="kt-klein links">Nur die Eingeladenen sehen die Umfrage – oben im Menü erscheint für sie der Reiter „Umfrage“. Es gibt keinen Link zum Weitergeben; ' +
+        "wer noch kein Konto hat, muss sich erst registrieren und kann dann dazugenommen werden.</p>";
+      teil.innerHTML = html;
+      var nb = teil.querySelector('[data-u="neu"]');
+      nb.addEventListener("click", function () { S.edit = { titel: "", text: "", bis: "", optionen: [], teilnehmer: [] }; neuZeichnen(); });
+      [].forEach.call(teil.querySelectorAll("[data-ubearb]"), function (k) {
+        k.addEventListener("click", function () {
+          var u = liste.filter(function (x) { return x.id === k.getAttribute("data-ubearb"); })[0];
+          S.edit = JSON.parse(JSON.stringify({ id: u.id, titel: u.titel, text: u.text, bis: u.bis, optionen: u.optionen, teilnehmer: u.teilnehmer, fest: u.fest }));
+          neuZeichnen();
+        });
+      });
+      return;
+    }
+    var E = S.edit, alle = E.teilnehmer === "alle", gew = alle ? [] : E.teilnehmer;
+    E.optionen.sort(function (a, b) { return uSortKey(a).localeCompare(uSortKey(b)); });
+    html += '<form class="kt-karte kt-form uf-editor" novalidate><b>' + (E.id ? "Umfrage bearbeiten" : "Neue Umfrage") + "</b>" +
+      feld("utitel", "Titel", "text", 'value="' + esc(E.titel) + '" placeholder="z. B. Nächste Vorstandssitzung"') +
+      '<div class="kt-feld"><label for="kt-utext">Text (optional)</label><textarea id="kt-utext" name="utext" style="min-height:60px">' + esc(E.text || "") + "</textarea></div>" +
+      '<h3 style="margin-top:1rem">Termine zur Auswahl</h3><div class="uf-chips">' + (E.optionen.length ? E.optionen.map(function (o, i) {
+        return '<span class="uf-chip">' + esc(uTermin(o).lang) + ' <button type="button" data-uweg="' + i + '" aria-label="entfernen">×</button></span>';
+      }).join("") : '<span class="kt-grau">Noch keine – unten hinzufügen.</span>') + "</div>" +
+      '<div class="uf-neu"><select data-uart><option value="datum"' + (S.art === "datum" ? " selected" : "") + '>mit Datum</option><option value="wt"' + (S.art === "wt" ? " selected" : "") + ">nur Wochentag</option></select>" +
+      (S.art === "datum" ? '<input type="date" data-udatum>' : '<span class="uf-wts">' + U_WTK.map(function (w) { return '<label><input type="checkbox" data-uwt value="' + w + '"> ' + w + "</label>"; }).join("") + "</span>") +
+      '<input data-uzeit placeholder="Uhrzeit(en), z. B. 19:00 oder 18, 19, 20" style="min-width:15rem"><button type="button" class="kt-mini" data-u="plus">+ hinzufügen</button></div>' +
+      '<p class="kt-klein links">Mehrere Uhrzeiten mit Komma ergeben mehrere Termine (Montag 18, 19, 20 Uhr = 3 Termine). Ohne Uhrzeit geht auch.</p>' +
+      '<h3 style="margin-top:1rem">Wer stimmt ab?</h3>' +
+      '<label class="kt-check"><input type="radio" name="uwer" value="alle"' + (alle ? " checked" : "") + "> <span>Alle angemeldeten Mitglieder (" + nutzer.length + ")</span></label>" +
+      '<label class="kt-check"><input type="radio" name="uwer" value="wahl"' + (alle ? "" : " checked") + "> <span>Nur ausgewählte Personen" + (alle ? "" : " (" + gew.length + " gewählt)") + "</span></label>" +
+      (alle ? "" : '<div class="uf-personen"><div class="kt-zeile" style="margin:0 0 .5rem"><input data-ufilter placeholder="Name suchen …"><button type="button" class="kt-mini" data-u="keine">keine</button></div><div class="uf-pliste">' +
+        nutzer.map(function (x) { return '<label data-pname="' + esc(x.name.toLowerCase()) + '"><input type="checkbox" data-uperson value="' + esc(x.benutzer) + '"' + (gew.indexOf(x.benutzer) >= 0 ? " checked" : "") + "> " + esc(x.name) + "</label>"; }).join("") +
+        "</div></div>") +
+      '<div class="ls-editor-kopf" style="margin-top:.8rem">' + feld("ubis", "Abstimmen bis (optional)", "date", 'value="' + esc(E.bis || "") + '"') + "</div>" +
+      '<p class="kt-fehler" hidden></p><div class="kt-zeile"><button type="submit" class="kt-btn gruen">Speichern</button><button type="button" class="kt-btn leise" data-u="abbrechen">Abbrechen</button>' +
+      (E.id ? '<button type="button" class="kt-btn rot" data-u="loeschen">Umfrage löschen</button>' : "") + "</div></form>";
+    teil.innerHTML = html;
+    var form = teil.querySelector(".uf-editor");
+    function lesen() {
+      E.titel = form.elements.utitel.value.trim(); E.text = form.elements.utext.value; E.bis = form.elements.ubis.value;
+      var wer = form.querySelector("[name=uwer]:checked").value;
+      if (wer === "alle") E.teilnehmer = "alle";
+      else {
+        var an = form.querySelectorAll("[data-uperson]");
+        E.teilnehmer = an.length ? [].filter.call(an, function (c) { return c.checked; }).map(function (c) { return c.value; }) : (E.teilnehmer === "alle" ? [] : E.teilnehmer);
+      }
+    }
+    function plus() {
+      lesen();
+      var zeiten = form.querySelector("[data-uzeit]").value.split(/[,;\s]+/).map(function (t) {
+        t = t.trim().replace(/\s*uhr$/i, "").replace(".", ":");
+        if (!t) return null;
+        var m = t.match(/^(\d{1,2})(?::(\d{2}))?$/);
+        return m && +m[1] < 24 ? zweistellig(+m[1]) + ":" + (m[2] || "00") : "?";
+      }).filter(function (t) { return t !== null; });
+      if (zeiten.indexOf("?") >= 0) return fehler(form, "Uhrzeit bitte wie 19:00 oder 19 eingeben.");
+      if (!zeiten.length) zeiten = [""];
+      var basis = [];
+      if (S.art === "datum") {
+        var d = form.querySelector("[data-udatum]").value;
+        if (!d) return fehler(form, "Bitte ein Datum wählen.");
+        basis.push({ datum: d });
+      } else {
+        basis = [].filter.call(form.querySelectorAll("[data-uwt]"), function (c) { return c.checked; }).map(function (c) { return { wt: c.value }; });
+        if (!basis.length) return fehler(form, "Bitte mindestens einen Wochentag anhaken.");
+      }
+      basis.forEach(function (b) {
+        zeiten.forEach(function (z) {
+          var o = { datum: b.datum || "", wt: b.wt || "", zeit: z };
+          if (!E.optionen.some(function (x) { return (x.datum || "") === o.datum && (x.wt || "") === o.wt && (x.zeit || "") === o.zeit; })) E.optionen.push(o);
+        });
+      });
+      neuZeichnen();
+    }
+    form.querySelector('[data-u="plus"]').addEventListener("click", plus);
+    form.querySelector("[data-uzeit]").addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); plus(); } });
+    form.querySelector("[data-uart]").addEventListener("change", function (ev) { lesen(); S.art = ev.target.value; neuZeichnen(); });
+    [].forEach.call(form.querySelectorAll("[data-uweg]"), function (k) {
+      k.addEventListener("click", function () { lesen(); E.optionen.splice(+k.getAttribute("data-uweg"), 1); neuZeichnen(); });
+    });
+    [].forEach.call(form.querySelectorAll("[name=uwer]"), function (r) {
+      r.addEventListener("change", function () { lesen(); if (r.value === "wahl" && E.teilnehmer === "alle") E.teilnehmer = []; neuZeichnen(); });
+    });
+    [].forEach.call(form.querySelectorAll("[data-uperson]"), function (c) {
+      c.addEventListener("change", function () {
+        var n = form.querySelectorAll("[data-uperson]:checked").length, s = form.querySelector("[name=uwer][value=wahl]").parentNode.querySelector("span");
+        s.textContent = "Nur ausgewählte Personen (" + n + " gewählt)";
+      });
+    });
+    var fi = form.querySelector("[data-ufilter]");
+    if (fi) fi.addEventListener("input", function () {
+      var q = fi.value.trim().toLowerCase();
+      [].forEach.call(form.querySelectorAll("[data-pname]"), function (l) { l.hidden = q && l.getAttribute("data-pname").indexOf(q) < 0; });
+    });
+    var kb = form.querySelector('[data-u="keine"]');
+    if (kb) kb.addEventListener("click", function () { [].forEach.call(form.querySelectorAll("[data-uperson]"), function (c) { c.checked = false; }); lesen(); neuZeichnen(); });
+    form.querySelector('[data-u="abbrechen"]').addEventListener("click", function () { S.edit = null; neuZeichnen(); });
+    var lw = form.querySelector('[data-u="loeschen"]');
+    if (lw) lw.addEventListener("click", function () {
+      if (!confirm("„" + E.titel + "“ mit allen Antworten endgültig löschen?")) return;
+      api("u_admin_loeschen", { id: E.id }).then(function (r) { if (r.ok) S.edit = null; fertig(r); });
+    });
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      lesen();
+      if (!E.titel) return fehler(form, "Titel fehlt.");
+      if (!E.optionen.length) return fehler(form, "Bitte mindestens einen Termin hinzufügen.");
+      if (E.teilnehmer !== "alle" && !E.teilnehmer.length) return fehler(form, "Bitte Personen anhaken (oder „Alle“).");
+      laedt(form, true);
+      api("u_admin_speichern", { umfrage: E }).then(function (r) { laedt(form, false); if (!r.ok) return fehler(form, r.fehler); S.edit = null; fertig(r); });
+    });
+  }
+
   // ---------- Start ----------
   ich().then(function (a) {
     knopfZeigen(a);
@@ -1044,10 +1340,12 @@
       if (art === "profil") seiteProfil(seite);
       if (art === "verwaltung") seiteVerwaltung(seite);
       if (art === "listen") seiteListen(seite);
+      if (art === "umfrage") seiteUmfrage(seite);
     }
     spielerseite(a);
     startseite(a);
     listenHinweis(a);
+    umfrageReiter(a);
     // Andere Skripte (z. B. "Ich will hin") können die Anmeldung nutzen
     document.dispatchEvent(new CustomEvent("afk-konto", { detail: a }));
   });
