@@ -737,9 +737,10 @@
     if (!id) {
       return api("l_laden", {}).then(function (r) {
         if (!r.ok) return bitteAnmelden(box, r.fehler);
-        box.innerHTML = r.listen.length ? '<div class="kt-nutzer">' + r.listen.map(function (l) {
+        box.innerHTML = (r.listen.length ? '<div class="kt-nutzer">' + r.listen.map(function (l) {
           return '<a class="kt-karte ls-karte" href="?id=' + encodeURIComponent(l.id) + '"><b>' + esc(l.titel) + '</b><span class="kt-grau">' + esc(lStatusText(l)) + "</span></a>";
-        }).join("") + "</div>" : '<p class="kt-klein links">Gerade gibt es keine offenen Listen.</p>';
+        }).join("") + "</div>" : '<p class="kt-klein links">Gerade gibt es keine offenen Listen.</p>') +
+          (r.verwalter ? '<p style="margin-top:1.2rem"><a class="kt-btn leise" href="' + PFAD + 'verwaltung.html#listen">Listen verwalten / neu anlegen</a></p>' : "");
       });
     }
     function laden() { return api("l_laden", { id: id }).then(function (r) { if (!r.ok) return meldung(box, r.fehler, "schlecht"); zeichnen(r); }); }
@@ -1050,6 +1051,23 @@
     return { wt: o.wt, gross: o.wt, klein: "", kopf: U_WT[o.wt] || o.wt, zeit: o.zeit || "", lang: (U_WT[o.wt] || o.wt) + (o.zeit ? ", " + o.zeit + " Uhr" : ""), woche: true };
   }
   function uSortKey(o) { return (o.datum || "9999-" + U_WTK.indexOf(o.wt)) + " " + (o.zeit || ""); }
+  function uTagKey(o) { return o.datum || "w" + U_WTK.indexOf(o.wt); }
+  function uTagText(o) {
+    if (!o.datum) return U_WT[o.wt] || o.wt;
+    var p = o.datum.split("-").map(Number);
+    return WT[new Date(p[0], p[1] - 1, p[2]).getDay()] + " " + zweistellig(p[2]) + "." + zweistellig(p[1]) + ".";
+  }
+  function uKW(iso) {     // ISO-Kalenderwoche
+    var p = iso.split("-").map(Number), d = new Date(Date.UTC(p[0], p[1] - 1, p[2])), t = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - t);
+    return Math.ceil(((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5 + 1) / 7);
+  }
+  // Viele Termine (Tage × Uhrzeiten) -> Raster statt langer Tabelle
+  function uIstRaster(O) {
+    var tage = {}, zeiten = {};
+    O.forEach(function (o) { tage[uTagKey(o)] = 1; zeiten[o.zeit || ""] = 1; });
+    return O.length > 10 && Object.keys(tage).length >= 2;
+  }
 
   // Reiter "Umfrage" oben im Menü (nur für Eingeladene, farbig)
   function umfrageReiter(a) {
@@ -1077,7 +1095,8 @@
         function karte(u) {
           var st = u.fest ? '<span class="uf-st fest">Termin: ' + esc(uTermin(u.fest).lang) + "</span>"
             : !u.eingeladen ? '<span class="uf-st">nicht eingeladen (Verwaltung)</span>'
-            : u.abgestimmt ? '<span class="uf-st ok">abgestimmt</span>' : '<span class="uf-st offen">noch nicht abgestimmt</span>';
+            : u.abgestimmt ? (u.neu ? '<span class="uf-st offen">' + u.neu + " neue Termine – bitte nachtragen</span>" : '<span class="uf-st ok">abgestimmt</span>')
+            : '<span class="uf-st offen">noch nicht abgestimmt</span>';
           return '<a class="kt-karte ls-karte" href="?id=' + encodeURIComponent(u.id) + '"><b>' + esc(u.titel) + "</b>" + st +
             '<span class="kt-grau">' + u.antworten + " Antworten" + (u.bis && !u.fest ? " · bis " + datumDe(u.bis) : "") + "</span></a>";
         }
@@ -1111,6 +1130,12 @@
       zahl.forEach(function (c, i) { if (c.j > 0 && (best < 0 || c.j > zahl[best].j || (c.j === zahl[best].j && c.v > zahl[best].v))) best = i; });
       if (U.fest) best = O.map(function (o) { return o.id; }).indexOf(U.fest);
       function kl(i) { return i === best ? " uf-best" : ""; }
+      var ichZ = Z.filter(function (z) { return z.ich; })[0];
+      var neuIds = {};
+      if (ichZ && ichZ.antworten && !U.fest) O.forEach(function (o) { if ((o.seit || 0) > (ichZ.zeit || 0) && !ichZ.antworten[o.id]) neuIds[o.id] = 1; });
+      var neuAnz = Object.keys(neuIds).length;
+      function neuMarke(o) { return neuIds[o.id] ? ' <span class="uf-neutag">neu</span>' : ""; }
+      var raster = uIstRaster(O);
       function wahl(oid, gross) {
         return '<span class="uf-wahl' + (gross ? " gross" : "") + '">' + ["j", "v", "x"].map(function (w) {
           return '<button type="button" data-uo="' + esc(oid) + '" data-uw="' + w + '" class="' + (MEIN[oid] === w ? "an " + w : "") + '" aria-label="' +
@@ -1124,10 +1149,12 @@
       if (U.fest) html += '<div class="uf-fest">Der Termin steht fest: <b>' + esc(uTermin(O[best]).lang) + "</b></div>";
       else if (U.abgelaufen) html += '<p class="kt-hinweis">Die Abstimmung ist beendet – der Termin wird bald festgelegt.</p>';
       else if (!R.eingeladen) html += '<p class="kt-hinweis">Du bist nicht eingeladen und siehst die Umfrage nur als Verwaltung.</p>';
+      if (neuAnz && darf) html += '<p class="uf-neuhinweis">' + (neuAnz === 1 ? "1 neuer Termin" : neuAnz + " neue Termine") + " seit deiner letzten Antwort – bitte nachtragen und speichern.</p>";
+      if (raster) html += rasterHtml();
       // PC: Tabelle
-      html += '<div class="kt-karte uf-pc"><div class="uf-scroll"><table class="uf-tab"><tr><th class="uf-name">Name</th>' + O.map(function (o, i) {
+      if (!raster) html += '<div class="kt-karte uf-pc"><div class="uf-scroll"><table class="uf-tab"><tr><th class="uf-name">Name</th>' + O.map(function (o, i) {
         var t = uTermin(o);
-        return '<th class="' + kl(i) + '"><span class="uf-wt">' + esc(t.woche ? "jeden" : t.wt) + '</span><span class="uf-dt">' + esc(t.kopf) + '</span><span class="uf-uz">' + esc(t.zeit || "") + "</span></th>";
+        return '<th class="' + kl(i) + '"><span class="uf-wt">' + esc(t.woche ? "jeden" : t.wt) + neuMarke(o) + '</span><span class="uf-dt">' + esc(t.kopf) + '</span><span class="uf-uz">' + esc(t.zeit || "") + "</span></th>";
       }).join("") + '<th class="uf-name">Kommentar</th></tr>' + Z.map(function (z) {
         if (z.ich && darf) {
           return '<tr class="uf-ich"><td class="uf-name">' + esc(z.name) + " (du)</td>" + O.map(function (o, i) { return '<td class="' + kl(i) + '">' + wahl(o.id) + "</td>"; }).join("") +
@@ -1142,25 +1169,75 @@
         return '<td class="' + kl(i) + '">' + c.j + (c.v ? ' <span class="uf-vl">+' + c.v + "?</span>" : "") + "</td>";
       }).join("") + "<td></td></tr></table></div></div>";
       // Handy: Karten
-      html += '<div class="kt-karte uf-handy">' + O.map(function (o, i) {
+      if (!raster) html += '<div class="kt-karte uf-handy">' + O.map(function (o, i) {
         var t = uTermin(o), c = zahl[i];
         var namen = function (w) { return Z.filter(function (z) { return antwort(z, o.id) === w; }).map(function (z) { return z.name.split(" ")[0]; }).join(", "); };
         var nj = namen("j"), nv = namen("v"), nx = namen("x");
         return '<div class="uf-opt' + kl(i) + '"><div class="uf-datum"><div class="uf-wt">' + esc(t.woche ? "jeden" : t.wt) + '</div><div class="uf-gross">' + esc(t.gross) +
           '</div><div class="uf-uz">' + esc((t.klein ? t.klein + " · " : "") + (t.zeit || "")) + "</div></div><div>" +
           "<b>" + c.j + " von " + n + "</b> können" + (c.v ? ' <span class="uf-vl">+' + c.v + " vielleicht</span>" : "") +
-          (i === best ? ' <span class="uf-bestwort">' + (U.fest ? "festgelegt" : "bester Termin") + "</span>" : "") +
+          (i === best ? ' <span class="uf-bestwort">' + (U.fest ? "festgelegt" : "bester Termin") + "</span>" : "") + neuMarke(o) +
           '<div class="uf-balken"><i style="width:' + (n ? c.j / n * 100 : 0) + '%" class="j"></i><i style="width:' + (n ? c.v / n * 100 : 0) + '%" class="v"></i></div>' +
           '<div class="uf-namen">' + (nj ? "✓ " + esc(nj) : "") + (nv ? " · ? " + esc(nv) : "") + (nx ? " · ✗ " + esc(nx) : "") + "</div></div>" +
           (darf && R.eingeladen ? '<div class="uf-knoepfe">' + wahl(o.id, true) + "</div>" : "") + "</div>";
       }).join("") + (darf ? '<div class="uf-handy-komm"><input class="uf-komm" data-uk maxlength="200" placeholder="Kommentar (z. B. kann erst ab 20 Uhr)" value="' + esc(KOMM) + '"></div>' : "") +
         (Z.some(function (z) { return z.kommentar && !z.ich; }) ? '<div class="uf-namen" style="margin-top:.8rem">' + Z.filter(function (z) { return z.kommentar && !z.ich; }).map(function (z) {
           return "<b>" + esc(z.name.split(" ")[0]) + ":</b> " + esc(z.kommentar); }).join("<br>") + "</div>" : "") + "</div>";
+      function rasterHtml() {
+        var tage = [], zeiten = [], idx = {};
+        O.forEach(function (o, i) {
+          var k = uTagKey(o);
+          if (tage.indexOf(k) < 0) tage.push(k);
+          if (zeiten.indexOf(o.zeit || "") < 0) zeiten.push(o.zeit || "");
+          idx[k + "|" + (o.zeit || "")] = i;
+        });
+        zeiten.sort();
+        var tagOpt = {};
+        O.forEach(function (o) { (tagOpt[uTagKey(o)] = tagOpt[uTagKey(o)] || []).push(o); });
+        function namen(o, w) { return Z.filter(function (z) { return antwort(z, o.id) === w; }).map(function (z) { return z.name; }).join(", "); }
+        var kw = null, zeilen = "";
+        tage.forEach(function (k) {
+          var o0 = tagOpt[k][0];
+          if (o0.datum && uKW(o0.datum) !== kw) {
+            kw = uKW(o0.datum);
+            zeilen += '<tr class="uf-kw"><td colspan="' + (zeiten.length + 1) + '">KW ' + kw + "</td></tr>";
+          }
+          var alleJ = tagOpt[k].every(function (o) { return MEIN[o.id] === "j"; });
+          zeilen += "<tr><th class=\"uf-tag\">" + (darf ? '<button type="button" data-utag="' + esc(k) + '" title="' + (alleJ ? "ganzen Tag zurücknehmen" : "ganzer Tag: kann") + '">' + esc(uTagText(o0)) + "</button>" : esc(uTagText(o0))) + "</th>" +
+            zeiten.map(function (zt) {
+              var i = idx[k + "|" + zt];
+              if (i === undefined) return '<td class="uf-rleer"></td>';
+              var o = O[i], c = zahl[i], st = MEIN[o.id] || "", a = n ? c.j / n : 0;
+              var tip = uTermin(o).lang + "\n✓ " + (namen(o, "j") || "–") + (c.v ? "\n? " + namen(o, "v") : "");
+              var inhalt = (c.j || "") + (c.v ? '<small>+' + c.v + "</small>" : "");
+              var stil = c.j ? "background:rgba(46,125,79," + (0.12 + 0.75 * a).toFixed(2) + ");" + (a > 0.55 ? "color:#fff;" : "") : "";
+              var klasse = "uf-rz" + (st ? " mein-" + st : "") + (i === best ? " uf-rbest" : "") + (neuIds[o.id] ? " uf-rneu" : "");
+              return '<td><' + (darf ? 'button type="button" data-uz="' + esc(o.id) + '"' : "span") + ' class="' + klasse + '" style="' + stil + '" title="' + esc(tip) + '">' + inhalt + "</" + (darf ? "button" : "span") + "></td>";
+            }).join("") + "</tr>";
+        });
+        var top = O.map(function (o, i) { return { o: o, c: zahl[i], i: i }; }).filter(function (x) { return x.c.j || x.c.v; })
+          .sort(function (x, y) { return y.c.j - x.c.j || y.c.v - x.c.v || x.i - y.i; }).slice(0, 3);
+        return '<div class="kt-karte uf-rasterkarte">' +
+          (darf ? '<p class="kt-klein links" style="margin-top:0">Tippe die Zeiten an, an denen du kannst: 1× = <b class="uf-ja">✓ kann</b>, 2× = <b class="uf-vl">? vielleicht</b>, 3× = zurück. ' +
+            "Tippen auf den Tag = ganzer Tag ✓. Die Zahl zeigt, wie viele können (je dunkler, desto mehr).</p>" : "") +
+          '<div class="uf-scroll"><table class="uf-raster"><tr><th></th>' + zeiten.map(function (z) { return "<th>" + esc(z || "ganztags") + "</th>"; }).join("") + "</tr>" + zeilen + "</table></div>" +
+          (top.length ? '<div class="uf-top"><b>Am besten:</b>' + top.map(function (x) {
+            return "<div>" + esc(uTermin(x.o).lang) + " – <b>" + x.c.j + " von " + n + "</b>" + (x.c.v ? ' <span class="uf-vl">+' + x.c.v + "?</span>" : "") +
+              '<span class="uf-namen"> · ✓ ' + esc(namen(x.o, "j") || "–") + "</span></div>";
+          }).join("") + "</div>" : "") +
+          (darf ? '<div class="uf-handy-komm"><input class="uf-komm" data-uk maxlength="200" placeholder="Kommentar (z. B. kann erst ab 20 Uhr)" value="' + esc(KOMM) + '"></div>' : "") +
+          (Z.some(function (z) { return z.kommentar && !z.ich; }) ? '<div class="uf-namen" style="margin-top:.8rem">' + Z.filter(function (z) { return z.kommentar && !z.ich; }).map(function (z) {
+            return "<b>" + esc(z.name) + ":</b> " + esc(z.kommentar); }).join("<br>") + "</div>" : "") +
+          '<div class="uf-namen" style="margin-top:.6rem">Abgestimmt: ' + (Z.filter(function (z) { return z.antworten; }).map(function (z) { return esc(z.name); }).join(", ") || "noch niemand") +
+          (Z.some(function (z) { return !z.antworten; }) ? " · offen: " + Z.filter(function (z) { return !z.antworten; }).map(function (z) { return esc(z.name); }).join(", ") : "") + "</div></div>";
+      }
       if (darf) html += '<div class="kt-zeile"><button type="button" class="kt-btn gruen" data-us>Speichern</button><span class="kt-grau">Nochmal tippen nimmt die Auswahl zurück. Ändern geht bis zum Festlegen.</span></div>';
       if (R.verwalter) {
         html += '<div class="kt-karte uf-verw"><b>Verwaltung</b><div class="kt-zeile">' + (U.fest
           ? '<button type="button" class="kt-btn leise" data-uf="">Wieder öffnen</button>'
-          : '<select data-ufw>' + O.map(function (o, i) { return '<option value="' + esc(o.id) + '"' + (i === best ? " selected" : "") + ">" + esc(uTermin(o).lang) + " (" + zahl[i].j + (zahl[i].v ? " +" + zahl[i].v + "?" : "") + ")</option>"; }).join("") +
+          : '<select data-ufw>' + O.map(function (o, i) { return { o: o, i: i }; }).sort(function (x, y) { return raster ? (zahl[y.i].j - zahl[x.i].j || zahl[y.i].v - zahl[x.i].v || x.i - y.i) : x.i - y.i; }).map(function (x) {
+              var o = x.o, i = x.i;
+              return '<option value="' + esc(o.id) + '"' + (i === best ? " selected" : "") + ">" + esc(uTermin(o).lang) + " (" + zahl[i].j + (zahl[i].v ? " +" + zahl[i].v + "?" : "") + ")</option>"; }).join("") +
             '</select><button type="button" class="kt-btn" data-uf="x">Diesen Termin nehmen</button>') +
           '<a class="kt-btn leise" href="' + PFAD + 'verwaltung.html#terminfinder">Bearbeiten</a></div></div>';
       }
@@ -1172,6 +1249,21 @@
           var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
         });
       });
+      [].forEach.call(box.querySelectorAll("[data-uz]"), function (k) {
+        k.addEventListener("click", function () {
+          var oid = k.getAttribute("data-uz"), w = MEIN[oid];
+          if (!w || w === "x") MEIN[oid] = "j"; else if (w === "j") MEIN[oid] = "v"; else delete MEIN[oid];
+          var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
+        });
+      });
+      [].forEach.call(box.querySelectorAll("[data-utag]"), function (k) {
+        k.addEventListener("click", function () {
+          var tag = k.getAttribute("data-utag"), liste = O.filter(function (o) { return uTagKey(o) === tag; });
+          var alle = liste.every(function (o) { return MEIN[o.id] === "j"; });
+          liste.forEach(function (o) { if (alle) delete MEIN[o.id]; else MEIN[o.id] = "j"; });
+          var y = window.scrollY; zeichnen(); window.scrollTo(0, y);
+        });
+      });
       [].forEach.call(box.querySelectorAll("[data-uk]"), function (f) {
         f.addEventListener("input", function () {
           KOMM = f.value;
@@ -1180,6 +1272,7 @@
       });
       var s = box.querySelector("[data-us]");
       if (s) s.addEventListener("click", function () {
+        if (!Object.keys(MEIN).length && !confirm("Du hast nichts angekreuzt – das heißt: du kannst an keinem Termin. So speichern?")) return;
         s.disabled = true;
         api("u_abstimmen", { id: id, antworten: MEIN, kommentar: KOMM }).then(function (a) {
           s.disabled = false;
@@ -1235,16 +1328,38 @@
     }
     var E = S.edit, alle = E.teilnehmer === "alle", gew = alle ? [] : E.teilnehmer;
     E.optionen.sort(function (a, b) { return uSortKey(a).localeCompare(uSortKey(b)); });
+    function terminListe() {     // nach Woche und Tag gruppiert, × je Termin, "Tag löschen" je Tag
+      if (!E.optionen.length) return '<p class="kt-grau" style="margin:.3rem 0 .8rem">Noch keine – unten hinzufügen.</p>';
+      var out = "", kw = null, tag = null;
+      E.optionen.forEach(function (o, i) {
+        var k = uTagKey(o);
+        if (k !== tag) {
+          if (tag !== null) out += "</span></div>";
+          var w = o.datum ? uKW(o.datum) : "wt";
+          if (w !== kw) { out += '<div class="uf-kwkopf">' + (o.datum ? "KW " + w : "Wochentage") + "</div>"; kw = w; }
+          out += '<div class="uf-tagzeile"><span class="uf-tagname">' + esc(uTagText(o)) + '</span><button type="button" class="kt-mini rot" data-utagweg="' + esc(k) + '" title="ganzen Tag löschen">Tag ×</button><span class="uf-chips">';
+          tag = k;
+        }
+        out += '<span class="uf-chip">' + esc(o.zeit || "ohne Uhrzeit") + ' <button type="button" data-uweg="' + i + '" aria-label="entfernen">×</button></span>';
+      });
+      return '<div class="uf-terminliste">' + out + "</span></div></div>";
+    }
     html += '<form class="kt-karte kt-form uf-editor" novalidate><b>' + (E.id ? "Umfrage bearbeiten" : "Neue Umfrage") + "</b>" +
       feld("utitel", "Titel", "text", 'value="' + esc(E.titel) + '" placeholder="z. B. Nächste Vorstandssitzung"') +
       '<div class="kt-feld"><label for="kt-utext">Text (optional)</label><textarea id="kt-utext" name="utext" style="min-height:60px">' + esc(E.text || "") + "</textarea></div>" +
-      '<h3 style="margin-top:1rem">Termine zur Auswahl</h3><div class="uf-chips">' + (E.optionen.length ? E.optionen.map(function (o, i) {
-        return '<span class="uf-chip">' + esc(uTermin(o).lang) + ' <button type="button" data-uweg="' + i + '" aria-label="entfernen">×</button></span>';
-      }).join("") : '<span class="kt-grau">Noch keine – unten hinzufügen.</span>') + "</div>" +
-      '<div class="uf-neu"><select data-uart><option value="datum"' + (S.art === "datum" ? " selected" : "") + '>mit Datum</option><option value="wt"' + (S.art === "wt" ? " selected" : "") + ">nur Wochentag</option></select>" +
-      (S.art === "datum" ? '<input type="date" data-udatum>' : '<span class="uf-wts">' + U_WTK.map(function (w) { return '<label><input type="checkbox" data-uwt value="' + w + '"> ' + w + "</label>"; }).join("") + "</span>") +
-      '<input data-uzeit placeholder="Uhrzeit(en), z. B. 19:00 oder 18, 19, 20" style="min-width:15rem"><button type="button" class="kt-mini" data-u="plus">+ hinzufügen</button></div>' +
-      '<p class="kt-klein links">Mehrere Uhrzeiten mit Komma ergeben mehrere Termine (Montag 18, 19, 20 Uhr = 3 Termine). Ohne Uhrzeit geht auch.</p>' +
+      '<h3 style="margin-top:1rem">Termine zur Auswahl <span class="kt-grau" style="font-weight:400">(' + E.optionen.length + ")</span></h3>" + terminListe() +
+      '<div class="uf-neu"><select data-uart>' + [["datum", "ein Datum"], ["zeitraum", "Zeitraum (mehrere Tage)"], ["wt", "nur Wochentag (ohne Datum)"]].map(function (x) {
+        return '<option value="' + x[0] + '"' + (S.art === x[0] ? " selected" : "") + ">" + x[1] + "</option>"; }).join("") + "</select>" +
+      (S.art === "datum" ? '<input type="date" data-udatum>'
+        : S.art === "zeitraum" ? '<input type="date" data-uvon title="von"> bis <input type="date" data-ubis2 title="bis">' : "") +
+      (S.art !== "datum" ? '<span class="uf-wts">' + U_WTK.map(function (w, k) { return '<label><input type="checkbox" data-uwt value="' + w + '"' + (S.art === "zeitraum" && k < 5 ? " checked" : "") + "> " + w + "</label>"; }).join("") + "</span>" : "") +
+      "</div>" +
+      '<div class="uf-neu" style="margin-top:.5rem"><input data-uzeit placeholder="Uhrzeit(en), z. B. 19:00 oder 18, 19, 20" style="min-width:17rem">' +
+      '<span class="kt-grau">oder Reihe:</span> <input data-ur1 type="time" value="18:00"> bis <input data-ur2 type="time" value="20:30"> alle <select data-urt><option>15</option><option selected>30</option><option>60</option></select> Min ' +
+      '<button type="button" class="kt-mini" data-u="reihe">→ eintragen</button></div>' +
+      '<p style="margin:.6rem 0 .2rem"><button type="button" class="kt-btn" data-u="plus">+ Termine hinzufügen</button></p>' +
+      '<p class="kt-klein links">Jeder Tag × jede Uhrzeit wird ein Termin (Zeitraum 01.–31.03., Mo–Fr, 18–20:30 alle 30 Min = 132 Termine). Danach einzelne Termine (×) oder ganze Tage löschen. ' +
+      "Bei vielen Terminen stimmen alle in einem Raster ab (Tage × Uhrzeiten). Ohne Uhrzeit geht auch.</p>" +
       '<h3 style="margin-top:1rem">Wer stimmt ab?</h3>' +
       '<label class="kt-check"><input type="radio" name="uwer" value="alle"' + (alle ? " checked" : "") + "> <span>Alle angemeldeten Mitglieder (" + nutzer.length + ")</span></label>" +
       '<label class="kt-check"><input type="radio" name="uwer" value="wahl"' + (alle ? "" : " checked") + "> <span>Nur ausgewählte Personen" + (alle ? "" : " (" + gew.length + " gewählt)") + "</span></label>" +
@@ -1256,6 +1371,7 @@
       (E.id ? '<button type="button" class="kt-btn rot" data-u="loeschen">Umfrage löschen</button>' : "") + "</div></form>";
     teil.innerHTML = html;
     var form = teil.querySelector(".uf-editor");
+    function iso(d) { return d.getFullYear() + "-" + zweistellig(d.getMonth() + 1) + "-" + zweistellig(d.getDate()); }
     function lesen() {
       E.titel = form.elements.utitel.value.trim(); E.text = form.elements.utext.value; E.bis = form.elements.ubis.value;
       var wer = form.querySelector("[name=uwer]:checked").value;
@@ -1280,10 +1396,23 @@
         var d = form.querySelector("[data-udatum]").value;
         if (!d) return fehler(form, "Bitte ein Datum wählen.");
         basis.push({ datum: d });
+      } else if (S.art === "zeitraum") {
+        var von = form.querySelector("[data-uvon]").value, bis = form.querySelector("[data-ubis2]").value;
+        var wts = [].filter.call(form.querySelectorAll("[data-uwt]"), function (c) { return c.checked; }).map(function (c) { return c.value; });
+        if (!von || !bis || bis < von) return fehler(form, "Bitte Zeitraum von – bis wählen.");
+        if (!wts.length) return fehler(form, "Bitte Wochentage anhaken.");
+        var p = von.split("-").map(Number), t = new Date(p[0], p[1] - 1, p[2]), n = 0;
+        while (iso(t) <= bis && n++ < 400) {
+          if (wts.indexOf(U_WTK[(t.getDay() + 6) % 7]) >= 0) basis.push({ datum: iso(t) });
+          t.setDate(t.getDate() + 1);
+        }
+        if (!basis.length) return fehler(form, "In dem Zeitraum liegt keiner der Wochentage.");
       } else {
         basis = [].filter.call(form.querySelectorAll("[data-uwt]"), function (c) { return c.checked; }).map(function (c) { return { wt: c.value }; });
         if (!basis.length) return fehler(form, "Bitte mindestens einen Wochentag anhaken.");
       }
+      var vorher = E.optionen.length;
+      if (vorher + basis.length * zeiten.length > 200) return fehler(form, "Das wären " + (vorher + basis.length * zeiten.length) + " Termine – höchstens 200. Zeitraum oder Uhrzeiten verkleinern.");
       basis.forEach(function (b) {
         zeiten.forEach(function (z) {
           var o = { datum: b.datum || "", wt: b.wt || "", zeit: z };
@@ -1294,6 +1423,20 @@
     }
     form.querySelector('[data-u="plus"]').addEventListener("click", plus);
     form.querySelector("[data-uzeit]").addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); plus(); } });
+    form.querySelector('[data-u="reihe"]').addEventListener("click", function () {
+      var a = form.querySelector("[data-ur1]").value, b = form.querySelector("[data-ur2]").value, schritt = +form.querySelector("[data-urt]").value;
+      var m = function (t) { var x = String(t || "").split(":").map(Number); return x[0] * 60 + (x[1] || 0); };
+      if (!a || !b || m(b) < m(a)) return fehler(form, "Reihe: bitte von – bis eingeben.");
+      var liste = [];
+      for (var x = m(a); x <= m(b) && liste.length < 40; x += schritt) liste.push(zweistellig(Math.floor(x / 60)) + ":" + zweistellig(x % 60));
+      form.querySelector("[data-uzeit]").value = liste.join(", ");
+    });
+    [].forEach.call(form.querySelectorAll("[data-utagweg]"), function (k) {
+      k.addEventListener("click", function () {
+        lesen(); var tag = k.getAttribute("data-utagweg");
+        E.optionen = E.optionen.filter(function (o) { return uTagKey(o) !== tag; }); neuZeichnen();
+      });
+    });
     form.querySelector("[data-uart]").addEventListener("change", function (ev) { lesen(); S.art = ev.target.value; neuZeichnen(); });
     [].forEach.call(form.querySelectorAll("[data-uweg]"), function (k) {
       k.addEventListener("click", function () { lesen(); E.optionen.splice(+k.getAttribute("data-uweg"), 1); neuZeichnen(); });
