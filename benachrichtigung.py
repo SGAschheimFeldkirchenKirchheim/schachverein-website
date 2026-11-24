@@ -118,6 +118,46 @@ def ereignisse_bauen(alt, neu, site_url):
     return ev
 
 
+def bericht_slugs(r, slug_fn):
+    """Wer kommt in diesem Bericht vor? Profil-Links + Spieler aus den Partien (ohne den Autor)."""
+    body = r.get("body", "")
+    slugs = set(re.findall(r'spieler/([a-z0-9-]+)\.html', body))
+    for name in re.findall(r'\[(?:White|Black) (?:"|&quot;)([^"&]+)(?:"|&quot;)\]', body):
+        if "," in name:
+            nach, vor = [x.strip() for x in name.split(",", 1)]
+            slugs.add(slug_fn(f"{vor} {nach}"))
+    slugs.discard(r.get("autor_slug", ""))
+    return {s for s in slugs if s}
+
+
+def meine_json(termine, berichte, teams, site_url, slug_fn, tage=120):
+    """spieler/meine.json für "Meine nächsten Termine" / "Meine Berichte" im Profil (nur öffentliche Daten)."""
+    bis = datetime.date.today() + datetime.timedelta(days=tage)
+    kader = {}
+    for d in teams:
+        spalte = "Jugend" if str(d.get("kurz", "")).startswith("U") else d.get("kurz", "")
+        for k in d.get("kader") or []:
+            name = str(k.get("name", "")).strip()
+            if "," in name:
+                nach, vor = [x.strip() for x in name.split(",", 1)]
+                name = f"{vor} {nach}"
+            s = slug_fn(name) if name else ""
+            if s and spalte and spalte not in kader.setdefault(s, []):
+                kader[s].append(spalte)
+    erw = {}
+    for r in berichte:
+        for s in bericht_slugs(r, slug_fn):
+            erw.setdefault(s, []).append({"titel": re.sub(r"<[^>]+>", "", r.get("title", "")), "link": "berichte/" + r["filename"],
+                                          "datum": r["when"].isoformat() if hasattr(r.get("when"), "isoformat") and r["when"].year > 1 else ""})
+    for s in erw:
+        erw[s].sort(key=lambda x: x["datum"], reverse=True)
+        erw[s] = erw[s][:20]
+    return {"stand": datetime.date.today().isoformat(),
+            "termine": [{"datum": t["datum"].isoformat(), "zeit": t["zeit"], "spalte": t["spalte"], "text": t["text"]}
+                        for t in termine if t["datum"] <= bis],
+            "kader": kader, "berichte": erw}
+
+
 def stand_bauen(termine, ausfaelle, berichte, ausschreibungen, teams, site_url, slug_fn, seite_fn):
     """Aktuellen Stand aus den Build-Daten zusammenstellen."""
     st = {"stand": datetime.datetime.now().isoformat(timespec="minutes"), "termine": {}, "ausfall": [],
@@ -138,13 +178,7 @@ def stand_bauen(termine, ausfaelle, berichte, ausschreibungen, teams, site_url, 
             st["ergebnisse"][k] = {"mannschaft": d.get("kurz", ""), "ergebnis": f"{_zahl(wir)} : {_zahl(sie)}",
                                    "text": f"Runde {m.get('r')} {'gegen' if heim else 'bei'} {gegner}", "link": site_url + seite_fn(d)}
     for r in berichte:
-        body = r.get("body", "")
-        slugs = set(re.findall(r'spieler/([a-z0-9-]+)\.html', body))
-        for name in re.findall(r'\[(?:White|Black) (?:"|&quot;)([^"&]+)(?:"|&quot;)\]', body):
-            if "," in name:
-                nach, vor = [x.strip() for x in name.split(",", 1)]
-                slugs.add(slug_fn(f"{vor} {nach}"))
-        slugs.discard(r.get("autor_slug", ""))
+        slugs = bericht_slugs(r, slug_fn)
         st["berichte"][r["stem"]] = {"titel": re.sub(r"<[^>]+>", "", r.get("title", "")), "meta": re.sub(r"<[^>]+>", "", r.get("meta", "")),
                                     "link": site_url + "berichte/" + r["filename"], "slugs": sorted(s for s in slugs if s)}
     for a in ausschreibungen:
