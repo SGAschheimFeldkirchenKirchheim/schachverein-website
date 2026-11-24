@@ -114,7 +114,6 @@
       '<a href="' + PFAD + 'mein-profil.html">Mein Profil</a>' +
       '<a href="' + PFAD + "spieler/" + esc(a.ich.slug) + '.html">Meine Seite ansehen</a>' +
       ((a.listen && a.listen.length) || a.ich.darf.listen ? '<a href="' + PFAD + 'listen.html">Listen' + (a.listen && a.listen.length ? " (" + a.listen.length + ")" : "") + "</a>" : "") +
-      (a.ich.darf.kontakte ? '<a href="' + PFAD + 'kontakte.html">Kontakte</a>' : "") +
       ((a.umfragen && a.umfragen.length) || a.ich.darf.terminfinder ? '<a href="' + PFAD + 'umfrage.html">Umfragen' + (a.umfragen && a.umfragen.length ? " (" + a.umfragen.length + ")" : "") + "</a>" : "") +
       (a.ich.darf.verwaltung || a.ich.darf.turniere || a.ich.darf.listen || a.ich.darf.terminfinder ? '<a href="' + PFAD + "verwaltung.html" +
         (!a.ich.darf.verwaltung ? (a.ich.darf.turniere ? "#turniere" : a.ich.darf.listen ? "#listen" : "#terminfinder") : a.offenTurniere && !a.offenAntraege && !a.offenBerichte ? "#turniere" : a.offenBerichte && !a.offenAntraege ? "#berichte" : "") + '">' +
@@ -358,7 +357,6 @@
       box.innerHTML =
         '<p class="kt-unter">Angemeldet als <b>' + esc(i.benutzer) + '</b> <span class="kt-tag ' + i.stufe + '">' + stufe + "</span> · " +
         'Änderungen siehst du sofort, alle anderen ab morgen früh. <a href="' + PFAD + "spieler/" + esc(i.slug) + '.html">Meine Seite ansehen →</a></p>' +
-        '<div class="kt-karte mt-box" hidden></div>' +
         '<div class="kt-raster"><form class="kt-haupt" novalidate>' +
         '<div class="kt-karte"><h2>Über mich</h2><div class="kt-feld"><textarea name="text" maxlength="600" rows="6">' + esc(p.text) + "</textarea>" +
         '<small><span class="kt-zaehler"></span> · Leerzeile = neuer Absatz, Links werden klickbar.</small></div>' +
@@ -383,10 +381,9 @@
         '<button type="button" class="kt-btn leise" data-kt="ab-alle">Auf allen Geräten abmelden</button>' +
         (i.stufe === "inhaber" ? "" : '<button type="button" class="kt-btn rot" data-kt="del">Konto löschen</button>') +
         '</div><div class="kt-unterform"></div></div></div></div>' +
-        '<div class="kt-karte pl-box" id="planung"></div><div class="kt-karte mb-box" hidden></div>' +
+        '<div class="kt-karte mb-box" hidden></div>' +
         '<div class="kt-karte nl-box" id="benachrichtigungen"></div>';
-      planungKarte(box.querySelector(".pl-box"), a);
-      meineDaten().then(function (M) { meineTermineKarte(box.querySelector(".mt-box"), a, M); meineBerichteKarte(box.querySelector(".mb-box"), a, M); });
+      meineDaten().then(function (M) { meineBerichteKarte(box.querySelector(".mb-box"), a, M); });
       if (NL_KARTE) box.querySelector(".nl-box").replaceWith(NL_KARTE);      // Mail-Kasten nur einmal laden
       else nlKarte(NL_KARTE = box.querySelector(".nl-box"));
       if (FOTO_V !== (p.fotoV || 0)) { FOTO_V = p.fotoV || 0; FOTO = ""; fotoLaden(a); }
@@ -682,7 +679,7 @@
           '<h3 style="margin-top:1.8rem">Online</h3>' + (bOnline.length ? '<div class="kt-karte kt-tabelle-rahmen"><table class="kt-tab">' + bOnline.map(function (e) { return berichtZeile(e, false); }).join("") + "</table></div>"
             : '<p class="kt-klein links">Keine.</p>') +
           '<p class="kt-klein links">Hier stehen alle Berichte von diesem und letztem Jahr. „Zurückziehen“ macht einen Bericht wieder zum Entwurf; endgültig löschen geht bei Entwürfen.</p>') +
-        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen, <b>listen</b> = Listen (Sommerfest …) anlegen, <b>terminfinder</b> = Terminfinder-Umfragen anlegen und festlegen, <b>mannschaftsfuehrer</b> = Kontaktliste (Telefon, Auto, Abwesenheit) sehen. Admins haben alle Rechte."
+        teil("nutzer", nutzerListe(aktiv) + '<p class="kt-klein links">' + (inh ? "Rechte: <b>geburtstage</b> = alle Geburtstage sehen, <b>berichte</b> = Berichte ohne Freigabe veröffentlichen, <b>turniere</b> = AFK-on-Tour-Anträge annehmen, <b>listen</b> = Listen (Sommerfest …) anlegen, <b>terminfinder</b> = Terminfinder-Umfragen anlegen und festlegen. Admins haben alle Rechte."
           : "Stufen und Rechte kann nur der Inhaber ändern.") + "</p>") +
         teil("weg", nutzerListe(weg) + '<p class="kt-klein links">Ausgetreten = steht nicht mehr in der Mitgliederliste. Diese Konten können sich nicht anmelden; das Profil ist ausgeblendet.</p>');
       if (box.querySelector('[data-r="listen"].kt-reiter-inhalt')) listenVerwaltung(box, LISTEN, zeichnen, fertig);
@@ -1751,36 +1748,11 @@
     teil.querySelector('[data-m="urlspeichern"]').addEventListener("click", function (ev) { aktion("url", { url: teil.querySelector('[data-m="url"]').value }, ev.target); });
   }
 
-  // ---------- Profil: Meine nächsten Termine, Mannschaftsplanung, Meine Berichte ----------
+  // ---------- Profil: Berichte, in denen du vorkommst ----------
   var MEINE = null;
   function meineDaten() {
-    if (!MEINE) MEINE = fetch(PFAD + "spieler/meine.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { return { termine: [], kader: {}, berichte: {} }; });
+    if (!MEINE) MEINE = fetch(PFAD + "spieler/meine.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { return { berichte: {} }; });
     return MEINE;
-  }
-  function isoHeute() { var d = new Date(); return d.getFullYear() + "-" + zweistellig(d.getMonth() + 1) + "-" + zweistellig(d.getDate()); }
-  function tagKurz(iso) { var p = iso.split("-").map(Number), d = new Date(p[0], p[1] - 1, p[2]); return WT[d.getDay()] + " " + zweistellig(p[2]) + "." + zweistellig(p[1]) + "."; }
-  function abwesendAm(pl, iso) { return (pl && pl.abwesend || []).some(function (z) { return z.von <= iso && iso <= z.bis; }); }
-  function meineTermineKarte(el, a, M) {
-    var slug = a.ich.slug, sp = (M.kader || {})[slug] || [], heute = isoHeute(), pl = a.planung;
-    var punkte = (M.termine || []).filter(function (t) { return t.datum >= heute && (sp.indexOf(t.spalte) >= 0 || t.spalte === "Verein"); })
-      .map(function (t) { return { datum: t.datum, html: "<b>" + esc(tagKurz(t.datum)) + (t.zeit ? " " + esc(t.zeit) : "") + '</b> <span class="mt-tag">' + esc(t.spalte) + "</span> " + esc(t.text), link: PFAD + "termine.html" }; });
-    (a.turniere || []).forEach(function (t) {
-      if (t.datum >= heute) punkte.push({ datum: t.datum, html: "<b>" + esc(tagKurz(t.datum)) + '</b> <span class="mt-tag tur">Turnier</span> ' + esc(t.titel) + (t.andere ? ' <span class="kt-grau">(+' + t.andere + " aus dem Verein)</span>" : ""), link: PFAD + "turnierkalender.html" });
-    });
-    punkte.sort(function (x, y) { return x.datum.localeCompare(y.datum); });
-    punkte = punkte.slice(0, 8);
-    var offen = mitmachenDinge(a).filter(function (x) { return x.offen; });
-    if (!punkte.length && !offen.length) { el.hidden = true; return; }
-    el.hidden = false;
-    el.innerHTML = "<h2>Meine nächsten Termine</h2>" +
-      (offen.length ? '<div class="mt-offen">' + offen.map(function (x) {
-        return '<a href="' + PFAD + (x.art === "umfrage" ? "umfrage.html" : "listen.html") + "?id=" + encodeURIComponent(x.id) + '">' + (x.art === "umfrage" ? "Umfrage" : "Liste") + ": " + esc(x.titel) + " – noch offen</a>";
-      }).join("") + "</div>" : "") +
-      (punkte.length ? '<ul class="mt-liste">' + punkte.map(function (x) {
-        return '<li class="' + (abwesendAm(pl, x.datum) ? "mt-weg" : "") + '"><a href="' + x.link + '">' + x.html + "</a>" + (abwesendAm(pl, x.datum) ? ' <span class="mt-hinweis">du bist abwesend</span>' : "") + "</li>";
-      }).join("") + "</ul>" : "") +
-      (sp.length ? '<p class="kt-klein links">Deine Mannschaften laut Meldeliste: ' + sp.map(esc).join(", ") + " · dazu Vereinstermine und deine Turniere („Ich will hin“).</p>"
-        : '<p class="kt-klein links">Du stehst auf keiner Meldeliste – hier stehen Vereinstermine und deine Turniere („Ich will hin“).</p>');
   }
   function meineBerichteKarte(el, a, M) {
     var l = (M.berichte || {})[a.ich.slug] || [];
@@ -1789,85 +1761,6 @@
     el.innerHTML = "<h2>Berichte, in denen du vorkommst</h2><ul class=\"mt-liste\">" + l.map(function (b) {
       return '<li><a href="' + PFAD + esc(b.link) + '">' + (b.datum ? "<b>" + esc(datumDe(b.datum)) + "</b> " : "") + esc(b.titel) + "</a></li>";
     }).join("") + "</ul>";
-  }
-  function planungKarte(el, a) {
-    var P = JSON.parse(JSON.stringify(a.planung || { abwesend: [], auto: 0, tel: "" }));
-    function zeichnen() {
-      el.innerHTML = '<h2>Für die Mannschaftsplanung</h2><p class="kt-meldung" hidden></p>' +
-        '<p class="kt-klein links">Freiwillig. Sehen können das nur die Mannschaftsführer und Admins – nichts davon ist öffentlich. Abwesenheiten tauchen automatisch in der Aufstellungsplanung auf.</p>' +
-        '<div class="nl-titel">Ich bin nicht da</div>' +
-        (P.abwesend.length ? P.abwesend.map(function (z, k) {
-          return '<div class="pl-zeile"><b>' + esc(datumDe(z.von)) + (z.bis !== z.von ? " – " + esc(datumDe(z.bis)) : "") + "</b>" + (z.notiz ? ' <span class="kt-grau">' + esc(z.notiz) + "</span>" : "") +
-            ' <button type="button" class="kt-mini" data-pweg="' + k + '">entfernen</button></div>';
-        }).join("") : '<p class="kt-klein links" style="margin:.2rem 0">Keine Abwesenheit eingetragen.</p>') +
-        '<div class="pl-neu"><input type="date" data-p="von" aria-label="von"> bis <input type="date" data-p="bis" aria-label="bis">' +
-        '<input data-p="notiz" maxlength="60" placeholder="Notiz (optional, z. B. Urlaub)"><button type="button" class="kt-mini" data-p="plus">+ hinzufügen</button></div>' +
-        '<div class="nl-titel">Auto bei Auswärtsspielen</div><select data-p="auto">' + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (n) {
-          return '<option value="' + n + '"' + (P.auto === n ? " selected" : "") + ">" + (n ? "ich kann " + n + (n === 1 ? " Person" : " Personen") + " mitnehmen" : "kein Auto / fahre nicht") + "</option>";
-        }).join("") + "</select>" +
-        '<div class="nl-titel">Telefon</div><input class="nl-feld" type="tel" data-p="tel" maxlength="25" value="' + esc(P.tel) + '" placeholder="z. B. 0171 1234567">' +
-        '<p class="kt-klein links">Nur für Mannschaftsführer, damit sie dich kurzfristig erreichen.</p>' +
-        '<div class="kt-zeile"><button type="button" class="kt-btn" data-p="speichern">Speichern</button></div>';
-      [].forEach.call(el.querySelectorAll("[data-pweg]"), function (k) {
-        k.addEventListener("click", function () { lesen(); P.abwesend.splice(+k.getAttribute("data-pweg"), 1); zeichnen(); });
-      });
-      el.querySelector('[data-p="plus"]').addEventListener("click", function () {
-        lesen();
-        var von = el.querySelector('[data-p="von"]').value, bis = el.querySelector('[data-p="bis"]').value || von;
-        if (!von) return meldung(el, "Bitte „von“ wählen.", "schlecht");
-        if (bis < von) return meldung(el, "„bis“ liegt vor „von“.", "schlecht");
-        P.abwesend.push({ von: von, bis: bis, notiz: el.querySelector('[data-p="notiz"]').value.trim() });
-        P.abwesend.sort(function (x, y) { return x.von.localeCompare(y.von); });
-        zeichnen();
-        meldung(el, "Hinzugefügt – bitte noch speichern.", "");
-      });
-      el.querySelector('[data-p="speichern"]').addEventListener("click", function (ev) {
-        lesen();
-        var k = ev.target; k.disabled = true;
-        api("p_speichern", P).then(function (r) {
-          k.disabled = false;
-          if (!r.ok) return meldung(el, r.fehler, "schlecht");
-          P = r.planung; a.planung = r.planung;
-          try { localStorage.removeItem(ICH_KEY); } catch (e) {}
-          zeichnen(); meldung(el, r.meldung, "gut");
-        });
-      });
-    }
-    function lesen() { P.auto = +el.querySelector('[data-p="auto"]').value; P.tel = el.querySelector('[data-p="tel"]').value.trim(); }
-    zeichnen();
-  }
-
-  // ---------- Seite "Kontakte" (Mannschaftsführer + Admins) ----------
-  function seiteKontakte(box) {
-    if (!token()) return bitteAnmelden(box, "Nur für Mannschaftsführer.");
-    box.innerHTML = '<p class="kt-klein links">Lädt …</p>';
-    var FILTER = "", SUCHE = "", M = { kader: {} }, R = null;
-    meineDaten().then(function (m) { M = m; if (R) zeichnen(); });
-    schnell("kontakte", function () { return api("p_kontakte"); }, function (r, frisch) {
-      if (!r.ok) return frisch ? bitteAnmelden(box, r.fehler) : null;
-      R = r; zeichnen();
-    });
-    function zeichnen() {
-      var heute = isoHeute(), teams = {};
-      Object.keys(M.kader || {}).forEach(function (s) { M.kader[s].forEach(function (t) { teams[t] = 1; }); });
-      var leute = R.leute.filter(function (x) {
-        return (!FILTER || ((M.kader || {})[x.slug] || []).indexOf(FILTER) >= 0) && (!SUCHE || x.name.toLowerCase().indexOf(SUCHE) >= 0);
-      });
-      box.innerHTML = '<p class="kt-klein links">Nur für Mannschaftsführer und Admins – bitte nicht weitergeben. Eintragen kann jeder selbst unter „Mein Profil“.</p>' +
-        '<div class="kt-zeile"><select data-kf><option value="">alle Mitglieder</option>' + Object.keys(teams).sort().map(function (t) {
-          return '<option' + (t === FILTER ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + '</select><input data-ks placeholder="Name suchen …" value="' + esc(SUCHE) + '"></div>' +
-        '<div class="kt-karte kt-tabelle-rahmen"><table class="ls-tab"><tr><th>Name</th><th>Telefon</th><th>Auto</th><th>Nicht da</th></tr>' + leute.map(function (x) {
-          var z = x.abwesend.filter(function (a) { return a.bis >= heute; });
-          return '<tr><td><a href="' + PFAD + "spieler/" + esc(x.slug) + '.html">' + esc(x.name) + "</a>" + (((M.kader || {})[x.slug] || []).length ? ' <span class="kt-grau">' + esc(M.kader[x.slug].join(", ")) + "</span>" : "") + "</td>" +
-            "<td>" + (x.tel ? '<a href="tel:' + esc(x.tel.replace(/[^+0-9]/g, "")) + '">' + esc(x.tel) + "</a>" : '<span class="kt-grau">–</span>') + "</td>" +
-            "<td>" + (x.auto ? x.auto + " Pl." : '<span class="kt-grau">–</span>') + "</td>" +
-            "<td>" + (z.length ? z.map(function (a) { return esc(datumDe(a.von)) + (a.bis !== a.von ? "–" + esc(datumDe(a.bis)) : "") + (a.notiz ? ' <span class="kt-grau">' + esc(a.notiz) + "</span>" : ""); }).join("<br>") : '<span class="kt-grau">–</span>') + "</td></tr>";
-        }).join("") + "</table></div>" +
-        '<p class="kt-klein links">' + leute.length + " von " + R.leute.length + " angemeldeten Mitgliedern. Wer kein Konto hat, fehlt hier.</p>";
-      box.querySelector("[data-kf]").addEventListener("change", function (ev) { FILTER = ev.target.value; zeichnen(); });
-      var s = box.querySelector("[data-ks]");
-      s.addEventListener("input", function () { SUCHE = s.value.trim().toLowerCase(); var pos = s.selectionStart; zeichnen(); var n = box.querySelector("[data-ks]"); n.focus(); n.setSelectionRange(pos, pos); });
-    }
   }
 
   // ---------- Start ----------
@@ -1881,7 +1774,6 @@
       if (art === "listen") seiteListen(seite);
       if (art === "umfrage") seiteUmfrage(seite);
       if (art === "mitmachen") seiteMitmachen(seite);
-      if (art === "kontakte") seiteKontakte(seite);
     }
     spielerseite(a);
     startseite(a);

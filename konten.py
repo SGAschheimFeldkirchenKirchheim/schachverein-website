@@ -148,8 +148,7 @@ def seiten_bauen(render_page):
         return
     for datei, titel, art in (("mein-profil.html", "Mein Profil", "profil"), ("verwaltung.html", "Verwaltung", "verwaltung"),
                              ("listen.html", "Listen", "listen"), ("umfrage.html", "Umfrage", "umfrage"),
-                             ("mitmachen.html", "Mitmachen", "mitmachen"),
-                             ("kontakte.html", "Kontakte", "kontakte")):
+                             ("mitmachen.html", "Mitmachen", "mitmachen")):
         content = (f'<h1>{titel}</h1><div id="kt-seite" data-seite="{art}">'
                    '<noscript><p>Für diese Seite wird JavaScript benötigt.</p></noscript></div>')
         render_page(titel, content, datei, description=f"{titel} – Mitgliederbereich der SG AFK.")

@@ -3448,7 +3448,7 @@ if __name__ == "__main__":
     konten.synchronisieren(_geburtstag_liste(), spieler.slug)
     konten.laden()
     konten.seiten_bauen(render_page)
-    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html", "listen.html", "umfrage.html", "mitmachen.html", "kontakte.html"})   # nicht in die Sitemap
+    WEITERLEITUNGEN.update({"mein-profil.html", "verwaltung.html", "listen.html", "umfrage.html", "mitmachen.html"})   # nicht in die Sitemap
     build_chessresults()
     if senioren.LIGA_TEAM_KURZ not in {d["kurz"] for d in teams}:   # Senioren ohne Tabellenrechner-Daten: eigene Seite
         SUBNAV["mannschaften.html"].append(("senioren.html", "Senioren"))
@@ -3489,9 +3489,9 @@ if __name__ == "__main__":
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams, saisons) else set())
     suche.bauen(render_page)   # nach allen Seiten (Suchindex)
-    # Profil: "Meine nächsten Termine" / "Meine Berichte" (öffentliche Daten, das Profil filtert im Browser)
+    # Profil: "Berichte, in denen du vorkommst" (öffentliche Daten, das Profil filtert im Browser)
     with open(os.path.join("spieler", "meine.json"), "w", encoding="utf-8") as f:
-        json.dump(benachrichtigung.meine_json(alle_termin_eintraege(), ALLE_BERICHTE, teams, SITE_URL, spieler.slug), f, ensure_ascii=False)
+        json.dump(benachrichtigung.meine_json(ALLE_BERICHTE, spieler.slug), f, ensure_ascii=False)
     # Mail-Benachrichtigungen: Neuigkeiten seit dem letzten Build ans Apps Script (nur im GitHub-Build)
     benachrichtigung.melden(alle_termin_eintraege(), read_ausfall(), ALLE_BERICHTE, ausschreibungen_eintraege(), teams,
                             SITE_URL, spieler.slug, liga.seite_datei,

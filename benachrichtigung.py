@@ -130,20 +130,8 @@ def bericht_slugs(r, slug_fn):
     return {s for s in slugs if s}
 
 
-def meine_json(termine, berichte, teams, site_url, slug_fn, tage=120):
-    """spieler/meine.json für "Meine nächsten Termine" / "Meine Berichte" im Profil (nur öffentliche Daten)."""
-    bis = datetime.date.today() + datetime.timedelta(days=tage)
-    kader = {}
-    for d in teams:
-        spalte = "Jugend" if str(d.get("kurz", "")).startswith("U") else d.get("kurz", "")
-        for k in d.get("kader") or []:
-            name = str(k.get("name", "")).strip()
-            if "," in name:
-                nach, vor = [x.strip() for x in name.split(",", 1)]
-                name = f"{vor} {nach}"
-            s = slug_fn(name) if name else ""
-            if s and spalte and spalte not in kader.setdefault(s, []):
-                kader[s].append(spalte)
+def meine_json(berichte, slug_fn):
+    """spieler/meine.json für "Berichte, in denen du vorkommst" im Profil (nur öffentliche Daten)."""
     erw = {}
     for r in berichte:
         for s in bericht_slugs(r, slug_fn):
@@ -152,10 +140,7 @@ def meine_json(termine, berichte, teams, site_url, slug_fn, tage=120):
     for s in erw:
         erw[s].sort(key=lambda x: x["datum"], reverse=True)
         erw[s] = erw[s][:20]
-    return {"stand": datetime.date.today().isoformat(),
-            "termine": [{"datum": t["datum"].isoformat(), "zeit": t["zeit"], "spalte": t["spalte"], "text": t["text"]}
-                        for t in termine if t["datum"] <= bis],
-            "kader": kader, "berichte": erw}
+    return {"stand": datetime.date.today().isoformat(), "berichte": erw}
 
 
 def stand_bauen(termine, ausfaelle, berichte, ausschreibungen, teams, site_url, slug_fn, seite_fn):
