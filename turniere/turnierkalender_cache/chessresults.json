@@ -17,7 +17,7 @@
   },
   "1310287": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1312987": {
@@ -50,9 +50,29 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1334473": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1336130": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1339606": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1350900": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1360077": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1362036": {
@@ -62,7 +82,12 @@
   },
   "1404735": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1404736": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1404737": {
@@ -72,7 +97,7 @@
   },
   "1411135": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1414395": {
@@ -82,32 +107,82 @@
   },
   "1415455": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1423439": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1423444": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1423453": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1423456": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1438001": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1446795": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1446796": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1446797": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1446837": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1446843": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1446845": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1446848": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1448641": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1448643": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1448645": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1453543": {
@@ -140,6 +215,11 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1464883": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1465179": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
@@ -147,12 +227,27 @@
   },
   "1467356": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1470795": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1475608": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1475610": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1475611": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1476222": {
@@ -167,12 +262,22 @@
   },
   "1477468": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1477469": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1477471": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1477473": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1477480": {
@@ -182,7 +287,7 @@
   },
   "1477481": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1477482": {
@@ -190,14 +295,64 @@
    "geprueft": "2026-11-23",
    "v": 2
   },
+  "1478254": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1478255": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1483218": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1484149": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1484150": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1484629": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1485460": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1485465": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1485468": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1485470": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1486720": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1487151": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1491902": {
@@ -206,62 +361,72 @@
   },
   "1492026": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492028": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492030": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492033": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492035": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492036": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492037": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1492038": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1493138": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1493140": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1493142": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1493279": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1493450": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1493451": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1493569": {
@@ -299,6 +464,11 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1496960": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1497035": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
@@ -312,6 +482,11 @@
   "1501105": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
+  },
+  "1502537": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
   },
   "1502546": {
    "anzahl": 0,
@@ -340,7 +515,7 @@
   },
   "1503548": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1505694": {
@@ -355,7 +530,17 @@
   },
   "1506718": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1507327": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1508420": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1508421": {
@@ -371,6 +556,11 @@
   "1508954": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1509873": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1510353": {
@@ -390,7 +580,7 @@
   },
   "1511437": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1511438": {
@@ -410,12 +600,12 @@
   },
   "1511856": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1511867": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1511882": {
@@ -450,6 +640,26 @@
   "1513147": {
    "anzahl": 0,
    "geprueft": "2026-11-19",
+   "v": 2
+  },
+  "1513372": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1513374": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1513381": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1513968": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1513984": {
@@ -502,6 +712,11 @@
    "geprueft": "2026-11-19",
    "v": 2
   },
+  "1515736": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1515893": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
@@ -519,27 +734,37 @@
   },
   "1517060": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1517062": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1517174": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1517577": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1517587": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1518934": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1518964": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1519301": {
@@ -562,9 +787,24 @@
    "geprueft": "2026-11-23",
    "v": 2
   },
+  "1521919": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1521929": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1522365": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1522839": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1522848": {
@@ -609,7 +849,12 @@
   },
   "1524144": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1524353": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1524949": {
@@ -620,6 +865,46 @@
   "1524950": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1525454": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1526396": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1526423": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1526439": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1526445": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1527213": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1527219": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1527220": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1527433": {
@@ -637,14 +922,24 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1528029": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1528247": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1528949": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1529001": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1529003": {
@@ -659,12 +954,12 @@
   },
   "1529346": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1529350": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1529410": {
@@ -672,9 +967,19 @@
    "geprueft": "2026-11-19",
    "v": 2
   },
+  "1529637": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1529641": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1529790": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1529959": {
@@ -704,7 +1009,12 @@
   },
   "1530205": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1530710": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1530782": {
@@ -714,17 +1024,22 @@
   },
   "1530811": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1530812": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1530815": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1530935": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1531188": {
@@ -734,7 +1049,7 @@
   },
   "1531197": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1531514": {
@@ -809,27 +1124,27 @@
   },
   "1531889": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1531891": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1531893": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1531902": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1531968": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1532737": {
@@ -939,6 +1254,21 @@
    "geprueft": "2026-11-19",
    "v": 2
   },
+  "1533709": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1533714": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1533720": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1533724": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
@@ -961,7 +1291,7 @@
   },
   "1533787": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1533812": {
@@ -976,7 +1306,7 @@
   },
   "1533834": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1533905": {
@@ -1001,22 +1331,27 @@
   },
   "1533943": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1533944": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1533945": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1533946": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1533966": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1534002": {
@@ -1068,17 +1403,17 @@
   },
   "1534597": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1534598": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1534599": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1534711": {
@@ -1089,6 +1424,11 @@
   "1534992": {
    "anzahl": 0,
    "geprueft": "2026-11-19",
+   "v": 2
+  },
+  "1535148": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1535157": {
@@ -1108,6 +1448,11 @@
   "1535522": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1535538": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1535653": {
@@ -1157,7 +1502,7 @@
   },
   "1536212": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1536525": {
@@ -1181,6 +1526,11 @@
   "1536759": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
+  },
+  "1536805": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
   },
   "1536806": {
    "anzahl": 0,
@@ -1214,17 +1564,17 @@
   },
   "1537141": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1537484": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1537485": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1537556": {
@@ -1242,9 +1592,19 @@
    "geprueft": "2026-11-22",
    "v": 2
   },
+  "1537720": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1537768": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1537769": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538075": {
@@ -1269,22 +1629,27 @@
   },
   "1538262": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538263": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538264": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538267": {
    "anzahl": 0,
    "geprueft": "2026-11-22",
+   "v": 2
+  },
+  "1538288": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538299": {
@@ -1299,7 +1664,7 @@
   },
   "1538509": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538548": {
@@ -1312,14 +1677,19 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1538587": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1538611": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538677": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538701": {
@@ -1333,7 +1703,7 @@
   },
   "1538782": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1538814": {
@@ -1398,7 +1768,7 @@
   },
   "1539168": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1539172": {
@@ -1545,7 +1915,7 @@
   },
   "1539860": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1539883": {
@@ -1560,12 +1930,17 @@
   },
   "1539886": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1539887": {
    "anzahl": 0,
    "geprueft": "2026-11-22",
+   "v": 2
+  },
+  "1539913": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1539949": {
@@ -1615,17 +1990,17 @@
   },
   "1540075": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1540077": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1540081": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1540155": {
@@ -1640,7 +2015,7 @@
   },
   "1540182": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1540199": {
@@ -1650,12 +2025,12 @@
   },
   "1540212": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1540270": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1540544": {
@@ -1695,17 +2070,17 @@
   },
   "1541623": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1541624": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1541625": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1541820": {
@@ -1716,6 +2091,31 @@
   "1541821": {
    "anzahl": 0,
    "geprueft": "2026-11-19",
+   "v": 2
+  },
+  "1541948": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1541960": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1541970": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1541987": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1541990": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1542284": {
@@ -1735,7 +2135,7 @@
   },
   "1542464": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1542721": {
@@ -1745,7 +2145,7 @@
   },
   "1542899": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1542920": {
@@ -1770,7 +2170,7 @@
   },
   "1542929": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1542936": {
@@ -1790,7 +2190,7 @@
   },
   "1543009": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543021": {
@@ -1805,12 +2205,12 @@
   },
   "1543033": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543034": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543037": {
@@ -1820,7 +2220,7 @@
   },
   "1543044": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543048": {
@@ -1925,7 +2325,7 @@
   },
   "1543462": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543467": {
@@ -1936,6 +2336,16 @@
   "1543543": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1543546": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1543551": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543654": {
@@ -1959,17 +2369,17 @@
   },
   "1543687": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543688": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543689": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1543706": {
@@ -2139,6 +2549,16 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1544236": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1544237": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1544238": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
@@ -2164,7 +2584,7 @@
   },
   "1544332": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1544334": {
@@ -2184,7 +2604,7 @@
   },
   "1544340": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1544341": {
@@ -2194,7 +2614,7 @@
   },
   "1544342": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1544345": {
@@ -2246,9 +2666,24 @@
    "anzahl": 0,
    "geprueft": "2026-11-18"
   },
+  "1544560": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1544562": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1544565": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
+  },
+  "1544566": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
   },
   "1544567": {
    "anzahl": 0,
@@ -2262,6 +2697,21 @@
   "1544633": {
    "anzahl": 0,
    "geprueft": "2026-11-18"
+  },
+  "1544635": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1544637": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1544638": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
   },
   "1544668": {
    "anzahl": 0,
@@ -2313,9 +2763,19 @@
    "geprueft": "2026-11-19",
    "v": 2
   },
+  "1544788": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1544790": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1544794": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1544795": {
@@ -2373,9 +2833,19 @@
    "geprueft": "2026-11-19",
    "v": 2
   },
+  "1544987": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1544989": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1544990": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1544993": {
@@ -2393,6 +2863,11 @@
    "geprueft": "2026-11-19",
    "v": 2
   },
+  "1544997": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1544998": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
@@ -2401,6 +2876,11 @@
   "1544999": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1545007": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545289": {
@@ -2430,7 +2910,7 @@
   },
   "1545318": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545325": {
@@ -2445,12 +2925,12 @@
   },
   "1545387": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545388": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545471": {
@@ -2460,7 +2940,7 @@
   },
   "1545496": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545532": {
@@ -2538,6 +3018,11 @@
    "geprueft": "2026-11-23",
    "v": 2
   },
+  "1545588": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1545618": {
    "anzahl": 0,
    "geprueft": "2026-11-20",
@@ -2610,12 +3095,12 @@
   },
   "1545672": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545673": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545674": {
@@ -2720,7 +3205,7 @@
   },
   "1545747": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1545760": {
@@ -2756,6 +3241,11 @@
   "1545788": {
    "anzahl": 0,
    "geprueft": "2026-11-20",
+   "v": 2
+  },
+  "1545910": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1546052": {
@@ -3210,12 +3700,12 @@
   },
   "1547881": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1547887": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1547950": {
@@ -3235,7 +3725,7 @@
   },
   "1548070": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1548071": {
@@ -3255,7 +3745,7 @@
   },
   "1548151": {
    "anzahl": 0,
-   "geprueft": "2026-11-22",
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1548156": {
@@ -3318,14 +3808,34 @@
    "geprueft": "2026-11-23",
    "v": 2
   },
+  "1548734": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1548778": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
    "v": 2
   },
+  "1548782": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1548789": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1548844": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1548849": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1548851": {
@@ -3356,6 +3866,11 @@
   "1548937": {
    "anzahl": 0,
    "geprueft": "2026-11-23",
+   "v": 2
+  },
+  "1548940": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1548942": {
@@ -3488,9 +4003,24 @@
    "geprueft": "2026-11-24",
    "v": 2
   },
+  "1549563": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549576": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
   "1549584": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1549586": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   },
   "1549606": {
@@ -3516,6 +4046,216 @@
   "1549618": {
    "anzahl": 0,
    "geprueft": "2026-11-24",
+   "v": 2
+  },
+  "1549775": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549785": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549787": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549832": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549837": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549839": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549842": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549862": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549870": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549871": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549874": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549879": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549882": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549902": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549905": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549907": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1549934": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550027": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550058": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550090": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550094": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550095": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550164": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550170": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550172": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550173": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550174": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550175": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550177": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550178": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550188": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550190": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550191": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550215": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550230": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550231": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550232": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550233": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550244": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550245": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550247": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
+   "v": 2
+  },
+  "1550253": {
+   "anzahl": 0,
+   "geprueft": "2026-11-25",
    "v": 2
   }
  },
@@ -4473,6 +5213,31 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2026-11-28"
+  },
+  "1404736": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 minutes with 2 second increment from move 1",
+   "bis": "2026-12-03",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1404736",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1404736.aspx?lan=0",
+    "website": "http://www.ajedrezenelbali.com"
+   },
+   "lon": null,
+   "name": "XVII Torneo Blitz Nocturno Gran Hotel Bali 2026 -Grupo A Open",
+   "ort": "Hotel Bali - Benidorm (Alicante - SPAIN)",
+   "quelle": "chess-results",
+   "runden": "8",
+   "schnitt": 1992,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-02"
   },
   "1404737": {
    "bedenkzeit": "blitz",
@@ -7026,6 +7791,31 @@
   },
   "1468900": null,
   "1468901": null,
+  "1468902": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10min +5sec increment per move starting from move 1",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1468902",
+   "land": "Polen",
+   "lat": 53.15486,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1468902.aspx?lan=0",
+    "website": "https://www.chessmanager.com/tournaments/4716513355497472"
+   },
+   "lon": 18.61252,
+   "name": "Enea Operator Międzyszkolna Liga Szachowa 26/27 turniej 5 - klasy 4-6 szkół pods tawowych",
+   "ort": "Grzywna",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1588,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-12"
+  },
   "1468903": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "Rapid: 10min +5sec increment per move starting from move 1",
@@ -7070,6 +7860,31 @@
    "quelle": "chess-results",
    "runden": "7",
    "schnitt": 1424,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-12"
+  },
+  "1468905": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10min +4sec increment per move starting from move 1",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1468905",
+   "land": "Polen",
+   "lat": 53.15486,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1468905.aspx?lan=0",
+    "website": "https://www.chessmanager.com/tournaments/6302851338993664"
+   },
+   "lon": 18.61252,
+   "name": "Turniej OPEN przy Międzyszkolnej Lidze Szachowej 25/26 turniej 5",
+   "ort": "Grzywna",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1336,
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2026-12-12"
@@ -9642,6 +10457,7 @@
    "v": 2,
    "von": "2026-12-06"
   },
+  "1484766": null,
   "1484777": {
    "bedenkzeit": "",
    "bedenkzeit_text": "",
@@ -12806,6 +13622,31 @@
    "von": "2026-10-16"
   },
   "1508275": null,
+  "1508284": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "1h 30m / 30 tahů + 60 min",
+   "bis": "2027-03-09",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1508284",
+   "land": "Tschechien",
+   "lat": 49.8354045,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1508284.aspx?lan=0",
+    "website": "https://s3.chess-results.com/Tnr1508284.aspx?lan=5&SNode=S0"
+   },
+   "lon": 18.292978,
+   "name": "Městský přebor Ostrava 2026/2027",
+   "ort": "Ostrava",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1655,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-10-20"
+  },
   "1508294": null,
   "1508416": null,
   "1508419": null,
@@ -13153,6 +13994,30 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2027-04-23"
+  },
+  "1509873": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "8+3",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1509873",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1509873.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "V Torneo de Navidad de Ajedrez Sub2200 Salesianos Montilla",
+   "ort": "Naves de Envidarte (Montilla)",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1407,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-13"
   },
   "1510340": null,
   "1510353": {
@@ -15884,6 +16749,31 @@
    "v": 2,
    "von": "2026-12-19"
   },
+  "1518964": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Schnellschach, 20 min.",
+   "bis": "2026-12-08",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1518964",
+   "land": "Österreich",
+   "lat": 48.2432425,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1518964.aspx?lan=0",
+    "website": "http://www.schach-nettingsdorf.at"
+   },
+   "lon": 14.5572299,
+   "name": "30. Offene Ansfeldner Stadtmeisterschaft 2026",
+   "ort": "Rathausfestsaal Haid/Ansfelden, Hauptplatz 40, 4053 Haid",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1727,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-08"
+  },
   "1519020": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "2x15 minut + 5 sec a tah",
@@ -16274,6 +17164,31 @@
    "v": 2,
    "von": "2026-11-28"
   },
+  "1521095": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90+30",
+   "bis": "2026-12-10",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1521095",
+   "land": "Israel",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1521095.aspx?lan=0",
+    "website": "https://www.chess.org.il/Tournaments/TournamentPage.aspx?Id=41681"
+   },
+   "lon": null,
+   "name": "אליפות קרית ביאליק 2026. רמה 1",
+   "ort": "Kiryat Bialic",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1807,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-10-22"
+  },
   "1521115": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "8' + 3''",
@@ -16553,30 +17468,7 @@
   "1521989": null,
   "1521990": null,
   "1521991": null,
-  "1522117": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "5 minūtes + 3 sekundes par gājienu katram spēlētājam",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "",
-   "id": "cr:1522117",
-   "land": "Lettland",
-   "lat": 56.9475481,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1522117.aspx?lan=0"
-   },
-   "lon": 24.1141842,
-   "name": "Novembra Dice Chess turnīrs (24.11.)",
-   "ort": "Aspazijas bulvāris 32, Rīga",
-   "quelle": "chess-results",
-   "runden": "12",
-   "schnitt": 1216,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1522117": null,
   "1522156": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "8 + 3",
@@ -17340,6 +18232,30 @@
    "v": 2,
    "von": "2026-11-28"
   },
+  "1524353": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-30",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1524353",
+   "land": "Armenien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1524353.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "4-րդ կարգի որակավորման մրցաշար,քաղաք Մասիս",
+   "ort": "քաղաք Մասիս",
+   "quelle": "chess-results",
+   "runden": "8",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
   "1524675": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "75 + 30",
@@ -17361,6 +18277,31 @@
    "quelle": "chess-results",
    "runden": "7",
    "schnitt": 1677,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-03"
+  },
+  "1524679": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "75 + 30",
+   "bis": "2026-12-08",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1524679",
+   "land": "Irland",
+   "lat": 48.7910947,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1524679.aspx?lan=0",
+    "website": "https://skerrieschess.com/"
+   },
+   "lon": 8.4857686,
+   "name": "Turkey Under 1400",
+   "ort": "SABC, 73B Strand Street, Skerries, Co. Dublin, K34 C951",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1311,
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2026-11-03"
@@ -18240,6 +19181,31 @@
    "v": 2,
    "von": "2026-10-31"
   },
+  "1527788": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minuten + 30 sec. per zet",
+   "bis": "2027-05-10",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1527788",
+   "land": "Niederlande",
+   "lat": 51.5993903,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1527788.aspx?lan=0",
+    "website": "https://schaakgenootschap.nl/"
+   },
+   "lon": 4.7718635,
+   "name": "Open Roosendaalsche 2026-2027",
+   "ort": "De Veestallen",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1639,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-10-26"
+  },
   "1527969": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "8 minūtes + 4 sekundes",
@@ -18674,6 +19640,30 @@
    "typ": "Einzel-Schweizersystem Turniere",
    "v": 2,
    "von": "2027-01-23"
+  },
+  "1528426": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10min",
+   "bis": "2026-12-18",
+   "bz_label": "bedenkzeit",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1528426",
+   "land": "Deutschland",
+   "lat": 52.2004727,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1528426.aspx?lan=0"
+   },
+   "lon": 8.5828944,
+   "name": "Weihnachtstunier 2026 SG Bünde 1945",
+   "ort": "Bünde",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 622,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-18"
   },
   "1528427": null,
   "1528464": {
@@ -21866,6 +22856,31 @@
    "von": "2026-12-05"
   },
   "1533056": null,
+  "1533058": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7 minutos + 3 segundos",
+   "bis": "2027-01-24",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1533058",
+   "land": "Spanien",
+   "lat": 39.4607735,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1533058.aspx?lan=0",
+    "website": "http://www.facv.org"
+   },
+   "lon": -0.3737371,
+   "name": "Circuito Ajedrez Base 26-27 Monteolivete",
+   "ort": "Club Ajedrez Monteolivete - C/ Escultor José Capuz, 44 Bajo Izq. 46006 Valencia",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1308,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-01-24"
+  },
   "1533090": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "15min+5s/move",
@@ -22533,31 +23548,7 @@
    "v": 2,
    "von": "2026-11-29"
   },
-  "1533583": {
-   "bedenkzeit": "blitz",
-   "bedenkzeit_text": "2 x 3min + 2s",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (blitz)",
-   "elo": true,
-   "europa": true,
-   "gefunden": "",
-   "id": "cr:1533583",
-   "land": "Slowakei",
-   "lat": 49.2132819,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1533583.aspx?lan=0",
-    "website": "https://kavadoppio.sk/"
-   },
-   "lon": 18.7480398,
-   "name": "Šachový turnaj DOPPIO Blitz, Žilina",
-   "ort": "Vysokoškolákov 6, Žilina, kaviareň DOPPIO",
-   "quelle": "chess-results",
-   "runden": "9",
-   "schnitt": 1891,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1533583": null,
   "1533631": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "90 Min/40 Züge + 15 Min/ Rest + 30 Sek Bonus/Zug ab Beginn",
@@ -22778,30 +23769,7 @@
    "v": 2,
    "von": "2026-12-12"
   },
-  "1533739": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "8.min.+4.sek.",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": true,
-   "europa": true,
-   "gefunden": "",
-   "id": "cr:1533739",
-   "land": "Lettland",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1533739.aspx?lan=0"
-   },
-   "lon": null,
-   "name": "Rīgas domes darbinieku   šaha turnīra  24.11.2026. I posms",
-   "ort": "Rīgas Dome Rātslaukums 1",
-   "quelle": "chess-results",
-   "runden": "6",
-   "schnitt": 1534,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1533739": null,
   "1533773": null,
   "1533778": {
    "bedenkzeit": "schnell",
@@ -26469,54 +27437,8 @@
    "v": 2,
    "von": "2026-11-29"
   },
-  "1538371": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "2x10min +3sek. ťah",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "",
-   "id": "cr:1538371",
-   "land": "Slowakei",
-   "lat": 48.9571845,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1538371.aspx?lan=0"
-   },
-   "lon": 20.522034,
-   "name": "Krajské majstrovstvá Košický kraj 2026 žiačky",
-   "ort": "Smižany",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1139,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
-  "1538375": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "2x10min +3sek. ťah",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "",
-   "id": "cr:1538375",
-   "land": "Slowakei",
-   "lat": 48.9571845,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1538375.aspx?lan=0"
-   },
-   "lon": 20.522034,
-   "name": "Krajské majstrovstvá Košický kraj 2026 žiaci",
-   "ort": "Smižany",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1176,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1538371": null,
+  "1538375": null,
   "1538376": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "5 min + 3 sec ( Bronstein)",
@@ -28181,6 +29103,7 @@
    "v": 2,
    "von": "2026-12-19"
   },
+  "1539874": null,
   "1539875": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "30min+30 sec",
@@ -32053,6 +32976,31 @@
   "1543662": null,
   "1543663": null,
   "1543666": null,
+  "1543668": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutos+ 30 segundos",
+   "bis": "2026-12-08",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1543668",
+   "land": "Spanien",
+   "lat": 28.5249212,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1543668.aspx?lan=0",
+    "website": "https://alumni.usal.es/vii-edicion-torneo-ajedrez-pablo-unamuno/"
+   },
+   "lon": -16.1532628,
+   "name": "VII Torneo de Ajedrez Pablo de Unamuno",
+   "ort": "Sala de las Pinturas del Colegio Arzobispo de Fonseca, situado en C/ Fonseca, 4.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1752,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
   "1543670": null,
   "1543671": {
    "bedenkzeit": "",
@@ -33337,31 +34285,7 @@
   "1544327": null,
   "1544328": null,
   "1544329": null,
-  "1544330": {
-   "bedenkzeit": "blitz",
-   "bedenkzeit_text": "3+2",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (blitz)",
-   "elo": true,
-   "europa": true,
-   "gefunden": "",
-   "id": "cr:1544330",
-   "land": "Litauen",
-   "lat": 54.6805282,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1544330.aspx?lan=0",
-    "website": "http://vilniuschess.lt"
-   },
-   "lon": 25.2929064,
-   "name": "Vilniaus šachmatų klubo žaibo turnyras 2026-11-24 LR Kariuomenės diena",
-   "ort": "Užupio kavinė, Užupio g. 2, Vilnius",
-   "quelle": "chess-results",
-   "runden": "11",
-   "schnitt": 1775,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1544330": null,
   "1544331": null,
   "1544332": {
    "bedenkzeit": "schnell",
@@ -33754,8 +34678,10 @@
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "2x90 min + 30sec/move",
    "bis": "2027-02-07",
+   "bz_label": "bedenkzeit (standard)",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:1544588",
    "land": "Ungarn",
    "lat": 47.457894,
@@ -33765,10 +34691,12 @@
    },
    "lon": 21.3333937,
    "name": "III. Dede Ernő Emlékverseny B csoport (2,8 millió Forint értékű díjalap/the prize fund is 7700 EUR)",
-   "ort": "4200 Hajdúszoboszló",
+   "ort": "4200 Hajdúszoboszló, Gábor Áron utca 21.",
    "quelle": "chess-results",
    "runden": "7",
+   "schnitt": 1687,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2027-02-04"
   },
   "1544589": null,
@@ -33776,8 +34704,10 @@
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "2x60 min + 30sec/move",
    "bis": "2027-02-07",
+   "bz_label": "bedenkzeit (standard)",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:1544590",
    "land": "Ungarn",
    "lat": 47.457894,
@@ -33786,11 +34716,13 @@
     "website": "https://dedeerno.hsi.hu/?lang=hu"
    },
    "lon": 21.3333937,
-   "name": "II. Dede Ernő Emlékverseny C csoport",
-   "ort": "4200 Hajdúszoboszló, Szilfákalja 2.",
+   "name": "II. Dede Ernő Emlékverseny C csoport (2,8 millió Forint értékű díjalap/the prize fund is 7700 EUR)",
+   "ort": "4200 Hajdúszoboszló, Gábor Áron utca 21.",
    "quelle": "chess-results",
    "runden": "9",
+   "schnitt": 1400,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2027-02-04"
   },
   "1544597": null,
@@ -39666,31 +40598,7 @@
   },
   "1548916": null,
   "1548917": null,
-  "1548918": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "10 minut + 3 sekundy na tah",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-23",
-   "id": "cr:1548918",
-   "land": "Tschechien",
-   "lat": 50.2758707,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1548918.aspx?lan=0",
-    "website": "http://www.emkojesenik.cz"
-   },
-   "lon": 17.1808923,
-   "name": "Okresní přebor škol - první stupeň - 24.11.2026",
-   "ort": "Jesenik",
-   "quelle": "chess-results",
-   "runden": "6",
-   "schnitt": 1037,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1548918": null,
   "1548920": null,
   "1548923": null,
   "1548924": null,
@@ -41537,31 +42445,7 @@
    "v": 2,
    "von": "2026-12-19"
   },
-  "1549382": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "10 minut + 3 sekundy na tah",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549382",
-   "land": "Tschechien",
-   "lat": 50.2758707,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549382.aspx?lan=0",
-    "website": "http://www.emkojesenik.cz"
-   },
-   "lon": 17.1808923,
-   "name": "Okresní přebor škol - druhý stupeň - 24.11.2026",
-   "ort": "Jesenik",
-   "quelle": "chess-results",
-   "runden": "6",
-   "schnitt": 1049,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549382": null,
   "1549385": {
    "bedenkzeit": "klassisch",
    "bedenkzeit_text": "Standard: 60min",
@@ -41733,31 +42617,7 @@
    "v": 2,
    "von": "2026-12-18"
   },
-  "1549410": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "10 minut + 3 sekundy na tah",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549410",
-   "land": "Tschechien",
-   "lat": 50.2758707,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549410.aspx?lan=0",
-    "website": "http://www.emkojesenik.cz"
-   },
-   "lon": 17.1808923,
-   "name": "Okresní přebor škol - střední školy - 24.11.2026",
-   "ort": "Jesenik",
-   "quelle": "chess-results",
-   "runden": "6",
-   "schnitt": 1057,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549410": null,
   "1549415": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "12 min + 3s/tah",
@@ -41858,30 +42718,7 @@
    "v": 2,
    "von": "2026-11-26"
   },
-  "1549427": {
-   "bedenkzeit": "blitz",
-   "bedenkzeit_text": "3'+ 2\"",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (blitz)",
-   "elo": true,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549427",
-   "land": "Armenien",
-   "lat": 40.1951553,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549427.aspx?lan=0"
-   },
-   "lon": 44.5246737,
-   "name": "Goris Open 2026 (Blitz)",
-   "ort": "33 Gusan Ashot Street, Goris, Syunik region, Republic of Armenia",
-   "quelle": "chess-results",
-   "runden": "9",
-   "schnitt": 1786,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549427": null,
   "1549431": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "10+5",
@@ -42151,31 +42988,7 @@
    "v": 2,
    "von": "2026-12-05"
   },
-  "1549464": {
-   "bedenkzeit": "blitz",
-   "bedenkzeit_text": "Rapid: 7min +5sec increment per move starting from move 1",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549464",
-   "land": "Polen",
-   "lat": 51.4660473,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549464.aspx?lan=0",
-    "website": "https://www.chessmanager.com/tournaments/5903451243544576"
-   },
-   "lon": 22.6052895,
-   "name": "Mistrzostwa ZS nr 2 w Lubartowie",
-   "ort": "Lubartow",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": null,
-   "typ": "Einzel-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549464": null,
   "1549466": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "Rapid: 10 minutes for the game with 5 seconds increment from move 1",
@@ -42397,30 +43210,7 @@
    "v": 2,
    "von": "2026-12-08"
   },
-  "1549558": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15 minut + 5 sekund",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549558",
-   "land": "Tschechien",
-   "lat": 49.195513,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549558.aspx?lan=0"
-   },
-   "lon": 16.6501556,
-   "name": "Okresní kolo Přeboru škol 6. - 9 tříd, Lanškroun 2026 okres Ústí nad Orlicí",
-   "ort": "Lanškroun, Dělnický dům",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1080,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549558": null,
   "1549559": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "7' + 3\"",
@@ -42767,156 +43557,12 @@
    "v": 2,
    "von": "2026-11-25"
   },
-  "1549595": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15'+10'' Eklemeli tempo",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549595",
-   "land": "Türkei",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549595.aspx?lan=0",
-    "website": "http://www.istanbul.tsf.org.tr"
-   },
-   "lon": null,
-   "name": "2026-2027 Öğretim Yılı Çekmeköy Gençlik Spor İlçe Müdürlüğü Okullar Arası  Satra Küçükler Açık",
-   "ort": "YETEV OKULLARI ÇEKMEKÖY KAMPÜSÜ",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1031,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
-  "1549596": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15'+10'' Eklemeli tempo",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549596",
-   "land": "Türkei",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549596.aspx?lan=0",
-    "website": "http://www.istanbul.tsf.org.tr"
-   },
-   "lon": null,
-   "name": "2026-2027 Öğretim Yılı Çekmeköy Gençlik Spor İlçe Müdürlüğü Okullar Arası  Satra Küçükler Kızlar",
-   "ort": "YETEV OKULLARI ÇEKMEKÖY KAMPÜSÜ",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1003,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
-  "1549597": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15'+10'' Eklemeli tempo",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549597",
-   "land": "Türkei",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549597.aspx?lan=0",
-    "website": "http://www.istanbul.tsf.org.tr"
-   },
-   "lon": null,
-   "name": "2026-2027 Öğretim Yılı Çekmeköy Gençlik Spor İlçe Müdürlüğü Okullar Arası  Satra Yıldızlar Açık",
-   "ort": "YETEV OKULLARI ÇEKMEKÖY KAMPÜSÜ",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1018,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
-  "1549598": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15'+10'' Eklemeli tempo",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549598",
-   "land": "Türkei",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549598.aspx?lan=0",
-    "website": "http://www.istanbul.tsf.org.tr"
-   },
-   "lon": null,
-   "name": "2026-2027 Öğretim Yılı Çekmeköy Gençlik Spor İlçe Müdürlüğü Okullar Arası  Satra Yıldızlar Kızlar",
-   "ort": "YETEV OKULLARI ÇEKMEKÖY KAMPÜSÜ",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1000,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
-  "1549599": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15'+10'' Eklemeli tempo",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549599",
-   "land": "Türkei",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549599.aspx?lan=0",
-    "website": "http://www.istanbul.tsf.org.tr"
-   },
-   "lon": null,
-   "name": "2026-2027 Öğretim Yılı Çekmeköy Gençlik Spor İlçe Müdürlüğü Okullar Arası  Satra Gençler Açık",
-   "ort": "YETEV OKULLARI ÇEKMEKÖY KAMPÜSÜ",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1034,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
-  "1549600": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "15'+10'' Eklemeli tempo",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549600",
-   "land": "Türkei",
-   "lat": null,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549600.aspx?lan=0",
-    "website": "http://www.istanbul.tsf.org.tr"
-   },
-   "lon": null,
-   "name": "2026-2027 Öğretim Yılı Çekmeköy Gençlik Spor İlçe Müdürlüğü Okullar Arası  Satra Gençler Kızlar",
-   "ort": "YETEV OKULLARI ÇEKMEKÖY KAMPÜSÜ",
-   "quelle": "chess-results",
-   "runden": "7",
-   "schnitt": 1031,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549595": null,
+  "1549596": null,
+  "1549597": null,
+  "1549598": null,
+  "1549599": null,
+  "1549600": null,
   "1549606": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "2x15",
@@ -42967,31 +43613,7 @@
    "v": 2,
    "von": "2026-11-29"
   },
-  "1549610": {
-   "bedenkzeit": "schnell",
-   "bedenkzeit_text": "10+3",
-   "bis": "2026-11-24",
-   "bz_label": "bedenkzeit (rapid)",
-   "elo": false,
-   "europa": true,
-   "gefunden": "2026-11-24",
-   "id": "cr:1549610",
-   "land": "England",
-   "lat": 51.5714876,
-   "links": {
-    "chessresults": "https://chess-results.com/tnr1549610.aspx?lan=0",
-    "website": "http://www.harrowschool.org.uk"
-   },
-   "lon": -0.3311238,
-   "name": "English Schools' Chess Championships Area Qualifier Harrow School",
-   "ort": "Harrow School, London",
-   "quelle": "chess-results",
-   "runden": "4",
-   "schnitt": 1263,
-   "typ": "Mannschafts-Schweizersystem Turniere",
-   "v": 2,
-   "von": "2026-11-24"
-  },
+  "1549610": null,
   "1549615": {
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "15 minute + 10 secunde",
@@ -43090,12 +43712,2702 @@
    "v": 2,
    "von": "2026-11-28"
   },
+  "1549756": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10'+5'' eklemeli tempo",
+   "bis": "2026-11-27",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549756",
+   "land": "Türkei",
+   "lat": 36.954233,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549756.aspx?lan=0",
+    "website": "http://tarsus.edu.tr"
+   },
+   "lon": 34.849977,
+   "name": "Tarsus Üniversitesi 2026-2027 Güz Turnuvası",
+   "ort": "Tarsus Üniversitesi Yemekhanesi",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1549764": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549764",
+   "land": "Ungarn",
+   "lat": 46.5632054,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549764.aspx?lan=0",
+    "website": "http://www.mattolna.hu"
+   },
+   "lon": 18.494504,
+   "name": "III. Fehér József Emlékverseny - 10 Város - Gyönk, 2026.12.05. - A csoport",
+   "ort": "Tolnai Lajos Gimnázium tornaterme – 7064 Gyönk, Rákóczi u. 555.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1473,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549766": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549766",
+   "land": "Ungarn",
+   "lat": 46.5632054,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549766.aspx?lan=0",
+    "website": "http://www.mattolna.hu"
+   },
+   "lon": 18.494504,
+   "name": "III. Fehér József Emlékverseny - 10 Város - Gyönk, 2026.12.05. - B csoport",
+   "ort": "Tolnai Lajos Gimnázium tornaterme – 7064 Gyönk, Rákóczi u. 555.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1062,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549769": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60՝+30՝՝",
+   "bis": "2026-12-03",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549769",
+   "land": "Armenien",
+   "lat": 40.2714761,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549769.aspx?lan=0",
+    "website": "http://ք.Աբովյան Հանրապետության 1/85"
+   },
+   "lon": 44.6333951,
+   "name": "ք. Աբովյան Որակավորման խառը մրցաշար 27.11.2026",
+   "ort": "Աբովյան",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1549775": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 + 3",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549775",
+   "land": "Serbien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549775.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "SUBOTICA - Zavrsni godisnji RAPID  5.decembra 2026",
+   "ort": "Prostorije SK SahArt, Subotica, ul.Bose Milicevica 1 (kod stanice0",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 2132,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549783": null,
+  "1549785": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5+3",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549785",
+   "land": "Aserbaidschan",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549785.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Məmmədyarovlar Şahmat Mərkəzi / Həvəskarlar Arasında Reytinqsiz Blitz Turnir  (5+3) 7 Tur 1900-ə qədər 18 Noyabr 19:30 Əlaqə: 055 666 83 84",
+   "ort": "Məmmədyarovlar Şahmat Mərkəzi",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1456,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1549787": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3 + 2",
+   "bis": "2026-12-11",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549787",
+   "land": "Kroatien",
+   "lat": 45.4083871,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549787.aspx?lan=0",
+    "website": "http://www.drustvo-sahpiran.si"
+   },
+   "lon": 13.6587529,
+   "name": "Brzopotezno prvenstvo ŠK Buje 2026 - 10. turnir",
+   "ort": "Buje",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1703,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-11"
+  },
+  "1549806": null,
+  "1549810": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10 minutes for game with 5 seconds increment from move 1",
+   "bis": "2026-11-26",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549810",
+   "land": "Israel",
+   "lat": 32.0980175,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549810.aspx?lan=0"
+   },
+   "lon": 34.7766332,
+   "name": "TechMate Chess Meetup Nova A",
+   "ort": "Nova",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1898,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1549815": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 минута по играчу + 10 секунди по потезу",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549815",
+   "land": "Bosnien",
+   "lat": 44.8067195,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549815.aspx?lan=0",
+    "website": "https://www.ssrepublikesrpske.org/"
+   },
+   "lon": 19.2639075,
+   "name": "31. КУП Републике Српске у шаху за 2026. годину - СЕНИОРИ",
+   "ort": "Хотел \"Свети Стефан\" - Дворови",
+   "quelle": "chess-results",
+   "runden": "1",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1549816": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 минута по играчу + 10 секунди по потезу",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549816",
+   "land": "Bosnien",
+   "lat": 44.8067195,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549816.aspx?lan=0",
+    "website": "https://www.ssrepublikesrpske.org/"
+   },
+   "lon": 19.2639075,
+   "name": "31. КУП Републике Српске у шаху за 2026. годину - КАДЕТИ",
+   "ort": "Хотел \"Свети Стефан\" - Дворови",
+   "quelle": "chess-results",
+   "runden": "1",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1549817": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 минута по играчу + 10 секунди по потезу",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549817",
+   "land": "Bosnien",
+   "lat": 44.8067195,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549817.aspx?lan=0",
+    "website": "https://www.ssrepublikesrpske.org/"
+   },
+   "lon": 19.2639075,
+   "name": "31. КУП Републике Српске у шаху за 2026. годину - ЖЕНЕ",
+   "ort": "Хотел \"Свети Стефан\" - Дворови",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1549818": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 минута по играчу + 10 секунди по потезу",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549818",
+   "land": "Bosnien",
+   "lat": 44.8067195,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549818.aspx?lan=0",
+    "website": "https://www.ssrepublikesrpske.org/"
+   },
+   "lon": 19.2639075,
+   "name": "31. КУП Републике Српске у шаху за 2026. годину - ФЕСТИВАЛ",
+   "ort": "Хотел \"Свети Стефан\" - Дворови",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1549819": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 минута по играчу + 10 секунди по потезу",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549819",
+   "land": "Bosnien",
+   "lat": 44.8067195,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549819.aspx?lan=0",
+    "website": "https://www.ssrepublikesrpske.org/"
+   },
+   "lon": 19.2639075,
+   "name": "31. КУП Републике Српске у шаху за 2026. годину - ОМЛАДИНЦИ",
+   "ort": "Хотел \"Свети Стефан\" - Дворови",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1549832": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min+3 sec KO",
+   "bis": "2026-11-26",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549832",
+   "land": "Rumänien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549832.aspx?lan=0",
+    "website": "http://www.hub8x8.ro"
+   },
+   "lon": null,
+   "name": "CNGL SIBIU - ONSS gimnaziu baieti - faza pe scoala , 26.11.2026, ora 11",
+   "ort": "CNGL - sala CDI",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": 1261,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1549837": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min+3 sec KO",
+   "bis": "2026-11-26",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549837",
+   "land": "Rumänien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549837.aspx?lan=0",
+    "website": "http://www.hub8x8.ro"
+   },
+   "lon": null,
+   "name": "CNGL SIBIU - ONSS gimnaziu fete- faza pe scoala , 26.11.2026, ora 11",
+   "ort": "CNGL - sala CDI",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": 1107,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1549838": null,
+  "1549839": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min+3 sec KO",
+   "bis": "2026-11-26",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549839",
+   "land": "Rumänien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549839.aspx?lan=0",
+    "website": "http://www.hub8x8.ro"
+   },
+   "lon": null,
+   "name": "CNGL SIBIU - ONSS liceu baieti - faza pe scoala , 26.11.2026, ora 11",
+   "ort": "CNGL - sala CDI",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": 1000,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1549841": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 perc - 15 perc + 3mp lépésenkénti időhozzáadás",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549841",
+   "land": "Ungarn",
+   "lat": 47.8218515,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549841.aspx?lan=0",
+    "website": "https://chess.hu/iii-szigetkozi-sakk-karacsony-jamboree-kimle/"
+   },
+   "lon": 17.3864754,
+   "name": "III. Szigetkozi Sakk Karácsony & Jamboree A-csoport",
+   "ort": "9181 Kimle, Vízpart utca 2. - Művelődési Ház Kimle",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1757,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-12"
+  },
+  "1549842": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min+3 sec KO",
+   "bis": "2026-11-26",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549842",
+   "land": "Rumänien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549842.aspx?lan=0",
+    "website": "http://www.hub8x8.ro"
+   },
+   "lon": null,
+   "name": "CNGL SIBIU - ONSS liceu fete- faza pe scoala , 26.11.2026, ora 11",
+   "ort": "CNGL - sala CDI",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": 1000,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1549848": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10 minutes for game with 5 seconds increment from move 1",
+   "bis": "2026-11-26",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549848",
+   "land": "Israel",
+   "lat": 32.0980175,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549848.aspx?lan=0"
+   },
+   "lon": 34.7766332,
+   "name": "TechMate Chess Meetup Nova B",
+   "ort": "Nova",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1357,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1549854": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 perc - 15 perc + 3mp lépésenkénti időhozzáadás",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549854",
+   "land": "Ungarn",
+   "lat": 47.8218515,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549854.aspx?lan=0",
+    "website": "https://chess.hu/iii-szigetkozi-sakk-karacsony-jamboree-kimle/"
+   },
+   "lon": 17.3864754,
+   "name": "III. Szigetkozi Sakk Karácsony & Jamboree A-csoport",
+   "ort": "9181 Kimle, Vízpart utca 2. - Művelődési Ház Kimle",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1072,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-12"
+  },
+  "1549855": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 perc - 15 perc + 3mp lépésenkénti időhozzáadás",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549855",
+   "land": "Ungarn",
+   "lat": 47.8218515,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549855.aspx?lan=0",
+    "website": "https://chess.hu/iii-szigetkozi-sakk-karacsony-jamboree-kimle/"
+   },
+   "lon": 17.3864754,
+   "name": "III. Szigetkozi Sakk Karácsony & Jamboree B-csoport",
+   "ort": "9181 Kimle, Vízpart utca 2. - Művelődési Ház Kimle",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1067,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-12"
+  },
+  "1549859": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60 dəqiqə",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549859",
+   "land": "Aserbaidschan",
+   "lat": 41.1969731,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549859.aspx?lan=0"
+   },
+   "lon": 49.0008177,
+   "name": "\"SABAH\" Chess Academy'nin təşkilatçılığı ilə keçirilən IV dərəcə təsnifat  turniri (2010-ci il təvəllüdlü və kiçik yaşlı).",
+   "ort": "İzmir küç 5",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549860": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "60 dəqiqə",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549860",
+   "land": "Aserbaidschan",
+   "lat": 41.1969731,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549860.aspx?lan=0"
+   },
+   "lon": 49.0008177,
+   "name": "\"SABAH\" Chess Academy'nin təşkilatçılığı ilə keçirilən lll dərəcə təsnifat  turniri (2010-ci il təvəllüdlü və kiçik yaşlı).",
+   "ort": "İzmir küç 5",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549862": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "35'+30'' eklemeli tempo",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549862",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549862.aspx?lan=0",
+    "website": "http://www.kocaeli.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "ÖZELSİN KOLEJİ SATRANÇ TURNUVASI **********8 YAŞ VE ALTI**********",
+   "ort": "ÖZEL SİN KOLEJİ SPOR SALONU",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549863": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549863",
+   "land": "Ungarn",
+   "lat": 46.5632054,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549863.aspx?lan=0",
+    "website": "http://www.mattolna.hu"
+   },
+   "lon": 18.494504,
+   "name": "III. Fehér József Emlékverseny - 10 Város - Gyönk, 2026.12.05. - C csoport",
+   "ort": "Tolnai Lajos Gimnázium tornaterme – 7064 Gyönk, Rákóczi u. 555.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 690,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549864": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549864",
+   "land": "Ungarn",
+   "lat": 46.5632054,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549864.aspx?lan=0",
+    "website": "http://www.mattolna.hu"
+   },
+   "lon": 18.494504,
+   "name": "III. Fehér József Emlékverseny - 10 Város - Gyönk, 2026.12.05. - D csoport",
+   "ort": "Tolnai Lajos Gimnázium tornaterme – 7064 Gyönk, Rákóczi u. 555.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549865": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 минута по играчу + 5 секунди по потезу",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549865",
+   "land": "Bosnien",
+   "lat": 44.8067195,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549865.aspx?lan=0",
+    "website": "https://www.ssrepublikesrpske.org/"
+   },
+   "lon": 19.2639075,
+   "name": "8. Аматерско првенство Републике Српске у шаху за 2026. годину",
+   "ort": "Хотел \"Свети Стефан\" - Дворови",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1549868": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x15 min + 5 sec",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549868",
+   "land": "Ungarn",
+   "lat": 46.5632054,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549868.aspx?lan=0",
+    "website": "http://www.mattolna.hu"
+   },
+   "lon": 18.494504,
+   "name": "III. Fehér József Emlékverseny - 10 Város - Gyönk, 2026.12.05. - E csoport kezdő",
+   "ort": "Tolnai Lajos Gimnázium tornaterme – 7064 Gyönk, Rákóczi u. 555.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549870": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "35'+30'' eklemeli tempo",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549870",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549870.aspx?lan=0",
+    "website": "http://www.kocaeli.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "ÖZELSİN KOLEJİ SATRANÇ TURNUVASI ********** 10 YAŞ VE ALTI **********",
+   "ort": "ÖZEL SİN KOLEJİ SPOR SALONU",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549871": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "35'+30'' eklemeli tempo",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549871",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549871.aspx?lan=0",
+    "website": "http://www.kocaeli.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "ÖZELSİN KOLEJİ SATRANÇ TURNUVASI ********** 12 YAŞ VE ALTI **********",
+   "ort": "ÖZEL SİN KOLEJİ SPOR SALONU",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549874": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "35'+30'' eklemeli tempo",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549874",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549874.aspx?lan=0",
+    "website": "http://www.kocaeli.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "ÖZELSİN KOLEJİ SATRANÇ TURNUVASI ********** 18 YAŞ VE ALTI **********",
+   "ort": "ÖZEL SİN KOLEJİ SPOR SALONU",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549879": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "20 Minuten",
+   "bis": "2026-12-07",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549879",
+   "land": "Schweiz",
+   "lat": 47.3504945,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549879.aspx?lan=0",
+    "website": "http://schachclub-freiamt.ch"
+   },
+   "lon": 8.2786906,
+   "name": "Schachsenioren am Montag Rapid2",
+   "ort": "Restaurant Leo, Kapellstrasse 4, Wohlen",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1568,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-30"
+  },
+  "1549882": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 мин. + 5 сек.",
+   "bis": "2027-01-09",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549882",
+   "land": "Bulgarien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549882.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "\"ЗЛАТНАТА ДАМА\"  * 9 януари 2027 г. * гр. София * -  3500 евро НФ",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1801,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-01-09"
+  },
+  "1549891": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15' + 5\"",
+   "bis": "2026-12-20",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549891",
+   "land": "England",
+   "lat": 51.3392845,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549891.aspx?lan=0",
+    "website": "https://chessentriesforall.com/home/future-events/"
+   },
+   "lon": -0.7460981,
+   "name": "Wey Valley Christmas Congress 2026 and LJCCQ  U8",
+   "ort": "The Mytchett Centre, 140 Mytchett Rd, Mytchett, Camberley GU16 6AA",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-20"
+  },
+  "1549895": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15' + 5\"",
+   "bis": "2026-12-20",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549895",
+   "land": "England",
+   "lat": 51.3392845,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549895.aspx?lan=0",
+    "website": "https://chessentriesforall.com/home/future-events/"
+   },
+   "lon": -0.7460981,
+   "name": "Wey Valley Christmas Congress 2026 U10",
+   "ort": "The Mytchett Centre, 140 Mytchett Rd, Mytchett, Camberley GU16 6AA",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-20"
+  },
+  "1549898": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15' + 5\"",
+   "bis": "2026-12-20",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549898",
+   "land": "England",
+   "lat": 51.3392845,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549898.aspx?lan=0",
+    "website": "https://chessentriesforall.com/home/future-events/"
+   },
+   "lon": -0.7460981,
+   "name": "Wey Valley Christmas Congress 2026 and LJCCQ  U12",
+   "ort": "The Mytchett Centre, 140 Mytchett Rd, Mytchett, Camberley GU16 6AA",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-20"
+  },
+  "1549902": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "5'+6\"",
+   "bis": "2026-12-20",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549902",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549902.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XXXVIII Abierto de Ajedrez Ciudad de Armilla",
+   "ort": "Pabellón Deportivo Municipal Rafael Machado Villar. Armilla (Granada)",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-20"
+  },
+  "1549905": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "5'+6\"",
+   "bis": "2026-12-20",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549905",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549905.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "VII Torneo Escolar de Ajedrez Ciudad de Armilla",
+   "ort": "Pabellón Deportivo Municipal Rafael Machado Villar. Armilla (Granada)",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-20"
+  },
+  "1549907": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 min/40 moves+ 30 min/end+ 30 sec incr,/move from move 1",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549907",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549907.aspx?lan=0",
+    "website": "https://firstsaturday.hu/"
+   },
+   "lon": null,
+   "name": "First Saturday 2026 December - U2250",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1913,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1549915": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5 min. +3 sek./ėjimui",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549915",
+   "land": "Litauen",
+   "lat": 56.1999121,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549915.aspx?lan=0",
+    "website": "http://www.bsk.puslapiai.lt"
+   },
+   "lon": 24.7571107,
+   "name": "2026 m. Biržų \"Žaibo\" šachmatų čempionatas",
+   "ort": "Biržai",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1428,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1549919": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5 sec/move",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549919",
+   "land": "England",
+   "lat": 51.5449509,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549919.aspx?lan=0"
+   },
+   "lon": -0.4816672,
+   "name": "Uxbridge LJCC Nov 2026: Under-8",
+   "ort": "Our Lady of Lourdes and Saint Michael, Osborn Rd, Uxbridge UB8 1UE",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 538,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1549927": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5 sec/move",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549927",
+   "land": "England",
+   "lat": 51.5449509,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549927.aspx?lan=0"
+   },
+   "lon": -0.4816672,
+   "name": "Uxbridge LJCC Nov 2026: Under-10",
+   "ort": "Our Lady of Lourdes and Saint Michael, Osborn Rd, Uxbridge UB8 1UE",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 649,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1549933": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5 sec/move",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549933",
+   "land": "England",
+   "lat": 51.5449509,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549933.aspx?lan=0"
+   },
+   "lon": -0.4816672,
+   "name": "Uxbridge LJCC Nov 2026: Under-12",
+   "ort": "Our Lady of Lourdes and Saint Michael, Osborn Rd, Uxbridge UB8 1UE",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 827,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1549934": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "3'2\"",
+   "bis": "2026-11-28",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549934",
+   "land": "Frankreich",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549934.aspx?lan=0",
+    "website": "https://echecs-veigy.fr"
+   },
+   "lon": null,
+   "name": "6ème Blitz de Veigy-Foncenex",
+   "ort": "Salle d'Animation, 166 B route du Chablais, 74140 Veigy-Foncenex.",
+   "quelle": "chess-results",
+   "runden": "11",
+   "schnitt": 1452,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1549941": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 min + 5 sec/move",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549941",
+   "land": "England",
+   "lat": 51.5449509,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549941.aspx?lan=0"
+   },
+   "lon": -0.4816672,
+   "name": "Uxbridge LJCC Nov 2026: Under-14",
+   "ort": "Our Lady of Lourdes and Saint Michael, Osborn Rd, Uxbridge UB8 1UE",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 745,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1549981": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 m. + 5 sec.",
+   "bis": "2026-11-30",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549981",
+   "land": "Armenien",
+   "lat": 40.1570136,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549981.aspx?lan=0",
+    "website": "https://www.chessfed.am/am"
+   },
+   "lon": 44.483239,
+   "name": "Karen Asrian Memorial Rapid Chess Championship (Semifinal)",
+   "ort": "Shevchenko 34",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 2167,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1549987": null,
+  "1549996": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-27",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1549996",
+   "land": "Spanien",
+   "lat": 41.6276802,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1549996.aspx?lan=0"
+   },
+   "lon": -0.933138,
+   "name": "ESCOLAR IND.- CASTELLÓ 2026- (Patronat, Columbretes 22) TORNEO 4, 27 NOV., 17:45",
+   "ort": "Patronat, CALLE Columbretes 22  -  TORNEO 4, 27 NOV., 17:45",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-27"
+  },
+  "1550027": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "8´+ 3´´",
+   "bis": "2026-11-28",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550027",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550027.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "I TORNEO DE AJEDREZ CAPILEIRA",
+   "ort": "Salon Municipal de Capileira",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1408,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1550058": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "Standard: 60 minutes with 30 second increment from move 1",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550058",
+   "land": "Serbien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550058.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "RUDAR 42 - FM ROUND Pozarevac 26-29 November2026.",
+   "ort": "Pozarevac - hotel \"Dunav\"",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": 2000,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1550066": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "2x45+30 vteřin na tah",
+   "bis": "2027-04-03",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550066",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550066.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Krajský přebor družstev mládeže ŠSLK 2026/2027",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550069": null,
+  "1550071": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes + 30 secondes par coup",
+   "bis": "2027-06-14",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550071",
+   "land": "Schweiz",
+   "lat": 46.5209573,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550071.aspx?lan=0",
+    "website": "https://www.gelchess.ch"
+   },
+   "lon": 6.6426666,
+   "name": "Tournoi GEL 2027",
+   "ort": "Chemin de Renou 2, 1005 Lausanne",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1857,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-14"
+  },
+  "1550076": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'x40+30\" → 30'+30\"",
+   "bis": "2027-02-19",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550076",
+   "land": "Frankreich",
+   "lat": 45.9366592,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550076.aspx?lan=0",
+    "website": "https://sharly-chess.com/o/echiquier-rochefortais"
+   },
+   "lon": -0.9616399,
+   "name": "25th Rochefort Chess Festival - C-PROMOTION",
+   "ort": "Rochefort",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1532,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-02-13"
+  },
+  "1550084": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'x40+30\" → 30'+30\"",
+   "bis": "2027-02-19",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550084",
+   "land": "Frankreich",
+   "lat": 45.9366592,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550084.aspx?lan=0",
+    "website": "https://sharly-chess.com/o/echiquier-rochefortais"
+   },
+   "lon": -0.9616399,
+   "name": "25th Rochefort Chess Festival - A-MASTERS",
+   "ort": "Rochefort",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 2404,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-02-13"
+  },
+  "1550085": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'x40+30\" → 30'+30\"",
+   "bis": "2027-02-19",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550085",
+   "land": "Frankreich",
+   "lat": 45.9366592,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550085.aspx?lan=0",
+    "website": "https://sharly-chess.com/o/echiquier-rochefortais"
+   },
+   "lon": -0.9616399,
+   "name": "25th Rochefort Chess Festival - B-ACCESSION",
+   "ort": "Rochefort",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1821,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-02-13"
+  },
+  "1550090": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "45 dəgigə",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550090",
+   "land": "Aserbaidschan",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550090.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "6-12-13 dekabr  saat 12.00 -   2010 və balaça  3- dərəçə -Bahruz Chess Club       Əlagə 0552003001       Limit 30 nəfər",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-06"
+  },
+  "1550094": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 Minuten + 5 Sekunden / Zug",
+   "bis": "2026-12-08",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550094",
+   "land": "Österreich",
+   "lat": 47.7752135,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550094.aspx?lan=0",
+    "website": "https://bsbschach.club"
+   },
+   "lon": 16.3258026,
+   "name": "Weihnachtsturnier des Union SK Bad Sauerbrunn 2026",
+   "ort": "Parkhotel Neubauer, 7202 Bad Sauerbrunn, Postgasse 2",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1540,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-08"
+  },
+  "1550095": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "45 dəgigə",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550095",
+   "land": "Aserbaidschan",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550095.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "6-12-13 dekabr  saat 14.00    2010 və balaça  2dərəçə -Bahruz Chess Club       Əlagə 0552003001       Limit 30 nəfər",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1000,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-06"
+  },
+  "1550096": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7+3",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550096",
+   "land": "Kroatien",
+   "lat": 45.8051939,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550096.aspx?lan=0"
+   },
+   "lon": 15.955145,
+   "name": "Predškolci i 1 razredi od početnika do majstora",
+   "ort": "Nova cesta 37",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-13"
+  },
+  "1550097": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7+3",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550097",
+   "land": "Kroatien",
+   "lat": 45.8051939,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550097.aspx?lan=0"
+   },
+   "lon": 15.955145,
+   "name": "2 i3 razredi od početnika do majstora",
+   "ort": "Nova cesta 37",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-13"
+  },
+  "1550099": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7+3",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550099",
+   "land": "Kroatien",
+   "lat": 45.8051939,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550099.aspx?lan=0"
+   },
+   "lon": 15.955145,
+   "name": "5 i 8 razredi od početnika do majstora",
+   "ort": "Nova cesta 37",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-13"
+  },
+  "1550110": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10min +3sec increment per move starting from move 1",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550110",
+   "land": "Polen",
+   "lat": 54.4635771,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550110.aspx?lan=0",
+    "website": "https://www.chessmanager.com/tournaments/4918092862980096"
+   },
+   "lon": 17.020948,
+   "name": "Otwarte Mistrzostwa Miasta Słupska w Szachach Dynamicznych. Eliminacje - OPEN W  SZACHACH SZYBKICH - zgłoszony do FIDE",
+   "ort": "Słupsk",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1740,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550111": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-29",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550111",
+   "land": "Aserbaidschan",
+   "lat": 40.3849336,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550111.aspx?lan=0"
+   },
+   "lon": 49.876209,
+   "name": "İdrisov Academy lll dərəcə turniri / 28-29 noyabr 15:00 / 055 866 82 52",
+   "ort": "Nəcəfqulu Rəfiyev 25a",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1550112": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-29",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550112",
+   "land": "Aserbaidschan",
+   "lat": 40.3849336,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550112.aspx?lan=0"
+   },
+   "lon": 49.876209,
+   "name": "İdrisov Academy lV dərəcə turniri / 28-29 noyabr 15:00 / 055 866 82 52",
+   "ort": "Nəcəfqulu Rəfiyev 25a",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1550119": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "50'+10\"",
+   "bis": "2027-02-15",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550119",
+   "land": "Frankreich",
+   "lat": 45.9366592,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550119.aspx?lan=0",
+    "website": "https://sharly-chess.com/o/echiquier-rochefortais"
+   },
+   "lon": -0.9616399,
+   "name": "25th Rochefort Chess Festival - ESPOIR",
+   "ort": "Rochefort",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1437,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-02-13"
+  },
+  "1550120": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90´+ 30´´",
+   "bis": "2027-01-24",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550120",
+   "land": "Portugal",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550120.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "ACXA - Campeonato Distrital de Veteranos 2026/27",
+   "ort": "Messines, VRSA e Lagos",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1782,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550122": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10'+5\" from move1",
+   "bis": "2026-11-28",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550122",
+   "land": "Albanien",
+   "lat": 41.3188249,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550122.aspx?lan=0"
+   },
+   "lon": 19.8133997,
+   "name": "Chess Tournament Dita e Pavaresise Open Rapid 28.11.2026",
+   "ort": "Shtepia e Shahut / Akademia Kombetare e Shahut, Zayed Center Tirane",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1854,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1550124": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90´+ 30´´",
+   "bis": "2027-01-24",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550124",
+   "land": "Portugal",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550124.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "ACXA - Campeonato Distrital Individual de Jovens Algarve 2026/27",
+   "ort": "Messines, VRSA e Lagos",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550131": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "3'+2\" from move1",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550131",
+   "land": "Albanien",
+   "lat": 41.3188249,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550131.aspx?lan=0"
+   },
+   "lon": 19.8133997,
+   "name": "Chess Tournament Dita e Clirimit Open Blitz 29.11.2026",
+   "ort": "Shtepia e Shahut / Akademia Kombetare e Shahut, Zayed Center Tirane",
+   "quelle": "chess-results",
+   "runden": "11",
+   "schnitt": 1848,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1550137": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15'+5''",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550137",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550137.aspx?lan=0",
+    "website": "https://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "2026–2027 ÖĞRETİM YILI SARIYER GSİM OKULLAR ARASI SATRANÇ TURNUVASI MİNİKLER(A) AÇIK",
+   "ort": "SARIYER BELEDİYESİ ANA BİNASI",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1007,
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550145": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15'+5''",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550145",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550145.aspx?lan=0",
+    "website": "https://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "2026–2027 ÖĞRETİM YILI SARIYER GSİM OKULLAR ARASI SATRANÇ TURNUVASI MİNİKLER(A) KIZLAR",
+   "ort": "SARIYER BELEDİYESİ ANA BİNASI",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1002,
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550159": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15'+5''",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550159",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550159.aspx?lan=0",
+    "website": "https://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "2026–2027 ÖĞRETİM YILI SARIYER GSİM OKULLAR ARASI SATRANÇ TURNUVASI MİNİKLER(B) AÇIK",
+   "ort": "SARIYER BELEDİYESİ ANA BİNASI",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1009,
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550161": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15'+5''",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550161",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550161.aspx?lan=0",
+    "website": "https://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "2026–2027 ÖĞRETİM YILI SARIYER GSİM OKULLAR ARASI SATRANÇ TURNUVASI MİNİKLER(B) KIZLAR",
+   "ort": "SARIYER BELEDİYESİ ANA BİNASI",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1000,
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550162": null,
+  "1550164": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "7min+3s",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550164",
+   "land": "Slowenien",
+   "lat": 46.5465766,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550164.aspx?lan=0",
+    "website": "http://www.sah-branikmb.si/"
+   },
+   "lon": 15.6498259,
+   "name": "Božični turnir- ŠK Branik Maribor",
+   "ort": "Mladinska ulica 29, 2000 Maribor, pod severno tribuno Ljudskega vrta",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1915,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550167": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 min. + 3 sec.",
+   "bis": "2026-12-12",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550167",
+   "land": "Montenegro",
+   "lat": 42.9624908,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550167.aspx?lan=0",
+    "website": "http://www.sahcg.me"
+   },
+   "lon": 19.5799899,
+   "name": "Rapid prvenstvo Crne Gore 2026",
+   "ort": "Mojkovac",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-12"
+  },
+  "1550168": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 min. + 3 sec.",
+   "bis": "2026-12-13",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550168",
+   "land": "Montenegro",
+   "lat": 42.9624908,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550168.aspx?lan=0",
+    "website": "http://www.sahcg.me"
+   },
+   "lon": 19.5799899,
+   "name": "Brzopotezno prvenstvo Crne Gore 2026",
+   "ort": "Mojkovac",
+   "quelle": "chess-results",
+   "runden": "13",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-13"
+  },
+  "1550170": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "12 min + 5 sec",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550170",
+   "land": "Bulgarien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550170.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "105.Trayana Stara Zagora 29.11.2026 /12m+5s/",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1595,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1550172": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 perc + 5 mp / lépés",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550172",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550172.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Rapid versenysorozat 2627 - Debrecen - 2026.12.05 (U700) D csoport",
+   "ort": "DSZC Brassai Sámuel Műszaki Technikum, Debrecen Víztorony utca 3",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550173": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 perc + 5 mp / lépés",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550173",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550173.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Rapid versenysorozat 2627 - Debrecen - 2026.12.05 (U1600) C csoport",
+   "ort": "DSZC Brassai Sámuel Műszaki Technikum, Debrecen Víztorony utca 3",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1143,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550174": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 perc + 5 mp / lépés",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550174",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550174.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Rapid versenysorozat 2627 - Debrecen - 2026.12.05 (U1900) B csoport",
+   "ort": "DSZC Brassai Sámuel Műszaki Technikum, Debrecen Víztorony utca 3",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1524,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550175": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 perc + 5 mp / lépés",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550175",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550175.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Rapid versenysorozat 2627 - Debrecen - 2026.12.05 A csoport",
+   "ort": "Brassai Sámuel Műszaki Technikum, Debrecen Víztorony utca 3.",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1748,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550177": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5'",
+   "bis": "2026-11-30",
+   "bz_label": "bedenkzeit",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550177",
+   "land": "Rumänien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550177.aspx?lan=0",
+    "website": "https://my.chesspairings.org/t.php?c=JuE1Z5eP"
+   },
+   "lon": null,
+   "name": "Turneu inchis 6 jucatori, 30 nov",
+   "ort": "Academia Ivan",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1565,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-30"
+  },
+  "1550178": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-12-19",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550178",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550178.aspx?lan=0",
+    "website": "http://www.vcentenario.com"
+   },
+   "lon": null,
+   "name": "Prebenjamin. Torneo SuperPollitos San Sebastián de los Reyes",
+   "ort": "Club Ajedrez V Centenario. Avenida Baunatal, 18, anexo. Sanse",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1200,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550183": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10+5",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550183",
+   "land": "Ungarn",
+   "lat": 47.4924385,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550183.aspx?lan=0",
+    "website": "https://chess.hu/10-varos-kezdo-kozephalado-gyerek-sakkverseny-budapest-2/"
+   },
+   "lon": 19.0255643,
+   "name": "10 Város kezdő-középhaladó gyerekverseny B csoport, december 5. Budapest",
+   "ort": "1123 Budpest, Testnevelési és Sporttudományi Egyetem",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1318,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550184": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10+5",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550184",
+   "land": "Ungarn",
+   "lat": 47.4924385,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550184.aspx?lan=0",
+    "website": "https://chess.hu/10-varos-kezdo-kozephalado-gyerek-sakkverseny-budapest-2/"
+   },
+   "lon": 19.0255643,
+   "name": "10 Város kezdő-középhaladó gyerekverseny C csoport, december 5. Budapest",
+   "ort": "1123 Budpest, Testnevelési és Sporttudományi Egyetem",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1117,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550185": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10+5",
+   "bis": "2026-12-05",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550185",
+   "land": "Ungarn",
+   "lat": 47.4924385,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550185.aspx?lan=0",
+    "website": "https://chess.hu/10-varos-kezdo-kozephalado-gyerek-sakkverseny-budapest-2/"
+   },
+   "lon": 19.0255643,
+   "name": "10 Város kezdő-középhaladó gyerekverseny D csoport, december 5. Budapest",
+   "ort": "1123 Budpest, Testnevelési és Sporttudományi Egyetem",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 875,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-05"
+  },
+  "1550188": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-12-19",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550188",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550188.aspx?lan=0",
+    "website": "http://www.vcentenario.com"
+   },
+   "lon": null,
+   "name": "Benjamin. Torneo SuperPollitos San Sebastián de los Reyes",
+   "ort": "Club Ajedrez V Centenario. Avenida Baunatal, 18, anexo. Sanse",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1200,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550189": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes with 30 seconds cumulative increment for each move starting from first move.",
+   "bis": "2026-12-17",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550189",
+   "land": "Ukraine",
+   "lat": 44.5118913,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550189.aspx?lan=0",
+    "website": "http://ukrchess.org.ua"
+   },
+   "lon": 33.4955352,
+   "name": "Championship UKR Women`s 2026",
+   "ort": "Lviv, Medova Pechera st., 65",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1815,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-09"
+  },
+  "1550190": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-12-19",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550190",
+   "land": "Spanien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550190.aspx?lan=0",
+    "website": "http://www.vcentenario.com"
+   },
+   "lon": null,
+   "name": "Alevin, Infantil y Cadete. Torneo SuperPollitos San Sebastián de los Reyes",
+   "ort": "Club Ajedrez V Centenario. Avenida Baunatal, 18, anexo. Sanse",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1275,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550191": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90-90 min. + 30 sec./move",
+   "bis": "2027-01-09",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550191",
+   "land": "Ungarn",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550191.aspx?lan=0",
+    "website": "https://chess.hu/budapest-winter/"
+   },
+   "lon": null,
+   "name": "Budapest Winter 6 fordulós értékszámszerző svájci verseny, január 7-9.",
+   "ort": "1123. Budapest, Alkotás utca 48. Magyar Testnevelési és Sporttudományi Egyetem",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1833,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-01-07"
+  },
+  "1550192": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Rapid: 10min +5sec increment per move starting from move 1",
+   "bis": "2026-11-28",
+   "bz_label": "bedenkzeit",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550192",
+   "land": "Ukraine",
+   "lat": 50.4500336,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550192.aspx?lan=0",
+    "website": "https://www.chessmanager.com/tournaments/4842532480614400"
+   },
+   "lon": 30.5241361,
+   "name": "Kyiv Cup senior 2026 round 3",
+   "ort": "Kyiv",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1572,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-28"
+  },
+  "1550193": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90 minutes with 30 seconds cumulative increment for each move starting from first move.",
+   "bis": "2026-12-17",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550193",
+   "land": "Ukraine",
+   "lat": 44.5118913,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550193.aspx?lan=0",
+    "website": "http://ukrchess.org.ua"
+   },
+   "lon": 33.4955352,
+   "name": "Championship UKR Men`s 2026\t\t\t\t\tUCF",
+   "ort": "Lviv, Medova Pechera st., 65",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": 1849,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-09"
+  },
+  "1550201": null,
+  "1550204": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15 minuta + 5 sekundi",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550204",
+   "land": "Kroatien",
+   "lat": 46.3079645,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550204.aspx?lan=0"
+   },
+   "lon": 16.3378198,
+   "name": "Ekipno prvenstvo SREDNJIH škola Varaždinske županije u šahu šk.god. 2026/27 MLADIĆI",
+   "ort": "Varaždin",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1303,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550209": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 min. + 3 sek. / tah",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550209",
+   "land": "Tschechien",
+   "lat": 50.7702648,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550209.aspx?lan=0"
+   },
+   "lon": 15.0583947,
+   "name": "PŠ - OK - Liberec",
+   "ort": "Liberec",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1022,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550210": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 min. + 3 sek. / tah",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550210",
+   "land": "Tschechien",
+   "lat": 50.7702648,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550210.aspx?lan=0"
+   },
+   "lon": 15.0583947,
+   "name": "PŠ - OK - Liberec",
+   "ort": "Liberec",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1027,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550211": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "2x 10 min. + 3 sek. / tah",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550211",
+   "land": "Tschechien",
+   "lat": 50.7702648,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550211.aspx?lan=0"
+   },
+   "lon": 15.0583947,
+   "name": "PŠ - OK - Liberec",
+   "ort": "Liberec",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": 1229,
+   "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550215": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "handicap",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550215",
+   "land": "Estland",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550215.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "XXVI Pühajärve Rapid Tournament",
+   "ort": "Pühajärve SPA & Holiday Resort",
+   "quelle": "chess-results",
+   "runden": "0",
+   "schnitt": 2076,
+   "typ": "Einzel-Rundenturniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1550226": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "10 minutos KO",
+   "bis": "2026-11-29",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550226",
+   "land": "Portugal",
+   "lat": 38.7242539,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550226.aspx?lan=0",
+    "website": "https://axadrezlisboa.pt"
+   },
+   "lon": -9.3531341,
+   "name": "II Torneio Escolar Individual - AX Lisboa 2026/2027",
+   "ort": "Soc. Rec. OUTEIRENSE-Est. Principal do Outeiro 847, 2785-520 S. Domingos de Rana",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-29"
+  },
+  "1550227": {
+   "bedenkzeit": "klassisch",
+   "bedenkzeit_text": "90'+30\"",
+   "bis": "2027-07-04",
+   "bz_label": "bedenkzeit (standard)",
+   "elo": true,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550227",
+   "land": "Kroatien",
+   "lat": 45.9003739,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550227.aspx?lan=0"
+   },
+   "lon": 16.8440193,
+   "name": "10th International Chess Tournament, \"Solta Chess Open 2027\",  Grohote, 27.06.-04.07.2027.",
+   "ort": "Solta [CRO], Grohote, House of culture",
+   "quelle": "chess-results",
+   "runden": "9",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2027-06-27"
+  },
+  "1550230": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 min/partii + 5 s/tah",
+   "bis": "2026-12-06",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550230",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550230.aspx?lan=0",
+    "website": "http://sksmichov.cz/"
+   },
+   "lon": null,
+   "name": "XXIII. Mikulášská šachová nadílka - turnaj A",
+   "ort": "Praha 5, Štefánikova 13 (Úřad Městské části Praha 5)",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-06"
+  },
+  "1550231": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Kola 1. a 2.: 20 min/partii, kola 3. až 7.: 25 min/partii",
+   "bis": "2026-12-06",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550231",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550231.aspx?lan=0",
+    "website": "http://sksmichov.cz/"
+   },
+   "lon": null,
+   "name": "XXIII. Mikulášská šachová nadílka - turnaj B",
+   "ort": "Praha 5, Štefánikova 13 (Úřad Městské části Praha 5)",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1113,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-06"
+  },
+  "1550232": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "25 min/partii + 5 s/tah",
+   "bis": "2026-12-19",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550232",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550232.aspx?lan=0",
+    "website": "http://sksmichov.cz/"
+   },
+   "lon": null,
+   "name": "XXIX. ročník O vánočního kapra - turnaj A",
+   "ort": "Praha 5, Štefánikova 13 (Úřad Městské části Praha 5)",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550233": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "Kola 1. a 2.: 20 min/partii, kola 3. až 7.: 25 min/partii",
+   "bis": "2026-12-19",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550233",
+   "land": "Tschechien",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550233.aspx?lan=0",
+    "website": "http://sksmichov.cz/"
+   },
+   "lon": null,
+   "name": "XXIX. ročník O vánočního kapra - turnaj B",
+   "ort": "Praha 5, Štefánikova 13 (Úřad Městské části Praha 5)",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-12-19"
+  },
+  "1550241": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15'+5''",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550241",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550241.aspx?lan=0",
+    "website": "http://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "ÇATALCA İLÇE OKULLAR ARASI SATRANÇ TURNUVASI KÜÇÜKLER GENEL KATEGORİSİ (2015-2016 YILLARINDA DOĞAN SPORCULAR)",
+   "ort": "ÇATALCA GENÇLİK MERKEZİ",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1000,
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550242": {
+   "bedenkzeit": "schnell",
+   "bedenkzeit_text": "15'+5''",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (rapid)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550242",
+   "land": "Türkei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550242.aspx?lan=0",
+    "website": "http://www.istanbul.tsf.org.tr"
+   },
+   "lon": null,
+   "name": "ÇATALCA İLÇE OKULLAR ARASI SATRANÇ TURNUVASI YILDIZLAR GENEL KATEGORİSİ (2012-2014 YILLARI VE ARASI DOĞUMLU SPORCULAR)",
+   "ort": "ÇATALCA GENÇLİK MERKEZİ",
+   "quelle": "chess-results",
+   "runden": "6",
+   "schnitt": 1008,
+   "typ": "Mannschafts-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
+  "1550244": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-26",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550244",
+   "land": "Slowakei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550244.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Majstrovstvá Banskobystrického kraja 2026/27 - študenti SŠ",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1324,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1550245": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-26",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550245",
+   "land": "Slowakei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550245.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Majstrovstvá Banskobystrického kraja 2026/27 - dievčatá ZŠ",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1088,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1550247": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-26",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550247",
+   "land": "Slowakei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550247.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Majstrovstvá Banskobystrického kraja 2026/27 - chlapci ZŠ",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1239,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1550253": {
+   "bedenkzeit": "",
+   "bedenkzeit_text": "",
+   "bis": "2026-11-26",
+   "bz_label": "",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550253",
+   "land": "Slowakei",
+   "lat": null,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550253.aspx?lan=0"
+   },
+   "lon": null,
+   "name": "Majstrovstvá Banskobystrického kraja 2026/27 - študentky SŠ",
+   "ort": "",
+   "quelle": "chess-results",
+   "runden": "7",
+   "schnitt": 1160,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-26"
+  },
+  "1550285": {
+   "bedenkzeit": "blitz",
+   "bedenkzeit_text": "5minutos + 3 segundos",
+   "bis": "2026-11-25",
+   "bz_label": "bedenkzeit (blitz)",
+   "elo": false,
+   "europa": true,
+   "gefunden": "2026-11-25",
+   "id": "cr:1550285",
+   "land": "Portugal",
+   "lat": 37.1946052,
+   "links": {
+    "chessresults": "https://chess-results.com/tnr1550285.aspx?lan=0"
+   },
+   "lon": -7.4155628,
+   "name": "III Torneio Escolar de V.R.S.A.",
+   "ort": "Vila Real de Santo António",
+   "quelle": "chess-results",
+   "runden": "5",
+   "schnitt": null,
+   "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
+   "von": "2026-11-25"
+  },
   "177135": {
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "2 minutes blitz",
    "bis": "2105-06-13",
+   "bz_label": "bedenkzeit",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:177135",
    "land": "Niederlande",
    "lat": 51.5856185,
@@ -43108,7 +46420,9 @@
    "ort": "Tilburg",
    "quelle": "chess-results",
    "runden": "7",
+   "schnitt": 1574,
    "typ": "Einzel-Rundenturniere",
+   "v": 2,
    "von": "2105-06-13"
   },
   "198379": {
@@ -43138,8 +46452,10 @@
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "3 minuter + 2 sek/drag per spelare och parti",
    "bis": "2115-09-20",
+   "bz_label": "bedenkzeit",
    "elo": false,
    "europa": true,
+   "gefunden": "",
    "id": "cr:224896",
    "land": "Schweden",
    "lat": null,
@@ -43152,7 +46468,9 @@
    "ort": "Schacksalongerna, Ringvägen 9 C på Södermalm (T Zinkensdamm)",
    "quelle": "chess-results",
    "runden": "14",
+   "schnitt": 1000,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2115-09-20"
   },
   "265105": {
@@ -43205,8 +46523,10 @@
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "7 min",
    "bis": "2107-11-08",
+   "bz_label": "bedenkzeit",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:295076",
    "land": "Island",
    "lat": 65.9248793,
@@ -43218,7 +46538,9 @@
    "ort": "Hauganes",
    "quelle": "chess-results",
    "runden": "11",
+   "schnitt": 1828,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2107-11-08"
   },
   "440650": {
@@ -43295,8 +46617,10 @@
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "7+3",
    "bis": "2109-11-30",
+   "bz_label": "bedenkzeit",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:494298",
    "land": "Kroatien",
    "lat": 45.3503765,
@@ -43308,7 +46632,9 @@
    "ort": "SEnj",
    "quelle": "chess-results",
    "runden": "11",
+   "schnitt": 1840,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2109-11-30"
   },
   "506334": {
@@ -43339,8 +46665,10 @@
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "5 min.",
    "bis": "2032-02-25",
+   "bz_label": "bedenkzeit (blitz)",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:724607",
    "land": "Slowenien",
    "lat": 45.466898,
@@ -43353,7 +46681,9 @@
    "ort": "Sv. Peter (Občina Piran)",
    "quelle": "chess-results",
    "runden": "9",
+   "schnitt": 1587,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2032-02-25"
   },
   "728169": {
@@ -43599,8 +46929,10 @@
    "bedenkzeit": "schnell",
    "bedenkzeit_text": "15 min +15 sek/potez",
    "bis": "3012-02-22",
+   "bz_label": "bedenkzeit",
    "elo": false,
    "europa": true,
+   "gefunden": "",
    "id": "cr:92947",
    "land": "Kroatien",
    "lat": 45.3889312,
@@ -43613,7 +46945,9 @@
    "ort": "Dražice",
    "quelle": "chess-results",
    "runden": "5",
+   "schnitt": 1665,
    "typ": "Mannschafts-Rundenturniere",
+   "v": 2,
    "von": "3012-02-22"
   },
   "962277": {
@@ -43644,8 +46978,10 @@
    "bedenkzeit": "blitz",
    "bedenkzeit_text": "3+2",
    "bis": "2924-08-08",
+   "bz_label": "bedenkzeit (blitz)",
    "elo": true,
    "europa": true,
+   "gefunden": "",
    "id": "cr:984715",
    "land": "Island",
    "lat": 64.145981,
@@ -43657,7 +46993,9 @@
    "ort": "Reykjavik",
    "quelle": "chess-results",
    "runden": "10",
+   "schnitt": 1774,
    "typ": "Einzel-Schweizersystem Turniere",
+   "v": 2,
    "von": "2924-08-08"
   }
  }
