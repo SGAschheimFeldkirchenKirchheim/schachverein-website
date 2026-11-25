@@ -905,12 +905,6 @@
 "slugs": [],
 "titel": "Weihnachtsblitz 2024 und Blitzjahreswertung 2024"
 },
-"2026-beispiel-mannschaftskampf": {
-"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-beispiel-mannschaftskampf.html",
-"meta": "21.11.2026 · von Korbinian Ruff",
-"slugs": [],
-"titel": "Beispiel: Mannschaftskampf mit 8 Partien"
-},
 "2026-blitzjahreswertung-2026-zwischenstand": {
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-blitzjahreswertung-2026-zwischenstand.html",
 "meta": "30.08.2026 · von Pierre Tassell",
@@ -976,12 +970,6 @@
 "meta": "11.03.2026 · von Pierre Tassell",
 "slugs": [],
 "titel": "SG AFK im Ligapokalfinale 2026"
-},
-"2026-testbericht-partie": {
-"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-testbericht-partie.html",
-"meta": "21.11.2026 · von Korbinian Ruff",
-"slugs": [],
-"titel": "Testbericht: Partie zum Nachspielen"
 },
 "2026-u20-landesliga-sud-klassenerhalt-geschafft": {
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-u20-landesliga-sud-klassenerhalt-geschafft.html",
@@ -1088,7 +1076,7 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-25T09:55",
+"stand": "2026-11-25T09:58",
 "termine": {
 "2026-11-26|AFK 1": {
 "datum": "2026-11-26",
