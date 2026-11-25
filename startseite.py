@@ -357,6 +357,8 @@ CSS = """<style>
   .st-wechsel { position: relative; width: 100%; overflow: hidden; }
   .st-wechsel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.6s ease; }
   .st-wechsel img.an { opacity: 1; }
+  .st-wechsel img:not(.an) { pointer-events: none; }   /* Rechtsklick/Antippen trifft das sichtbare Foto */
+  .st-wechsel img.an { z-index: 1; }
   .st-wechsel.frei { display: grid; align-items: center; overflow: visible; }
   .st-wechsel.frei img { position: static; grid-area: 1 / 1; height: auto; object-fit: initial; }
 
@@ -386,7 +388,7 @@ CSS = """<style>
   .st-pol img { display: block; max-width: min(34vw, 520px); max-height: clamp(260px, 28vw, 420px); width: auto; height: auto; }
   .st-pol figcaption { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; color: #333;
     font-family: "Segoe Print", "Bradley Hand", cursive; font-size: 1rem; }
-  .st-pol.weg { transform: translate(10%, -50%) rotate(calc(var(--r) + 12deg)); opacity: 0; }
+  .st-pol.weg { transform: translate(10%, -50%) rotate(calc(var(--r) + 12deg)); opacity: 0; pointer-events: none; }
 
   @media (max-width: 900px) {
     .st-hero { aspect-ratio: auto; min-height: 0; }
