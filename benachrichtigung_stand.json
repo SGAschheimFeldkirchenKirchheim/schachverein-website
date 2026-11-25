@@ -965,12 +965,6 @@
 "slugs": [],
 "titel": "OIS 2026 - Dominik gewinnt C-Turnier!"
 },
-"2026-ronny-die-maske": {
-"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-ronny-die-maske.html",
-"meta": "21.11.2026 · von Korbinian Ruff",
-"slugs": [],
-"titel": "Ronny die Maske"
-},
 "2026-saison-25-26-erfolgreich-beendet": {
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/berichte/2026-saison-25-26-erfolgreich-beendet.html",
 "meta": "07.06.2026 · von Pierre Tassell",
@@ -1094,7 +1088,7 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-25T09:44",
+"stand": "2026-11-25T09:55",
 "termine": {
 "2026-11-26|AFK 1": {
 "datum": "2026-11-26",
