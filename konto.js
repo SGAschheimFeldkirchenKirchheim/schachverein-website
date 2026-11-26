@@ -1186,7 +1186,7 @@
     t.className = "geb-banner";
     t.innerHTML = '<button type="button" class="geb-text" title="Nochmal Konfetti">' + text + '</button><button type="button" class="geb-zu" aria-label="Schließen">×</button>';
     document.body.appendChild(t);
-    t.querySelector(".geb-text").onclick = function () { konfetti(); };
+    t.querySelector(".geb-text").onclick = function () { konfetti(true); };
     t.querySelector(".geb-zu").onclick = function () { t.remove(); };
     // Konfetti einmal pro Tag und Browser von selbst, danach per Klick aufs Banner
     var k = "afk-konfetti", wert = jetzt.getFullYear() + "-" + md + ":" + kinder.map(function (x) { return x.m.slug; }).join(",");
@@ -1194,8 +1194,9 @@
     if (!schon) setTimeout(konfetti, 400);
   }
 
-  function konfetti() {
-    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  // "Animationen reduzieren" (Windows/Mac/Handy): kein automatisches Konfetti, nur nach Klick aufs Banner
+  function konfetti(geklickt) {
+    if (!geklickt && window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     var c = document.createElement("canvas"), x = c.getContext("2d"), dpr = window.devicePixelRatio || 1;
     c.className = "geb-konfetti"; document.body.appendChild(c);
     function groesse() { c.width = innerWidth * dpr; c.height = innerHeight * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0); }

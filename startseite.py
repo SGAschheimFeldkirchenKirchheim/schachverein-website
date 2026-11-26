@@ -165,7 +165,7 @@ def termine_html(events, team_klasse, plain_text):
         zeilen.append(
             f'<a class="event-card st-termin" href="termine.html" data-date="{d.isoformat()}">'
             f'<span class="st-tag"><b>{d.day}</b><span>{WOCHENTAG[d.weekday()]} {d.month:02d}.</span></span>'
-            f'<span class="st-tt">{esc(plain_text(ev["title"]))}<span class="ev-rel"></span></span>'
+            f'<span class="st-tt">{esc(plain_text(re.sub(r"<br\s*/?>", " · ", ev["title"])))}<span class="ev-rel"></span></span>'
             f'<span class="st-pills">{pills}</span></a>')
     return f"""
         <aside class="st-glas" aria-label="Termine">
