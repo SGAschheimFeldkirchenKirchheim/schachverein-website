@@ -710,16 +710,33 @@ def reiter_spieltage(d):
       {"".join(teile)}"""
 
 
+WT_KURZ = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+
+def spiel_datum(m):
+    """'2026-11-24T19:30' -> 'Di 24.11.' + ' · 19:30' (vom Bezirk; fehlt bei Ligamanager-Ligen)."""
+    dt = m.get("dt")
+    if not dt:
+        return '<span class="dat"></span>'
+    try:
+        t = datetime.strptime(dt[:10], "%Y-%m-%d")
+    except ValueError:
+        return '<span class="dat"></span>'
+    zeit = f'<span class="uhr"> · {dt[11:16]}</span>' if len(dt) >= 16 else ""
+    return (f'<span class="dat" title="{WT_KURZ[t.weekday()]} {t.day:02d}.{t.month:02d}.{t.year}{" " + dt[11:16] + " Uhr" if zeit else ""}">'
+            f'{WT_KURZ[t.weekday()]} {t.day:02d}.{t.month:02d}.{zeit}</span>')
+
+
 def reiter_spiele(d):
     teile = []
     for m in eigene_spiele(d):
         if m.get("sf"):
-            teile.append(f'<div class="spiel"><span class="rd">R{m["r"]}</span><span class="geg">{KEIN_TEAM}</span></div>')
+            teile.append(f'<div class="spiel"><span class="rd">R{m["r"]}</span><span class="ha"></span>{spiel_datum(m)}<span class="geg">{KEIN_TEAM}</span></div>')
             continue
         heim, gegner, mein, sein, art = sicht(d, m)
         dwz = m.get("dg" if heim else "dh")
         info = f'<span class="dwz">Ø {dwz}</span>' if dwz else ""
-        kopf = (f'<span class="rd">R{m["r"]}</span><span class="ha">{"H" if heim else "A"}</span>'
+        kopf = (f'<span class="rd">R{m["r"]}</span><span class="ha">{"H" if heim else "A"}</span>{spiel_datum(m)}'
                 f'<span class="geg">{esc(gegner)}{info}</span>{ergebnis_badge(art, mein, sein)}')
         details = bretter_html(d, m)
         if not m["gesp"] and (PROGNOSE_ALLE_SPIELE or m is naechstes_spiel(d)):
@@ -1096,6 +1113,15 @@ STYLES = """<style>
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
+      .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
+      @media (max-width: 600px) {
+        .spiel > summary, div.spiel { display: grid; grid-template-columns: 2rem 1.1rem minmax(0, 1fr) auto auto; column-gap: 0.45rem; }
+        .spiel .rd { grid-area: 1 / 1 / 3 / 2; } .spiel .ha { grid-area: 1 / 2 / 3 / 3; }
+        .spiel .geg { grid-area: 1 / 3; } .spiel .dat { grid-area: 2 / 3; width: auto; margin: 0; font-size: 0.76rem; }
+        .spiel .dat:empty { display: none; }
+        .spiel .erg { grid-area: 1 / 4 / 3 / 5; } details.spiel > summary::after { grid-area: 1 / 5 / 3 / 6; }
+      }
       .dwz { margin-left: 0.5rem; font-size: 0.8rem; color: #777; }
       .bretter .dwz { margin-left: 0.25rem; font-size: 0.75rem; font-weight: normal; white-space: nowrap; }
       a.sp-link { color: inherit; text-decoration: none; border-bottom: 1px dotted #999; }
