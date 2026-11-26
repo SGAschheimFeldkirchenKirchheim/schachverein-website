@@ -948,3 +948,16 @@ span.uf-rz { cursor: default; }
 .mt-liste li:last-child { border-bottom: none; }
 .mt-liste a { color: inherit; text-decoration: none; }
 .mt-liste a:hover { color: var(--link-c); }
+
+/* Startseite: Geburtstag heute (Banner + Konfetti) */
+.geb-konfetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
+.geb-banner { position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%); z-index: 9998; display: flex; align-items: center; gap: .3rem;
+  max-width: calc(100vw - 2rem); background: var(--surface); border: 1px solid var(--hell, #6f9fd8); border-radius: 14px;
+  box-shadow: 0 14px 40px #0007; padding: .35rem .35rem .35rem .4rem; animation: geb-rein .5s ease both; }
+.geb-banner .geb-text { background: none; border: 0; color: var(--text); font: inherit; font-size: 1.05rem; text-align: center; padding: .55rem .9rem; cursor: pointer; border-radius: 10px; line-height: 1.4; }
+.geb-banner .geb-text:hover { background: color-mix(in srgb, var(--hell, #6f9fd8) 14%, transparent); }
+.geb-banner .geb-text b { color: var(--head); }
+.geb-banner .geb-zu { background: none; border: 0; color: var(--muted); font-size: 1.4rem; line-height: 1; padding: .3rem .6rem; cursor: pointer; border-radius: 8px; }
+.geb-banner .geb-zu:hover { color: var(--text); }
+@keyframes geb-rein { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@media (prefers-reduced-motion: reduce) { .geb-banner { animation: none; } }

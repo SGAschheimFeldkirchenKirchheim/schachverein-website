@@ -9,7 +9,7 @@
   var PFAD = (SCRIPT && SCRIPT.getAttribute("data-pfad")) || "";
   if (!SKRIPT) return;
 
-  var KEY = "afk-sitzung", ICH_KEY = "afk-ich", GEB_KEY = "afk-geb", ICH_MINUTEN = 5, GEB_STUNDEN = 12;
+  var KEY = "afk-sitzung", ICH_KEY = "afk-ich", GEB_KEY = "afk-geb2", ICH_MINUTEN = 5, GEB_STUNDEN = 12;
   var MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
   var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
@@ -397,7 +397,7 @@
           gb: (f.querySelector("[name=gb]:checked") || {}).value, tour: f.tour.checked }).then(function (r) {
           b.disabled = false;
           if (!r.ok) return meldung(box, r.fehler, "schlecht");
-          try { localStorage.removeItem(ICH_KEY); } catch (e) {}
+          try { localStorage.removeItem(ICH_KEY); localStorage.removeItem(GEB_KEY); } catch (e) {}
           meldung(box, "Gespeichert. Auf deiner Seite siehst du es sofort, alle anderen ab morgen früh.", "gut");
         });
       });
@@ -1137,7 +1137,9 @@
   // Startseite: "Geburtstage diese Woche" für Berechtigte mit allen Mitgliedern
   function startseite(a) {
     var box = document.querySelector("[data-geb-woche]");
-    if (!box || !a || !a.ich.darf.geburtstage) return;
+    if (!box || !a) return;
+    geburtstage().then(function (g) { if (g) geburtstagHeute(g); });
+    if (!a.ich.darf.geburtstage) return;
     var tage = +box.getAttribute("data-geb-woche") || 7;
     geburtstage().then(function (g) {
       if (!g) return;
@@ -1159,6 +1161,74 @@
           "</span>" + (t.m.oeffentlich ? "" : ' <span class="kt-tag admin">nur für Admins</span>') + "</span><em>wird " + t.alter + "</em></li>";
       }).join("");
     });
+  }
+
+  // ---------- Startseite: Geburtstag heute -> Banner + Konfetti ----------
+  // Wer sieht es?  Admins / Recht "geburtstage": alle.  Das Geburtstagskind selbst: immer.
+  // Sonst nur, wenn der eigene UND der Geburtstag des Geburtstagskinds öffentlich geteilt sind.
+  function geburtstagHeute(g) {
+    var jetzt = new Date(), md = zweistellig(jetzt.getMonth() + 1) + "-" + zweistellig(jetzt.getDate());
+    var ich = g.ich, gesehen = {}, kinder = [];
+    (g.liste || []).concat(ich ? [ich] : []).forEach(function (m) {
+      if (!m || !m.datum || gesehen[m.slug] || m.datum.slice(5) !== md) return;
+      gesehen[m.slug] = 1;
+      var selbst = !!ich && m.slug === ich.slug;
+      if (g.alle || selbst || (ich && ich.oeffentlich && m.oeffentlich))
+        kinder.push({ m: m, selbst: selbst, alter: jetzt.getFullYear() - +m.datum.slice(0, 4) });
+    });
+    if (!kinder.length) return;
+    kinder.sort(function (x, y) { return y.selbst - x.selbst; });
+    var eigen = kinder[0].selbst, andere = kinder.filter(function (k) { return !k.selbst; });
+    var text = eigen ? "<b>Alles Gute zum Geburtstag, " + esc(kinder[0].m.vorname) + "!</b>" : "";
+    if (andere.length) text += (eigen ? "<br>" : "") + "Heute " + (andere.length > 1 ? "haben " : "hat ") +
+      andere.map(function (k) { return "<b>" + esc(k.m.vorname + " " + k.m.nachname) + "</b> (" + k.alter + ")"; }).join(" und ") + " Geburtstag!";
+    var t = document.createElement("div");
+    t.className = "geb-banner";
+    t.innerHTML = '<button type="button" class="geb-text" title="Nochmal Konfetti">' + text + '</button><button type="button" class="geb-zu" aria-label="Schließen">×</button>';
+    document.body.appendChild(t);
+    t.querySelector(".geb-text").onclick = function () { konfetti(); };
+    t.querySelector(".geb-zu").onclick = function () { t.remove(); };
+    // Konfetti einmal pro Tag und Browser von selbst, danach per Klick aufs Banner
+    var k = "afk-konfetti", wert = jetzt.getFullYear() + "-" + md + ":" + kinder.map(function (x) { return x.m.slug; }).join(",");
+    var schon = false; try { schon = localStorage.getItem(k) === wert; localStorage.setItem(k, wert); } catch (e) {}
+    if (!schon) setTimeout(konfetti, 400);
+  }
+
+  function konfetti() {
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var c = document.createElement("canvas"), x = c.getContext("2d"), dpr = window.devicePixelRatio || 1;
+    c.className = "geb-konfetti"; document.body.appendChild(c);
+    function groesse() { c.width = innerWidth * dpr; c.height = innerHeight * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    groesse(); addEventListener("resize", groesse);
+    var farben = ["#6f9fd8", "#1c2d52", "#e6c15a", "#ffffff", "#e0675a", "#5fd08a", "#b98cf0"], teile = [];
+    var w = innerWidth, h = innerHeight, n = Math.min(420, Math.round(w * h / 3500));
+    function schuss(vonX, richtung, anzahl) {
+      for (var i = 0; i < anzahl; i++) {
+        var winkel = (-60 - Math.random() * 35) * Math.PI / 180, v = 9 + Math.random() * 13;
+        teile.push({ x: vonX, y: h + 10, vx: Math.cos(winkel) * v * richtung, vy: Math.sin(winkel) * v * (0.9 + h / 1600),
+          w: 6 + Math.random() * 7, h: 9 + Math.random() * 9, r: Math.random() * 6, vr: (Math.random() - .5) * .35,
+          f: farben[(Math.random() * farben.length) | 0], kipp: Math.random() * 6, rund: Math.random() < .25 });
+      }
+    }
+    schuss(0, 1, n / 2); schuss(w, -1, n / 2);
+    setTimeout(function () { for (var i = 0; i < n / 2; i++) teile.push({ x: Math.random() * w, y: -20 - Math.random() * 200, vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 3,
+      w: 6 + Math.random() * 7, h: 9 + Math.random() * 9, r: Math.random() * 6, vr: (Math.random() - .5) * .3, f: farben[(Math.random() * farben.length) | 0], kipp: Math.random() * 6, rund: Math.random() < .25 }); }, 700);
+    var start = performance.now();
+    (function bild(t) {
+      x.clearRect(0, 0, w = innerWidth, h = innerHeight);
+      var aktiv = 0;
+      teile.forEach(function (p) {
+        p.vy += 0.28; p.vx *= 0.985; p.vy = Math.min(p.vy, 6.5); p.x += p.vx + Math.sin(p.kipp) * .8; p.y += p.vy; p.r += p.vr; p.kipp += .08;
+        if (p.y > h + 40) return;
+        aktiv++;
+        x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.scale(1, Math.cos(p.kipp));
+        x.fillStyle = p.f;
+        if (p.rund) { x.beginPath(); x.arc(0, 0, p.w / 2, 0, 7); x.fill(); } else x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        x.restore();
+      });
+      if (aktiv && t - start < 9000) requestAnimationFrame(bild);
+      else { removeEventListener("resize", groesse); c.remove(); }
+    })(start);
   }
 
   // ---------- Terminfinder (Umfragen: wann können alle?) ----------
