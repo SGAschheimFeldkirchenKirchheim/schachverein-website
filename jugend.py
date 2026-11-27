@@ -158,7 +158,7 @@ def team_karte(t, termine, liga_seiten=None):
         <h3>{esc(t["name"])} <span class="team-klasse">{esc(t["liga"])}</span></h3>
         <p>{esc(t.get("ebene", ""))}</p>
         <p>{nt_text}</p>
-        <p>{esc(plain(nt["title"])) if nt else ""}</p>"""
+        <p translate="no">{esc(plain(nt["title"])) if nt else ""}</p>"""
     seite_intern = (liga_seiten or {}).get(t.get("kurz") or t["name"])
     if seite_intern:
         return f"""
@@ -180,7 +180,7 @@ def termin_zeile(ev):
     return f"""
         <a class="event-card" href="termine.html" data-date="{ev["date"].isoformat()}">
           <div class="ev-date">{ev["when"]}</div>
-          <div class="ev-title">{ev["title"]}</div>
+          <div class="ev-title" translate="no">{ev["title"]}</div>
           <div class="ev-teams"></div>
         </a>"""
 
@@ -188,7 +188,7 @@ def termin_zeile(ev):
 def bericht_karte(r):
     return f"""
         <div class="card news-card">
-          <h3>{r["title"]}</h3>
+          <h3 translate="no">{r["title"]}</h3>
           <p class="news-meta">{r["meta"]}</p>
           <p class="news-snippet">{r["snippet"]}</p>
           <a href="berichte/{r["filename"]}">Weiterlesen →</a>

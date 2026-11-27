@@ -165,7 +165,7 @@ def termine_html(events, team_klasse, plain_text):
         zeilen.append(
             f'<a class="event-card st-termin" href="termine.html" data-date="{d.isoformat()}">'
             f'<span class="st-tag"><b>{d.day}</b><span>{WOCHENTAG[d.weekday()]} {d.month:02d}.</span></span>'
-            f'<span class="st-tt">{esc(plain_text(re.sub(r"<br\s*/?>", " · ", ev["title"])))}<span class="ev-rel"></span></span>'
+            f'<span class="st-tt"><span translate="no">{esc(plain_text(re.sub(r"<br\s*/?>", " · ", ev["title"])))}</span><span class="ev-rel"></span></span>'
             f'<span class="st-pills">{pills}</span></a>')
     return f"""
         <aside class="st-glas" aria-label="Termine">
@@ -184,7 +184,7 @@ def berichte_html(berichte):
         auszug = "" if bild else f'<span class="st-auszug">{r.get("snippet") or ""}</span>'
         karten.append(f"""
         <a class="st-bkarte{"" if bild else " ohne-bild"}" href="berichte/{r['filename']}">{bild}
-          <span class="st-btext"><span class="st-meta">{r['meta']}</span><b>{r['title']}</b>{auszug}
+          <span class="st-btext"><span class="st-meta">{r['meta']}</span><b translate="no">{r['title']}</b><span translate="no">{auszug}</span>
           {"" if bild else '<span class="st-weiter">Bericht lesen →</span>'}</span></a>""")
     if not karten:
         return ""
@@ -197,6 +197,12 @@ def berichte_html(berichte):
           <button type="button" class="st-vor" aria-label="Weiter">→</button><span class="st-punkte"></span></div>
       </div>
     </section>"""
+
+
+def _gegner(t):
+    """'vs. SC Roter Turm München 2' -> Vereinsname nicht übersetzen (englische Seite)."""
+    vor, _, name = t.partition(" ")
+    return f'{esc(vor)} <span translate="no">{esc(name)}</span>' if vor in ("vs.", "bei") else f'<span translate="no">{esc(t)}</span>'
 
 
 def ergebnisse_html(zeilen):
@@ -229,9 +235,11 @@ def ergebnisse_html(zeilen):
         kurz, cls, geg, mein, sein, art, rd, link, termin = z
         if art:
             return f'<td class="st-erg-{art}">{mein} : {sein}</td>'
-        return f'<td class="st-offen" data-date="{termin[1]}">{esc(termin[0])}</td>'
+        tag, _, uhr = termin[0].partition(" · ")
+        return (f'<td class="st-offen" data-date="{termin[1]}"><span>{esc(tag)}</span>'
+                + (f' <span class="st-uhr">{esc(uhr)}</span>' if uhr else "") + "</td>")
     rows = "".join(
-        f'<tr class="{z[1]}"><td><a href="{z[7]}">{esc(z[0])}</a></td><td>{esc(z[2])}</td>'
+        f'<tr class="{z[1]}"><td translate="no"><a href="{z[7]}">{esc(z[0])}</a></td><td>{_gegner(z[2])}</td>'
         f'<td class="st-rd">R{z[6]}</td>{ende(z)}</tr>' for z in zeilen)
     return f'<table class="st-erg">{rows}</table>', titel
 
@@ -242,7 +250,7 @@ def geburtstage_html(liste):
         return f'<div class="st-geb" data-geb-woche="{GEBURTSTAG_TAGE}" hidden><h3>Geburtstage diese Woche</h3><ul></ul></div>'
     heute = datetime.date.today()
     z = "".join(
-        f'<li data-date="{d.isoformat()}"><span><b>{esc(n)}</b> <span class="st-meta">'
+        f'<li data-date="{d.isoformat()}"><span><b translate="no">{esc(n)}</b> <span class="st-meta">'
         f'{"heute" if d == heute else f"{WOCHENTAG[d.weekday()]} {d.day:02d}.{d.month:02d}."}</span></span>'
         f'{f"<em>wird {a}</em>" if GEBURTSTAG_ALTER and a else ""}</li>' for d, n, a in liste)
     return f'<div class="st-geb" data-geb-woche="{GEBURTSTAG_TAGE}"><h3>Geburtstage diese Woche</h3><ul>{z}</ul></div>'
@@ -386,7 +394,9 @@ CSS = """<style>
   .st-erg td:first-child { font-weight: 700; width: 6rem; } .st-erg td:first-child a { color: var(--team, var(--head)); text-decoration: none; }
   .st-erg td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .st-erg .st-rd { color: var(--muted); font-size: .85rem; width: 2.5rem; }
-  .st-erg .st-offen { color: var(--muted); font-weight: 600; font-size: .95rem; }
+  .st-erg td.st-offen { color: var(--muted); font-weight: 600; font-size: .9rem; white-space: normal; line-height: 1.3; }
+  .st-erg .st-offen span { white-space: nowrap; display: inline-block; }
+  .st-erg .st-offen .st-uhr { font-weight: 500; }
   .st-erg-s { color: #5fd08a; } .st-erg-n { color: #ff8f84; } .st-erg-u { color: #e6c15a; }
   :root[data-theme="light"] .st-erg-s { color: #2e7d4f; } :root[data-theme="light"] .st-erg-n { color: #b03a2e; } :root[data-theme="light"] .st-erg-u { color: #9a6a12; }
 

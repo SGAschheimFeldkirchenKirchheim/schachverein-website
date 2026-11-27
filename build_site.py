@@ -24,6 +24,7 @@ import historie  # Mannschaftshistorie (Daten: mannschaften_historie.json + Arch
 import einreichen  # "Bericht einreichen"-Formular auf berichte.html (Einstellungen in einreichen.py)
 import spieler  # Spielerseiten spieler/<name>.html (Einstellungen in spieler.py)
 import startseite  # Startseite: Aufbau, Texte, Bilder-Ordner (startseite/)
+import englisch  # englische Fassung einzelner Seiten (…-en.html, Wörterbuch uebersetzung/en.json)
 import suche  # seitenweite Suche: suche.html + suche.json (Einstellungen in suche.py)
 import benachrichtigung  # Mail-Benachrichtigungen: Neuigkeiten erkennen und ans Apps Script melden
 
@@ -293,11 +294,14 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
     if MAIL_UMLEITUNG:
         full_html = re.sub(r"[\w.+-]+@sg-afk\.de", MAIL_UMLEITUNG, full_html)
     full_html = suche.knopf_einbauen(full_html, nav_path)
+    full_html = englisch.einbauen(full_html, name, nav_path)     # Sprachumschalter DE/EN
     full_html = _cache_brecher(full_html)
     suche.merken(title, content, filename, description or PAGE_DESCRIPTIONS.get(name, ""))
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(full_html)
+    if nav_path == "" and not os.path.dirname(filename) and englisch.hat_en(name):
+        englisch.merken(full_html, name)                            # englische Fassung am Ende des Builds
 
 
 _STAND = None
@@ -3524,6 +3528,7 @@ if __name__ == "__main__":
     build_404()
     build_static_pages(skip={"mannschaften"} if build_mannschaften(teams, saisons) else set())
     suche.bauen(render_page)   # nach allen Seiten (Suchindex)
+    englisch.alles_schreiben()   # englische Fassungen (…-en.html), Einstellungen in englisch.py
     # Profil: "Berichte, in denen du vorkommst" (öffentliche Daten, das Profil filtert im Browser)
     with open(os.path.join("spieler", "meine.json"), "w", encoding="utf-8") as f:
         json.dump(benachrichtigung.meine_json(ALLE_BERICHTE, spieler.slug), f, ensure_ascii=False)
