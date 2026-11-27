@@ -997,6 +997,12 @@
 "mannschaft": "AFK 1",
 "text": "Runde 2 gegen SC Roter Turm München 1"
 },
+"AFK 1|16|3": {
+"ergebnis": "5 : 3",
+"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-1.html",
+"mannschaft": "AFK 1",
+"text": "Runde 3 bei SC Sendling 1"
+},
 "AFK 2|16|1": {
 "ergebnis": "5 : 3",
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-2.html",
@@ -1076,7 +1082,7 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-27T09:32",
+"stand": "2026-11-27T09:33",
 "termine": {
 "2026-11-27|AFK 2": {
 "datum": "2026-11-27",
