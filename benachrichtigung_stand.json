@@ -1015,6 +1015,12 @@
 "mannschaft": "AFK 2",
 "text": "Runde 2 bei TSV Solln 1"
 },
+"AFK 2|16|3": {
+"ergebnis": "6,5 : 1,5",
+"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-2.html",
+"mannschaft": "AFK 2",
+"text": "Runde 3 gegen SC Roter Turm München 2"
+},
 "AFK 3|16|1": {
 "ergebnis": "3,5 : 3,5",
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-3.html",
@@ -1082,7 +1088,7 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-27T16:30",
+"stand": "2026-11-27T22:35",
 "termine": {
 "2026-11-27|AFK 2": {
 "datum": "2026-11-27",
