@@ -113,6 +113,14 @@
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
       .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
       .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
       @media (max-width: 600px) {
@@ -601,6 +609,7 @@
       
         <div class="auf-block" data-tlnr="1" hidden>
           <h2>SC Kirchseeon 2</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Generationencafe ´´Cafe zam´´</b><br>Münchner Str. 8<br>85614 Kirchseeon<br>Zugang für Rollstuhl über mobile Rampe möglich</div><div class="lok-heim">Heimspiele: Dienstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Generationencafe%20%C2%B4%C2%B4Cafe%20zam%C2%B4%C2%B4%2CM%C3%BCnchner%20Str.%208%2C85614%20Kirchseeon" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -612,6 +621,7 @@
         </div>
         <div class="auf-block" data-tlnr="2" hidden>
           <h2>SF Dachau 1932 4</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Adolf-Hölzel-Haus</b><br>Ernst-Reuter-Platz 1<br>85221 Dachau<br>Spielbeginn: 19:30</div><div class="lok-heim">Heimspiele: Donnerstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Adolf-H%C3%B6lzel-Haus%2CErnst-Reuter-Platz%201%2C85221%20Dachau" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -623,6 +633,7 @@
         </div>
         <div class="auf-block" data-tlnr="3" hidden>
           <h2>1. SK Neuperlach 3</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Parkstüberl der Arbeiterwohlfahrt - AWO Horst-Salzmann-Zentrum</b><br>Plievierpark 5-15<br>81737 München<br>Der Zugang (nur über Putzbrunner Straße möglich) ist barrierefrei</div><div class="lok-heim">Heimspiele: Dienstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Parkst%C3%BCberl%20der%20Arbeiterwohlfahrt%20-%20AWO%20Horst-Salzmann-Zentrum%2CPlievierpark%205-15%2C81737%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -634,6 +645,7 @@
         </div>
         <div class="auf-block" data-tlnr="4" hidden>
           <h2>Schachfreunde München 5</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Laim</b><br>Kiem-Pauli-Weg 22 (Eingang el. Schiebetür oder rechte Seitentür)<br>barrierefrei</div><div class="lok-heim">Heimspiele: Freitag 19:00</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Laim%2C%20Kiem-Pauli-Weg%2022%20%28Eingang%20el.%20Schiebet%C3%BCr%20oder%20rechte%20Seitent%C3%BCr%29%2C%20barrierefrei" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -645,6 +657,7 @@
         </div>
         <div class="auf-block" data-tlnr="5" hidden>
           <h2>SG Schwabing München Nord 5</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Milbertshofen</b><br>Schleißheimerstr. 378<br>80909 München<br>barrierefrei</div><div class="lok-heim">Heimspiele: Dienstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Milbertshofen%2C%20Schlei%C3%9Fheimerstr.%20378%2C%2080909%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -656,6 +669,7 @@
         </div>
         <div class="auf-block" data-tlnr="6" hidden>
           <h2>SG AFK 6</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Gymnasium Kirchheim</b><br>Heimstettner Str. 20<br>85551 Kirchheim<br>Eingang Mensa</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gymnasium%20Kirchheim%2CHeimstettner%20Str.%2020%2C85551%20Kirchheim" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -667,6 +681,7 @@
         </div>
         <div class="auf-block" data-tlnr="7" hidden>
           <h2>SC Unterhaching 3</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Bildungshaus</b><br>Hans-Durach-Straße 17<br>82008 Unterhaching<br>Im zweiten Stock klingeln.</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Bildungshaus%2C%20Hans-Durach-Stra%C3%9Fe%2017%2C%2082008%20Unterhaching" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -678,6 +693,7 @@
         </div>
         <div class="auf-block" data-tlnr="8" hidden>
           <h2>Schachtreff Obermenzing 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Pfarrheim Leiden Christi</b><br>Passionistenstraße 12<br>81247 München</div><div class="lok-heim">Heimspiele: Montag 19:00</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Pfarrheim%20Leiden%20Christi%2C%20Passionistenstra%C3%9Fe%2012%2C%2081247%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>

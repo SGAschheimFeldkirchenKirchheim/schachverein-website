@@ -113,6 +113,14 @@
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
       .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
       .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
       @media (max-width: 600px) {
@@ -595,6 +603,7 @@
       
         <div class="auf-block" data-tlnr="1" hidden>
           <h2>SC Vaterstetten-Grasbrunn 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Pfarrsaal Neukeferloh Saarlandstrasse 10 85630 Grasbrunn Gemeindeteil: Neukeferloh</b></div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Pfarrsaal%20Neukeferloh%20Saarlandstrasse%2010%2085630%20Grasbrunn%20Gemeindeteil%3A%20Neukeferloh" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -607,6 +616,7 @@
         <div class="auf-block" data-tlnr="2" hidden>
           <h2>SG AFK 2</h2>
           
+          
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
           <th class="neben">1</th><th class="neben">2</th><th class="neben">3</th><th class="neben">4</th><th class="neben">5</th><th class="neben">6</th><th class="neben">7</th><th title="Punkte">Pkt</th><th title="gespielte Partien">Spl</th><th title="gespielte Runden von bisher gespielten Runden">Einsätze</th></tr>
@@ -617,6 +627,7 @@
         </div>
         <div class="auf-block" data-tlnr="3" hidden>
           <h2>SF Dachau 1932 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Adolf-Hölzel-Saal</b><br>Ernst-Reuter-Platz 1<br>85221 Dachau</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Adolf-H%C3%B6lzel-Saal%2C%20Ernst-Reuter-Platz%201%2C%2085221%20Dachau" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -628,6 +639,7 @@
         </div>
         <div class="auf-block" data-tlnr="4" hidden>
           <h2>Münchener SC 1836 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Alten- und Service-Zentrum Harlaching</b><br>Rotbuchenstraße 32<br>81547 München<br>Am Spielort bei ´ASZ Harlaching´ klingeln und die Haustür öffnet sich automatisch. Im Eingangsbereich den Schalter rechts drucken und die Tür zum ASZ öffnet sich. Man braucht (und soll) keine Tür mit der Klinke öffnen.</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Alten-%20und%20Service-Zentrum%20Harlaching%2CRotbuchenstra%C3%9Fe%2032%2C81547%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -640,6 +652,7 @@
         <div class="auf-block" data-tlnr="5" hidden>
           <h2>FC Bayern München 2</h2>
           
+          
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
           <th class="neben">1</th><th class="neben">2</th><th class="neben">3</th><th class="neben">4</th><th class="neben">5</th><th class="neben">6</th><th class="neben gg-uns">7</th><th title="Punkte">Pkt</th><th title="gespielte Partien">Spl</th><th title="geschätzte Wahrscheinlichkeit für einen Einsatz im nächsten Spiel">Prognose</th></tr>
@@ -650,6 +663,7 @@
         </div>
         <div class="auf-block" data-tlnr="6" hidden>
           <h2>MSA Zugzwang 82 2</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Schachakademie - Zweibrückenstr 8 - Im Innenhof - Bitte Klingeln</b></div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Schachakademie%20-%20Zweibr%C3%BCckenstr%208%20-%20Im%20Innenhof%20-%20Bitte%20Klingeln" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -662,6 +676,7 @@
         <div class="auf-block" data-tlnr="7" hidden>
           <h2>SV Höhenkirchen 1</h2>
           
+          
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
           <th class="neben gg-uns">1</th><th class="neben">2</th><th class="neben">3</th><th class="neben">4</th><th class="neben">5</th><th class="neben">6</th><th class="neben">7</th><th title="Punkte">Pkt</th><th title="gespielte Partien">Spl</th><th title="geschätzte Wahrscheinlichkeit für einen Einsatz im nächsten Spiel">Prognose</th></tr>
@@ -672,6 +687,7 @@
         </div>
         <div class="auf-block" data-tlnr="8" hidden>
           <h2>SF München 2</h2>
+          
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>

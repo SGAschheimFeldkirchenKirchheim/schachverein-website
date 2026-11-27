@@ -113,6 +113,14 @@
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
       .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
       .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
       @media (max-width: 600px) {
@@ -631,6 +639,7 @@
       
         <div class="auf-block" data-tlnr="1" hidden>
           <h2>SC Roter Turm München 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>AWO-Seniorentreff - Arcisstr. 45</b><br>München-Maxvorstadt<br>sehr schlechte Parkmöglichkeiten</div><div class="lok-heim">Heimspiele: Mittwoch 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=AWO-Seniorentreff%20-%20Arcisstr.%2045%2CM%C3%BCnchen-Maxvorstadt%2C%20sehr%20schlechte%20Parkm%C3%B6glichkeiten" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -642,6 +651,7 @@
         </div>
         <div class="auf-block" data-tlnr="2" hidden>
           <h2>SC Sendling 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Sendling</b><br>Daiserstraße 37<br>81371 München</div><div class="lok-heim">Heimspiele: Donnerstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Sendling%2CDaiserstra%C3%9Fe%2037%2C81371%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -653,6 +663,7 @@
         </div>
         <div class="auf-block" data-tlnr="3" hidden>
           <h2>SG AFK 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Gymnasium Kirchheim</b><br>Heimstettner Str. 20<br>85551 Kirchheim<br>Eingang Mensa</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gymnasium%20Kirchheim%2CHeimstettner%20Str.%2020%2C85551%20Kirchheim" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -664,6 +675,7 @@
         </div>
         <div class="auf-block" data-tlnr="4" hidden>
           <h2>FC Bayern München 4</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Anton-Fingerle-Bildungszentrum</b><br>Schlierseestraße 47<br>81539 München</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Anton-Fingerle-Bildungszentrum%2CSchlierseestra%C3%9Fe%2047%2C81539%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -675,6 +687,7 @@
         </div>
         <div class="auf-block" data-tlnr="5" hidden>
           <h2>Münchener SC 1836 3</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Alten- und Service-Zentrum Harlaching</b><br>Rotbuchenstraße 32<br>81547 München<br>Am Spielort bei ´´ASZ Harlaching´´ klingeln und die Haustür öffnet sich automatisch. Im Eingangsbereich den Schalter rechts drucken und die Tür zum ASZ öffnet sich. Man braucht (und soll) keine Tür mit der Klinke öffnen.</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Alten-%20und%20Service-Zentrum%20Harlaching%2CRotbuchenstra%C3%9Fe%2032%2C81547%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -686,6 +699,7 @@
         </div>
         <div class="auf-block" data-tlnr="6" hidden>
           <h2>SF Deisenhofen 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Evangelisches Gemeindehaus</b><br>Alpenstr. 16<br>82041 Oberhaching<br>(gegenüber dem Rathaus)</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Evangelisches%20Gemeindehaus%2CAlpenstr.%2016%2C82041%20Oberhaching" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -697,6 +711,7 @@
         </div>
         <div class="auf-block" data-tlnr="7" hidden>
           <h2>SG Schwabing München Nord 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Milbertshofen</b><br>Schleißheimerstr. 378<br>80809 München<br>barrierefrei</div><div class="lok-heim">Heimspiele: Dienstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Milbertshofen%2C%20Schlei%C3%9Fheimerstr.%20378%2C%2080809%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -708,6 +723,7 @@
         </div>
         <div class="auf-block" data-tlnr="8" hidden>
           <h2>Schach-Union München 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Pelkovenschlössl</b><br>Moosacher St.Martins-Platz 2<br>80992 München</div><div class="lok-heim">Heimspiele: Mittwoch 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Pelkovenschl%C3%B6ssl%2C%20Moosacher%20St.Martins-Platz%202%2C%2080992%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -719,6 +735,7 @@
         </div>
         <div class="auf-block" data-tlnr="9" hidden>
           <h2>SC Garching 1980 5</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Bürgerhaus Garching - Clubräume</b><br>Bürgerplatz 9<br>85748 Garching<br>Eingang gegenüber der Kreissparkasse</div><div class="lok-heim">Heimspiele: Donnerstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=B%C3%BCrgerhaus%20Garching%20-%20Clubr%C3%A4ume%2CB%C3%BCrgerplatz%209%2C85748%20Garching" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -730,6 +747,7 @@
         </div>
         <div class="auf-block" data-tlnr="10" hidden>
           <h2>SK Tarrasch 1945 München 2</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Untergiesing</b><br>Kolumbusstraße 33<br>81543 München</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Untergiesing%2C%20Kolumbusstra%C3%9Fe%2033%2C81543%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>

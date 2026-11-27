@@ -113,6 +113,14 @@
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
       .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
       .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
       @media (max-width: 600px) {
@@ -564,6 +572,7 @@
       
         <div class="auf-block" data-tlnr="1" hidden>
           <h2>TSV Solln 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Geschäftsstelle des TSV München-Solln e.V.Herterichstr. 14181476 MünchenTel: 089-79 94 13</b></div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gesch%C3%A4ftsstelle%20des%20TSV%20M%C3%BCnchen-Solln%20e.V.Herterichstr.%2014181476%20M%C3%BCnchenTel%3A%20089-79%2094%2013" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -575,6 +584,7 @@
         </div>
         <div class="auf-block" data-tlnr="2" hidden>
           <h2>SG Schwabing München Nord 2</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Milbertshofen</b><br>Schleißheimerstr. 378<br>80809 München<br>barrierefrei</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Milbertshofen%2C%20Schlei%C3%9Fheimerstr.%20378%2C%2080809%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -586,6 +596,7 @@
         </div>
         <div class="auf-block" data-tlnr="3" hidden>
           <h2>Münchener SC 1836 2</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Gaststätte im Münchner Sportkegelzentrum (MKV)</b><br>Säbener Straße 49<br>81547 München-Harlaching<br>(Zugang über Parkplatz Klausener Str.)</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gastst%C3%A4tte%20im%20M%C3%BCnchner%20Sportkegelzentrum%20%28MKV%29%2CS%C3%A4bener%20Stra%C3%9Fe%2049%2C81547%20M%C3%BCnchen-Harlaching" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -597,6 +608,7 @@
         </div>
         <div class="auf-block" data-tlnr="4" hidden>
           <h2>Schachfreunde München 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>AWO Begegnungszentrum am Reinmarplatz 18-20</b><br>barrierefrei</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=AWO%20Begegnungszentrum%20am%20Reinmarplatz%2018-20%2C%20barrierefrei" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -608,6 +620,7 @@
         </div>
         <div class="auf-block" data-tlnr="5" hidden>
           <h2>SG AFK 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Gymnasium Kirchheim</b><br>Heimstettner Str. 20<br>85551 Kirchheim<br>Eingang Mensa</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gymnasium%20Kirchheim%2CHeimstettner%20Str.%2020%2C85551%20Kirchheim" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -619,6 +632,7 @@
         </div>
         <div class="auf-block" data-tlnr="6" hidden>
           <h2>SC Haar 1931 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Bürgerhaus Haar (Vereinsräume über Gasthof zur Post</b><br>Kirchenplatz 1<br>85540 Haar</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=B%C3%BCrgerhaus%20Haar%20%28Vereinsr%C3%A4ume%20%C3%BCber%20Gasthof%20zur%20Post%2C%20Kirchenplatz%201%2C%2085540%20Haar" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -630,6 +644,7 @@
         </div>
         <div class="auf-block" data-tlnr="7" hidden>
           <h2>SK München Südost 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Ara-Gebäude (Eingang Arastraße) - 1. StockArastraße 285579 NeubibergLageplan siehe www.schachklub.info (Spiellokale)Routenplaner</b></div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Ara-Geb%C3%A4ude%20%28Eingang%20Arastra%C3%9Fe%29%20-%201.%20StockArastra%C3%9Fe%20285579%20NeubibergLageplan%20siehe%20www.schachklub.info%20%28Spiellokale%29Routenplaner" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>

@@ -113,6 +113,14 @@
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
       .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
       .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
       @media (max-width: 600px) {
@@ -653,6 +661,7 @@
       
         <div class="auf-block" data-tlnr="1" hidden>
           <h2>SC Haar 1931 4</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Bürgerhaus Haar</b><br>Kirchenplatz 1<br>85540 Haar<br>Seminarräume über Gasthof zur Post</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=B%C3%BCrgerhaus%20Haar%2C%20Kirchenplatz%201%2C%2085540%20Haar" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -664,6 +673,7 @@
         </div>
         <div class="auf-block" data-tlnr="2" hidden>
           <h2>SK Tarrasch 1945 München 5</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Untergiesing</b><br>Kolumbusstr. 33<br>81543 München</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Untergiesing%2CKolumbusstr.%2033%2C81543%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -675,6 +685,7 @@
         </div>
         <div class="auf-block" data-tlnr="3" hidden>
           <h2>SG AFK 4</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Gymnasium Kirchheim</b><br>Heimstettner Str. 20<br>85551 Kirchheim<br>Eingang Mensa</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gymnasium%20Kirchheim%2CHeimstettner%20Str.%2020%2C85551%20Kirchheim" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -686,6 +697,7 @@
         </div>
         <div class="auf-block" data-tlnr="4" hidden>
           <h2>FC Bayern München 10</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Anton-Fingerle-Bildungszentrum</b><br>Schlierseestraße 47<br>81539 München</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Anton-Fingerle-Bildungszentrum%2CSchlierseestra%C3%9Fe%2047%2C81539%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -697,6 +709,7 @@
         </div>
         <div class="auf-block" data-tlnr="5" hidden>
           <h2>SV Weiß-Blau Allianz München 1</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Allianz Sportheim</b><br>Tagungsraum 1. Stock<br>Osterwaldstr. 144<br>80805 München</div><div class="lok-heim">Heimspiele: Donnerstag 19:00</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Allianz%20Sportheim%2CTagungsraum%201.%20Stock%2COsterwaldstr.%20144" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -708,6 +721,7 @@
         </div>
         <div class="auf-block" data-tlnr="6" hidden>
           <h2>Schachfreunde München 4</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Laim</b><br>Kiem-Pauli-Weg 22 (Eingang el. Schiebetür oder rechte Seitentür)<br>barrierefrei</div><div class="lok-heim">Heimspiele: Freitag 19:00</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Laim%2C%20Kiem-Pauli-Weg%2022%20%28Eingang%20el.%20Schiebet%C3%BCr%20oder%20rechte%20Seitent%C3%BCr%29%2C%20barrierefrei" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -719,6 +733,7 @@
         </div>
         <div class="auf-block" data-tlnr="7" hidden>
           <h2>SC Sendling 3</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>ASZ Sendling</b><br>Daiserstraße 37<br>81371 München</div><div class="lok-heim">Heimspiele: Donnerstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=ASZ%20Sendling%2CDaiserstra%C3%9Fe%2037%2C81371%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -730,6 +745,7 @@
         </div>
         <div class="auf-block" data-tlnr="8" hidden>
           <h2>1. SK Neuperlach 2</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Parkstüberl der Arbeiterwohlfahrt - AWO Horst-Salzmann-Zentrum</b><br>Plievierpark 5-15<br>81737 München<br>Der Zugang (nur über Putzbrunner Straße möglich) ist barrierefrei</div><div class="lok-heim">Heimspiele: Dienstag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Parkst%C3%BCberl%20der%20Arbeiterwohlfahrt%20-%20AWO%20Horst-Salzmann-Zentrum%2CPlievierpark%205-15%2C81737%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -741,6 +757,7 @@
         </div>
         <div class="auf-block" data-tlnr="9" hidden>
           <h2>FC Bayern München 9</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Anton-Fingerle-Bildungszentrum</b><br>Schlierseestr. 47<br>81539 München</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Anton-Fingerle-Bildungszentrum%2CSchlierseestr.%2047%2C81539%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
@@ -752,6 +769,7 @@
         </div>
         <div class="auf-block" data-tlnr="10" hidden>
           <h2>TSV Solln 4</h2>
+          <div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text"><b>Geschäftsstelle des TSV München-Solln e.V.</b><br>Herterichstr. 141<br>81476 München<br>Tel: 089-79 94 13</div><div class="lok-heim">Heimspiele: Freitag 19:30</div><a class="lok-karte" href="https://www.google.com/maps/search/?api=1&amp;query=Gesch%C3%A4ftsstelle%20des%20TSV%20M%C3%BCnchen-Solln%20e.V.%2CHerterichstr.%20141%2C81476%20M%C3%BCnchen" target="_blank" rel="noopener">In Google Maps öffnen ↗</a></div>
           
       <div class="tab-wrap"><table class="liga-tab aufst">
         <thead><tr><th>Nr</th><th class="neben" title="Stammspieler">St</th><th class="name">Name</th><th>DWZ</th>
