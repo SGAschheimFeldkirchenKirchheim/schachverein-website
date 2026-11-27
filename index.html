@@ -124,7 +124,9 @@
   .st-erg td:first-child { font-weight: 700; width: 6rem; } .st-erg td:first-child a { color: var(--team, var(--head)); text-decoration: none; }
   .st-erg td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .st-erg .st-rd { color: var(--muted); font-size: .85rem; width: 2.5rem; }
-  .st-erg .st-offen { color: var(--muted); font-weight: 600; font-size: .95rem; }
+  .st-erg td.st-offen { color: var(--muted); font-weight: 600; font-size: .9rem; white-space: normal; line-height: 1.3; }
+  .st-erg .st-offen span { white-space: nowrap; display: inline-block; }
+  .st-erg .st-offen .st-uhr { font-weight: 500; }
   .st-erg-s { color: #5fd08a; } .st-erg-n { color: #ff8f84; } .st-erg-u { color: #e6c15a; }
   :root[data-theme="light"] .st-erg-s { color: #2e7d4f; } :root[data-theme="light"] .st-erg-n { color: #b03a2e; } :root[data-theme="light"] .st-erg-u { color: #9a6a12; }
 
@@ -181,6 +183,28 @@
   <meta property="og:site_name" content="SG Aschheim / Feldkirchen / Kirchheim">
   <meta property="og:image" content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png">
   <meta property="og:image:alt" content="Wappen der SG Aschheim / Feldkirchen / Kirchheim">
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+  <link rel="alternate" hreflang="de" href="index.html">
+  <link rel="alternate" hreflang="en" href="index-en.html">
 </head>
 <body>
 
@@ -194,6 +218,8 @@
         <span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
       </a>
       <div class="kopf-tools">
+        <div class="sprache" translate="no"><button type="button" class="kopf-knopf sprache-knopf" aria-label="Sprache" aria-haspopup="true">DE<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button><div class="sprache-menue" hidden><a href="index.html" data-sprache="de" class=an>Deutsch <small>✓</small></a><a href="index-en.html" data-sprache="en">English</a></div></div>
+        
         <a class="kopf-knopf such-knopf" href="suche.html" aria-label="Suche" title="Suche"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></a>
     <button type="button" class="kopf-knopf konto-knopf" id="konto-knopf" aria-label="Anmelden" title="Anmelden" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -205,7 +231,7 @@
         <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
       </div>
     </div>
-    <nav aria-label="Hauptmenü">
+    <nav aria-label="Hauptmenü"><div class="sprache-mobil" translate="no"><a href="index.html" data-sprache="de" class=an>Deutsch</a><a href="index-en.html" data-sprache="en">English</a></div>
       <a href="index.html" aria-current="page">Start</a>
       <div class="nav-gruppe"><a href="ueber-uns.html">Über uns</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Über uns aufklappen"></button><div class="nav-unter"><a href="geschichte.html">Geschichte</a><a href="dokumente/satzung.pdf">Satzung (PDF)</a></div></div>
       <div class="nav-gruppe"><a href="mannschaften.html">Mannschaften</a><button type="button" class="nav-auf" aria-expanded="false" aria-label="Mannschaften aufklappen"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="geschichte.html#mannschaften">Historie</a></div></div>
@@ -235,7 +261,7 @@
         <aside class="st-glas" aria-label="Termine">
           <h2>Diese Woche</h2>
           <p class="spielabend st-spielabend" id="spielabend" hidden></p>
-          <div class="events-grid" data-max="5"><a class="event-card st-termin" href="termine.html" data-date="2026-11-27"><span class="st-tag"><b>27</b><span>Fr 11.</span></span><span class="st-tt">MMM Runde 3 (AFK 2, AFK 3, AFK 4, AFK 5) · MMM Runde 2 (AFK 6)<span class="ev-rel"></span></span><span class="st-pills"></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-11-29"><span class="st-tag"><b>29</b><span>So 11.</span></span><span class="st-tt">U14/U16 MMM Runde 1-3<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-05"><span class="st-tag"><b>5</b><span>Sa 12.</span></span><span class="st-tt">Schulschach EM<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-05"><span class="st-tag"><b>5</b><span>Sa 12.</span></span><span class="st-tt">Landesliga Süd Runde 2+3<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-06"><span class="st-tag"><b>6</b><span>So 12.</span></span><span class="st-tt">U20 MMM, 1.Liga Runde 2+3<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-08"><span class="st-tag"><b>8</b><span>Di 12.</span></span><span class="st-tt">MMM Runde 3<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-afk-6">AFK 6</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-11"><span class="st-tag"><b>11</b><span>Fr 12.</span></span><span class="st-tt">MMM Runde 4<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-afk-1">AFK 1</span><span class="pill team-afk-2">AFK 2</span><span class="pill team-afk-3">AFK 3</span><span class="pill team-afk-4">AFK 4</span><span class="pill team-afk-5">AFK 5</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-12"><span class="st-tag"><b>12</b><span>Sa 12.</span></span><span class="st-tt">U14/U16 MMM Runde 4+5<span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-18"><span class="st-tag"><b>18</b><span>Fr 12.</span></span><span class="st-tt">Weihnachtsblitz<span class="ev-rel"></span></span><span class="st-pills"></span></a></div>
+          <div class="events-grid" data-max="5"><a class="event-card st-termin" href="termine.html" data-date="2026-11-27"><span class="st-tag"><b>27</b><span>Fr 11.</span></span><span class="st-tt"><span translate="no">MMM Runde 3 (AFK 2, AFK 3, AFK 4, AFK 5) · MMM Runde 2 (AFK 6)</span><span class="ev-rel"></span></span><span class="st-pills"></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-11-29"><span class="st-tag"><b>29</b><span>So 11.</span></span><span class="st-tt"><span translate="no">U14/U16 MMM Runde 1-3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-05"><span class="st-tag"><b>5</b><span>Sa 12.</span></span><span class="st-tt"><span translate="no">Schulschach EM</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-05"><span class="st-tag"><b>5</b><span>Sa 12.</span></span><span class="st-tt"><span translate="no">Landesliga Süd Runde 2+3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-06"><span class="st-tag"><b>6</b><span>So 12.</span></span><span class="st-tt"><span translate="no">U20 MMM, 1.Liga Runde 2+3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-08"><span class="st-tag"><b>8</b><span>Di 12.</span></span><span class="st-tt"><span translate="no">MMM Runde 3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-afk-6">AFK 6</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-11"><span class="st-tag"><b>11</b><span>Fr 12.</span></span><span class="st-tt"><span translate="no">MMM Runde 4</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-afk-1">AFK 1</span><span class="pill team-afk-2">AFK 2</span><span class="pill team-afk-3">AFK 3</span><span class="pill team-afk-4">AFK 4</span><span class="pill team-afk-5">AFK 5</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-12"><span class="st-tag"><b>12</b><span>Sa 12.</span></span><span class="st-tt"><span translate="no">U14/U16 MMM Runde 4+5</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Jugend</span></span></a><a class="event-card st-termin" href="termine.html" data-date="2026-12-18"><span class="st-tag"><b>18</b><span>Fr 12.</span></span><span class="st-tt"><span translate="no">Weihnachtsblitz</span><span class="ev-rel"></span></span><span class="st-pills"></span></a></div>
           <p class="events-empty" id="events-empty" hidden>Gerade keine Termine eingetragen.</p>
           <a class="st-mehr" href="termine.html">Alle Termine →</a>
         </aside>
@@ -247,31 +273,31 @@
       <div class="st-slider" data-sek="9">
         <div class="st-fenster"><div class="st-spur">
         <a class="st-bkarte" href="berichte/2026-kooperationsturnier-ebe.html"><img src="berichte/bilder/2026-kooperationsturnier-ebe/siegerfoto.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">24.10.2026 · von Pierre Tassell</span><b>Schnellschach-Vereinsmeisterschaft 2026</b>
+          <span class="st-btext"><span class="st-meta">24.10.2026 · von Pierre Tassell</span><b translate="no">Schnellschach-Vereinsmeisterschaft 2026</b><span translate="no"></span>
           </span></a>
         <a class="st-bkarte" href="berichte/2026-kooperationsturnier-gyki-feat-sg-afk-2026.html"><img src="berichte/bilder/2026-kooperationsturnier-gyki-feat-sg-afk-2026/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">13.10.2026 · von Pierre Tassell</span><b>Kooperationsturnier GyKi feat. SG AFK 2026</b>
+          <span class="st-btext"><span class="st-meta">13.10.2026 · von Pierre Tassell</span><b translate="no">Kooperationsturnier GyKi feat. SG AFK 2026</b><span translate="no"></span>
           </span></a>
         <a class="st-bkarte ohne-bild" href="berichte/2026-herbstblitz.html">
-          <span class="st-btext"><span class="st-meta">29.09.2026 · von Pierre Tassell</span><b>Herbstblitz 2026</b><span class="st-auszug">Das Herbstblitz war mit 25 Teilnehmern gut besucht! Wir spielten (leicht) wahnsinnige 13 Runden Blitz bei 3 min Bedenkzeit.</span>
+          <span class="st-btext"><span class="st-meta">29.09.2026 · von Pierre Tassell</span><b translate="no">Herbstblitz 2026</b><span translate="no"><span class="st-auszug">Das Herbstblitz war mit 25 Teilnehmern gut besucht! Wir spielten (leicht) wahnsinnige 13 Runden Blitz bei 3 min Bedenkzeit.</span></span>
           <span class="st-weiter">Bericht lesen →</span></span></a>
         <a class="st-bkarte" href="berichte/2026-duke-blitz-runde-2.html"><img src="berichte/bilder/2026-duke-blitz-runde-2/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">22.09.2026 · von Pierre Tassell</span><b>Duke Blitz - Runde 2</b>
+          <span class="st-btext"><span class="st-meta">22.09.2026 · von Pierre Tassell</span><b translate="no">Duke Blitz - Runde 2</b><span translate="no"></span>
           </span></a>
         <a class="st-bkarte" href="berichte/2026-ois-2026-dominik-gewinnt-c-turnier.html"><img src="berichte/bilder/2026-ois-2026-dominik-gewinnt-c-turnier/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">18.09.2026 · von Pierre Tassell</span><b>OIS 2026 - Dominik gewinnt C-Turnier!</b>
+          <span class="st-btext"><span class="st-meta">18.09.2026 · von Pierre Tassell</span><b translate="no">OIS 2026 - Dominik gewinnt C-Turnier!</b><span translate="no"></span>
           </span></a>
         <a class="st-bkarte ohne-bild" href="berichte/2026-blitzjahreswertung-2026-zwischenstand.html">
-          <span class="st-btext"><span class="st-meta">30.08.2026 · von Pierre Tassell</span><b>Blitzjahreswertung 2026 (Zwischenstand)</b><span class="st-auszug">Nach drei von fünf Turnieren ist Vorjahressieger Fabian Müller mit zwei Punkten in Führung vor Pierre Tassell.</span>
+          <span class="st-btext"><span class="st-meta">30.08.2026 · von Pierre Tassell</span><b translate="no">Blitzjahreswertung 2026 (Zwischenstand)</b><span translate="no"><span class="st-auszug">Nach drei von fünf Turnieren ist Vorjahressieger Fabian Müller mit zwei Punkten in Führung vor Pierre Tassell.</span></span>
           <span class="st-weiter">Bericht lesen →</span></span></a>
         <a class="st-bkarte" href="berichte/2026-oberlandquartett-2026-5-sieg-in-folge.html"><img src="berichte/bilder/2026-oberlandquartett-2026-5-sieg-in-folge/foto1.jpg" alt="" loading="lazy">
-          <span class="st-btext"><span class="st-meta">06.07.2026 · von Pierre Tassell</span><b>Oberlandquartett 2026: 5. Sieg in Folge!</b>
+          <span class="st-btext"><span class="st-meta">06.07.2026 · von Pierre Tassell</span><b translate="no">Oberlandquartett 2026: 5. Sieg in Folge!</b><span translate="no"></span>
           </span></a>
         <a class="st-bkarte ohne-bild" href="berichte/2026-saison-25-26-erfolgreich-beendet.html">
-          <span class="st-btext"><span class="st-meta">07.06.2026 · von Pierre Tassell</span><b>Saison 25/26 erfolgreich beendet!</b><span class="st-auszug">Bezirksliga</span>
+          <span class="st-btext"><span class="st-meta">07.06.2026 · von Pierre Tassell</span><b translate="no">Saison 25/26 erfolgreich beendet!</b><span translate="no"><span class="st-auszug">Bezirksliga</span></span>
           <span class="st-weiter">Bericht lesen →</span></span></a>
         <a class="st-bkarte ohne-bild" href="berichte/2026-u20-landesliga-sud-klassenerhalt-geschafft.html">
-          <span class="st-btext"><span class="st-meta">11.03.2026 · von Pierre Tassell</span><b>U20-Landesliga Süd: Klassenerhalt geschafft!</b><span class="st-auszug">Am Samstag haben Alex Wittko, Gaurav Mudan, Konrad Keblat und Alex Meißner den Klassenerhalt gesichert und sich den 5. Platz von 8 in der U20-Landesliga Süd erkämpft!</span>
+          <span class="st-btext"><span class="st-meta">11.03.2026 · von Pierre Tassell</span><b translate="no">U20-Landesliga Süd: Klassenerhalt geschafft!</b><span translate="no"><span class="st-auszug">Am Samstag haben Alex Wittko, Gaurav Mudan, Konrad Keblat und Alex Meißner den Klassenerhalt gesichert und sich den 5. Platz von 8 in der U20-Landesliga Süd erkämpft!</span></span>
           <span class="st-weiter">Bericht lesen →</span></span></a></div></div>
         <div class="st-steuer"><button type="button" class="st-zurueck" aria-label="Zurück">←</button>
           <button type="button" class="st-vor" aria-label="Weiter">→</button><span class="st-punkte"></span></div>
@@ -283,7 +309,7 @@
       <div class="st-inhalt">
       <div class="st-kl">Mannschaften · aktuelle Runde</div>
       <h2>4 Siege – 5 Spiele stehen noch an</h2>
-      <table class="st-erg"><tr class="team-afk-1"><td><a href="afk-1.html">AFK 1</a></td><td>bei SC Sendling 1</td><td class="st-rd">R3</td><td class="st-erg-s">5 : 3</td></tr><tr class="team-afk-2"><td><a href="afk-2.html">AFK 2</a></td><td>vs. SC Roter Turm München 2</td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27">Fr 27.11. · 19:30</td></tr><tr class="team-afk-3"><td><a href="afk-3.html">AFK 3</a></td><td>vs. Schachfreunde München 3</td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27">Fr 27.11. · 19:30</td></tr><tr class="team-afk-4"><td><a href="afk-4.html">AFK 4</a></td><td>bei SK Tarrasch 1945 München 5</td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27">Fr 27.11. · 19:30</td></tr><tr class="team-afk-5"><td><a href="afk-5.html">AFK 5</a></td><td>bei MSA Zugzwang 82 5</td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27">Fr 27.11. · 19:30</td></tr><tr class="team-afk-6"><td><a href="afk-6.html">AFK 6</a></td><td>vs. Schachfreunde München 5</td><td class="st-rd">R2</td><td class="st-offen" data-date="2026-11-27">Fr 27.11. · 19:30</td></tr><tr class="team-senioren"><td><a href="senioren.html">Senioren</a></td><td>bei Schachfreunde München 1</td><td class="st-rd">R1</td><td class="st-erg-s">2,5 : 1,5</td></tr><tr class="team-u20-i"><td><a href="u20-i.html">U20 I</a></td><td>vs. FC Bayern München</td><td class="st-rd">R1</td><td class="st-erg-s">3 : 1</td></tr><tr class="team-u20-ii"><td><a href="u20-ii.html">U20 II</a></td><td>vs. SV Höhenkirchen 1</td><td class="st-rd">R1</td><td class="st-erg-s">2,5 : 1,5</td></tr></table>
+      <table class="st-erg"><tr class="team-afk-1"><td translate="no"><a href="afk-1.html">AFK 1</a></td><td>bei <span translate="no">SC Sendling 1</span></td><td class="st-rd">R3</td><td class="st-erg-s">5 : 3</td></tr><tr class="team-afk-2"><td translate="no"><a href="afk-2.html">AFK 2</a></td><td>vs. <span translate="no">SC Roter Turm München 2</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fr 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-3"><td translate="no"><a href="afk-3.html">AFK 3</a></td><td>vs. <span translate="no">Schachfreunde München 3</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fr 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-4"><td translate="no"><a href="afk-4.html">AFK 4</a></td><td>bei <span translate="no">SK Tarrasch 1945 München 5</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fr 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-5"><td translate="no"><a href="afk-5.html">AFK 5</a></td><td>bei <span translate="no">MSA Zugzwang 82 5</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fr 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-6"><td translate="no"><a href="afk-6.html">AFK 6</a></td><td>vs. <span translate="no">Schachfreunde München 5</span></td><td class="st-rd">R2</td><td class="st-offen" data-date="2026-11-27"><span>Fr 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-senioren"><td translate="no"><a href="senioren.html">Senioren</a></td><td>bei <span translate="no">Schachfreunde München 1</span></td><td class="st-rd">R1</td><td class="st-erg-s">2,5 : 1,5</td></tr><tr class="team-u20-i"><td translate="no"><a href="u20-i.html">U20 I</a></td><td>vs. <span translate="no">FC Bayern München</span></td><td class="st-rd">R1</td><td class="st-erg-s">3 : 1</td></tr><tr class="team-u20-ii"><td translate="no"><a href="u20-ii.html">U20 II</a></td><td>vs. <span translate="no">SV Höhenkirchen 1</span></td><td class="st-rd">R1</td><td class="st-erg-s">2,5 : 1,5</td></tr></table>
       <p class="st-knoepfe"><a class="st-btn" href="mannschaften.html">Alle Mannschaften →</a></p></div>
     </section>
     
@@ -510,5 +536,46 @@
     })();
   </script>
   <script src="konto.js?v=9d88a0c8" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" data-pfad="" defer></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
 </body>
 </html>

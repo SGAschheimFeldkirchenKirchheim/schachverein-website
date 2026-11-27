@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Home | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+  /* Startseite: Abschnitte über die volle Bildschirmbreite (main ist sonst schmaler) */
+  html, body { overflow-x: clip; }
+  main.container { margin-top: 0 !important; }
+  .st-voll { width: 100vw; margin-left: calc(50% - 50vw); }
+  .st-kl { font-size: 0.95rem; font-weight: 600; color: var(--hell); margin-bottom: 0.5rem; }
+  .st-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.5rem; font-weight: 700; font-size: 1rem;
+    border: 1.5px solid currentColor; color: var(--head); text-decoration: none; border-radius: 6px; transition: background .25s, color .25s; }
+  .st-btn:hover { background: var(--head); color: var(--bg); }
+  .st-btn.voll { background: var(--hell); border-color: var(--hell); color: #0e1524; }
+  .st-btn.voll:hover { background: #fff; border-color: #fff; }
+  .st-meta { color: var(--muted); font-size: .9rem; font-weight: 400; }
+
+  /* Kopfbild: Höhe folgt dem Foto -> nichts abgeschnitten, kein Rand */
+  .st-hero { position: relative; aspect-ratio: var(--verh); background: #0b111d; overflow: hidden; display: flex; }
+  .st-kopfbild { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+  .st-hero::after { content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, #0b111de6 0%, #0b111d99 45%, #0b111d55 100%), linear-gradient(transparent 70%, var(--bg)); }
+  .st-hero-raster { position: relative; z-index: 1; flex: 1; padding: 2.5rem max(1.5rem, calc((100% - 1280px) / 2)) 3rem;
+    display: grid; grid-template-columns: 1.1fr .9fr; gap: 3rem; align-items: end; }
+  .st-hero h1 { color: #fff; font-size: clamp(2.4rem, 3.8vw, 3.8rem); line-height: 1.05; margin: 0; }
+  .st-hero-text p { color: #e3e8f1; font-size: 1.2rem; margin: 1.1rem 0 1.7rem; max-width: 38rem; }
+
+  /* Termin-Kasten */
+  .st-glas { background: #0b111da6; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid #ffffff26;
+    border-radius: 12px; padding: 1.3rem 1.5rem; color: #e3e8f1; }
+  .st-glas h2 { color: #fff; font-size: 1.5rem; margin: 0 0 .6rem; }
+  .st-glas .st-spielabend { margin: 0 0 .4rem; padding: .5rem .8rem; background: #6f9fd833; border: 0; border-left: 3px solid var(--hell);
+    border-radius: 6px; font-weight: 700; color: #fff; font-size: .98rem; }
+  .st-glas .events-grid { display: block; }
+  .st-glas a.event-card.st-termin { display: grid; grid-template-columns: 3.2rem 1fr auto; gap: .9rem; align-items: center;
+    padding: .5rem .15rem; margin: 0; background: none; border: 0; border-bottom: 1px solid #ffffff1f; border-radius: 0;
+    box-shadow: none; color: #fff; text-decoration: none; transition: background .2s; }
+  .st-glas a.event-card.st-termin:hover { background: #ffffff0d; }
+  .st-glas .event-card .ev-rel:not(:empty), .st-glas .event-card.next .ev-rel:not(:empty) { background: none; color: var(--hell); padding: 0; }
+  .st-tag { text-align: center; line-height: 1; } .st-tag b { display: block; font-family: var(--font-head); font-size: 1.45rem; color: #fff; }
+  .st-tag span { font-size: .78rem; color: #b9c4d6; font-weight: 600; }
+  .st-tt { font-weight: 600; font-size: 1.02rem; color: #fff; line-height: 1.3; }
+  .st-tt .ev-rel:not(:empty) { display: block; font-size: .78rem; font-weight: 600; }
+  .st-pills .pill { font-size: .75rem; margin: 0; padding: .12rem .55rem; border-radius: 999px; font-weight: 700; white-space: nowrap; }
+  .st-mehr { display: inline-block; margin-top: .8rem; color: var(--hell); font-weight: 600; text-decoration: none; }
+  .st-glas .events-empty { margin: .4rem 0; color: #e3e8f1; }
+
+  /* Berichte-Slider: rückt Karte für Karte weiter (kein Dauerlauf) */
+  .st-block { padding: 4.5rem 0 3.5rem; }
+  .st-kopfzeile { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.4rem; }
+  .st-kopfzeile h2 { font-size: 2.5rem; margin: 0; } .st-kopfzeile a { font-weight: 600; text-decoration: none; }
+  .st-fenster { overflow: hidden; }
+  .st-spur { display: flex; gap: 1.4rem; align-items: flex-start; transition: transform .8s cubic-bezier(.65,0,.35,1); }
+  .st-bkarte { flex: 0 0 calc((100% - 2.8rem) / 3); background: var(--surface); border-radius: 10px; overflow: hidden;
+    color: inherit; text-decoration: none; transition: transform .3s; }
+  .st-bkarte:hover { transform: translateY(-5px); }
+  .st-bkarte img { display: block; width: 100%; height: auto; max-height: 340px; object-fit: contain; background: var(--surface); }
+  .st-spur { align-items: stretch; }
+  .st-bkarte.ohne-bild { display: flex; border-top: 4px solid var(--hell); }
+  .st-bkarte.ohne-bild .st-btext { display: flex; flex-direction: column; padding: 1.6rem 1.5rem; }
+  .st-bkarte.ohne-bild b { font-size: 1.6rem; line-height: 1.2; margin: .5rem 0 1rem; }
+  .st-auszug { color: var(--muted); display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+  .st-weiter { margin-top: auto; padding-top: 1rem; color: var(--hell); font-weight: 600; }
+  .st-btext { display: block; padding: 1rem 1.2rem 1.3rem; } .st-btext b { display: block; font-family: var(--font-head); font-size: 1.25rem; color: var(--head); margin-top: .3rem; }
+  .st-steuer { display: flex; align-items: center; gap: .9rem; margin-top: 1.2rem; }
+  .st-steuer button { width: 2.8rem; height: 2.8rem; border-radius: 50%; border: 1.5px solid var(--line); background: none; color: var(--head); font-size: 1.15rem; cursor: pointer; }
+  .st-steuer button:hover { background: var(--head); color: var(--bg); }
+  .st-punkte { display: flex; gap: .45rem; } .st-punkte i { width: .55rem; height: .55rem; border-radius: 999px; background: var(--line); cursor: pointer; transition: width .3s; }
+  .st-punkte i.an { background: var(--hell); width: 1.6rem; }
+
+  /* Kästchen: Bild + Inhalt nebeneinander, abwechselnd */
+  .st-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; background: var(--bg); }
+  .st-split.um .st-bild { order: 2; }
+  .st-inhalt { padding: 3.5rem max(1.5rem, 6vw); }
+  .st-inhalt h2 { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.1; margin: 0 0 1rem; }
+  .st-inhalt p { font-size: 1.12rem; }
+  .st-knoepfe { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+  .st-wechsel { position: relative; width: 100%; overflow: hidden; }
+  .st-wechsel img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.6s ease; }
+  .st-wechsel img.an { opacity: 1; }
+  .st-wechsel img:not(.an) { pointer-events: none; }   /* Rechtsklick/Antippen trifft das sichtbare Foto */
+  .st-wechsel img.an { z-index: 1; }
+  .st-wechsel.frei { display: grid; align-items: center; overflow: visible; }
+  .st-wechsel.frei img { position: static; grid-area: 1 / 1; height: auto; object-fit: initial; }
+
+  .st-erg { width: 100%; border-collapse: collapse; font-size: 1.05rem; background: none !important; }
+  .st-erg td { padding: .6rem .4rem; border-bottom: 1px solid var(--line); }
+  .st-erg td:first-child { font-weight: 700; width: 6rem; } .st-erg td:first-child a { color: var(--team, var(--head)); text-decoration: none; }
+  .st-erg td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .st-erg .st-rd { color: var(--muted); font-size: .85rem; width: 2.5rem; }
+  .st-erg td.st-offen { color: var(--muted); font-weight: 600; font-size: .9rem; white-space: normal; line-height: 1.3; }
+  .st-erg .st-offen span { white-space: nowrap; display: inline-block; }
+  .st-erg .st-offen .st-uhr { font-weight: 500; }
+  .st-erg-s { color: #5fd08a; } .st-erg-n { color: #ff8f84; } .st-erg-u { color: #e6c15a; }
+  :root[data-theme="light"] .st-erg-s { color: #2e7d4f; } :root[data-theme="light"] .st-erg-n { color: #b03a2e; } :root[data-theme="light"] .st-erg-u { color: #9a6a12; }
+
+  .st-fakten { display: flex; flex-wrap: wrap; gap: 2.6rem; margin: 1.6rem 0 .5rem; }
+  .st-fakten b { display: block; font-family: var(--font-head); font-size: 2.4rem; color: var(--head); line-height: 1.1; }
+  .st-fakten span { color: var(--muted); }
+  .st-wann { list-style: none; padding: 0; margin: 1rem 0; font-size: 1.08rem; display: grid; gap: .4rem; }
+  .st-geb[hidden] { display: none; }
+  .st-geb { margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+  .st-geb h3 { font-size: 1.1rem; margin: 0 0 .5rem; }
+  .st-geb ul { list-style: none; padding: 0; margin: 0; }
+  .st-geb li { display: flex; justify-content: space-between; padding: .4rem 0; border-bottom: 1px solid var(--line); }
+  .st-geb b { color: var(--head); } .st-geb em { font-style: normal; color: var(--hell); font-weight: 600; }
+
+  /* Polaroid-Stapel für alte Fotos: jedes Foto in seinem Format */
+  .st-stapel { position: relative; height: clamp(380px, 38vw, 560px); }
+  .st-pol { position: absolute; left: 50%; top: 50%; margin: 0; background: #fbfaf6; padding: 12px 12px 42px;
+    box-shadow: 0 12px 30px #0008; transform: translate(-50%, -50%) rotate(var(--r)); transition: transform 1s ease, opacity 1s ease; }
+  .st-pol img { display: block; max-width: min(34vw, 520px); max-height: clamp(260px, 28vw, 420px); width: auto; height: auto; }
+  .st-pol figcaption { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; color: #333;
+    font-family: "Segoe Print", "Bradley Hand", cursive; font-size: 1rem; }
+  .st-pol.weg { transform: translate(10%, -50%) rotate(calc(var(--r) + 12deg)); opacity: 0; pointer-events: none; }
+
+  @media (max-width: 900px) {
+    .st-hero { aspect-ratio: auto; min-height: 0; }
+    .st-hero-raster { position: relative; grid-template-columns: minmax(0, 1fr); padding-top: 2.5rem; }
+    .st-kopfbild { opacity: .55; }
+    .st-split, .st-split.um { grid-template-columns: minmax(0, 1fr); } .st-split.um .st-bild { order: 0; }
+    .st-inhalt { padding: 2.2rem 1.2rem 2.8rem; }
+    .st-bkarte { flex-basis: 85%; }
+    .st-stapel { height: 420px; } .st-pol img { max-width: 72vw; max-height: 300px; }
+    .st-kopfzeile h2 { font-size: 2rem; }
+    .st-erg { font-size: .95rem; } .st-erg .st-rd { display: none; } .st-erg td:first-child { width: auto; white-space: nowrap; }
+  }
+  @media (prefers-reduced-motion: reduce) { .st-spur, .st-wechsel img, .st-pol { transition: none; } }
+</style><style>
+      .hinweis-banner { background: #fff3cd; border: 1px solid #ffe08a; color: #664d03; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-weight: bold; }
+</style><style>
+  .geburtstag { display: flex; align-items: center; gap: 0.9rem; margin: 0 0 1rem; padding: 0.8rem 1.1rem;
+                border-radius: 12px; border: 1px solid var(--border, #e3e7ee); background: var(--soft, #f5f7fa);
+                box-shadow: inset 4px 0 0 #e8b931; }
+  .geburtstag p { margin: 0; line-height: 1.5; }
+  .gb-torte { font-size: 2rem; line-height: 1; }
+  .gb-gruss { color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+  .gb-schnipsel { position: fixed; top: -12px; width: 8px; height: 13px; border-radius: 2px; z-index: 9999;
+                  pointer-events: none; animation: gb-fall var(--d) cubic-bezier(.3,.6,.5,1) forwards; }
+  @keyframes gb-fall { to { transform: translate(var(--x), 105vh) rotate(var(--r)); opacity: 0.2; } }
+</style>
+<link href="design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Home | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="index.html" hreflang="de" rel="alternate"/>
+<link href="index-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="index-en.html">
+<img alt="" class="brand-logo" src="Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="index.html">Deutsch</a><a class="an" data-sprache="en" href="index-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="index.html">Deutsch</a><a class="an" data-sprache="en" href="index-en.html">English</a></div>
+<a aria-current="page" href="index-en.html">Home</a>
+<div class="nav-gruppe"><a href="ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="geschichte.html">History</a><a href="dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe"><a href="mannschaften.html">Teams</a><button aria-expanded="false" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="afk-1.html">AFK 1</a><a href="afk-2.html">AFK 2</a><a href="afk-3.html">AFK 3</a><a href="afk-4.html">AFK 4</a><a href="afk-5.html">AFK 5</a><a href="afk-6.html">AFK 6</a><a href="senioren.html">Senioren</a><a href="geschichte.html#mannschaften">History</a></div></div>
+<a href="jugend-en.html">Youth</a>
+<a href="termine.html">Events</a>
+<div class="nav-gruppe"><a href="berichte.html">Reports</a><button aria-expanded="false" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe"><a href="turniere.html">Tournaments</a><button aria-expanded="false" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a href="oberlandquartett.html">Oberlandquartett</a><a href="blitzjahreswertung.html">Blitz annual ranking</a><a href="vereinsintern.html">Hall of Fame</a><a href="ausschreibungen.html">Tournament announcements</a><a href="turnierkalender.html">Tournament calendar</a><a href="turnierorte.html">AFK on Tour</a></div></div>
+<a href="faq-en.html">FAQ</a>
+<a href="kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<div class="st-voll pause-band" hidden="" id="pause-band"></div>
+<section class="st-hero st-voll" style="--verh:1.7778">
+<img alt="" class="st-kopfbild" src="startseite/kopfbild.jpg"/>
+<div class="st-hero-raster">
+<div class="st-hero-text">
+<h1>Play chess in Aschheim, Feldkirchen &amp; Kirchheim</h1>
+<p>Every Friday at Gymnasium Kirchheim – youth 6 to 7:30 pm, adults from 7:30 pm. Beginners and guests welcome.</p>
+<a class="st-btn voll" href="ueber-uns-en.html#neu-hier">New here? How to visit us →</a>
+</div>
+<aside aria-label="Events" class="st-glas">
+<h2>This week</h2>
+<p class="spielabend st-spielabend" hidden="" id="spielabend"></p>
+<div class="events-grid" data-max="5"><a class="event-card st-termin" data-date="2026-11-27" href="termine.html"><span class="st-tag"><b>27</b><span>Fri 11.</span></span><span class="st-tt"><span translate="no">MMM Runde 3 (AFK 2, AFK 3, AFK 4, AFK 5) · MMM Runde 2 (AFK 6)</span><span class="ev-rel"></span></span><span class="st-pills"></span></a><a class="event-card st-termin" data-date="2026-11-29" href="termine.html"><span class="st-tag"><b>29</b><span>Sun 11.</span></span><span class="st-tt"><span translate="no">U14/U16 MMM Runde 1-3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Youth</span></span></a><a class="event-card st-termin" data-date="2026-12-05" href="termine.html"><span class="st-tag"><b>5</b><span>Sat 12.</span></span><span class="st-tt"><span translate="no">Schulschach EM</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Youth</span></span></a><a class="event-card st-termin" data-date="2026-12-05" href="termine.html"><span class="st-tag"><b>5</b><span>Sat 12.</span></span><span class="st-tt"><span translate="no">Landesliga Süd Runde 2+3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Youth</span></span></a><a class="event-card st-termin" data-date="2026-12-06" href="termine.html"><span class="st-tag"><b>6</b><span>Sun 12.</span></span><span class="st-tt"><span translate="no">U20 MMM, 1.Liga Runde 2+3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Youth</span></span></a><a class="event-card st-termin" data-date="2026-12-08" href="termine.html"><span class="st-tag"><b>8</b><span>Tue 12.</span></span><span class="st-tt"><span translate="no">MMM Runde 3</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-afk-6">AFK 6</span></span></a><a class="event-card st-termin" data-date="2026-12-11" href="termine.html"><span class="st-tag"><b>11</b><span>Fri 12.</span></span><span class="st-tt"><span translate="no">MMM Runde 4</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-afk-1">AFK 1</span><span class="pill team-afk-2">AFK 2</span><span class="pill team-afk-3">AFK 3</span><span class="pill team-afk-4">AFK 4</span><span class="pill team-afk-5">AFK 5</span></span></a><a class="event-card st-termin" data-date="2026-12-12" href="termine.html"><span class="st-tag"><b>12</b><span>Sat 12.</span></span><span class="st-tt"><span translate="no">U14/U16 MMM Runde 4+5</span><span class="ev-rel"></span></span><span class="st-pills"><span class="pill team-jugend">Youth</span></span></a><a class="event-card st-termin" data-date="2026-12-18" href="termine.html"><span class="st-tag"><b>18</b><span>Fri 12.</span></span><span class="st-tt"><span translate="no">Weihnachtsblitz</span><span class="ev-rel"></span></span><span class="st-pills"></span></a></div>
+<p class="events-empty" hidden="" id="events-empty">No events scheduled at the moment.</p>
+<a class="st-mehr" href="termine.html">All events →</a>
+</aside>
+</div>
+</section>
+<section class="st-block">
+<div class="st-kopfzeile"><h2>Reports</h2><a href="berichte.html">All reports →</a></div>
+<div class="st-slider" data-sek="9">
+<div class="st-fenster"><div class="st-spur">
+<a class="st-bkarte" href="berichte/2026-kooperationsturnier-ebe.html"><img alt="" loading="lazy" src="berichte/bilder/2026-kooperationsturnier-ebe/siegerfoto.jpg"/>
+<span class="st-btext"><span class="st-meta">24.10.2026 · by Pierre Tassell</span><b translate="no">Schnellschach-Vereinsmeisterschaft 2026</b><span translate="no"></span>
+</span></a>
+<a class="st-bkarte" href="berichte/2026-kooperationsturnier-gyki-feat-sg-afk-2026.html"><img alt="" loading="lazy" src="berichte/bilder/2026-kooperationsturnier-gyki-feat-sg-afk-2026/foto1.jpg"/>
+<span class="st-btext"><span class="st-meta">13.10.2026 · by Pierre Tassell</span><b translate="no">Kooperationsturnier GyKi feat. SG AFK 2026</b><span translate="no"></span>
+</span></a>
+<a class="st-bkarte ohne-bild" href="berichte/2026-herbstblitz.html">
+<span class="st-btext"><span class="st-meta">29.09.2026 · by Pierre Tassell</span><b translate="no">Herbstblitz 2026</b><span translate="no"><span class="st-auszug">Das Herbstblitz war mit 25 Teilnehmern gut besucht! Wir spielten (leicht) wahnsinnige 13 Runden Blitz bei 3 min Bedenkzeit.</span></span>
+<span class="st-weiter">Read report →</span></span></a>
+<a class="st-bkarte" href="berichte/2026-duke-blitz-runde-2.html"><img alt="" loading="lazy" src="berichte/bilder/2026-duke-blitz-runde-2/foto1.jpg"/>
+<span class="st-btext"><span class="st-meta">22.09.2026 · by Pierre Tassell</span><b translate="no">Duke Blitz - Runde 2</b><span translate="no"></span>
+</span></a>
+<a class="st-bkarte" href="berichte/2026-ois-2026-dominik-gewinnt-c-turnier.html"><img alt="" loading="lazy" src="berichte/bilder/2026-ois-2026-dominik-gewinnt-c-turnier/foto1.jpg"/>
+<span class="st-btext"><span class="st-meta">18.09.2026 · by Pierre Tassell</span><b translate="no">OIS 2026 - Dominik gewinnt C-Turnier!</b><span translate="no"></span>
+</span></a>
+<a class="st-bkarte ohne-bild" href="berichte/2026-blitzjahreswertung-2026-zwischenstand.html">
+<span class="st-btext"><span class="st-meta">30.08.2026 · by Pierre Tassell</span><b translate="no">Blitzjahreswertung 2026 (Zwischenstand)</b><span translate="no"><span class="st-auszug">Nach drei von fünf Turnieren ist Vorjahressieger Fabian Müller mit zwei Punkten in Führung vor Pierre Tassell.</span></span>
+<span class="st-weiter">Read report →</span></span></a>
+<a class="st-bkarte" href="berichte/2026-oberlandquartett-2026-5-sieg-in-folge.html"><img alt="" loading="lazy" src="berichte/bilder/2026-oberlandquartett-2026-5-sieg-in-folge/foto1.jpg"/>
+<span class="st-btext"><span class="st-meta">06.07.2026 · by Pierre Tassell</span><b translate="no">Oberlandquartett 2026: 5. Sieg in Folge!</b><span translate="no"></span>
+</span></a>
+<a class="st-bkarte ohne-bild" href="berichte/2026-saison-25-26-erfolgreich-beendet.html">
+<span class="st-btext"><span class="st-meta">07.06.2026 · by Pierre Tassell</span><b translate="no">Saison 25/26 erfolgreich beendet!</b><span translate="no"><span class="st-auszug">Bezirksliga</span></span>
+<span class="st-weiter">Read report →</span></span></a>
+<a class="st-bkarte ohne-bild" href="berichte/2026-u20-landesliga-sud-klassenerhalt-geschafft.html">
+<span class="st-btext"><span class="st-meta">11.03.2026 · by Pierre Tassell</span><b translate="no">U20-Landesliga Süd: Klassenerhalt geschafft!</b><span translate="no"><span class="st-auszug">Am Samstag haben Alex Wittko, Gaurav Mudan, Konrad Keblat und Alex Meißner den Klassenerhalt gesichert und sich den 5. Platz von 8 in der U20-Landesliga Süd erkämpft!</span></span>
+<span class="st-weiter">Read report →</span></span></a></div></div>
+<div class="st-steuer"><button aria-label="Back" class="st-zurueck" type="button">←</button>
+<button aria-label="Next" class="st-vor" type="button">→</button><span class="st-punkte"></span></div>
+</div>
+</section>
+<section class="st-split st-voll">
+<div class="st-bild"><div class="st-wechsel" style="aspect-ratio:1.3333"><img alt="" class="an" src="startseite/mannschaften/01.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/02.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/03.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/04.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/05.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/06.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/07.jpg"/><img alt="" loading="lazy" src="startseite/mannschaften/08.jpg"/></div></div>
+<div class="st-inhalt">
+<div class="st-kl">Teams · current round</div>
+<h2>4 wins – 5 matches still to play</h2>
+<table class="st-erg"><tr class="team-afk-1"><td translate="no"><a href="afk-1.html">AFK 1</a></td><td>at <span translate="no">SC Sendling 1</span></td><td class="st-rd">R3</td><td class="st-erg-s">5 : 3</td></tr><tr class="team-afk-2"><td translate="no"><a href="afk-2.html">AFK 2</a></td><td>vs. <span translate="no">SC Roter Turm München 2</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fri 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-3"><td translate="no"><a href="afk-3.html">AFK 3</a></td><td>vs. <span translate="no">Schachfreunde München 3</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fri 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-4"><td translate="no"><a href="afk-4.html">AFK 4</a></td><td>at <span translate="no">SK Tarrasch 1945 München 5</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fri 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-5"><td translate="no"><a href="afk-5.html">AFK 5</a></td><td>at <span translate="no">MSA Zugzwang 82 5</span></td><td class="st-rd">R3</td><td class="st-offen" data-date="2026-11-27"><span>Fri 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-afk-6"><td translate="no"><a href="afk-6.html">AFK 6</a></td><td>vs. <span translate="no">Schachfreunde München 5</span></td><td class="st-rd">R2</td><td class="st-offen" data-date="2026-11-27"><span>Fri 27.11.</span> <span class="st-uhr">19:30</span></td></tr><tr class="team-senioren"><td translate="no"><a href="senioren.html">Senioren</a></td><td>at <span translate="no">Schachfreunde München 1</span></td><td class="st-rd">R1</td><td class="st-erg-s">2,5 : 1,5</td></tr><tr class="team-u20-i"><td translate="no"><a href="u20-i.html">U20 I</a></td><td>vs. <span translate="no">FC Bayern München</span></td><td class="st-rd">R1</td><td class="st-erg-s">3 : 1</td></tr><tr class="team-u20-ii"><td translate="no"><a href="u20-ii.html">U20 II</a></td><td>vs. <span translate="no">SV Höhenkirchen 1</span></td><td class="st-rd">R1</td><td class="st-erg-s">2,5 : 1,5</td></tr></table>
+<p class="st-knoepfe"><a class="st-btn" href="mannschaften.html">All teams →</a></p></div>
+</section>
+<section class="st-split st-voll um">
+<div class="st-bild"><div class="st-wechsel frei"><img alt="" class="an" src="startseite/historie/01-oberlandquartett-2015.jpg"/><img alt="" src="startseite/historie/02-spielabend.jpg"/><img alt="" src="startseite/historie/03-spielabend.jpg"/><img alt="" src="startseite/historie/04-spielabend.jpg"/><img alt="" src="startseite/historie/05-spielabend.jpg"/></div></div>
+<div class="st-inhalt">
+<div class="st-kl">History</div>
+<h2>At the board since 1952</h2>
+<p>What started as Schachfreunde Feldkirchen in 1952 has become a chess club for three municipalities – with teams from youth level up to the Bezirksliga. Chronicle, milestones and which team played in which league and when.</p>
+<div class="st-fakten"><div><b>1952</b><span>founded</span></div>
+<div><b>9</b><span>teams today</span></div>
+<div><b>104</b><span>members</span></div></div>
+<p class="st-knoepfe"><a class="st-btn" href="geschichte.html">Our history →</a></p></div>
+</section>
+<section class="st-split st-voll">
+<div class="st-bild"><div class="st-wechsel" style="aspect-ratio:1.3333"><img alt="" class="an" src="startseite/ueber-uns/01.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/02.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/03.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/04.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/05.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/06.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/07.jpg"/><img alt="" loading="lazy" src="startseite/ueber-uns/08.jpg"/></div></div>
+<div class="st-inhalt">
+<div class="st-kl">About us · New here?</div>
+<h2>Just drop by</h2>
+<p>Just drop by on a Friday – no need to sign up, and trying it out is free. Beginner, casual player or tournament player, young or old: everyone finds an opponent here.</p>
+<ul class="st-wann"><li><b>When?</b> Every Friday from 6 pm – youth until 7:30 pm, adults from 7:30 pm</li>
+<li><b>Where?</b> Gymnasium Kirchheim, Heimstettner Str. 20, 85551 Kirchheim</li></ul>
+<p class="st-knoepfe"><a class="st-btn voll" href="ueber-uns-en.html#neu-hier">About us &amp; new here →</a>
+<a class="st-btn" download="" href="mitgliederantrag.pdf">Membership form (PDF)</a></p>
+<div class="st-geb" data-geb-woche="7" hidden=""><h3>Birthdays this week</h3><ul></ul></div></div>
+</section>
+<script>
+(function () {
+  var ruhig = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Berichte-Slider
+  document.querySelectorAll(".st-slider").forEach(function (sl) {
+    var spur = sl.querySelector(".st-spur"), karten = spur.children, punkte = sl.querySelector(".st-punkte"), i = 0, t = null;
+    function sicht() { return window.innerWidth <= 900 ? 1 : 3; }
+    function max() { return Math.max(0, karten.length - sicht()); }
+    function geh(k) {
+      i = ((k % (max() + 1)) + max() + 1) % (max() + 1);
+      var x = karten[i] ? karten[i].offsetLeft - karten[0].offsetLeft : 0;
+      spur.style.transform = "translateX(" + (-x) + "px)";
+      [].forEach.call(punkte.children, function (p, j) { p.classList.toggle("an", j === i); });
+    }
+    function punkteBauen() {
+      punkte.innerHTML = "";
+      for (var k = 0; k <= max(); k++) { var p = document.createElement("i"); p.onclick = (function (n) { return function () { geh(n); }; })(k); punkte.appendChild(p); }
+      geh(Math.min(i, max()));
+    }
+    function start() { stop(); if (!ruhig) t = setInterval(function () { geh(i + 1); }, (+sl.dataset.sek || 9) * 1000); }
+    function stop() { if (t) clearInterval(t); t = null; }
+    sl.querySelector(".st-vor").onclick = function () { geh(i + 1); start(); };
+    sl.querySelector(".st-zurueck").onclick = function () { geh(i - 1); start(); };
+    sl.addEventListener("mouseenter", stop); sl.addEventListener("mouseleave", start);
+    addEventListener("resize", punkteBauen); punkteBauen(); start();
+  });
+  if (ruhig) return;
+  // Kästchen: ruhig überblenden, versetzt gestartet
+  document.querySelectorAll(".st-wechsel").forEach(function (w, nr) {
+    var b = w.querySelectorAll("img"), i = 0;
+    if (b.length < 2) return;
+    setTimeout(function () { setInterval(function () { b[i].classList.remove("an"); i = (i + 1) % b.length; b[i].classList.add("an"); }, 6000); }, nr * 2000);
+  });
+  // Polaroid-Stapel: oberstes Foto gleitet weg und kommt unten wieder dazu
+  document.querySelectorAll(".st-stapel").forEach(function (s) {
+    var k = [].slice.call(s.children);
+    if (k.length < 2) return;
+    setInterval(function () {
+      var oben = k.shift(); oben.classList.add("weg");
+      setTimeout(function () { k.push(oben); k.forEach(function (el, j) { el.style.zIndex = k.length - j; }); oben.classList.remove("weg"); }, 1000);
+    }, 5000);
+  });
+})();
+</script><script>
+(function () {
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var AUSFALL = [{"start": "2026-12-25", "end": "2027-01-06", "reason": "Weihnachtsferien"}];   // Spielabend-Ausfälle aus ausfall.txt
+  var PAUSE_BAND = true, PAUSE_VORLAUF = 7;
+
+  function two(x) { return ("0" + x).slice(-2); }
+  function iso(d) { return d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate()); }
+  function dm(d) { return two(d.getDate()) + "." + two(d.getMonth() + 1) + "."; }
+  function rel(d) {
+    var n = Math.round((d - today) / 86400000);
+    if (n === 0) return "today";
+    if (n === 1) return "tomorrow";
+    return "in " + n + " days";
+  }
+  function dmi(s) { var p = s.split("-"); return p[2] + "." + p[1] + "."; }
+  // Ausfälle, die angezeigt werden: ab dem 1. des Monats, in dem sie beginnen, bis zu ihrem Ende
+  function angekuendigt() {
+    var t = iso(today), out = [];
+    for (var i = 0; i < AUSFALL.length; i++) {
+      var a = AUSFALL[i];
+      if (t >= a.start.slice(0, 8) + "01" && t <= a.end) out.push(a);
+    }
+    return out;
+  }
+  function blocked(d) {
+    var s = iso(d);
+    for (var i = 0; i < AUSFALL.length; i++) {
+      if (s >= AUSFALL[i].start && s <= AUSFALL[i].end) return AUSFALL[i];
+    }
+    return null;
+  }
+
+  // Termin-Karten: vergangene ausblenden, nur die ersten N zeigen
+  var grid = document.querySelector(".events-grid");
+  var max = (grid && parseInt(grid.dataset.max, 10)) || 4;
+  var total = 0, shown = 0, last = null;
+  document.querySelectorAll(".event-card[data-date]").forEach(function (c) {
+    total++;
+    var p = c.dataset.date.split("-");
+    var d = new Date(+p[0], p[1] - 1, +p[2]);
+    if (d < today || shown >= max) { c.style.display = "none"; return; }
+    var r = c.querySelector(".ev-rel");
+    if (r) r.textContent = rel(d);
+    if (shown === 0) c.classList.add("next", "first-visible");
+    shown++;
+    last = c;
+  });
+  if (last) last.classList.add("last-visible");
+  var empty = document.getElementById("events-empty");
+  if (empty && total > 0 && shown === 0) empty.hidden = false;
+
+  // Nächster Spielabend: jeden Freitag, außer an Ausfalltagen (ausfall.txt)
+  var el = document.getElementById("spielabend");
+  var band = document.getElementById("pause-band");
+  function zeitraum(a) { return a.start === a.end ? "on " + dmi(a.start) : "from " + dmi(a.start) + " to " + dmi(a.end); }
+  function fett(t) { var b = document.createElement("b"); b.textContent = t; return b; }
+  if (el) {
+    var f = new Date(today);
+    f.setDate(f.getDate() + ((5 - f.getDay() + 7) % 7));
+    var pause = blocked(f), hit = pause, n = 0;
+    while (hit && n++ < 30) { f.setDate(f.getDate() + 7); hit = blocked(f); }
+    // Pause, die nach dem nächsten Spielabend bald beginnt (Vorschau)
+    var bald = null;
+    if (!pause) {
+      var g = new Date(f); g.setDate(g.getDate() + 7);
+      bald = blocked(g);
+    }
+    var grenze = new Date(today); grenze.setDate(grenze.getDate() + PAUSE_VORLAUF);
+    el.textContent = "";
+    if (hit) {
+      el.appendChild(document.createTextNode("No club night at the moment" + (hit.reason ? ": " + hit.reason : "")));
+    } else if (pause) {
+      el.classList.add("pause");
+      el.appendChild(fett(pause.reason || "Pause"));
+      el.appendChild(document.createTextNode(" " + zeitraum(pause) + " – next club night: Friday " + dm(f) + " from 6 pm"));
+    } else {
+      el.appendChild(document.createTextNode("Next club night: Friday " + dm(f) + " from 6 pm (" + rel(f) + ")"));
+      if (bald) {
+        el.classList.add("pause");
+        el.appendChild(document.createTextNode(" – "));
+        el.appendChild(fett("then " + (bald.reason || "Pause") + (bald.start === bald.end ? "" : " until " + dmi(bald.end))));
+      }
+      var ank = angekuendigt();
+      for (var k = 0; k < ank.length; k++) {
+        if (bald && ank[k] === bald) continue;
+        var why = ank[k].reason ? " (" + ank[k].reason + ")" : "";
+        var note = document.createElement("span");
+        note.className = "spielabend-note";
+        note.textContent = (ank[k].start === ank[k].end ? "On " + dmi(ank[k].start) : "From " + dmi(ank[k].start) + " to " + dmi(ank[k].end)) + " no club night" + why;
+        el.appendChild(document.createElement("br"));
+        el.appendChild(note);
+      }
+    }
+    el.hidden = false;
+
+    // Band unter dem Menü: während der Pause und PAUSE_VORLAUF Tage vorher
+    var b = pause || null;
+    if (!b) for (var i = 0; i < AUSFALL.length; i++) {
+      var st = AUSFALL[i].start.split("-"), sd = new Date(+st[0], st[1] - 1, +st[2]);
+      if (sd >= today && sd <= grenze && AUSFALL[i].start !== AUSFALL[i].end) { b = AUSFALL[i]; break; }
+    }
+    if (band && b && PAUSE_BAND) {
+      var weiter = new Date(+b.end.slice(0, 4), b.end.slice(5, 7) - 1, +b.end.slice(8, 10));
+      weiter.setDate(weiter.getDate() + 1);
+      while (weiter.getDay() !== 5 || blocked(weiter)) weiter.setDate(weiter.getDate() + 1);
+      band.appendChild(fett(b.reason || "Pause"));
+      band.appendChild(document.createTextNode(" " + zeitraum(b) + " – next club night after that: Friday " + dm(weiter)));
+      band.hidden = false;
+    }
+  }
+})();
+</script>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="kontakt-en.html">Contact form</a></p>
+<p><a download="" href="mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="ueber-uns-en.html">About us</a></p>
+<p><a href="faq-en.html">FAQ</a></p>
+<p><a href="impressum.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>
