@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Korbinian R. – AFK on Tour | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+  .tour-zahlen { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1rem 0 1.4rem; }
+  .tour-zahl { flex: 1 1 8rem; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  .tour-zahl strong { display: block; font-size: 1.8rem; line-height: 1.1; }
+  .tour-zahl span { font-size: 0.85rem; color: var(--muted); }
+  .tour-kartenkopf { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; justify-content: space-between; margin: 1.6rem 0 0.6rem; }
+  .tour-kartenkopf h2 { margin: 0; }
+  .tour-kartenkopf select { font: inherit; padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--text); }
+  #tour-karte { height: 480px; border-radius: 10px; border: 1px solid var(--line); z-index: 0; }
+  @media (max-width: 600px) { #tour-karte { height: 360px; } }
+  .tour-flagge { background: none; border: 0; }
+  .tour-flagge svg { overflow: visible; filter: drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+  .leaflet-popup-content { font-size: 0.85rem; line-height: 1.35; }
+  .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--surface, #fff); color: var(--text, #222);
+    box-shadow: 0 4px 16px rgba(0,0,0,.35); }
+  .leaflet-popup-content-wrapper { border: 1px solid var(--line, #ddd); border-radius: 10px; }
+  .leaflet-popup-content a { color: var(--link-c, #2c5d99); }
+  .leaflet-container a.leaflet-popup-close-button { color: var(--muted, #888); }
+  .leaflet-container { font-family: inherit; }
+  .leaflet-control-zoom a { background: var(--surface, #fff); color: var(--text, #222); border-color: var(--line, #ccc); }
+  .leaflet-control-attribution { background: rgba(0,0,0,.35) !important; color: #ccc; }
+  .leaflet-control-attribution a { color: #ddd; }
+  .leaflet-popup-content h4 { margin: 0 0 0.3rem; font-size: 1rem; }
+  .leaflet-popup-content ul { margin: 0; padding-left: 1rem; }
+  .tour-tab { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .tour-tab th, .tour-tab td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .tour-tab th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
+  .tour-tab td.z { text-align: right; font-variant-numeric: tabular-nums; }
+  .tour-tab tr:first-child td:first-child { font-weight: 800; }
+  .tour-abz { display: inline-block; font-size: 0.72rem; padding: 0.05rem 0.45rem; margin: 0.1rem 0.15rem 0.1rem 0; border-radius: 999px;
+    background: var(--hell, #6f9fd8); color: #0e1524; white-space: nowrap; }
+  .tour-profile { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+  .tour-profil { padding: 0.9rem 1rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); scroll-margin-top: 90px; }
+  .tour-profil h3 { margin: 0 0 0.2rem; }
+  .tour-profil .k { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.4rem; }
+  .tour-profil ul { margin: 0.5rem 0 0; padding-left: 1.1rem; font-size: 0.88rem; }
+  .tour-profil li small { color: var(--muted); }
+  .tour-hinweis { font-size: 0.9rem; color: var(--muted); }
+  .tour-abz.st-bronze, .st.st-bronze { background: #b87333; color: #fff; }
+  .tour-abz.st-silber, .st.st-silber { background: #8e9aa6; color: #fff; }
+  .tour-abz.st-gold, .st.st-gold { background: #d4a017; color: #1b1b1b; }
+  .tour-abz.st-legendaer, .st.st-legendaer { background: linear-gradient(135deg, #7b4fbf, #c0392b); color: #fff; }
+  .st { display: inline-block; min-width: 1.4rem; text-align: center; font-size: 0.75rem; font-weight: 700; padding: 0.05rem 0.35rem;
+    border-radius: 999px; margin-right: 0.15rem; }
+  .abz-kopf { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; margin: 1.4rem 0 0.8rem; }
+  .abz-kopf label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
+  .abz-kopf select { font: inherit; font-weight: normal; padding: 0.35rem 0.5rem; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--soft); color: var(--text); }
+  .abz-kat { margin: 1.2rem 0 0.5rem; font-size: 1.05rem; }
+  .abz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 0.6rem; }
+  .abz { position: relative; padding: 0.7rem 0.85rem 0.75rem; border: 1px solid var(--line); border-left: 5px solid var(--line);
+    border-radius: 10px; background: var(--surface); }
+  .abz.st-bronze { border-left-color: #b87333; } .abz.st-silber { border-left-color: #8e9aa6; }
+  .abz.st-gold { border-left-color: #d4a017; } .abz.st-legendaer { border-left-color: #7b4fbf; }
+  .abz h4 { margin: 0 0 0.15rem; font-size: 0.98rem; display: flex; justify-content: space-between; gap: 0.5rem; align-items: baseline; }
+  .abz h4 small { font-weight: 600; font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .abz p { margin: 0; font-size: 0.84rem; }
+  .abz .wer { margin-top: 0.35rem; font-size: 0.78rem; color: var(--muted); }
+  .abz.offen { opacity: 0.55; }
+  .abz.erreicht { box-shadow: 0 0 0 1px var(--hell, #6f9fd8) inset; }
+  .abz .balken { height: 6px; border-radius: 3px; background: var(--soft); margin-top: 0.4rem; overflow: hidden; }
+  .abz .balken span { display: block; height: 100%; background: var(--hell, #6f9fd8); }
+  .abz .selten { position: absolute; right: 0.6rem; bottom: 0.45rem; font-size: 0.7rem; font-weight: 700; color: #c0392b; }
+  .rl-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.6rem; }
+  .rl-tabs button { font: inherit; font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--line);
+    background: transparent; color: var(--text); cursor: pointer; }
+  .rl-tabs button.an { background: var(--hell, #6f9fd8); color: #0e1524; border-color: transparent; font-weight: 700; }
+  .tour-tab.rl th[data-nach] { cursor: pointer; }
+  .tour-tab.rl th.z, .tour-tab.rl td.z { text-align: center; }
+  .tour-tab.rl th.an, .tour-tab.rl td.an { color: var(--text); font-weight: 700; }
+  .tour-tab.rl tr td.pl { font-weight: 800; width: 2.5rem; }
+  .tour-tab.rl tr.platz1 td.pl { color: #d4a017; } .tour-tab.rl tr.platz2 td.pl { color: #9aa6b2; }
+  .tour-tab.rl tr.platz3 td.pl { color: #b87333; }
+  .tour-tab.rl tr.platz1 { box-shadow: inset 4px 0 0 #d4a017; } .tour-tab.rl tr.platz2 { box-shadow: inset 4px 0 0 #9aa6b2; }
+  .tour-tab.rl tr.platz3 { box-shadow: inset 4px 0 0 #b87333; }
+  .rl-mehr { text-align: center; margin: 0.8rem 0 0; }
+  .rl-mehr button { font: inherit; font-weight: 600; padding: 0.45rem 1.1rem; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--text); cursor: pointer; }
+  @media (max-width: 700px) {
+    .tour-tab.rl thead { display: none; }
+    .tour-tab.rl, .tour-tab.rl tbody { display: block; }
+    .tour-tab.rl tr { display: grid; grid-template-columns: 2.2rem repeat(3, minmax(0, 1fr)); gap: 0.15rem 0.5rem; padding: 0.6rem 0.4rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--line); }
+    .tour-tab.rl td { border: 0; padding: 0; text-align: left !important; }
+    .tour-tab.rl td.sp { grid-column: 2 / -1; font-weight: 700; }
+    .tour-tab.rl td.pl { grid-row: span 3; }
+    .tour-tab.rl td[data-l]::before { content: attr(data-l) ": "; color: var(--muted); font-size: 0.78rem; }
+    .tour-tab.rl td.st-zelle { grid-column: 2 / -1; }
+  }
+  .tour-weiter { margin: 0.9rem 0 0; font-weight: 600; }
+  .tour-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+  .tour-liste { padding-left: 1.1rem; }
+  .tour-liste li { margin-bottom: 0.45rem; }
+  .tour-liste li small { color: var(--muted); }
+  .tour-leer { padding: 1.4rem; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
+  .tour-antrag { margin-top: 2.5rem; }
+  .tour-antrag > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between;
+    align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .tour-antrag > summary::-webkit-details-marker { display: none; }
+  .tour-antrag form { display: grid; gap: 0.8rem; padding: 0 1.2rem 1.2rem; }
+  .tour-reihe { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.8rem; }
+  .tour-antrag label { display: grid; gap: 0.25rem; font-weight: 600; font-size: 0.9rem; }
+  .tour-antrag label.inline { display: flex; align-items: center; gap: 0.4rem; font-weight: normal; }
+  .tour-antrag input, .tour-antrag select, .tour-antrag textarea { font: inherit; font-weight: normal; padding: 0.5rem 0.65rem;
+    border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--text); width: 100%; box-sizing: border-box; }
+  .tour-antrag label.inline input { width: auto; }
+  .tour-antrag .klein { font-size: 0.85rem; color: var(--muted); margin: 0; font-weight: normal; }
+  .tour-antrag .falle { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .tour-antrag .meldung { margin: 0; font-weight: 600; }
+  .tour-antrag .meldung.ok { color: #2e8b57; }
+  .tour-antrag .meldung.fehler { color: #c0392b; }
+</style>
+<link href="design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Korbinian R. – AFK on Tour | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="tour-KorbinianR.html" hreflang="de" rel="alternate"/>
+<link href="tour-KorbinianR-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="index-en.html">
+<img alt="" class="brand-logo" src="Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="tour-KorbinianR.html">Deutsch</a><a class="an" data-sprache="en" href="tour-KorbinianR-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="tour-KorbinianR.html">Deutsch</a><a class="an" data-sprache="en" href="tour-KorbinianR-en.html">English</a></div>
+<a href="index-en.html">Home</a>
+<div class="nav-gruppe"><a href="ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="geschichte-en.html">History</a><a href="dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe"><a href="mannschaften-en.html">Teams</a><button aria-expanded="false" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="afk-1-en.html">AFK 1</a><a href="afk-2-en.html">AFK 2</a><a href="afk-3-en.html">AFK 3</a><a href="afk-4-en.html">AFK 4</a><a href="afk-5-en.html">AFK 5</a><a href="afk-6-en.html">AFK 6</a><a href="senioren-en.html">Senioren</a><a href="geschichte-en.html#mannschaften">History</a></div></div>
+<a href="jugend-en.html">Youth</a>
+<a href="termine-en.html">Events</a>
+<div class="nav-gruppe"><a href="berichte-en.html">Reports</a><button aria-expanded="false" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe offen"><a aria-current="page" href="turniere-en.html">Tournaments</a><button aria-expanded="true" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a href="oberlandquartett-en.html">Oberlandquartett</a><a href="blitzjahreswertung-en.html">Blitz annual ranking</a><a href="vereinsintern-en.html">Hall of Fame</a><a href="ausschreibungen-en.html">Tournament announcements</a><a href="turnierkalender-en.html">Tournament calendar</a><a href="turnierorte-en.html">AFK on Tour</a></div></div>
+<a href="faq-en.html">FAQ</a>
+<a href="kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<a href="turnierorte-en.html" style="text-decoration:none;">← Back to AFK on Tour</a>
+<h1 style="margin-top:1rem;">Korbinian R.</h1>
+<p class="tour-hinweis">2th place out of 2 by places · 12 badges <span class="st st-gold" title="Gold">1</span> <span class="st st-silber" title="Silver">3</span> <span class="st st-bronze" title="Bronze">8</span></p>
+<div class="tour-zahlen"><div class="tour-zahl"><strong>6</strong><span>Places</span></div><div class="tour-zahl"><strong>2</strong><span>Countries</span></div><div class="tour-zahl"><strong>8</strong><span>Tournaments</span></div><div class="tour-zahl"><strong>496 km</strong><span>Longest journey</span></div><div class="tour-zahl"><strong>205</strong><span>Points</span></div></div>
+<div aria-label="Map of tournament venues by Korbinian R." id="tour-karte" role="img"></div>
+<h2 style="margin-top:2rem;">Give Badge</h2>
+<div class="tour-chips"><span class="tour-abz st-silber" title="Grenke Open in Karlsruhe – 50 % in the club">Grenke Pilgrims</span><span class="tour-abz st-bronze" title="A special tournament (exception), e.g., university championship – 50 % in the club">Victory lap</span><span class="tour-abz st-bronze" title="A tournament at Lake Tegernsee – 50 % in the club">Tegernseer</span><span class="tour-abz st-gold" title="As the first AFK player in a country – 100 % in the club">Explorer</span><span class="tour-abz st-silber" title="As the first AFK player in a city – 100 % in the club">Pioneer</span><span class="tour-abz st-silber" title="3 Places where no AFK player has been before – 100 % in the club">Food Tour Guide</span><span class="tour-abz st-bronze" title="Your first tournament on tour – 100 % in the club">First journey.</span><span class="tour-abz st-bronze" title="First Open abroad – 100 % in the club">Cross-border commuters</span><span class="tour-abz st-bronze" title="First tournament outside Bavaria – 100 % in the club">Road trip</span><span class="tour-abz st-bronze" title="Played in 5 different places – 100 % in a club">5 Locations</span><span class="tour-abz st-bronze" title="Tournament at least 300 km from Kirchheim – 100% in the club">300 km</span><span class="tour-abz st-bronze" title="Tournament in July or August – 100 % in the club">Summer freshness</span></div>
+<h3 style="margin-top:1.4rem;">Next available</h3><div class="abz-grid"><div class="abz st-gold"><h4>Tournament Year<small> Gold · 50</small></h4><p>5 tournaments in a calendar year</p><div class="balken"><span style="width:80%"></span></div><p class="wer">4 / 5</p><p class="wer">CREDIT_FOR_TRANSLATORS</p></div><div class="abz st-silber"><h4>Four Seasons<small> Silver · 25</small></h4><p>Frühling, Sommer, Herbst und Winter</p><div class="balken"><span style="width:75%"></span></div><p class="wer">3 / 4</p><p class="wer">1 in the club (50 %)</p></div><div class="abz st-bronze"><h4>3<small> Bronze Countries · 10</small></h4><p>Played in 3 countries</p><div class="balken"><span style="width:67%"></span></div><p class="wer">2 / 3</p><p class="wer">1 in the club (50 %)</p></div><div class="abz st-bronze"><h4><small>Bronze Tour Group · 10</small></h4><p>With at least 2 other AFK players in the same tournament</p><div class="balken"><span style="width:67%"></span></div><p class="wer">2 / 3</p><p class="wer">CREDIT_FOR_TRANSLATORS</p></div></div>
+<p class="tour-weiter"><a href="turnierorte-abzeichen.html?wer=KorbinianR">All badges earned by Korbinian R. →</a></p>
+<h2 style="margin-top:2rem;">Tournaments</h2>
+<ul class="tour-liste"><li><b>Berlin</b> <small>2×</small><br/><a href="https://chess-results.com/tnr1496981.aspx?lan=0" rel="noopener" target="_blank">German University Championship 2026</a> <small>Amendment 2026 (exception)</small>; <a href="https://chess-results.com/tnr1534478.aspx?lan=0" rel="noopener" target="_blank">German University Championship 2026</a> <small>Nov 2026 (Exception: German University Championship)</small></li><li><b>Karlsruhe</b> <small>2×</small><br/><a href="https://chess-results.com/tnr1384883.aspx?lan=0" rel="noopener" target="_blank"> Grenke B-Open</a> <small>Apr 2026</small>; Grenke B-Open <small>Apr 2023</small></li><li><b>Bad Wörishofen</b><br/><a href="https://chess-results.com/tnr1371811.aspx?lan=0" rel="noopener" target="_blank">ChessOrg Chess Festival 2026 Bad Wörishofen</a> <small>March 2026</small></li><li><b>Tegernsee</b><br/><a href="https://chess-results.com/tnr1049709.aspx?lan=0" rel="noopener" target="_blank">4.Tegernsee Open 2025</a> <small>Apr 2025</small></li><li><b>Feffernitz</b> <small>Villach, Austria</small><br/><a href="https://chess-results.com/tnr585243.aspx?lan=0" rel="noopener" target="_blank">31. Int. Open Feffernitz 2022</a> <small>Aug 2022</small></li><li><b>Innsbruck</b> <small>Villach, Austria</small><br/><a href="https://chess-results.com/tnr534227.aspx?lan=0" rel="noopener" target="_blank">5. Innsbruck International Chess Festival C Open</a> <small>Aug 2021</small></li></ul>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script><script id="tour-daten" type="application/json">{"farbe": "#c0392b", "flagge": "<svg width=\"34\" height=\"40\" viewBox=\"0 0 34 40\"><line x1=\"3\" y1=\"2\" x2=\"3\" y2=\"39\" stroke=\"#333\" stroke-width=\"2.6\"/><path d=\"M4 3 H31 L26 11 L31 19 H4 Z\" fill=\"{farbe}\" stroke=\"#fff\" stroke-width=\"1.2\"/><text x=\"15.5\" y=\"15\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#fff\" font-family=\"sans-serif\">{n}<\/text><\/svg>", "karte": {"dunkel": {"meer": "#0e1524", "land": "#1d2b47", "besucht": "#2f5d9a", "rand": "#3c5070"}, "hell": {"meer": "#dfe8f2", "land": "#f7f8fa", "besucht": "#b9d0ea", "rand": "#a8b6c7"}}, "grenzen": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json", "orte": [{"ort": "Bad Wörishofen", "land": "Deutschland", "lat": 48.00482, "lon": 10.59264, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "März 2026", "turnier": "ChessOrg Schachfestival 2026 Bad Wörishofen", "link": "https://chess-results.com/tnr1371811.aspx?lan=0"}]}, {"ort": "Berlin", "land": "Deutschland", "lat": 52.51739, "lon": 13.39513, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Nov 2026", "turnier": "Deutsche Uni-Meisterschaft 2026", "link": "https://chess-results.com/tnr1496981.aspx?lan=0"}, {"id": "KorbinianR", "name": "Korbinian R.", "monat": "Nov 2026", "turnier": "Deutsche Uni-Meisterschaft 2026", "link": "https://chess-results.com/tnr1534478.aspx?lan=0"}]}, {"ort": "Feffernitz", "land": "Österreich", "lat": 46.69275, "lon": 13.68759, "iso": "040", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Aug 2022", "turnier": "31. Int. Open Feffernitz 2022", "link": "https://chess-results.com/tnr585243.aspx?lan=0"}]}, {"ort": "Innsbruck", "land": "Österreich", "lat": 47.26543, "lon": 11.39277, "iso": "040", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Aug 2021", "turnier": "5. Internationales Chess Festival Innsbruck C Open", "link": "https://chess-results.com/tnr534227.aspx?lan=0"}]}, {"ort": "Karlsruhe", "land": "Deutschland", "lat": 49.00687, "lon": 8.40342, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2026", "turnier": "Grenke B-Open", "link": "https://chess-results.com/tnr1384883.aspx?lan=0"}, {"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2023", "turnier": "Grenke B-Open", "link": ""}]}, {"ort": "Tegernsee", "land": "Deutschland", "lat": 47.70992, "lon": 11.75433, "iso": "276", "besuche": [{"id": "KorbinianR", "name": "Korbinian R.", "monat": "Apr 2025", "turnier": "4.Tegernsee Open 2025", "link": "https://chess-results.com/tnr1049709.aspx?lan=0"}]}], "fest": "KorbinianR"}</script><script>
+(function () {
+  var D = JSON.parse(document.getElementById("tour-daten").textContent), el = document.getElementById("tour-karte");
+  if (!el || !window.L) return;
+  var F = D.karte, sel = document.getElementById("tour-wer");
+  function thema() { return document.documentElement.getAttribute("data-theme") === "dark" ? "dunkel" : "hell"; }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  var karte = L.map(el, {scrollWheelZoom: false, zoomSnap: 0.25}).setView([48.5, 11], 5);
+  karte.attributionControl.addAttribution('Grenzen &copy; <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
+  var grenzen = null, marker = L.layerGroup().addTo(karte), besucht = {};
+  function stil() {
+    var f = F[thema()];
+    el.style.background = f.meer;
+    if (grenzen) grenzen.setStyle(function (ft) {
+      var b = besucht[ft.id] || besucht["name:" + ft.properties.name];
+      return {color: f.rand, weight: 0.8, fillColor: b ? f.besucht : f.land, fillOpacity: 1};
+    });
+  }
+  function zeichne() {
+    var wer = sel ? sel.value : D.fest, punkte = [];
+    marker.clearLayers(); besucht = {};
+    D.orte.forEach(function (o) {
+      var b = o.besuche.filter(function (x) { return !wer || x.id === wer; });
+      if (!b.length || o.lat == null) return;
+      if (o.iso) besucht[o.iso] = 1;
+      var leute = {}; b.forEach(function (x) { leute[x.id] = 1; });
+      var n = wer ? b.length : Object.keys(leute).length;
+      var icon = L.divIcon({className: "tour-flagge", iconSize: [34, 40], iconAnchor: [3, 39], popupAnchor: [13, -36],
+        html: D.flagge.replace("{farbe}", D.farbe).replace("{n}", n)});
+      var html = "<h4>" + esc(o.ort) + (o.land ? " <small>(" + esc(o.land) + ")</small>" : "") + "</h4><ul>" +
+        b.map(function (x) {
+          var t = x.link ? '<a href="' + esc(x.link) + '" target="_blank" rel="noopener">' + esc(x.turnier || "Turnier") + "</a>" : esc(x.turnier || "");
+          return "<li>" + esc(x.monat) + (wer ? "" : " · <b>" + esc(x.name) + "</b>") + (t ? " · " + t : "") + "</li>";
+        }).join("") + "</ul>";
+      L.marker([o.lat, o.lon], {icon: icon}).bindPopup(html).addTo(marker);
+      punkte.push([o.lat, o.lon]);
+    });
+    stil();
+    if (punkte.length > 1) karte.fitBounds(punkte, {padding: [40, 40], maxZoom: 7});
+    else if (punkte.length === 1) karte.setView(punkte[0], 6);
+  }
+  fetch(D.grenzen).then(function (r) { return r.json(); }).then(function (topo) {
+    grenzen = L.geoJSON(topojson.feature(topo, topo.objects.countries), {interactive: false}).addTo(karte);
+    grenzen.bringToBack(); stil();
+  }).catch(function () {});
+  new MutationObserver(stil).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  if (sel) sel.addEventListener("change", zeichne);
+  zeichne();
+})();
+</script>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="kontakt-en.html">Contact form</a></p>
+<p><a download="" href="mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="ueber-uns-en.html">About us</a></p>
+<p><a href="faq-en.html">FAQ</a></p>
+<p><a href="impressum-en.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>

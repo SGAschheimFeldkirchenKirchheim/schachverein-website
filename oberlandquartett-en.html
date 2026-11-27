@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Oberlandquartett | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .klein { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+      .oq-karten { list-style: none; padding: 0; margin: 1.2rem 0 1.4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 42vw), 1fr)); gap: 0.6rem; }
+      .oq-karten li { display: flex; flex-direction: column; gap: 0.15rem; padding: 0.7rem 0.9rem; border-radius: 10px; background: var(--soft, #f3f5f9); border: 1px solid var(--border, #e3e7ee); }
+      .oq-team { font-weight: 800; font-size: 1.05rem; }
+      .oq-fotos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.8rem; margin: 0 0 1.4rem; }
+      .oq-fotos figure { margin: 0; }
+      .oq-fotos img { width: 100%; max-width: 720px; height: auto; border-radius: 10px; display: block; }
+      .oq-fotos figcaption { font-size: 0.85rem; margin-top: 0.35rem; color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+      .oq-zahlen { font-size: 0.9rem; }
+      .oq-stand { font-size: 0.8rem; color: color-mix(in srgb, var(--text, #000) 65%, transparent); }
+      .oq-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; border: 1px solid var(--border, #d6dbe4); }
+      .oq-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; background: var(--surface, #fff); color: var(--text, inherit); }
+      .oq-tab th, .oq-tab td { padding: 0.5rem 0.65rem; text-align: center; border-bottom: 1px solid var(--border, #e3e7ee); white-space: nowrap; }
+      .oq-tab thead th { background: var(--accent, #1c2d52); color: #fff; font-weight: 700; }
+      .oq-tab .oq-jahr, .oq-tab .oq-ort { text-align: left; }
+      .oq-tab td.oq-jahr { font-weight: 700; font-variant-numeric: tabular-nums; }
+      .oq-tab td.oq-jahr small { display: inline-block; margin-left: 0.5rem; font-weight: normal; font-size: 0.78rem; color: color-mix(in srgb, var(--text, #000) 55%, transparent); }
+      .oq-tab tbody tr:nth-child(even) > * { background-color: var(--soft, #f5f7fa); }
+      .oq-tab tbody tr:hover > * { background-color: color-mix(in srgb, var(--text, #000) 9%, var(--surface, #fff)); }
+      .oq-platz { display: inline-block; min-width: 2em; padding: 0.1rem 0.45rem; border-radius: 6px; font-variant-numeric: tabular-nums; color: color-mix(in srgb, var(--text, #000) 70%, transparent); }
+      .oq-platz.oq-p1 { background: var(--oq-sieg, #ffd54a); color: #1b2a4a; font-weight: 800; }
+      .oq-platz.oq-pokal { box-shadow: 0 0 0 2px var(--surface, #fff), 0 0 0 4px var(--oq-sieg, #ffd54a); }
+      .oq-tab .oq-leer { color: color-mix(in srgb, var(--text, #000) 30%, transparent); }
+      .oq-tab .oq-ersatz { font-size: 0.82rem; font-style: italic; color: color-mix(in srgb, var(--text, #000) 60%, transparent); }
+      .oq-tab td.oq-aus { font-style: italic; color: color-mix(in srgb, var(--text, #000) 50%, transparent);
+                          background-image: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--text, #000) 6%, transparent) 6px 12px); }
+      .oq-tab tr.oq-kommend > * { color: color-mix(in srgb, var(--text, #000) 55%, transparent); font-style: italic; }
+      .oq-tab tr.oq-kommend td.oq-jahr { font-weight: 600; }
+      .oq-tab tr.oq-kommend + tr:not(.oq-kommend) > *, .oq-tab tr:not(.oq-kommend) + tr.oq-kommend > * { border-top: 2px solid var(--line, #d6dbe4); }
+      .oq-tab td.oq-plan { font-size: 0.85rem; }
+      .oq-tab .oq-plan-ort { display: none; }
+      .oq-legende2 { font-size: 0.85rem; margin-top: 0.8rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+      .oq-legende2 .oq-platz.oq-pokal { margin-left: 1rem; }
+      @media (max-width: 700px) {
+        .oq-tab { font-size: 0.85rem; } .oq-tab th, .oq-tab td { padding: 0.4rem 0.4rem; }
+        .oq-tab td.oq-jahr small, .oq-tab .oq-ort { display: none; }
+        .oq-tab .oq-plan-ort { display: inline; }
+      }
+    </style>
+<link href="design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Oberlandquartett | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="oberlandquartett.html" hreflang="de" rel="alternate"/>
+<link href="oberlandquartett-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="index-en.html">
+<img alt="" class="brand-logo" src="Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="oberlandquartett.html">Deutsch</a><a class="an" data-sprache="en" href="oberlandquartett-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="oberlandquartett.html">Deutsch</a><a class="an" data-sprache="en" href="oberlandquartett-en.html">English</a></div>
+<a href="index-en.html">Home</a>
+<div class="nav-gruppe"><a href="ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="geschichte-en.html">History</a><a href="dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe"><a href="mannschaften-en.html">Teams</a><button aria-expanded="false" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="afk-1-en.html">AFK 1</a><a href="afk-2-en.html">AFK 2</a><a href="afk-3-en.html">AFK 3</a><a href="afk-4-en.html">AFK 4</a><a href="afk-5-en.html">AFK 5</a><a href="afk-6-en.html">AFK 6</a><a href="senioren-en.html">Senioren</a><a href="geschichte-en.html#mannschaften">History</a></div></div>
+<a href="jugend-en.html">Youth</a>
+<a href="termine-en.html">Events</a>
+<div class="nav-gruppe"><a href="berichte-en.html">Reports</a><button aria-expanded="false" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe offen"><a aria-current="page" href="turniere-en.html">Tournaments</a><button aria-expanded="true" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a aria-current="page" href="oberlandquartett-en.html">Oberlandquartett</a><a href="blitzjahreswertung-en.html">Blitz annual ranking</a><a href="vereinsintern-en.html">Hall of Fame</a><a href="ausschreibungen-en.html">Tournament announcements</a><a href="turnierkalender-en.html">Tournament calendar</a><a href="turnierorte-en.html">AFK on Tour</a></div></div>
+<a href="faq-en.html">FAQ</a>
+<a href="kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<a href="turniere-en.html" style="text-decoration:none;">← Back to tournaments</a>
+<h1 style="margin-top:1rem;">Oberlandquartett</h1>
+<ul class="oq-karten"><li><span class="oq-team">Aschheim</span><span class="oq-zahlen"><b>12</b> tournament wins · <b>3</b> trophies</span><span class="oq-stand">Towards the next trophy: 2× in a row, 2/5 wins</span></li><li><span class="oq-team">Deisenhofen</span><span class="oq-zahlen"><b>10</b> tournament wins · <b>2</b> trophies</span><span class="oq-stand">Towards the next trophy: no win yet</span></li><li><span class="oq-team">Holzkirchen</span><span class="oq-zahlen"><b>2</b> tournament wins · <b>0</b> trophies</span><span class="oq-stand">Towards the next trophy: no win yet</span></li><li><span class="oq-team">Höhenkirchen</span><span class="oq-zahlen"><b>3</b> tournament wins · <b>0</b> trophies</span><span class="oq-stand">Towards the next trophy: no win yet</span></li></ul>
+<div class="oq-show" data-ms="6000"><div class="oq-show-bilder"><figure class="an"><span class="oq-bg" style="background-image:url('turniere/oberlandquartett/diashow/2015.jpg')"></span><img alt="2015" src="turniere/oberlandquartett/diashow/2015.jpg"/><figcaption>2015</figcaption></figure><figure><span class="oq-bg" style="background-image:url('turniere/oberlandquartett/diashow/2023.jpg')"></span><img alt="2023" loading="lazy" src="turniere/oberlandquartett/diashow/2023.jpg"/><figcaption>2023</figcaption></figure><figure><span class="oq-bg" style="background-image:url('turniere/oberlandquartett/diashow/2024.jpg')"></span><img alt="2024" loading="lazy" src="turniere/oberlandquartett/diashow/2024.jpg"/><figcaption>2024</figcaption></figure><figure><span class="oq-bg" style="background-image:url('turniere/oberlandquartett/diashow/2025.jpg')"></span><img alt="2025" loading="lazy" src="turniere/oberlandquartett/diashow/2025.jpg"/><figcaption>2025</figcaption></figure><figure><span class="oq-bg" style="background-image:url('turniere/oberlandquartett/diashow/2025_2.jpg')"></span><img alt="2025 2" loading="lazy" src="turniere/oberlandquartett/diashow/2025_2.jpg"/><figcaption>2025 2</figcaption></figure><figure><span class="oq-bg" style="background-image:url('turniere/oberlandquartett/diashow/2026.jpg')"></span><img alt="2026" loading="lazy" src="turniere/oberlandquartett/diashow/2026.jpg"/><figcaption>2026</figcaption></figure></div><div class="oq-show-steuer"><button aria-label="Back" class="oq-z" type="button">←</button><span class="oq-nr">1 / 6</span><button aria-label="Next" class="oq-v" type="button">→</button></div></div>
+<style>
+  .oq-show { position: relative; margin: 1.5rem 0 2rem; max-width: 900px; aspect-ratio: 3 / 2; max-height: 520px;
+    border-radius: 12px; overflow: hidden; background: #0a0f1a; }
+  .oq-show-bilder, .oq-show figure { position: absolute; inset: 0; margin: 0; }
+  .oq-show figure { opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }
+  .oq-show figure.an { opacity: 1; pointer-events: auto; }
+  .oq-bg { position: absolute; inset: -30px; background: center / cover no-repeat; filter: blur(26px) brightness(.45) saturate(1.2); }
+  .oq-show img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
+  .oq-show figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.2rem 1rem .75rem; font-size: .92rem; font-weight: 600;
+    color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, .65)); }
+  .oq-show-steuer { position: absolute; right: .7rem; bottom: .6rem; display: flex; align-items: center; gap: .45rem; z-index: 2; }
+  .oq-show-steuer button { width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 0; background: rgba(0, 0, 0, .45);
+    color: #fff; cursor: pointer; font-size: 1rem; backdrop-filter: blur(4px); }
+  .oq-show-steuer button:hover { background: rgba(0, 0, 0, .7); }
+  .oq-nr { font-size: .85rem; color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px #000; }
+  @media (max-width: 600px) { .oq-show { aspect-ratio: 4 / 3; border-radius: 10px; } }
+  @media (prefers-reduced-motion: reduce) { .oq-show figure { transition: none; } }
+</style>
+<script>
+(function () {
+  var s = document.querySelector(".oq-show"); if (!s) return;
+  var f = s.querySelectorAll("figure"), i = 0, t = null, ms = +s.dataset.ms, nr = s.querySelector(".oq-nr");
+  if (f.length < 2) return;
+  function geh(n) { f[i].classList.remove("an"); i = (n + f.length) % f.length; f[i].classList.add("an"); nr.textContent = (i + 1) + " / " + f.length; }
+  function start() { stop(); if (ms && !matchMedia("(prefers-reduced-motion: reduce)").matches) t = setInterval(function () { geh(i + 1); }, ms); }
+  function stop() { if (t) clearInterval(t); t = null; }
+  s.querySelector(".oq-v").onclick = function () { geh(i + 1); start(); };
+  s.querySelector(".oq-z").onclick = function () { geh(i - 1); start(); };
+  var x0 = null;                                            // Wischen am Handy
+  s.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  s.addEventListener("touchend", function (e) { if (x0 === null) return; var d = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(d) > 40) { geh(i + (d < 0 ? 1 : -1)); start(); } });
+  s.addEventListener("mouseenter", stop); s.addEventListener("mouseleave", start); start();
+})();
+</script>
+<div class="oq-scroll"><table class="oq-tab"><thead><tr><th class="oq-jahr">Year</th><th class="oq-ort">Host</th><th>Aschheim</th><th>Deisenhofen</th><th>Holzkirchen</th><th>Höhenkirchen</th></tr></thead><tbody><tr class="oq-kommend"><td class="oq-jahr">2030</td><td class="oq-ort">Holzkirchen</td><td class="oq-plan" colspan="4"><span class="oq-plan-ort">Host: Holzkirchen</span></td></tr><tr class="oq-kommend"><td class="oq-jahr">2029</td><td class="oq-ort">Höhenkirchen</td><td class="oq-plan" colspan="4"><span class="oq-plan-ort">Host: Höhenkirchen</span></td></tr><tr class="oq-kommend"><td class="oq-jahr">2028</td><td class="oq-ort">Aschheim</td><td class="oq-plan" colspan="4"><span class="oq-plan-ort">Host: Aschheim</span></td></tr><tr class="oq-kommend"><td class="oq-jahr">2027</td><td class="oq-ort">Deisenhofen</td><td class="oq-plan" colspan="4"><span class="oq-plan-ort">Host: Deisenhofen</span></td></tr><tr><td class="oq-jahr">2026<small>03.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2025<small>27.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2024<small>28.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz oq-p1 oq-pokal" title="Tournament win and trophy win">🏆 1</span></td><td><span class="oq-platz">2</span></td><td class="oq-ersatz" title="Substitute team">Aschheim II</td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2023<small>23.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2022<small>01.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td></tr><tr class="oq-ausfall"><td class="oq-jahr">2021<small></small></td><td class="oq-ort"></td><td class="oq-aus" colspan="4">Cancelled (Covid)</td></tr><tr class="oq-ausfall"><td class="oq-jahr">2020<small></small></td><td class="oq-ort"></td><td class="oq-aus" colspan="4">Cancelled (Covid)</td></tr><tr><td class="oq-jahr">2019<small>28.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1 oq-pokal" title="Tournament win and trophy win">🏆 1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2018<small>29.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2017<small>30.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2016<small>08.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2015<small>17.07.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2014<small>13.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td></tr><tr><td class="oq-jahr">2013<small>28.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2012<small>29.06.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2011<small>24.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1 oq-pokal" title="Tournament win and trophy win">🏆 1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2010<small>11.06.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2009<small>26.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2008<small>04.07.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz oq-p1 oq-pokal" title="Tournament win and trophy win">🏆 1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2007<small>29.06.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">2006<small>07.07.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2005<small>15.07.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">2004<small>18.06.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td></tr><tr><td class="oq-jahr">2003<small>24.07.</small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td></tr><tr class="oq-ausfall"><td class="oq-jahr">2002<small></small></td><td class="oq-ort">Aschheim</td><td class="oq-aus" colspan="4">not held</td></tr><tr><td class="oq-jahr">2001<small>29.06.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">4</span></td></tr><tr><td class="oq-jahr">2000<small>30.06.</small></td><td class="oq-ort">Holzkirchen</td><td><span class="oq-platz">3</span></td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">1999<small></small></td><td class="oq-ort">Höhenkirchen</td><td><span class="oq-platz oq-p1 oq-pokal" title="Tournament win and trophy win">🏆 1</span></td><td><span class="oq-platz">2</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">3</span></td></tr><tr><td class="oq-jahr">1998<small>17.07.</small></td><td class="oq-ort">Aschheim</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr><tr><td class="oq-jahr">1997<small>21.07.</small></td><td class="oq-ort">Deisenhofen</td><td><span class="oq-platz oq-p1" title="Tournament win">1</span></td><td><span class="oq-platz">3</span></td><td><span class="oq-platz">4</span></td><td><span class="oq-platz">2</span></td></tr></tbody></table></div>
+<p class="oq-legende2"><span class="oq-platz oq-p1">1</span> Tournament win <span class="oq-platz oq-p1 oq-pokal">🏆 1</span> Trophy win</p>
+<p class="klein">The trophy goes to the team that wins either 3x in a row or 5x in total.<br/>After a trophy win, counting starts again! The winner donates the new trophy.</p>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="kontakt-en.html">Contact form</a></p>
+<p><a download="" href="mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="ueber-uns-en.html">About us</a></p>
+<p><a href="faq-en.html">FAQ</a></p>
+<p><a href="impressum-en.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>

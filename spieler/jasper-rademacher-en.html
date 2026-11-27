@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Jasper Rademacher | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="../Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="../style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .klein { font-size: 0.85rem; color: #555; }
+      .team-grid .team-karte { display: flex; flex-direction: column; color: inherit; text-decoration: none; }
+      a.team-karte:hover { border-color: var(--link); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+      .team-karte h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.6rem; margin-bottom: 0.4rem; }
+      .team-karte p { margin: 0.3rem 0; }
+      .k-mehr { margin-top: auto; padding-top: 0.6rem; font-weight: bold; color: var(--link); font-size: 0.9rem; }
+      .team-klasse { font-size: 0.8rem; font-weight: bold; background: #dcebf7; color: #1b4f7a; border-radius: 999px; padding: 0.05rem 0.65rem; vertical-align: middle; }
+
+      .partie-link { margin-left: .35rem; text-decoration: none; font-size: .8rem; color: var(--accent); }
+      .zurueck { margin: 0 0 0.5rem; } .zurueck a { text-decoration: none; font-weight: bold; }
+      .team-kopf { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1rem; }
+      .team-kopf h1 { margin: 0; color: var(--navy); display: flex; align-items: center; gap: 0.6rem; }
+      .team-platz { font-weight: bold; color: var(--navy); font-size: 1.1rem; }
+
+      /* Reiter in einer Zeile; wenn der Platz nicht reicht, seitlich wischen statt umbrechen */
+      .reiter { display: flex; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; position: relative;
+                gap: 0.3rem; margin: 1rem 0 1.2rem; border-bottom: 3px solid var(--navy); }
+      .reiter::-webkit-scrollbar { display: none; }
+      .reiter a { flex: 0 0 auto; white-space: nowrap; padding: 0.5rem 0.9rem; border-radius: 6px 6px 0 0; text-decoration: none; font-weight: bold; color: var(--navy); background: var(--soft); }
+      .reiter a:hover { background: #dcebf7; }
+      .reiter a[aria-current="true"] { background: var(--navy); color: #fff; }
+      .js .panel-titel { display: none; }
+      .panel { scroll-margin-top: 5rem; }
+      .panel-titel { color: var(--navy); margin-top: 2rem; }
+      .panel h3 { color: var(--navy); margin: 1.2rem 0 0.5rem; font-size: 1.1rem; }
+
+      .tab-wrap { overflow-x: auto; }
+      .liga-tab { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+      .liga-tab th, .liga-tab td { padding: 0.4rem 0.5rem; text-align: center; border-bottom: 1px solid var(--border); }
+      .liga-tab th { background: var(--navy); color: #fff; }
+      .liga-tab .name { text-align: left; }
+      .liga-tab .rechts { text-align: right; }
+      .liga-tab tr.eigen td { background: #dcebf7; font-weight: bold; }
+      .liga-tab tr.auf td:first-child { box-shadow: inset 4px 0 #1e8449; }
+      .liga-tab tr.ab td:first-child { box-shadow: inset 4px 0 #c0392b; }
+      .liga-tab tr.trenn td { border-top: 2px dashed #888; }
+      .paarungen { border-top: 1px solid var(--border); }
+      .paar { border-bottom: 1px solid var(--border); }
+      .paar > summary { list-style: none; cursor: pointer; }
+      .paar > summary::-webkit-details-marker { display: none; }
+      .paar > summary, .p-zeile { display: grid; grid-template-columns: 1fr 6.5rem 1fr 1rem; align-items: center; gap: 0.5rem; padding: 0.45rem 0.5rem; }
+      .p-zeile::after { content: ""; }
+      .paar > summary::after { content: "▸"; color: #888; text-align: right; }
+      .paar[open] > summary::after { content: "▾"; }
+      .paar > summary:hover { background: var(--soft); }
+      .paar.eigen > summary, .paar.eigen .p-zeile { background: #dcebf7; font-weight: bold; }
+      .p-e { text-align: center; font-weight: bold; white-space: nowrap; }
+      .p-g { text-align: right; }
+      .paar .bretter { margin: 0.2rem 0 0.6rem; }
+      .bretter td.rechts { text-align: right; }
+      @media (max-width: 600px) { .paar > summary, .p-zeile { grid-template-columns: 1fr 5rem 1fr 0.8rem; gap: 0.3rem; font-size: 0.9rem; } }
+      .delta { font-size: 0.8rem; font-weight: bold; }
+      .delta.hoch { color: #1e8449; } .delta.runter { color: #c0392b; }
+      @media (max-width: 600px) {
+        .neben { display: none; }
+        .liga-tab { font-size: 0.85rem; }
+        .liga-tab th, .liga-tab td { padding: 0.35rem 0.3rem; }
+        .reiter a { padding: 0.4rem 0.6rem; font-size: 0.9rem; }
+      }
+
+      .runden-wahl { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-bottom: 0.5rem; }
+      .runden-wahl button { font: inherit; min-width: 2.4rem; cursor: pointer; border: 1px solid var(--border); background: var(--soft); border-radius: 6px; padding: 0.25rem 0.5rem; }
+      .runden-wahl button[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+      .js .runde[data-zu] { display: none; }
+
+      .spiel { border-top: 1px solid var(--border); padding: 0.35rem 0; }
+      .spiel > summary { cursor: pointer; list-style: none; }
+      .spiel > summary::-webkit-details-marker { display: none; }
+      .spiel > summary, div.spiel { display: flex; align-items: center; gap: 0.6rem; }
+      details.spiel > summary::after { content: "▸"; color: #888; margin-left: 0.2rem; }
+      details.spiel[open] > summary::after { content: "▾"; }
+      .rd { width: 2.2rem; font-weight: bold; color: #555; }
+      .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
+      .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
+      .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
+      .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
+      @media (max-width: 600px) {
+        .spiel > summary, div.spiel { display: grid; grid-template-columns: 2rem 1.1rem minmax(0, 1fr) auto auto; column-gap: 0.45rem; }
+        .spiel .rd { grid-area: 1 / 1 / 3 / 2; } .spiel .ha { grid-area: 1 / 2 / 3 / 3; }
+        .spiel .geg { grid-area: 1 / 3; } .spiel .dat { grid-area: 2 / 3; width: auto; margin: 0; font-size: 0.76rem; }
+        .spiel .dat:empty { display: none; }
+        .spiel .erg { grid-area: 1 / 4 / 3 / 5; } details.spiel > summary::after { grid-area: 1 / 5 / 3 / 6; }
+      }
+      .dwz { margin-left: 0.5rem; font-size: 0.8rem; color: #777; }
+      .bretter .dwz { margin-left: 0.25rem; font-size: 0.75rem; font-weight: normal; white-space: nowrap; }
+      a.sp-link { color: inherit; text-decoration: none; border-bottom: 1px dotted #999; }
+      a.sp-link:hover { color: var(--link); border-bottom-color: var(--link); }
+
+      .erg { display: inline-block; min-width: 3.6rem; text-align: center; border-radius: 999px; padding: 0.05rem 0.6rem; font-weight: bold; font-size: 0.9rem; background: #e3e6ea; color: #333; white-space: nowrap; }
+      .erg.klein { min-width: 3rem; font-size: 0.8rem; }
+      .erg-s { background: #d4efdf; color: #145a32; }
+      .erg-u { background: #fdebd0; color: #7e5109; }
+      .erg-n { background: #fadbd8; color: #922b21; }
+      .erg-offen { background: transparent; color: #888; font-weight: normal; }
+
+      .bretter { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.4rem 0 0.6rem; }
+      .bretter td { padding: 0.2rem 0.4rem; text-align: center; }
+      .bretter td.name { text-align: left; }
+      .bretter td:first-child { width: 2rem; color: #777; }
+
+      .verlauf { width: 100%; max-width: 720px; height: auto; display: block; margin: 0 0 1rem; font-size: 12px; }
+      .verlauf .g { stroke: #e3e6ea; }
+      .verlauf text { fill: #666; }
+      .verlauf polyline { fill: none; stroke: var(--link); stroke-width: 3; }
+      .verlauf circle { fill: #fff; stroke: var(--link); stroke-width: 3; }
+
+      .quelle { margin-top: 2rem; }
+
+      .team-knopf { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; border-bottom: 1px dotted #999; }
+      .team-knopf:hover { color: var(--link); border-bottom-color: var(--link); }
+      .auf-dialog { width: min(1240px, 97vw); max-height: 88vh; padding: 1rem 1.2rem 1.2rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface, #fff); color: inherit; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+      .auf-dialog::backdrop { background: rgba(10, 18, 35, 0.6); }
+      .auf-dialog h2 { margin: 0 2rem 0.6rem 0; color: var(--navy); font-size: 1.3rem; }
+      .auf-dialog form { position: sticky; top: 0; float: right; z-index: 1; }
+      .auf-zu { font: inherit; font-size: 1.1rem; cursor: pointer; border: 1px solid var(--border); background: var(--soft); border-radius: 999px; width: 2.2rem; height: 2.2rem; }
+      .aufst td, .aufst th { white-space: nowrap; }
+      .aufst .rd-erg { min-width: 1.6rem; color: var(--navy); }
+      .aufst .rd-erg.kl { color: #888; }
+      .aufst tr.ersatz td { color: #777; font-style: italic; }
+      .aufst tr.geg-zeile th { padding-top: 0; font-size: 0.66rem; font-weight: normal; line-height: 1.15; vertical-align: top; }
+      .aufst th.rd-geg { white-space: nowrap; cursor: help; position: relative; }
+      .auf-dialog .aufst { width: 100%; }
+      .aufst th.neben, .aufst td.neben { text-align: center; }
+      .aufst th.rd-geg.offen { font-style: italic; color: rgba(255,255,255,0.6); }
+      .aufst th.rd-geg:focus { outline: none; }
+      .aufst th.rd-geg:focus::after { content: attr(data-tip); position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+                  z-index: 3; white-space: nowrap; background: var(--navy); color: #fff; font-size: 0.75rem; font-style: normal;
+                  padding: 0.2rem 0.5rem; border-radius: 4px; opacity: 1; }
+      .aufst .gg-uns { background: rgba(230, 160, 20, 0.16); }
+      [data-theme="dark"] .aufst .gg-uns { background: rgba(230, 160, 20, 0.2); }
+      [data-theme="dark"] .aufst thead th.gg-uns { background: #e6a014; color: #1a252f; }
+      .aufst .rd-k-erg { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: bold; font-style: normal; white-space: nowrap; }
+      .aufst thead th.gg-uns, .aufst thead th.rd-geg.gg-uns { background: #e6a014; color: #1a252f; }
+      .aufst tfoot td { border-top: 2px solid var(--border); font-weight: bold; }
+      .aufst .rd-mk { display: inline-block; font-size: 0.7rem; padding: 0 0.25rem; border-radius: 4px; }
+      .titel { font-size: 0.7rem; font-weight: bold; color: #b9770e; }
+      .chance { display: inline-block; min-width: 3.4rem; padding: 0 0.4rem; border-radius: 999px; font-size: 0.8rem; font-weight: bold;
+                background: linear-gradient(90deg, rgba(46,125,79,0.35) var(--p), rgba(127,127,127,0.15) var(--p)); }
+      a.vorb { text-decoration: none; font-size: 0.85rem; margin-left: 0.25rem; opacity: 0.6; }
+      a.vorb:hover { opacity: 1; }
+      a.vorb-db { font-size: 0.62rem; font-weight: bold; letter-spacing: 0.03em; border: 1px solid currentColor;
+                  border-radius: 4px; padding: 0 0.22rem; vertical-align: 0.1em; position: relative; }
+      a.vorb-db.kopiert::after { content: "Name kopiert ✓"; position: absolute; left: 50%; bottom: 135%; transform: translateX(-50%);
+                  white-space: nowrap; background: #2e7d4f; color: #fff; font-size: 0.75rem; padding: 0.15rem 0.45rem; border-radius: 4px; }
+      .chance.neu { background: rgba(127,127,127,0.15); font-weight: normal; font-style: italic; }
+      .vorschau { padding: 0.3rem 0 0.6rem; }
+      .varianten { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0.4rem 1.2rem; }
+      .variante .v-kopf { display: flex; justify-content: space-between; gap: 0.5rem; margin: 0.4rem 0 0; border-bottom: 2px solid var(--border); }
+      .variante tr.anders td { background: rgba(230, 160, 20, 0.16); font-weight: bold; }
+      .variante tr.anders td:first-child { box-shadow: inset 4px 0 #e6a014; }
+      .variante .fuer { display: block; font-size: 0.78rem; font-weight: normal; color: #c98a0a; }
+      @media (max-width: 600px) { .auf-dialog { padding: 0.8rem 0.5rem; width: 98vw; } .chance { min-width: 2.8rem; padding: 0 0.25rem; } }
+      .vorschau p { margin: 0.3rem 0; }
+
+      .saisons { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin: 0.6rem 0 0.2rem; }
+      .saisons span { margin-right: 0.3rem; }
+      .saisons a { padding: 0.15rem 0.6rem; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; font-size: 0.85rem; color: var(--navy); background: var(--soft); }
+      .saisons a:hover { border-color: var(--link); }
+      .saisons-link { margin: .1rem 0 .6rem; }
+      .saisons a[aria-current="page"] { background: var(--navy); color: #fff; border-color: var(--navy); font-weight: bold; }
+      .archiv-hinweis { margin: 0.6rem 0; padding: 0.5rem 0.8rem; border-left: 4px solid #b9770e; background: #fdf2e0; color: #6e4a07; border-radius: 4px; font-size: 0.9rem; }
+      .archiv-hinweis a { font-weight: bold; }
+      .status { display: inline-block; font-size: 0.75rem; font-weight: bold; border-radius: 999px; padding: 0 0.5rem; margin-left: 0.3rem; background: #e3e6ea; color: #444; }
+      .status.s-auf, .status.s-auf-evtl { background: #d4efdf; color: #145a32; }
+      .status.s-ab, .status.s-ab-evtl { background: #fadbd8; color: #922b21; }
+
+      .rechner .r-runde { margin: 0.5rem 0 0.2rem; font-weight: bold; cursor: pointer; }
+      .rechner .r-runde-box { border-top: 1px solid var(--border); }
+      .rechner .r-spiel { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; padding: 0.25rem 0; border-top: 1px solid var(--border); }
+      .rechner .r-spiel.eigen { background: #eef5fb; }
+      .rechner .r-spiel span:last-child { text-align: right; }
+      .rechner select { font: inherit; padding: 0.15rem 0.3rem; }
+      .rechner .r-knoepfe { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+      .rechner button { font: inherit; cursor: pointer; border: 1px solid var(--border); background: var(--soft); border-radius: 6px; padding: 0.3rem 0.8rem; }
+      .rechner button:hover { border-color: var(--link); }
+      .rechner .r-tabelle { margin: 0.5rem 0 1rem; }
+      @media (max-width: 600px) { .rechner .r-spiel { grid-template-columns: 1fr; } .rechner .r-spiel span:last-child { text-align: left; } }
+
+      .sp-name { color: var(--navy); margin: 0.2rem 0 0.8rem; }
+      .sp-oben { display: flex; gap: 2.5rem; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+      .sp-links { flex: 1 1 auto; min-width: 0; }
+      .sp-text { max-width: 640px; margin: 1.2rem 0 .8rem; padding: .9rem 1.1rem; border-left: 3px solid var(--link-c, var(--link));
+        background: var(--soft, rgba(127,127,127,.08)); border-radius: 0 10px 10px 0; }
+      .sp-text p { margin: 0 0 .6rem; } .sp-text p:last-child { margin-bottom: 0; }
+      .sp-text strong { display: block; margin-bottom: .3rem; }
+      .sp-text[hidden], .sp-gb[hidden] { display: none; }
+      .sp-gb { display: contents; }
+      .sp-links-profil { font-size: .95rem; }
+      .sp-foto { width: clamp(240px, 26vw, 380px); height: auto; max-height: 480px; object-fit: contain; border-radius: 12px;
+        flex: 0 0 auto; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3); }
+      @media (max-width: 800px) { .sp-oben { flex-direction: column-reverse; gap: 1.2rem; } .sp-foto { width: min(100%, 320px); } }
+      .sp-kopf { display: flex; flex-wrap: wrap; gap: 0.8rem 3rem; align-items: flex-start; margin-bottom: 0.5rem; }
+      .sp-kopf dl { display: grid; grid-template-columns: auto auto; gap: 0.2rem 1rem; margin: 0; }
+      .sp-kopf dt { font-weight: bold; color: var(--navy); }
+      .sp-kopf dd { margin: 0; }
+      .sp-meldungen { margin: 0.2rem 0 0; padding-left: 1.1rem; }
+      .sp-titel { display: block !important; }
+      .liga-tab tfoot td { border-top: 2px solid var(--navy); }
+      .sp-saison { border-top: 1px solid var(--border); }
+      .sp-saison > summary { cursor: pointer; list-style: none; }
+      .sp-saison > summary::-webkit-details-marker { display: none; }
+      .sp-saison > summary h3 { display: inline-flex; gap: 0.8rem; align-items: baseline; margin: 0.8rem 0; color: var(--navy); }
+      .sp-saison > summary h3::after { content: "▸"; color: #888; font-size: 0.9rem; }
+      .sp-saison[open] > summary h3::after { content: "▾"; }
+      .sp-saison h4 { margin: 0.6rem 0 0.4rem; }
+      .dwz-verlauf { width: 100%; max-width: 680px; height: auto; display: block; margin: 0.3rem 0 1rem; font-size: 11px; }
+      .dwz-verlauf text { fill: var(--muted, #777); }
+      .dwz-verlauf .dv-raster { stroke: var(--border, #e3e7ee); stroke-width: 1; }
+      .dwz-verlauf polyline { fill: none; stroke: var(--hell, #2c5d99); stroke-width: 2.5; stroke-linejoin: round; }
+      .dwz-verlauf circle { fill: var(--hell, #2c5d99); }
+      .sp-berichte { margin: 0.3rem 0 1rem; padding-left: 1.1rem; display: grid; gap: 0.25rem; }
+      .sp-mehr summary { cursor: pointer; color: var(--link-c, var(--link)); font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+      .sp-mehr summary:hover { text-decoration: underline; }
+      .sp-anzahl { font-size: .8rem; font-weight: 700; background: var(--soft, rgba(127,127,127,.12)); border-radius: 999px; padding: .1rem .55rem; vertical-align: middle; }
+      .sp-tour { margin: 1.2rem 0 1.6rem; padding: 1.1rem 1.3rem; max-width: 760px; }
+      .sp-tour-kopf { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .3rem 1rem; }
+      .sp-tour-kopf h2 { margin: 0; font-size: 1.15rem; color: var(--navy); }
+      .sp-tour-zahlen { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: .8rem 0; }
+      .sp-tour-zahlen div { text-align: center; padding: .5rem .2rem; border-radius: 8px; background: var(--soft, rgba(127,127,127,.08)); }
+      .sp-tour-zahlen b { display: block; font-size: 1.3rem; color: var(--navy); }
+      .sp-tour-zahlen span { font-size: .78rem; color: var(--muted); }
+      @media (max-width: 520px) { .sp-tour-zahlen { grid-template-columns: repeat(2, 1fr); } }
+      .tour-chips { display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+      .tour-abz { display: inline-block; font-size: 0.78rem; padding: 0.1rem 0.55rem; border-radius: 999px; background: var(--hell, #6f9fd8); color: #0e1524; white-space: nowrap; }
+      .tour-abz.st-bronze { background: #b87333; color: #fff; }
+      .tour-abz.st-silber { background: #8e9aa6; color: #fff; }
+      .tour-abz.st-gold { background: #d4a017; color: #1b1b1b; }
+      .tour-abz.st-legendaer { background: linear-gradient(135deg, #7b4fbf, #c0392b); color: #fff; }
+</style>
+<link href="../design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Jasper Rademacher | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="jasper-rademacher.html" hreflang="de" rel="alternate"/>
+<link href="jasper-rademacher-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="../index-en.html">
+<img alt="" class="brand-logo" src="../Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="jasper-rademacher.html">Deutsch</a><a class="an" data-sprache="en" href="jasper-rademacher-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="../suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="jasper-rademacher.html">Deutsch</a><a class="an" data-sprache="en" href="jasper-rademacher-en.html">English</a></div>
+<a href="../index-en.html">Home</a>
+<div class="nav-gruppe"><a href="../ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../geschichte-en.html">History</a><a href="../dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe offen"><a aria-current="page" href="../mannschaften-en.html">Teams</a><button aria-expanded="true" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../afk-1-en.html">AFK 1</a><a href="../afk-2-en.html">AFK 2</a><a href="../afk-3-en.html">AFK 3</a><a href="../afk-4-en.html">AFK 4</a><a href="../afk-5-en.html">AFK 5</a><a href="../afk-6-en.html">AFK 6</a><a href="../senioren-en.html">Senioren</a><a href="../geschichte-en.html#mannschaften">History</a></div></div>
+<a href="../jugend-en.html">Youth</a>
+<a href="../termine-en.html">Events</a>
+<div class="nav-gruppe"><a href="../berichte-en.html">Reports</a><button aria-expanded="false" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe"><a href="../turniere-en.html">Tournaments</a><button aria-expanded="false" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../oberlandquartett-en.html">Oberlandquartett</a><a href="../blitzjahreswertung-en.html">Blitz annual ranking</a><a href="../vereinsintern-en.html">Hall of Fame</a><a href="../ausschreibungen-en.html">Tournament announcements</a><a href="../turnierkalender-en.html">Tournament calendar</a><a href="../turnierorte-en.html">AFK on Tour</a></div></div>
+<a href="../faq-en.html">FAQ</a>
+<a href="../kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<p class="zurueck"><a href="../afk-3-en.html">← AFK 3</a></p>
+<div class="sp-oben" data-profil-slug="jasper-rademacher">
+<div class="sp-links">
+<h1 class="sp-name" translate="no">Jasper Rademacher</h1>
+<div class="sp-kopf">
+<dl>
+<dt>DWZ</dt><dd>1792</dd>
+<dt>Elo</dt><dd>1719</dd>
+<dt>Record</dt><dd>1½ / 2 (75 %)</dd>
+<dt>Games</dt><dd>Home 1 · Away 1</dd>
+<div class="sp-gb" data-gb-zeile=""><dt>Year of birth</dt><dd>2006</dd></div>
+</dl>
+<div><strong>Registered for</strong><ul class="sp-meldungen"><li><a href="../afk-3-en.html">AFK 3</a> <span class="klein">B-Klasse · No. 7</span></li></ul></div>
+</div>
+<div class="sp-text" data-kt-text="" hidden=""></div>
+<p class="klein"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=16&amp;zps=22061&amp;mglnr=1134&amp;PKZ=NU4430768&amp;Itemid=4164" rel="noopener" target="_blank">View at the Schachbezirk ↗</a></p>
+</div>
+</div>
+<h2 class="panel-titel sp-titel">Games played</h2><p class="klein">No games played this season yet.</p><details class="sp-saison"><summary><h3>Season 2025/26 <span class="klein">1½ / 2</span></h3></summary>
+<h4><a href="../saison/2025-26/afk-3-en.html">AFK 3</a> <span class="team-klasse">C-Klasse 2</span></h4>
+<div class="tab-wrap"><table class="liga-tab">
+<thead><tr><th title="Round">Rd</th><th class="neben">Place</th><th title="Board">Bd</th>
+<th class="name">Opponent</th><th>DWZ</th><th class="name neben">Team</th><th>Res.</th></tr></thead>
+<tbody><tr><td>2</td><td class="neben">Away</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22059&amp;mglnr=1242&amp;PKZ=&amp;Itemid=4103" rel="noopener" target="_blank" translate="no">Lars Baumgart</a></td><td>1508</td><td class="name neben" translate="no">SC Garching 1980 7</td><td><span class="erg erg-u klein">½</span></td></tr><tr><td>5</td><td class="neben">Home</td><td>4</td><td class="name"><a href="https://www.schachbezirk-muenchen.de/component/clm/?view=spieler&amp;saison=15&amp;zps=22040&amp;mglnr=114&amp;PKZ=&amp;Itemid=4103" rel="noopener" target="_blank" translate="no">Helmut Lederer</a></td><td>1377</td><td class="name neben" translate="no">SC Roter Turm Altstadt 4</td><td><span class="erg erg-s klein">1</span></td></tr></tbody>
+<tfoot><tr><td class="rechts" colspan="7"><strong>Total 1½ / 2</strong></td></tr></tfoot>
+</table></div></details>
+<h2 class="panel-titel sp-titel">In reports</h2>
+<ul class="sp-berichte"><li><a href="../berichte/2025-siegesrausch-bei-den-mmm-en.html">Siegesrausch bei den MMM</a> <span class="klein">19.01.2025</span></li><li><a href="../berichte/2024-neues-von-den-mannschaftsmeisterschaften-en.html">Neues von den Mannschaftsmeisterschaften</a> <span class="klein">21.11.2024</span></li></ul>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="../kontakt-en.html">Contact form</a></p>
+<p><a download="" href="../mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="../ueber-uns-en.html">About us</a></p>
+<p><a href="../faq-en.html">FAQ</a></p>
+<p><a href="../impressum-en.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="../" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="../konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>

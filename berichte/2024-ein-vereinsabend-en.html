@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ein Vereinsabend | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="../Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="../style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
+      .vergangene-jahre > summary { cursor: pointer; font-size: 1.4rem; font-weight: bold; color: var(--navy); padding: 0.6rem 0; }
+      .jahr-archiv { margin: 0.5rem 0 0.5rem 1rem; }
+      .jahr-archiv > summary { cursor: pointer; font-size: 1.15rem; font-weight: bold; padding: 0.4rem 0; }
+      .jahr-archiv .grid { margin-top: 0.8rem; }
+      .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
+      .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+      .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
+      .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
+      .news-card a { font-weight: bold; text-decoration: none; }
+      .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
+      .news-card { position: relative; }
+      .news-card a::after { content: ""; position: absolute; inset: 0; }
+      .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .news-card:hover h3 { text-decoration: underline; }
+
+      .article-content h2 { margin-top: 2rem; color: var(--navy); }
+      .article-content h3, .article-content h4 { color: var(--navy); }
+      .article-content p, .article-content li { max-width: 70ch; }
+      .article-content li { margin-bottom: 0.3rem; }
+      .report-img { margin: 1.5rem 0; }
+      .report-img img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+      .report-img figcaption { font-size: 0.85rem; color: #666; margin-top: 0.4rem; }
+</style>
+<link href="../design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Ein Vereinsabend | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="2024-ein-vereinsabend.html" hreflang="de" rel="alternate"/>
+<link href="2024-ein-vereinsabend-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="../index-en.html">
+<img alt="" class="brand-logo" src="../Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="2024-ein-vereinsabend.html">Deutsch</a><a class="an" data-sprache="en" href="2024-ein-vereinsabend-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="../suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="2024-ein-vereinsabend.html">Deutsch</a><a class="an" data-sprache="en" href="2024-ein-vereinsabend-en.html">English</a></div>
+<a href="../index-en.html">Home</a>
+<div class="nav-gruppe"><a href="../ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../geschichte-en.html">History</a><a href="../dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe"><a href="../mannschaften-en.html">Teams</a><button aria-expanded="false" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../afk-1-en.html">AFK 1</a><a href="../afk-2-en.html">AFK 2</a><a href="../afk-3-en.html">AFK 3</a><a href="../afk-4-en.html">AFK 4</a><a href="../afk-5-en.html">AFK 5</a><a href="../afk-6-en.html">AFK 6</a><a href="../senioren-en.html">Senioren</a><a href="../geschichte-en.html#mannschaften">History</a></div></div>
+<a href="../jugend-en.html">Youth</a>
+<a href="../termine-en.html">Events</a>
+<div class="nav-gruppe offen"><a aria-current="page" href="../berichte-en.html">Reports</a><button aria-expanded="true" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe"><a href="../turniere-en.html">Tournaments</a><button aria-expanded="false" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a href="../oberlandquartett-en.html">Oberlandquartett</a><a href="../blitzjahreswertung-en.html">Blitz annual ranking</a><a href="../vereinsintern-en.html">Hall of Fame</a><a href="../ausschreibungen-en.html">Tournament announcements</a><a href="../turnierkalender-en.html">Tournament calendar</a><a href="../turnierorte-en.html">AFK on Tour</a></div></div>
+<a href="../faq-en.html">FAQ</a>
+<a href="../kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<a href="../berichte-en.html" style="text-decoration:none;">← Back to all reports</a>
+<h1 style="margin-top:1rem;" translate="no">Ein Vereinsabend</h1>
+<p class="news-meta">01.05.2024 · by <a href="../spieler/frederik-prause-en.html" translate="no">Frederik Prause</a></p>
+<hr style="border:0; border-top:1px solid #eee; margin:1.5rem 0;"/>
+<div class="article-content"><figure class="report-img"><img alt="" loading="lazy" src="bilder/2024-ein-vereinsabend/foto1.jpg"/></figure>
+<p>So sieht ein normaler Spielabend in einem der Räume statt.</p></div>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="../kontakt-en.html">Contact form</a></p>
+<p><a download="" href="../mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="../ueber-uns-en.html">About us</a></p>
+<p><a href="../faq-en.html">FAQ</a></p>
+<p><a href="../impressum-en.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="../" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="../konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>

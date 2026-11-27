@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reports &amp; news | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .vergangene-jahre { margin-top: 2.5rem; border-top: 2px solid #e3e6ea; padding-top: 0.5rem; }
+      .vergangene-jahre > summary { cursor: pointer; font-size: 1.4rem; font-weight: bold; color: var(--navy); padding: 0.6rem 0; }
+      .jahr-archiv { margin: 0.5rem 0 0.5rem 1rem; }
+      .jahr-archiv > summary { cursor: pointer; font-size: 1.15rem; font-weight: bold; padding: 0.4rem 0; }
+      .jahr-archiv .grid { margin-top: 0.8rem; }
+      .jahr-titel { margin: 2.2rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 2px solid #e3e6ea; color: var(--navy); }
+      .news-card h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+      .news-meta { color: #666; font-size: 0.85rem; margin: 0 0 0.6rem; }
+      .news-snippet { margin: 0 0 0.8rem; font-size: 0.95rem; }
+      .news-card a { font-weight: bold; text-decoration: none; }
+      .news-thumb { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 0.8rem; }
+      .news-card { position: relative; }
+      .news-card a::after { content: ""; position: absolute; inset: 0; }
+      .news-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.12); }
+      .news-card:hover h3 { text-decoration: underline; }
+
+      .einreichen { margin: 2.5rem 0 0; padding: 0; }
+      .einreichen > summary { cursor: pointer; list-style: none; padding: 0.9rem 1.2rem; display: flex;
+        align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+      .einreichen > summary::-webkit-details-marker { display: none; }
+      .einreichen[open] > summary .btn { opacity: 0.6; }
+      .be-app { padding: 0 1.2rem 1.3rem; }
+      .be-hinweis { padding: .7rem 1rem; border-radius: 10px; margin: 0 0 1rem; font-size: .95rem; background: var(--soft); color: var(--soft-text); }
+      .be-hinweis.rot { border: 1px solid rgba(208, 84, 74, .55); background: rgba(208, 84, 74, .12); color: #e0796f; }
+      :root:not([data-theme="dark"]) .be-hinweis.rot { color: #b23b30; }
+      .be-hinweis.gruen { background: #3fae6c22; border: 1px solid #3fae6c66; color: #2f8f55; }
+      :root[data-theme="dark"] .be-hinweis.gruen { color: #6fd59a; }
+      .be-reihe { display: grid; grid-template-columns: 2fr 1.4fr 1fr; gap: .8rem; margin-bottom: .8rem; }
+      .be-app label { display: grid; gap: .25rem; font-weight: 600; font-size: .9rem; }
+      .be-app input[type=text], .be-app input[type=email], .be-app textarea { font: inherit; font-weight: normal; padding: .55rem .7rem;
+        border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); width: 100%; box-sizing: border-box; }
+      .be-kat { display: flex; gap: .4rem; flex-wrap: wrap; margin: .3rem 0 1rem; }
+      .be-kat button { font: inherit; font-size: .88rem; padding: .3rem .8rem; border-radius: 20px; border: 1px solid var(--line);
+        background: none; color: var(--muted); cursor: pointer; }
+      .be-kat button.an { background: var(--link-c); border-color: var(--link-c); color: #0e1524; font-weight: 600; }
+      :root:not([data-theme="dark"]) .be-kat button.an { background: #1c2d52; border-color: #1c2d52; color: #fff; }
+      .be-tabs { display: flex; gap: .2rem; border-bottom: 1px solid var(--line); }
+      .be-tabs button { font: inherit; font-weight: 600; padding: .5rem 1rem; border: 0; border-bottom: 2px solid transparent; background: none;
+        color: var(--muted); cursor: pointer; margin-bottom: -1px; }
+      .be-tabs button.an { color: var(--head); border-color: var(--link-c); }
+      .be-leiste { display: flex; flex-wrap: wrap; gap: .2rem; padding: .35rem; background: var(--bg); border: 1px solid var(--line); border-top: 0; }
+      .be-leiste button { font: inherit; font-size: .9rem; min-width: 2.2rem; height: 2.1rem; padding: 0 .55rem; border: 0; border-radius: 6px;
+        background: none; color: var(--text); cursor: pointer; }
+      .be-leiste button:hover { background: var(--soft); }
+      .be-leiste i.tr { width: 1px; background: var(--line); margin: .2rem .3rem; }
+      .be-app textarea.be-text { border-top: 0; border-radius: 0 0 10px 10px; min-height: 16rem; resize: vertical; line-height: 1.6; }
+      .be-vorschau { border: 1px solid var(--line); border-top: 0; border-radius: 0 0 10px 10px; padding: 1rem 1.2rem; min-height: 16rem; background: var(--bg); }
+      .be-vorschau h1 { font-size: 1.6rem; margin: 0 0 .3rem; }
+      .be-vorschau figure { margin: 1rem 0; } .be-vorschau img { max-width: 100%; border-radius: 6px; display: block; }
+      .be-vorschau figcaption { font-size: .85rem; color: var(--muted); margin-top: .3rem; }
+      .be-hilfe { font-size: .82rem; color: var(--muted); margin: .4rem 0 0; }
+      .be-seitenkopf { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+      .be-intro { color: var(--muted); max-width: 46rem; }
+      .einreichen.offen { padding: 1.2rem 1.4rem; }
+      .be-hilfe code { background: var(--soft); padding: 0 .3rem; border-radius: 4px; }
+      /* Partien im Editor */
+      .be-partien h4 { margin: 1rem 0 .4rem; font-size: .95rem; }
+      .be-partie { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; padding: .5rem .7rem; border: 1px solid var(--line); border-radius: 8px; margin-bottom: .4rem; background: var(--surface); }
+      .be-partie .be-nr { background: var(--soft); padding: .1rem .5rem; border-radius: 6px; font-size: .8rem; font-weight: 700; }
+      .be-p-text { flex: 1 1 14rem; }
+      .be-p-akt { display: flex; gap: .3rem; }
+      .be-p-akt button { font: inherit; font-size: .8rem; padding: .3rem .6rem; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); cursor: pointer; }
+      .be-p-akt button.rot { color: #d0544a; }
+      /* Dialoge */
+      body.be-dlg-offen { overflow: hidden; }
+      .be-dlg-hg { position: fixed; inset: 0; z-index: 200; background: rgba(5, 10, 20, .55); display: grid; place-items: center; padding: 1rem; }
+      .be-dlg { width: min(760px, 100%); max-height: calc(100vh - 2rem); overflow: auto; background: var(--surface); color: var(--text);
+        border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.3rem; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+      .be-dlg h3 { margin: 0 0 .8rem; }
+      .be-dlg label { display: block; font-weight: 600; font-size: .9rem; margin: .6rem 0 .3rem; }
+      .be-dlg textarea, .be-dlg input[type=url], .be-dlg input[type=number] { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .5rem .6rem; box-sizing: border-box; }
+      .be-dlg textarea, .be-dlg input[type=url] { width: 100%; font-weight: 400; }
+      .be-pgn { height: 7rem; font-family: ui-monospace, Consolas, monospace !important; font-size: .82rem !important; }
+      .be-datei { display: inline-block !important; font-weight: 400 !important; color: var(--link-c); cursor: pointer; margin: .2rem 0 !important; }
+      .be-erkannt.gut { color: #2f8f55; } .be-erkannt.fehler { color: #d0544a; }
+      :root[data-theme="dark"] .be-erkannt.gut { color: #6fd59a; }
+      .be-wahl { font-weight: 400 !important; margin: .2rem 0 !important; display: flex !important; gap: .4rem; align-items: center; }
+      .be-spieler { display: grid; grid-template-columns: 1fr 1fr 9rem; gap: .6rem; }
+      .be-spieler input, .be-spieler select { width: 100%; font: inherit; font-weight: 400; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: .45rem .6rem; box-sizing: border-box; }
+      .be-dlg .be-check[hidden] { display: none !important; }
+      .be-dlg .be-check { display: flex !important; gap: .5rem; align-items: flex-start; font-weight: 400 !important; margin: .7rem 0 .4rem !important; }
+      .be-check input { margin-top: .25rem; }
+      @media (max-width: 600px) { .be-spieler { grid-template-columns: 1fr 1fr; } .be-spieler label:last-child { grid-column: 1 / -1; } }
+      .be-ab { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin: .2rem 0 .4rem; }
+      .be-ab input { width: 4.5rem; }
+      .be-ab .be-kat { margin: 0; }
+      .be-dlg-vorschau .pz { margin: 1rem 0 0; }
+      .be-dlg-fuss { z-index: 10; display: flex; justify-content: flex-end; gap: .5rem; margin-top: 1.1rem; position: sticky; bottom: -1.2rem; background: var(--surface); padding: .6rem 0 .2rem; }
+      .be-dlg-fuss .btn[disabled] { opacity: .5; cursor: default; }
+      .be-bilder { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: 1rem; }
+      .be-bild { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg); position: relative; }
+      .be-bild img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+      .be-bild input[type=text] { border: 0 !important; border-top: 1px solid var(--line) !important; border-radius: 0 !important; font-size: .85rem !important; }
+      .be-bild .be-titel { position: absolute; left: .5rem; top: .5rem; background: #e0a84f; color: #1b1b1b; font-size: .75rem; font-weight: 700; padding: .12rem .5rem; border-radius: 20px; }
+      .be-bild .be-nr { position: absolute; right: .5rem; top: .5rem; background: rgba(0,0,0,.65); color: #fff; font-size: .75rem; padding: .1rem .45rem; border-radius: 6px; }
+      .be-bild .be-akt { display: flex; flex-wrap: wrap; border-top: 1px solid var(--line); }
+      .be-bild .be-akt button { flex: 1 0 auto; font: inherit; font-size: .76rem; padding: .4rem .35rem; white-space: nowrap; border: 0; background: none; color: var(--text); cursor: pointer; }
+      .be-bild .be-akt button + button { border-left: 1px solid var(--line); }
+      .be-bild .be-akt button.rot { color: #d0544a; }
+      .be-drop { border: 2px dashed var(--line); border-radius: 10px; display: grid; place-items: center; text-align: center; color: var(--muted);
+        font-size: .9rem; padding: 1rem; min-height: 9rem; cursor: pointer; }
+      .be-drop.ueber { border-color: var(--link-c); color: var(--link-c); }
+      .be-drop { gap: .25rem; align-content: center; font: inherit; background: none; }
+      .be-drop svg { width: 2.2rem; height: 2.2rem; fill: none; stroke: currentColor; stroke-width: 1.6; margin: 0 auto .2rem; }
+      .be-drop svg .v { fill: currentColor; stroke: none; opacity: .55; }
+      .be-drop b { color: var(--text); font-size: 1rem; }
+      .be-drop span { font-size: .82rem; line-height: 1.35; font-weight: 400; }
+      .be-drop { min-width: 0; overflow-wrap: anywhere; }
+      @media (max-width: 700px) {
+        .be-drop { grid-column: 1 / -1; min-height: 0; padding: .8rem 1rem; text-align: left; overflow-wrap: normal;
+          grid-template-columns: 2.4rem 1fr; place-items: center start; column-gap: .8rem; row-gap: 0; }
+        .be-drop svg { grid-row: span 2; margin: 0; width: 2rem; height: 2rem; }
+      }
+      .be-drop:hover, .be-drop:focus-visible { border-color: var(--link-c); color: var(--link-c); outline: none; }
+      .be-fuss { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+      .be-falle { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+      .be-meldung { margin: .8rem 0 0; padding: .7rem 1rem; border-radius: 10px; font-weight: 600; }
+      .be-meldung.ok { background: #3fae6c22; color: #2f8f55; } .be-meldung.fehler { background: #e0675c22; color: #c0453b; }
+      :root[data-theme="dark"] .be-meldung.ok { color: #6fd59a; } :root[data-theme="dark"] .be-meldung.fehler { color: #ff8a80; }
+      .be-meine { margin-top: 1.6rem; }
+      .be-meine table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+      .be-meine td { padding: .6rem .4rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+      .be-st { font-size: .76rem; font-weight: 700; padding: .12rem .5rem; border-radius: 20px; white-space: nowrap; }
+      .be-st.online { background: #3fae6c26; color: #2f8f55; } .be-st.entwurf { background: #e0a84f26; color: #9a6510; }
+      :root[data-theme="dark"] .be-st.online { color: #6fd59a; } :root[data-theme="dark"] .be-st.entwurf { color: #f2c37a; }
+      @media (max-width: 700px) { .be-reihe { grid-template-columns: 1fr; } .be-bilder { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+        .be-meine tr { display: grid; grid-template-columns: 1fr auto; border-bottom: 1px solid var(--line); padding: .5rem 0; }
+        .be-meine td { border: 0; padding: .15rem .3rem; }
+        .be-meine td.be-k { grid-column: 1 / -1; text-align: left !important; } }
+</style>
+<link href="design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Reports &amp; news | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="berichte.html" hreflang="de" rel="alternate"/>
+<link href="berichte-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="index-en.html">
+<img alt="" class="brand-logo" src="Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="berichte.html">Deutsch</a><a class="an" data-sprache="en" href="berichte-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="berichte.html">Deutsch</a><a class="an" data-sprache="en" href="berichte-en.html">English</a></div>
+<a href="index-en.html">Home</a>
+<div class="nav-gruppe"><a href="ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="geschichte-en.html">History</a><a href="dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe"><a href="mannschaften-en.html">Teams</a><button aria-expanded="false" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="afk-1-en.html">AFK 1</a><a href="afk-2-en.html">AFK 2</a><a href="afk-3-en.html">AFK 3</a><a href="afk-4-en.html">AFK 4</a><a href="afk-5-en.html">AFK 5</a><a href="afk-6-en.html">AFK 6</a><a href="senioren-en.html">Senioren</a><a href="geschichte-en.html#mannschaften">History</a></div></div>
+<a href="jugend-en.html">Youth</a>
+<a href="termine-en.html">Events</a>
+<div class="nav-gruppe offen"><a aria-current="page" href="berichte-en.html">Reports</a><button aria-expanded="true" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe"><a href="turniere-en.html">Tournaments</a><button aria-expanded="false" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a href="oberlandquartett-en.html">Oberlandquartett</a><a href="blitzjahreswertung-en.html">Blitz annual ranking</a><a href="vereinsintern-en.html">Hall of Fame</a><a href="ausschreibungen-en.html">Tournament announcements</a><a href="turnierkalender-en.html">Tournament calendar</a><a href="turnierorte-en.html">AFK on Tour</a></div></div>
+<a href="faq-en.html">FAQ</a>
+<a href="kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<script>
+  (function () {
+    var q = location.search;
+    if (location.hash === "#einreichen" || /[?&]bearbeiten=/.test(q)) location.replace("bericht-schreiben.html" + q);
+  })();
+</script><div class="be-seitenkopf"><h1>Latest reports &amp; news</h1><a class="btn be-schreiben-knopf" href="bericht-schreiben.html">Write a report</a></div><h2 class="jahr-titel">2026</h2><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-kooperationsturnier-ebe/siegerfoto.jpg"/>
+<h3 translate="no">Schnellschach-Vereinsmeisterschaft 2026</h3>
+<p class="news-meta">24.10.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Unsere diesjährige Schnellschach-Vereinsmeisterschaft haben wir als Kooperationsturnier mit der SU Ebersberg-Grafing gespielt.</p>
+<a class="btn" href="berichte/2026-kooperationsturnier-ebe-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-kooperationsturnier-gyki-feat-sg-afk-2026/foto1.jpg"/>
+<h3 translate="no">Kooperationsturnier GyKi feat. SG AFK 2026</h3>
+<p class="news-meta">13.10.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Das Profiturnier unseres Kooperationsturniers mit dem Gymnasium Kirchheim (GyKi) konnten klar Poldi Elger und Stefans Kasims für sich entscheiden!</p>
+<a class="btn" href="berichte/2026-kooperationsturnier-gyki-feat-sg-afk-2026-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Herbstblitz 2026</h3>
+<p class="news-meta">29.09.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Das Herbstblitz war mit 25 Teilnehmern gut besucht! Wir spielten (leicht) wahnsinnige 13 Runden Blitz bei 3 min Bedenkzeit.</p>
+<a class="btn" href="berichte/2026-herbstblitz-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-duke-blitz-runde-2/foto1.jpg"/>
+<h3 translate="no">Duke Blitz - Runde 2</h3>
+<p class="news-meta">22.09.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Am 16.9. fand die 2. Auflage unseres Blitzturniers in der Duke Bar in Aschheim statt. Es fanden sich 16 Spieler ein, und so wurde im Schweizersystem 7 Runden lang um jeden Punkt gekämpft.</p>
+<a class="btn" href="berichte/2026-duke-blitz-runde-2-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-ois-2026-dominik-gewinnt-c-turnier/foto1.jpg"/>
+<h3 translate="no">OIS 2026 - Dominik gewinnt C-Turnier!</h3>
+<p class="news-meta">18.09.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Dominik Dax gewinnt souverän mit 6,5 aus 7 Punkten das C-Turnier!</p>
+<a class="btn" href="berichte/2026-ois-2026-dominik-gewinnt-c-turnier-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Blitzjahreswertung 2026 (Zwischenstand)</h3>
+<p class="news-meta">30.08.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Nach drei von fünf Turnieren ist Vorjahressieger Fabian Müller mit zwei Punkten in Führung vor Pierre Tassell.</p>
+<a class="btn" href="berichte/2026-blitzjahreswertung-2026-zwischenstand-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-oberlandquartett-2026-5-sieg-in-folge/foto1.jpg"/>
+<h3 translate="no">Oberlandquartett 2026: 5. Sieg in Folge!</h3>
+<p class="news-meta">06.07.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Zum 5. Mal in Folgen konnten wir das Oberlandquartett für uns entscheiden!</p>
+<a class="btn" href="berichte/2026-oberlandquartett-2026-5-sieg-in-folge-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Saison 25/26 erfolgreich beendet!</h3>
+<p class="news-meta">07.06.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Bezirksliga</p>
+<a class="btn" href="berichte/2026-saison-25-26-erfolgreich-beendet-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">U20-Landesliga Süd: Klassenerhalt geschafft!</h3>
+<p class="news-meta">11.03.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Am Samstag haben Alex Wittko, Gaurav Mudan, Konrad Keblat und Alex Meißner den Klassenerhalt gesichert und sich den 5. Platz von 8 in der U20-Landesliga Süd erkämpft!</p>
+<a class="btn" href="berichte/2026-u20-landesliga-sud-klassenerhalt-geschafft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">SG AFK im Ligapokalfinale 2026</h3>
+<p class="news-meta">11.03.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Christian Graf, Alex Wittko, Peter Esser und Alex Meißner haben am Wahlsonntag auswärts den TSV Solln knapp mit 2:2 geschlagen.</p>
+<a class="btn" href="berichte/2026-sg-afk-im-ligapokalfinale-2026-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinspokal Runde 1 abgeschlossen</h3>
+<p class="news-meta">26.02.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Alex Meißner hat sich am Freitag gegen Ronny Damaske durchgesetzt und somit ist die erste Runde unseres Vereinspokals abgeschlossen.</p>
+<a class="btn" href="berichte/2026-vereinspokal-runde-1-abgeschlossen-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-garchinger-mannschaftsblitz-2026/foto1.jpg"/>
+<h3 translate="no">Garchinger Mannschaftsblitz 2026</h3>
+<p class="news-meta">15.02.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Beim diesjährigen Garchinger Mannschaftsblitz (aka offene Münchner Blitz-Mannschaftsmeisterschaft) waren wir mit drei Mannschaften vertreten.</p>
+<a class="btn" href="berichte/2026-garchinger-mannschaftsblitz-2026-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2026-lars-ist-der-munchner-schnellschachmeister-2026/foto1.jpg"/>
+<h3 translate="no">Lars ist der Münchner Schnellschachmeister 2026!</h3>
+<p class="news-meta">07.01.2026 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Beim 23. Garchinger Dreikönigsturnier konnte Lars mit starken 7,5 aus 9 Punkten (ohne Verlustpartie!) den 2. Platz erobern und ist damit der Münchner Schnellschachmeister 2026!</p>
+<a class="btn" href="berichte/2026-lars-ist-der-munchner-schnellschachmeister-2026-en.html">Read report →</a>
+</div>
+</div>
+<details class="vergangene-jahre"><summary>Previous years</summary><details class="jahr-archiv"><summary>2025</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-fabian-gewinnt-die-blitzjahreswertung-2025/foto1.jpg"/>
+<h3 translate="no">Fabian gewinnt die Blitzjahreswertung 2025!</h3>
+<p class="news-meta">31.12.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Die Turniere der Blitzjahreswertung waren auch im Jahr 2025 gut besucht!</p>
+<a class="btn" href="berichte/2025-fabian-gewinnt-die-blitzjahreswertung-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-simultan-mit-im-lars-goldbeck/foto1.jpg"/>
+<h3 translate="no">Simultan mit IM Lars Goldbeck</h3>
+<p class="news-meta">03.12.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Zum dritten Mal (2017 als Kleinmeister, 2021 als FIDE-Meister und nun 2025 als frisch gebackener internationaler Meister!) wagte sich Lars mutig in die "Hölle von Kirchheim" um es mit 35 Gegnern …</p>
+<a class="btn" href="berichte/2025-simultan-mit-im-lars-goldbeck-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">3. Platz beim Blitzturnier in Ebersberg</h3>
+<p class="news-meta">23.11.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 21.11.2025 fand das Jubiläumsblitzturnier in Ebersberg statt. Mit 72 Teilnehmern und 9 Titelträgern (3 IM, 6 FM) war das Turnier nicht nur gut besucht, sondern auch stark besetzt.</p>
+<a class="btn" href="berichte/2025-3-platz-beim-blitzturnier-in-ebersberg-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">SG-AFK Mannschaften erfolgreich</h3>
+<p class="news-meta">26.10.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 17.10.2025 starteten die Senioren der Schachgemeinschaft AFK mit dem Spiel gegen die 2. Seniorenmannschaft von Haar in die diesjährige Spielsaison des Bezirks.</p>
+<a class="btn" href="berichte/2025-sg-afk-mannschaften-erfolgreich-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schnellschach-VM 2025</h3>
+<p class="news-meta">15.10.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Stefans gewinnt die diesjährige Schnellschachmeisterschaft ungeschlagen mit 4,5 aus 5 Punkten!</p>
+<a class="btn" href="berichte/2025-schnellschach-vm-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchener Schnellschach-MM 2025</h3>
+<p class="news-meta">04.08.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 03. August fand in Ismaning die Offene Münchner Schnellschach-Mannschaftsmeisterschaft 2024/2025 statt. 14 starke Vierermannschaften spielten um die Plätze.</p>
+<a class="btn" href="berichte/2025-munchener-schnellschach-mm-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Sommerblitz 2025</h3>
+<p class="news-meta">30.07.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Das diesjährige Sommerblitz (Bedenkzeit 5min + 2s Inkrement) konnte Lars klar mit 8,5 aus 9 Punkten für sich entscheiden!</p>
+<a class="btn" href="berichte/2025-sommerblitz-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-vereinsmeisterschaft-2025-beendet/foto1.jpg"/>
+<h3 translate="no">Vereinsmeisterschaft 2025 beendet</h3>
+<p class="news-meta">27.07.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Die Vereinsmeisterschaft 2025 war mit 19 Teilnehmern deutlich besser besucht als im Vorjahr womit sich die klassische Durchführung der Vereinsmeisterschaft an fünf Freitagabenden wohl dauerhaft …</p>
+<a class="btn" href="berichte/2025-vereinsmeisterschaft-2025-beendet-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-mitgliederversammlung-und-sommerfest-25-07-2025/foto1.jpg"/>
+<h3 translate="no">Mitgliederversammlung und Sommerfest 25.07.2025</h3>
+<p class="news-meta">19.07.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am Freitag, 25.07.2025, ab 18:30 Uhr findet unsere jährliche Mitgliederversammlung statt. Danach - ab ca. 20:00 Uhr das Sommerfest.</p>
+<a class="btn" href="berichte/2025-mitgliederversammlung-und-sommerfest-25-07-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Alex Wittko ist Pokalsieger 2025!</h3>
+<p class="news-meta">14.07.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Nach langer Schlacht hat sich Alex W. am letzten Freitag (11.07) gegen Pierre durchsetzen können und ist damit nicht nur Jugendvereinsmeister 2025, sondern auch SG AFK Pokalsieger 2025!</p>
+<a class="btn" href="berichte/2025-alex-wittko-ist-pokalsieger-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-historischer-sieg-im-oberlandquartett/foto1.jpg"/>
+<h3 translate="no">Historischer Sieg im Oberlandquartett.</h3>
+<p class="news-meta">29.06.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 27. Juni 2025 fand zum 27. Mal das Traditionsturnier "Oberlandquartett" statt. Dieses Schachturnier findet jährlich nach der Mannschaftssaison statt.</p>
+<a class="btn" href="berichte/2025-historischer-sieg-im-oberlandquartett-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Senioren auf Platz 6</h3>
+<p class="news-meta">17.05.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Der letzte Mannschaftskampf der Senioren in der 2. Seniorenliga gegen München Nord endete mit 0,5 zu 3,5 leider klar zugunsten der Münchener. Damit erreichte das AFK-Team den 6. Tabellenplatz.</p>
+<a class="btn" href="berichte/2025-senioren-auf-platz-6-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Dorothea Gundel ✝️</h3>
+<p class="news-meta">10.05.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Die Schachgemeinschaft trauert um Dorothea Gundel, die uns am 21.März 2025 im Alter von 88 Jahren für immer verließ.</p>
+<a class="btn" href="berichte/2025-dorothea-gundel-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">SG AFK 3 Vizemeister in der D-Klasse!</h3>
+<p class="news-meta">13.04.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Mit weitgehend unveränderter Besetzung ging unsere 3. Mannschaft in ihre 2. Saison in der D-Klasse.</p>
+<a class="btn" href="berichte/2025-sg-afk-3-vizemeister-in-der-d-klasse-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Osterblitz 2025</h3>
+<p class="news-meta">12.04.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Das Osterblitz 2025 war mit 27 Teilnehmern gut besucht und wir spielten - nach recht demokratischer Abstimmung ;-) - 13 Runden Blitzschach (3 min + 2 s Inkrement).</p>
+<a class="btn" href="berichte/2025-osterblitz-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">SG AFK 4 gewinnt die D-Klasse!</h3>
+<p class="news-meta">11.04.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Das ist der Artikel für die 4.Mannschaft, für die Spieler aus Aschheim, aus Feldkirchen</p>
+<a class="btn" href="berichte/2025-sg-afk-4-gewinnt-die-d-klasse-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-die-jugendvereinsmeisterschaft-2025-ist-beendet/foto1.jpg"/>
+<h3 translate="no">Die Jugendvereinsmeisterschaft 2025 ist beendet...</h3>
+<p class="news-meta">07.03.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Am vergangenen Wochenende fand die Jugend-Vereinsmeisterschaft 2025</p>
+<a class="btn" href="berichte/2025-die-jugendvereinsmeisterschaft-2025-ist-beendet-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Blitzschach-MM 2025</h3>
+<p class="news-meta">04.03.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Team 1:</p>
+<a class="btn" href="berichte/2025-munchner-blitzschach-mm-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Senioren erfolgreich gegen Bayern München 2</h3>
+<p class="news-meta">01.03.2025 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 28.02.2024 begrüßten die Senioren der Schachgemeinschaft AFK die 2. Seniorenmannschaft von Bayern München zur 5. Runde in der zweiten Seniorenliga.</p>
+<a class="btn" href="berichte/2025-senioren-erfolgreich-gegen-bayern-munchen-2-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Wahnsinn: Remis gegen einen Großmeister!</h3>
+<p class="news-meta">27.02.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Obwohl das Spitzenspiel in der Bezirksliga gegen die Schachfreunde München knapp mit 4,5 zu 3,5 verloren wurde, hat das Match für die Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim (AFK) viele …</p>
+<a class="btn" href="berichte/2025-wahnsinn-remis-gegen-einen-gromeister-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinspokal 2025 gestartet!</h3>
+<p class="news-meta">16.02.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Der Vereinspokal ist mit 16 Teilnehmern wieder sehr vernünftig besetzt, da man im Sinne des KO-Systems für ein 5-rundiges Turnier 32 Teilnehmer (oder zumindest eine verwandte Teilnehmerzahl) …</p>
+<a class="btn" href="berichte/2025-vereinspokal-2025-gestartet-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">U20 Landesliga Süd: Vizemeister!</h3>
+<p class="news-meta">16.02.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Unsere Jugendlichen haben in der U20 Landesliga Süd eine gute Saison gespielt und den 2. Platz erreicht!</p>
+<a class="btn" href="berichte/2025-u20-landesliga-sud-vizemeister-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">3. Platz beim 4er-Pokal auf Münchner Ebene</h3>
+<p class="news-meta">16.02.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Nachdem die Schachfreunde am heutigen Sonntag besseres zu tun hatten als sich mit uns zu duellieren, haben wir gratis den 3. Platz beim Viererpokal errungen!</p>
+<a class="btn" href="berichte/2025-3-platz-beim-4er-pokal-auf-munchner-ebene-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">MMM: 1. Februar-Runde</h3>
+<p class="news-meta">11.02.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Nach ihrem dritten Platz im Vorjahr träumt derzeit die 1. Mannschaft der Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim vom Aufstieg in die Regionalliga.</p>
+<a class="btn" href="berichte/2025-mmm-1-februar-runde-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Siegesrausch bei den MMM</h3>
+<p class="news-meta">19.01.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Die 1. Mannschaft schlug den gewiss nicht schwachen Münchener SC 1836 3 mit 5 zu 3 Punkten und ist dadurch punktgleich mit den Schachfreunden München 1 an der Tabellenspitze der Bezirksliga.</p>
+<a class="btn" href="berichte/2025-siegesrausch-bei-den-mmm-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-weihnachtsblitz-2024-und-blitzjahreswertung-2024/foto1.jpg"/>
+<h3 translate="no">Weihnachtsblitz 2024 und Blitzjahreswertung 2024</h3>
+<p class="news-meta">12.01.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Stefans gewinnt das Weihnachtsblitz 2024 knapp vor Fabian (punktgleich bei besserer Buchholz) und das Duo meldet damit schon mal Interesse am Gesamtsieg 2025 an ;-)</p>
+<a class="btn" href="berichte/2025-weihnachtsblitz-2024-und-blitzjahreswertung-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2025-neujahrsblitz-2025/foto1.jpg"/>
+<h3 translate="no">Neujahrsblitz 2025</h3>
+<p class="news-meta">12.01.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Unser Neujahrsblitz war mit 26 Teilnehmern gut besucht und wir spielten 7 Runden Schweizer System bei 10 min Bedenkzeit.</p>
+<a class="btn" href="berichte/2025-neujahrsblitz-2025-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Jugend-Einzelmeisterschaften 2025</h3>
+<p class="news-meta">12.01.2025 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Von unserem Verein waren Alex Wittko (U16), Poldi Elger (U14) und Philipp Mai (U12) bei den Münchner Jugend-Einzelmeisterschaften vertreten.</p>
+<a class="btn" href="berichte/2025-munchner-jugend-einzelmeisterschaften-2025-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2024</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">U16 Münchner Mannschaftsmeisterschaft</h3>
+<p class="news-meta">09.12.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Alex W., Konrad, Hajun, Kian, Philipp und Valentin haben eine sehr erfolgreiche U16-Mannschaftsmeisterschaft gespielt.</p>
+<a class="btn" href="berichte/2024-u16-munchner-mannschaftsmeisterschaft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Licht und Schatten im 4er-Pokal...</h3>
+<p class="news-meta">09.12.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Im Mannschaftspokal konnten sich Lars, Cedric, Arthur und Fabian klar mit einem 3:1 gegen Garching durchsetzen und erreichen somit das Halbfinale, welches am 26.01.25 stattfindet!</p>
+<a class="btn" href="berichte/2024-licht-und-schatten-im-4er-pokal-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Eine Superwoche für die Annalen...</h3>
+<p class="news-meta">08.12.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Den Anfang machte die erste Mannschaft mit ihrem Ausflug zur Schachunion München. Den Grundstock lieferte Stefans Kasims, der mit einem Mehrbauern sein Spiel geduldig durchzog und für das 1:0 sorgte.</p>
+<a class="btn" href="berichte/2024-eine-superwoche-fur-die-annalen-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Neues von den Mannschaftsmeisterschaften</h3>
+<p class="news-meta">21.11.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Mit einem "etwas" glücklichem 5:3 Heimsieg gegen den SK München Südost 2 festigte die erste Mannschaft ihren Spitzenplatz in der Bezirksliga.</p>
+<a class="btn" href="berichte/2024-neues-von-den-mannschaftsmeisterschaften-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">MMM 2025: Ein perfekter Start</h3>
+<p class="news-meta">13.10.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Einen besseren Start zum Auftakt der Mannschaftskämpfe 2024/25 hätte sich die Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim nicht wünschen können.</p>
+<a class="btn" href="berichte/2024-mmm-2025-ein-perfekter-start-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schnellschach Vereinsmeisterschaft 2024</h3>
+<p class="news-meta">29.09.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Der Sommer ist vorbei und die Schachaktivitäten nehmen zu.</p>
+<a class="btn" href="berichte/2024-schnellschach-vereinsmeisterschaft-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2024-herbstblitz-2024/foto1.jpg"/>
+<h3 translate="no">Herbstblitz 2024</h3>
+<p class="news-meta">14.09.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Ende der Sommerpause … endlich wieder Blitzschach en masse!</p>
+<a class="btn" href="berichte/2024-herbstblitz-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2024-oberlandquartett-2024/foto1.jpg"/>
+<h3 translate="no">Oberlandquartett 2024</h3>
+<p class="news-meta">30.06.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Das diesjährige Oberland"quartett" (Holzkirchen war diesmal leider nicht dabei) fand bei uns in Kirchheim statt.</p>
+<a class="btn" href="berichte/2024-oberlandquartett-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinsmeisterschaft 2024</h3>
+<p class="news-meta">24.06.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Wir haben in diesem Jahr die Vereinsmeisterschaft zum ersten Mal als Wochenendturnier (eine Runde am Freitag und Samstag und Sonntag jeweils zwei Runden) gespielt.</p>
+<a class="btn" href="berichte/2024-vereinsmeisterschaft-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinspokal 2024</h3>
+<p class="news-meta">16.06.2024 · by <span translate="no">Pierre Tassell</span></p>
+<p class="news-snippet" translate="no">Der Vereinspokal 2024 ist abgeschlossen und der neue Vereinspokalsieger ist - langweilig! - der Titelverteidiger Pierre Tassell.</p>
+<a class="btn" href="berichte/2024-vereinspokal-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Mannschaftssaison 2023/24</h3>
+<p class="news-meta">03.06.2024 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 16. Oktober 2023 wurde vom Schach-Bezirksverband München für acht Ligen der Startschuss gegeben. Am 26. April 2024 standen die Abschlusstabellen fest.</p>
+<a class="btn" href="berichte/2024-mannschaftssaison-2023-24-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">2. Platz in der U20</h3>
+<p class="news-meta">03.06.2024 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Am 24.2. und 25.2. startete die Münchner Mannschaftsmeisterschaft der U20 mit den ersten 4 Runden.</p>
+<a class="btn" href="berichte/2024-2-platz-in-der-u20-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Osterblitz 2024</h3>
+<p class="news-meta">02.05.2024 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Unser diesjähriges Osterblitz war so stark wie noch nie besetzt und mit 28 Teilnehmern auch richtig gut besucht!</p>
+<a class="btn" href="berichte/2024-osterblitz-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2024-ein-vereinsabend/foto1.jpg"/>
+<h3 translate="no">Ein Vereinsabend</h3>
+<p class="news-meta">01.05.2024 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">So sieht ein normaler Spielabend in einem der Räume statt.</p>
+<a class="btn" href="berichte/2024-ein-vereinsabend-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Mannschaftsmeisterschaften 2024</h3>
+<p class="news-meta">26.02.2024</p>
+<p class="news-snippet" translate="no">Erstmals mit vier Mannschaften ist die Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim bei den Meisterschaften des Bezirkverbandes München dabei.</p>
+<a class="btn" href="berichte/2024-archiv-munchner-mannschaftsmeisterschaften-2024-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">3 Mannschaftskämpfe,3 Ligen und 3 Siege!</h3>
+<p class="news-meta">19.02.2024</p>
+<p class="news-snippet" translate="no">Der letzte Freitag wird sicher in die Annalen des Vereins vermerkt werden:</p>
+<a class="btn" href="berichte/2024-archiv-3-mannschaftskampfe-3-ligen-und-3-siege-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2023</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Herbstblitz 2023</h3>
+<p class="news-meta">06.12.2023</p>
+<p class="news-snippet" translate="no">Das 4. Turnier unserer Blitz-Jahreswertung (diesmal wurde rasant mit 3 min Bedenkzeit gespielt) hat David souverän vor Ronny und Pierre gewonnen!</p>
+<a class="btn" href="berichte/2023-archiv-herbstblitz-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinsmeisterschaft 2023 (abgeschlossen)</h3>
+<p class="news-meta">28.09.2023</p>
+<p class="news-snippet" translate="no">Die Vereinsmeisterschaft 2023 ist beendet und Pierre ist mit 4,5 Punkten (aus 5 Partien) die Titelverteidigung gelungen!</p>
+<a class="btn" href="berichte/2023-archiv-vereinsmeisterschaft-2023-abgeschlossen-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Sommerblitz 2023</h3>
+<p class="news-meta">28.09.2023</p>
+<p class="news-snippet" translate="no">Nachdem wir uns (dank der Mitgliederversammlung) schon warm gedacht und (dank Quirin!) kulinarisch gestärkt hatten, konnte das Sommerblitz um 19:45 Uhr beginnen.</p>
+<a class="btn" href="berichte/2023-archiv-sommerblitz-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Rise of the Vize-Lars...</h3>
+<p class="news-meta">28.09.2023</p>
+<p class="news-snippet" translate="no">Mein Weg zum Bayerischen Vizemeister-Titel</p>
+<a class="btn" href="berichte/2023-archiv-rise-of-the-vize-lars-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Stadtmeisterschaft 2023</h3>
+<p class="news-meta">30.08.2023 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Armin gewinnt souverän mit 4,5 aus 5 Punkten die Kirchheimer Stadtmeisterschaft 2023 und wird damit en passant Schnellschach-Vereinsmeister 2023!!!</p>
+<a class="btn" href="berichte/2023-archiv-stadtmeisterschaft-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Oberlandquartett: Mission Titelverteidigung</h3>
+<p class="news-meta">23.06.2023</p>
+<p class="news-snippet" translate="no">Am 23. Juni 2023 begegneten sich die vier Schachvereine (Deisenhofen, Holzkirchen, Höhenkirchen und die SG AFK) beim traditionellen Oberlandquartett, das inzwischen zum 25. Mal stattfand.</p>
+<a class="btn" href="berichte/2023-archiv-oberlandquartett-mission-titelverteidigung-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Qualifikation zur Deutschen Amateurmeisterschaft</h3>
+<p class="news-meta">29.05.2023</p>
+<p class="news-snippet" translate="no">Rainer Seidl hat beim Qualifikationsturnier zur Deutschen Amateurmeisterschaft in Darmstadt den 3.</p>
+<a class="btn" href="berichte/2023-archiv-qualifikation-zur-deutschen-amateurmeisterschaft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Osterblitz 2023</h3>
+<p class="news-meta">29.05.2023</p>
+<p class="news-snippet" translate="no">Unser (extrem) offizielles Osterturnier 2023 war mit 20 Spielern trotz der Abwesenheit des größten Teils unserer 10.</p>
+<a class="btn" href="berichte/2023-archiv-osterblitz-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Niederlage gegen Roter Turm in der Seniorenliga</h3>
+<p class="news-meta">29.05.2023</p>
+<p class="news-snippet" translate="no">Bei der vorletzten Runde der 1. Seniorenliga war der SC Roter Turm Altstadt zu Gast.</p>
+<a class="btn" href="berichte/2023-archiv-niederlage-gegen-roter-turm-in-der-seniorenliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Klassenerhalt in der Bezirksliga!</h3>
+<p class="news-meta">29.05.2023</p>
+<p class="news-snippet" translate="no">Drei sind aller guten Dinge und so hat auch unsere 1. Mannschaft den Klassenerhalt in der Bezirksliga - "etwas" glücklich ;-) - geschafft, nachdem zuvor schon die 2.</p>
+<a class="btn" href="berichte/2023-archiv-klassenerhalt-in-der-bezirksliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Bayerischer U20-Mannschafts-Vizemeister!!!</h3>
+<p class="news-meta">29.05.2023</p>
+<p class="news-snippet" translate="no">Mission Completed: Unsere erste U20 Mannschaft hat es geschafft sich den Bayerischen Vizemeister-Titel in der Bayernliga, der höchsten Jugendliga des Freistaats, in einer spannenden Endrunde zu …</p>
+<a class="btn" href="berichte/2023-archiv-bayerischer-u20-mannschafts-vizemeister-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Bayerische U16 Meisterschaften 2023</h3>
+<p class="news-meta">29.05.2023</p>
+<p class="news-snippet" translate="no">Fabian Müller hat bei der Bayerischen U16 Meisterschaft 2023 in Bad Kissingen einen starken 6. Platz erreicht!</p>
+<a class="btn" href="berichte/2023-archiv-bayerische-u16-meisterschaften-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Reykjavik Open 2023</h3>
+<p class="news-meta">04.04.2023</p>
+<p class="news-snippet" translate="no">Einen Ausflug der besonderen Art unternahmen die zwei besten Jugendlichen der Schachgemeinschaft Aschheim/Feldkirchen/Kirchheim: David Mehlhorn und Arthur Krumm nahmen zwischen dem 29. März und dem 4.</p>
+<a class="btn" href="berichte/2023-archiv-reykjavik-open-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Seniorenkampf gegen MSC: Ehrenvolle Niederlage</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Mit der denkbar besten Mannschaft trat der Münchener SC 1836 bei der dritten Runde der Seniorenmeisterschaft in Kirchheim an.</p>
+<a class="btn" href="berichte/2023-archiv-seniorenkampf-gegen-msc-ehrenvolle-niederlage-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Senioren: Unentschieden gegen FC Bayern 1</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Die Seniorenmannschaft konnte mit einem 2:2 gegen den FC Bayern einen wichtigen Punkt gegen den Abstieg verbuchen.</p>
+<a class="btn" href="berichte/2023-archiv-senioren-unentschieden-gegen-fc-bayern-1-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Jugend-Vereinsmeisterschaft Runde 1</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Unsere Jugend-Vereinsmeisterschaft hat in Abwesenheit der U25-Fraktion (die nur durch Rapahel vertreten ist) einige mutige "Neu"zugänge zu verzeichnen:  Konrad Keblat, der schon über viel …</p>
+<a class="btn" href="berichte/2023-archiv-jugend-vereinsmeisterschaft-runde-1-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Gelungener Start in der Bezirksliga</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Der Saisonstart in der Bezirksliga glückte uns diesmal besser und wir starten mit einem Sieg in die Saison 2022/23!</p>
+<a class="btn" href="berichte/2023-archiv-gelungener-start-in-der-bezirksliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">DWZ-Turnier: (partielle) Finalrunde</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Unsere finale Runde des DWZ-Turniers ist durch einige krankheitsbedingte Ausfälle partiell ins neue Jahr vertagt, dennoch sind schon erste Gratulationen möglich:</p>
+<a class="btn" href="berichte/2023-archiv-dwz-turnier-partielle-finalrunde-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Bayernliga Doppelrunde in Augsburg</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Die Bayernliga-Doppelrunde in Augsburg war im Wesentlichen erfolgreich:</p>
+<a class="btn" href="berichte/2023-archiv-bayernliga-doppelrunde-in-augsburg-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">31. Bamberger Jugendopen</h3>
+<p class="news-meta">22.03.2023</p>
+<p class="news-snippet" translate="no">Was macht man an einem Feiertag wenn sonst nix los ist?</p>
+<a class="btn" href="berichte/2023-archiv-31-bamberger-jugendopen-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Jugend-Einzelmeisterschaft 2023</h3>
+<p class="news-meta">19.02.2023</p>
+<p class="news-snippet" translate="no">Am letzten Wochenende fand vom 17.02 bis 19.02.23 die Münchner Jugend Einzelmeisterschaft 2023 statt. Mit 115 Teilnehmern wurde ein neuer Teilnehmerrekord aufgestellt.</p>
+<a class="btn" href="berichte/2023-archiv-munchner-jugend-einzelmeisterschaft-2023-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Doppelsieg bei der MMM</h3>
+<p class="news-meta">10.02.2023</p>
+<p class="news-snippet" translate="no">Die erste und zweite Mannschaft haben einen erfolgreichen Freitag hinter sich und machen jeweils einen wichtigen Schritt in Richtung Klassenerhalt!</p>
+<a class="btn" href="berichte/2023-archiv-doppelsieg-bei-der-mmm-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Sieg gegen Garching 1 bei der MSenMM!</h3>
+<p class="news-meta">31.01.2023</p>
+<p class="news-snippet" translate="no">Unser Seniorenteam besiegt im ersten Saisonspiel die im Schnitt um 80 DWZ-Punkte höher gewertete Mannschaft aus Garching mit 2,5 zu 1,5!</p>
+<a class="btn" href="berichte/2023-archiv-sieg-gegen-garching-1-bei-der-msenmm-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Seniorenkampf gegen Deisenhofen: Eine würdevolle Niederlage</h3>
+<p class="news-meta">31.01.2023</p>
+<p class="news-snippet" translate="no">Die auf dem Papier klar stärkere Mannschaft des SF Deisenhofen erwies sich für die Senioren des SG AFK auch in der Realität als zu stark.</p>
+<a class="btn" href="berichte/2023-archiv-seniorenkampf-gegen-deisenhofen-eine-wurdevolle-ni-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Erfolgreicher Saisonauftakt in der Bayernliga</h3>
+<p class="news-meta">31.01.2023</p>
+<p class="news-snippet" translate="no">Mit einem "etwas" glücklichen 4:2 gewinnt unsere Bayernligamannschaft (Arthur, David, Fabian, Andra's, Aiman und Emil) ihr erstes Heimspiel gegen unseren Nachbarn Garching.</p>
+<a class="btn" href="berichte/2023-archiv-erfolgreicher-saisonauftakt-in-der-bayernliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">DWZ-Turnier Runde 1</h3>
+<p class="news-meta">31.01.2023</p>
+<p class="news-snippet" translate="no">Unser DWZ-Turnier für Spieler mit einer Spielstärke von DWZ &lt; 1410 war am gestrigen Abend gut besucht.</p>
+<a class="btn" href="berichte/2023-archiv-dwz-turnier-runde-1-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">DWZ-Turnier (concluded)</h3>
+<p class="news-meta">27.01.2023</p>
+<p class="news-snippet" translate="no">Unser DWZ-Turnier ist nunmehr beendet und es ergibt sich folgendes Bild:</p>
+<a class="btn" href="berichte/2023-archiv-dwz-turnier-concluded-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<img alt="" class="news-thumb" loading="lazy" src="berichte/bilder/2023-sieger-im-oberlandquartet-2023/foto1.jpg"/>
+<h3 translate="no">Sieger im Oberlandquartet 2023</h3>
+<p class="news-meta">01.01.2023 · by <span translate="no">Frederik Prause</span></p>
+<p class="news-snippet" translate="no">Das ist die Siegermannschaft im Oberlandquartet 2023. Vier starke Mannschaften aus dem Münchener Umland spielten um den Sieg in Schnellschach-Partien.</p>
+<a class="btn" href="berichte/2023-sieger-im-oberlandquartet-2023-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2022</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Weihnachtsblitz 2022</h3>
+<p class="news-meta">31.12.2022</p>
+<p class="news-snippet" translate="no">Aufgrund des Seniorenkampfes am Freitag musste unser Weihnachtsblitz um einen Tag vorverlegt werden...</p>
+<a class="btn" href="berichte/2022-archiv-weihnachtsblitz-2022-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Stadtmeisterschaft 2022</h3>
+<p class="news-meta">31.12.2022</p>
+<p class="news-snippet" translate="no">Unsere Stadtmeisterschaft 2022 war mit 57 Startern gut besucht und hat mit der Deutschen Vize-Schnellschachmeisterin 2022 eine würdige Siegerin gefunden!</p>
+<a class="btn" href="berichte/2022-archiv-stadtmeisterschaft-2022-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">DWZ-Turnier Runde 4</h3>
+<p class="news-meta">16.12.2022</p>
+<p class="news-snippet" translate="no">In der 4. Runde unseres DWZ-Turniers für Spieler mit DWZ&lt;1410 gab es am Freitag viele spannende und interessante Begegnungen:</p>
+<a class="btn" href="berichte/2022-archiv-dwz-turnier-runde-4-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schnellschach-Vereinsmeisterschaft 2022</h3>
+<p class="news-meta">29.11.2022</p>
+<p class="news-snippet" translate="no">Am Freitag hat unsere diesjährige Schnellschach-Vereinsmeisterschaft stattgefunden und wir haben einen neuen Schnellschach-Vereinsmeister:</p>
+<a class="btn" href="berichte/2022-archiv-schnellschach-vereinsmeisterschaft-2022-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">4. Platz in der Bayernliga: Glück ist keine Laterne...</h3>
+<p class="news-meta">29.11.2022</p>
+<p class="news-snippet" translate="no">Das Glück war uns leider am letzten Spieltag nicht hold und so reichte es trotz eines geschenkten Punktes auf Brett 6 (Korbinian war arbeitslos) leider nur für ein 2:4 gegen Augsburg.</p>
+<a class="btn" href="berichte/2022-archiv-4-platz-in-der-bayernliga-gluck-ist-keine-laterne-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinsmeisterschaft 2022 (abgeschlossen)</h3>
+<p class="news-meta">07.10.2022</p>
+<p class="news-snippet" translate="no">Die Vereinsmeisterschaft ist abgeschlossen und wir haben eine "klare" Tabellensituation: Julian gewinnt das Turnier souverän mit 4,5 Punkten, kann aber mangels Vereinszugehörigkeit nicht …</p>
+<a class="btn" href="berichte/2022-archiv-vereinsmeisterschaft-2022-abgeschlossen-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">"Summer is out" - Blitzturnier</h3>
+<p class="news-meta">05.10.2022</p>
+<p class="news-snippet" translate="no">Unser "Reboot-Turnier" nach den Sommerferien war mit 18 Startern gut besucht und die Ferienerholung konnte man bei 17 Runden Hochgeschwindigskeitsblitz (3 Minuten ohne Inkrement) auch gut gebrauchen …</p>
+<a class="btn" href="berichte/2022-archiv-summer-is-out-blitzturnier-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Sieg beim Oberlandquartett 2022</h3>
+<p class="news-meta">05.10.2022</p>
+<p class="news-snippet" translate="no">Einen nicht unbedingt erwarteten Sieg verbuchte die Schachgemeinschaft beim schon fast traditionellen Oberlandquartett.</p>
+<a class="btn" href="berichte/2022-archiv-sieg-beim-oberlandquartett-2022-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Feffernitz-Open: Tradition ist eine Laterne...</h3>
+<p class="news-meta">05.10.2022</p>
+<p class="news-snippet" translate="no">Es ist vollbracht.</p>
+<a class="btn" href="berichte/2022-archiv-feffernitz-open-tradition-ist-eine-laterne-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Ein bewegtes Wochenende in der Bayernliga...</h3>
+<p class="news-meta">05.10.2022</p>
+<p class="news-snippet" translate="no">Unser Bayernligateam (in der Besetzung Arthur, David, Fabian, Andra's, Aiman, Korbinian mit Teammanager Andreas) hat ein bewegtes Wochenende hinter sich:  Nach einem soliden Remis gegen Kelheim am …</p>
+<a class="btn" href="berichte/2022-archiv-ein-bewegtes-wochenende-in-der-bayernliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Aufstieg der Seniorenmannschaft</h3>
+<p class="news-meta">18.08.2022</p>
+<p class="news-snippet" translate="no">Unverhofft, kommt oft!</p>
+<a class="btn" href="berichte/2022-archiv-aufstieg-der-seniorenmannschaft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Mitgliederversammlung und Sommerblitz</h3>
+<p class="news-meta">15.07.2022</p>
+<p class="news-snippet" translate="no">Mitgliederversammlung:</p>
+<a class="btn" href="berichte/2022-archiv-mitgliederversammlung-und-sommerblitz-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">U20-Bezirksliga 2</h3>
+<p class="news-meta">06.07.2022</p>
+<p class="news-snippet" translate="no">In der Münchner U20-Bezirksliga 2 hat unser zweites Team sich würdevoll geschlagen und einen soliden vierten Platz (bei acht Teams insgesamt) erreicht!</p>
+<a class="btn" href="berichte/2022-archiv-u20-bezirksliga-2-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Jugend-Blitzschachmeisterschaft</h3>
+<p class="news-meta">06.07.2022</p>
+<p class="news-snippet" translate="no">Bei der Münchner Jugend-Blitzmeisterschaft hat Emil einen super starken 3. Platz erreicht und nur knapp die Qualifikation für die bayerischen Meisterschaften verpasst!</p>
+<a class="btn" href="berichte/2022-archiv-munchner-jugend-blitzschachmeisterschaft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Erster Mannschaftspunkt in der Bezirksliga!</h3>
+<p class="news-meta">23.05.2022</p>
+<p class="news-snippet" translate="no">In der zweiten (bzw. formal gesehen dritten) Runde gelang es uns den ersten Mannschaftspunkt (in der Vereinsgeschichte der SG AFK) in der Bezirksliga nach Hause zu holen!</p>
+<a class="btn" href="berichte/2022-archiv-erster-mannschaftspunkt-in-der-bezirksliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinsmeisterschaft 2022</h3>
+<p class="news-meta">20.05.2022</p>
+<p class="news-snippet" translate="no">Der Aufruf zu unserer ersten Vereinsmeisterschaft seit 2019 wurde gut aufgenommen und so fand sich am gestrigen Abend eine buntgemischte Truppe aus jung und alt zusammen um die erste Runde zu …</p>
+<a class="btn" href="berichte/2022-archiv-vereinsmeisterschaft-2022-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Starker Auftakt in der Bayernliga...</h3>
+<p class="news-meta">20.05.2022</p>
+<p class="news-snippet" translate="no">Der Einstand von Arthur, David, Fabian, Andra's, Mesut und Aiman in der Bayernliga ist super gelungen!</p>
+<a class="btn" href="berichte/2022-archiv-starker-auftakt-in-der-bayernliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Pokal Finals...</h3>
+<p class="news-meta">20.05.2022</p>
+<p class="news-snippet" translate="no">Coronapokal David gewinnt mit einem (recht) opferfreudig vorgetragenem Königsangriff gegen Andra's.</p>
+<a class="btn" href="berichte/2022-archiv-pokal-finals-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Osterblitz 2022</h3>
+<p class="news-meta">20.05.2022</p>
+<p class="news-snippet" translate="no">Beim diesjährigen Osterblitz war das Teilnehmerfeld etwas ausgedünnt, da parallel das Auswärtsspiel der Senioren gegen die Union (ging leider mit 2,5 zu 1,5 an die Union), die …</p>
+<a class="btn" href="berichte/2022-archiv-osterblitz-2022-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Bayerische U16-Meisterschaften</h3>
+<p class="news-meta">20.05.2022</p>
+<p class="news-snippet" translate="no">Fabians Ausflug zur bayerischen U16-Meisterschaft in den Osterferien gestaltete sich würdevoll. In einem sehr homogen besetzten Teilnehmerfeld startete er als 11. von 24.</p>
+<a class="btn" href="berichte/2022-archiv-bayerische-u16-meisterschaften-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Sieg gegen Deisenhofen in der Bezirksliga</h3>
+<p class="news-meta">29.04.2022</p>
+<p class="news-snippet" translate="no">Am Freitag den 29.04.22 konnte unsere erste Mannschaft ihren ersten Sieg in der Bezirksliga gegen Deisenhofen verbuchen und hat damit einen wichtigen Schritt Richtung nicht-Abstieg gemacht!</p>
+<a class="btn" href="berichte/2022-archiv-sieg-gegen-deisenhofen-in-der-bezirksliga-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2021</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">DSJ-Weihnachtsturnier 2021</h3>
+<p class="news-meta">31.12.2021</p>
+<p class="news-snippet" translate="no">Arthur (4 aus 7; Leistung: 1899), David (4,5 aus 7; Leistung: 1874), Fabian (4 aus 7; Leistung: 1819), Andra's (4,5 aus 7; Leistung: 1694), Aiman (4,5 aus 7; Leistung: 1562) und Emil (3,5 aus 7 …</p>
+<a class="btn" href="berichte/2021-archiv-dsj-weihnachtsturnier-2021-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">David gewinnt das Weihnachtsblitz</h3>
+<p class="news-meta">31.12.2021</p>
+<p class="news-snippet" translate="no">David lässt uns im alten Jahr noch mal alle alt ausschauen ;-) und marschiert einmal (fast) ohne Gnade durchs Teilnehmerfeld.</p>
+<a class="btn" href="berichte/2021-archiv-david-gewinnt-das-weihnachtsblitz-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">U20: Klassenerhalt der 2. Mannschaft</h3>
+<p class="news-meta">30.11.2021</p>
+<p class="news-snippet" translate="no">Unsere zweite U20-Mannschaft hat mit 5 aus 14 würdevoll die Klasse gehalten und darf in der nächsten Saison wieder in der Bezirksliga 1 antreten.</p>
+<a class="btn" href="berichte/2021-archiv-u20-klassenerhalt-der-2-mannschaft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schnellschach-Vereinsmeisterschaft reloaded</h3>
+<p class="news-meta">30.11.2021</p>
+<p class="news-snippet" translate="no">Nach sieben Jahren Pause war es endlich wieder soweit: Die Schnellschach-Vereinsmeisterschaft unserer Schachgemeinschaft wurde ausgetragen!</p>
+<a class="btn" href="berichte/2021-archiv-schnellschach-vereinsmeisterschaft-reloaded-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Wir rocken die (Jugend) Landesliga (Süd)!</h3>
+<p class="news-meta">27.09.2021</p>
+<p class="news-snippet" translate="no">Vom 24.7.- 25.7. fanden die ersten 4 Runden der U20 Landesliga Süd statt, an der unsere Jugend das erste Mal teilnimmt.</p>
+<a class="btn" href="berichte/2021-archiv-wir-rocken-die-jugend-landesliga-sud-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Jugend goes Innsbruck Open</h3>
+<p class="news-meta">27.09.2021</p>
+<p class="news-snippet" translate="no">Vom 20 – 29 August war die Jugendmannschaft der SG AFK in Innsbruck, um an einem internationalen Turnierteilzunehmen.</p>
+<a class="btn" href="berichte/2021-archiv-jugend-goes-innsbruck-open-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Arthur gewinnt das Sommerturnier 2021</h3>
+<p class="news-meta">19.09.2021</p>
+<p class="news-snippet" translate="no">Arthur setzt sich - nach einer wackeligen ersten Runde gegen Gaurav ;-) - beim Sommerturnier souverän durch und gewinnt vor David und Andra's, die beide ebenfalls ein starkes Turnier spielen!</p>
+<a class="btn" href="berichte/2021-archiv-arthur-gewinnt-das-sommerturnier-2021-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Auf Erfolgskurs in der U20-Bayernliga</h3>
+<p class="news-meta">18.09.2021</p>
+<p class="news-snippet" translate="no">Die Erfolgsgeschichte unseres ersten U20-Teams geht weiter:</p>
+<a class="btn" href="berichte/2021-archiv-auf-erfolgskurs-in-der-u20-bayernliga-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Rudolf dominiert das Sommerblitz</h3>
+<p class="news-meta">23.07.2021</p>
+<p class="news-snippet" translate="no">Unser Sommerblitz - das nach der Vereinsversammlung am Freitag den 23.07.21 stattfand - war mit 21 Spielern gut besucht.</p>
+<a class="btn" href="berichte/2021-archiv-rudolf-dominiert-das-sommerblitz-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner U14- und U16-Mannschaftsmeisterschaft</h3>
+<p class="news-meta">04.07.2021</p>
+<p class="news-snippet" translate="no">Bericht aus Dachau (U16):</p>
+<a class="btn" href="berichte/2021-archiv-munchner-u14-und-u16-mannschaftsmeisterschaft-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Osterturniere 2021</h3>
+<p class="news-meta">16.05.2021</p>
+<p class="news-snippet" translate="no">Am Ostersonntag nahmen Fabian und Emil am Moosacher Online-Open teil und erspielten in ihren Altersklassen gute Ergebnisse:</p>
+<a class="btn" href="berichte/2021-archiv-osterturniere-2021-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Korbinian ist nicht aufzuhalten...</h3>
+<p class="news-meta">17.04.2021</p>
+<p class="news-snippet" translate="no">Korbinian hat es schon wieder getan ... mit einem (großmeisterlichen) Remis gegen Fabian in der letzten Runde sichert er sich den Gesamtsieg. Gratulation!</p>
+<a class="btn" href="berichte/2021-archiv-korbinian-ist-nicht-aufzuhalten-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Korbinian gewinnt Gruppe 1</h3>
+<p class="news-meta">17.04.2021</p>
+<p class="news-snippet" translate="no">Korbinian Ruff gewinnt mit einem Sieg in der letzten Runde gegen Arthur Krumm souverän mit 4,5 aus Punkten 5 die Gruppe 1! Gratulation zu diesem tollen Ergebnis!</p>
+<a class="btn" href="berichte/2021-archiv-korbinian-gewinnt-gruppe-1-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Alex gewinnt Gruppe 3</h3>
+<p class="news-meta">17.04.2021</p>
+<p class="news-snippet" translate="no">Alex Roth spielt in der letzten Runde Remis gegen Rainer Seidl (ausgekämpft!) und gewinnt damit Gruppe 3! **</p>
+<a class="btn" href="berichte/2021-archiv-alex-gewinnt-gruppe-3-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Deutsche Lehrermeisterschaft 2021</h3>
+<p class="news-meta">13.04.2021</p>
+<p class="news-snippet" translate="no">Die Deutsche Lehrermeisterschaft wurde in diesem Jahr coronabedingt online ausgetragen.</p>
+<a class="btn" href="berichte/2021-archiv-deutsche-lehrermeisterschaft-2021-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Aiman gewinnt Gruppe 2</h3>
+<p class="news-meta">13.04.2021</p>
+<p class="news-snippet" translate="no">Der erste Sieger beim Trainingsturnier steht fest:</p>
+<a class="btn" href="berichte/2021-archiv-aiman-gewinnt-gruppe-2-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2020</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Weihnachtsblitz 2020</h3>
+<p class="news-meta">31.12.2020</p>
+<p class="news-snippet" translate="no">Das Weihnachtsturnier musste in diesem Jahr leider - aus gut bekanntem Grund ;-) - online ausgetragen werden.</p>
+<a class="btn" href="berichte/2020-archiv-weihnachtsblitz-2020-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Erfolg beim U16-Weihnachtsturnier der DSJ</h3>
+<p class="news-meta">31.12.2020</p>
+<p class="news-snippet" translate="no">Unser erstes U16-Team∗ (David, Andra's, Fabian und Aiman) hätte es beim Weihnachtsturnier der DSJ fast aufs Treppchen geschafft und wurde am Ende nur knapp durch die Feinwertung von Kiel und …</p>
+<a class="btn" href="berichte/2020-archiv-erfolg-beim-u16-weihnachtsturnier-der-dsj-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Saisonüberblick 19/20</h3>
+<p class="news-meta">24.11.2020</p>
+<p class="news-snippet" translate="no">Die Saison 19/20 ist - trotz Corona - für unsere Mannschaften gut verlaufen:</p>
+<a class="btn" href="berichte/2020-archiv-saisonuberblick-19-20-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">GyKi mit Hilfe der SG-AFK zur Deutschen Schachschule gekürt...</h3>
+<p class="news-meta">25.09.2020</p>
+<p class="news-snippet" translate="no">Am Freitag, den 25. September 2020 war es im Gymnasium Kirchheim so weit:</p>
+<a class="btn" href="berichte/2020-archiv-gyki-mit-hilfe-der-sg-afk-zur-deutschen-schachschu-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Mannschaftsmeisterschaften – 1. und 2. Mannschaft, Seniorenmannschaft, Jugendmannschaften</h3>
+<p class="news-meta">19.09.2020</p>
+<p class="news-snippet" translate="no">Im Zuge der Corona-Virus-bedingten Kontaktbeschränkungen wurde die Saison 2019 / 20 der Münchner Schach-Mannschafts-Meisterschaften unterbrochen.</p>
+<a class="btn" href="berichte/2020-archiv-munchner-mannschaftsmeisterschaften-1-und-2-mannsc-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Die Schachgemeinschaft wählt neuen Vorstand</h3>
+<p class="news-meta">10.07.2020</p>
+<p class="news-snippet" translate="no">Neuer Vorstand gewählt</p>
+<a class="btn" href="berichte/2020-archiv-die-schachgemeinschaft-wahlt-neuen-vorstand-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Team Battle gegen Markt Schwaben</h3>
+<p class="news-meta">15.05.2020</p>
+<p class="news-snippet" translate="no">Unser Teambattle am 15.05.20 auf lichess.org gegen den SK Markt Schwaben war eine richtig nette Geschichte!</p>
+<a class="btn" href="berichte/2020-archiv-team-battle-gegen-markt-schwaben-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">1. SG AFK Online-Blitzserie 2020</h3>
+<p class="news-meta">03.04.2020</p>
+<p class="news-snippet" translate="no">Endergebnis des ersten Online-Blitzschachturniers der Schachgemeinschaft AFK:</p>
+<a class="btn" href="berichte/2020-archiv-1-sg-afk-online-blitzserie-2020-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2019</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Ermutigender Start in die neue Saison der Münchner Mannschaftsmeisterschaften</h3>
+<p class="news-meta">14.12.2019</p>
+<p class="news-snippet" translate="no">Nachdem sowohl unsere 2.</p>
+<a class="btn" href="berichte/2019-archiv-ermutigender-start-in-die-neue-saison-der-munchner-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner U16-Meisterschaft 19/20</h3>
+<p class="news-meta">09.11.2019</p>
+<p class="news-snippet" translate="no">Die Münchner U16-Meisterschaft am letzten Samstag (09.11.19) verlief für unser Team wie geplant.</p>
+<a class="btn" href="berichte/2019-archiv-munchner-u16-meisterschaft-19-20-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">David MEHLHORN verteidigt den Vereinsjugend-Pokal // Finale des Vereins-Pokals am 29. November</h3>
+<p class="news-meta">08.11.2019</p>
+<p class="news-snippet" translate="no">Am Abend des 8.</p>
+<a class="btn" href="berichte/2019-archiv-david-mehlhorn-verteidigt-den-vereinsjugend-pokal-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinsturnier 2019 - Sieger : Arthur KRUMM</h3>
+<p class="news-meta">19.07.2019</p>
+<p class="news-snippet" translate="no">Unser Vereinsturnier 2019 hat am Freitag, den 19. Juli, mit den Partien der 5. und letzten Runde seinen Abschluss gefunden.</p>
+<a class="btn" href="berichte/2019-archiv-vereinsturnier-2019-sieger-arthur-krumm-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Oberland-Quartett 2019</h3>
+<p class="news-meta">30.06.2019</p>
+<p class="news-snippet" translate="no">Am Freitag, den 28. Juni, machten sich 8 Spieler unserer 1.</p>
+<a class="btn" href="berichte/2019-archiv-oberland-quartett-2019-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereins-Blitzschach-Meisterschaft 2019</h3>
+<p class="news-meta">14.06.2019</p>
+<p class="news-snippet" translate="no">Unsere diesjährige Vereins-Blitzmeisterschaft wird an 4 Spielabenden ausgetragen.</p>
+<a class="btn" href="berichte/2019-archiv-vereins-blitzschach-meisterschaft-2019-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Erfolgreiche Saison für alle Mannschaften</h3>
+<p class="news-meta">10.05.2019</p>
+<p class="news-snippet" translate="no">Die Saison 2018 / 19 war für alle 4 Mannschaften der Schachgemeinschaft Aschheim – Feldkirchen - Kirchheim überaus erfolgreich und hat selbst optimistische Erwartungen übertroffen :</p>
+<a class="btn" href="berichte/2019-archiv-erfolgreiche-saison-fur-alle-mannschaften-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Aufstieg in die 1. Münchner Seniorenliga</h3>
+<p class="news-meta">01.02.2019</p>
+<p class="news-snippet" translate="no">Am letzten Spieltag in der 2. Münchner Seniorenliga reisten wir als Tabellenzweiter zum Tabellenführer Schach-Union München.</p>
+<a class="btn" href="berichte/2019-archiv-aufstieg-in-die-1-munchner-seniorenliga-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2018</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Weihnachts-Blitzschach-Turnier 2018 - Sieger : Rudolf OSTER</h3>
+<p class="news-meta">31.12.2018</p>
+<p class="news-snippet" translate="no">Wie bereits gute Tradition, fand am letzten Freitag vor Weihnachten unser Weihnachts-Blitzschachturnier statt.</p>
+<a class="btn" href="berichte/2018-archiv-weihnachts-blitzschach-turnier-2018-sieger-rudolf-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Erfolge bei den Münchner U16 Mannschafts-Meisterschaften und bei den Münchner Schüler-Einzelmeisterschaften</h3>
+<p class="news-meta">02.12.2018</p>
+<p class="news-snippet" translate="no">Bei den diesjährigen Münchner U16 Mannschaftsmeisterschaftenerrang unsere U16 Mannschaft den unerwarteten und beeindruckenden zweiten Rang.</p>
+<a class="btn" href="berichte/2018-archiv-erfolge-bei-den-munchner-u16-mannschafts-meistersc-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Simultan mit IM Frank Zeller</h3>
+<p class="news-meta">30.09.2018</p>
+<p class="news-snippet" translate="no">He is back again...</p>
+<a class="btn" href="berichte/2018-archiv-simultan-mit-im-frank-zeller-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereins-Blitzmeisterschaft 2018 - Sieger : Frederik PRAUSE</h3>
+<p class="news-meta">16.09.2018</p>
+<p class="news-snippet" translate="no">Am Freitag, den 14. September, wurde unsere diesjährige Vereinsblitzmeisterschaft in den Räumlichkeiten unseres Vereins-Schule-Kooperations-Partners, des Gymnasiums Kirchheim, ausgetragen.</p>
+<a class="btn" href="berichte/2018-archiv-vereins-blitzmeisterschaft-2018-sieger-frederik-pr-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereins-Jugend-Pokal 2018</h3>
+<p class="news-meta">01.09.2018</p>
+<p class="news-snippet" translate="no">Dank des Zuwachses an Jugendspielern in unserer Schachgemeinschaft sowie der sich schnell entwickelnden Spielstärke unserer jungen Vereinsmitglieder konnte in diesem Jahr erstmalig ein …</p>
+<a class="btn" href="berichte/2018-archiv-vereins-jugend-pokal-2018-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Erfreuliche Platzierungen in den Münchner Mannschafts-Meisterschaften und in der Jugendbezirksliga</h3>
+<p class="news-meta">31.08.2018</p>
+<p class="news-snippet" translate="no">Dank der stetig zunehmenden Spielstärke und Turniererfahrung unserer jugendlichen Vereinsmitglieder hat die Schachgemeinschaft Aschheim-Feldkirchen-Kirchheim in der Saison 2017/18 erstmalig mit drei …</p>
+<a class="btn" href="berichte/2018-archiv-erfreuliche-platzierungen-in-den-munchner-mannscha-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereins-Pokal 2018 : Sieger Pierre Tassell</h3>
+<p class="news-meta">06.07.2018</p>
+<p class="news-snippet" translate="no">Herzlichen Glückwunsch an unseren Pokalsieger 2018 Pierre Tassell !</p>
+<a class="btn" href="berichte/2018-archiv-vereins-pokal-2018-sieger-pierre-tassell-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2017</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Vereinsturnier - Hauptgruppe - Endstand</h3>
+<p class="news-meta">31.12.2017</p>
+<p class="news-snippet" translate="no">Nunmehr sind auch alle Partien der Hauptgruppe unseres Vereinsturniers 2017 gespielt und es ergibt sich folgender Endstand :</p>
+<a class="btn" href="berichte/2017-archiv-vereinsturnier-hauptgruppe-endstand-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Dieter Vischer gewinnt die Vereins-Meisterschaft 2017 // hartes Ringen um den Aufstieg in die Meistergruppe 2018</h3>
+<p class="news-meta">31.12.2017</p>
+<p class="news-snippet" translate="no">Wir gratulieren unserem neuen Vereinsmeister Dieter VISCHER sowie den nächstplatzierten Spielern Bernd NOWOTNY, Horst HAHN und Helmut KAUFMANN !</p>
+<a class="btn" href="berichte/2017-archiv-dieter-vischer-gewinnt-die-vereins-meisterschaft-2-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2016</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">1. Mannschaft erreicht in den Münchner Mannschafts-Meisterschaften 2016 in der B-Klasse einen 2. Platz</h3>
+<p class="news-meta">31.12.2016</p>
+<p class="news-snippet" translate="no">Die 1. Mannschaft der Schachgemeinschaft Aschheim / Feldkirchen / Kirchheim hat in den Münchner Mannschafts-Meisterschaften 2016 in der B-Klasse einen beachtlichen 2. Platz erreicht.</p>
+<a class="btn" href="berichte/2016-archiv-1-mannschaft-erreicht-in-den-munchner-mannschafts-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Gruppensieg bei den Münchner Senioren-Mannschaftsmeisterschaften 2016/17</h3>
+<p class="news-meta">09.12.2016</p>
+<p class="news-snippet" translate="no">Unsere Senioren-Mannschaft konnte am Freitag, den 9. Dezember, ihren beeindruckenden "Durchmarsch" in der 2.</p>
+<a class="btn" href="berichte/2016-archiv-gruppensieg-bei-den-munchner-senioren-mannschaftsm-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">2. Mannschaft erreicht in den Münchner Mannschafts-Meisterschaften in der D-Klasse einen 3. Platz</h3>
+<p class="news-meta">26.10.2016</p>
+<p class="news-snippet" translate="no">Zwei Wochen nach dem letzten Spieltag der B-Klasse (wie berichtet hat die 1. Mannschaft der Schachgemeinschaft hier einen 2.</p>
+<a class="btn" href="berichte/2016-archiv-2-mannschaft-erreicht-in-den-munchner-mannschafts-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinsturnier 2016 - Ergebnisse 4. Runde / Spielpaarungen 5. Runde</h3>
+<p class="news-meta">21.10.2016</p>
+<p class="news-snippet" translate="no">Am Abend des 21. Oktober wurde die 4.Runde unseres Vereinsturniers ausgetragen sowie die Spielpaarungen der 5. Runde wie folgt ermittelt :</p>
+<a class="btn" href="berichte/2016-archiv-vereinsturnier-2016-ergebnisse-4-runde-spielpaarun-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Blitzschach-Meisterschaft 2016</h3>
+<p class="news-meta">26.08.2016</p>
+<p class="news-snippet" translate="no">Vereinsblitzmeisterschaft 2016</p>
+<a class="btn" href="berichte/2016-archiv-blitzschach-meisterschaft-2016-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schach-Gemeinschaft AFK kann Vorjahres-Sieg im "Oberlandquartett" nicht wiederholen</h3>
+<p class="news-meta">08.07.2016</p>
+<p class="news-snippet" translate="no">Am Freitag, den 8. Juli, ist unsere Schachgemeinschaft der Einladung des Schachvereins Holzkirchen zur Teilnahme am diesjährigren "Oberlandquartett" gefolgt.</p>
+<a class="btn" href="berichte/2016-archiv-schach-gemeinschaft-afk-kann-vorjahres-sieg-im-obe-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Vereinspokal-Sieger 2016 : Armin TOBISCH</h3>
+<p class="news-meta">19.02.2016</p>
+<p class="news-snippet" translate="no">Am Freitag, den 19. Februar, ging das Pokalturnier 2016 der Schachgemeinschaft Aschheim / Feldkirchen / Kirchheim zu Ende.</p>
+<a class="btn" href="berichte/2016-archiv-vereinspokal-sieger-2016-armin-tobisch-en.html">Read report →</a>
+</div>
+</div></details><details class="jahr-archiv"><summary>2015</summary><div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+<div class="card news-card">
+<h3 translate="no">Vereinsturnier 2015 - Hanspeter Hecht erneut Vereinsmeister</h3>
+<p class="news-meta">31.12.2015</p>
+<p class="news-snippet" translate="no">Am Ende eines spannenden Vereisturniers konnte Hanspeter HECHT mit 6,5 Punkten / 7 Partien seinen Vereinsmeister-Titel erfolgreich verteidigen.</p>
+<a class="btn" href="berichte/2015-archiv-vereinsturnier-2015-hanspeter-hecht-erneut-vereins-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Weihnachtsblitzturnier 2015</h3>
+<p class="news-meta">18.12.2015</p>
+<p class="news-snippet" translate="no">Am letzten Vereinsabend vor Weihnachten, Freitag, den 18. Dezember, fand traditionell das Weihnachtsblitzturnier der Schachgemeinschaft Aschheim / Feldkirchen / Kirchheim statt.</p>
+<a class="btn" href="berichte/2015-archiv-weihnachtsblitzturnier-2015-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Münchner Mannschaftsmeisterschaften 2015</h3>
+<p class="news-meta">18.12.2015</p>
+<p class="news-snippet" translate="no">Bei den diesjährigen Münchner Mannschaftsmeisterschaften konnte keiner unserer beiden Mannschaften einen Platz im Vorderfeld ihrer jeweiligen Liga erreichen.</p>
+<a class="btn" href="berichte/2015-archiv-munchner-mannschaftsmeisterschaften-2015-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schachgemeinschaft spielt 2:2 im Ligapokal 2015</h3>
+<p class="news-meta">11.10.2015</p>
+<p class="news-snippet" translate="no">Das Münchner Ligapokalturnier (MLPT) wird jede Saison von November bis Februar an mehreren Sonntagen ausgetragen. Teilnahmeberechtigt sind alle Vereine des Schachbezirks mit bis zu drei Mannschaften.</p>
+<a class="btn" href="berichte/2015-archiv-schachgemeinschaft-spielt-2-2-im-ligapokal-2015-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schach für Kinder und Jugendliche</h3>
+<p class="news-meta">17.09.2015</p>
+<p class="news-snippet" translate="no">Die Schachgemeinschaft Aschheim-Feldkirchen-Kirchheim lädt alle interessierten Kinder und Jugendliche ab 6 Jahren herzlich zum Schachspielen ein.</p>
+<a class="btn" href="berichte/2015-archiv-schach-fur-kinder-und-jugendliche-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Blitzschach-Meisterschaft 2015</h3>
+<p class="news-meta">04.09.2015</p>
+<p class="news-snippet" translate="no">Am Freitag, den 4. September, wurde die Vereins-Blitzschachmeisterschaft 2015 ausgetragen.</p>
+<a class="btn" href="berichte/2015-archiv-blitzschach-meisterschaft-2015-en.html">Read report →</a>
+</div>
+<div class="card news-card">
+<h3 translate="no">Schach-Gemeinschaft AFK gewinnt Freundschaftsturnier "Oberlandquartett" 2015</h3>
+<p class="news-meta">17.07.2015</p>
+<p class="news-snippet" translate="no">Am Freitag, den 17. Juli, ist unsere Schachgemeinschaft der Einladung des Schachvereins Höhenkirchen zur Teilnahme am diesjährigren "Oberlandquartett" gefolgt.</p>
+<a class="btn" href="berichte/2015-archiv-schach-gemeinschaft-afk-gewinnt-freundschaftsturni-en.html">Read report →</a>
+</div>
+</div></details></details>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="kontakt-en.html">Contact form</a></p>
+<p><a download="" href="mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="ueber-uns-en.html">About us</a></p>
+<p><a href="faq-en.html">FAQ</a></p>
+<p><a href="impressum-en.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>

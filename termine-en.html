@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Events &amp; schedule | SG AFK</title>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." name="description"/>
+<meta content="#1b2a4a" name="theme-color"/>
+<link href="Logo.png" rel="icon"/>
+<script>
+    /* Farbmodus: gespeicherte Wahl (hell/dunkel) sofort anwenden, damit nichts aufblitzt.
+       Noch keine Wahl gespeichert -> einmalig der Einstellung von Handy/PC folgen. */
+    (function () {
+      var wahl = null;
+      try { wahl = localStorage.getItem("theme"); } catch (e) {}
+      if (wahl !== "hell" && wahl !== "dunkel") {
+        wahl = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dunkel" : "hell";
+      }
+      document.documentElement.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+      document.documentElement.dataset.themeWahl = wahl;
+    })();
+  </script>
+<link href="style.css?v=c9537c50" rel="stylesheet"/>
+<style>
+      /* Skip-Link: erst sichtbar, wenn er per Tastatur (Tab) angesprungen wird */
+      .skip-link { position: absolute; left: -999px; top: 0; background: #fff; color: var(--navy); padding: 0.5rem 1rem; z-index: 200; font-weight: bold; }
+      .skip-link:focus { left: 0; }
+
+      /* Header (Kopf, Menü, Untermenüs, Handy-Menü): steht komplett in design.css */
+
+      .footer-link { color: #aaa; }
+    </style>
+<script>
+      // Handy-Menü: Pfeil neben "Über uns" / "Mannschaften" klappt die Unterpunkte auf und zu
+      document.addEventListener("click", function (e) {
+        var k = e.target.closest && e.target.closest(".nav-auf");
+        if (!k) return;
+        var g = k.parentNode, offen = g.classList.toggle("offen");
+        k.setAttribute("aria-expanded", offen ? "true" : "false");
+      });
+    </script><style>
+      .full-bleed { width: min(96vw, 1900px); position: relative; left: 50%; transform: translateX(-50%); }
+
+      .hinweis-banner { background: #fff3cd; border: 1px solid #ffe08a; color: #664d03; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-weight: bold; }
+
+      .table-responsive { overflow-x: auto; margin-top: 1.5rem; text-align: center; }
+      .svg-container svg { max-width: 100%; height: auto; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+      .custom-tabelle { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white; border-radius: 8px; overflow: hidden; }
+      .custom-tabelle th, .custom-tabelle td { padding: 7px 8px; border: 1px solid #dcdcdc; text-align: center; line-height: 1.3; }
+      .custom-tabelle th { background-color: #1a252f; color: white; }
+      .custom-tabelle td:first-child { white-space: nowrap; }
+      .custom-tabelle td.monat-header { background: deepskyblue; font-weight: bold; font-size: 1.05rem; }
+      .custom-tabelle .past td { opacity: 0.45; }
+      .custom-tabelle td.bg-yellow { background: yellow; }
+      .custom-tabelle td.bg-orange { background: orange; }
+      .custom-tabelle td.bg-green { background: #5fd068; }
+      .custom-tabelle td.bg-darkslategray { background: #2f4f4f; color: white; }
+      .custom-tabelle td.bg-deepskyblue { background: deepskyblue; }
+      .kalender-box { background: #f8f9fa; border-left: 5px solid #3498db; border-radius: 6px; padding: 0.8rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+      .kalender-box summary { cursor: pointer; font-weight: bold; }
+      .kalender-box ul { list-style: none; padding: 0; margin: 0.6rem 0 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.4rem 1.5rem; }
+      .kalender-box li a { margin-left: 0.6rem; color: #3498db; text-decoration: none; font-weight: bold; }
+          .custom-tabelle td.bg-green { background: #00CD00; }
+      .custom-tabelle td.bg-yellow { background: #ffff00; }
+      .custom-tabelle td.bg-blue { background: #0000ff; color: white; }
+      .custom-tabelle td.bg-red { background: #ff0000; color: white; }
+      .custom-tabelle td.bg-chocolate { background: #d2691e; }
+      .custom-tabelle td.bg-orange { background: #ffa500; }
+      .custom-tabelle td.bg-purple { background: #551a8b; color: white; }
+      .custom-tabelle td.bg-gray { background: #bebebe; }
+      .custom-tabelle td.bg-white { background: #ffffff; }
+      .custom-tabelle td.bg-black { background: #000000; color: white; }
+      .custom-tabelle td.bg-gold { background: #B8860B; }
+      .custom-tabelle td.bg-tuerkis { background: #8B8878; }
+      .custom-tabelle td.bg-blueviolet { background: #8A2BE2; color: white; }
+      .custom-tabelle td.bg-orangered { background: #ff4500; }
+      .custom-tabelle td.bg-deepskyblue { background: #00bfff; }
+      .custom-tabelle td.bg-darkslategray { background: #528b8b; color: white; }
+</style><style>
+      .termine-filter { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: end; margin: 1rem 0 0; }
+      .termine-filter label { display: grid; gap: 0.2rem; font-size: 0.85rem; font-weight: 600; }
+      .termine-filter select, .termine-filter button { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px;
+        border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
+      .termine-filter button, .termine-filter .tf-knopf { cursor: pointer; }
+      .termine-filter .tf-knopf { font: inherit; font-size: 0.92rem; padding: 0.4rem 0.6rem; border-radius: 6px; text-decoration: none;
+        border: 1px solid var(--line, #ccc); background: var(--surface, #fff); color: var(--text, #222); }
+      .termine-filter .tf-knopf.aus { opacity: 0.45; pointer-events: none; }
+      .termine-filter .tf-haupt { font-weight: 700; }
+      .termine-filter button[disabled] { opacity: 0.45; cursor: not-allowed; }
+      .custom-tabelle tr.tf-aus { display: none; }
+      .termine-leer { text-align: center; padding: 1.5rem; color: var(--muted, #777); }
+      .druck-titel { display: none; }
+      @media print {
+        @page { size: A4 landscape; margin: 10mm; }
+        body * { visibility: hidden !important; }
+        #termine-druck, #termine-druck * { visibility: visible !important; }
+        #termine-druck { position: absolute !important; left: 0 !important; top: 0; width: 100% !important; transform: none !important;
+          margin: 0 !important; padding: 0 !important; }
+        .custom-tabelle { width: 100% !important; }
+        .druck-titel { display: block; font-size: 14pt; margin: 0 0 6pt; color: #000; }
+        .table-responsive { overflow: visible !important; margin: 0 !important; }
+        .custom-tabelle { font-size: 8pt; }
+        .custom-tabelle th, .custom-tabelle td { padding: 3px 4px !important; }
+        .custom-tabelle tr { break-inside: avoid; }
+        .custom-tabelle .past td { opacity: 1; }
+        * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+    </style>
+<link href="design.css?v=3e60530b" rel="stylesheet"/>
+<meta content="Events &amp; schedule | SG AFK" property="og:title"/>
+<meta content="Chess club in Aschheim, Feldkirchen &amp; Kirchheim – club night every Friday." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="SG Aschheim / Feldkirchen / Kirchheim" property="og:site_name"/>
+<meta content="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/Logo.png" property="og:image"/>
+<meta content="Wappen der SG Aschheim / Feldkirchen / Kirchheim" property="og:image:alt"/>
+<style>
+.sprache{position:relative}
+.sprache-knopf{width:auto!important;padding:0 .7rem!important;gap:.25rem;font-weight:700;font-size:.85rem;letter-spacing:.03em;display:inline-flex;align-items:center}
+.sprache-knopf svg{width:.7rem;height:.7rem}
+.sprache-menue{position:absolute;right:0;top:calc(100% + .45rem);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px #0006;padding:.35rem;min-width:9.5rem;z-index:50}
+.sprache-menue[hidden]{display:none}
+.sprache-menue a{display:flex;justify-content:space-between;gap:1rem;padding:.5rem .7rem;border-radius:8px;color:var(--text);text-decoration:none;font-weight:600}
+.sprache-menue a:hover,.sprache-menue a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 16%,transparent)}
+.sprache-menue small{color:var(--muted);font-weight:500}
+.sprache-mobil{display:none}
+@media (max-width:900px){.sprache{display:none}.sprache-mobil{display:flex;gap:.4rem;padding:.6rem 1rem .2rem;font-weight:700}
+ .sprache-mobil a{padding:.35rem .8rem;border-radius:8px;border:1px solid var(--line);text-decoration:none;color:var(--text)}
+ .sprache-mobil a.an{background:color-mix(in srgb,var(--hell,#6f9fd8) 22%,transparent);border-color:transparent}}
+.ue-hinweis{position:fixed;right:1.2rem;bottom:1.2rem;max-width:23rem;background:var(--surface);border:1px solid var(--hell,#6f9fd8);border-radius:14px;box-shadow:0 14px 40px #0007;padding:1rem 1.1rem;z-index:9000;font-size:.95rem;line-height:1.45;color:var(--text)}
+.ue-hinweis b{color:var(--head);display:block;margin-bottom:.25rem;font-size:1.02rem}
+.ue-hinweis .k{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.ue-hinweis button,.ue-hinweis a{font:inherit;font-weight:600;font-size:.88rem;padding:.45rem .8rem;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);text-decoration:none;cursor:pointer}
+.ue-hinweis button{background:var(--hell,#6f9fd8);color:#0d1730;border-color:transparent}
+@media(max-width:600px){.ue-hinweis{left:.8rem;right:.8rem;bottom:.8rem;max-width:none}}
+</style>
+<link href="termine.html" hreflang="de" rel="alternate"/>
+<link href="termine-en.html" hreflang="en" rel="alternate"/>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="kopf">
+<input aria-label="Open or close menu" class="nav-toggle" id="nav-toggle" type="checkbox"/>
+<div class="kopf-oben">
+<a class="brand" href="index-en.html">
+<img alt="" class="brand-logo" src="Logo.png"/>
+<span class="brand-name"><span class="name-lang">SG Aschheim / Feldkirchen / Kirchheim</span><span class="name-kurz">SG AFK</span></span>
+</a>
+<div class="kopf-tools">
+<div class="sprache" translate="no"><button aria-haspopup="true" aria-label="Language" class="kopf-knopf sprache-knopf" type="button">EN<svg aria-hidden="true" viewbox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"></path></svg></button><div class="sprache-menue" hidden=""><a data-sprache="de" href="termine.html">Deutsch</a><a class="an" data-sprache="en" href="termine-en.html">English <small>✓</small></a></div></div>
+<a aria-label="Search" class="kopf-knopf such-knopf" href="suche.html" title="Search"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" fill="none" r="6.5" stroke="currentColor" stroke-width="2.2"></circle><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path></svg></a>
+<button aria-label="Sign in" class="kopf-knopf konto-knopf" hidden="" id="konto-knopf" title="Sign in" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8.2" fill="none" r="4" stroke="currentColor" stroke-width="2"></circle><path d="M4 20.5c1.4-4 4.5-6 8-6s6.6 2 8 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Switch colour mode" class="kopf-knopf theme-schalter" id="theme-schalter" type="button">
+<svg aria-hidden="true" class="icon-mond" viewbox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+<svg aria-hidden="true" class="icon-sonne" viewbox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></g></svg>
+</button>
+<label aria-hidden="true" class="nav-burger" for="nav-toggle"><span></span></label>
+</div>
+</div>
+<nav aria-label="Main menu"><div class="sprache-mobil" translate="no"><a data-sprache="de" href="termine.html">Deutsch</a><a class="an" data-sprache="en" href="termine-en.html">English</a></div>
+<a href="index-en.html">Home</a>
+<div class="nav-gruppe"><a href="ueber-uns-en.html">About us</a><button aria-expanded="false" aria-label="Expand About us" class="nav-auf" type="button"></button><div class="nav-unter"><a href="geschichte-en.html">History</a><a href="dokumente/satzung.pdf">Statutes (PDF)</a></div></div>
+<div class="nav-gruppe"><a href="mannschaften-en.html">Teams</a><button aria-expanded="false" aria-label="Expand teams" class="nav-auf" type="button"></button><div class="nav-unter"><a href="afk-1-en.html">AFK 1</a><a href="afk-2-en.html">AFK 2</a><a href="afk-3-en.html">AFK 3</a><a href="afk-4-en.html">AFK 4</a><a href="afk-5-en.html">AFK 5</a><a href="afk-6-en.html">AFK 6</a><a href="senioren-en.html">Senioren</a><a href="geschichte-en.html#mannschaften">History</a></div></div>
+<a href="jugend-en.html">Youth</a>
+<a aria-current="page" href="termine-en.html">Events</a>
+<div class="nav-gruppe"><a href="berichte-en.html">Reports</a><button aria-expanded="false" aria-label="Expand reports" class="nav-auf" type="button"></button><div class="nav-unter"><a href="bericht-schreiben.html">Write a report</a></div></div>
+<div class="nav-gruppe"><a href="turniere-en.html">Tournaments</a><button aria-expanded="false" aria-label="Expand tournaments" class="nav-auf" type="button"></button><div class="nav-unter"><a href="oberlandquartett-en.html">Oberlandquartett</a><a href="blitzjahreswertung-en.html">Blitz annual ranking</a><a href="vereinsintern-en.html">Hall of Fame</a><a href="ausschreibungen-en.html">Tournament announcements</a><a href="turnierkalender-en.html">Tournament calendar</a><a href="turnierorte-en.html">AFK on Tour</a></div></div>
+<a href="faq-en.html">FAQ</a>
+<a href="kontakt-en.html">Contact</a>
+</nav>
+</header>
+<main class="container" id="main">
+<h1>Events &amp; schedule</h1>
+<p><a download="" href="termine.pdf">Download events as PDF</a></p>
+<details class="kalender-box">
+<summary>Subscribe to events in your phone calendar</summary>
+<p>The calendar updates automatically when the schedule changes. <strong>iPhone / Mac / Outlook:</strong> tap “Subscribe”. <strong>Google Calendar:</strong> tap “Copy link” and paste it in Google Calendar under “Other calendars → From URL”.</p>
+<ul><li><strong>All events</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/alle.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>AFK 1</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-1.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>AFK 2</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-2.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>AFK 3</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-3.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>AFK 4</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-4.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>AFK 5</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-5.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>AFK 6</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/afk-6.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>Senioren</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/senioren.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li><li><strong>Youth</strong> <a href="webcal://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics">Subscribe</a> <a data-url="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" href="https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/kalender/jugend.ics" onclick="navigator.clipboard.writeText(this.dataset.url);this.textContent='Link kopiert';return false;">Copy link</a></li></ul>
+</details>
+<div class="termine-filter" id="termine-filter">
+<label>From <select id="tf-von"></select></label>
+<label>To <select id="tf-bis"></select></label>
+<button id="tf-alle" type="button">All</button>
+<a class="tf-haupt tf-knopf" download="" href="#" id="tf-druck">Selection as PDF</a>
+</div><script id="termine-pdfs" type="application/json">{"2026-11|2026-11": "termine/auswahl/2026-11_2026-11.pdf", "2026-11|2026-12": "termine/auswahl/2026-11_2026-12.pdf", "2026-11|2027-01": "termine/auswahl/2026-11_2027-01.pdf", "2026-11|2027-02": "termine/auswahl/2026-11_2027-02.pdf", "2026-11|2027-03": "termine/auswahl/2026-11_2027-03.pdf", "2026-11|2027-04": "termine/auswahl/2026-11_2027-04.pdf", "2026-11|2027-05": "termine/auswahl/2026-11_2027-05.pdf", "2026-11|2027-11": "termine/auswahl/2026-11_2027-11.pdf", "2026-12|2026-12": "termine/auswahl/2026-12_2026-12.pdf", "2026-12|2027-01": "termine/auswahl/2026-12_2027-01.pdf", "2026-12|2027-02": "termine/auswahl/2026-12_2027-02.pdf", "2026-12|2027-03": "termine/auswahl/2026-12_2027-03.pdf", "2026-12|2027-04": "termine/auswahl/2026-12_2027-04.pdf", "2026-12|2027-05": "termine/auswahl/2026-12_2027-05.pdf", "2026-12|2027-11": "termine/auswahl/2026-12_2027-11.pdf", "2027-01|2027-01": "termine/auswahl/2027-01_2027-01.pdf", "2027-01|2027-02": "termine/auswahl/2027-01_2027-02.pdf", "2027-01|2027-03": "termine/auswahl/2027-01_2027-03.pdf", "2027-01|2027-04": "termine/auswahl/2027-01_2027-04.pdf", "2027-01|2027-05": "termine/auswahl/2027-01_2027-05.pdf", "2027-01|2027-11": "termine/auswahl/2027-01_2027-11.pdf", "2027-02|2027-02": "termine/auswahl/2027-02_2027-02.pdf", "2027-02|2027-03": "termine/auswahl/2027-02_2027-03.pdf", "2027-02|2027-04": "termine/auswahl/2027-02_2027-04.pdf", "2027-02|2027-05": "termine/auswahl/2027-02_2027-05.pdf", "2027-02|2027-11": "termine/auswahl/2027-02_2027-11.pdf", "2027-03|2027-03": "termine/auswahl/2027-03_2027-03.pdf", "2027-03|2027-04": "termine/auswahl/2027-03_2027-04.pdf", "2027-03|2027-05": "termine/auswahl/2027-03_2027-05.pdf", "2027-03|2027-11": "termine/auswahl/2027-03_2027-11.pdf", "2027-04|2027-04": "termine/auswahl/2027-04_2027-04.pdf", "2027-04|2027-05": "termine/auswahl/2027-04_2027-05.pdf", "2027-04|2027-11": "termine/auswahl/2027-04_2027-11.pdf", "2027-05|2027-05": "termine/auswahl/2027-05_2027-05.pdf", "2027-05|2027-11": "termine/auswahl/2027-05_2027-11.pdf", "2027-11|2027-11": "termine/auswahl/2027-11_2027-11.pdf"}</script>
+<div class="full-bleed" id="termine-druck">
+<h2 class="druck-titel">SG Aschheim / Feldkirchen / Kirchheim – Events <span id="druck-zeitraum"></span></h2>
+<div class="table-responsive">
+<table class="custom-tabelle"><thead><tr><th>Event</th><th>Club</th><th class="team-afk-1">AFK 1</th><th class="team-afk-2">AFK 2</th><th class="team-afk-3">AFK 3</th><th class="team-afk-4">AFK 4</th><th class="team-afk-5">AFK 5</th><th class="team-afk-6">AFK 6</th><th class="team-senioren">Senioren</th><th class="team-jugend">Youth</th></tr></thead>
+<tbody>
+<tr class="monat-row" data-monat="2026-11"><td class="monat-header" colspan="10">November</td></tr>
+<tr data-monat="2026-11"><td><strong>Fri 27.11., 19:30</strong></td><td></td><td></td><td class="team-zelle team-afk-2">MMM Runde 3</td><td class="team-zelle team-afk-3">MMM Runde 3</td><td class="team-zelle team-afk-4">MMM Runde 3</td><td class="team-zelle team-afk-5">MMM Runde 3</td><td class="team-zelle team-afk-6">MMM Runde 2</td><td></td><td></td></tr>
+<tr data-monat="2026-11"><td>Sun 29.11., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U14/U16 MMM Runde 1-3</td></tr>
+<tr class="monat-row" data-monat="2026-12"><td class="monat-header" colspan="10">December</td></tr>
+<tr data-monat="2026-12"><td>Sat 05.12.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Schulschach EM</td></tr>
+<tr data-monat="2026-12"><td>Sat 05.12., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 2+3</td></tr>
+<tr data-monat="2026-12"><td>Sun 06.12., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U20 MMM, 1.Liga Runde 2+3</td></tr>
+<tr data-monat="2026-12"><td><b class="abw">Tue</b> 08.12., 19:30</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-afk-6">MMM Runde 3</td><td></td><td></td></tr>
+<tr data-monat="2026-12"><td><strong>Fri 11.12., 19:30</strong></td><td></td><td class="team-zelle team-afk-1">MMM Runde 4</td><td class="team-zelle team-afk-2">MMM Runde 4</td><td class="team-zelle team-afk-3">MMM Runde 4</td><td class="team-zelle team-afk-4">MMM Runde 4</td><td class="team-zelle team-afk-5">MMM Runde 4</td><td></td><td></td><td></td></tr>
+<tr data-monat="2026-12"><td>Sat 12.12., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U14/U16 MMM Runde 4+5</td></tr>
+<tr data-monat="2026-12"><td><b class="abw">Mon</b> 14.12.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-senioren">MSMM Spielfrei</td><td></td></tr>
+<tr data-monat="2026-12"><td>Fri 18.12.</td><td class="verein-zelle">Weihnachtsblitz</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="pause-zeile" data-monat="2026-12"><td>25.12. – 6.1.</td><td colspan="9"><b>Christmas holidays</b> – no club night</td></tr>
+<tr class="monat-row" data-monat="2027-01"><td class="monat-header" colspan="10">January</td></tr>
+<tr data-monat="2027-01"><td>Wed 06.01.</td><td class="verein-zelle">Epiphany tournament</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td><strong>Fri 22.01., 19:30</strong></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-senioren">MSMM Runde 3</td><td></td></tr>
+<tr data-monat="2027-01"><td>Sat 23.01., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 4+5</td></tr>
+<tr data-monat="2027-01"><td>Sun 24.01., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U20 MMM, 1.Liga Runde 4+5</td></tr>
+<tr data-monat="2027-01"><td><b class="abw">Mon</b> 25.01., <b class="abw">19:00</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-afk-6">MMM Runde 4</td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td><b class="abw">Thu</b> 28.01., 19:30</td><td></td><td></td><td></td><td class="team-zelle team-afk-3">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td>Fri 29.01., <b class="abw">19:00</b></td><td></td><td></td><td class="team-zelle team-afk-2">MMM Runde 5</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td><strong>Fri 29.01., 19:30</strong></td><td></td><td class="team-zelle team-afk-1">MMM Runde 5</td><td></td><td></td><td class="team-zelle team-afk-4">MMM Runde 5</td><td class="team-zelle team-afk-5">MMM Runde 5</td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-01"><td>Sat 30.01.</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Schulschach MMM</td></tr>
+<tr class="monat-row" data-monat="2027-02"><td class="monat-header" colspan="10">February</td></tr>
+<tr data-monat="2027-02"><td><b class="abw">Thu</b> 18.02., <b class="abw">19:00</b></td><td></td><td></td><td></td><td></td><td class="team-zelle team-afk-4">MMM Runde 6</td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-02"><td><strong>Fri 19.02., 19:30</strong></td><td></td><td class="team-zelle team-afk-1">MMM Runde 6</td><td class="team-zelle team-afk-2">MMM Runde 6</td><td class="team-zelle team-afk-3">MMM Runde 6</td><td></td><td class="team-zelle team-afk-5">MMM Runde 6</td><td class="team-zelle team-afk-6">MMM Runde 5</td><td></td><td></td></tr>
+<tr data-monat="2027-02"><td>Sat 20.02., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">Landesliga Süd Runde 6+7</td></tr>
+<tr data-monat="2027-02"><td>Sun 21.02., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U20 MMM, 1.Liga Runde 6+7</td></tr>
+<tr data-monat="2027-02"><td><b class="abw">Wed</b> 24.02., 19:30</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-senioren">MSMM Runde 4</td><td></td></tr>
+<tr class="monat-row" data-monat="2027-03"><td class="monat-header" colspan="10">March</td></tr>
+<tr data-monat="2027-03"><td><b class="abw">Tue</b> 09.03., 19:30</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-afk-6">MMM Runde 6</td><td></td><td></td></tr>
+<tr data-monat="2027-03"><td>Fri 12.03., <b class="abw">19:00</b></td><td></td><td></td><td class="team-zelle team-afk-2">MMM Runde 7</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-03"><td><strong>Fri 12.03., 19:30</strong></td><td></td><td class="team-zelle team-afk-1">MMM Runde 7</td><td></td><td class="team-zelle team-afk-3">MMM Runde 7</td><td class="team-zelle team-afk-4">MMM Runde 7</td><td class="team-zelle team-afk-5">MMM Runde 7</td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-03"><td><strong>Fri 19.03., 19:30</strong></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-senioren">MSMM Runde 5</td><td></td></tr>
+<tr class="monat-row" data-monat="2027-04"><td class="monat-header" colspan="10">April</td></tr>
+<tr data-monat="2027-04"><td><b class="abw">Tue</b> 06.04., 19:30</td><td></td><td class="team-zelle team-afk-1">MMM Runde 8</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td><b class="abw">Thu</b> 08.04., 19:30</td><td></td><td></td><td></td><td></td><td class="team-zelle team-afk-4">MMM Runde 8</td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td><strong>Fri 09.04., 19:30</strong></td><td></td><td></td><td class="team-zelle team-afk-2">MMM Runde 8</td><td class="team-zelle team-afk-3">MMM Runde 8</td><td></td><td class="team-zelle team-afk-5">MMM Runde 8</td><td class="team-zelle team-afk-6">MMM Runde 7</td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td><b class="abw">Tue</b> 13.04., <b class="abw">19:00</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-senioren">MSMM Runde 6</td><td></td></tr>
+<tr data-monat="2027-04"><td>Sat 17.04., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U20 MMM, Ab 2.Liga Runde 1-3</td></tr>
+<tr data-monat="2027-04"><td>Sun 18.04., 10:00</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-jugend">U20 MMM, Ab 2.Liga Runde 4+5</td></tr>
+<tr data-monat="2027-04"><td><b class="abw">Tue</b> 27.04., 19:30</td><td></td><td></td><td class="team-zelle team-afk-2">MMM Runde 9</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr data-monat="2027-04"><td><strong>Fri 30.04., 19:30</strong></td><td></td><td class="team-zelle team-afk-1">MMM Runde 9</td><td></td><td class="team-zelle team-afk-3">MMM Runde 9</td><td class="team-zelle team-afk-4">MMM Runde 9</td><td class="team-zelle team-afk-5">MMM Runde 9</td><td></td><td></td><td></td></tr>
+<tr class="monat-row" data-monat="2027-05"><td class="monat-header" colspan="10">May</td></tr>
+<tr data-monat="2027-05"><td><strong>Fri 14.05., 19:30</strong></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="team-zelle team-senioren">MSMM Runde 7</td><td></td></tr>
+<tr class="monat-row" data-monat="2027-11"><td class="monat-header" colspan="10">November 2027</td></tr>
+<tr data-monat="2027-11"><td>Fri 19.11., 18:00</td><td class="verein-zelle"><a href="https://www.mathenacht.de/" rel="noopener" target="_blank">Maths night</a></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+</div>
+<p class="termine-leer" hidden="" id="termine-leer">No events in this period.</p>
+</div>
+<script>
+(function () {
+  var tab = document.querySelector(".custom-tabelle"); if (!tab) return;
+  var zeilen = [].slice.call(tab.querySelectorAll("tbody tr[data-monat]"));
+  var MON = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+  var monate = []; zeilen.forEach(function (z) { var m = z.getAttribute("data-monat"); if (monate.indexOf(m) < 0) monate.push(m); });
+  monate.sort();
+  if (!monate.length) { document.getElementById("termine-filter").hidden = true; return; }
+  var von = document.getElementById("tf-von"), bis = document.getElementById("tf-bis"), SPEICHER = "afk-termine-filter2";
+  var PDFS = {}; try { PDFS = JSON.parse(document.getElementById("termine-pdfs").textContent); } catch (e) {}
+  function name(m) { return MON[+m.slice(5, 7) - 1] + " " + m.slice(0, 4); }
+  monate.forEach(function (m) { [von, bis].forEach(function (s) { var o = document.createElement("option"); o.value = m; o.textContent = name(m); s.appendChild(o); }); });
+  // Standard: aktueller Monat (oder der nächste mit Terminen) bis Saisonende
+  var h = new Date(), jetzt = h.getFullYear() + "-" + ("0" + (h.getMonth() + 1)).slice(-2);
+  var start = monate.filter(function (m) { return m >= jetzt; })[0] || monate[0];
+  var w = null; try { w = JSON.parse(localStorage.getItem(SPEICHER) || "null"); } catch (e) {}
+  // Gemerkte Auswahl nur, wenn man sie selbst gewählt hat; "bis zum letzten Monat" bleibt "bis zum Ende",
+  // auch wenn neue Monate dazukommen (z. B. ein Termin ein Jahr später). Vergangene Monate fallen weg.
+  von.value = w && monate.indexOf(w.von) >= 0 && w.von >= start ? w.von : start;
+  bis.value = w && !w.ende && monate.indexOf(w.bis) >= 0 && w.bis >= von.value ? w.bis : monate[monate.length - 1];
+  function anwenden(geaendert) {
+    // Bis vor Von: tauschen (z. B. "April bis März" -> "März bis April")
+    if (bis.value < von.value) { var t = von.value; von.value = bis.value; bis.value = t; }
+    var a = von.value, b = bis.value, sichtbar = 0;
+    zeilen.forEach(function (z) {
+      var m = z.getAttribute("data-monat"), an = m >= a && m <= b;
+      z.classList.toggle("tf-aus", !an);
+      if (an && !z.classList.contains("monat-row")) sichtbar++;
+    });
+    // Monatsüberschriften ohne sichtbare Termine darunter ausblenden
+    zeilen.forEach(function (z, i) {
+      if (!z.classList.contains("monat-row") || z.classList.contains("tf-aus")) return;
+      var n = zeilen[i + 1];
+      if (!n || n.classList.contains("monat-row") || n.classList.contains("tf-aus")) z.classList.add("tf-aus");
+    });
+    tab.style.display = sichtbar ? "" : "none";
+    document.getElementById("termine-leer").hidden = !!sichtbar;
+    // Fertige PDF für genau diesen Zeitraum (beim Build mit Typst erzeugt); ohne PDF: Drucken als Notlösung
+    var pdf = PDFS[a + "|" + b], knopf = document.getElementById("tf-druck");
+    knopf.classList.toggle("aus", !sichtbar);
+    if (pdf) { knopf.href = pdf; knopf.setAttribute("download", "Termine_" + a + "_bis_" + b + ".pdf"); knopf.dataset.drucken = ""; }
+    else { knopf.href = "#"; knopf.removeAttribute("download"); knopf.dataset.drucken = "1"; }
+    document.getElementById("druck-zeitraum").textContent = a === b ? name(a) : name(a) + " – " + name(b);
+    if (geaendert === true) try { localStorage.setItem(SPEICHER, JSON.stringify({von: a, bis: b, ende: b === monate[monate.length - 1]})); } catch (e) {}
+  }
+  von.addEventListener("change", function () { anwenden(true); }); bis.addEventListener("change", function () { anwenden(true); });
+  document.getElementById("tf-alle").addEventListener("click", function () { von.value = monate[0]; bis.value = monate[monate.length - 1]; anwenden(true); });
+  // Drucken/PDF immer im hellen Design
+  var thema = null;
+  window.addEventListener("beforeprint", function () { thema = document.documentElement.getAttribute("data-theme"); document.documentElement.setAttribute("data-theme", "light"); });
+  window.addEventListener("afterprint", function () { if (thema) document.documentElement.setAttribute("data-theme", thema); });
+  document.getElementById("tf-druck").addEventListener("click", function (ev) {
+    if (this.dataset.drucken) { ev.preventDefault(); window.print(); }
+  });
+  anwenden();
+})();
+</script>
+</main>
+<footer>
+<div class="footer-spalten">
+<div>
+<h2>Club night</h2>
+<p>Every Friday from 6 pm</p>
+<p>Youth 6:00 – 7:30 pm, adults from 7:30 pm</p>
+<p>Gymnasium Kirchheim<br/>Heimstettner Str. 20, 85551 Kirchheim</p>
+<p class="spielort-hinweis">Gymnasium Kirchheim (GyKi) is a chess school and our venue.</p>
+</div>
+<div>
+<h2>Contact</h2>
+<p><a href="mailto:sgafk1952@gmail.com">sgafk1952@gmail.com</a></p>
+<p><a href="kontakt-en.html">Contact form</a></p>
+<p><a download="" href="mitgliederantrag.pdf">Membership form (PDF)</a></p>
+</div>
+<div>
+<h2>Club</h2>
+<p><a href="ueber-uns-en.html">About us</a></p>
+<p><a href="faq-en.html">FAQ</a></p>
+<p><a href="impressum-en.html">Legal notice &amp; privacy</a></p>
+</div>
+</div>
+<p class="footer-unten">© 2026 SG Aschheim / Feldkirchen / Kirchheim e.V. · Last updated: 27.11.2026</p>
+</footer>
+<script>
+    (function () {
+      var html = document.documentElement, knopf = document.getElementById("theme-schalter");
+      function setze(wahl, speichern) {
+        html.dataset.themeWahl = wahl;
+        html.dataset.theme = wahl === "dunkel" ? "dark" : "light";
+        var text = wahl === "dunkel" ? "Zum hellen Farbmodus wechseln" : "Zum dunklen Farbmodus wechseln";
+        knopf.title = text;
+        knopf.setAttribute("aria-label", text);
+        if (speichern) { try { localStorage.setItem("theme", wahl); } catch (e) {} }
+      }
+      setze(html.dataset.themeWahl === "dunkel" ? "dunkel" : "hell", false);
+      knopf.addEventListener("click", function () { setze(html.dataset.themeWahl === "dunkel" ? "hell" : "dunkel", true); });
+    })();
+  </script>
+<script data-pfad="" data-skript="https://script.google.com/macros/s/AKfycbxvMU_7CRADHdkcfSHuLLwmpYOGpZ6YbFqQCXVHSNl0wcG9A0iKRzaElJ2ATgUI0qeV/exec" defer="" src="konto.js?v=9d88a0c8"></script>
+<script>
+(function () {
+  var en = document.documentElement.lang === "en";
+  var box = document.querySelector(".sprache");
+  if (box) {
+    var k = box.querySelector(".sprache-knopf"), m = box.querySelector(".sprache-menue");
+    k.addEventListener("click", function (e) { e.stopPropagation(); m.hidden = !m.hidden; });
+    document.addEventListener("click", function () { m.hidden = true; });
+  }
+  document.querySelectorAll("[data-sprache]").forEach(function (a) {
+    a.addEventListener("click", function () { try { localStorage.setItem("afk-sprache", a.dataset.sprache); } catch (e) {} });
+  });
+  var wahl = null; try { wahl = localStorage.getItem("afk-sprache"); } catch (e) {}
+  var alt = document.querySelector('link[rel=alternate][hreflang="en"]');
+  // gemerkte Wahl: deutsche Seite mit englischer Fassung -> dorthin
+  if (!en && wahl === "en" && alt) { location.replace(alt.getAttribute("href") + location.hash); return; }
+  if (en) {
+    var schon = false; try { schon = localStorage.getItem("afk-ue-hinweis") === "1"; } catch (e) {}
+    if (schon) return;
+    var de = document.querySelector('link[rel=alternate][hreflang="de"]');
+    var h = document.createElement("div");
+    h.className = "ue-hinweis"; h.setAttribute("role", "dialog"); h.setAttribute("translate", "no");
+    h.innerHTML = "<b>Automatically translated</b>This English version is translated automatically from German, so some wording may be a little off. Match reports, event titles and documents stay in German." +
+      '<div class="k"><button type="button">Got it</button><a data-sprache="de" href="' + (de ? de.getAttribute("href") : "index.html") + '">Deutsche Version</a></div>';
+    document.body.appendChild(h);
+    function weg() { try { localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} h.remove(); }
+    h.querySelector("button").onclick = weg;
+    h.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "de"); localStorage.setItem("afk-ue-hinweis", "1"); } catch (e) {} };
+  } else if (!wahl && alt && /^en\b/i.test(navigator.language || "")) {
+    // Browser auf Englisch: einmal fragen
+    var gefragt = false; try { gefragt = localStorage.getItem("afk-en-frage") === "1"; } catch (e) {}
+    if (gefragt) return;
+    var f = document.createElement("div");
+    f.className = "ue-hinweis"; f.setAttribute("translate", "no");
+    f.innerHTML = '<b>English version available</b>Parts of this website are available in English.<div class="k"><a data-sprache="en" href="' + alt.getAttribute("href") + '">Switch to English</a><button type="button">Auf Deutsch bleiben</button></div>';
+    document.body.appendChild(f);
+    f.querySelector("button").onclick = function () { try { localStorage.setItem("afk-en-frage", "1"); localStorage.setItem("afk-sprache", "de"); } catch (e) {} f.remove(); };
+    f.querySelector("a").onclick = function () { try { localStorage.setItem("afk-sprache", "en"); } catch (e) {} };
+  }
+})();
+</script>
+</body>
+</html>
