@@ -1033,6 +1033,12 @@
 "mannschaft": "AFK 3",
 "text": "Runde 2 bei SV Höhenkirchen 1"
 },
+"AFK 3|16|3": {
+"ergebnis": "2,5 : 4,5",
+"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-3.html",
+"mannschaft": "AFK 3",
+"text": "Runde 3 gegen Schachfreunde München 3"
+},
 "AFK 4|16|1": {
 "ergebnis": "4,5 : 1,5",
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-4.html",
@@ -1088,7 +1094,7 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-27T23:03",
+"stand": "2026-11-27T23:07",
 "termine": {
 "2026-11-29|Jugend": {
 "datum": "2026-11-29",
