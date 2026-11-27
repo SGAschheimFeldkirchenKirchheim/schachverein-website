@@ -10,7 +10,6 @@
     [* Termin *], [* Verein *], [* AFK 1 *], [* AFK 2 *], [* AFK 3 *], [* AFK 4 *], [* AFK 5 *], [* AFK 6 *], [* Senioren *], [* Jugend *]
   ),
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("November")]],
-  [#strong[27.11. Fr, 19:30 Uhr]], [], [], [MMM Runde 3], [MMM Runde 3], [MMM Runde 3], [MMM Runde 3], [MMM Runde 2], [], [],
   [29.11. So, 10:00 Uhr], [], [], [], [], [], [], [], [], [U14/U16 MMM Runde 1-3],
   table.cell(colspan: 10, fill: DeepSkyBlue)[#align(center)[#strong("Dezember")]],
   [05.12. Sa], [], [], [], [], [], [], [], [], [Schulschach EM],
