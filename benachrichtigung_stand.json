@@ -1088,38 +1088,8 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-27T22:35",
+"stand": "2026-11-27T23:03",
 "termine": {
-"2026-11-27|AFK 2": {
-"datum": "2026-11-27",
-"spalte": "AFK 2",
-"text": "MMM Runde 3",
-"zeit": "19:30"
-},
-"2026-11-27|AFK 3": {
-"datum": "2026-11-27",
-"spalte": "AFK 3",
-"text": "MMM Runde 3",
-"zeit": "19:30"
-},
-"2026-11-27|AFK 4": {
-"datum": "2026-11-27",
-"spalte": "AFK 4",
-"text": "MMM Runde 3",
-"zeit": "19:30"
-},
-"2026-11-27|AFK 5": {
-"datum": "2026-11-27",
-"spalte": "AFK 5",
-"text": "MMM Runde 3",
-"zeit": "19:30"
-},
-"2026-11-27|AFK 6": {
-"datum": "2026-11-27",
-"spalte": "AFK 6",
-"text": "MMM Runde 2",
-"zeit": "19:30"
-},
 "2026-11-29|Jugend": {
 "datum": "2026-11-29",
 "spalte": "Jugend",
