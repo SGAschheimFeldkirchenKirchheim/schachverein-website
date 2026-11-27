@@ -200,20 +200,39 @@ def berichte_html(berichte):
 
 
 def ergebnisse_html(zeilen):
-    """zeilen = [(kurz, css-Klasse, Gegnertext, mein, sein, art 's'/'u'/'n', Runde, Link)]"""
+    """zeilen = [(kurz, css-Klasse, Gegnertext, mein, sein, art 's'/'u'/'n'/None, Runde, Link, (Termintext, iso) | None)]
+    -> (Tabelle, Überschrift)"""
     if not zeilen:
         return "<p>Die Saison hat noch nicht begonnen.</p>", ""
+    heute = datetime.date.today().isoformat()
     s = sum(1 for z in zeilen if z[5] == "s")
     u = sum(1 for z in zeilen if z[5] == "u")
     n = sum(1 for z in zeilen if z[5] == "n")
+    kommt = sum(1 for z in zeilen if z[5] is None and z[8][1] >= heute)
+    fehlt = sum(1 for z in zeilen if z[5] is None and z[8][1] < heute)
     teile = [f"{s} {'Sieg' if s == 1 else 'Siege'}"] if s else []
     teile += [f"{u} {'Remis'}"] if u else []
     teile += [f"{n} {'Niederlage' if n == 1 else 'Niederlagen'}"] if n else []
     titel = ", ".join(teile[:-1]) + " und " + teile[-1] if len(teile) > 1 else (teile[0] if teile else "")
+    rest = []
+    if kommt:
+        rest.append(f"{kommt} {'Spiel steht' if kommt == 1 else 'Spiele stehen'} noch an")
+    if fehlt:
+        rest.append(f"{fehlt} {'Ergebnis fehlt' if fehlt == 1 else 'Ergebnisse fehlen'} noch")
+    if rest and not teile:
+        titel = (f"Diese Woche {'spielt 1 Mannschaft' if kommt == 1 else f'spielen {kommt} Mannschaften'}"
+                 if kommt and not fehlt else " und ".join(rest))
+    elif rest:
+        titel += " – " + " und ".join(rest)
+
+    def ende(z):
+        kurz, cls, geg, mein, sein, art, rd, link, termin = z
+        if art:
+            return f'<td class="st-erg-{art}">{mein} : {sein}</td>'
+        return f'<td class="st-offen" data-date="{termin[1]}">{esc(termin[0])}</td>'
     rows = "".join(
-        f'<tr class="{cls}"><td><a href="{link}">{esc(kurz)}</a></td><td>{esc(geg)}</td>'
-        f'<td class="st-rd">R{rd}</td><td class="st-erg-{art}">{mein} : {sein}</td></tr>'
-        for kurz, cls, geg, mein, sein, art, rd, link in zeilen)
+        f'<tr class="{z[1]}"><td><a href="{z[7]}">{esc(z[0])}</a></td><td>{esc(z[2])}</td>'
+        f'<td class="st-rd">R{z[6]}</td>{ende(z)}</tr>' for z in zeilen)
     return f'<table class="st-erg">{rows}</table>', titel
 
 
@@ -247,7 +266,7 @@ def seite(events, berichte, ergebnis_zeilen, geburtstage, mitglieder, mannschaft
     tabelle, ergebnis_titel = ergebnisse_html(ergebnis_zeilen)
 
     mannschaften_inhalt = f"""
-      <div class="st-kl">Mannschaften · zuletzt gespielt</div>
+      <div class="st-kl">Mannschaften · aktuelle Runde</div>
       <h2>{ergebnis_titel or "Unsere Mannschaften"}</h2>
       {tabelle}
       <p class="st-knoepfe"><a class="st-btn" href="mannschaften.html">Alle Mannschaften →</a></p>"""
@@ -367,6 +386,7 @@ CSS = """<style>
   .st-erg td:first-child { font-weight: 700; width: 6rem; } .st-erg td:first-child a { color: var(--team, var(--head)); text-decoration: none; }
   .st-erg td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .st-erg .st-rd { color: var(--muted); font-size: .85rem; width: 2.5rem; }
+  .st-erg .st-offen { color: var(--muted); font-weight: 600; font-size: .95rem; }
   .st-erg-s { color: #5fd08a; } .st-erg-n { color: #ff8f84; } .st-erg-u { color: #e6c15a; }
   :root[data-theme="light"] .st-erg-s { color: #2e7d4f; } :root[data-theme="light"] .st-erg-n { color: #b03a2e; } :root[data-theme="light"] .st-erg-u { color: #9a6a12; }
 

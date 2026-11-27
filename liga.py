@@ -541,6 +541,22 @@ def reiter_aufstellung(d):
             f'Andere Mannschaften: in der Tabelle auf den Namen tippen.</p>')
 
 
+def spiellokal_html(d, tlnr):
+    """Spiellokal der Mannschaft (vom Bezirk) mit Link zu Google Maps."""
+    lok = (d.get("lokale") or {}).get(str(tlnr))
+    if not lok:
+        return ""
+    from urllib.parse import quote
+    karte = lok.get("karte") or ", ".join(lok.get("zeilen", [])[:3])
+    link = f"https://www.google.com/maps/search/?api=1&query={quote(karte)}" if karte else ""
+    zeilen = lok.get("zeilen") or []
+    text = (f"<b>{esc(zeilen[0])}</b>" + "".join(f"<br>{esc(z)}" for z in zeilen[1:])) if zeilen else ""
+    heim = f'<div class="lok-heim">Heimspiele: {esc(lok["heim"])}</div>' if lok.get("heim") else ""
+    knopf = (f'<a class="lok-karte" href="{esc(link)}" target="_blank" rel="noopener">In Google Maps öffnen ↗</a>'
+             if link else "")
+    return f'<div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text">{text}</div>{heim}{knopf}</div>'
+
+
 def aufstellungen_dialog(d):
     """Ein Fenster für alle Mannschaften der Liga; die Tabellen-Namen öffnen den passenden Teil."""
     if not d.get("kader_alle"):
@@ -558,6 +574,7 @@ def aufstellungen_dialog(d):
         bloecke.append(f"""
         <div class="auf-block" data-tlnr="{tlnr}" hidden>
           <h2>{esc(name_von(d, tlnr))}</h2>
+          {spiellokal_html(d, tlnr)}
           {aufstellung_tabelle(d, tlnr)}
           <p class="klein">{LEGENDE_RUNDEN}{legende if (eigen or not d.get("archiv")) else ""} {link}</p>
         </div>""")
@@ -1113,6 +1130,14 @@ STYLES = """<style>
       .rd { width: 2.2rem; font-weight: bold; color: #555; }
       .ha { width: 1.4rem; font-size: 0.8rem; font-weight: bold; color: #777; }
       .geg { flex: 1; }
+      .auf-dialog .lok { border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.9rem; margin: 0 0 1rem;
+        display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; align-items: start; }
+      .auf-dialog .lok-kopf { grid-column: 1 / -1; font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: #888; }
+      .auf-dialog .lok-text { line-height: 1.45; }
+      .auf-dialog .lok-heim { grid-column: 1; font-size: 0.88rem; color: #888; }
+      .auf-dialog .lok-karte { grid-column: 2; grid-row: 2 / span 2; align-self: center; white-space: nowrap; font-weight: 600;
+        padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--line); text-decoration: none; }
+      @media (max-width: 600px) { .auf-dialog .lok { grid-template-columns: 1fr; } .auf-dialog .lok-karte { grid-column: 1; grid-row: auto; justify-self: start; margin-top: .4rem; } }
       .spiel .dat { width: 8.2rem; flex-shrink: 0; font-size: 0.85rem; color: #888; white-space: nowrap; font-variant-numeric: tabular-nums; }
       .spiel .dat:empty { width: 0; margin-left: -0.6rem; }
       @media (max-width: 600px) {

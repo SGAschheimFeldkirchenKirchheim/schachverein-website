@@ -3112,6 +3112,48 @@ GEBURTSTAG_JS = """<script>
 </script>"""
 
 
+def _spiel_tag(m):
+    """'2026-11-27T19:30' -> datetime.date (None ohne Datum)."""
+    try:
+        return datetime.date.fromisoformat((m.get("dt") or "")[:10])
+    except ValueError:
+        return None
+
+
+def spielwoche_zeilen(teams, heute=None):
+    """Je Mannschaft ihre aktuelle Runde: die Spiele ihrer letzten Spielwoche (Mo–So), die schon begonnen hat.
+    Sie bleibt stehen bis zum Montag der Woche, in der ihr nächstes Spiel ist. Gespielt -> Ergebnis,
+    noch offen -> Tag und Uhrzeit. Mannschaften ohne Datumsangaben: letztes Ergebnis.
+    -> [(kurz, css, Gegnertext, mein, sein, art|None, Runde, Link, (Termintext, iso)|None)]"""
+    heute = heute or TODAY
+    montag = lambda d: d - datetime.timedelta(days=d.weekday())
+    zeilen = []
+    for d in teams:
+        datei = liga.seite_datei(d)
+        spiele = [(m, _spiel_tag(m)) for m in liga.eigene_spiele(d) if not m.get("sf")]
+        mit_tag = [(m, t) for m, t in spiele if t and montag(t) <= montag(heute)]
+        if mit_tag:
+            woche = max(montag(t) for _, t in mit_tag)
+            auswahl = [(m, t) for m, t in mit_tag if montag(t) == woche]
+        elif any(t for _, t in spiele):
+            continue                                  # Saison dieser Mannschaft hat noch nicht begonnen
+        else:
+            m = liga.letztes_spiel(d)
+            auswahl = [(m, None)] if m else []
+        for m, tag in auswahl:
+            heim, gegner, mein, sein, art = liga.sicht(d, m)
+            termin = None
+            if not art:
+                if not tag:
+                    continue
+                uhr = (m.get("dt") or "")[11:16]
+                termin = (f"{WOCHENTAG[tag.weekday()]} {tag.day:02d}.{tag.month:02d}." + (f" · {uhr}" if uhr else ""),
+                          tag.isoformat())
+            zeilen.append((d["kurz"], "team-" + datei[:-5], ("vs. " if heim else "bei ") + gegner,
+                           liga.zahl(mein) if art else None, liga.zahl(sein) if art else None, art, m["r"], datei, termin))
+    return zeilen
+
+
 def build_index(upcoming_events, home_news_snippets, teams=()):
     """Startseite – Aufbau, Texte und Bilder-Ordner: startseite.py"""
     ausfall_json = json.dumps(read_ausfall(), ensure_ascii=False).replace("<", "\\u003c")
@@ -3122,16 +3164,9 @@ def build_index(upcoming_events, home_news_snippets, teams=()):
     # Termine ab heute (das Skript blendet vergangene aus und zeigt nur die ersten)
     events = [ev for ev in upcoming_events if ev["date"] >= TODAY][:startseite.TERMINE_ANZAHL + 4]
 
-    # Letztes Ergebnis je Mannschaft
-    zeilen = []
-    for d in teams:
-        m = liga.letztes_spiel(d)
-        if not m:
-            continue
-        heim, gegner, mein, sein, art = liga.sicht(d, m)
-        datei = liga.seite_datei(d)
-        zeilen.append((d["kurz"], "team-" + datei[:-5], ("vs. " if heim else "bei ") + gegner,
-                       liga.zahl(mein), liga.zahl(sein), art, m["r"], datei))
+    # Je Mannschaft die aktuelle Runde: ab dem Montag ihrer Spielwoche bis zum Montag der nächsten
+    # Spielwoche. Gespielt -> Ergebnis, noch offen -> Tag und Uhrzeit.
+    zeilen = spielwoche_zeilen(teams)
 
     # Geburtstage der nächsten Tage mit Alter
     geburtstage = []
