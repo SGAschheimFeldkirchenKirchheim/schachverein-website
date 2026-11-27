@@ -294,14 +294,13 @@ def render_page(title, content, filename, css_path="", nav_path="", extra_styles
     if MAIL_UMLEITUNG:
         full_html = re.sub(r"[\w.+-]+@sg-afk\.de", MAIL_UMLEITUNG, full_html)
     full_html = suche.knopf_einbauen(full_html, nav_path)
-    full_html = englisch.einbauen(full_html, name, nav_path)     # Sprachumschalter DE/EN
+    full_html = englisch.einbauen(full_html, os.path.relpath(filename).replace(os.sep, "/"), nav_path)   # Sprachumschalter DE/EN
     full_html = _cache_brecher(full_html)
     suche.merken(title, content, filename, description or PAGE_DESCRIPTIONS.get(name, ""))
 
     with open(filename, "w", encoding="utf-8") as f:
         f.write(full_html)
-    if nav_path == "" and not os.path.dirname(filename) and englisch.hat_en(name):
-        englisch.merken(full_html, name)                            # englische Fassung am Ende des Builds
+    englisch.merken(full_html, os.path.relpath(filename), nav_path)   # englische Fassung am Ende des Builds
 
 
 _STAND = None
@@ -2482,9 +2481,9 @@ def build_berichte():
         return f"""
         <div class="card news-card">
           {thumb_html(r)}
-          <h3>{r['title']}</h3>
+          <h3 translate="no">{r['title']}</h3>
           <p class="news-meta">{r['meta']}</p>
-          <p class="news-snippet">{r['snippet']}</p>
+          <p class="news-snippet" translate="no">{r['snippet']}</p>
           <a href="berichte/{r['filename']}" class="btn">Bericht lesen →</a>
         </div>
         """
@@ -2530,9 +2529,9 @@ def build_berichte():
         home_news_snippets.append(f"""
         <div class="card news-card">
           {thumb_html(r)}
-          <h3>{r['title']}</h3>
+          <h3 translate="no">{r['title']}</h3>
           <p class="news-meta">{r['meta']}</p>
-          <p class="news-snippet">{r['snippet']}</p>
+          <p class="news-snippet" translate="no">{r['snippet']}</p>
           <a href="berichte/{r['filename']}">Weiterlesen →</a>
         </div>
         """)

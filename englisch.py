@@ -24,8 +24,10 @@ WOERTERBUCH = os.path.join(ORDNER, "en.json")
 EIGENE = os.path.join(ORDNER, "eigene.json")
 FEHLT = os.path.join(ORDNER, "fehlt.json")
 
-# Seiten mit englischer Fassung (nur Dateien im Hauptordner)
-EN_SEITEN = ["index.html", "ueber-uns.html", "jugend.html", "faq.html", "kontakt.html"]
+# Alle Seiten bekommen eine englische Fassung, außer diesen (Pfad relativ zum Website-Ordner;
+# ein Eintrag mit "/" am Ende gilt für den ganzen Ordner)
+OHNE_EN = ["suche.html", "404.html", "mein-profil.html", "verwaltung.html", "listen.html", "umfrage.html",
+           "mitmachen.html", "mail.html", "kontakte.html", "bericht-schreiben.html"]
 
 # Begriffe, die DeepL nicht anfassen soll (bleiben deutsch)
 GESCHUETZT = [
@@ -66,7 +68,7 @@ BLOCK = {"p", "li", "h1", "h2", "h3", "h4", "h5", "h6", "td", "th", "dt", "dd", 
          "summary", "figcaption", "blockquote", "option", "caption", "legend", "div", "ul", "ol", "table",
          "tr", "section", "article", "nav", "header", "footer", "form", "details", "figure", "main"}
 UEBERSPRINGEN = {"script", "style", "code", "pre", "svg", "noscript", "textarea", "template"}
-ATTRIBUTE = ("title", "aria-label", "placeholder", "alt")
+ATTRIBUTE = ("title", "aria-label", "placeholder", "alt", "data-tip")
 
 _buch = None          # deutsch -> englisch
 _neu = {}             # in diesem Lauf neu übersetzt
@@ -94,8 +96,12 @@ def en_name(name):
     return name[:-5] + "-en.html"
 
 
-def hat_en(name):
-    return name in EN_SEITEN
+def hat_en(pfad):
+    """pfad = Datei relativ zum Website-Ordner, z. B. 'index.html' oder 'berichte/x.html'."""
+    pfad = pfad.replace(os.sep, "/")
+    if not pfad.endswith(".html") or pfad.endswith("-en.html"):
+        return False
+    return not any(pfad == o or (o.endswith("/") and pfad.startswith(o)) for o in OHNE_EN)
 
 
 def _ist_text(t):
@@ -108,6 +114,15 @@ def _fest(t):
         return FEST[t]
     if t in GESCHUETZT:
         return t
+    m = re.fullmatch(r"<(strong|b)([^>]*)>(.*)</\1>", t)
+    if m and (innen := _fest(m.group(3))) is not None:
+        return f"<{m.group(1)}{m.group(2)}>{innen}</{m.group(1)}>"
+    m = re.fullmatch(r'(\d{2}\.\d{2}\.) <b class="abw">(Mo|Di|Mi|Do|Fr|Sa|So)</b>(, \d{1,2}:\d{2})?( Uhr)?', t)
+    if m:
+        return f'<b class="abw">{WT[m.group(2)]}</b> {m.group(1)}{m.group(3) or ""}'
+    m = re.fullmatch(r"(\d+) – ([\d,½]+) : ([\d,½]+) \((Sieg|Niederlage|Unentschieden) für", t)
+    if m:
+        return f"{m.group(1)} – {m.group(2)} : {m.group(3)} ({ {'Sieg': 'win', 'Niederlage': 'loss', 'Unentschieden': 'draw'}[m.group(4)]} for"
     # "05.12. Sa, 10:00 Uhr" / "05.12. Sa"
     m = re.fullmatch(r"(\d{1,2}\.\d{1,2}\.(?:\d{4})?) (Mo|Di|Mi|Do|Fr|Sa|So)(,? \d{1,2}:\d{2})?( Uhr)?", t)
     if m:
@@ -123,6 +138,9 @@ def _fest(t):
     m = re.fullmatch(r"© (\d{4}) (SG Aschheim / Feldkirchen / Kirchheim e\.V\.) · Zuletzt aktualisiert: (.+)", t)
     if m:
         return f"© {m.group(1)} {m.group(2)} · Last updated: {m.group(3)}"
+    m = _muster(t)
+    if m is not None:
+        return m
     # Startseite: "4 Siege, 1 Remis und 2 Niederlagen – 5 Spiele stehen noch an"
     e = _ergebnis_titel(t)
     if e:
@@ -136,6 +154,120 @@ def _fest(t):
         return WT[m.group(1)] + m.group(2).replace(" Uhr", "")
     if re.fullmatch(r"(ab |bis )?\d{1,2}[:.]\d{2} Uhr", t):
         return t.replace("ab ", "from ").replace("bis ", "until ").replace(" Uhr", "")
+    return None
+
+
+# ------------------------------------------------------------------
+# Namen (Spieler, Mannschaften) bleiben, wie sie sind
+# ------------------------------------------------------------------
+_namen_rx = None
+
+
+def _namen():
+    """Alle Spieler- und Mannschaftsnamen aus mannschaften/**/*.json -> ein Regex (längste zuerst)."""
+    global _namen_rx
+    if _namen_rx is not None:
+        return _namen_rx
+    namen = set()
+
+    def sammeln(x, schluessel=None):
+        if isinstance(x, dict):
+            for k, v in x.items():
+                if k == "teams" and isinstance(v, dict):
+                    namen.update(t for t in v.values() if isinstance(t, str))
+                sammeln(v, k)
+        elif isinstance(x, list):
+            for v in x:
+                if isinstance(v, str) and schluessel == "bretter" and re.fullmatch(r"[^\W\d_]+(?:[ '-][^\W\d_]+){1,4}", v):
+                    namen.add(v)          # Spielernamen in den Brett-Listen
+                else:
+                    sammeln(v, schluessel)
+        elif isinstance(x, str) and schluessel in ("name", "gegner", "team", "verein", "w", "b"):
+            namen.add(x)
+    for wurzel, _, dateien in os.walk("mannschaften"):
+        for d in dateien:
+            if d.endswith(".json"):
+                try:
+                    with open(os.path.join(wurzel, d), encoding="utf-8") as f:
+                        sammeln(json.load(f))
+                except (OSError, ValueError):
+                    pass
+    namen = {n.strip() for n in namen if len(n.strip()) >= 4 and re.search(r"[A-Za-zÄÖÜäöü]", n)}
+    teile = sorted(namen, key=len, reverse=True)
+    _namen_rx = re.compile(r"(?<![\w])(" + "|".join(re.escape(n) for n in teile) + r")(?![\w])") if teile else re.compile(r"(?!x)x")
+    return _namen_rx
+
+
+def _namen_schuetzen(soup, body):
+    """Namen in Textknoten in <span translate="no"> packen, damit sie nie übersetzt werden."""
+    rx = _namen()
+    for t in list(body.find_all(string=True)):
+        if isinstance(t, Comment) or _geschuetzt(t.parent):
+            continue
+        text = str(t)
+        if not rx.search(text):
+            continue
+        stuecke = []
+        pos = 0
+        for m in rx.finditer(text):
+            if m.start() > pos:
+                stuecke.append(NavigableString(text[pos:m.start()]))
+            sp = soup.new_tag("span", attrs={"translate": "no"})
+            sp.string = m.group(0)
+            stuecke.append(sp)
+            pos = m.end()
+        if pos < len(text):
+            stuecke.append(NavigableString(text[pos:]))
+        if len(stuecke) == 1 and getattr(stuecke[0], "name", None) == "span" and t.parent and \
+                len([c for c in t.parent.children if not (isinstance(c, NavigableString) and not c.strip())]) == 1:
+            t.parent["translate"] = "no"          # Element besteht nur aus dem Namen
+            continue
+        for st in stuecke:
+            t.insert_before(st)
+        t.extract()
+
+
+# Feste Muster (Spielpläne, Prognosen …)
+MUSTER = [
+    (r"R(\d+): vs\.", r"R\1: vs."), (r"R(\d+): bei", r"R\1: at"), (r"R(\d+):", r"R\1:"),
+    (r"– (\d+(?:[,.]5)?|\d+½?) : (\d+(?:[,.]5)?|\d+½?) \((Sieg|Niederlage|Unentschieden) für",
+     lambda m: f"– {m.group(1)} : {m.group(2)} ({ {'Sieg': 'win', 'Niederlage': 'loss', 'Unentschieden': 'draw'}[m.group(3)]} for"),
+    (r"– gegen uns", "– against us"), (r"\)", ")"),
+    (r"–", "–"), (r"\|", "|"), (r"\| SG AFK", "| SG AFK"), (r"·", "·"),
+    (r"(\d{2}\.\d{2}\.\d{4}) · von", r"\1 · by"),
+    (r"Saison (\d{4}/\d{2})(.*)", r"Season \1\2"),
+    (r"([SUN]) ([\d½]+:[\d½]+)", lambda m: {"S": "W", "U": "D", "N": "L"}[m.group(1)] + " " + m.group(2)),
+    (r"-Schnitt ca\. (\d+)", r" average approx. \1"),
+    (r"([\d,]+)<small>\+([\d,]+) evtl\.</small>", r"\1<small>+\2 poss.</small>"),
+    (r"\+ ([\d,]+) % evtl\.", r"+ \1 % poss."),
+    (r"(Mo|Di|Mi|Do|Fr|Sa|So) (\d{2}\.\d{2}\.)<span class=\"uhr\"> · (\d{1,2}:\d{2})</span>",
+     lambda m: f'{WT[m.group(1)]} {m.group(2)}<span class="uhr"> · {m.group(3)}</span>'),
+    (r"Heimspiele: (Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag) (\d{1,2}:\d{2})",
+     lambda m: "Home matches: " + {"Montag": "Monday", "Dienstag": "Tuesday", "Mittwoch": "Wednesday",
+                                   "Donnerstag": "Thursday", "Freitag": "Friday", "Samstag": "Saturday",
+                                   "Sonntag": "Sunday"}[m.group(1)] + " " + m.group(2)),
+    (r"· Nr\. (\d+)( · Stamm)?", lambda m: f"· No. {m.group(1)}" + (" · regular" if m.group(2) else "")),
+    (r"Rd", "Rd"),
+    (r"Platz (\d+): ([\d,]+ %)", r"Place \1: \2"), (r"(\d+) Punkte?: ([\d,]+ %)", r"\1 points: \2"),
+    (r"Platz (\d+)", r"Place \1"), (r"(\d+)\. von (\d+)", r"\1 of \2"),
+    (r"Heim (\d+) · Auswärts (\d+)", r"Home \1 · Away \2"),
+    (r"Summe ([\d½]+) / (\d+)", r"Total \1 / \2"), (r"<strong>Summe ([\d½]+) / (\d+)</strong>", r"<strong>Total \1 / \2</strong>"),
+    (r"([\d½]+) / (\d+) \((\d+) %\) seit (\d{4}/\d{2})", r"\1 / \2 (\3 %) since \4"),
+    (r"heute: (.+)", r"today: \1"), (r"Beste Liga:", "Best league:"),
+    (r"(\d+) Partien?", lambda m: f"{m.group(1)} game{'s' if m.group(1) != '1' else ''}"),
+    (r"· DWZ-Schnitt ca\. (\d+)", r"· average DWZ approx. \1"),
+    (r"(Bezirksliga|[A-E]-Klasse|\d\. Seniorenliga|\d\. Jugend-Bezirksliga|U20 Landesliga Süd)( \(\d{4}/\d{2}\))?", r"\1\2"),
+    (r"((?:Bezirksliga|[A-E]-Klasse|\d\. Seniorenliga)) · Platz (\d+)", r"\1 · place \2"),
+    (r"((?:Bezirksliga|[A-E]-Klasse|\d\. Seniorenliga|\d\. Jugend-Bezirksliga)) · Nr\. (\d+)( · Stamm)?",
+     lambda m: f"{m.group(1)} · No. {m.group(2)}" + (" · regular" if m.group(3) else "")),
+]
+
+
+def _muster(t):
+    for rx, ers in MUSTER:
+        m = re.fullmatch(rx, t)
+        if m:
+            return m.expand(ers) if isinstance(ers, str) else ers(m)
     return None
 
 
@@ -163,6 +295,51 @@ def _ergebnis_titel(t):
     return " – ".join(raus)
 
 
+def uebersetze_mit_namen(t, seite=""):
+    """Wie uebersetze, aber Namen (Spieler/Mannschaften) bleiben stehen; für Attribute und <title>."""
+    en = uebersetze(t, seite) if not _namen().search(t) else None
+    if en is not None:
+        return en
+    teile = _namen().split(t)
+    if len(teile) == 1:
+        return uebersetze(t, seite)
+    raus = []
+    for i, teil in enumerate(teile):
+        if i % 2 == 1 or not _ist_text(teil):
+            raus.append(teil)
+            continue
+        e = uebersetze(teil, seite)
+        if e is None:
+            return None
+        vorne = re.match(r"\s*", teil).group(0)
+        hinten = re.search(r"\s*$", teil).group(0)
+        raus.append(vorne + e + hinten)
+    return "".join(raus)
+
+
+_ZAHL = re.compile(r"(?<![\d§])\d+(?:[.,:/]\d+)*(?![\d])")
+_HREF = re.compile(r'href="[^"]*"')
+
+
+def schablone(k):
+    """Text -> (Schablone, Links, Zahlen): Links werden zu href="§H", Zahlen zu §N.
+    So reicht eine Übersetzung für "Platz 3 von 10" und "Platz 7 von 12"."""
+    links = _HREF.findall(k)
+    s = _HREF.sub('href="§H"', k)
+    zahlen = _ZAHL.findall(s)
+    return _ZAHL.sub("§N", s), links, zahlen
+
+
+def fuellen(en, links, zahlen):
+    if en.count('href="§H"') != len(links) or en.count("§N") != len(zahlen):
+        return None
+    for l in links:
+        en = en.replace('href="§H"', l, 1)
+    for z in zahlen:
+        en = en.replace("§N", z, 1)
+    return en
+
+
 def uebersetze(t, seite=""):
     """Ein Textstück (darf Inline-HTML enthalten) -> englisch oder None."""
     _lade()
@@ -174,11 +351,17 @@ def uebersetze(t, seite=""):
     f = _fest(k)
     if f is not None:
         return f
-    _fehlt.setdefault(k, seite)
+    sch, links, zahlen = schablone(k)
+    if sch != k and sch in _buch:
+        en = fuellen(_buch[sch], links, zahlen)
+        if en is not None:
+            return en
+    _fehlt.setdefault(sch, seite)
     return None
 
 
-KLASSEN_NEIN = {"no-translate", "brand", "pill", "sprache", "sprache-mobil", "visually-hidden-nein"}
+KLASSEN_NEIN = {"no-translate", "brand", "pill", "sprache", "sprache-mobil", "article-content", "team-zelle",
+               "ev-title", "sp-berichte", "news-snippet"}
 
 
 def _geschuetzt(el):
@@ -195,8 +378,7 @@ def _einheit(el):
     """Element, das als Ganzes übersetzt wird: enthält Text, aber keine Block-Elemente."""
     if el.name not in EINHEITEN or _geschuetzt(el):
         return False
-    if el.find(lambda x: x.name in BLOCK or x.name in UEBERSPRINGEN or
-               (x.attrs or {}).get("translate") == "no" or KLASSEN_NEIN & set((x.attrs or {}).get("class") or [])):
+    if el.find(lambda x: x.name in BLOCK or x.name in UEBERSPRINGEN):
         return False
     # nur Kinder-Elemente ohne eigenen Text dazwischen (z. B. Menü aus Links, <b>27</b><span>Fr</span>) -> einzeln
     eigener_text = any(isinstance(c, NavigableString) and not isinstance(c, Comment) and _ist_text(str(c))
@@ -207,12 +389,17 @@ def _einheit(el):
     return _ist_text(el.get_text())
 
 
-def seite_uebersetzen(html, name):
-    """Deutsche fertige Seite -> englische Seite (Links auf andere übersetzte Seiten zeigen auf -en)."""
+def seite_uebersetzen(html, name, en_dateien=None):
+    """Deutsche fertige Seite -> englische Seite (Links auf andere übersetzte Seiten zeigen auf -en).
+    name = Pfad relativ zum Website-Ordner; en_dateien = Menge aller Seiten mit englischer Fassung."""
     soup = BeautifulSoup(html, "html.parser")
     if soup.html:
         soup.html["lang"] = "en"
     body = soup.body or soup
+    if name.startswith("berichte/"):          # Berichte: Titel und Text bleiben deutsch
+        for h in body.select("main h1"):
+            h["translate"] = "no"
+    _namen_schuetzen(soup, body)
     erledigt = set()
     # 1. ganze Einheiten (Absatz, Listenpunkt, Zelle, Knopf …) – von außen nach innen
     for el in body.find_all(True):
@@ -221,9 +408,30 @@ def seite_uebersetzen(html, name):
             continue              # schon übersetzt (Teil einer größeren Einheit) bzw. ersetzt
         if not _einheit(el):
             continue
-        # die größte Einheit nehmen, deren Inhalt nur Inline-Elemente hat
+        # die größte Einheit nehmen, deren Inhalt nur Inline-Elemente hat;
+        # geschützte Teile darin (Namen, translate="no") werden zu §P und bleiben unverändert
         innen = el.decode_contents()
-        en = uebersetze(innen, name)
+        en = _buch.get(norm(innen)) if _buch is not None else None
+        if en is None:
+            fest = [x for x in el.find_all(True) if _geschuetzt(x) and not _geschuetzt(x.parent) or
+                    (x.parent is el and _geschuetzt(x))]
+            fest = [x for x in fest if not any(p in fest for p in x.parents)]
+            maske = innen
+            teile = []
+            for x in fest:
+                h = str(x)
+                if h in maske:
+                    maske = maske.replace(h, "§P", 1)
+                    teile.append(h)
+            if not _ist_text(re.sub(r"§P|<[^>]+>", "", maske)):
+                continue          # nur Geschütztes -> nichts zu tun
+            en = uebersetze(maske, name)
+            if en is not None:
+                if en.count("§P") != len(teile):
+                    en = None
+                else:
+                    for h in teile:
+                        en = en.replace("§P", h, 1)
         if en is None and el.name in ("span", "em", "b", "strong", "small", "div"):
             continue              # kleine Stücke: einzeln über die Textknoten
         erledigt.add(id(el))
@@ -247,31 +455,37 @@ def seite_uebersetzen(html, name):
             continue
         for a in ATTRIBUTE:
             if el.has_attr(a):
-                en = uebersetze(el[a], name)
+                en = uebersetze_mit_namen(el[a], name)
                 if en is not None:
                     el[a] = BeautifulSoup(en, "html.parser").get_text()
+    namensseite = name.startswith(("berichte/", "spieler/", "tour-"))
     for meta in soup.find_all("meta"):
+        if namensseite and meta.get("property") == "og:title":
+            continue
         if meta.get("name") == "description" or meta.get("property") in ("og:description", "og:title"):
             en = uebersetze(meta.get("content", ""), name)
             if en is not None:
                 meta["content"] = BeautifulSoup(en, "html.parser").get_text()
         if meta.get("property") == "og:locale":
             meta["content"] = "en_GB"
-    if soup.title:
-        en = uebersetze(soup.title.get_text(), name)
+    if soup.title and not namensseite:
+        en = uebersetze_mit_namen(soup.title.get_text(), name)
         if en is not None:
             soup.title.string = BeautifulSoup(en, "html.parser").get_text()
     for pill in soup.select(".pill"):
         if pill.get_text(strip=True) in ("Jugend", "Senioren"):
             pill.string = {"Jugend": "Youth", "Senioren": "Seniors"}[pill.get_text(strip=True)]
     # 4. Links auf übersetzte Seiten
+    ordner = os.path.dirname(name)
     for a in soup.find_all("a", href=True):
         if a.has_attr("data-sprache"):
             continue
-        h = a["href"]
-        m = re.fullmatch(r"([\w-]+\.html)(#.*)?", h)
-        if m and hat_en(m.group(1)):
-            a["href"] = en_name(m.group(1)) + (m.group(2) or "")
+        m = re.fullmatch(r"((?:\.\./)*(?:[\w.-]+/)*)([\w.-]+\.html)(#.*)?", a["href"])
+        if not m:
+            continue
+        ziel = os.path.normpath(os.path.join(ordner, m.group(1) + m.group(2))).replace(os.sep, "/")
+        if en_dateien is not None and ziel in en_dateien:
+            a["href"] = m.group(1) + en_name(m.group(2)) + (m.group(3) or "")
     # 5. Skripte
     for s in soup.find_all("script"):
         if s.string:
@@ -309,17 +523,16 @@ SCHALTER_CSS = """<style>
 PFEIL = '<svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'
 
 
-def _ziele(name, nav_path):
-    """(deutsche Adresse, englische Adresse) für den Umschalter."""
-    if nav_path == "" and hat_en(name):
-        return name, en_name(name)
-    return name if nav_path == "" else "", nav_path + "index-en.html"
+def _ziele(pfad, nav_path):
+    """(deutsche Adresse, englische Adresse) für den Umschalter, relativ zur Seite."""
+    datei = os.path.basename(pfad)
+    if hat_en(pfad):
+        return datei, en_name(datei)
+    return datei, nav_path + "index-en.html"
 
 
 def schalter(name, nav_path, en):
     de_ziel, en_ziel = _ziele(name, nav_path)
-    if en:
-        de_ziel = name
     menue = (f'<div class="sprache-menue" hidden><a href="{de_ziel or "#"}" data-sprache="de"{" class=an" if not en else ""}>'
              f'Deutsch{" <small>✓</small>" if not en else ""}</a>'
              f'<a href="{en_ziel}" data-sprache="en"{" class=an" if en else ""}>English{" <small>✓</small>" if en else ""}</a></div>')
@@ -329,8 +542,6 @@ def schalter(name, nav_path, en):
 
 def mobil(name, nav_path, en):
     de_ziel, en_ziel = _ziele(name, nav_path)
-    if en:
-        de_ziel = name
     return (f'<div class="sprache-mobil" translate="no"><a href="{de_ziel or "#"}" data-sprache="de"{" class=an" if not en else ""}>Deutsch</a>'
             f'<a href="{en_ziel}" data-sprache="en"{" class=an" if en else ""}>English</a></div>')
 
@@ -379,13 +590,14 @@ SCHALTER_JS = """<script>
 
 
 def einbauen(html, name, nav_path, en=False):
-    """Umschalter, hreflang und Skript in eine fertige Seite einsetzen."""
+    """Umschalter, hreflang und Skript in eine fertige Seite einsetzen (name = Pfad relativ zum Website-Ordner)."""
     html = html.replace('<div class="kopf-tools">', '<div class="kopf-tools">\n        ' + schalter(name, nav_path, en), 1)
     html = re.sub(r'(<nav aria-label="[^"]*">)', lambda m: m.group(1) + mobil(name, nav_path, en), html, count=1)
     kopf = SCHALTER_CSS
-    if nav_path == "" and hat_en(name):
-        kopf += (f'\n  <link rel="alternate" hreflang="de" href="{name}">'
-                 f'\n  <link rel="alternate" hreflang="en" href="{en_name(name)}">')
+    if hat_en(name):
+        d = os.path.basename(name)
+        kopf += (f'\n  <link rel="alternate" hreflang="de" href="{d}">'
+                 f'\n  <link rel="alternate" hreflang="en" href="{en_name(d)}">')
     html = html.replace("</head>", kopf + "\n</head>", 1)
     return html.replace("</body>", SCHALTER_JS + "\n</body>", 1)
 
@@ -403,8 +615,9 @@ MYMEMORY_MAIL = "sgafk1952@gmail.com"   # erhöht das freie Tageskontingent von 
 
 
 def _pruefen(de, en):
-    """Maschinelle Übersetzung nur übernehmen, wenn Tags und geschützte Begriffe erhalten blieben."""
-    if not en or en.count("<") != de.count("<"):
+    """Maschinelle Übersetzung nur übernehmen, wenn Tags, Platzhalter und geschützte Begriffe erhalten blieben."""
+    if not en or en.count("<") != de.count("<") or en.count("§N") != de.count("§N") or en.count("§P") != de.count("§P") \
+            or en.count('href="§H"') != de.count('href="§H"'):
         return False
     return all(w in en for w in GESCHUETZT if re.search(r"(?<![\w])" + re.escape(w) + r"(?![\w])", de))
 
@@ -493,33 +706,36 @@ def speichern():
 # ------------------------------------------------------------------
 # Ablauf im Build
 # ------------------------------------------------------------------
-_seiten = {}
+_seiten = {}          # Pfad -> (html, nav_path)
 
 
-def merken(html, name):
+def merken(html, name, nav_path=""):
     """render_page: fertige deutsche Seite (mit Umschalter) für die englische Fassung vormerken."""
-    _seiten[name] = html
+    name = name.replace(os.sep, "/")
+    if hat_en(name):
+        _seiten[name] = (html, nav_path)
 
 
 def alles_schreiben():
     """Am Ende von build_site.py: alle vorgemerkten Seiten übersetzen und als <name>-en.html schreiben."""
     if not _seiten:
         return
-    for name, html in _seiten.items():          # 1. Durchgang: fehlende Stücke sammeln
-        seite_uebersetzen(html, name)
+    en_dateien = set(_seiten)
+    for name, (html, _) in _seiten.items():     # 1. Durchgang: fehlende Stücke sammeln
+        seite_uebersetzen(html, name, en_dateien)
     neu = deepl_nachholen()
     if neu:
         print(f"Englisch: {neu} Textstücke automatisch übersetzt.")
         _fehlt.clear()
-    for name, html in _seiten.items():          # 2. Durchgang: schreiben
-        en = seite_uebersetzen(einbauen_en(html, name), name)
+    for name, (html, nav_path) in _seiten.items():   # 2. Durchgang: schreiben
+        en = seite_uebersetzen(einbauen_en(html, name, nav_path), name, en_dateien)
         with open(en_name(name), "w", encoding="utf-8") as f:
             f.write(en)
     speichern()
     print(f"Englisch: {len(_seiten)} Seiten (…-en.html).")
 
 
-def einbauen_en(html_de, name):
+def einbauen_en(html_de, name, nav_path=""):
     """Deutsche Seite (mit DE-Umschalter) -> Umschalter auf EN stellen."""
-    html = html_de.replace(schalter(name, "", False), schalter(name, "", True), 1)
-    return html.replace(mobil(name, "", False), mobil(name, "", True), 1)
+    html = html_de.replace(schalter(name, nav_path, False), schalter(name, nav_path, True), 1)
+    return html.replace(mobil(name, nav_path, False), mobil(name, nav_path, True), 1)

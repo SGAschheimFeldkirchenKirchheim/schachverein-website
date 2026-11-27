@@ -438,7 +438,7 @@ def aufstellung_tabelle(d, tlnr):
         if g["art"]:
             erg = f'<span class="rd-k-erg">{ERGEBNIS_KURZ.get(g["art"], "")} {halb(g["mein"])}:{halb(g["sein"])}</span>'
         return (f'<th class="neben rd-geg{offen}{uns_cls(r)}" tabindex="0" '
-                f'title="{esc(tip)}" data-tip="{esc(tip)}">{esc(g["kurz"])}{erg}</th>')
+                f'title="{esc(tip)}" data-tip="{esc(tip)}"><span translate="no">{esc(g["kurz"])}</span>{erg}</th>')
 
     def ergebnis(r):
         g = geg.get(r)
@@ -554,7 +554,7 @@ def spiellokal_html(d, tlnr):
     heim = f'<div class="lok-heim">Heimspiele: {esc(lok["heim"])}</div>' if lok.get("heim") else ""
     knopf = (f'<a class="lok-karte" href="{esc(link)}" target="_blank" rel="noopener">In Google Maps öffnen ↗</a>'
              if link else "")
-    return f'<div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text">{text}</div>{heim}{knopf}</div>'
+    return f'<div class="lok"><div class="lok-kopf">Spiellokal</div><div class="lok-text" translate="no">{text}</div>{heim}{knopf}</div>'
 
 
 def aufstellungen_dialog(d):
