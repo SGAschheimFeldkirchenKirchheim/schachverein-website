@@ -1051,6 +1051,12 @@
 "mannschaft": "AFK 4",
 "text": "Runde 2 gegen SC Haar 1931 4"
 },
+"AFK 4|16|3": {
+"ergebnis": "5 : 1",
+"link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-4.html",
+"mannschaft": "AFK 4",
+"text": "Runde 3 bei SK Tarrasch 1945 München 5"
+},
 "AFK 5|16|1": {
 "ergebnis": "4 : 2",
 "link": "https://sgaschheimfeldkirchenkirchheim.github.io/schachverein-website/afk-5.html",
@@ -1094,7 +1100,7 @@
 "text": "Runde 1 gegen FC Bayern München"
 }
 },
-"stand": "2026-11-27T23:26",
+"stand": "2026-11-28T00:27",
 "termine": {
 "2026-11-29|Jugend": {
 "datum": "2026-11-29",
